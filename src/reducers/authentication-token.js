@@ -13,8 +13,10 @@ const authenticationTokenReducer = (state = defaultState, action) => {
 				...state,
 				isFetching: action.isFetching,
 				status:
-					typeof action.status !== undefined ? action.status : state.status,
-				token: typeof action.token !== undefined ? action.token : state.token
+					action.status || action.status === null
+						? action.status
+						: state.status,
+				token: action.token ? action.token : state.token
 			};
 		case "RESET_JWT_TOKEN":
 			return defaultState;

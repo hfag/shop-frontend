@@ -40,11 +40,9 @@ export const resetJwtToken = () => ({
 export const login = (username, password) => dispatch => {
 	dispatch(fetchJwtToken(true, null));
 
-	var form = new FormData();
+	const form = new FormData();
 	form.append("username", username);
 	form.append("password", password);
-
-	console.log(username, password);
 
 	return fetch(API_URL + "/wp-json/jwt-auth/v1/token", {
 		method: "POST",

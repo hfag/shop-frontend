@@ -118,18 +118,20 @@ class Header extends React.PureComponent {
 										<NavItem>
 											<img src="/img/logo/logo_negative.svg" />
 										</NavItem>
-										<CSSTransitionGroup
-											component={AnimatedSlogan}
-											transitionName="slogan"
-											transitionEnterTimeout={500}
-											transitionLeaveTimeout={300}
-										>
-											{!this.state.searchVisible && (
-												<NavItem>
-													<img src="/img/logo/name_slogan_negative.svg" />
-												</NavItem>
-											)}
-										</CSSTransitionGroup>
+										<MediaQuery md up>
+											<CSSTransitionGroup
+												component={AnimatedSlogan}
+												transitionName="slogan"
+												transitionEnterTimeout={500}
+												transitionLeaveTimeout={300}
+											>
+												{!this.state.searchVisible && (
+													<NavItem>
+														<img src="/img/logo/name_slogan_negative.svg" />
+													</NavItem>
+												)}
+											</CSSTransitionGroup>
+										</MediaQuery>
 									</Flexbar>
 								</Link>
 								<CSSTransitionGroup

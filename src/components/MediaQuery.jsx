@@ -7,6 +7,7 @@ import { media } from "style-utilities";
 const b = "display: block";
 
 export default styled.div`
+	height: 100%;
 	display: none;
 	${({ sm, md, lg, xlg, up, down }) =>
 		up

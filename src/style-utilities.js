@@ -18,7 +18,7 @@ export const media = {
 		}
 	`,
 	maxSmall: (...args) => css`
-		@media (max-width: 576px) {
+		@media (max-width: 575px) {
 			${css(...args)};
 		}
 	`,
@@ -28,7 +28,7 @@ export const media = {
 		}
 	`,
 	maxMedium: (...args) => css`
-		@media (max-width: 768px) {
+		@media (max-width: 767px) {
 			${css(...args)};
 		}
 	`,
@@ -38,7 +38,7 @@ export const media = {
 		}
 	`,
 	maxLarge: (...args) => css`
-		@media (max-width: 992px) {
+		@media (max-width: 991px) {
 			${css(...args)};
 		}
 	`,
@@ -48,7 +48,7 @@ export const media = {
 		}
 	`,
 	maxXLarge: (...args) => css`
-		@media (max-width: 1200px) {
+		@media (max-width: 1199px) {
 			${css(...args)};
 		}
 	`

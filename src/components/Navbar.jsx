@@ -8,7 +8,7 @@ const Navbar = styled.div`
 	color: ${colors.primaryContrast};
 	box-shadow: ${shadows.y};
 	padding: 1rem 0;
-	height: 3rem;
+	height: 5rem;
 `;
 
 export default Navbar;

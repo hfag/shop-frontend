@@ -12,11 +12,12 @@ import Flexbar from "components/Flexbar";
 const UnstyledLink = styled.div`
 	height: 100%;
 	cursor: pointer;
+
+	color: ${({ negative }) =>
+		negative ? colors.primaryContrast : colors.primary};
 `;
 
 const StyledLink = styled(UnstyledLink)`
-	color: ${({ negative }) =>
-		negative ? colors.primaryContrast : colors.primary};
 	text-decoration: underline;
 `;
 
@@ -26,13 +27,13 @@ class Link extends React.PureComponent {
 			dispatch,
 			to,
 			onClick,
-			styled,
+			unstyled,
 			children,
 			negative,
 			flex
 		} = this.props;
 
-		const LinkComponent = styled === false ? UnstyledLink : StyledLink;
+		const LinkComponent = unstyled ? UnstyledLink : StyledLink;
 
 		let props = { negative };
 
@@ -56,7 +57,7 @@ Link.propTypes = {
 	children: PropTypes.node,
 	to: PropTypes.string,
 	onClick: PropTypes.func,
-	styled: PropTypes.bool,
+	unstyled: PropTypes.bool,
 	negative: PropTypes.bool
 };
 

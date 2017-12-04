@@ -4,19 +4,31 @@ import PropTypes from "prop-types";
 import { colors } from "style-utilities";
 
 const NavItem = styled.div`
+	position: relative;
+
 	height: 100%;
+
 	width: auto;
-	padding-right: 0.75rem;
-	${({ seperator }) =>
-		seperator
-			? `border-right: ${colors.primaryContrast} 1px solid;`
-			: ""} margin-right: 0.75rem;
+	margin-right: 0.75rem;
+	padding-right: 0.8rem;
+
 	display: inline-block;
 
-	overflow: hidden;
+	&:after {
+		position: absolute;
+		top: 50%;
+		right: 0;
+		height: 2.5rem;
 
-	img,
-	svg {
+		transform: translateY(-50%);
+
+		content: "";
+		display: block;
+		${({ seperator }) =>
+			seperator ? `border-right: ${colors.primaryContrast} 1px solid;` : ""};
+	}
+
+	img {
 		height: 100%;
 		width: auto;
 	}

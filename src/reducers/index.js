@@ -4,11 +4,13 @@ import { reducer as burgerMenu } from "redux-burger-menu";
 
 //import reducers
 import authenticationToken, * as fromAuthToken from "./authentication-token";
+import productSearch, * as fromProductSearch from "./product-search";
 
 export default combineReducers({
 	routing: routerReducer,
 	burgerMenu,
-	authenticationToken
+	authenticationToken,
+	productSearch
 });
 
 /**
@@ -47,3 +49,25 @@ authenticationToken.isFetching;
  */
 export const getAuthenticationTokenStatus = state =>
 	fromAuthToken.getAuthenticationTokenStatus(state.authenticationToken);
+
+/**
+ * Returns the product list
+ * @param {object} state The redux state
+ * @return {array} The product array
+ */
+export const getProductSearchProducts = state =>
+	fromProductSearch.getProductSearchProducts(state.productSearch);
+/**
+ * Checks whether it is currently being fetched
+ * @param {object} state The redux state
+ * @return {boolean} Whether the token is being fetched
+ */
+export const getProductSearchFetching = state =>
+	fromProductSearch.getProductSearchFetching(state.productSearch);
+/**
+ * Returns the status
+ * @param {object} state The redux state
+ * @return {error} The current status
+ */
+export const getProductSearchStatus = state =>
+	fromProductSearch.getProductSearchStatus(state.productSearch);

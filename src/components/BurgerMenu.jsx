@@ -49,27 +49,27 @@ class BurgerMenu extends React.PureComponent {
 				<BurgerLogo src="/img/logo/name_slogan_negative.svg" />
 				<BurgerList>
 					<BurgerItem seperator>
-						<Link to="https://feuerschutz.ch" negative flex>
+						<Link to="https://feuerschutz.ch" unstyled negative flex>
 							<HomeIcon />Zu unserer Homepage
 						</Link>
 					</BurgerItem>
 					<BurgerItem seperator>
-						<Link to="/search" negative flex>
+						<Link to="/search" unstyled negative flex>
 							<SearchIcon />Suche
 						</Link>
 					</BurgerItem>
 					<BurgerItem>
-						<Link to="/cart" negative flex>
+						<Link to="/cart" unstyled negative flex>
 							<CartIcon />Warenkorb
 						</Link>
 					</BurgerItem>
 					<BurgerItem seperator>
-						<Link to="/checkout" negative flex>
+						<Link to="/checkout" unstyled negative flex>
 							<CheckoutIcon />Zur Kasse
 						</Link>
 					</BurgerItem>
 					<BurgerItem>
-						<Link to="/account" negative flex>
+						<Link to="/account" unstyled negative flex>
 							{loggedIn ? (
 								<span>
 									<AccountIcon />Mein Konto

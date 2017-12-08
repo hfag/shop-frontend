@@ -33,19 +33,9 @@ const Counter = styled.div`
 	font-size: 1.25rem;
 `;
 
-const StyledSearch = styled.div`
+const AnimatedSearch = styled.div`
 	width: 100%;
 	margin-right: 1rem;
-
-	input {
-		padding: 0.5rem 0.75rem;
-		font-size: 1rem;
-
-		border: none;
-		border-radius: 0.2rem;
-		height: 100%;
-		width: 100%;
-	}
 
 	.searchbar-enter {
 		opacity: 0.01;
@@ -135,7 +125,7 @@ class Header extends React.PureComponent {
 									</Flexbar>
 								</Link>
 								<CSSTransitionGroup
-									component={StyledSearch}
+									component={AnimatedSearch}
 									transitionName="searchbar"
 									transitionEnterTimeout={500}
 									transitionLeaveTimeout={300}

@@ -55,8 +55,8 @@ export const getAuthenticationTokenStatus = state =>
  * @param {object} state The redux state
  * @return {array} The product array
  */
-export const getProductSearchProducts = state =>
-	fromProductSearch.getProductSearchProducts(state.productSearch);
+export const getProductSearchSections = state =>
+	fromProductSearch.getProductSearchSections(state.productSearch);
 /**
  * Checks whether it is currently being fetched
  * @param {object} state The redux state

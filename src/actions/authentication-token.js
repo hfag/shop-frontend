@@ -1,4 +1,4 @@
-import { API_URL } from "config.json";
+import { fetchApi as fetch } from "api-utilities";
 
 /**
  * Action called before and after fetching the JWT token
@@ -44,7 +44,7 @@ export const login = (username, password) => dispatch => {
 	form.append("username", username);
 	form.append("password", password);
 
-	return fetch(API_URL + "/wp-json/jwt-auth/v1/token", {
+	return fetch("/wp-json/jwt-auth/v1/token", {
 		method: "POST",
 		body: form
 	})
@@ -67,16 +67,11 @@ export const login = (username, password) => dispatch => {
 export const verifyToken = token => dispatch => {
 	dispatch(verifyJwtToken());
 
-	return fetch(API_URL + "/wp-json/jwt-auth/v1/token/validate", {
+	return fetch("/wp-json/jwt-auth/v1/token/validate", {
 		method: "POST",
 		headers: new Headers({ Authorization: "Bearer " + token.token })
 	})
-		.then(
-			response =>
-				response.ok
-					? response.json()
-					: Promise.reject(new Error("Response wasn't ok!"))
-		)
+		.then(response => response.json())
 		.then(token => {
 			dispatch(verifyJwtToken(true));
 		})

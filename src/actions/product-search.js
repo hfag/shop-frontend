@@ -1,19 +1,17 @@
-import { API_URL } from "config.json";
+import { fetchApi as fetch } from "api-utilities";
 
 /**
  * Action called before and after searching products
  * @param {boolean} isFetching Whether the token is currently being fetched
  * @param {string} status If there was an error during the request, this field should contain it
- * @param {object} products The received products
- * @param {object} total The total count of products found
+ * @param {object} sections The received suggestion sections
  * @returns {object} The redux action
  */
-const searchProducts = (isFetching, status, products, total) => ({
+const searchProducts = (isFetching, status, sections) => ({
 	type: "SEARCH_PRODUCTS",
 	isFetching,
 	status,
-	products,
-	total
+	sections
 });
 
 /**
@@ -33,22 +31,13 @@ export const search = query => dispatch => {
 	dispatch(searchProducts(true, null));
 
 	const form = new FormData();
-	form.append("action", "product_search");
-	form.append("s", query);
-	form.append("version", 2);
 
-	return fetch(API_URL + "/wp-admin/admin-ajax.php", {
-		method: "POST",
-		body: form
+	return fetch("/wp-json/hfag/suggestions?query=" + query, {
+		method: "GET"
 	})
-		.then(
-			response =>
-				response.ok
-					? response.json()
-					: Promise.reject(new Error("Response wasn't ok!"))
-		)
-		.then(json => {
-			dispatch(searchProducts(false, null, json.products, json.count));
+		.then(response => response.json())
+		.then(sections => {
+			dispatch(searchProducts(false, null, sections));
 		})
 		.catch(error => {
 			dispatch(searchProducts(false, error, []));

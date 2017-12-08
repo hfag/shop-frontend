@@ -11,7 +11,7 @@ import Link from "components/Link";
 import { colors, shadows } from "style-utilities";
 
 import { search, reset } from "actions/product-search";
-import { getProductSearchProducts } from "reducers";
+import { getProductSearchSections } from "reducers";
 
 const StyledSearch = styled.div`
 	position: relative;
@@ -42,6 +42,9 @@ const SuggestionContainer = styled.div`
 	background-color: ${colors.backgroundOverlay};
 	box-shadow: ${shadows.y};
 
+	border-bottom-left-radius: 0.2rem;
+	border-bottom-right-radius: 0.2rem;
+
 	&:empty {
 		display: none;
 	}
@@ -60,7 +63,22 @@ const Suggestion = styled.div`
 	}
 `;
 
+const SuggestionTitle = styled.div`
+	margin: 0 0.5rem;
+	font-size: 1.2rem;
+	font-weight: 500;
+	border-bottom: ${colors.primary} 1px solid;
+`;
+
 const SearchInput = styled.input`
+	padding: 0.5rem 0.75rem;
+	font-size: 1rem;
+
+	border: none;
+	border-radius: 0.2rem;
+	height: 100%;
+	width: 100%;
+
 	&:focus {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
@@ -89,6 +107,12 @@ const renderSuggestionContainer = ({ containerProps, children, query }) => {
 const renderInputComponent = inputProps => {
 	return <SearchInput {...inputProps} />;
 };
+
+const renderSectionTitle = section => {
+	return <SuggestionTitle>{section.title}</SuggestionTitle>;
+};
+
+const getSectionSuggestions = section => section.suggestions;
 
 class Searchbar extends React.PureComponent {
 	constructor() {
@@ -120,7 +144,7 @@ class Searchbar extends React.PureComponent {
 
 	render = () => {
 		const { value } = this.state;
-		const { suggestions } = this.props;
+		const { sections } = this.props;
 
 		// Autosuggest will pass through all these props to the input.
 		const inputProps = {
@@ -132,7 +156,7 @@ class Searchbar extends React.PureComponent {
 		return (
 			<StyledSearch>
 				<Autosuggest
-					suggestions={suggestions}
+					suggestions={sections}
 					onSuggestionsFetchRequested={debouce(
 						this.onSuggestionsFetchRequested,
 						300
@@ -146,6 +170,9 @@ class Searchbar extends React.PureComponent {
 					renderInputComponent={renderInputComponent}
 					focusInputOnSuggestionClick={false}
 					inputProps={inputProps}
+					multiSection={true}
+					renderSectionTitle={renderSectionTitle}
+					getSectionSuggestions={getSectionSuggestions}
 				/>
 			</StyledSearch>
 		);
@@ -153,7 +180,7 @@ class Searchbar extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-	suggestions: getProductSearchProducts(state)
+	sections: getProductSearchSections(state)
 });
 
 export default connect(mapStateToProps)(Searchbar);

@@ -5,7 +5,7 @@
  * @return {object} The new state
  */
 const productSearchReducer = (
-	state = { isFetching: false, status: null, products: [], total: 0 },
+	state = { isFetching: false, status: null, sections: [] },
 	action
 ) => {
 	switch (action.type) {
@@ -16,8 +16,7 @@ const productSearchReducer = (
 					action.status || action.status === null
 						? action.status
 						: state.status,
-				products: action.products ? action.products : state.products,
-				total: action.total ? action.total : state.total
+				sections: action.sections ? action.sections : state.sections
 			};
 		default:
 			return state;
@@ -31,7 +30,7 @@ export default productSearchReducer;
  * @param {object} productSearch This part of the redux state
  * @return {array} The product array
  */
-export const getProductSearchProducts = productSearch => productSearch.products;
+export const getProductSearchSections = productSearch => productSearch.sections;
 /**
  * Checks whether it is currently being fetched
  * @param {object} productSearch This part of the redux state

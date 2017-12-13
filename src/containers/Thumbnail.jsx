@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { fetch as fetchThumbnail } from "actions/attachments";
 
-import { getAttachments } from "reducers";
+import { getAttachment } from "reducers";
 
 const StyledThumbail = styled.div`
 	img {
@@ -51,18 +51,18 @@ Thumbnail.propTypes = {
 	size: PropTypes.string
 };
 
-const mapStateToProps = state => ({ thumbnails: getAttachments(state) });
+const mapStateToProps = state => ({ state });
 const mapDispatchToProps = dispatch => ({
 	fetchThumbnail(id) {
 		return id ? dispatch(fetchThumbnail(id)) : undefined;
 	}
 });
 
-const mergeProps = ({ thumbnails }, { fetchThumbnail }, { id }) => ({
+const mergeProps = ({ state }, { fetchThumbnail }, { id }) => ({
 	fetchThumbnail() {
 		return id ? fetchThumbnail(id) : undefined;
 	},
-	thumbnail: thumbnails.filter(thumbnail => thumbnail.id === id)[0],
+	thumbnail: getAttachment(state, id),
 	id
 });
 

@@ -15,6 +15,17 @@ const byId = (state = {}, action) => {
 					status: action.status
 				}
 			};
+		case "FETCH_ATTACHMENTS":
+			return action.isFetching || action.status
+				? state
+				: action.attachments.reduce((object, attachment) => {
+						object[attachment.id] = {
+							...attachment,
+							isFetching: action.isFetching,
+							status: action.status
+						};
+						return object;
+					}, {});
 		default:
 			return state;
 	}

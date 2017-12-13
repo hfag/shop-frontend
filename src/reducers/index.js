@@ -99,3 +99,20 @@ export const getProductCategories = state =>
  */
 export const getAttachments = state =>
 	fromAttachment.getAttachments(state.attachment);
+
+/**
+ * Retrieves the object with the specified id
+ * @param {object} state The redux state
+ * @param {number} id The object id
+ * @return {object} The requested object
+ */
+export const getAttachment = (state, id) =>
+	fromAttachment.getAttachment(state.attachment, id);
+
+/**
+ * Returns all items by id
+ * @param {object} state The redux state
+ * @return {object} An object mapping the id to the object
+ */
+export const getAttachmentsById = state =>
+	fromAttachment.getAttachmentsById(state.attachment);

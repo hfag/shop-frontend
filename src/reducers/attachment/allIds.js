@@ -14,6 +14,8 @@ const allIds = (state = [], action) => {
 						: [...state, action.attachmentId]
 					: state.filter(attachment => attachment.id !== action.attachmentId)
 				: [];
+		case "FETCH_ATTACHMENT":
+			return action.attachments.map(attachment => attachment.id);
 		default:
 			return state;
 	}

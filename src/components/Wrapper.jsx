@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { ThemeProvider } from "styled-components";
+
 import Header from "containers/Header";
 import Footer from "components/Footer";
 
@@ -9,11 +11,17 @@ class Wrapper extends React.Component {
 		const { children } = this.props;
 		//"outer-container" and "page-wrap" are used by "react-burger-menu"
 		return (
-			<div id="outer-container">
-				<Header />
-				<main id="page-wrap">{children}</main>
-				<Footer />
-			</div>
+			<ThemeProvider
+				theme={{
+					breakpoints: [36, 48, 62, 75]
+				}}
+			>
+				<div id="outer-container">
+					<Header />
+					<main id="page-wrap">{children}</main>
+					<Footer />
+				</div>
+			</ThemeProvider>
 		);
 	};
 }

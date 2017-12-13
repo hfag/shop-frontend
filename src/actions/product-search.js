@@ -30,14 +30,13 @@ export const reset = () => ({
 export const search = query => dispatch => {
 	dispatch(searchProducts(true, null));
 
-	const form = new FormData();
-
 	return fetch("/wp-json/hfag/suggestions?query=" + query, {
 		method: "GET"
 	})
 		.then(response => response.json())
 		.then(sections => {
 			dispatch(searchProducts(false, null, sections));
+			return Promise.resolve(sections);
 		})
 		.catch(error => {
 			dispatch(searchProducts(false, error, []));

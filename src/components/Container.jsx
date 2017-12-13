@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { media } from "style-utilities";
 
 const Container = styled.div`
+	position: relative;
 	margin: 0 auto;
 	padding: 0 1rem;
 

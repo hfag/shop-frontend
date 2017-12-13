@@ -5,13 +5,17 @@ import { reducer as burgerMenu } from "redux-burger-menu";
 //import reducers
 import authentication, * as fromAuthentication from "./authentication";
 
+import product, * as fromProduct from "./product";
+import attachment, * as fromAttachment from "./attachment";
 import productSearch, * as fromProductSearch from "./product-search";
 
 export default combineReducers({
 	routing: routerReducer,
 	burgerMenu,
 	productSearch,
-	authentication
+	authentication,
+	product,
+	attachment
 });
 
 /**
@@ -79,3 +83,19 @@ export const getProductSearchFetching = state =>
  */
 export const getProductSearchStatus = state =>
 	fromProductSearch.getProductSearchStatus(state.productSearch);
+
+/**
+ * Returns all product categories
+ * @param {object} state The redux state
+ * @return {array} An array of product categories
+ */
+export const getProductCategories = state =>
+	fromProduct.getProductCategories(state.product);
+
+/**
+ * Returns all attachments
+ * @param {object} state The redux state
+ * @return {array} All attachments
+ */
+export const getAttachments = state =>
+	fromAttachment.getAttachments(state.attachment);

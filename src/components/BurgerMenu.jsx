@@ -14,7 +14,7 @@ import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
 
 import { getLoggedIn } from "reducers";
-import { colors } from "style-utilities";
+import { colors } from "utilities/style";
 
 const BurgerLogo = styled.img`
 	width: 100%;
@@ -49,27 +49,27 @@ class BurgerMenu extends React.PureComponent {
 				<BurgerLogo src="/img/logo/name_slogan_negative.svg" />
 				<BurgerList>
 					<BurgerItem seperator>
-						<Link to="https://feuerschutz.ch" unstyled negative flex>
+						<Link to="https://feuerschutz.ch" negative flex>
 							<HomeIcon />Zu unserer Homepage
 						</Link>
 					</BurgerItem>
 					<BurgerItem seperator>
-						<Link to="/search" unstyled negative flex>
+						<Link to="/search" negative flex>
 							<SearchIcon />Suche
 						</Link>
 					</BurgerItem>
 					<BurgerItem>
-						<Link to="/cart" unstyled negative flex>
+						<Link to="/cart" negative flex>
 							<CartIcon />Warenkorb
 						</Link>
 					</BurgerItem>
 					<BurgerItem seperator>
-						<Link to="/checkout" unstyled negative flex>
+						<Link to="/checkout" negative flex>
 							<CheckoutIcon />Zur Kasse
 						</Link>
 					</BurgerItem>
 					<BurgerItem>
-						<Link to="/account" unstyled negative flex>
+						<Link to="/account" negative flex>
 							{loggedIn ? (
 								<span>
 									<AccountIcon />Mein Konto

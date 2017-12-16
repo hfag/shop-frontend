@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { wrap } from "utilities/reducer";
 
 //import reducers
 import jwtToken, * as fromAuthToken from "./authentication-token";
@@ -11,37 +12,47 @@ export default combineReducers({
 
 /**
  * Checks whether the user is logged in
- * @param {object} authentication This part of the redux state
+ * @param {object} state This state
  * @return {boolean} Whether the user is logged in
  */
-export const getLoggedIn = authentication =>
-	fromWcCredentials.getLoggedIn(authentication.credentials);
+export const getLoggedIn = wrap(
+	fromWcCredentials.getLoggedIn,
+	state => state.credentials
+);
 /**
  * Returns the authentication token
- * @param {object} authentication This part of the redux state
+ * @param {object} state This state
  * @return {object} The woocommerce credentials
  */
-export const getCredentials = authentication =>
-	fromWcCredentials.getCredentials(authentication.credentials);
+export const getCredentials = wrap(
+	fromWcCredentials.getCredentials,
+	state => state.credentials
+);
 
 /**
  * Returns the authentication token
- * @param {object} authentication This part of the redux state
+ * @param {object} state This state
  * @return {object} The jwt token
  */
-export const getAuthenticationToken = authentication =>
-	fromAuthToken.getAuthenticationToken(authentication.token);
+export const getAuthenticationToken = wrap(
+	fromAuthToken.getAuthenticationToken,
+	state => state.token
+);
 /**
  * Checks whether the token is currently being fetched
- * @param {object} authentication This part of the redux state
+ * @param {object} state This state
  * @return {boolean} Whether the token is being fetched
  */
-export const getAuthenticationTokenFetching = authentication =>
-	fromAuthToken.getAuthenticationTokenFetching(authentication.token);
+export const getAuthenticationTokenFetching = wrap(
+	fromAuthToken.getAuthenticationTokenFetching,
+	state => state.token
+);
 /**
  * Returns the status of the jwt token
- * @param {object} authentication This part of the redux state
+ * @param {object} state This state
  * @return {error} The current status
  */
-export const getAuthenticationTokenStatus = authentication =>
-	fromAuthToken.getAuthenticationTokenStatus(authentication.token);
+export const getAuthenticationTokenStatus = wrap(
+	fromAuthToken.getAuthenticationTokenStatus,
+	state => state.token
+);

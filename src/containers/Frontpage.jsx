@@ -3,24 +3,14 @@ import { connect } from "react-redux";
 
 import Link from "components/Link";
 
-import { fetch as fetchCategories } from "actions/product/categories";
+import ProductCategories from "containers/ProductCategories";
 
-import { getProductCategories } from "reducers";
-
-import Categories from "components/Categories";
-
-//not a container yet but will be one in the future
-class Dashboard extends React.PureComponent {
-	componentWillMount = () => {
-		const { dispatch } = this.props;
-
-		dispatch(fetchCategories());
-	};
+class Frontpage extends React.PureComponent {
 	render = () => {
 		const { categories } = this.props;
 		return (
 			<div>
-				<Categories categories={categories} />
+				<ProductCategories />
 				<Link styled={false}>unstyled</Link>
 				<Link to="/login">Login</Link>
 			</div>
@@ -28,8 +18,4 @@ class Dashboard extends React.PureComponent {
 	};
 }
 
-const mapStateToProps = state => ({
-	categories: getProductCategories(state)
-});
-
-export default connect(mapStateToProps)(Dashboard);
+export default connect()(Frontpage);

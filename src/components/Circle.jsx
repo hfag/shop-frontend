@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { colors } from "style-utilities";
+import { colors } from "utilities/style";
 
 const Circle = styled.div`
 	padding: ${({ padding }) => (padding ? padding : "0.25rem")};

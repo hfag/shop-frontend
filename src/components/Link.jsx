@@ -5,7 +5,7 @@ import { push } from "react-router-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import { colors } from "style-utilities";
+import { colors } from "utilities/style";
 
 import Flexbar from "components/Flexbar";
 
@@ -27,13 +27,13 @@ class Link extends React.PureComponent {
 			dispatch,
 			to,
 			onClick,
-			unstyled,
+			styled,
 			children,
 			negative,
 			flex
 		} = this.props;
 
-		const LinkComponent = unstyled ? UnstyledLink : StyledLink;
+		const LinkComponent = styled ? StyledLink : UnstyledLink;
 
 		let props = { negative };
 
@@ -57,7 +57,7 @@ Link.propTypes = {
 	children: PropTypes.node,
 	to: PropTypes.string,
 	onClick: PropTypes.func,
-	unstyled: PropTypes.bool,
+	styled: PropTypes.bool,
 	negative: PropTypes.bool
 };
 

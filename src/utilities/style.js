@@ -4,7 +4,13 @@ export const colors = {
 	primary: "#2c3e50",
 	primaryContrast: "#ffffff",
 	background: "#f5f5f5",
-	backgroundOverlay: "#ffffff"
+	backgroundOverlay: "#ffffff",
+	font: "#464646",
+	fontLight: "#888888",
+	success: "#2ecc71",
+	info: "#3498db",
+	warning: "#FCBF37",
+	danger: "#e74c3c"
 };
 
 export const shadows = {

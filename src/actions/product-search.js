@@ -1,4 +1,4 @@
-import { fetchApi as fetch } from "api-utilities";
+import { fetchApi as fetch } from "utilities/api";
 
 /**
  * Action called before and after searching products

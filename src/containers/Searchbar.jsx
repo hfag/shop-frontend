@@ -8,7 +8,7 @@ import debouce from "lodash/debounce";
 import Flexbar from "components/Flexbar";
 import Link from "components/Link";
 
-import { colors, shadows } from "style-utilities";
+import { colors, shadows } from "utilities/style";
 
 import { search, reset } from "actions/product-search";
 import { getProductSearchSections } from "reducers";
@@ -44,6 +44,8 @@ const SuggestionContainer = styled.div`
 
 	border-bottom-left-radius: 0.2rem;
 	border-bottom-right-radius: 0.2rem;
+
+	z-index: 1000;
 
 	&:empty {
 		display: none;

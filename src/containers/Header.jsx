@@ -5,7 +5,7 @@ import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 
 import { action as toggleBurgerMenuAction } from "redux-burger-menu";
-import { colors } from "style-utilities";
+import { colors } from "utilities/style";
 
 import { getBurgerMenuOpen } from "reducers";
 
@@ -155,7 +155,7 @@ class Header extends React.PureComponent {
 												</Link>
 											</NavItem>
 											<NavItem seperator>
-												<Link onClick={() => {}} negative unstyled flex>
+												<Link onClick={() => {}} negative flex>
 													<CartIcon size="35" />
 													<Counter>
 														<Circle

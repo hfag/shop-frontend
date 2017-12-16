@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import Container from "components/Container";
 
-import { colors, shadows } from "style-utilities";
+import { colors, shadows } from "utilities/style";
 
 const Page = styled(Container)`
 	background-color: ${colors.backgroundOverlay};

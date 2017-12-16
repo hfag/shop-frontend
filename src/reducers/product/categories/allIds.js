@@ -7,8 +7,15 @@
 const allIds = (state = [], action) => {
 	switch (action.type) {
 		case "FETCH_PRODUCT_CATEGORIES":
+			console.log("state", state);
+			console.log("cat", action.categories);
 			return action.categories
-				? action.categories.map(category => category.id)
+				? [
+						...state,
+						...action.categories
+							.filter(category => !state.includes(category.id))
+							.map(category => category.id)
+					]
 				: state;
 		default:
 			return state;

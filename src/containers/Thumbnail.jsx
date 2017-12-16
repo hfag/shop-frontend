@@ -5,7 +5,9 @@ import styled from "styled-components";
 
 import { fetch as fetchThumbnail } from "actions/attachments";
 
-import { getAttachment } from "reducers";
+import { getAttachmentById } from "reducers";
+
+import Placeholder from "components/Placeholder";
 
 const StyledThumbail = styled.div`
 	img {
@@ -15,32 +17,61 @@ const StyledThumbail = styled.div`
 `;
 
 class Thumbnail extends React.PureComponent {
+	constructor() {
+		super();
+
+		this.state = { fetched: false, error: false };
+	}
+
 	componentWillMount = () => {
-		const { fetchThumbnail } = this.props;
-		fetchThumbnail();
+		const { id, fetchThumbnail, thumbnail } = this.props;
+
+		if (id > 0 && !thumbnail) {
+			fetchThumbnail();
+		}
 	};
+	onImageLoad = event => {
+		this.setState({ fetched: true });
+	};
+
+	onImageError = event => {
+		this.setState({ error: true });
+	};
+
 	render = () => {
 		const { id, thumbnail, size = "feuerschutz_fix_width" } = this.props;
+		const { fetched, error } = this.state;
 
-		if (!thumbnail || !thumbnail.mimeType) {
-			return null;
-		}
-
-		const thumbnailUrl = thumbnail.mimeType.startsWith("image/")
-			? thumbnail.sizes
-				? thumbnail.sizes[size]
-					? thumbnail.sizes[size].source_url
+		const thumbnailUrl =
+			thumbnail && thumbnail.mimeType && thumbnail.mimeType.startsWith("image/")
+				? thumbnail.sizes
+					? thumbnail.sizes[size]
+						? thumbnail.sizes[size].source_url
+						: thumbnail.url
 					: thumbnail.url
-				: thumbnail.url
-			: "";
+				: "";
+
+		const show = fetched && !error && thumbnail && thumbnailUrl;
 
 		return (
 			<StyledThumbail>
-				<img
-					width={thumbnail.width}
-					height={thumbnail.height}
-					src={thumbnailUrl}
-				/>
+				{thumbnail &&
+					thumbnailUrl && (
+						<img
+							onLoad={this.onImageLoad}
+							onError={this.onImageError}
+							width={thumbnail.width}
+							height={thumbnail.height}
+							src={thumbnailUrl}
+							style={
+								show
+									? {}
+									: { position: "absolute", width: 1, height: 1, zIndex: -1 }
+							}
+						/>
+					)}
+
+				{!show && <Placeholder block error={error} />}
 			</StyledThumbail>
 		);
 	};
@@ -51,21 +82,13 @@ Thumbnail.propTypes = {
 	size: PropTypes.string
 };
 
-const mapStateToProps = state => ({ state });
-const mapDispatchToProps = dispatch => ({
-	fetchThumbnail(id) {
-		return id ? dispatch(fetchThumbnail(id)) : undefined;
+const mapStateToProps = (state, { id }) => ({
+	thumbnail: getAttachmentById(state, id)
+});
+const mapDispatchToProps = (dispatch, { id }) => ({
+	fetchThumbnail() {
+		return dispatch(fetchThumbnail(id));
 	}
 });
 
-const mergeProps = ({ state }, { fetchThumbnail }, { id }) => ({
-	fetchThumbnail() {
-		return id ? fetchThumbnail(id) : undefined;
-	},
-	thumbnail: getAttachment(state, id),
-	id
-});
-
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
-	Thumbnail
-);
+export default connect(mapStateToProps, mapDispatchToProps)(Thumbnail);

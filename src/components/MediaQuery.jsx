@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { media } from "style-utilities";
+import { media } from "utilities/style";
 
 const b = "display: block";
 

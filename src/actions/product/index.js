@@ -3,32 +3,37 @@ import {
 	createFetchSingleItemThunk,
 	createFetchItemsAction,
 	createFetchAllItemsThunk,
+	createFetchItemsThunk,
 	createFetchItemPageThunk
 } from "utilities/action";
 
-const itemName = "productCategory";
+const itemName = "product";
 
 /**
  * Maps an item so we can store it in the state
  * @param {object} item The item to map
  * @return {object} The mapped item
  */
-const mapItem = ({
+const mapItem = (
+	{
+		id,
+		title: { rendered: title },
+		content: { rendered: content },
+		excerpt: { rendered: excerpt },
+		featured_media: thumbnailId,
+		product_cat: categoryIds,
+		date
+	},
+	page,
+	args
+) => ({
 	id,
-	count,
-	description,
-	name,
-	slug,
-	parent,
-	thumbnail_id: thumbnailId
-}) => ({
-	id,
-	count,
-	description,
-	name,
-	slug,
-	parent,
-	thumbnailId
+	title,
+	content,
+	excerpt,
+	thumbnailId,
+	categoryIds,
+	date
 });
 
 /**
@@ -47,7 +52,7 @@ const fetchItemAction = createFetchSingleItemAction(itemName);
  */
 export const fetchItem = createFetchSingleItemThunk(
 	fetchItemAction,
-	id => `/wp-json/wp/v2/product_cat/${id}`,
+	id => `/wp-json/wp/v2/product/${id}`,
 	mapItem
 );
 
@@ -62,26 +67,33 @@ const fetchItemsAction = createFetchItemsAction(itemName);
 
 /**
  * Fetches all items
- * @returns {function}
+ * @return {function}
  */
 export const fetchAll = createFetchAllItemsThunk(
 	fetchItemsAction,
-	(page, perPage) =>
-		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}`,
+	(page, perPage) => `/wp-json/wp/v2/product?page=${page}&per_page=${perPage}`,
 	response => parseInt(response.headers.get("x-wp-total")),
 	mapItem
 );
 
 /**
- * Fetches specified items
+ * Fetches the specified items
  * @return {function}
  */
 export const fetchItems = createFetchItemPageThunk(
 	fetchItemsAction,
-	(page, perPage, itemIds) =>
-		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${
-			perPage
-		}&include[]=${itemIds.join("&include[]=")}`,
+	(
+		page,
+		perPage,
+		{ itemIds = [], categoryIds = [], order = "desc", orderby = "date" }
+	) =>
+		`/wp-json/wp/v2/product?page=${page}&per_page=${perPage}${
+			itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
+		}${
+			categoryIds.length > 0
+				? "&product_cat[]=" + categoryIds.join("&product_cat[]=")
+				: ""
+		}&orderby=${orderby}&order=${order}`,
 	response => parseInt(response.headers.get("x-wp-total")),
 	mapItem
 );

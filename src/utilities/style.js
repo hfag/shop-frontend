@@ -10,7 +10,8 @@ export const colors = {
 	success: "#2ecc71",
 	info: "#3498db",
 	warning: "#FCBF37",
-	danger: "#e74c3c"
+	danger: "#e74c3c",
+	disabled: "#cccccc"
 };
 
 export const shadows = {

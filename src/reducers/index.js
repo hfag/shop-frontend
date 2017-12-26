@@ -133,9 +133,30 @@ export const getProductSearchStatus = wrap(
 import product, * as fromProduct from "./product";
 
 /**
+ * Returns the product with the specified id
+ * @param {object} state This state
+ * @param {number} categoryId The product id
+ * @return {array} All product categories
+ */
+export const getProductById = wrap(
+	fromProduct.getProductById,
+	state => state.product
+);
+
+/**
+ * Returns all products
+ * @param {object} state This state
+ * @return {array} All products
+ */
+export const getProducts = wrap(
+	fromProduct.getProducts,
+	state => state.product
+);
+
+/**
  * Returns the product category with the specified id
  * @param {object} state This state
- * @param {number} categoryId An optional parent category id
+ * @param {number} categoryId The category id
  * @return {array} All product categories
  */
 export const getProductCategoryById = wrap(

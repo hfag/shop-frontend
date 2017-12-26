@@ -11,7 +11,8 @@ import Placeholder from "components/Placeholder";
 
 import { colors, shadows } from "utilities/style";
 
-import { fetch as fetchProductCategory } from "actions/product/categories";
+import { fetchItem as fetchProductCategory } from "actions/product/categories";
+
 import { getProductCategoryById } from "reducers";
 
 const StyledCategory = styled.div`
@@ -70,7 +71,7 @@ class Category extends React.PureComponent {
 }
 
 Category.propTypes = {
-	categories: PropTypes.arrayOf(PropTypes.object)
+	id: PropTypes.number.isRequired
 };
 
 const mapStateToProps = (state, { id }) => {

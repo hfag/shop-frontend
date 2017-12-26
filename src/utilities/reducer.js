@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import pluralize from "pluralize";
 import changeCase from "change-case";
 
-const createAllIds = name => (state = [], action) => {
+export const createAllIds = name => (state = [], action) => {
 	switch (action.type) {
 		case "FETCH_" + changeCase.snakeCase(name).toUpperCase():
 			return action.itemId
@@ -12,21 +12,21 @@ const createAllIds = name => (state = [], action) => {
 				: state;
 		case "FETCH_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
 			return action.items
-				? !action.isFetching && !action.status
-					? [
-							...state,
-							...action.items
-								.map(item => item.id)
-								.filter(id => !state.includes(id))
-						]
-					: state.filter(item => !action.items.includes(item.id))
-				: state;
+				? [
+						...state,
+						...action.items
+							.map(item => item.id)
+							.filter(id => !state.includes(id))
+					]
+				: action.itemIds
+					? [...state, ...action.itemIds.filter(id => !state.includes(id))]
+					: state;
 		default:
 			return state;
 	}
 };
 
-const createById = name => (state = {}, action) => {
+export const createById = name => (state = {}, action) => {
 	switch (action.type) {
 		case "FETCH_" + changeCase.snakeCase(name).toUpperCase():
 			return {
@@ -38,7 +38,7 @@ const createById = name => (state = {}, action) => {
 				}
 			};
 		case "FETCH_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
-			return action.isFetching || action.status || !action.items
+			return action.isFetching || action.status || action.items.length === 0
 				? state
 				: {
 						...state,
@@ -69,7 +69,7 @@ export const createReducer = name =>
 
 /**
  * Gets a single item based on its id
- * @param {object} state The correct part of the redux state
+ * @param {object} state This item's part of the redux state
  * @param {number} itemId The items id to look for
  * @return {object} The item
  */
@@ -77,7 +77,7 @@ export const getItemById = (state, itemId) => state.byId[itemId];
 
 /**
  * Gets all items
- * @param {object} state The correct part of the redux state
+ * @param {object} state This item's part of the redux state
  * @return {array} All items
  */
 export const getAllItems = state => state.allIds.map(id => state.byId[id]);

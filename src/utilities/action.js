@@ -57,14 +57,16 @@ export const createFetchSingleItemThunk = (
  * @param {string} name The singular name of the item type
  * @return {function} The redux action
  */
-export const createFetchAllItemsAction = name => (
+export const createFetchItemsAction = name => (
 	isFetching,
 	status,
-	items
+	args = {},
+	items = []
 ) => ({
 	type: "FETCH_" + changeCase.snakeCase(pluralize(name)).toUpperCase(),
 	isFetching,
 	status,
+	args,
 	items
 });
 
@@ -75,42 +77,42 @@ export const createFetchAllItemsAction = name => (
  * @param {function} endpoint A function generating the endpoint url based on the page and the number of items per page
  * @param {function} total A function getting the total amount of pages from a response (e.g. read a header)
  * @param {function} mapItem A function mapping the item into the desired format
- * @param {number} perPage The amount of items per page
- * @param {number} page The page that should be fetched
+ * @param {number} [perPage=10] The amount of items per page
  * @return {promise} A promise yielding all items or an error
  */
-const fetchByPage = (
-	dispatch,
+export const createFetchItemPageThunk = (
 	action,
 	endpoint,
 	total,
 	mapItem = item => item,
-	perPage = 20,
-	page = 1
-) =>
-	fetchApi(endpoint(page, perPage), {
+	perPage = 10
+) => (page = 1, pageTo = -1, args = {}) => dispatch =>
+	fetchApi(endpoint(page, perPage, args), {
 		method: "GET"
 	}).then(response => {
 		return response.json().then(items => {
 			const totalItems = total(response);
 
-			if ((page - 1) * perPage + items.length < totalItems) {
-				if (total && total.length) {
-					dispatch(action(false, null, items.map(mapItem)));
-				}
+			dispatch(
+				action(false, null, args, items.map(item => mapItem(item, page, args)))
+			);
 
-				return fetchByPage(
-					dispatch,
+			if (
+				(page - 1) * perPage + items.length < totalItems &&
+				(pageTo > 0 ? page <= pageTo : true)
+			) {
+				return createFetchItemPageThunk(
 					action,
 					endpoint,
 					total,
 					mapItem,
-					page + 1,
 					perPage
-				).then(nextItems => Promise.resolve([...items, ...nextItems]));
+				)(page + 1, pageTo, args)(dispatch).then(({ items: nextItems }) =>
+					Promise.resolve({ items: [...items, ...nextItems], totalItems })
+				);
 			}
 
-			return Promise.resolve(items);
+			return Promise.resolve({ items, totalItems });
 		});
 	});
 
@@ -129,14 +131,18 @@ export const createFetchAllItemsThunk = (
 	total,
 	mapItem = item => item,
 	perPage = 10
-) => () => dispatch => {
+) => (args = {}) => dispatch => {
 	dispatch(action(true, null));
 
-	return fetchByPage(dispatch, action, endpoint, total, mapItem, perPage)
-		.then(items => {
-			dispatch(action(false, null, items.map(mapItem)));
+	return createFetchItemPageThunk(action, endpoint, total, mapItem, perPage)(
+		1,
+		-1,
+		args
+	)(dispatch)
+		.then(({ items }) => {
+			dispatch(action(false, null, args, items.map(mapItem)));
 
-			return Promise.resolve(items);
+			return Promise.resolve({ items });
 		})
 		.catch(error => {
 			dispatch(action(false, error, []));

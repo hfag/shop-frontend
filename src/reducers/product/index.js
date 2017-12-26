@@ -1,8 +1,24 @@
 import categories, * as fromCategories from "./categories";
 import { combineReducers } from "redux";
-import { wrap } from "utilities/reducer";
+import {
+	wrap,
+	createAllIds,
+	createById,
+	createStatus
+} from "utilities/reducer";
 
-export default combineReducers({ categories });
+const itemName = "product";
+
+export {
+	getAllItems as getProducts,
+	getItemById as getProductById
+} from "utilities/reducer";
+
+export default combineReducers({
+	byId: createById(itemName),
+	allIds: createAllIds(itemName),
+	categories
+});
 
 /**
  * Returns the product category with the specified id

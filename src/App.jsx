@@ -10,7 +10,7 @@ import Login from "components/Login";
 
 //containers
 import Frontpage from "containers/Frontpage";
-import ProductCategories from "containers/Frontpage";
+import ProductCategories from "containers/ProductCategories";
 import Account from "containers/Account";
 
 const App = ({ history, store }) => {
@@ -19,9 +19,13 @@ const App = ({ history, store }) => {
 			<ConnectedRouter history={history}>
 				<Wrapper>
 					<Route exact path="/" component={Frontpage} />
-					<Route path="/category/:categoryId" component={ProductCategories} />
-					<Route path="/login" component={Login} />
-					<Route path="/account" component={Account} />
+					<Route
+						exact
+						path="/category/:categoryId/:page"
+						component={ProductCategories}
+					/>
+					<Route exact path="/login" component={Login} />
+					<Route exact path="/account" component={Account} />
 				</Wrapper>
 			</ConnectedRouter>
 		</Provider>

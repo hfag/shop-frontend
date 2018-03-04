@@ -3,7 +3,6 @@ import {
 	createFetchSingleItemThunk,
 	createFetchItemsAction,
 	createFetchAllItemsThunk,
-	createFetchItemsThunk,
 	createFetchItemPageThunk,
 	createFetchItemPageAction
 } from "utilities/action";
@@ -58,13 +57,14 @@ export const fetchProduct = createFetchSingleItemThunk(
 );
 
 /**
- * Action called before and after fetching all items
+ * Action called before and after fetching an item page
  * @param {boolean} isFetching Whether it is currently being fetched
  * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} items The received items
  * @return {object} The redux action
  */
-const fetchItemsAction = createFetchItemsAction(itemName);
+const fetchItemPageAction = createFetchItemPageAction(itemName);
 
 /**
  * Fetches all items
@@ -73,16 +73,15 @@ const fetchItemsAction = createFetchItemsAction(itemName);
  * @return {function}
  */
 export const fetchAllProducts = createFetchAllItemsThunk(
-	fetchItemsAction,
+	fetchItemPageAction,
 	(page, perPage) => `/wp-json/wp/v2/product?page=${page}&per_page=${perPage}`,
 	mapItem
 );
 
 /**
- * Action called before and after fetching an item page
+ * Action called before and after fetching all items
  * @param {boolean} isFetching Whether it is currently being fetched
  * @param {string} error If there was an error during the request, this field should contain it
- * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} items The received items
  * @param {array} itemIds If specified only items with the specified item ids will be fetched
  * @param {array} categoryIds If specified only items of the given categories will be fetched
@@ -90,7 +89,7 @@ export const fetchAllProducts = createFetchAllItemsThunk(
  * @param {string} orderby What the items should by ordered by
  * @return {object} The redux action
  */
-const fetchItemPageAction = createFetchItemPageAction(
+const fetchItemsAction = createFetchItemsAction(
 	itemName,
 	"itemIds",
 	"categoryIds",
@@ -104,6 +103,7 @@ const fetchItemPageAction = createFetchItemPageAction(
  * @param {number} pageTo The last page to fetch, -1 for all
  * @param {number} perPage How many items should be fetched per page
  * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @param {array} itemIds Only the specified product ids will be fetched
  * @param {array} categoryIds If specified only items of the given categories will be fetched
  * @param {string} order Whether the items should be order asc or desc
  * @param {string} orderby What the items should by ordered by

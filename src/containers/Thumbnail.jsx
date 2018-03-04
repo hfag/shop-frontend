@@ -11,8 +11,13 @@ import Placeholder from "components/Placeholder";
 
 const StyledThumbail = styled.div`
 	img {
-		width: 100%;
-		height: auto;
+		${({ longerSide }) =>
+			longerSide === "width"
+				? "width: 100%; height: auto;"
+				: "height: 100%; width: auto;"};
+
+		/*max-height: 100%;
+		max-width: 100%;*/
 	}
 `;
 
@@ -54,10 +59,17 @@ class Thumbnail extends React.PureComponent {
 		const show = fetched && !error && thumbnail && thumbnailUrl;
 
 		return (
-			<StyledThumbail>
+			<StyledThumbail
+				longerSide={
+					thumbnail && thumbnail.width < thumbnail.height ? "height" : "width"
+				}
+			>
 				{thumbnail &&
 					thumbnailUrl && (
 						<img
+							className={
+								thumbnail.width < thumbnail.height ? "b-height" : "b-width"
+							}
 							onLoad={this.onImageLoad}
 							onError={this.onImageError}
 							width={thumbnail.width}

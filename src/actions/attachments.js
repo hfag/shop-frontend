@@ -2,7 +2,8 @@ import {
 	createFetchSingleItemAction,
 	createFetchSingleItemThunk,
 	createFetchItemsAction,
-	createFetchAllItemsThunk
+	createFetchAllItemsThunk,
+	createFetchItemPageThunk
 } from "utilities/action";
 
 const itemName = "attachment";
@@ -55,18 +56,41 @@ export const fetchAttachment = createFetchSingleItemThunk(
  * @param {boolean} isFetching Whether it is currently being fetched
  * @param {string} error If there was an error during the request, this field should contain it
  * @param {object} items The received items
- * @returns {object} The redux action
+ * @param {array} itemIds If specified only items with the specified item ids will be fetched
+ * @param {string} order Whether the items should be order asc or desc
+ * @param {string} orderby What the items should by ordered by
+ * @return {object} The redux action
  */
-const fetchItems = createFetchItemsAction(itemName);
+const fetchItemsAction = createFetchItemsAction(
+	itemName,
+	"itemIds",
+	"order",
+	"orderby"
+);
 
 /**
- * Fetches all items
+ * Fetches the specified items
+ * @param {number} page The first page to fetch
+ * @param {number} pageTo The last page to fetch, -1 for all
  * @param {number} perPage How many items should be fetched per page
  * @param {boolean} visualize Whether the progress of this action should be visualized
- * @returns {function}
+ * @param {array} itemIds Only the specified product ids will be fetched
+ * @param {string} order Whether the items should be order asc or desc
+ * @param {string} orderby What the items should by ordered by
+ * @return {function}
  */
-export const fetchAllAttachments = createFetchAllItemsThunk(
-	fetchItems,
-	(page, perPage) => `/wp-json/wp/v2/media?page=${page}&per_page=${perPage}`,
+export const fetchAttachments = createFetchItemPageThunk(
+	fetchItemsAction,
+	(
+		page,
+		perPage,
+		itemIds = [],
+		categoryIds = [],
+		order = "desc",
+		orderby = "date"
+	) =>
+		`/wp-json/wp/v2/product?page=${page}&per_page=${perPage}${
+			itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
+		}&orderby=${orderby}&order=${order}`,
 	mapItem
 );

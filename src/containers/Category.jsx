@@ -25,8 +25,30 @@ const StyledCategory = styled.div`
 	height: 100%;
 
 	& > div:first-child {
-		/* Thumbnail */
+		position: relative;
 		border-bottom: ${colors.background} 1px solid;
+		padding-top: 100%;
+
+		& > * {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+
+			width: 90%;
+			height: 90%;
+
+			transform: translate(-50%, -50%);
+
+			&.b-height {
+				height: 90%;
+				width: auto;
+			}
+
+			&.b-width {
+				width: 90%;
+				height: auto;
+			}
+		}
 	}
 
 	& > div:last-child {

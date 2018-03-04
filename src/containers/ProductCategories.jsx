@@ -13,6 +13,7 @@ import Product from "containers/Product";
 
 import { fetchProductCategories } from "actions/product/categories";
 import { fetchProducts } from "actions/product";
+import { fetchAttachments } from "actions/attachments";
 
 import {
 	getProducts,
@@ -52,8 +53,9 @@ class ProductCategories extends React.PureComponent {
 
 		if (categoryIds.length === 0 && productIds.length === 0) {
 			fetchAllProductCategories();
-			fetchProducts();
 		}
+
+		fetchProducts();
 	};
 	onPageChange = ({ selected }) => {
 		const { match: { params: { categoryId, page } } } = this.props;
@@ -133,7 +135,14 @@ const mapDispatchToProps = (
 		page = parseInt(page);
 		return categoryId
 			? dispatch(
-					fetchProducts(page, page, perPage, visualize, [parseInt(categoryId)])
+					fetchProducts(
+						page,
+						page,
+						perPage,
+						visualize,
+						[],
+						[parseInt(categoryId)]
+					)
 				)
 			: Promise.resolve();
 	}

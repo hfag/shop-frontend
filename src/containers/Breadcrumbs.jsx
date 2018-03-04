@@ -88,7 +88,7 @@ const CategoryBreadcrumb = connect(
 				</Keyer>
 			]
 		) : (
-			<Placeholder text />
+			<Placeholder text inline minWidth={5} />
 		)
 );
 

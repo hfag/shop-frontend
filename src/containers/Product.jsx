@@ -60,7 +60,7 @@ class Product extends React.PureComponent {
 		const { id: productId, product, categories } = this.props;
 
 		return (
-			<Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} pr={2} pt={2}>
+			<Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} pr={3} pb={3}>
 				<Link to={"/product/" + productId}>
 					<StyledProduct>
 						<Thumbnail id={product ? product.thumbnailId : -1} />

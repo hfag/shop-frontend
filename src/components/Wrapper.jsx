@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { ThemeProvider } from "styled-components";
 
 import Header from "containers/Header";
+import Breadcrumbs from "containers/Breadcrumbs";
 import Footer from "components/Footer";
 
 class Wrapper extends React.Component {
@@ -18,7 +19,10 @@ class Wrapper extends React.Component {
 			>
 				<div id="outer-container">
 					<Header />
-					<main id="page-wrap">{children}</main>
+					<main id="page-wrap">
+						<Breadcrumbs />
+						{children}
+					</main>
 					<Footer />
 				</div>
 			</ThemeProvider>

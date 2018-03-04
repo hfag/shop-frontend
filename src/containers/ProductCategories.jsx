@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { push } from "react-router-redux";
 
-import { Flex, Box } from "grid-styled";
+import Flex from "components/Flex";
 
 import Link from "components/Link";
 import Container from "components/Container";
@@ -69,7 +69,7 @@ class ProductCategories extends React.PureComponent {
 
 		return (
 			<Container>
-				<Flex wrap>
+				<Flex flexWrap="wrap">
 					{categoryIds.length > 0
 						? categoryIds.map(categoryId => (
 								<Category key={categoryId} id={categoryId} />
@@ -129,11 +129,11 @@ const mapDispatchToProps = (
 	fetchAllProductCategories() {
 		return dispatch(fetchProductCategories());
 	},
-	fetchProducts(visualize = false) {
+	fetchProducts(perPage = 15, visualize = false) {
 		page = parseInt(page);
 		return categoryId
 			? dispatch(
-					fetchProductPage(page, page, visualize, [parseInt(categoryId)])
+					fetchProducts(page, page, perPage, visualize, [parseInt(categoryId)])
 				)
 			: Promise.resolve();
 	}

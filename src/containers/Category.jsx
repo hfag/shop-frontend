@@ -64,7 +64,7 @@ class Category extends React.PureComponent {
 		}
 
 		return (
-			<Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} pr={2} pt={2}>
+			<Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
 				<Link to={"/category/" + categoryId + "/1"}>
 					<StyledCategory>
 						<Thumbnail id={category ? category.thumbnailId : -1} />

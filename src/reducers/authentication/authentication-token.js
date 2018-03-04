@@ -1,4 +1,4 @@
-const defaultState = { isFetching: false, status: null, token: {} };
+const defaultState = { isFetching: false, error: null, token: {} };
 
 /**
  * The authentication token reducer
@@ -12,10 +12,10 @@ const authenticationTokenReducer = (state = defaultState, action) => {
 			return {
 				...state,
 				isFetching: action.isFetching,
-				status:
-					action.status || action.status === null
-						? action.status
-						: state.status,
+				error:
+					action._error || action._error === null
+						? action._error
+						: state._error,
 				token: action.token ? action.token : state.token
 			};
 		case "RESET_JWT_TOKEN":
@@ -34,7 +34,7 @@ export default authenticationTokenReducer;
  */
 export const getLoggedIn = authenticationToken =>
 	authenticationToken.isFetching === false &&
-	authenticationToken.status === null &&
+	authenticationToken.error === null &&
 	Object.keys(authenticationToken.token).length !== 0;
 /**
  * Returns the authentication token
@@ -51,9 +51,9 @@ export const getAuthenticationToken = authenticationToken =>
 export const getAuthenticationTokenFetching = authenticationToken =>
 	authenticationToken.isFetching;
 /**
- * Returns the status of the jwt token
+ * Returns the error of the jwt token
  * @param {object} authenticationToken This part of the redux state
- * @return {error} The current status
+ * @return {error} The current error
  */
-export const getAuthenticationTokenStatus = authenticationToken =>
-	authenticationToken.status;
+export const getAuthenticationTokenError = authenticationToken =>
+	authenticationToken.error;

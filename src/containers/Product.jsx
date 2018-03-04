@@ -8,10 +8,11 @@ import { Flex, Box } from "grid-styled";
 
 import Thumbnail from "containers/Thumbnail";
 import Placeholder from "components/Placeholder";
+import Link from "components/Link";
 
 import { colors, shadows } from "utilities/style";
 
-import { fetchItem as fetchProduct } from "actions/product";
+import { fetchProduct } from "actions/product";
 
 import { getProductCategories, getProductById } from "reducers";
 
@@ -56,26 +57,30 @@ class Product extends React.PureComponent {
 	};
 
 	render = () => {
-		const { product, categories } = this.props;
+		const { id: productId, product, categories } = this.props;
 
 		return (
-			<StyledProduct>
-				<Thumbnail id={product ? product.thumbnailId : -1} />
-				<div>
-					{product ? <Title>{product.title}</Title> : <Placeholder text />}
-					{product ? (
-						categories ? (
-							categories.map(category => (
-								<Subtitle key={category.id}>{category.name}</Subtitle>
-							))
-						) : (
-							""
-						)
-					) : (
-						<Placeholder text />
-					)}
-				</div>
-			</StyledProduct>
+			<Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} pr={2} pt={2}>
+				<Link to={"/product/" + productId}>
+					<StyledProduct>
+						<Thumbnail id={product ? product.thumbnailId : -1} />
+						<div>
+							{product ? <Title>{product.title}</Title> : <Placeholder text />}
+							{product ? (
+								categories ? (
+									categories.map(category => (
+										<Subtitle key={category.id}>{category.name}</Subtitle>
+									))
+								) : (
+									""
+								)
+							) : (
+								<Placeholder text />
+							)}
+						</div>
+					</StyledProduct>
+				</Link>
+			</Box>
 		);
 	};
 }

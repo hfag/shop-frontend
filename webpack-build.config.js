@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issues/56
 
@@ -19,7 +20,12 @@ module.exports = {
 
 	plugins: [
 		new webpack.NoEmitOnErrorsPlugin(),
-		new ExtractTextPlugin("styles.css")
+		new ExtractTextPlugin("styles.css"),
+		new Dotenv({
+			path: "./.env",
+			safe: true,
+			systemvars: true
+		})
 	],
 
 	resolve: {

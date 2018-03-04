@@ -5,17 +5,17 @@
  * @return {object} The new state
  */
 const productSearchReducer = (
-	state = { isFetching: false, status: null, sections: [] },
+	state = { isFetching: false, error: null, sections: [] },
 	action
 ) => {
 	switch (action.type) {
 		case "SEARCH_PRODUCTS":
 			return {
 				isFetching: action.isFetching,
-				status:
-					action.status || action.status === null
-						? action.status
-						: state.status,
+				error:
+					action._error || action._error === null
+						? action._error
+						: state._error,
 				sections: action.sections ? action.sections : state.sections
 			};
 		default:
@@ -39,8 +39,8 @@ export const getProductSearchSections = productSearch => productSearch.sections;
 export const getProductSearchFetching = productSearch =>
 	productSearch.isFetching;
 /**
- * Returns the status
+ * Returns the error
  * @param {object} productSearch This part of the redux state
- * @return {error} The current status
+ * @return {error} The current error
  */
-export const getProductSearchStatus = productSearch => productSearch.status;
+export const getProductSearchError = productSearch => productSearch.error;

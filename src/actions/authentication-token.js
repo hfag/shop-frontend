@@ -1,27 +1,20 @@
-import { fetchApi as fetch } from "api-utilities";
+import { fetchApi } from "utilities/api";
+import { createFetchAction } from "utilities/action";
 
 /**
  * Action called before and after fetching the JWT token
  * @param {boolean} isFetching Whether the token is currently being fetched
- * @param {string} status If there was an error during the request, this field should contain it
+ * @param {string} error If there was an error during the request, this field should contain it
  * @param {object} token The received token
  * @returns {object} The redux action
  */
-const fetchJwtToken = (isFetching, status, token) => ({
-	type: "FETCH_JWT_TOKEN",
-	isFetching,
-	token,
-	status
-});
+const fetchJwtToken = createFetchAction("FETCH_JWT_TOKEN", "token");
 
 /**
  * Verifies the jwt token
  * @returns {object} The redux action
  */
-const verifyJwtToken = (verified = undefined) => ({
-	type: "VERIFY_JWT_TOKEN",
-	verified
-});
+const verifyJwtToken = createFetchAction("VERIFY_JWT_TOKEN", "verified");
 
 /**
  * Logs the user out and resets the jwt token
@@ -64,20 +57,23 @@ export const login = (username, password) => dispatch => {
 		});
 };
 
-export const verifyToken = token => dispatch => {
-	dispatch(verifyJwtToken());
+/**
+ * Validates the authentication token
+ * @return {function} The redux thunk
+ */
+export const verifyToken = () => dispatch => {
+	dispatch(verifyJwtToken(true, null, null));
 
 	return fetch("/wp-json/jwt-auth/v1/token/validate", {
-		method: "POST",
-		headers: new Headers({ Authorization: "Bearer " + token.token })
+		method: "POST"
 	})
 		.then(response => response.json())
 		.then(token => {
-			dispatch(verifyJwtToken(true));
+			dispatch(verifyJwtToken(false, null, true));
 		})
 		.catch(error => {
-			dispatch(fetchJwtToken(false));
-			dispatch(resetJwtToken(false));
+			dispatch(fetchJwtToken(false, error, false));
+			dispatch(resetJwtToken(false, error, false));
 
 			return Promise.reject(error);
 		});

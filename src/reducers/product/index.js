@@ -1,11 +1,6 @@
 import categories, * as fromCategories from "./categories";
 import { combineReducers } from "redux";
-import {
-	wrap,
-	createAllIds,
-	createById,
-	createStatus
-} from "utilities/reducer";
+import { wrap, createAllIds, createById } from "utilities/reducer";
 
 const itemName = "product";
 

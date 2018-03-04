@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import { fetch as fetchThumbnail } from "actions/attachments";
+import { fetchAttachment } from "actions/attachments";
 
 import { getAttachmentById } from "reducers";
 
@@ -87,7 +87,7 @@ const mapStateToProps = (state, { id }) => ({
 });
 const mapDispatchToProps = (dispatch, { id }) => ({
 	fetchThumbnail() {
-		return dispatch(fetchThumbnail(id));
+		return dispatch(fetchAttachment(id));
 	}
 });
 

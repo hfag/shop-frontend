@@ -71,12 +71,12 @@ export const getAuthenticationTokenFetching = wrap(
 	state => state.authentication
 );
 /**
- * Returns the status of the jwt token
+ * Returns the error of the jwt token
  * @param {object} state This state
- * @return {error} The current status
+ * @return {error} The current error
  */
-export const getAuthenticationTokenStatus = wrap(
-	fromAuthentication.getAuthenticationTokenStatus,
+export const getAuthenticationTokenError = wrap(
+	fromAuthentication.getAuthenticationTokenError,
 	state => state.authentication
 );
 
@@ -111,12 +111,12 @@ export const getProductSearchFetching = wrap(
 	state => state.productSearch
 );
 /**
- * Returns the status
+ * Returns the error
  * @param {object} state This state
- * @return {error} The current status
+ * @return {error} The current error
  */
-export const getProductSearchStatus = wrap(
-	fromProductSearch.getProductSearchStatus,
+export const getProductSearchError = wrap(
+	fromProductSearch.getProductSearchError,
 	state => state.productSearch
 );
 

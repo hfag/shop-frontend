@@ -33,7 +33,7 @@ const mapItem = ({
 /**
  * Action called before and after fetching an item
  * @param {boolean} isFetching Whether it is currently being fetched
- * @param {string} status If there was an error during the request, this field should contain it
+ * @param {string} error If there was an error during the request, this field should contain it
  * @param {object} item The received item
  * @returns {object} The redux action
  */
@@ -44,7 +44,7 @@ const fetchItem = createFetchSingleItemAction(itemName);
  * @param {number} itemId The id of the requested item
  * @returns {function}
  */
-export const fetch = createFetchSingleItemThunk(
+export const fetchAttachment = createFetchSingleItemThunk(
 	fetchItem,
 	id => `/wp-json/wp/v2/media/${id}`,
 	mapItem
@@ -53,7 +53,7 @@ export const fetch = createFetchSingleItemThunk(
 /**
  * Action called before and after fetching all items
  * @param {boolean} isFetching Whether it is currently being fetched
- * @param {string} status If there was an error during the request, this field should contain it
+ * @param {string} error If there was an error during the request, this field should contain it
  * @param {object} items The received items
  * @returns {object} The redux action
  */
@@ -61,11 +61,12 @@ const fetchItems = createFetchItemsAction(itemName);
 
 /**
  * Fetches all items
+ * @param {number} perPage How many items should be fetched per page
+ * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function}
  */
-export const fetchAll = createFetchAllItemsThunk(
+export const fetchAllAttachments = createFetchAllItemsThunk(
 	fetchItems,
 	(page, perPage) => `/wp-json/wp/v2/media?page=${page}&per_page=${perPage}`,
-	response => parseInt(response.headers.get("x-wp-total")),
 	mapItem
 );

@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const Dotenv = require("dotenv-webpack");
 
 process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issues/56
 
@@ -30,7 +31,12 @@ module.exports = {
 	plugins: [
 		new webpack.NamedModulesPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoEmitOnErrorsPlugin()
+		new webpack.NoEmitOnErrorsPlugin(),
+		new Dotenv({
+			path: "./.env",
+			safe: true,
+			systemvars: true
+		})
 	],
 
 	resolve: {

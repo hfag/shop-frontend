@@ -2,56 +2,119 @@ import { combineReducers } from "redux";
 import pluralize from "pluralize";
 import changeCase from "change-case";
 
-export const createAllIds = name => (state = [], action) => {
+function removeKey(obj, deleteKey) {
+    let clone = Object.assign({}, obj);
+    delete clone[deleteKey];
+    return clone;
+}
+
+export const createAllIds = (
+	name,
+	uniqueProperty = "id",
+	customCases = null
+) => (state = [], action) => {
 	switch (action.type) {
 		case "FETCH_" + changeCase.snakeCase(name).toUpperCase():
 			return action.itemId
-				? !action.isFetching && action.item && !action.status
+				? !action.isFetching && action.item && !action.error
 					? state.includes(action.itemId) ? state : [...state, action.itemId]
-					: state.filter(item => item.id !== action.itemId)
+					: state.filter(item => item[uniqueProperty] !== action.itemId)
 				: state;
+
 		case "FETCH_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
 			return action.items
-				? [
-						...state,
-						...action.items
-							.map(item => item.id)
-							.filter(id => !state.includes(id))
-					]
-				: action.itemIds
-					? [...state, ...action.itemIds.filter(id => !state.includes(id))]
-					: state;
+				? !action.isFetching && !action.error
+					? [
+							...state,
+							...action.items
+								.map(item => item[uniqueProperty])
+								.filter(id => !state.includes(id))
+						]
+					: state.filter(item => !action.items.includes(item[uniqueProperty]))
+				: state;
+		case "CREATE_" + changeCase.snakeCase(name).toUpperCase():
+			return !action.isFetching &&
+				action.item &&
+				action.item[uniqueProperty] &&
+				!action.error &&
+				!state.includes(action.item[uniqueProperty])
+				? [...state, action.item[uniqueProperty]]
+				: state;
+		case "DELETE_" + changeCase.snakeCase(name).toUpperCase():
+			return !action.isFetching && action.itemId
+				? state.filter(id => id != action.itemId)
+				: state;
 		default:
+			if (customCases) {
+				return customCases(state, action);
+			}
 			return state;
 	}
 };
 
-export const createById = name => (state = {}, action) => {
+export const createById = (name, uniqueProperty = "id", customCases = null) => (
+	state = {},
+	action
+) => {
 	switch (action.type) {
 		case "FETCH_" + changeCase.snakeCase(name).toUpperCase():
 			return {
 				...state,
 				[action.itemId]: {
 					...action.item,
-					isFetching: action.isFetching,
-					status: action.status
+					_isFetching: action.isFetching,
+					_error: action.error
 				}
 			};
 		case "FETCH_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
-			return action.isFetching || action.status || action.items.length === 0
+			return action.isFetching || action.error || !action.items
 				? state
 				: {
 						...state,
 						...action.items.reduce((object, item) => {
-							object[item.id] = {
+							object[item[uniqueProperty]] = {
+								...state[item[uniqueProperty]],
 								...item,
-								isFetching: action.isFetching,
-								status: action.status
+								_isFetching: action.isFetching,
+								_error: action.error
 							};
+							if (action.page) {
+								object[item[uniqueProperty]]._page = action.page;
+							}
 							return object;
 						}, {})
 					};
+		case "CREATE_" + changeCase.snakeCase(name).toUpperCase():
+			return action.isFetching
+				? state
+				: {
+						...state,
+						[action.item[uniqueProperty]]: {
+							...action.item,
+							_isFetching: action.isFetching,
+							_error: action.error
+						}
+					};
+		case "UPDATE_" + changeCase.snakeCase(name).toUpperCase():
+			return !action.isFetching && action.item && action.item[uniqueProperty]
+				? {
+						...state,
+						[action.item[uniqueProperty]]: {
+							...state[action.item[uniqueProperty]],
+							...action.item,
+							_isFetching: action.isFetching,
+							_error: action.error
+						}
+					}
+				: state;
+		case "DELETE_" + changeCase.snakeCase(name).toUpperCase():
+            return !action.isFetching && action.itemId
+                ? removeKey(state,action.itemId)
+                : state;
 		default:
+			if (customCases) {
+				return customCases(state, action);
+			}
 			return state;
 	}
 };
@@ -61,15 +124,15 @@ export const createById = name => (state = {}, action) => {
  * @param {string} name The item name used for the actions
  * @return {function} The reducer
  */
-export const createReducer = name =>
+export const createReducer = (name, uniqueProperty = "id") =>
 	combineReducers({
-		byId: createById(name),
-		allIds: createAllIds(name)
+		byId: createById(name, uniqueProperty),
+		allIds: createAllIds(name, uniqueProperty)
 	});
 
 /**
  * Gets a single item based on its id
- * @param {object} state This item's part of the redux state
+ * @param {object} state The correct part of the redux state
  * @param {number} itemId The items id to look for
  * @return {object} The item
  */
@@ -77,7 +140,7 @@ export const getItemById = (state, itemId) => state.byId[itemId];
 
 /**
  * Gets all items
- * @param {object} state This item's part of the redux state
+ * @param {object} state The correct part of the redux state
  * @return {array} All items
  */
 export const getAllItems = state => state.allIds.map(id => state.byId[id]);

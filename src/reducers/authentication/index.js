@@ -48,11 +48,11 @@ export const getAuthenticationTokenFetching = wrap(
 	state => state.token
 );
 /**
- * Returns the status of the jwt token
+ * Returns the error of the jwt token
  * @param {object} state This state
- * @return {error} The current status
+ * @return {error} The current error
  */
-export const getAuthenticationTokenStatus = wrap(
-	fromAuthToken.getAuthenticationTokenStatus,
+export const getAuthenticationTokenError = wrap(
+	fromAuthToken.getAuthenticationTokenError,
 	state => state.token
 );

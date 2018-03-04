@@ -7,12 +7,12 @@ import { Flex, Box } from "grid-styled";
 
 import Link from "components/Link";
 import Container from "components/Container";
-import Pagination from "../components/Pagination";
+import Pagination from "components/Pagination";
 import Category from "containers/Category";
 import Product from "containers/Product";
 
-import { fetchAll as fetchProductCategories } from "actions/product/categories";
-import { fetchItems as fetchProductPage } from "actions/product";
+import { fetchProductCategories } from "actions/product/categories";
+import { fetchProducts } from "actions/product";
 
 import {
 	getProducts,
@@ -70,44 +70,19 @@ class ProductCategories extends React.PureComponent {
 		return (
 			<Container>
 				<Flex wrap>
-					{categoryIds.length > 0 &&
-						categoryIds.map(categoryId => (
-							<Box
-								key={categoryId}
-								width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
-								pr={2}
-								pt={2}
-							>
-								<Link to={"/category/" + categoryId + "/1"}>
-									<Category id={categoryId} />
-								</Link>
-							</Box>
-						))}
-					{productIds.length > 0 &&
-						productIds.map(productId => (
-							<Box
-								key={productId}
-								width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
-								pr={2}
-								pt={2}
-							>
-								<Link to={"/product/" + productId}>
-									<Product id={productId} />
-								</Link>
-							</Box>
-						))}
+					{categoryIds.length > 0
+						? categoryIds.map(categoryId => (
+								<Category key={categoryId} id={categoryId} />
+							))
+						: productIds.map(productId => (
+								<Product key={productId} id={productId} />
+							))}
+
 					{categoryIds.length === 0 &&
 						productIds.length === 0 &&
-						new Array(12).fill().map((el, index) => (
-							<Box
-								key={index}
-								width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
-								pr={2}
-								pt={2}
-							>
-								<Category id={-1} />
-							</Box>
-						))}
+						new Array(12)
+							.fill()
+							.map((el, index) => <Category key={index} id={-1} />)}
 				</Flex>
 				{productIds.length !== 0 &&
 					category &&
@@ -154,13 +129,11 @@ const mapDispatchToProps = (
 	fetchAllProductCategories() {
 		return dispatch(fetchProductCategories());
 	},
-	fetchProducts() {
+	fetchProducts(visualize = false) {
 		page = parseInt(page);
 		return categoryId
 			? dispatch(
-					fetchProductPage(page, page, {
-						categoryIds: [parseInt(categoryId)]
-					})
+					fetchProductPage(page, page, visualize, [parseInt(categoryId)])
 				)
 			: Promise.resolve();
 	}

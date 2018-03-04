@@ -8,10 +8,11 @@ import { Flex, Box } from "grid-styled";
 
 import Thumbnail from "containers/Thumbnail";
 import Placeholder from "components/Placeholder";
+import Link from "components/Link";
 
 import { colors, shadows } from "utilities/style";
 
-import { fetchItem as fetchProductCategory } from "actions/product/categories";
+import { fetchProductCategory } from "actions/product/categories";
 
 import { getProductCategoryById } from "reducers";
 
@@ -19,9 +20,17 @@ const StyledCategory = styled.div`
 	background-color: #fff;
 	box-shadow: ${shadows.y};
 
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
 	& > div:first-child {
 		/* Thumbnail */
 		border-bottom: ${colors.background} 1px solid;
+	}
+
+	& > div:last-child {
+		flex: 1 0 auto;
 	}
 
 	& > div {
@@ -48,24 +57,32 @@ class Category extends React.PureComponent {
 	};
 
 	render = () => {
-		const { category, parent } = this.props;
+		const { id: categoryId, category, parent } = this.props;
+
+		if (category && !category.count) {
+			return null;
+		}
 
 		return (
-			<StyledCategory>
-				<Thumbnail id={category ? category.thumbnailId : -1} />
-				<div>
-					{category ? <Title>{category.name}</Title> : <Placeholder text />}
-					{category ? (
-						parent ? (
-							<Subtitle>{parent.name}</Subtitle>
-						) : (
-							""
-						)
-					) : (
-						<Placeholder text />
-					)}
-				</div>
-			</StyledCategory>
+			<Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} pr={2} pt={2}>
+				<Link to={"/category/" + categoryId + "/1"}>
+					<StyledCategory>
+						<Thumbnail id={category ? category.thumbnailId : -1} />
+						<div>
+							{category ? <Title>{category.name}</Title> : <Placeholder text />}
+							{category ? (
+								parent ? (
+									<Subtitle>{parent.name}</Subtitle>
+								) : (
+									""
+								)
+							) : (
+								<Placeholder text />
+							)}
+						</div>
+					</StyledCategory>
+				</Link>
+			</Box>
 		);
 	};
 }

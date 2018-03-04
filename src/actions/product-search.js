@@ -1,18 +1,22 @@
-import { fetchApi as fetch } from "utilities/api";
+import { fetchApi } from "utilities/api";
+import { createFetchAction, createFetchItemsThunk } from "utilities/action";
+
+const mapItem = section => section;
 
 /**
  * Action called before and after searching products
  * @param {boolean} isFetching Whether the token is currently being fetched
- * @param {string} status If there was an error during the request, this field should contain it
+ * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @param {object} query The search query
  * @param {object} sections The received suggestion sections
  * @returns {object} The redux action
  */
-const searchProducts = (isFetching, status, sections) => ({
-	type: "SEARCH_PRODUCTS",
-	isFetching,
-	status,
-	sections
-});
+const searchProducts = createFetchAction(
+	"SEARCH_PRODUCTS",
+	"query",
+	"sections"
+);
 
 /**
  * Clears the product search array
@@ -27,20 +31,8 @@ export const reset = () => ({
  * @param {string} query The search query
  * @returns {function} A redux thunk
  */
-export const search = query => dispatch => {
-	dispatch(searchProducts(true, null));
-
-	return fetch("/wp-json/hfag/suggestions?query=" + query, {
-		method: "GET"
-	})
-		.then(response => response.json())
-		.then(sections => {
-			dispatch(searchProducts(false, null, sections));
-			return Promise.resolve(sections);
-		})
-		.catch(error => {
-			dispatch(searchProducts(false, error, []));
-
-			return Promise.reject(error);
-		});
-};
+export const search = createFetchItemsThunk(
+	searchProducts,
+	query => `/wp-json/hfag/suggestions?query=${query}`,
+	mapItem
+);

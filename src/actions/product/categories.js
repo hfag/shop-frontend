@@ -1,9 +1,11 @@
 import {
+	createFetchAction,
 	createFetchSingleItemAction,
 	createFetchSingleItemThunk,
 	createFetchItemsAction,
 	createFetchAllItemsThunk,
-	createFetchItemPageThunk
+	createFetchItemPageThunk,
+	createFetchItemPageAction
 } from "utilities/action";
 
 const itemName = "productCategory";
@@ -34,7 +36,8 @@ const mapItem = ({
 /**
  * Action called before and after fetching an item
  * @param {boolean} isFetching Whether it is currently being fetched
- * @param {string} status If there was an error during the request, this field should contain it
+ * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} item The received item
  * @return {object} The redux action
  */
@@ -45,16 +48,17 @@ const fetchItemAction = createFetchSingleItemAction(itemName);
  * @param {number} itemId The id of the requested item
  * @returns {function}
  */
-export const fetchItem = createFetchSingleItemThunk(
+export const fetchProductCategory = createFetchSingleItemThunk(
 	fetchItemAction,
 	id => `/wp-json/wp/v2/product_cat/${id}`,
 	mapItem
 );
 
 /**
- * Action called before and after fetching all items
+ * Action called before and after fetching multiple items
  * @param {boolean} isFetching Whether it is currently being fetched
- * @param {string} status If there was an error during the request, this field should contain it
+ * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} items The received items
  * @return {object} The redux action
  */
@@ -62,26 +66,41 @@ const fetchItemsAction = createFetchItemsAction(itemName);
 
 /**
  * Fetches all items
- * @returns {function}
+ * @param {number} perPage How many items should be fetched per page
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @returns {function} The redux thunk
  */
-export const fetchAll = createFetchAllItemsThunk(
+export const fetchAllProductCategories = createFetchAllItemsThunk(
 	fetchItemsAction,
 	(page, perPage) =>
 		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}`,
-	response => parseInt(response.headers.get("x-wp-total")),
 	mapItem
 );
 
 /**
- * Fetches specified items
- * @return {function}
+ * Action called before and after fetching an item page
+ * @param {boolean} isFetching Whether it is currently being fetched
+ * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @param {object} items The received items
+ * @param {array} itemIds The item ids to fetch
+ * @return {object} The redux action
  */
-export const fetchItems = createFetchItemPageThunk(
-	fetchItemsAction,
-	(page, perPage, itemIds) =>
-		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${
-			perPage
-		}&include[]=${itemIds.join("&include[]=")}`,
-	response => parseInt(response.headers.get("x-wp-total")),
+const fetchItemPageAction = createFetchItemPageAction(itemName, "itemIds");
+
+/**
+ * Fetches specified items
+ * @param {number} page The first page to fetch
+ * @param {number} pageTo The last page to fetch, -1 for all
+ * @param {number} perPage How many items should be fetched per page
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @return {function} The redux thunk
+ */
+export const fetchProductCategories = createFetchItemPageThunk(
+	fetchItemPageAction,
+	(page, perPage, itemIds = []) =>
+		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}${
+			itemIds.length > 0 ? `&include[]=${itemIds.join("&include[]=")}` : ""
+		}`,
 	mapItem
 );

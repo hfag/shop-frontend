@@ -90,13 +90,11 @@ const fetchItemPageAction = createFetchItemPageAction(itemName, "itemIds");
 
 /**
  * Fetches specified items
- * @param {number} page The first page to fetch
- * @param {number} pageTo The last page to fetch, -1 for all
  * @param {number} perPage How many items should be fetched per page
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @return {function} The redux thunk
  */
-export const fetchProductCategories = createFetchItemPageThunk(
+export const fetchProductCategories = createFetchAllItemsThunk(
 	fetchItemPageAction,
 	(page, perPage, itemIds = []) =>
 		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}${

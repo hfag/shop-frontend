@@ -119,14 +119,15 @@ export const createFetchItemPageThunk = (
 		const total = parseInt(response.headers.get("x-wp-total"));
 
 		const mappedItems = items.map(mapItem);
-		dispatch(
-			action(page < pageTo, null, visualize, mappedItems, page, ...attributes)
-		);
 
 		if (
 			(page - 1) * perPage + items.length < total &&
 			(pageTo > 0 ? page < pageTo : true)
 		) {
+			dispatch(
+				action(false, null, visualize, mappedItems, page, ...attributes)
+			);
+
 			return createFetchItemPageThunk(action, endpoint, mapItem)(
 				page + 1,
 				pageTo,
@@ -137,12 +138,12 @@ export const createFetchItemPageThunk = (
 				({ items: nextItems, originalItems: newOriginalItems }) =>
 					Promise.resolve({
 						items: [...mappedItems, ...nextItems],
-						originalItems: [...items, ...newOriginalItems],
-						perPage,
-						total
+						originalItems: [...items, ...newOriginalItems]
 					})
 			);
 		}
+		dispatch(action(false, null, visualize, mappedItems, page, ...attributes));
+
 		return Promise.resolve({
 			items: mappedItems,
 			originalItems: items,

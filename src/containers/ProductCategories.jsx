@@ -75,10 +75,10 @@ class ProductCategories extends React.PureComponent {
 					{categoryIds.length > 0
 						? categoryIds.map(categoryId => (
 								<Category key={categoryId} id={categoryId} />
-							))
+						  ))
 						: productIds.map(productId => (
 								<Product key={productId} id={productId} />
-							))}
+						  ))}
 
 					{categoryIds.length === 0 &&
 						productIds.length === 0 &&
@@ -128,8 +128,8 @@ const mapDispatchToProps = (
 	{ match: { params: { categoryId, page } } }
 ) => ({
 	dispatch,
-	fetchAllProductCategories() {
-		return dispatch(fetchProductCategories());
+	fetchAllProductCategories(perPage = 10, visualize = true) {
+		return dispatch(fetchProductCategories(perPage, visualize));
 	},
 	fetchProducts(perPage = 10, visualize = false) {
 		page = parseInt(page);
@@ -143,7 +143,7 @@ const mapDispatchToProps = (
 						[],
 						[parseInt(categoryId)]
 					)
-				)
+			  )
 			: Promise.resolve();
 	}
 });

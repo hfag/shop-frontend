@@ -90,6 +90,10 @@ const AnimatedSlogan = styled.div`
 	}
 `;
 
+const HeaderWrapper = styled.div`
+	margin-top: 5rem;
+`;
+
 class Header extends React.PureComponent {
 	constructor() {
 		super();
@@ -99,7 +103,7 @@ class Header extends React.PureComponent {
 		const { toggleBurgerMenu } = this.props;
 
 		return (
-			<div>
+			<HeaderWrapper>
 				<LoadingBar className="redux-loading-bar" />
 				<BurgerMenu />
 				<header>
@@ -188,7 +192,7 @@ class Header extends React.PureComponent {
 						</Container>
 					</Navbar>
 				</header>
-			</div>
+			</HeaderWrapper>
 		);
 	};
 }

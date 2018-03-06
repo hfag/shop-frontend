@@ -43,7 +43,13 @@ const store = createStore(
 			thunkMiddleware,
 			routerMiddleware(history),
 			store => next => action => {
-				if (action.visualize) {
+				if (action.visualize === true) {
+					console.log(
+						action.type,
+						action.visualize,
+						typeof action.visualize,
+						action
+					);
 					store.dispatch(action.isFetching ? showLoading() : hideLoading());
 				}
 				return next(action);

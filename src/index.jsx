@@ -11,6 +11,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import { ConnectedRouter, routerMiddleware } from "react-router-redux";
+import { showLoading, hideLoading } from "react-redux-loading-bar";
 
 //reducers
 import reducers from "./reducers";
@@ -38,16 +39,25 @@ const store = createStore(
 	reducers,
 	presistedState,
 	composeWithDevTools(
-		applyMiddleware(thunkMiddleware, routerMiddleware(history))
+		applyMiddleware(
+			thunkMiddleware,
+			routerMiddleware(history),
+			store => next => action => {
+				if (action.visualize) {
+					store.dispatch(action.isFetching ? showLoading() : hideLoading());
+				}
+				return next(action);
+			}
+		)
 	)
 );
 
 //storing *some* keys of the application state in the localstorage
 store.subscribe(
 	throttle(() => {
-		const { routing } = store.getState();
+		const { authentication } = store.getState();
 		saveState({
-			routing
+			authentication
 		});
 	}, 1000)
 );
@@ -55,7 +65,7 @@ store.subscribe(
 const render = Component => {
 	ReactDOM.render(
 		<AppContainer>
-			<App history={history} store={store} />
+			<Component history={history} store={store} />
 		</AppContainer>,
 		document.getElementById("root")
 	);

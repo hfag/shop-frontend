@@ -107,7 +107,7 @@ export const createFetchItemPageThunk = (
 ) => (
 	page = 1,
 	pageTo = -1,
-	perPage = 15,
+	perPage = 10,
 	visualize = false,
 	...attributes
 ) => dispatch => {
@@ -163,7 +163,7 @@ export const createFetchAllItemsThunk = (
 	action,
 	endpoint,
 	mapItem = item => item
-) => (perPage = 15, visualize = false, ...attributes) => dispatch => {
+) => (perPage = 10, visualize = false, ...attributes) => dispatch => {
 	dispatch(action(true, null, visualize, [], null, ...attributes));
 
 	return createFetchItemPageThunk(action, endpoint, mapItem)(

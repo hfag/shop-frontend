@@ -131,7 +131,7 @@ const mapDispatchToProps = (
 	fetchAllProductCategories() {
 		return dispatch(fetchProductCategories());
 	},
-	fetchProducts(perPage = 15, visualize = false) {
+	fetchProducts(perPage = 10, visualize = false) {
 		page = parseInt(page);
 		return categoryId
 			? dispatch(

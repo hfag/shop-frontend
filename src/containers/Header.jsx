@@ -28,6 +28,8 @@ import CheckoutIcon from "react-icons/lib/fa/money";
 import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
 
+import LoadingBar from "react-redux-loading-bar";
+
 const Counter = styled.div`
 	margin-left: 0.5rem;
 	font-size: 1.25rem;
@@ -98,6 +100,7 @@ class Header extends React.PureComponent {
 
 		return (
 			<div>
+				<LoadingBar className="redux-loading-bar" />
 				<BurgerMenu />
 				<header>
 					<Navbar>

@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { routerReducer } from "react-router-redux";
 import { reducer as burgerMenu } from "redux-burger-menu";
 
 import { wrap } from "utilities/reducer";
@@ -218,8 +217,12 @@ export const getAttachmentById = wrap(
 	state => state.attachment
 );
 
+import { loadingBarReducer as loadingBar } from "react-redux-loading-bar";
+import { routerReducer as router } from "react-router-redux";
+
 export default combineReducers({
-	routing: routerReducer,
+	router,
+	loadingBar,
 	burgerMenu,
 	productSearch,
 	authentication,

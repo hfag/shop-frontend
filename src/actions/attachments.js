@@ -13,7 +13,7 @@ const itemName = "attachment";
  * @param {object} item The item to map
  * @return {object} The mapped item
  */
-const mapItem = ({
+export const mapItem = ({
 	id,
 	date,
 	caption,
@@ -35,18 +35,20 @@ const mapItem = ({
  * Action called before and after fetching an item
  * @param {boolean} isFetching Whether it is currently being fetched
  * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} item The received item
  * @returns {object} The redux action
  */
-const fetchItem = createFetchSingleItemAction(itemName);
+export const fetchAttachmentAction = createFetchSingleItemAction(itemName);
 
 /**
  * Fetches a single item
  * @param {number} itemId The id of the requested item
+ * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function}
  */
 export const fetchAttachment = createFetchSingleItemThunk(
-	fetchItem,
+	fetchAttachmentAction,
 	id => `/wp-json/wp/v2/media/${id}`,
 	mapItem
 );
@@ -55,17 +57,16 @@ export const fetchAttachment = createFetchSingleItemThunk(
  * Action called before and after fetching all items
  * @param {boolean} isFetching Whether it is currently being fetched
  * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} items The received items
  * @param {array} itemIds If specified only items with the specified item ids will be fetched
  * @param {string} order Whether the items should be order asc or desc
  * @param {string} orderby What the items should by ordered by
  * @return {object} The redux action
  */
-const fetchItemsAction = createFetchItemsAction(
+export const fetchAttachmentsAction = createFetchItemsAction(
 	itemName,
-	"itemIds",
-	"order",
-	"orderby"
+	"itemIds"
 );
 
 /**
@@ -75,12 +76,10 @@ const fetchItemsAction = createFetchItemsAction(
  * @param {number} perPage How many items should be fetched per page
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {array} itemIds Only the specified product ids will be fetched
- * @param {string} order Whether the items should be order asc or desc
- * @param {string} orderby What the items should by ordered by
  * @return {function}
  */
 export const fetchAttachments = createFetchItemPageThunk(
-	fetchItemsAction,
+	fetchAttachmentsAction,
 	(
 		page,
 		perPage,
@@ -89,8 +88,8 @@ export const fetchAttachments = createFetchItemPageThunk(
 		order = "desc",
 		orderby = "date"
 	) =>
-		`/wp-json/wp/v2/product?page=${page}&per_page=${perPage}${
+		`/wp-json/wp/v2/media?page=${page}&per_page=${perPage}${
 			itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
-		}&orderby=${orderby}&order=${order}`,
+		}`,
 	mapItem
 );

@@ -11,6 +11,7 @@ import Login from "components/Login";
 //containers
 import Frontpage from "containers/Frontpage";
 import ProductCategories from "containers/ProductCategories";
+import Product from "containers/Product";
 import Account from "containers/Account";
 
 const App = ({ history, store }) => {
@@ -24,6 +25,7 @@ const App = ({ history, store }) => {
 						path="/category/:categoryId/:page"
 						component={ProductCategories}
 					/>
+					<Route exact path="/product/:productId" component={Product} />
 					<Route exact path="/login" component={Login} />
 					<Route exact path="/account" component={Account} />
 				</Wrapper>

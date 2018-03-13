@@ -3,9 +3,9 @@ import pluralize from "pluralize";
 import changeCase from "change-case";
 
 function removeKey(obj, deleteKey) {
-    let clone = Object.assign({}, obj);
-    delete clone[deleteKey];
-    return clone;
+	let clone = Object.assign({}, obj);
+	delete clone[deleteKey];
+	return clone;
 }
 
 export const createAllIds = (
@@ -29,7 +29,7 @@ export const createAllIds = (
 							...action.items
 								.map(item => item[uniqueProperty])
 								.filter(id => !state.includes(id))
-						]
+					  ]
 					: state.filter(item => !action.items.includes(item[uniqueProperty]))
 				: state;
 		case "CREATE_" + changeCase.snakeCase(name).toUpperCase():
@@ -83,7 +83,7 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
 							}
 							return object;
 						}, {})
-					};
+				  };
 		case "CREATE_" + changeCase.snakeCase(name).toUpperCase():
 			return action.isFetching
 				? state
@@ -94,7 +94,7 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
 							_isFetching: action.isFetching,
 							_error: action.error
 						}
-					};
+				  };
 		case "UPDATE_" + changeCase.snakeCase(name).toUpperCase():
 			return !action.isFetching && action.item && action.item[uniqueProperty]
 				? {
@@ -105,12 +105,12 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
 							_isFetching: action.isFetching,
 							_error: action.error
 						}
-					}
+				  }
 				: state;
 		case "DELETE_" + changeCase.snakeCase(name).toUpperCase():
-            return !action.isFetching && action.itemId
-                ? removeKey(state,action.itemId)
-                : state;
+			return !action.isFetching && action.itemId
+				? removeKey(state, action.itemId)
+				: state;
 		default:
 			if (customCases) {
 				return customCases(state, action);

@@ -35,6 +35,15 @@ class Thumbnail extends React.PureComponent {
 			fetchThumbnail();
 		}
 	};
+
+	componentDidUpdate() {
+		const { id, fetchThumbnail, thumbnail } = this.props;
+
+		if (id > 0 && !thumbnail) {
+			fetchThumbnail();
+		}
+	}
+
 	onImageLoad = event => {
 		this.setState({ fetched: true });
 	};
@@ -98,8 +107,8 @@ const mapStateToProps = (state, { id }) => ({
 	thumbnail: getAttachmentById(state, id)
 });
 const mapDispatchToProps = (dispatch, { id }) => ({
-	fetchThumbnail() {
-		return dispatch(fetchAttachment(id));
+	fetchThumbnail(visualize = true) {
+		return dispatch(fetchAttachment(id, visualize));
 	}
 });
 

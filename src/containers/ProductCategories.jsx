@@ -8,8 +8,8 @@ import Flex from "components/Flex";
 import Link from "components/Link";
 import Container from "components/Container";
 import Pagination from "components/Pagination";
-import Category from "containers/Category";
-import Product from "containers/Product";
+import CategoryItem from "containers/CategoryItem";
+import ProductItem from "containers/ProductItem";
 
 import { fetchProductCategories } from "actions/product/categories";
 import { fetchProducts } from "actions/product";
@@ -21,6 +21,8 @@ import {
 	getProductCategoryById
 } from "reducers";
 
+const ITEMS_PER_PAGE = 30;
+
 class ProductCategories extends React.PureComponent {
 	constructor(props) {
 		super(props);
@@ -28,9 +30,7 @@ class ProductCategories extends React.PureComponent {
 
 		this.state = {
 			categoryId,
-			page,
-			fetchedCategories: false,
-			fetchedProducts: false
+			page
 		};
 	}
 	componentWillMount = () => {
@@ -72,33 +72,33 @@ class ProductCategories extends React.PureComponent {
 		return (
 			<Container>
 				<Flex flexWrap="wrap">
-					{categoryIds.length > 0
-						? categoryIds.map(categoryId => (
-								<Category key={categoryId} id={categoryId} />
-						  ))
-						: productIds.map(productId => (
-								<Product key={productId} id={productId} />
-						  ))}
+					{categoryIds.map(categoryId => (
+						<CategoryItem key={categoryId} id={categoryId} />
+					))}
+				</Flex>
+				{categoryIds.length > 0 && productIds.length > 0 && <hr />}
+				<Flex flexWrap="wrap">
+					{productIds.map(productId => (
+						<ProductItem key={productId} id={productId} />
+					))}
 
 					{categoryIds.length === 0 &&
 						productIds.length === 0 &&
 						new Array(12)
 							.fill()
-							.map((el, index) => <Category key={index} id={-1} />)}
+							.map((el, index) => <CategoryItem key={index} id={-1} />)}
 				</Flex>
-				{productIds.length !== 0 &&
-					category &&
-					category.count && (
-						<Pagination
-							pageCount={Math.ceil(category.count / 10)}
-							pageRangeDisplayed={5}
-							marginPagesDisplayed={1}
-							previousLabel={"<"}
-							nextLabel={">"}
-							forcePage={parseInt(page) - 1}
-							onPageChange={this.onPageChange}
-						/>
-					)}
+				{productIds.length !== 0 && (
+					<Pagination
+						pageCount={Math.ceil(productIds.length / ITEMS_PER_PAGE)}
+						pageRangeDisplayed={5}
+						marginPagesDisplayed={1}
+						previousLabel={"<"}
+						nextLabel={">"}
+						forcePage={parseInt(page) - 1}
+						onPageChange={this.onPageChange}
+					/>
+				)}
 			</Container>
 		);
 	};
@@ -119,7 +119,7 @@ const mapStateToProps = (
 			.filter(product => product.categoryIds.includes(parseInt(categoryId)))
 			.sort((a, b) => new Date(b.date) - new Date(a.date))
 			.map(product => product.id)
-			.slice(10 * (page - 1), 10 * page) || [],
+			.slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page) || [],
 	page
 });
 
@@ -128,10 +128,10 @@ const mapDispatchToProps = (
 	{ match: { params: { categoryId, page } } }
 ) => ({
 	dispatch,
-	fetchAllProductCategories(perPage = 10, visualize = true) {
+	fetchAllProductCategories(perPage = ITEMS_PER_PAGE, visualize = true) {
 		return dispatch(fetchProductCategories(perPage, visualize));
 	},
-	fetchProducts(perPage = 10, visualize = false) {
+	fetchProducts(perPage = ITEMS_PER_PAGE, visualize = true) {
 		page = parseInt(page);
 		return categoryId
 			? dispatch(
@@ -148,6 +148,8 @@ const mapDispatchToProps = (
 	}
 });
 
-export default withRouter(
-	connect(mapStateToProps, mapDispatchToProps)(ProductCategories)
+const connectedCategories = connect(mapStateToProps, mapDispatchToProps)(
+	ProductCategories
 );
+
+export default withRouter(connectedCategories);

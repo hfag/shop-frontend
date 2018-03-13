@@ -8,6 +8,11 @@ import {
 	createFetchItemPageAction
 } from "utilities/action";
 
+import {
+	fetchAttachmentsAction,
+	mapItem as mapAttachment
+} from "actions/attachments";
+
 const itemName = "productCategory";
 
 /**
@@ -22,7 +27,7 @@ const mapItem = ({
 	name,
 	slug,
 	parent,
-	thumbnail_id: thumbnailId
+	thumbnail
 }) => ({
 	id,
 	count,
@@ -30,8 +35,22 @@ const mapItem = ({
 	name,
 	slug,
 	parent,
-	thumbnailId
+	thumbnailId: thumbnail && thumbnail.id ? thumbnail.id : -1
 });
+
+const afterCategoryFetch = (dispatch, response, items) => {
+	dispatch(
+		fetchAttachmentsAction(
+			false,
+			null,
+			false,
+			items
+				.map(cat => cat.thumbnail)
+				.filter(t => t)
+				.map(mapAttachment)
+		)
+	);
+};
 
 /**
  * Action called before and after fetching an item
@@ -74,7 +93,8 @@ export const fetchAllProductCategories = createFetchAllItemsThunk(
 	fetchItemsAction,
 	(page, perPage) =>
 		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}`,
-	mapItem
+	mapItem,
+	afterCategoryFetch
 );
 
 /**
@@ -92,6 +112,7 @@ const fetchItemPageAction = createFetchItemPageAction(itemName, "itemIds");
  * Fetches specified items
  * @param {number} perPage How many items should be fetched per page
  * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @param {array} itemIds The item ids to fetch
  * @return {function} The redux thunk
  */
 export const fetchProductCategories = createFetchAllItemsThunk(
@@ -100,5 +121,6 @@ export const fetchProductCategories = createFetchAllItemsThunk(
 		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}${
 			itemIds.length > 0 ? `&include[]=${itemIds.join("&include[]=")}` : ""
 		}`,
-	mapItem
+	mapItem,
+	afterCategoryFetch
 );

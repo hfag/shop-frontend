@@ -44,10 +44,10 @@ export const fetchApi = (url, options) => {
 
 							if (response.status === 401) {
 								//session expired
-								window.location =
+								/*window.location =
 									"/login?redirect=" +
 									encodeURIComponent(window.location.pathname); //we can't use react-router in here as we don't have access to the store
-								return;
+								return;*/
 							}
 
 							return Promise.reject(

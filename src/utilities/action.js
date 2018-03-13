@@ -98,12 +98,14 @@ export const createFetchItemPageAction = (name, ...attributes) =>
  * @param {function} action The action that should be dispatched
  * @param {function} endpoint A function generating the endpoint url based on the page and the number of items per page
  * @param {function} mapItem A function mapping the item into the desired format
+ * @param {function} callback A function called before dispatching the action. Can dispatch more actions
  * @return {promise} A promise yielding all items or an error
  */
 export const createFetchItemPageThunk = (
 	action,
 	endpoint,
-	mapItem = item => item
+	mapItem = item => item,
+	callback
 ) => (
 	page = 1,
 	pageTo = -1,
@@ -124,11 +126,24 @@ export const createFetchItemPageThunk = (
 			(page - 1) * perPage + items.length < total &&
 			(pageTo > 0 ? page < pageTo : true)
 		) {
+			if (callback) {
+				callback(
+					dispatch,
+					response,
+					items,
+					page,
+					perPage,
+					visualize,
+					total,
+					...attributes
+				);
+			}
+
 			dispatch(
 				action(false, null, visualize, mappedItems, page, ...attributes)
 			);
 
-			return createFetchItemPageThunk(action, endpoint, mapItem)(
+			return createFetchItemPageThunk(action, endpoint, mapItem, callback)(
 				page + 1,
 				pageTo,
 				perPage,
@@ -142,6 +157,20 @@ export const createFetchItemPageThunk = (
 					})
 			);
 		}
+
+		if (callback) {
+			callback(
+				dispatch,
+				response,
+				items,
+				page,
+				perPage,
+				visualize,
+				total,
+				...attributes
+			);
+		}
+
 		dispatch(action(false, null, visualize, mappedItems, page, ...attributes));
 
 		return Promise.resolve({
@@ -158,16 +187,18 @@ export const createFetchItemPageThunk = (
  * @param {function} action The redux action to dispatch
  * @param {function} endpoint A function generating the endpoint url based on the page and the number of items per page
  * @param {function} mapItem A function mapping the item into the desired format
+ * @param {function} callback A function called before dispatching the action. Can dispatch more actions
  * @return {function} The redux thunk
  */
 export const createFetchAllItemsThunk = (
 	action,
 	endpoint,
-	mapItem = item => item
+	mapItem = item => item,
+	callback
 ) => (perPage = 10, visualize = false, ...attributes) => dispatch => {
 	dispatch(action(true, null, visualize, [], null, ...attributes));
 
-	return createFetchItemPageThunk(action, endpoint, mapItem)(
+	return createFetchItemPageThunk(action, endpoint, mapItem, callback)(
 		1,
 		-1,
 		perPage,
@@ -191,27 +222,32 @@ export const createFetchAllItemsThunk = (
  * @param {function} action The redux action to dispatch
  * @param {function} endpoint A function generating the endpoint url based on the attributes
  * @param {function} mapItem A function mapping the item into the desired format
+ * @param {function} callback A function called before dispatching the action. Can dispatch more actions
  * @return {function} The redux thunk
  */
 export const createFetchItemsThunk = (
 	action,
 	endpoint,
-	mapItem = item => item
+	mapItem = item => item,
+	callback
 ) => (visualize = false, ...attributes) => dispatch => {
-	dispatch(action(true, null, visualize, [], null, ...attributes));
+	dispatch(action(true, null, visualize, [], ...attributes));
 
 	return fetchApi(endpoint(...attributes), {
 		method: "GET"
 	})
 		.then(({ json: items }) => {
 			const mappedItems = items.map(mapItem);
-			dispatch(
-				action(false, null, visualize, mappedItems, null, ...attributes)
-			);
+
+			if (callback) {
+				callback(dispatch, items, visualize, ...attributes);
+			}
+
+			dispatch(action(false, null, visualize, mappedItems, ...attributes));
 			return Promise.resolve({ items: mappedItems, originalItems: items });
 		})
 		.catch(error => {
-			dispatch(action(false, error, visualize, [], null, ...attributes));
+			dispatch(action(false, error, visualize, [], ...attributes));
 
 			return Promise.reject(error);
 		});

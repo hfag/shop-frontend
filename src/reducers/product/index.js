@@ -10,7 +10,22 @@ export {
 } from "utilities/reducer";
 
 export default combineReducers({
-	byId: createById(itemName),
+	byId: createById(itemName, "id", (state, action) => {
+		switch (action.type) {
+			case "FETCH_PRODUCT_VARIATIONS":
+				return !action.isFetching && !action.error && action.productId
+					? {
+							...state,
+							[action.productId]: {
+								...state[action.productId],
+								variations: action.items
+							}
+					  }
+					: state;
+			default:
+				return state;
+		}
+	}),
 	allIds: createAllIds(itemName),
 	categories
 });

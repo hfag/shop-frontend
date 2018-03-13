@@ -44,12 +44,6 @@ const store = createStore(
 			routerMiddleware(history),
 			store => next => action => {
 				if (action.visualize === true) {
-					console.log(
-						action.type,
-						action.visualize,
-						typeof action.visualize,
-						action
-					);
 					store.dispatch(action.isFetching ? showLoading() : hideLoading());
 				}
 				return next(action);

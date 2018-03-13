@@ -12,15 +12,15 @@ import Link from "components/Link";
 
 import { colors, shadows } from "utilities/style";
 
-import { fetchProductCategory } from "actions/product/categories";
+import { fetchProduct } from "actions/product";
 
-import { getProductCategoryById } from "reducers";
+import { getProductCategories, getProductById } from "reducers";
 
-const StyledCategory = styled.div`
+const StyledProduct = styled.div`
 	background-color: #fff;
 	box-shadow: ${shadows.y};
 
-	display: flex;
+	/*display: flex; See https://bugzilla.mozilla.org/show_bug.cgi?id=958714*/
 	flex-direction: column;
 	height: 100%;
 
@@ -69,32 +69,30 @@ const Subtitle = styled.div`
 	font-size: 0.8rem;
 `;
 
-class Category extends React.PureComponent {
+class ProductItem extends React.PureComponent {
 	componentWillMount = () => {
-		const { id, category, fetchProductCategory } = this.props;
+		const { id, product, fetchProduct } = this.props;
 
-		if (id > 0 && !category) {
-			fetchProductCategory();
+		if (id > 0 && !product) {
+			fetchProduct();
 		}
 	};
 
 	render = () => {
-		const { id: categoryId, category, parent } = this.props;
-
-		if (category && !category.count) {
-			return null;
-		}
+		const { id: productId, product, categories } = this.props;
 
 		return (
 			<Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
-				<Link to={"/category/" + categoryId + "/1"}>
-					<StyledCategory>
-						<Thumbnail id={category ? category.thumbnailId : -1} />
+				<Link to={"/product/" + productId}>
+					<StyledProduct>
+						<Thumbnail id={product ? product.thumbnailId : -1} />
 						<div>
-							{category ? <Title>{category.name}</Title> : <Placeholder text />}
-							{category ? (
-								parent ? (
-									<Subtitle>{parent.name}</Subtitle>
+							{product ? <Title>{product.title}</Title> : <Placeholder text />}
+							{product ? (
+								categories ? (
+									categories.map(category => (
+										<Subtitle key={category.id}>{category.name}</Subtitle>
+									))
 								) : (
 									""
 								)
@@ -102,34 +100,34 @@ class Category extends React.PureComponent {
 								<Placeholder text />
 							)}
 						</div>
-					</StyledCategory>
+					</StyledProduct>
 				</Link>
 			</Box>
 		);
 	};
 }
 
-Category.propTypes = {
+ProductItem.propTypes = {
 	id: PropTypes.number.isRequired
 };
 
 const mapStateToProps = (state, { id }) => {
-	const category = getProductCategoryById(state, id);
+	const product = getProductById(state, id);
 
-	return category
+	return product
 		? {
-				category,
-				parent: category.parent
-					? getProductCategoryById(state, category.parent)
-					: undefined
-			}
+				product,
+				categories: getProductCategories(state).filter(category =>
+					product.categoryIds.includes(category.id)
+				)
+		  }
 		: {};
 };
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-	fetchProductCategory() {
-		return dispatch(fetchProductCategory(id));
+	fetchProduct(visualize = true) {
+		return dispatch(fetchProduct(id, visualize));
 	}
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Category);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductItem);

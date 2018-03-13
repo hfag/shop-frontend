@@ -14,7 +14,7 @@ class Wrapper extends React.Component {
 		return (
 			<ThemeProvider
 				theme={{
-					breakpoints: [36, 48, 62, 75]
+					breakpoints: ["36rem", "48rem", "62rem", "75rem"]
 				}}
 			>
 				<div id="outer-container">

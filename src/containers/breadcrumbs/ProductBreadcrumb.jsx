@@ -13,7 +13,7 @@ class ProductBreadcrumb extends React.PureComponent {
 	render = () => {
 		const { id, product: { title }, parents, match } = this.props;
 
-		return title ? (
+		return typeof title === "string" ? (
 			[
 				...parents.reverse().map(cat => (
 					<Keyer key={cat.id}>
@@ -42,7 +42,10 @@ const mapStateToProps = (state, { match: { params: { productId } } }) => {
 			state,
 			product.categoryIds ? product.categoryIds[0] : -1
 		) || {};
-	const parents = [getProductCategoryById(state, product.categoryIds[0])];
+	const parents =
+		product.categoryIds && getProductCategoryById(state, product.categoryIds[0])
+			? [getProductCategoryById(state, product.categoryIds[0])]
+			: [];
 
 	let current = category;
 

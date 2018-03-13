@@ -100,7 +100,7 @@ const mapDispatchToProps = (
 		return dispatch(fetchProductCategories(perPage, visualize));
 	},
 	fetchProduct(visualize = true) {
-		return dispatch(fetchProduct(productId, visualize));
+		return dispatch(fetchProduct(parseInt(productId), visualize));
 	},
 	fetchVariations(visualize = true) {
 		return dispatch(fetchVariations(visualize, productId));

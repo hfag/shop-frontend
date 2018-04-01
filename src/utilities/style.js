@@ -3,6 +3,7 @@ import { css } from "styled-components";
 export const colors = {
 	primary: "#2c3e50",
 	primaryContrast: "#ffffff",
+	secondary: "#464646",
 	background: "#f5f5f5",
 	backgroundOverlay: "#ffffff",
 	font: "#464646",

@@ -184,6 +184,36 @@ export const getProductCategoryChildrenIds = wrap(
 	state => state.product
 );
 
+/**
+ * Returns the product attribute with the specified id
+ * @param {object} state This state
+ * @param {number} categoryId An optional parent category id
+ * @return {array} The specified product attribute
+ */
+export const getProductAttributeById = wrap(
+	fromProduct.getProductAttributeById,
+	state => state.product
+);
+
+/**
+ * Returns all product attributes
+ * @param {object} state This state
+ * @return {array} All product attributes
+ */
+export const getProductAttributes = wrap(
+	fromProduct.getProductAttributes,
+	state => state.product
+);
+
+/**
+ * Returns a slug => attribute map
+ * @param {object} state The redux state
+ */
+export const getProductAttributesBySlug = wrap(
+	fromProduct.getProductAttributesBySlug,
+	state => state.product
+);
+
 /*
    #    ####### #######    #     #####  #     # #     # ####### #     # ####### 
   # #      #       #      # #   #     # #     # ##   ## #       ##    #    #    

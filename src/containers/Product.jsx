@@ -20,9 +20,14 @@ import VariationSlider from "components/VariationSlider";
 import { colors, shadows } from "utilities/style";
 
 import { fetchProductCategories } from "actions/product/categories";
+import { fetchProductAttributes } from "actions/product/attributes";
 import { fetchProduct, fetchVariations } from "actions/product";
 
-import { getProductCategories, getProductById } from "reducers";
+import {
+	getProductCategories,
+	getProductById,
+	getProductAttributesBySlug
+} from "reducers";
 
 class Product extends React.PureComponent {
 	constructor(props) {
@@ -97,6 +102,7 @@ class Product extends React.PureComponent {
 			product,
 			fetchProduct,
 			fetchVariations,
+			fetchAttributes,
 			fetchAllProductCategories
 		} = this.props;
 
@@ -106,6 +112,7 @@ class Product extends React.PureComponent {
 		}
 
 		fetchVariations();
+		fetchAttributes();
 	};
 
 	onChangeDropdown = attributeKey => selectedItem => {
@@ -121,8 +128,23 @@ class Product extends React.PureComponent {
 		this.setState({ selectedAttributes: attributes });
 	};
 
+	getAttributeLabel = attributeKey =>
+		this.props.attributes && this.props.attributes[attributeKey]
+			? this.props.attributes[attributeKey].name
+			: attributeKey;
+
+	getOptionLabel = (attributeKey, optionValue) => {
+		const { attributes = {} } = this.props;
+
+		return attributes[attributeKey] && attributes[attributeKey].isTaxonomy
+			? attributes[attributeKey].options.find(
+					option => option.slug === optionValue
+			  ).name
+			: optionValue;
+	};
+
 	render = () => {
-		const { product = {} } = this.props;
+		const { product = {}, attributes = {} } = this.props;
 		const { selectedAttributes, possibleAttributeValues } = this.state;
 
 		const {
@@ -142,7 +164,7 @@ class Product extends React.PureComponent {
 			) || {};
 
 		//based on all the possible values and the constraints given by variations calculated the actual possible attributes values
-		const attributes = this.getPossibleAttributeValues(
+		const possibleAttributes = this.getPossibleAttributeValues(
 			variations.filter(({ attributes }) => {
 				for (let key in selectedAttributes) {
 					if (
@@ -181,18 +203,18 @@ class Product extends React.PureComponent {
 						onSelect={this.onVariationSliderSelect}
 					/>
 					<Flex flexWrap="wrap">
-						{Object.keys(attributes)
+						{Object.keys(possibleAttributes)
 							.filter(
 								attributeKey => possibleAttributeValues[attributeKey].length > 1
 							)
 							.map(attributeKey => (
 								<Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-									<h4>{attributeKey}</h4>
+									<h4>{this.getAttributeLabel(attributeKey)}</h4>
 									<Select
 										onChange={this.onChangeDropdown(attributeKey)}
 										value={selectedAttributes[attributeKey]}
-										options={attributes[attributeKey].map(value => ({
-											label: value,
+										options={possibleAttributes[attributeKey].map(value => ({
+											label: this.getOptionLabel(attributeKey, value),
 											value
 										}))}
 									/>
@@ -203,10 +225,13 @@ class Product extends React.PureComponent {
 						<tbody>
 							{Object.keys(selectedAttributes).map(attributeKey => (
 								<tr key={attributeKey}>
-									<td>{attributeKey}</td>
+									<td>{this.getAttributeLabel(attributeKey)}</td>
 									<td>
 										{selectedAttributes[attributeKey]
-											? selectedAttributes[attributeKey]
+											? this.getOptionLabel(
+													attributeKey,
+													selectedAttributes[attributeKey]
+											  )
 											: "-"}
 									</td>
 								</tr>
@@ -227,7 +252,8 @@ const mapStateToProps = (state, { match: { params: { productId } } }) => {
 				product,
 				categories: getProductCategories(state).filter(category =>
 					product.categoryIds.includes(category.id)
-				)
+				),
+				attributes: getProductAttributesBySlug(state)
 		  }
 		: { productId: parseInt(productId) };
 };
@@ -241,6 +267,9 @@ const mapDispatchToProps = (
 	},
 	fetchProduct(visualize = true) {
 		return dispatch(fetchProduct(parseInt(productId), visualize));
+	},
+	fetchAttributes(visualize = true) {
+		return dispatch(fetchProductAttributes(visualize, productId));
 	},
 	fetchVariations(visualize = true) {
 		return dispatch(fetchVariations(visualize, productId));

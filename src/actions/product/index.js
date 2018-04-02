@@ -75,7 +75,15 @@ const mapVariation = ({
 	isPurchasable,
 	isSoldIndividually,
 	isVirtual,
-	attributes
+	attributes: Object.keys(attributes).reduce((object, attributeKey) => {
+		if (attributeKey.startsWith("attribute_")) {
+			object[attributeKey.replace("attribute_", "")] = attributes[attributeKey];
+		} else {
+			object[attributeKey] = attributes[attributeKey];
+		}
+
+		return object;
+	}, {})
 });
 
 /**

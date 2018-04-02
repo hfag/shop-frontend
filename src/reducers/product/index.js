@@ -1,4 +1,6 @@
 import categories, * as fromCategories from "./categories";
+import attributes, * as fromAttributes from "./attributes";
+
 import { combineReducers } from "redux";
 import { wrap, createAllIds, createById } from "utilities/reducer";
 
@@ -27,7 +29,8 @@ export default combineReducers({
 		}
 	}),
 	allIds: createAllIds(itemName),
-	categories
+	categories,
+	attributes
 });
 
 /**
@@ -60,4 +63,34 @@ export const getProductCategories = wrap(
 export const getProductCategoryChildrenIds = wrap(
 	fromCategories.getProductCategoryChildrenIds,
 	state => state.categories
+);
+
+/**
+ * Returns the product attribute with the specified id
+ * @param {object} state This state
+ * @param {number} categoryId An optional parent category id
+ * @return {array} The specified product attribute
+ */
+export const getProductAttributeById = wrap(
+	fromAttributes.getProductAttributeById,
+	state => state.attributes
+);
+
+/**
+ * Returns all product attributes
+ * @param {object} state This state
+ * @return {array} All product attributes
+ */
+export const getProductAttributes = wrap(
+	fromAttributes.getProductAttributes,
+	state => state.attributes
+);
+
+/**
+ * Returns a slug => attribute map
+ * @param {object} state The redux state
+ */
+export const getProductAttributesBySlug = wrap(
+	fromAttributes.getProductAttributesBySlug,
+	state => state.attributes
 );

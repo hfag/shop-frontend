@@ -26,6 +26,20 @@ const Slide = styled(Box)`
 	}
 `;
 
+const Scrollers = styled.div`
+	white-space: nowrap;
+	text-align: center;
+	font-size: 1.5rem;
+
+	user-select: none;
+
+	& > div {
+		display: inline-block;
+		margin: 0 0.5rem;
+		cursor: pointer;
+	}
+`;
+
 const ShowAll = styled.div`
 	margin-top: -0.25rem;
 	text-align: right;
@@ -49,6 +63,53 @@ class VariationSlider extends React.PureComponent {
 		}
 	};
 
+	animateScrolling = (
+		scrollDelta,
+		callback = () => {},
+		time = 500,
+		fpms = 60 / 1000,
+		start = Date.now(),
+		last = Date.now()
+	) => {
+		const passed = Date.now() - last;
+		const slider = ReactDOM.findDOMNode(this.slider);
+
+		if (passed > fpms) {
+			slider.scrollLeft += scrollDelta / time * passed;
+
+			if (Date.now() - start >= time) {
+				callback();
+				return;
+			}
+
+			requestAnimationFrame(() =>
+				this.animateScrolling(scrollDelta, time, fpms, start, Date.now())
+			);
+		} else {
+			requestAnimationFrame(() =>
+				this.animateScrolling(scrollDelta, time, fpms, start, last)
+			);
+		}
+	};
+
+	startAnimatedScrolling = (step, fpms = 60 / 1000, last = Date.now()) => {
+		const passed = Date.now() - last;
+		if (passed > fpms) {
+			const slider = ReactDOM.findDOMNode(this.slider);
+			slider.scrollLeft += step;
+
+			this.animatedScrolling = requestAnimationFrame(() =>
+				this.startAnimatedScrolling(step, fpms, Date.now())
+			);
+		} else {
+			this.animatedScrolling = requestAnimationFrame(() =>
+				this.startAnimatedScrolling(step, fpms, last)
+			);
+		}
+	};
+
+	stopAnimatedScrolling = () => cancelAnimationFrame(this.animatedScrolling);
+
 	scrollToActiveImage = () => {
 		const slider = ReactDOM.findDOMNode(this.slider);
 		const activeSlide = ReactDOM.findDOMNode(this.activeSlide);
@@ -62,6 +123,12 @@ class VariationSlider extends React.PureComponent {
 			sliderBoundingRect.width / 2 +
 			slideBoundingRect.width / 2;
 	};
+
+	startScrollingLeft = () => this.startAnimatedScrolling(-10);
+	stopScrollingLeft = () => this.stopAnimatedScrolling();
+
+	startScrollingRight = () => this.startAnimatedScrolling(10);
+	stopScrollingRight = () => this.stopAnimatedScrolling();
 
 	render = () => {
 		const { variations = [], selectedAttributes } = this.props;
@@ -146,6 +213,20 @@ class VariationSlider extends React.PureComponent {
 							))}
 					</Flex>
 				)}
+				<Scrollers>
+					<div
+						onMouseDown={this.startScrollingLeft}
+						onMouseUp={this.stopScrollingLeft}
+					>
+						{"<"}
+					</div>
+					<div
+						onMouseDown={this.startScrollingRight}
+						onMouseUp={this.stopScrollingRight}
+					>
+						{">"}
+					</div>
+				</Scrollers>
 				<ShowAll onClick={() => this.setState({ showAll: !showAll })}>
 					Zeige Alle
 				</ShowAll>

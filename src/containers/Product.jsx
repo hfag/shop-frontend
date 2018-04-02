@@ -211,6 +211,7 @@ class Product extends React.PureComponent {
 								<Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
 									<h4>{this.getAttributeLabel(attributeKey)}</h4>
 									<Select
+										placeholder="Wählen Sie eine Eigenschaft"
 										onChange={this.onChangeDropdown(attributeKey)}
 										value={selectedAttributes[attributeKey]}
 										options={possibleAttributes[attributeKey].map(value => ({

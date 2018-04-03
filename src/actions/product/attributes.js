@@ -14,7 +14,7 @@ const itemName = "productAttribute";
  * @param {object} item The item to map
  * @return {object} The mapped item
  */
-const mapItem = ({
+export const mapItem = ({
 	id,
 	name,
 	slug,
@@ -41,7 +41,10 @@ const mapItem = ({
  * @param {number} productId The product id
  * @return {object} The redux action
  */
-const fetchItemsAction = createFetchItemsAction(itemName, "productId");
+export const fetchAttributesAction = createFetchItemsAction(
+	itemName,
+	"productId"
+);
 
 /**
  * Fetches a single item
@@ -50,7 +53,7 @@ const fetchItemsAction = createFetchItemsAction(itemName, "productId");
  * @returns {function}
  */
 export const fetchProductAttributes = createFetchItemsThunk(
-	fetchItemsAction,
+	fetchAttributesAction,
 	id => `/wp-json/hfag/product-attributes?productId=${id}`,
 	mapItem
 );

@@ -20,8 +20,7 @@ import VariationSlider from "components/VariationSlider";
 import { colors, shadows } from "utilities/style";
 
 import { fetchProductCategories } from "actions/product/categories";
-import { fetchProductAttributes } from "actions/product/attributes";
-import { fetchProduct, fetchVariations } from "actions/product";
+import { fetchProduct } from "actions/product";
 
 import {
 	getProductCategories,
@@ -97,22 +96,13 @@ class Product extends React.PureComponent {
 	};
 
 	componentWillMount = () => {
-		const {
-			productId,
-			product,
-			fetchProduct,
-			fetchVariations,
-			fetchAttributes,
-			fetchAllProductCategories
-		} = this.props;
+		const { categories, fetchProduct, fetchAllProductCategories } = this.props;
 
-		if (productId > 0 && !product) {
+		if (categories.length === 0) {
 			fetchAllProductCategories();
-			fetchProduct();
 		}
 
-		fetchVariations();
-		fetchAttributes();
+		fetchProduct();
 	};
 
 	onChangeDropdown = attributeKey => selectedItem => {
@@ -256,7 +246,10 @@ const mapStateToProps = (state, { match: { params: { productId } } }) => {
 				),
 				attributes: getProductAttributesBySlug(state)
 		  }
-		: { productId: parseInt(productId) };
+		: {
+				productId: parseInt(productId),
+				categories: getProductCategories(state)
+		  };
 };
 
 const mapDispatchToProps = (

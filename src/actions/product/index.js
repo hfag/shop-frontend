@@ -13,6 +13,11 @@ import {
 	mapItem as mapAttachment
 } from "actions/attachments";
 
+import {
+	fetchAttributesAction,
+	mapItem as mapAttribute
+} from "actions/product/attributes";
+
 const itemName = "product";
 
 /**
@@ -20,27 +25,29 @@ const itemName = "product";
  * @param {object} item The item to map
  * @return {object} The mapped item
  */
-const mapItem = (
-	{
+const mapItem = data => {
+	const {
 		id,
 		title: { rendered: title },
 		content: { rendered: content },
 		excerpt: { rendered: excerpt },
 		featured_media: thumbnailId,
 		product_cat: categoryIds,
-		date
-	},
-	page,
-	args
-) => ({
-	id,
-	title,
-	content,
-	excerpt,
-	thumbnailId,
-	categoryIds,
-	date
-});
+		date,
+		discount = {}
+	} = data.product ? data.product : data;
+
+	return {
+		id,
+		title,
+		content,
+		excerpt,
+		thumbnailId,
+		categoryIds,
+		date,
+		discount
+	};
+};
 
 /**
  * Maps an item so we can store it in the state
@@ -102,8 +109,44 @@ const fetchItemAction = createFetchSingleItemAction(itemName);
  */
 export const fetchProduct = createFetchSingleItemThunk(
 	fetchItemAction,
-	id => `/wp-json/wp/v2/product/${id}`,
-	mapItem
+	id => `/wp-json/hfag/product?productId=${id}`,
+	mapItem,
+	(dispatch, response, item) => {
+		if (item.variations && item.product && item.product.id) {
+			dispatch(
+				fetchVariationsAction(
+					false,
+					null,
+					false,
+					item.variations.map(mapVariation),
+					item.product.id
+				)
+			);
+
+			dispatch(
+				fetchAttachmentsAction(
+					false,
+					null,
+					false,
+					item.variations
+						.map(variation => variation.image)
+						.filter(t => t)
+						.map(mapAttachment)
+				)
+			);
+		}
+
+		if (item.attributes) {
+			dispatch(
+				fetchAttributesAction(
+					false,
+					null,
+					false,
+					item.attributes.map(mapAttribute)
+				)
+			);
+		}
+	}
 );
 
 /**

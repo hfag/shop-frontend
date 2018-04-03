@@ -61,6 +61,7 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
 			return {
 				...state,
 				[action.itemId]: {
+					...(state[action.itemId] ? state[action.itemId] : {}),
 					...action.item,
 					_isFetching: action.isFetching,
 					_error: action.error

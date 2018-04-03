@@ -42,20 +42,26 @@ export const createFetchSingleItemAction = (name, ...attributes) =>
  * @param {function} action The action that should be dispatched
  * @param {function} endpoint A function generating the endpoint url based on the item id and the passed arguments
  * @param {function} mapItem A function mapping the item into the desired format
+ * @param {function} callback A function called before dispatching the action. Can dispatch more actions
  * @return {function} The redux thunk
  */
 export const createFetchSingleItemThunk = (
 	action,
 	endpoint,
-	mapItem = item => item
+	mapItem = item => item,
+	callback
 ) => (itemId, visualize = false, ...attributes) => dispatch => {
 	dispatch(action(true, null, visualize, itemId, null, ...attributes));
 
 	return fetchApi(endpoint(itemId, ...attributes), {
 		method: "GET"
 	})
-		.then(({ json: item }) => {
+		.then(({ json: item, response }) => {
 			const mappedItem = mapItem(item);
+
+			if (callback) {
+				callback(dispatch, response, item, visualize, ...attributes);
+			}
 
 			dispatch(
 				action(false, null, visualize, itemId, mappedItem, ...attributes)

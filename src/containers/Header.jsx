@@ -30,6 +30,9 @@ import SignInIcon from "react-icons/lib/fa/sign-in";
 
 import LoadingBar from "react-redux-loading-bar";
 
+import LogoNegative from "img/logo/logo_negative.svg";
+import NameSloganNegative from "img/logo/name_slogan_negative.svg";
+
 const Counter = styled.div`
 	margin-left: 0.5rem;
 	font-size: 1.25rem;
@@ -113,7 +116,7 @@ class Header extends React.PureComponent {
 								<Link to="/">
 									<Flexbar>
 										<NavItem>
-											<img src="/img/logo/logo_negative.svg" />
+											<img src={LogoNegative} />
 										</NavItem>
 										<MediaQuery md up>
 											<CSSTransitionGroup
@@ -124,7 +127,7 @@ class Header extends React.PureComponent {
 											>
 												{!this.state.searchVisible && (
 													<NavItem>
-														<img src="/img/logo/name_slogan_negative.svg" />
+														<img src={NameSloganNegative} />
 													</NavItem>
 												)}
 											</CSSTransitionGroup>

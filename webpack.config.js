@@ -1,31 +1,41 @@
 const path = require("path");
 const webpack = require("webpack");
 const Dotenv = require("dotenv-webpack");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+	.BundleAnalyzerPlugin;
+
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 
 process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issues/56
 
 const context = __dirname;
 
 module.exports = {
+	mode: "development",
+
 	context,
 
 	entry: [
 		"react-hot-loader/patch",
-		"webpack-hot-middleware/client",
+		/*"webpack-hot-middleware/client",*/
 		path.join(context, "src/index.jsx")
 	],
 
 	output: {
-		path: path.join(context, "build/"),
+		path: path.join(context, "dist/"),
 		filename: "bundle.js",
-		publicPath: "/build"
+		publicPath: "/dist"
 	},
 
-	devtool: "inline-source-map",
+	devtool: "eval-source-map",
 	devServer: {
 		contentBase: ".",
 		hot: true,
 		historyApiFallback: true
+	},
+
+	optimization: {
+		minimize: false
 	},
 
 	plugins: [
@@ -33,21 +43,20 @@ module.exports = {
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoEmitOnErrorsPlugin(),
 		new Dotenv({
-			path: "./.env",
-			safe: true,
+			path: "./.env", // Path to .env file (this is the default)
+			safe: true, // load .env.example (defaults to "false" which does not use dotenv-safe)
 			systemvars: true
-		})
+		}),
+		new BundleAnalyzerPlugin()
 	],
 
 	resolve: {
-		modules: [
-			path.resolve(context, "src"),
-			path.resolve(context, "node_modules")
-		],
-		extensions: [".js", ".jsx", ".css", ".scss"]
+		modules: [path.resolve(context, "src"), "node_modules"],
+		extensions: [".js", ".jsx", ".css", ".scss"],
+		alias: {
+			img: path.resolve(context, "img")
+		}
 	},
-
-	devtool: "source-map",
 
 	module: {
 		rules: [
@@ -92,8 +101,11 @@ module.exports = {
 				],
 
 				use: [
-					"style-loader",
-					{ loader: "css-loader", options: { import: false, sourceMap: true } },
+					{ loader: "style-loader" },
+					{
+						loader: "css-loader",
+						options: { import: false, sourceMap: true, minimize: false }
+					},
 					{ loader: "postcss-loader", options: { sourceMap: true } }
 				]
 			},
@@ -105,10 +117,13 @@ module.exports = {
 				],
 
 				use: [
-					"style-loader",
-					{ loader: "css-loader", options: { import: false, sourceMap: true } },
+					{ loader: "style-loader" },
+					{
+						loader: "css-loader",
+						options: { import: false, sourceMap: true, minimize: false }
+					},
 					{ loader: "postcss-loader", options: { sourceMap: true } },
-					"resolve-url-loader",
+					{ loader: "resolve-url-loader" },
 					{ loader: "sass-loader", options: { sourceMap: true } }
 				]
 			},

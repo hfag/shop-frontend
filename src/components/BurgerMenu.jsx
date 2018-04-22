@@ -16,6 +16,8 @@ import SignInIcon from "react-icons/lib/fa/sign-in";
 import { getLoggedIn } from "reducers";
 import { colors } from "utilities/style";
 
+import NameSloganNegative from "img/logo/name_slogan_negative.svg";
+
 const BurgerLogo = styled.img`
 	width: 100%;
 	height: auto;
@@ -46,7 +48,7 @@ class BurgerMenu extends React.PureComponent {
 
 		return (
 			<ReduxBurgerMenu right>
-				<BurgerLogo src="/img/logo/name_slogan_negative.svg" />
+				<BurgerLogo src={NameSloganNegative} />
 				<BurgerList>
 					<BurgerItem seperator>
 						<Link to="https://feuerschutz.ch" negative flex>

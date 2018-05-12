@@ -2,9 +2,9 @@ const defaultState = { key: null, secret: null };
 
 /**
  * The authentication token reducer
- * @param {object} state The redux state
- * @param {object} action The dispatched action
- * @return {object} The new state
+ * @param {Object} state The redux state
+ * @param {Object} action The dispatched action
+ * @returns {Object} The new state
  */
 const credentialsReducer = (state = defaultState, action) => {
 	switch (action.type) {
@@ -24,15 +24,15 @@ export default credentialsReducer;
 
 /**
  * Checks whether the user is logged in
- * @param {object} credentials This part of the redux state
- * @return {boolean} Whether the user is logged in
+ * @param {Object} credentials This part of the redux state
+ * @returns {boolean} Whether the user is logged in
  */
 export const getLoggedIn = credentials =>
 	credentials.key !== null && credentials.secret !== null;
 /**
  * Returns the authentication token
- * @param {object} credentials This part of the redux state
- * @return {object} The woocommerce credentials
+ * @param {Object} credentials This part of the redux state
+ * @returns {Object} The woocommerce credentials
  */
 export const getCredentials = credentials => ({
 	key: credentials.key,

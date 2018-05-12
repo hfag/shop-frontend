@@ -1,14 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-
 import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
-
 import { action as toggleBurgerMenuAction } from "redux-burger-menu";
 import { colors } from "utilities/style";
-
 import { getBurgerMenuOpen } from "reducers";
-
 import Container from "components/Container";
 import Flexbar from "components/Flexbar";
 import Push from "components/Push";
@@ -18,18 +14,14 @@ import MediaQuery from "components/MediaQuery";
 import BurgerMenu from "components/BurgerMenu";
 import NavItem from "components/NavItem";
 import Navbar from "components/Navbar";
-
 import Searchbar from "containers/Searchbar";
-
 import MenuIcon from "react-icons/lib/md/menu";
 import SearchIcon from "react-icons/lib/fa/search";
 import CartIcon from "react-icons/lib/fa/shopping-cart";
 import CheckoutIcon from "react-icons/lib/fa/money";
 import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
-
 import LoadingBar from "react-redux-loading-bar";
-
 import LogoNegative from "img/logo/logo_negative.svg";
 import NameSloganNegative from "img/logo/name_slogan_negative.svg";
 
@@ -97,6 +89,10 @@ const HeaderWrapper = styled.div`
 	margin-top: 5rem;
 `;
 
+/**
+ * The page header
+ * @returns {Component} The component
+ */
 class Header extends React.PureComponent {
 	constructor() {
 		super();
@@ -125,11 +121,11 @@ class Header extends React.PureComponent {
 												transitionEnterTimeout={500}
 												transitionLeaveTimeout={300}
 											>
-												{!this.state.searchVisible && (
+												{!this.state.searchVisible && 
 													<NavItem>
 														<img src={NameSloganNegative} />
 													</NavItem>
-												)}
+												}
 											</CSSTransitionGroup>
 										</MediaQuery>
 									</Flexbar>
@@ -205,14 +201,23 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+	/**
+	 * Sets the burger menu open state
+	 * @param {boolean} open Whether the burger menu should be open
+	 * @returns {void}
+	 */
 	setBurgerMenu(open) {
-		dispatch(toggleBurgerMenuAction(open));
+		return dispatch(toggleBurgerMenuAction(open));
 	}
 });
 
 const mergeProps = ({ isBurgerMenuOpen }, { setBurgerMenu }, ownProps) => ({
+	/**
+	 * Toggles the mobile burder menu
+	 * @returns {void}
+	 */
 	toggleBurgerMenu() {
-		setBurgerMenu(!isBurgerMenuOpen);
+		return setBurgerMenu(!isBurgerMenuOpen);
 	},
 	...ownProps
 });

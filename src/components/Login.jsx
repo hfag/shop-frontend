@@ -1,13 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
-
 import Page from "components/Page";
-
 import queryString from "query-string";
-
 import { receiveWoocommerceCredentials } from "actions/authentication-woocommerce";
 
+/**
+ * The login page
+ * @returns {Component} The component
+ */
 class Login extends React.PureComponent {
 	componentWillMount = () => {
 		const params = queryString.parse(location.search);

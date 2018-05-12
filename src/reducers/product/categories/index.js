@@ -11,9 +11,9 @@ export {
 
 /**
  * Returns all categories
- * @param {object} state The exercise category state
+ * @param {Object} state The exercise category state
  * @param {number} parentId An optional parent category id
- * @return {array} An array of all exercise categories
+ * @returns {Array} An array of all exercise categories
  */
 export const getProductCategoryChildrenIds = (state, parentId = 0) =>
 	state.allIds

@@ -1,3 +1,7 @@
+/**
+ * Loads the previously stored state from localStorage
+ * @returns {Object|undefined} The loaded state
+ */
 export const loadState = () => {
 	try {
 		const serializedState = localStorage.getItem("state");
@@ -11,12 +15,17 @@ export const loadState = () => {
 	}
 };
 
+/**
+ * Stores the current redux state in the localStorage
+ * @param {Object} state The current state object
+ * @returns {void}
+ */
 export const saveState = state => {
 	try {
 		const serializedState = JSON.stringify(state);
 
 		localStorage.setItem("state", serializedState);
 	} catch (err) {
-		console.log("Error", err);
+		throw err;
 	}
 };

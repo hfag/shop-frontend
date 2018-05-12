@@ -2,31 +2,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { AppContainer } from "react-hot-loader";
-
-//routing
 import createHistory from "history/createBrowserHistory";
-
-//redux
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import { ConnectedRouter, routerMiddleware } from "react-router-redux";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
-
-//reducers
-import reducers from "./reducers";
-
-//general
 import throttle from "lodash/throttle";
-import { loadState, saveState } from "./local-storage";
-
-//components
 import App from "App";
 
-//styles
+import reducers from "./reducers";
+import { loadState, saveState } from "./local-storage";
 import "scss/global.scss";
 
-//polyfills
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
 

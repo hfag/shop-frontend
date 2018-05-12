@@ -1,4 +1,12 @@
 import {
+	fetchAttachmentsAction,
+	mapItem as mapAttachment
+} from "../attachments";
+import {
+	fetchAttributesAction,
+	mapItem as mapAttribute
+} from "./attributes";
+import {
 	createFetchSingleItemAction,
 	createFetchSingleItemThunk,
 	createFetchItemsAction,
@@ -6,28 +14,19 @@ import {
 	createFetchItemPageThunk,
 	createFetchItemPageAction,
 	createFetchItemsThunk
-} from "utilities/action";
-
-import {
-	fetchAttachmentsAction,
-	mapItem as mapAttachment
-} from "actions/attachments";
-
-import {
-	fetchAttributesAction,
-	mapItem as mapAttribute
-} from "actions/product/attributes";
+} from "../../utilities/action";
 
 const itemName = "product";
 
 /**
- * Maps an item so we can store it in the state
- * @param {object} item The item to map
- * @return {object} The mapped item
+ * Maps the received object properties to the ones that should be stored in the state
+ * @param {Object} data The item to map
+ * @returns {Object} The mapped item
  */
 const mapItem = data => {
 	const {
 		id,
+		sku,
 		title: { rendered: title },
 		content: { rendered: content },
 		excerpt: { rendered: excerpt },
@@ -39,6 +38,7 @@ const mapItem = data => {
 
 	return {
 		id,
+		sku,
 		title,
 		content,
 		excerpt,
@@ -51,8 +51,8 @@ const mapItem = data => {
 
 /**
  * Maps an item so we can store it in the state
- * @param {object} item The item to map
- * @return {object} The mapped item
+ * @param {Object} item The item to map
+ * @returns {Object} The mapped item
  */
 const mapVariation = ({
 	attributes,

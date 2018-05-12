@@ -1,19 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-
 import PropTypes from "prop-types";
 import styled from "styled-components";
-
 import { Flex, Box } from "grid-styled";
-
 import Thumbnail from "containers/Thumbnail";
 import Placeholder from "components/Placeholder";
 import Link from "components/Link";
-
 import { colors, shadows } from "utilities/style";
-
 import { fetchProduct } from "actions/product";
-
 import { getProductCategories, getProductById } from "reducers";
 
 const StyledProduct = styled.div`
@@ -69,6 +63,10 @@ const Subtitle = styled.div`
 	font-size: 0.8rem;
 `;
 
+/**
+ * Renders a single product item
+ * @returns {Component} The component
+ */
 class ProductItem extends React.PureComponent {
 	componentWillMount = () => {
 		const { id, product, fetchProduct } = this.props;
@@ -88,17 +86,17 @@ class ProductItem extends React.PureComponent {
 						<Thumbnail id={product ? product.thumbnailId : -1} />
 						<div>
 							{product ? <Title>{product.title}</Title> : <Placeholder text />}
-							{product ? (
-								categories ? (
-									categories.map(category => (
+							{product ? 
+								categories ? 
+									categories.map(category => 
 										<Subtitle key={category.id}>{category.name}</Subtitle>
-									))
-								) : (
+									)
+								 : 
 									""
-								)
-							) : (
+								
+							 : 
 								<Placeholder text />
-							)}
+							}
 						</div>
 					</StyledProduct>
 				</Link>
@@ -125,6 +123,11 @@ const mapStateToProps = (state, { id }) => {
 };
 
 const mapDispatchToProps = (dispatch, { id }) => ({
+	/**
+	 * Fetches a product
+	 * @param {boolean} visualize Whether the progress should be visualized
+	 * @returns {Promise} The fetch promise
+	 */
 	fetchProduct(visualize = true) {
 		return dispatch(fetchProduct(id, visualize));
 	}

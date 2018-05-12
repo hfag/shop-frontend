@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { colors } from "utilities/style";
 
 const Circle = styled.div`
-	padding: ${({ padding }) => (padding ? padding : "0.25rem")};
+	padding: ${({ padding }) => padding ? padding : "0.25rem"};
 	border-radius: 50%;
 	text-align: center;
 	border: ${({ negative }) =>
 			negative ? colors.primaryContrast : colors.primary}
-		${({ thickness }) => (thickness ? thickness : "1px")} solid;
+		${({ thickness }) => thickness ? thickness : "1px"} solid;
 
 	color: ${({ filled, negative }) =>
 		negative
@@ -20,11 +20,11 @@ const Circle = styled.div`
 			? `background-color: ${
 					negative ? colors.primaryContrast : colors.primary
 				};`
-			: ""} ${({ width }) => (width ? `width: ${width};` : "")} ${({
+			: ""} ${({ width }) => width ? `width: ${width};` : ""} ${({
 			height
-		}) => (height ? `height: ${height};line-height: ${height};` : "")} ${({
+		}) => height ? `height: ${height};line-height: ${height};` : ""} ${({
 			inline
-		}) => (inline ? `display: inline-block;` : "")};
+		}) => inline ? `display: inline-block;` : ""};
 `;
 
 Circle.propTypes = {

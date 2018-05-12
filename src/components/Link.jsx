@@ -1,12 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
-
 import styled from "styled-components";
 import PropTypes from "prop-types";
-
 import { colors } from "utilities/style";
-
 import Flexbar from "components/Flexbar";
 
 const UnstyledLink = styled.div`
@@ -21,6 +18,10 @@ const StyledLink = styled(UnstyledLink)`
 	text-decoration: underline;
 `;
 
+/**
+ * A hyperlink
+ * @returns {Component} The component
+ */
 class Link extends React.PureComponent {
 	render = () => {
 		const {

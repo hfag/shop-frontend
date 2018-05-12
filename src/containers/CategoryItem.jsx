@@ -1,19 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-
 import PropTypes from "prop-types";
 import styled from "styled-components";
-
 import { Flex, Box } from "grid-styled";
-
 import Thumbnail from "containers/Thumbnail";
 import Placeholder from "components/Placeholder";
 import Link from "components/Link";
-
 import { colors, shadows } from "utilities/style";
-
 import { fetchProductCategory } from "actions/product/categories";
-
 import { getProductCategoryById } from "reducers";
 
 const StyledCategory = styled.div`
@@ -69,6 +63,10 @@ const Subtitle = styled.div`
 	font-size: 0.8rem;
 `;
 
+/**
+ * A single category item
+ * @returns {Component} The component
+ */
 class CategoryItem extends React.PureComponent {
 	componentWillMount = () => {
 		const { id, category, fetchProductCategory } = this.props;
@@ -92,15 +90,15 @@ class CategoryItem extends React.PureComponent {
 						<Thumbnail id={category ? category.thumbnailId : -1} />
 						<div>
 							{category ? <Title>{category.name}</Title> : <Placeholder text />}
-							{category ? (
-								parent ? (
+							{category ? 
+								parent ? 
 									<Subtitle>{parent.name}</Subtitle>
-								) : (
+								 : 
 									""
-								)
-							) : (
+								
+							 : 
 								<Placeholder text />
-							)}
+							}
 						</div>
 					</StyledCategory>
 				</Link>
@@ -127,6 +125,10 @@ const mapStateToProps = (state, { id }) => {
 };
 
 const mapDispatchToProps = (dispatch, { id }) => ({
+	/**
+	 * Fetches the product category
+	 * @returns {Promise} The fetch promise
+	 */
 	fetchProductCategory() {
 		return dispatch(fetchProductCategory(id));
 	}

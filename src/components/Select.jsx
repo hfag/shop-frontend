@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
 import { colors } from "utilities/style";
-
 import Select from "react-select";
 
 export default styled(Select)`

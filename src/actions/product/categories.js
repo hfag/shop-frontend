@@ -7,7 +7,6 @@ import {
 	createFetchItemPageThunk,
 	createFetchItemPageAction
 } from "utilities/action";
-
 import {
 	fetchAttachmentsAction,
 	mapItem as mapAttachment
@@ -17,8 +16,8 @@ const itemName = "productCategory";
 
 /**
  * Maps an item so we can store it in the state
- * @param {object} item The item to map
- * @return {object} The mapped item
+ * @param {Object} item The item to map
+ * @returns {Object} The mapped item
  */
 const mapItem = ({
 	id,
@@ -38,6 +37,13 @@ const mapItem = ({
 	thumbnailId: thumbnail && thumbnail.id ? thumbnail.id : -1
 });
 
+/**
+ * Function called after fetching a category
+ * @param {function} dispatch The dispatch function
+ * @param {Response} response The fetch response
+ * @param {Array} items The received item array
+ * @returns {void}
+ */
 const afterCategoryFetch = (dispatch, response, items) => {
 	dispatch(
 		fetchAttachmentsAction(

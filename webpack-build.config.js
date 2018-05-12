@@ -1,4 +1,6 @@
 const path = require("path");
+const ChildProcess = require("child_process");
+
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Dotenv = require("dotenv-webpack");
@@ -18,8 +20,7 @@ const context = __dirname;
 const PUBLIC_PATH = "/wp-content/themes/feuerschutz/";
 const ROLLBAR_PUBLIC_ACCESS_TOKEN = "ffd21bafd45c4974aa0b8f5c07d6243a";
 const ROLLBAR_PRIVATE_ACCESS_TOKEN = process.env.ROLLBAR_PRIVATE_ACCESS_TOKEN;
-const VERSION = require("child_process")
-	.execSync("git rev-parse HEAD")
+const VERSION = ChildProcess.execSync("git rev-parse HEAD")
 	.toString()
 	.trim();
 

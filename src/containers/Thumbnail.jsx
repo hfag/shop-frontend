@@ -2,11 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-
 import { fetchAttachment } from "actions/attachments";
-
 import { getAttachmentById } from "reducers";
-
 import Placeholder from "components/Placeholder";
 
 const StyledThumbail = styled.div`
@@ -21,6 +18,10 @@ const StyledThumbail = styled.div`
 	}
 `;
 
+/**
+ * Renders a thumbnail
+ * @returns {Component} The component
+ */
 class Thumbnail extends React.PureComponent {
 	constructor() {
 		super();
@@ -44,10 +45,17 @@ class Thumbnail extends React.PureComponent {
 		}
 	}
 
-	onImageLoad = event => {
-		this.setState({ fetched: true });
-	};
-
+	/**
+	 * Called when the image has loaded
+	 * @param {Event} event The load event
+	 * @returns {void}
+	 */
+	onImageLoad = event => this.setState({ fetched: true });
+	/**
+	 * Called when the image fetching resulted in an error
+	 * @param {Event} event The load event
+	 * @returns {void}
+	 */
 	onImageError = event => {
 		this.setState({ error: true });
 	};
@@ -74,7 +82,7 @@ class Thumbnail extends React.PureComponent {
 				}
 			>
 				{thumbnail &&
-					thumbnailUrl && (
+					thumbnailUrl && 
 						<img
 							className={
 								thumbnail.width < thumbnail.height ? "b-height" : "b-width"
@@ -90,7 +98,7 @@ class Thumbnail extends React.PureComponent {
 									: { position: "absolute", width: 1, height: 1, zIndex: -1 }
 							}
 						/>
-					)}
+					}
 
 				{!show && <Placeholder block error={error} />}
 			</StyledThumbail>
@@ -107,6 +115,11 @@ const mapStateToProps = (state, { id }) => ({
 	thumbnail: getAttachmentById(state, id)
 });
 const mapDispatchToProps = (dispatch, { id }) => ({
+	/**
+	 * Fetches a thumbnail
+	 * @param {boolean} visualize Whether to visualize the progress
+	 * @returns {Promise} The fetch promise
+	 */
 	fetchThumbnail(visualize = true) {
 		return dispatch(fetchAttachment(id, visualize));
 	}

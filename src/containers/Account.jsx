@@ -1,9 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
-
 import { getLoggedIn } from "reducers";
 
+/**
+ * The account page
+ * @returns {Component} The component
+ */
 class Account extends React.PureComponent {
 	componentWillMount = () => {
 		const { loggedIn, redirectToLogin } = this.props;
@@ -28,8 +31,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+	/**
+	 * Redirects the client to the login page
+	 * @returns {void}
+	 */
 	redirectToLogin() {
-		dispatch(push("/login"));
+		return dispatch(push("/login"));
 	}
 });
 

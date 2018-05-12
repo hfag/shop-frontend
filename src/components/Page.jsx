@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-
 import Container from "components/Container";
-
 import { colors, shadows } from "utilities/style";
 
 const Page = styled(Container)`

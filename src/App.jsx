@@ -1,19 +1,19 @@
 import React from "react";
 import { Provider } from "react-redux";
-
 import { Route } from "react-router-dom";
 import { ConnectedRouter } from "react-router-redux";
 
-//components
-import Wrapper from "components/Wrapper";
-import Login from "components/Login";
+import Frontpage from "./containers/Frontpage";
+import ProductCategories from "./containers/ProductCategories";
+import Product from "./containers/Product";
+import Account from "./containers/Account";
+import Login from "./components/Login";
+import Wrapper from "./components/Wrapper";
 
-//containers
-import Frontpage from "containers/Frontpage";
-import ProductCategories from "containers/ProductCategories";
-import Product from "containers/Product";
-import Account from "containers/Account";
-
+/**
+ * The app's root component
+ * @returns {Component} The component
+ */
 const App = ({ history, store }) => {
 	return (
 		<Provider store={store}>

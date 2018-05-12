@@ -11,8 +11,8 @@ const itemName = "productAttribute";
 
 /**
  * Maps an item so we can store it in the state
- * @param {object} item The item to map
- * @return {object} The mapped item
+ * @param {Object} item The item to map
+ * @returns {Object} The mapped item
  */
 export const mapItem = ({
 	id,

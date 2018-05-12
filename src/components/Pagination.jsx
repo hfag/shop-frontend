@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
-
 import { colors, shadows } from "utilities/style";
 
 const StyledPagination = styled.div`
@@ -31,6 +30,10 @@ const StyledPagination = styled.div`
 	}
 `;
 
+/**
+ * A pagination component
+ * @returns {Component} The component
+ */
 class Pagination extends React.PureComponent {
 	render = () => {
 		return (

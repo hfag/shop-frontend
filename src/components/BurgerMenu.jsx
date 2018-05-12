@@ -3,19 +3,15 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { elastic as Menu } from "react-burger-menu";
 import { decorator as reduxBurgerMenu } from "redux-burger-menu";
-
 import Link from "components/Link";
-
 import HomeIcon from "react-icons/lib/fa/home";
 import SearchIcon from "react-icons/lib/fa/search";
 import CartIcon from "react-icons/lib/fa/shopping-cart";
 import CheckoutIcon from "react-icons/lib/fa/money";
 import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
-
 import { getLoggedIn } from "reducers";
 import { colors } from "utilities/style";
-
 import NameSloganNegative from "img/logo/name_slogan_negative.svg";
 
 const BurgerLogo = styled.img`
@@ -42,6 +38,10 @@ const BurgerItem = styled.li`
 
 const ReduxBurgerMenu = reduxBurgerMenu(Menu);
 
+/**
+ * The burger mobile menu
+ * @returns {Component} The component
+ */
 class BurgerMenu extends React.PureComponent {
 	render = () => {
 		const { loggedIn } = this.props;
@@ -72,15 +72,15 @@ class BurgerMenu extends React.PureComponent {
 					</BurgerItem>
 					<BurgerItem>
 						<Link to="/account" negative flex>
-							{loggedIn ? (
+							{loggedIn ? 
 								<span>
 									<AccountIcon />Mein Konto
 								</span>
-							) : (
+							 : 
 								<span>
 									<SignInIcon />Login
 								</span>
-							)}
+							}
 						</Link>
 					</BurgerItem>
 				</BurgerList>

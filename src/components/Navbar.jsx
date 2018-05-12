@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 import { colors, shadows } from "utilities/style";
 
 const Navbar = styled.div`

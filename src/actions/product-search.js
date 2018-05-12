@@ -1,6 +1,11 @@
 import { fetchApi } from "utilities/api";
 import { createFetchAction, createFetchItemsThunk } from "utilities/action";
 
+/**
+ * Maps the received object properties to the ones that should be stored in the state
+ * @param {Object} section The item to map
+ * @returns {Object} The mapped item
+ */
 const mapItem = section => section;
 
 /**
@@ -13,17 +18,17 @@ const mapItem = section => section;
  * @returns {object} The redux action
  */
 const searchProducts = createFetchAction(
-	"SEARCH_PRODUCTS",
-	"query",
-	"sections"
+  "SEARCH_PRODUCTS",
+  "query",
+  "sections"
 );
 
 /**
  * Clears the product search array
- * @returns {object} The redux action
+ * @returns {Object} The redux action
  */
 export const reset = () => ({
-	type: "RESET_PRODUCT_SEARCH"
+  type: "RESET_PRODUCT_SEARCH"
 });
 
 /**
@@ -32,7 +37,7 @@ export const reset = () => ({
  * @returns {function} A redux thunk
  */
 export const search = createFetchItemsThunk(
-	searchProducts,
-	query => `/wp-json/hfag/suggestions?query=${query}`,
-	mapItem
+  searchProducts,
+  query => `/wp-json/hfag/suggestions?query=${query}`,
+  mapItem
 );

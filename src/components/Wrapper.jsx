@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-
 import { ThemeProvider } from "styled-components";
-
 import Header from "containers/Header";
 import Breadcrumbs from "containers/Breadcrumbs";
 import Footer from "components/Footer";
 
+/**
+ * The global wrapper component
+ * @returns {Component} The component
+ */
 class Wrapper extends React.Component {
 	render = () => {
 		const { children } = this.props;

@@ -1,8 +1,9 @@
+import { combineReducers } from "redux";
+import { wrap, createAllIds, createById } from "utilities/reducer";
+
 import categories, * as fromCategories from "./categories";
 import attributes, * as fromAttributes from "./attributes";
 
-import { combineReducers } from "redux";
-import { wrap, createAllIds, createById } from "utilities/reducer";
 
 const itemName = "product";
 

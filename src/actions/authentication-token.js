@@ -18,10 +18,10 @@ const verifyJwtToken = createFetchAction("VERIFY_JWT_TOKEN", "verified");
 
 /**
  * Logs the user out and resets the jwt token
- * @returns {object} The redux action
+ * @returns {Object} The redux action
  */
 export const resetJwtToken = () => ({
-	type: "RESET_JWT_TOKEN"
+  type: "RESET_JWT_TOKEN"
 });
 
 /**
@@ -31,50 +31,50 @@ export const resetJwtToken = () => ({
  * @returns {function} A redux thunk
  */
 export const login = (username, password) => dispatch => {
-	dispatch(fetchJwtToken(true, null));
+  dispatch(fetchJwtToken(true, null));
 
-	const form = new FormData();
-	form.append("username", username);
-	form.append("password", password);
+  const form = new FormData();
+  form.append("username", username);
+  form.append("password", password);
 
-	return fetch("/wp-json/jwt-auth/v1/token", {
-		method: "POST",
-		body: form
-	})
-		.then(
-			response =>
-				response.ok
-					? response.json()
-					: Promise.reject(new Error("Response wasn't ok!"))
-		)
-		.then(token => {
-			dispatch(fetchJwtToken(false, null, token));
-		})
-		.catch(error => {
-			dispatch(fetchJwtToken(false, error, {}));
+  return fetch("/wp-json/jwt-auth/v1/token", {
+    method: "POST",
+    body: form
+  })
+    .then(
+      response =>
+        response.ok
+          ? response.json()
+          : Promise.reject(new Error("Response wasn't ok!"))
+    )
+    .then(token => {
+      dispatch(fetchJwtToken(false, null, token));
+    })
+    .catch(error => {
+      dispatch(fetchJwtToken(false, error, {}));
 
-			return Promise.reject(error);
-		});
+      return Promise.reject(error);
+    });
 };
 
 /**
  * Validates the authentication token
- * @return {function} The redux thunk
+ * @returns {function} The redux thunk
  */
 export const verifyToken = () => dispatch => {
-	dispatch(verifyJwtToken(true, null, null));
+  dispatch(verifyJwtToken(true, null, null));
 
-	return fetch("/wp-json/jwt-auth/v1/token/validate", {
-		method: "POST"
-	})
-		.then(response => response.json())
-		.then(token => {
-			dispatch(verifyJwtToken(false, null, true));
-		})
-		.catch(error => {
-			dispatch(fetchJwtToken(false, error, false));
-			dispatch(resetJwtToken(false, error, false));
+  return fetch("/wp-json/jwt-auth/v1/token/validate", {
+    method: "POST"
+  })
+    .then(response => response.json())
+    .then(token => {
+      dispatch(verifyJwtToken(false, null, true));
+    })
+    .catch(error => {
+      dispatch(fetchJwtToken(false, error, false));
+      dispatch(resetJwtToken(false, error, false));
 
-			return Promise.reject(error);
-		});
+      return Promise.reject(error);
+    });
 };

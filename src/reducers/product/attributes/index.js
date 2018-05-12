@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
-import { createReducer } from "utilities/reducer";
+
+import { createReducer } from "../../../utilities/reducer";
 
 const itemName = "productAttribute";
 
@@ -11,7 +12,8 @@ export {
 
 /**
  * Returns a slug => attribute map
- * @param {object} state The redux state
+ * @param {Object} state The redux state
+ * @returns {Object} The object mapping the slugs
  */
 export const getProductAttributesBySlug = state =>
 	state.allIds.reduce((object, id) => {

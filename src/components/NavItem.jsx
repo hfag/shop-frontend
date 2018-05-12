@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-
 import { colors } from "utilities/style";
 
 const NavItem = styled.div`

@@ -1,35 +1,20 @@
 import { combineReducers } from "redux";
 import { reducer as burgerMenu } from "redux-burger-menu";
+import { loadingBarReducer as loadingBar } from "react-redux-loading-bar";
+import { routerReducer as router } from "react-router-redux";
 
-import { wrap } from "utilities/reducer";
-
-/*
-#     #    #    #     # 
-##    #   # #   #     # 
-# #   #  #   #  #     # 
-#  #  # #     # #     # 
-#   # # #######  #   #  
-#    ## #     #   # #   
-#     # #     #    # 
-*/
+import { wrap } from "../utilities/reducer";
+import authentication, * as fromAuthentication from "./authentication";
+import productSearch, * as fromProductSearch from "./product-search";
+import product, * as fromProduct from "./product";
+import attachment, * as fromAttachment from "./attachment";
 
 /**
  * Checks whether the burger menu is open
- * @param {object} state This state
- * @return {boolean} Whether the burger menu is open
+ * @param {Object} state This state
+ * @returns {boolean} Whether the burger menu is open
  */
 export const getBurgerMenuOpen = state => state.burgerMenu.isOpen;
-
-/*
-   #    #     # ####### #     # 
-  # #   #     #    #    #     # 
- #   #  #     #    #    #     # 
-#     # #     #    #    ####### 
-####### #     #    #    #     # 
-#     # #     #    #    #     # 
-#     #  #####     #    #     # 
-*/
-import authentication, * as fromAuthentication from "./authentication";
 
 /**
  * Checks whether the user is logged in
@@ -37,8 +22,8 @@ import authentication, * as fromAuthentication from "./authentication";
  * @return {boolean} Whether the user is logged in
  */
 export const getLoggedIn = wrap(
-	fromAuthentication.getLoggedIn,
-	state => state.authentication
+  fromAuthentication.getLoggedIn,
+  state => state.authentication
 );
 /**
  * Returns the authentication token
@@ -46,8 +31,8 @@ export const getLoggedIn = wrap(
  * @return {object} The woocommerce credentials
  */
 export const getCredentials = wrap(
-	fromAuthentication.getCredentials,
-	state => state.authentication
+  fromAuthentication.getCredentials,
+  state => state.authentication
 );
 
 /**
@@ -56,8 +41,8 @@ export const getCredentials = wrap(
  * @return {object} The jwt token
  */
 export const getAuthenticationToken = wrap(
-	fromAuthentication.getAuthenticationToken,
-	state => state.authentication
+  fromAuthentication.getAuthenticationToken,
+  state => state.authentication
 );
 
 /**
@@ -66,8 +51,8 @@ export const getAuthenticationToken = wrap(
  * @return {boolean} Whether the token is being fetched
  */
 export const getAuthenticationTokenFetching = wrap(
-	fromAuthentication.getAuthenticationTokenFetching,
-	state => state.authentication
+  fromAuthentication.getAuthenticationTokenFetching,
+  state => state.authentication
 );
 /**
  * Returns the error of the jwt token
@@ -75,21 +60,9 @@ export const getAuthenticationTokenFetching = wrap(
  * @return {error} The current error
  */
 export const getAuthenticationTokenError = wrap(
-	fromAuthentication.getAuthenticationTokenError,
-	state => state.authentication
+  fromAuthentication.getAuthenticationTokenError,
+  state => state.authentication
 );
-
-/*
- #####  #######    #    ######   #####  #     # 
-#     # #         # #   #     # #     # #     # 
-#       #        #   #  #     # #       #     # 
- #####  #####   #     # ######  #       ####### 
-      # #       ####### #   #   #       #     # 
-#     # #       #     # #    #  #     # #     # 
- #####  ####### #     # #     #  #####  #     #
- */
-
-import productSearch, * as fromProductSearch from "./product-search";
 
 /**
  * Returns the product list
@@ -97,8 +70,8 @@ import productSearch, * as fromProductSearch from "./product-search";
  * @return {array} The product array
  */
 export const getProductSearchSections = wrap(
-	fromProductSearch.getProductSearchSections,
-	state => state.productSearch
+  fromProductSearch.getProductSearchSections,
+  state => state.productSearch
 );
 /**
  * Checks whether it is currently being fetched
@@ -106,8 +79,8 @@ export const getProductSearchSections = wrap(
  * @return {boolean} Whether the token is being fetched
  */
 export const getProductSearchFetching = wrap(
-	fromProductSearch.getProductSearchFetching,
-	state => state.productSearch
+  fromProductSearch.getProductSearchFetching,
+  state => state.productSearch
 );
 /**
  * Returns the error
@@ -115,21 +88,9 @@ export const getProductSearchFetching = wrap(
  * @return {error} The current error
  */
 export const getProductSearchError = wrap(
-	fromProductSearch.getProductSearchError,
-	state => state.productSearch
+  fromProductSearch.getProductSearchError,
+  state => state.productSearch
 );
-
-/*
-######  ######  ####### ######  #     #  #####  ####### 
-#     # #     # #     # #     # #     # #     #    #    
-#     # #     # #     # #     # #     # #          #    
-######  ######  #     # #     # #     # #          #    
-#       #   #   #     # #     # #     # #          #    
-#       #    #  #     # #     # #     # #     #    #    
-#       #     # ####### ######   #####   #####     # 
-*/
-
-import product, * as fromProduct from "./product";
 
 /**
  * Returns the product with the specified id
@@ -138,8 +99,8 @@ import product, * as fromProduct from "./product";
  * @return {array} All product categories
  */
 export const getProductById = wrap(
-	fromProduct.getProductById,
-	state => state.product
+  fromProduct.getProductById,
+  state => state.product
 );
 
 /**
@@ -148,8 +109,8 @@ export const getProductById = wrap(
  * @return {array} All products
  */
 export const getProducts = wrap(
-	fromProduct.getProducts,
-	state => state.product
+  fromProduct.getProducts,
+  state => state.product
 );
 
 /**
@@ -159,8 +120,8 @@ export const getProducts = wrap(
  * @return {array} All product categories
  */
 export const getProductCategoryById = wrap(
-	fromProduct.getProductCategoryById,
-	state => state.product
+  fromProduct.getProductCategoryById,
+  state => state.product
 );
 
 /**
@@ -169,8 +130,8 @@ export const getProductCategoryById = wrap(
  * @return {array} All product categories
  */
 export const getProductCategories = wrap(
-	fromProduct.getProductCategories,
-	state => state.product
+  fromProduct.getProductCategories,
+  state => state.product
 );
 
 /**
@@ -180,8 +141,8 @@ export const getProductCategories = wrap(
  * @return {array} All product categories
  */
 export const getProductCategoryChildrenIds = wrap(
-	fromProduct.getProductCategoryChildrenIds,
-	state => state.product
+  fromProduct.getProductCategoryChildrenIds,
+  state => state.product
 );
 
 /**
@@ -191,8 +152,8 @@ export const getProductCategoryChildrenIds = wrap(
  * @return {array} The specified product attribute
  */
 export const getProductAttributeById = wrap(
-	fromProduct.getProductAttributeById,
-	state => state.product
+  fromProduct.getProductAttributeById,
+  state => state.product
 );
 
 /**
@@ -201,8 +162,8 @@ export const getProductAttributeById = wrap(
  * @return {array} All product attributes
  */
 export const getProductAttributes = wrap(
-	fromProduct.getProductAttributes,
-	state => state.product
+  fromProduct.getProductAttributes,
+  state => state.product
 );
 
 /**
@@ -210,21 +171,9 @@ export const getProductAttributes = wrap(
  * @param {object} state The redux state
  */
 export const getProductAttributesBySlug = wrap(
-	fromProduct.getProductAttributesBySlug,
-	state => state.product
+  fromProduct.getProductAttributesBySlug,
+  state => state.product
 );
-
-/*
-   #    ####### #######    #     #####  #     # #     # ####### #     # ####### 
-  # #      #       #      # #   #     # #     # ##   ## #       ##    #    #    
- #   #     #       #     #   #  #       #     # # # # # #       # #   #    #    
-#     #    #       #    #     # #       ####### #  #  # #####   #  #  #    #    
-#######    #       #    ####### #       #     # #     # #       #   # #    #    
-#     #    #       #    #     # #     # #     # #     # #       #    ##    #    
-#     #    #       #    #     #  #####  #     # #     # ####### #     #    #
-*/
-
-import attachment, * as fromAttachment from "./attachment";
 
 /**
  * Returns all attachments
@@ -232,8 +181,8 @@ import attachment, * as fromAttachment from "./attachment";
  * @return {array} All attachments
  */
 export const getAttachments = wrap(
-	fromAttachment.getAttachments,
-	state => state.attachment
+  fromAttachment.getAttachments,
+  state => state.attachment
 );
 
 /**
@@ -243,19 +192,16 @@ export const getAttachments = wrap(
  * @return {object} The requested object
  */
 export const getAttachmentById = wrap(
-	fromAttachment.getAttachmentById,
-	state => state.attachment
+  fromAttachment.getAttachmentById,
+  state => state.attachment
 );
 
-import { loadingBarReducer as loadingBar } from "react-redux-loading-bar";
-import { routerReducer as router } from "react-router-redux";
-
 export default combineReducers({
-	router,
-	loadingBar,
-	burgerMenu,
-	productSearch,
-	authentication,
-	product,
-	attachment
+  router,
+  loadingBar,
+  burgerMenu,
+  productSearch,
+  authentication,
+  product,
+  attachment
 });

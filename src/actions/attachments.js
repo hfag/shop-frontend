@@ -1,34 +1,34 @@
 import {
-	createFetchSingleItemAction,
-	createFetchSingleItemThunk,
-	createFetchItemsAction,
-	createFetchAllItemsThunk,
-	createFetchItemPageThunk
+  createFetchSingleItemAction,
+  createFetchSingleItemThunk,
+  createFetchItemsAction,
+  createFetchAllItemsThunk,
+  createFetchItemPageThunk
 } from "utilities/action";
 
 const itemName = "attachment";
 
 /**
  * Maps an item so we can store it in the state
- * @param {object} item The item to map
- * @return {object} The mapped item
+ * @param {Object} item The item to map
+ * @returns {Object} The mapped item
  */
 export const mapItem = ({
-	id,
-	date,
-	caption,
-	mime_type: mimeType,
-	media_details: { width, height, sizes },
-	source_url: url
+  id,
+  date,
+  caption,
+  mime_type: mimeType,
+  media_details: { width, height, sizes },
+  source_url: url
 }) => ({
-	id,
-	date,
-	caption,
-	mimeType,
-	width,
-	height,
-	url,
-	sizes
+  id,
+  date,
+  caption,
+  mimeType,
+  width,
+  height,
+  url,
+  sizes
 });
 
 /**
@@ -48,9 +48,9 @@ export const fetchAttachmentAction = createFetchSingleItemAction(itemName);
  * @returns {function}
  */
 export const fetchAttachment = createFetchSingleItemThunk(
-	fetchAttachmentAction,
-	id => `/wp-json/wp/v2/media/${id}`,
-	mapItem
+  fetchAttachmentAction,
+  id => `/wp-json/wp/v2/media/${id}`,
+  mapItem
 );
 
 /**
@@ -65,8 +65,8 @@ export const fetchAttachment = createFetchSingleItemThunk(
  * @return {object} The redux action
  */
 export const fetchAttachmentsAction = createFetchItemsAction(
-	itemName,
-	"itemIds"
+  itemName,
+  "itemIds"
 );
 
 /**
@@ -79,17 +79,17 @@ export const fetchAttachmentsAction = createFetchItemsAction(
  * @return {function}
  */
 export const fetchAttachments = createFetchItemPageThunk(
-	fetchAttachmentsAction,
-	(
-		page,
-		perPage,
-		itemIds = [],
-		categoryIds = [],
-		order = "desc",
-		orderby = "date"
-	) =>
-		`/wp-json/wp/v2/media?page=${page}&per_page=${perPage}${
-			itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
-		}`,
-	mapItem
+  fetchAttachmentsAction,
+  (
+    page,
+    perPage,
+    itemIds = [],
+    categoryIds = [],
+    order = "desc",
+    orderby = "date"
+  ) =>
+    `/wp-json/wp/v2/media?page=${page}&per_page=${perPage}${
+      itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
+    }`,
+  mapItem
 );

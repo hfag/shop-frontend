@@ -1,9 +1,9 @@
 const path = require("path");
+
 const webpack = require("webpack");
 const Dotenv = require("dotenv-webpack");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
 	.BundleAnalyzerPlugin;
-
 const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 
 process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issues/56
@@ -15,11 +15,7 @@ module.exports = {
 
 	context,
 
-	entry: [
-		"react-hot-loader/patch",
-		/*"webpack-hot-middleware/client",*/
-		path.join(context, "src/index.jsx")
-	],
+	entry: ["react-hot-loader/patch", path.join(context, "src/index.jsx")],
 
 	output: {
 		path: path.join(context, "dist/"),
@@ -73,7 +69,7 @@ module.exports = {
 						options: {
 							presets: [
 								[
-									"env",
+									"@babel/preset-env",
 									{
 										modules: false,
 										targets: {
@@ -81,10 +77,10 @@ module.exports = {
 										}
 									}
 								],
-								"react"
+								"@babel/preset-react"
 							],
 							plugins: [
-								"transform-object-rest-spread",
+								"@babel/plugin-proposal-object-rest-spread",
 								"transform-class-properties",
 								"babel-plugin-styled-components",
 								"react-hot-loader/babel"

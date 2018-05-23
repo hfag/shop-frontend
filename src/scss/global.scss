@@ -6,27 +6,32 @@
 @import "../../node_modules/react-select/dist/react-select";
 
 html,
-body {
-	font-family: "Helvetica Neue Condensed", sans-serif;
-	font-weight: 300;
-	background-color: #f5f5f5;
-	color: #464646;
-	line-height: 1.4;
-	hyphens: auto;
+body,
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: "Helvetica Neue Condensed", sans-serif;
+  font-weight: 300;
+  background-color: #f5f5f5;
+  color: #464646;
+  line-height: 1.4;
+  hyphens: auto;
 }
 
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .redux-loading-bar {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 
-	height: 3px;
-	background-color: #fff;
+  height: 3px;
+  background-color: #fff;
 
-	z-index: 99999;
+  z-index: 99999;
 }

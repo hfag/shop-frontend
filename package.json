@@ -9,8 +9,7 @@
 		"dev": "webpack-dev-server",
 		"build": "webpack --config webpack-build.config.js",
 		"docs": "rm -rf ./docs/* && jsdoc src -c jsdoc.json",
-		"prettier":
-			"prettier --print-width 80 --tab-width 2 --trailing-comma none --arrow-parens avoid --write src/**/*.js",
+		"prettier": "prettier --print-width 80 --tab-width 2 --trailing-comma none --arrow-parens avoid --write src/**/*.js",
 		"lint": "eslint --ext .jsx --ext .js src/",
 		"test": "ava test/test.js"
 	},
@@ -22,6 +21,7 @@
 	},
 	"dependencies": {
 		"change-case": "^3.0.1",
+		"color": "^3.0.0",
 		"dotenv": "^5.0.1",
 		"dotenv-webpack": "^1.5.5",
 		"es6-promise": "^4.1.1",
@@ -40,6 +40,7 @@
 		"react-dom": "^16.0.0",
 		"react-icons": "^2.2.7",
 		"react-paginate": "^5.0.0",
+		"react-progress-button": "^5.1.0",
 		"react-redux": "^5.0.6",
 		"react-redux-loading-bar": "^3.1.1",
 		"react-router": "^4.2.0",

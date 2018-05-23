@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { colors } from "utilities/style";
 import Flexbar from "components/Flexbar";
 
-const UnstyledLink = styled.div`
+const UnstyledLink = styled.span`
 	height: 100%;
 	cursor: pointer;
 

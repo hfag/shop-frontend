@@ -1,5 +1,5 @@
-import { fetchApi } from "utilities/api";
-import { createFetchAction } from "utilities/action";
+import { fetchApi } from "../utilities/api";
+import { createFetchAction } from "../utilities/action";
 
 /**
  * Action called before and after fetching the JWT token

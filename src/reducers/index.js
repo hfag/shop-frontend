@@ -8,6 +8,7 @@ import authentication, * as fromAuthentication from "./authentication";
 import productSearch, * as fromProductSearch from "./product-search";
 import product, * as fromProduct from "./product";
 import attachment, * as fromAttachment from "./attachment";
+import shoppingCart, * as fromShoppingCart from "./shopping-cart";
 
 /**
  * Checks whether the burger menu is open
@@ -196,11 +197,80 @@ export const getAttachmentById = wrap(
   state => state.attachment
 );
 
+/**
+ * Retrieves the latest fetch error
+ * @param {Object} state The redux state
+ * @returns {Error} The fetch error
+ */
+export const getShoppingCartError = wrap(
+  fromShoppingCart.getShoppingCartError,
+  state => state.shoppingCart
+);
+/**
+ * Checks whether the shopping cart is currently being fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether the cart is currently being fetched
+ */
+export const getShoppingCartFetching = wrap(
+  fromShoppingCart.getShoppingCartFetching,
+  state => state.shoppingCart
+);
+/**
+ * Gets all items that are currenlty in the shopping cart
+ * @param {Object} state The redux state
+ * @returns {Array} The cart items
+ */
+export const getShoppingCartItems = wrap(
+  fromShoppingCart.getShoppingCartItems,
+  state => state.shoppingCart
+);
+
+/**
+ * Gets the total price of the cart
+ * @param {Object} state The redux state
+ * @returns {number} The sum
+ */
+export const getShoppingCartTotal = wrap(
+  fromShoppingCart.getShoppingCartTotal,
+  state => state.shoppingCart
+);
+
+/**
+ * Gets the shopping cart taxes
+ * @param {Object} state The redux state
+ * @returns {number} The taxes
+ */
+export const getShoppingCartTaxes = wrap(
+  fromShoppingCart.getShoppingCartTaxes,
+  state => state.shoppingCart
+);
+
+/**
+ * Gets the shopping cart fees
+ * @param {Object} state The redux state
+ * @returns {number} The fees
+ */
+export const getShoppingCartFees = wrap(
+  fromShoppingCart.getShoppingCartFees,
+  state => state.shoppingCart
+);
+
+/**
+ * Gets the shopping shipping
+ * @param {Object} state The redux state
+ * @returns {number} The shipping
+ */
+export const getShoppingCartShipping = wrap(
+  fromShoppingCart.getShoppingCartShipping,
+  state => state.shoppingCart
+);
+
 export default combineReducers({
   router,
   loadingBar,
   burgerMenu,
   productSearch,
+  shoppingCart,
   authentication,
   product,
   attachment

@@ -8,36 +8,39 @@ import { getLoggedIn } from "reducers";
  * @returns {Component} The component
  */
 class Account extends React.PureComponent {
-	componentWillMount = () => {
-		const { loggedIn, redirectToLogin } = this.props;
-		if (!loggedIn) {
-			redirectToLogin();
-		}
-	};
+  componentWillMount = () => {
+    const { loggedIn, redirectToLogin } = this.props;
+    if (!loggedIn) {
+      redirectToLogin();
+    }
+  };
 
-	render = () => {
-		return (
-			<div>
-				<form>
-					<h1>Account</h1>
-				</form>
-			</div>
-		);
-	};
+  render = () => {
+    return (
+      <div>
+        <form>
+          <h1>Account</h1>
+        </form>
+      </div>
+    );
+  };
 }
 
 const mapStateToProps = state => ({
-	loggedIn: getLoggedIn(state)
+  loggedIn: getLoggedIn(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-	/**
-	 * Redirects the client to the login page
-	 * @returns {void}
-	 */
-	redirectToLogin() {
-		return dispatch(push("/login"));
-	}
+  /**
+   * Redirects the client to the login page
+   * @returns {void}
+   */
+  redirectToLogin() {
+    return dispatch(push("/login"));
+  }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Account);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Account);

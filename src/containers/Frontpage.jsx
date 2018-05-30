@@ -8,16 +8,16 @@ import ProductCategories from "containers/ProductCategories";
  * @returns {Component} The component
  */
 class Frontpage extends React.PureComponent {
-	render = () => {
-		const { categories } = this.props;
-		return (
-			<div>
-				<ProductCategories />
-				<Link styled={false}>unstyled</Link>
-				<Link to="/login">Login</Link>
-			</div>
-		);
-	};
+  render = () => {
+    const { categories } = this.props;
+    return (
+      <div>
+        <ProductCategories />
+        <Link styled={false}>unstyled</Link>
+        <Link to="/login">Login</Link>
+      </div>
+    );
+  };
 }
 
 export default connect()(Frontpage);

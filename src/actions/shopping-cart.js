@@ -17,19 +17,6 @@ const fetchShoppingCartAction = createFetchAction(
 );
 
 /**
- * Updates the shopping cart
- * @param {boolean} isFetching Whether the cart is currently being updated
- * @param {string} error If there was an error during the request, this field should contain it
- * @param {boolean} visualize Whether the progress of this action should be visualized
- * @param {object} cart The received shopping cart
- * @returns {object} The redux action
- */
-const updateShoppingCartAction = createFetchAction(
-  "UPDATE_SHOPPING_CART",
-  "cart"
-);
-
-/**
  * Fetches the shopping cart
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
@@ -53,7 +40,20 @@ export const fetchShoppingCart = (visualize = false) => dispatch => {
 };
 
 /**
- * Updates the shopping cart
+ * Adds an item to the shopping cart
+ * @param {boolean} isFetching Whether the cart is currently being updated
+ * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @param {object} cart The received shopping cart
+ * @returns {object} The redux action
+ */
+const addShoppingCartItemAction = createFetchAction(
+  "ADD_SHOPPING_CART_ITEM",
+  "cart"
+);
+
+/**
+ * Adds an item to the shopping cart
  * @param {number|string} productId The product id that should be added
  * @param {number|string} [variationId] The variation id
  * @param {Object} [variation] The variation attributes
@@ -61,14 +61,14 @@ export const fetchShoppingCart = (visualize = false) => dispatch => {
  * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const updateShoppingCart = (
+export const addShoppingCartItem = (
   productId,
   variationId,
   variation,
   quantity = 1,
   visualize = false
 ) => dispatch => {
-  dispatch(updateShoppingCartAction(true));
+  dispatch(addShoppingCartItemAction(true, null, visualize));
 
   return fetchApi("/wp-json/hfag/shopping-cart", {
     method: "POST",
@@ -85,12 +85,60 @@ export const updateShoppingCart = (
         return Promise.reject(new Error("Unknown error while adding"));
       }
 
-      dispatch(updateShoppingCartAction(false, null, visualize, cart));
+      dispatch(addShoppingCartItemAction(false, null, visualize, cart));
 
       return Promise.resolve(cart);
     })
     .catch(e => {
-      dispatch(fetchShoppingCartAction(false, e, visualize));
+      dispatch(addShoppingCartItemAction(false, e, visualize));
+
+      return Promise.reject(e);
+    });
+};
+
+/**
+ * Adds an item to the shopping cart
+ * @param {boolean} isFetching Whether the cart is currently being updated
+ * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @param {object} cart The received shopping cart
+ * @returns {object} The redux action
+ */
+const updateShoppingCartItemAction = createFetchAction(
+  "UPDATE_SHOPPING_CART",
+  "cart"
+);
+
+/**
+ * Updates the shopping cart
+ * @param {Array<Object>} items All items that should be in the shopping cart
+ * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
+ * @returns {function} The redux thunk
+ */
+export const updateShoppingCartItem = (
+  items,
+  visualize = false
+) => dispatch => {
+  dispatch(updateShoppingCartItemAction(true, null, visualize));
+
+  return fetchApi("/wp-json/hfag/shopping-cart", {
+    method: "PUT",
+    credentials: "include",
+    body: JSON.stringify({
+      items
+    })
+  })
+    .then(({ json: cart }) => {
+      if (cart.error) {
+        return Promise.reject(new Error("Unknown error while adding"));
+      }
+
+      dispatch(updateShoppingCartItemAction(false, null, visualize, cart));
+
+      return Promise.resolve(cart);
+    })
+    .catch(e => {
+      dispatch(updateShoppingCartItemAction(false, e, visualize));
 
       return Promise.reject(e);
     });

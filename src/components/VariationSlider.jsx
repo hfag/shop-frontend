@@ -14,7 +14,7 @@ const Slider = styled.div`
 const Slide = styled(Box)`
   flex-shrink: 0;
 
-  opacity: ${({ active = false }) => active ? 1 : 0.5};
+  opacity: ${({ active = false }) => (active ? 1 : 0.5)};
 
   cursor: pointer;
 
@@ -92,7 +92,7 @@ class VariationSlider extends React.PureComponent {
     const slider = ReactDOM.findDOMNode(this.slider);
 
     if (passed > frameLength) {
-      slider.scrollLeft += scrollDelta / time * passed;
+      slider.scrollLeft += (scrollDelta / time) * passed;
 
       if (Date.now() - start >= time) {
         callback();
@@ -233,14 +233,14 @@ class VariationSlider extends React.PureComponent {
 
     return (
       <Slider>
-        {variations.length > 0 && 
+        {variations.length > 0 && (
           <Flex
-            ref={ref => this.slider = ref}
+            ref={ref => (this.slider = ref)}
             flexWrap={showAll ? "wrap" : "nowrap"}
           >
             {Object.keys(imageMap)
               .map(i => parseInt(i))
-              .map(imageId => 
+              .map(imageId => (
                 <Slide
                   key={imageId}
                   width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
@@ -254,17 +254,17 @@ class VariationSlider extends React.PureComponent {
                   ref={ref =>
                     activeImageIds.includes(imageId) &&
                     activeImageIds.length === 1
-                      ? this.activeSlide = ref
+                      ? (this.activeSlide = ref)
                       : ""
                   }
                   onClick={this.onSelectImage(imageId, imageMap[imageId])}
                 >
                   <Thumbnail id={imageId} />
                 </Slide>
-              )}
+              ))}
           </Flex>
-        }
-        {!showAll && 
+        )}
+        {!showAll && (
           <Scrollers>
             <div
               onMouseDown={this.startScrollingLeft}
@@ -279,7 +279,7 @@ class VariationSlider extends React.PureComponent {
               {">"}
             </div>
           </Scrollers>
-        }
+        )}
         <ShowAll onClick={() => this.setState({ showAll: !showAll })}>
           {showAll ? "Zeige Slider" : "Zeige Alle"}
         </ShowAll>

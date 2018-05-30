@@ -18,6 +18,7 @@ const shoppingCartReducer = (
 ) => {
   switch (action.type) {
     case "FETCH_SHOPPING_CART":
+    case "ADD_SHOPPING_CART_ITEM":
     case "UPDATE_SHOPPING_CART":
       return {
         isFetching: action.isFetching,

@@ -19,7 +19,7 @@ import VariationSlider from "../components/VariationSlider";
 import { colors, shadows } from "../utilities/style";
 import { fetchProductCategories } from "../actions/product/categories";
 import { fetchProduct } from "../actions/product";
-import { updateShoppingCart } from "../actions/shopping-cart";
+import { addShoppingCartItem } from "../actions/shopping-cart";
 import {
   getProductCategories,
   getProductById,
@@ -48,7 +48,7 @@ const DiscountRow = styled.tr`
   background-color: ${({ selected }) =>
     selected ? colors.primary : "transparent"};
 
-  color: ${({ selected }) => selected ? "#fff" : "inherit"};
+  color: ${({ selected }) => (selected ? "#fff" : "inherit")};
 `;
 
 /**
@@ -225,8 +225,7 @@ class Product extends React.PureComponent {
       ),
       { sku, price } = selectedVariation || {};
 
-    const discountRow =
-      discount.bulk &&
+    const discountRow = (discount.bulk &&
       selectedVariation &&
       discount.bulk[selectedVariation.id] &&
       discount.bulk[selectedVariation.id].reduce(
@@ -236,7 +235,7 @@ class Product extends React.PureComponent {
             ? nextDiscount
             : highestQuantity,
         { qty: 1, ppu: price }
-      );
+      )) || { qty: 1, ppu: price };
 
     //based on all the possible values and the constraints given by variations calculated the actual possible attributes values
     const possibleAttributes = this.getPossibleAttributeValues(
@@ -283,7 +282,7 @@ class Product extends React.PureComponent {
               .filter(
                 attributeKey => possibleAttributeValues[attributeKey].length > 1
               )
-              .map(attributeKey => 
+              .map(attributeKey => (
                 <Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
                   <h4>{this.getAttributeLabel(attributeKey)}</h4>
                   <Select
@@ -296,7 +295,7 @@ class Product extends React.PureComponent {
                     }))}
                   />
                 </Box>
-              )}
+              ))}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
               <h4>Anzahl</h4>
               <Counter
@@ -343,11 +342,11 @@ class Product extends React.PureComponent {
                     <td>
                       {categories.length > 0
                         ? categories
-                            .map(({ id, name }) => 
+                            .map(({ id, name }) => (
                               <Link key={id} styled to={`category/${id}`}>
                                 {name}
                               </Link>
-                            )
+                            ))
                             .reduce((prev, curr) => [prev, ", ", curr])
                         : ""}
                     </td>
@@ -356,7 +355,7 @@ class Product extends React.PureComponent {
                     <td>Produkt</td>
                     <td>{title}</td>
                   </tr>
-                  {Object.keys(selectedAttributes).map(attributeKey => 
+                  {Object.keys(selectedAttributes).map(attributeKey => (
                     <tr key={attributeKey}>
                       <td>{this.getAttributeLabel(attributeKey)}</td>
                       <td>
@@ -368,14 +367,14 @@ class Product extends React.PureComponent {
                           : "-"}
                       </td>
                     </tr>
-                  )}
+                  ))}
                 </tbody>
               </StyledTable>
             </Box>
             {discount.bulk &&
               selectedVariation &&
               discount.bulk[selectedVariation.id] &&
-              discount.bulk[selectedVariation.id].length > 0 && 
+              discount.bulk[selectedVariation.id].length > 0 && (
                 <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
                   <h4>Mengenrabatt</h4>
                   <DiscountTable>
@@ -387,7 +386,7 @@ class Product extends React.PureComponent {
                     </thead>
                     <tbody>
                       {discount.bulk[selectedVariation.id].map(
-                        ({ qty, ppu }, index) => 
+                        ({ qty, ppu }, index) => (
                           <DiscountRow
                             onClick={() => this.setState({ productCount: qty })}
                             selected={qty === discountRow.qty}
@@ -398,14 +397,14 @@ class Product extends React.PureComponent {
                               <Price>{ppu}</Price>
                             </td>
                           </DiscountRow>
-                        
+                        )
                       )}
                     </tbody>
                   </DiscountTable>
                 </Box>
-              }
+              )}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-              {selectedVariation ? 
+              {selectedVariation ? (
                 <div>
                   <h4>Preis</h4>
                   <Bill
@@ -435,7 +434,7 @@ class Product extends React.PureComponent {
                     Zum Warenkorb hinzufügen
                   </Button>
                 </div>
-               : null /*"Wähle zuerst eine Variante aus"*/}
+              ) : null /*"Wähle zuerst eine Variante aus"*/}
             </Box>
           </Flex>
         </Card>
@@ -519,9 +518,18 @@ const mapDispatchToProps = (
    */
   addToShoppingCart(variationId, variation, quantity = 1, visualize = true) {
     return dispatch(
-      updateShoppingCart(productId, variationId, variation, quantity, visualize)
+      addShoppingCartItem(
+        productId,
+        variationId,
+        variation,
+        quantity,
+        visualize
+      )
     );
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Product);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Product);

@@ -15,25 +15,25 @@ import { colors } from "utilities/style";
 import NameSloganNegative from "img/logo/name_slogan_negative.svg";
 
 const BurgerLogo = styled.img`
-	width: 100%;
-	height: auto;
+  width: 100%;
+  height: auto;
 
-	margin-bottom: 2rem;
+  margin-bottom: 2rem;
 `;
 const BurgerList = styled.ul`
-	padding: 0;
-	margin: 0;
-	list-style: none;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 `;
 const BurgerItem = styled.li`
-	margin: 0 0 0.5rem 0;
-	padding: 0 0 0.5rem 0;
-	${({ seperator }) =>
-		seperator ? `border-bottom: ${colors.primaryContrast} 1px solid;` : ""};
+  margin: 0 0 0.5rem 0;
+  padding: 0 0 0.5rem 0;
+  ${({ seperator }) =>
+    seperator ? `border-bottom: ${colors.primaryContrast} 1px solid;` : ""};
 
-	svg {
-		margin-right: 0.5rem;
-	}
+  svg {
+    margin-right: 0.5rem;
+  }
 `;
 
 const ReduxBurgerMenu = reduxBurgerMenu(Menu);
@@ -43,54 +43,54 @@ const ReduxBurgerMenu = reduxBurgerMenu(Menu);
  * @returns {Component} The component
  */
 class BurgerMenu extends React.PureComponent {
-	render = () => {
-		const { loggedIn } = this.props;
+  render = () => {
+    const { loggedIn } = this.props;
 
-		return (
-			<ReduxBurgerMenu right>
-				<BurgerLogo src={NameSloganNegative} />
-				<BurgerList>
-					<BurgerItem seperator>
-						<Link to="https://feuerschutz.ch" negative flex>
-							<HomeIcon />Zu unserer Homepage
-						</Link>
-					</BurgerItem>
-					<BurgerItem seperator>
-						<Link to="/search" negative flex>
-							<SearchIcon />Suche
-						</Link>
-					</BurgerItem>
-					<BurgerItem>
-						<Link to="/cart" negative flex>
-							<CartIcon />Warenkorb
-						</Link>
-					</BurgerItem>
-					<BurgerItem seperator>
-						<Link to="/checkout" negative flex>
-							<CheckoutIcon />Zur Kasse
-						</Link>
-					</BurgerItem>
-					<BurgerItem>
-						<Link to="/account" negative flex>
-							{loggedIn ? 
-								<span>
-									<AccountIcon />Mein Konto
-								</span>
-							 : 
-								<span>
-									<SignInIcon />Login
-								</span>
-							}
-						</Link>
-					</BurgerItem>
-				</BurgerList>
-			</ReduxBurgerMenu>
-		);
-	};
+    return (
+      <ReduxBurgerMenu right>
+        <BurgerLogo src={NameSloganNegative} />
+        <BurgerList>
+          <BurgerItem seperator>
+            <Link to="https://feuerschutz.ch" negative flex>
+              <HomeIcon />Zu unserer Homepage
+            </Link>
+          </BurgerItem>
+          <BurgerItem seperator>
+            <Link to="/search" negative flex>
+              <SearchIcon />Suche
+            </Link>
+          </BurgerItem>
+          <BurgerItem>
+            <Link to="/cart" negative flex>
+              <CartIcon />Warenkorb
+            </Link>
+          </BurgerItem>
+          <BurgerItem seperator>
+            <Link to="/checkout" negative flex>
+              <CheckoutIcon />Zur Kasse
+            </Link>
+          </BurgerItem>
+          <BurgerItem>
+            <Link to="/account" negative flex>
+              {loggedIn ? (
+                <span>
+                  <AccountIcon />Mein Konto
+                </span>
+              ) : (
+                <span>
+                  <SignInIcon />Login
+                </span>
+              )}
+            </Link>
+          </BurgerItem>
+        </BurgerList>
+      </ReduxBurgerMenu>
+    );
+  };
 }
 
 const mapStateToProps = state => ({
-	loggedIn: getLoggedIn(state)
+  loggedIn: getLoggedIn(state)
 });
 
 export default connect(mapStateToProps)(BurgerMenu);

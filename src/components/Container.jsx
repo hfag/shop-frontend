@@ -3,22 +3,22 @@ import styled from "styled-components";
 import { media } from "utilities/style";
 
 const Container = styled.div`
-	position: relative;
-	margin: 0 auto;
-	padding: 0 1rem;
+  position: relative;
+  margin: 0 auto;
+  padding: 0 1rem;
 
-	height: 100%;
+  height: 100%;
 
-	${media.minSmall`
+  ${media.minSmall`
 		max-width: 576px;
 	`};
-	${media.minMedium`
+  ${media.minMedium`
 		max-width: 720px;
 	`};
-	${media.minLarge`
+  ${media.minLarge`
 		max-width: 940px;
 	`};
-	${media.minXLarge`
+  ${media.minXLarge`
 		max-width: 1140px;
 	`};
 `;

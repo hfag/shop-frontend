@@ -178,11 +178,11 @@ class Header extends React.PureComponent {
                         transitionEnterTimeout={500}
                         transitionLeaveTimeout={300}
                       >
-                        {!this.state.showSearch && 
+                        {!this.state.showSearch && (
                           <NavItem>
                             <img src={NameSloganNegative} />
                           </NavItem>
-                        }
+                        )}
                       </CSSTransitionGroup>
                     </MediaQuery>
                   </Flexbar>
@@ -236,35 +236,41 @@ class Header extends React.PureComponent {
                               width="1.75rem"
                               height="1.75rem"
                               padding="0"
-                              inline
+                              centerChildren
                             >
-                              {shoppingCartFetching
-                                ? ""
-                                : shoppingCartItems.length}
+                              <small>
+                                {shoppingCartFetching
+                                  ? ""
+                                  : shoppingCartItems.reduce(
+                                      (sum, item) => sum + item.quantity,
+                                      0
+                                    )}
+                              </small>
                             </Circle>
                           </Counter>
                           <Triangle color="#fff" size="0.5rem" />
                         </Link>
-                        {this.state.showShoppingCartDropdown && 
+                        {this.state.showShoppingCartDropdown && (
                           <Dropdown>
                             <ShoppingCartList>
-                              {shoppingCartItems.length > 0 ? 
-                                shoppingCartItems.map(item => 
-                                  <li key={item.id}>
+                              {shoppingCartItems.length > 0 ? (
+                                shoppingCartItems.map((item, index) => (
+                                  <li key={index}>
                                     {item.quantity} x {item.title}
                                   </li>
-                                )
-                               : 
+                                ))
+                              ) : (
                                 <li>
                                   Es befinden sich bisher noch keine Produkte im
                                   Warenkorb.
                                 </li>
-                              }
+                              )}
                               <li>
                                 <Price>{shoppingCartTotal}</Price>
                               </li>
                             </ShoppingCartList>
                             <Button
+                              fullWidth
                               onClick={() =>
                                 new Promise((resolve, reject) => {
                                   redirect("/cart");
@@ -278,7 +284,7 @@ class Header extends React.PureComponent {
                               Zum Warenkorb
                             </Button>
                           </Dropdown>
-                        }
+                        )}
                       </NavItem>
                       <NavItem>
                         <Link to="/account" negative>
@@ -346,4 +352,8 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Header);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
+)(Header);

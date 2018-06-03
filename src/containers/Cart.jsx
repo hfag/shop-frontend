@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { withFormik, Form, FieldArray, Field } from "formik";
-import { MdDelete } from "react-icons/lib/md";
+import MdDelete from "react-icons/lib/md/delete";
 
 import {
   fetchShoppingCart,
@@ -26,10 +26,11 @@ import Table from "../components/Table";
 import Thumbnail from "../containers/Thumbnail";
 import UncontrolledCollapse from "../components/UncontrolledCollapse";
 
-const Action = styled.div`
+const Action = styled.span`
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  transform-origin: 10% 70%;
+  transform-origin: 50% 50%;
+  display: inline-block;
   &:hover {
     color: ${colors.danger};
     transform: scale(1.1);

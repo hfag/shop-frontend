@@ -35,7 +35,6 @@ const Taxes = styled.li``;
 class Bill extends React.PureComponent {
   render = () => {
     const { items } = this.props;
-    const currency = "CHF";
     const taxes = "zzgl. MwSt., zzgl. Versandkosten";
 
     const normalSum = items.reduce(
@@ -54,7 +53,6 @@ class Bill extends React.PureComponent {
           return count > 0 ? (
             <li key={index}>
               <Count>{count}</Count>
-              {currency}{" "}
               {price ? (
                 discountPrice ? (
                   <DiscountPrice>
@@ -72,7 +70,6 @@ class Bill extends React.PureComponent {
           );
         })}
         <Sum>
-          {currency}{" "}
           {items.length > 0 ? (
             normalSum === discountSum ? (
               <Price>{normalSum}</Price>

@@ -22,7 +22,7 @@ import { fetchProduct } from "../actions/product";
 import { addShoppingCartItem } from "../actions/shopping-cart";
 import {
   getProductCategories,
-  getProductById,
+  getProductBySlug,
   getProductAttributesBySlug
 } from "../reducers";
 import Bill from "../components/Bill";
@@ -447,31 +447,29 @@ const mapStateToProps = (
   state,
   {
     match: {
-      params: { productId }
+      params: { productSlug }
     }
   }
 ) => {
-  const product = getProductById(state, parseInt(productId));
-  return product && !product._isFetching
-    ? {
-        productId: parseInt(productId),
-        product,
-        categories: getProductCategories(state).filter(category =>
-          product.categoryIds.includes(category.id)
-        ),
-        attributes: getProductAttributesBySlug(state)
-      }
-    : {
-        productId: parseInt(productId),
-        categories: getProductCategories(state)
-      };
+  const product = getProductBySlug(state, productSlug);
+  return {
+    productSlug,
+    product: product && !product._isFetching ? product : {},
+    categories:
+      product && !product._isFetching
+        ? getProductCategories(state).filter(category =>
+            product.categoryIds.includes(category.id)
+          )
+        : [],
+    attributes: getProductAttributesBySlug(state)
+  };
 };
 
 const mapDispatchToProps = (
   dispatch,
   {
     match: {
-      params: { productId }
+      params: { productSlug }
     }
   }
 ) => ({
@@ -490,7 +488,7 @@ const mapDispatchToProps = (
    * @returns {Promise} The fetch promise
    */
   fetchProduct(visualize = true) {
-    return dispatch(fetchProduct(parseInt(productId), visualize));
+    return dispatch(fetchProduct(productSlug, visualize));
   },
   /**
    * Fetches the product attributes
@@ -502,21 +500,29 @@ const mapDispatchToProps = (
   },
   /**
    * Fetches the product variations
+   * @param {number|string} productId The productId
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchVariations(visualize = true) {
+  fetchVariations(productId, visualize = true) {
     return dispatch(fetchVariations(visualize, productId));
   },
   /**
    * Updates the shopping cart
+   * @param {number|string} productId The product id
    * @param {number|string} [variationId] The variation id
    * @param {Object} [variation] The variation attributes
    * @param {number} [quantity=1] The quantity
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {function} The redux thunk
    */
-  addToShoppingCart(variationId, variation, quantity = 1, visualize = true) {
+  addToShoppingCart(
+    productId,
+    variationId,
+    variation,
+    quantity = 1,
+    visualize = true
+  ) {
     return dispatch(
       addShoppingCartItem(
         productId,
@@ -529,7 +535,46 @@ const mapDispatchToProps = (
   }
 });
 
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the product variations
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchVariations(visualize = true) {
+    return mapStateToProps.product
+      ? mapDispatchToProps.fetchVariations(
+          mapStateToProps.product.id,
+          visualize
+        )
+      : Promise.resolve();
+  },
+  /**
+   * Updates the shopping cart
+   * @param {number|string} [variationId] The variation id
+   * @param {Object} [variation] The variation attributes
+   * @param {number} [quantity=1] The quantity
+   * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
+   * @returns {function} The redux thunk
+   */
+  addToShoppingCart(variationId, variation, quantity = 1, visualize = true) {
+    return mapStateToProps.product
+      ? mapDispatchToProps.addToShoppingCart(
+          mapStateToProps.product.id,
+          variationId,
+          variation,
+          quantity,
+          visualize
+        )
+      : Promise.resolve();
+  }
+});
+
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Product);

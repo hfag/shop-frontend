@@ -273,7 +273,7 @@ class Header extends React.PureComponent {
                               fullWidth
                               onClick={() =>
                                 new Promise((resolve, reject) => {
-                                  redirect("/cart");
+                                  redirect("/warenkorb");
                                   this.setState(
                                     { showShoppingCartDropdown: false },
                                     resolve

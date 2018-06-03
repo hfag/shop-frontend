@@ -3,11 +3,22 @@ import { createReducer } from "utilities/reducer";
 
 const itemName = "productCategory";
 
-export default createReducer(itemName);
+export default createReducer(itemName, "slug");
 export {
-	getAllItems as getProductCategories,
-	getItemById as getProductCategoryById
+  getAllItems as getProductCategories,
+  getItemById as getProductCategoryBySlug
 } from "utilities/reducer";
+
+/**
+ * Returns the category
+ * @param {Object} state The exercise category state
+ * @param {number} categoryId The category id to look for
+ * @returns {Array} An array of all exercise categories
+ */
+export const getProductCategoryById = (state, categoryId) =>
+  state.allIds
+    .map(slug => state.byId[slug])
+    .find(category => category.id === categoryId);
 
 /**
  * Returns all categories
@@ -15,8 +26,8 @@ export {
  * @param {number} parentId An optional parent category id
  * @returns {Array} An array of all exercise categories
  */
-export const getProductCategoryChildrenIds = (state, parentId = 0) =>
-	state.allIds
-		.map(id => state.byId[id])
-		.filter(category => category.parent === parentId)
-		.map(category => category.id);
+export const getProductCategoryChildrenIdsById = (state, parentId = 0) =>
+  state.allIds
+    .map(id => state.byId[id])
+    .filter(category => category.parent === parentId)
+    .map(category => category.id);

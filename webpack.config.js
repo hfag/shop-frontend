@@ -62,9 +62,6 @@ module.exports = {
 
         use: [
           {
-            loader: "react-hot-loader/webpack"
-          },
-          {
             loader: "babel-loader",
             options: {
               presets: [

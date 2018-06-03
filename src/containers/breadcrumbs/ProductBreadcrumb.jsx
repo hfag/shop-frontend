@@ -4,74 +4,74 @@ import Link from "components/Link";
 import Placeholder from "components/Placeholder";
 import Keyer from "containers/breadcrumbs/Keyer";
 import Breadcrumb from "containers/breadcrumbs/Breadcrumb";
-import { getProductCategoryById, getProductById } from "reducers";
+import { getProductCategoryById, getProductBySlug } from "reducers";
 
 /**
  * Renders a product breadcrumb
  * @returns {Component} The component
  */
 class ProductBreadcrumb extends React.PureComponent {
-	render = () => {
-		const {
-			id,
-			product: { title },
-			parents,
-			match
-		} = this.props;
+  render = () => {
+    const {
+      slug,
+      product: { id, title },
+      parents,
+      match
+    } = this.props;
 
-		return typeof title === "string" ? 
-			[
-				...parents.reverse().map(cat => 
-					<Keyer key={cat.id}>
-						<Breadcrumb>
-							<Link to={"/category/" + cat.id + "/1"}>{cat.name}</Link>
-						</Breadcrumb>
-					</Keyer>
-				),
-				<Keyer key={id}>
-					<Breadcrumb>
-						<Link to={"/product/" + id}>{title}</Link>
-					</Breadcrumb>
-				</Keyer>
-			]
-		 : 
-			<Placeholder text inline minWidth={5} />
-		;
-	};
+    return typeof title === "string" ? 
+      [
+        ...parents.reverse().map(cat => 
+          <Keyer key={cat.id}>
+            <Breadcrumb>
+              <Link to={"/produkte/" + cat.slug + "/1"}>{cat.name}</Link>
+            </Breadcrumb>
+          </Keyer>
+        ),
+        <Keyer key={slug}>
+          <Breadcrumb>
+            <Link to={"/produkte/" + slug}>{title}</Link>
+          </Breadcrumb>
+        </Keyer>
+      ]
+     : 
+      <Placeholder text inline minWidth={5} />
+    ;
+  };
 }
 
 const mapStateToProps = (
-	state,
-	{
-		match: {
-			params: { productId }
-		}
-	}
+  state,
+  {
+    match: {
+      params: { productSlug }
+    }
+  }
 ) => {
-	const product = getProductById(state, productId) || {};
+  const product = getProductBySlug(state, productSlug) || {};
 
-	const category =
-		getProductCategoryById(
-			state,
-			product.categoryIds ? product.categoryIds[0] : -1
-		) || {};
-	const parents =
-		product.categoryIds && getProductCategoryById(state, product.categoryIds[0])
-			? [getProductCategoryById(state, product.categoryIds[0])]
-			: [];
+  const category =
+    getProductCategoryById(
+      state,
+      product.categoryIds ? product.categoryIds[0] : -1
+    ) || {};
+  const parents =
+    product.categoryIds && getProductCategoryById(state, product.categoryIds[0])
+      ? [getProductCategoryById(state, product.categoryIds[0])]
+      : [];
 
-	let current = category;
+  let current = category;
 
-	while (current.parent) {
-		parents.push(getProductCategoryById(state, current.parent));
-		current = parents[parents.length - 1];
-	}
+  while (current.parent) {
+    parents.push(getProductCategoryById(state, current.parent));
+    current = parents[parents.length - 1];
+  }
 
-	return {
-		id: productId,
-		product,
-		parents
-	};
+  return {
+    slug: productSlug,
+    product,
+    parents
+  };
 };
 
 export default connect(mapStateToProps)(ProductBreadcrumb);

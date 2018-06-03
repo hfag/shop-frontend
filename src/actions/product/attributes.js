@@ -1,10 +1,10 @@
 import {
-	createFetchAction,
-	createFetchSingleItemAction,
-	createFetchSingleItemThunk,
-	createFetchItemsAction,
-	createFetchItemsThunk,
-	createFetchItemPageAction
+  createFetchAction,
+  createFetchSingleItemAction,
+  createFetchSingleItemThunk,
+  createFetchItemsAction,
+  createFetchItemsThunk,
+  createFetchItemPageAction
 } from "utilities/action";
 
 const itemName = "productAttribute";
@@ -15,21 +15,21 @@ const itemName = "productAttribute";
  * @returns {Object} The mapped item
  */
 export const mapItem = ({
-	id,
-	name,
-	slug,
-	options,
-	position,
-	is_taxonomy: isTaxonomy,
-	is_variation: isVariation
+  id,
+  name,
+  slug,
+  options,
+  position,
+  is_taxonomy: isTaxonomy,
+  is_variation: isVariation
 }) => ({
-	id,
-	name,
-	slug,
-	options,
-	position,
-	isTaxonomy,
-	isVariation
+  id,
+  name,
+  slug,
+  options,
+  position,
+  isTaxonomy,
+  isVariation
 });
 
 /**
@@ -38,22 +38,22 @@ export const mapItem = ({
  * @param {string} error If there was an error during the request, this field should contain it
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} items The received items
- * @param {number} productId The product id
+ * @param {number} productSlug The product slug
  * @return {object} The redux action
  */
 export const fetchAttributesAction = createFetchItemsAction(
-	itemName,
-	"productId"
+  itemName,
+  "productSlug"
 );
 
 /**
  * Fetches a single item
  * @param {boolean} visualize Whether the progress of this action should be visualized
- * @param {number} productId The product id
+ * @param {number} productSlug The product slug
  * @returns {function}
  */
 export const fetchProductAttributes = createFetchItemsThunk(
-	fetchAttributesAction,
-	id => `/wp-json/hfag/product-attributes?productId=${id}`,
-	mapItem
+  fetchAttributesAction,
+  slug => `/wp-json/hfag/product-attributes?productSlug=${slug}`,
+  mapItem
 );

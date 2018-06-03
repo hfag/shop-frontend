@@ -94,13 +94,24 @@ export const getProductSearchError = wrap(
 );
 
 /**
- * Returns the product with the specified id
+ * Returns the product with the specified
  * @param {object} state This state
- * @param {number} categoryId The product id
+ * @param {number} productId The product id
  * @return {array} All product categories
  */
 export const getProductById = wrap(
   fromProduct.getProductById,
+  state => state.product
+);
+
+/**
+ * Returns the product with the specified slug
+ * @param {object} state This state
+ * @param {number} productSlug The product slug
+ * @return {array} All product categories
+ */
+export const getProductBySlug = wrap(
+  fromProduct.getProductBySlug,
   state => state.product
 );
 
@@ -111,6 +122,17 @@ export const getProductById = wrap(
  */
 export const getProducts = wrap(
   fromProduct.getProducts,
+  state => state.product
+);
+
+/**
+ * Returns the product category with the specified slug
+ * @param {object} state This state
+ * @param {number} categorySlug The category slug
+ * @return {array} All product categories
+ */
+export const getProductCategoryBySlug = wrap(
+  fromProduct.getProductCategoryBySlug,
   state => state.product
 );
 
@@ -141,8 +163,8 @@ export const getProductCategories = wrap(
  * @param {number} categoryId An optional parent category id
  * @return {array} All product categories
  */
-export const getProductCategoryChildrenIds = wrap(
-  fromProduct.getProductCategoryChildrenIds,
+export const getProductCategoryChildrenIdsById = wrap(
+  fromProduct.getProductCategoryChildrenIdsById,
   state => state.product
 );
 

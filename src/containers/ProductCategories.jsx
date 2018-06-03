@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import { Route } from "react-router-dom";
 import { push } from "react-router-redux";
 import Flex from "components/Flex";
 import Link from "components/Link";
@@ -13,8 +14,9 @@ import { fetchProducts } from "actions/product";
 import { fetchAttachments } from "actions/attachments";
 import {
   getProducts,
-  getProductCategoryChildrenIds,
-  getProductCategoryById
+  getProductCategoryChildrenIdsById,
+  getProductCategoryById,
+  getProductCategoryBySlug
 } from "reducers";
 
 const ITEMS_PER_PAGE = 30;
@@ -26,29 +28,37 @@ const ITEMS_PER_PAGE = 30;
 class ProductCategories extends React.PureComponent {
   constructor(props) {
     super(props);
-    const {
-      match: {
-        params: { categoryId, page }
-      }
-    } = props;
 
-    this.state = {
-      categoryId,
-      page
-    };
+    this.state = { active: window.location.pathname === props.match.url };
   }
   componentWillMount = () => {
     this.loadData();
   };
-  componentDidUpdate = () => {
+
+  /**
+   * Lifecycle method
+   * @param {Object} prevProps The previous props
+   * @returns {void}
+   */
+  componentDidUpdate = prevProps => {
     const {
       match: {
-        params: { categoryId, page }
-      }
+        params: { categorySlug, page },
+        url
+      },
+      category
     } = this.props;
-    if (categoryId !== this.state.categoryId || page !== this.state.page) {
-      this.setState({ categoryId, page }, this.loadData);
+    if (
+      (categorySlug !== prevProps.categorySlug ||
+        page !== prevProps.page ||
+        (!prevProps.category && category)) &&
+      categorySlug &&
+      page
+    ) {
+      this.loadData();
     }
+
+    this.setState({ active: window.location.pathname === url });
   };
   loadData = () => {
     const {
@@ -59,8 +69,13 @@ class ProductCategories extends React.PureComponent {
       fetchProducts
     } = this.props;
 
-    if (categoryIds.length === 0 && productIds.length === 0) {
+    if (!this.state.active) {
+      return;
+    }
+
+    if (!window.loaded) {
       fetchAllProductCategories();
+      window.loaded = true;
     }
 
     fetchProducts();
@@ -68,52 +83,80 @@ class ProductCategories extends React.PureComponent {
   onPageChange = ({ selected }) => {
     const {
       match: {
-        params: { categoryId, page }
+        params: { categorySlug, page }
       }
     } = this.props;
-    this.props.dispatch(push("/category/" + categoryId + "/" + (selected + 1)));
+    this.props.dispatch(
+      push("/produkte/" + categorySlug + "/" + (selected + 1))
+    );
   };
   render = () => {
     const {
       category,
       categoryIds,
       productIds,
+      parents = [],
       match: {
-        params: { categoryId, page }
+        params: { categorySlug, page },
+        url
       }
     } = this.props;
+    const { active } = this.state;
+
+    const pathSegments = url.split("/");
+    pathSegments.pop();
+    const urlWithoutPage = page ? pathSegments.join("/") : url;
+
+    const newParents = categorySlug ? [...parents, categorySlug] : [];
 
     return (
-      <Container>
-        <Flex flexWrap="wrap">
-          {categoryIds.map(categoryId => (
-            <CategoryItem key={categoryId} id={categoryId} />
-          ))}
-        </Flex>
-        {categoryIds.length > 0 && productIds.length > 0 && <hr />}
-        <Flex flexWrap="wrap">
-          {productIds.map(productId => (
-            <ProductItem key={productId} id={productId} />
-          ))}
+      <div>
+        {active && (
+          <Container>
+            <Flex flexWrap="wrap">
+              {categoryIds.map(categoryId => (
+                <CategoryItem
+                  key={categoryId}
+                  id={categoryId}
+                  parents={newParents}
+                />
+              ))}
+            </Flex>
+            {categoryIds.length > 0 && productIds.length > 0 && <hr />}
+            <Flex flexWrap="wrap">
+              {productIds.map(productId => (
+                <ProductItem
+                  key={productId}
+                  id={productId}
+                  parents={newParents}
+                />
+              ))}
 
-          {categoryIds.length === 0 &&
-            productIds.length === 0 &&
-            new Array(12)
-              .fill()
-              .map((el, index) => <CategoryItem key={index} id={-1} />)}
-        </Flex>
-        {productIds.length !== 0 && (
-          <Pagination
-            pageCount={Math.ceil(productIds.length / ITEMS_PER_PAGE)}
-            pageRangeDisplayed={5}
-            marginPagesDisplayed={1}
-            previousLabel={"<"}
-            nextLabel={">"}
-            forcePage={parseInt(page) - 1}
-            onPageChange={this.onPageChange}
-          />
+              {categoryIds.length === 0 &&
+                productIds.length === 0 &&
+                new Array(12)
+                  .fill()
+                  .map((el, index) => <CategoryItem key={index} id={-1} />)}
+            </Flex>
+            {productIds.length !== 0 && (
+              <Pagination
+                pageCount={Math.ceil(productIds.length / ITEMS_PER_PAGE)}
+                pageRangeDisplayed={5}
+                marginPagesDisplayed={1}
+                previousLabel={"<"}
+                nextLabel={">"}
+                forcePage={parseInt(page) - 1}
+                onPageChange={this.onPageChange}
+              />
+            )}
+          </Container>
         )}
-      </Container>
+        <Route
+          path={`${urlWithoutPage}/:categorySlug/:page`}
+          component={RoutedCategories}
+          parents={newParents}
+        />
+      </div>
     );
   };
 }
@@ -122,30 +165,36 @@ const mapStateToProps = (
   state,
   {
     match: {
-      params: { categoryId, page }
+      params: { categorySlug, page }
     }
   }
-) => ({
-  category: getProductCategoryById(state, categoryId),
-  categoryIds:
-    getProductCategoryChildrenIds(
-      state,
-      categoryId ? parseInt(categoryId) : undefined
-    ) || [],
-  productIds:
-    getProducts(state)
-      .filter(product => product.categoryIds.includes(parseInt(categoryId)))
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
-      .map(product => product.id)
-      .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page) || [],
-  page
-});
+) => {
+  const category = getProductCategoryBySlug(state, categorySlug);
+
+  return {
+    categorySlug,
+    category,
+    categoryIds:
+      getProductCategoryChildrenIdsById(
+        state,
+        categorySlug && category ? category.id : 0
+      ) || [],
+    productIds: category
+      ? getProducts(state)
+          .filter(product => product.categoryIds.includes(category.id))
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .map(product => product.id)
+          .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
+      : [],
+    page
+  };
+};
 
 const mapDispatchToProps = (
   dispatch,
   {
     match: {
-      params: { categoryId, page }
+      params: { categorySlug, page = 1 }
     }
   }
 ) => ({
@@ -161,17 +210,18 @@ const mapDispatchToProps = (
   },
   /**
    * Fetches the matching products
+   * @param {number} [categoryId=null] The category id
    * @param {number} perPage The amount of products per page
    * @param {visualize} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchProducts(perPage = ITEMS_PER_PAGE, visualize = true) {
-    page = parseInt(page);
+  fetchProducts(categoryId = null, perPage = ITEMS_PER_PAGE, visualize = true) {
+    const numPage = parseInt(page);
     return categoryId
       ? dispatch(
           fetchProducts(
-            page,
-            page,
+            numPage,
+            numPage,
             perPage,
             visualize,
             [],
@@ -182,9 +232,31 @@ const mapDispatchToProps = (
   }
 });
 
-const connectedCategories = connect(
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the matching products
+   * @param {number} perPage The amount of products per page
+   * @param {visualize} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchProducts(perPage = ITEMS_PER_PAGE, visualize = true) {
+    const page = parseInt(ownProps.match.params.page);
+    const categoryId = mapStateToProps.category
+      ? mapStateToProps.category.id
+      : null;
+    return mapDispatchToProps.fetchProducts(categoryId, perPage, visualize);
+  }
+});
+
+const ConnectedCategories = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(ProductCategories);
 
-export default withRouter(connectedCategories);
+const RoutedCategories = withRouter(ConnectedCategories);
+
+export default RoutedCategories;

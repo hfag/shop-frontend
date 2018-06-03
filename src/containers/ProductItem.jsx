@@ -8,7 +8,11 @@ import Placeholder from "components/Placeholder";
 import Link from "components/Link";
 import { colors, shadows } from "utilities/style";
 import { fetchProduct } from "actions/product";
-import { getProductCategories, getProductById } from "reducers";
+import {
+  getProductCategories,
+  getProductBySlug,
+  getProductById
+} from "reducers";
 
 const StyledProduct = styled.div`
   background-color: #fff;
@@ -77,11 +81,11 @@ class ProductItem extends React.PureComponent {
   };
 
   render = () => {
-    const { id: productId, product, categories } = this.props;
+    const { id: productId, product, categories, parents = [] } = this.props;
 
     return (
       <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
-        <Link to={"/product/" + productId}>
+        <Link to={"/produkt/" + product.slug}>
           <StyledProduct>
             <Thumbnail id={product ? product.thumbnailId : -1} />
             <div>
@@ -106,7 +110,8 @@ class ProductItem extends React.PureComponent {
 }
 
 ProductItem.propTypes = {
-  id: PropTypes.number.isRequired
+  id: PropTypes.number.isRequired,
+  parents: PropTypes.arrayOf(PropTypes.string)
 };
 
 const mapStateToProps = (state, { id }) => {

@@ -2,6 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { Route } from "react-router-dom";
 import { ConnectedRouter } from "react-router-redux";
+import { hot } from "react-hot-loader";
 
 import Frontpage from "./containers/Frontpage";
 import ProductCategories from "./containers/ProductCategories";
@@ -21,19 +22,15 @@ const App = ({ history, store }) => {
       <ConnectedRouter history={history}>
         <Wrapper>
           <Route exact path="/" component={Frontpage} />
-          <Route
-            exact
-            path="/category/:categoryId/:page"
-            component={ProductCategories}
-          />
-          <Route exact path="/product/:productId" component={Product} />
+          <Route path="/produkte" component={ProductCategories} />
+          <Route exact path="/produkt/:productSlug" component={Product} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/account" component={Account} />
-          <Route exact path="/cart" component={Cart} />
+          <Route exact path="/konto" component={Account} />
+          <Route exact path="/warenkorb" component={Cart} />
         </Wrapper>
       </ConnectedRouter>
     </Provider>
   );
 };
 
-export default App;
+export default hot(module)(App);

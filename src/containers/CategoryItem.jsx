@@ -77,7 +77,7 @@ class CategoryItem extends React.PureComponent {
   };
 
   render = () => {
-    const { id: categoryId, category, parent } = this.props;
+    const { id: categoryId, category, parent, parents = [] } = this.props;
 
     if (category && !category.count) {
       return null;
@@ -85,7 +85,16 @@ class CategoryItem extends React.PureComponent {
 
     return (
       <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
-        <Link to={"/category/" + categoryId + "/1"}>
+        <Link
+          to={
+            category
+              ? "/produkte/" +
+                (parents.length > 0 ? parents.join("/") + "/" : "") +
+                category.slug +
+                "/1"
+              : ""
+          }
+        >
           <StyledCategory>
             <Thumbnail id={category ? category.thumbnailId : -1} />
             <div>
@@ -108,7 +117,8 @@ class CategoryItem extends React.PureComponent {
 }
 
 CategoryItem.propTypes = {
-  id: PropTypes.number.isRequired
+  id: PropTypes.number.isRequired,
+  parents: PropTypes.arrayOf(PropTypes.string)
 };
 
 const mapStateToProps = (state, { id }) => {

@@ -23,6 +23,7 @@ const itemName = "product";
 const mapItem = data => {
   const {
     id,
+    slug,
     sku,
     title: { rendered: title },
     content: { rendered: content },
@@ -35,6 +36,7 @@ const mapItem = data => {
 
   return {
     id,
+    slug,
     sku,
     title,
     content,
@@ -110,7 +112,7 @@ const fetchItemAction = createFetchSingleItemAction(itemName);
  */
 export const fetchProduct = createFetchSingleItemThunk(
   fetchItemAction,
-  id => `/wp-json/hfag/product?productId=${id}`,
+  slug => `/wp-json/hfag/product?productSlug=${slug}`,
   mapItem,
   (dispatch, response, item) => {
     if (item.variations && item.product && item.product.id) {
@@ -120,7 +122,7 @@ export const fetchProduct = createFetchSingleItemThunk(
           null,
           false,
           item.variations.map(mapVariation),
-          item.product.id
+          item.product.slug
         )
       );
 
@@ -241,23 +243,23 @@ export const fetchProducts = createFetchItemPageThunk(
  * @param {boolean} isFetching Whether it is currently being fetched
  * @param {string} error If there was an error during the request, this field should contain it
  * @param {object} items The received items
- * @param {array} productId The productId these variations are related to
+ * @param {array} productSlug The product slug these variations are related to
  * @return {object} The redux action
  */
 const fetchVariationsAction = createFetchItemsAction(
   "product_variation",
-  "productId"
+  "productSlug"
 );
 
 /**
  * Fetches all product variations for one product
  * @param {boolean} visualize Whether the progress of this action should be visualized
- * @param {array} productId The productId these variations are related to
+ * @param {array} productSlug The product slug these variations are related to
  * @return {function}
  */
 export const fetchVariations = createFetchItemsThunk(
   fetchVariationsAction,
-  productId => `/wp-json/hfag/product-variations?productId=${productId}`,
+  productSlug => `/wp-json/hfag/product-variations?productSlug=${productSlug}`,
   mapVariation,
   (dispatch, items) => {
     dispatch(

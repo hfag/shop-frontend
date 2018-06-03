@@ -25,11 +25,22 @@ const routes = [
     breadcrumb: generateStringBreadcrumb("Startseite")
   },
   {
-    path: "login",
+    path: "/login",
     breadcrumb: generateStringBreadcrumb("Anmelden")
   },
-  { path: "/category/:categoryId/:page", breadcrumb: CategoryBreadcrumb },
-  { path: "/product/:productId", breadcrumb: ProductBreadcrumb }
+  {
+    path: "/warenkorb",
+    breadcrumb: generateStringBreadcrumb("Warenkorb")
+  },
+  {
+    path: "/checkout",
+    breadcrumb: generateStringBreadcrumb("Warenkorb")
+  },
+  {
+    path: "/produkte/",
+    breadcrumb: CategoryBreadcrumb
+  },
+  { path: "/produkt/:productSlug", breadcrumb: ProductBreadcrumb }
 ];
 
 /**

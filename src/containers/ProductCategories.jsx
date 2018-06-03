@@ -73,6 +73,7 @@ class ProductCategories extends React.PureComponent {
       return;
     }
 
+    // TODO: pls no
     if (!window.loaded) {
       fetchAllProductCategories();
       window.loaded = true;
@@ -216,12 +217,11 @@ const mapDispatchToProps = (
    * @returns {Promise} The fetch promise
    */
   fetchProducts(categoryId = null, perPage = ITEMS_PER_PAGE, visualize = true) {
-    const numPage = parseInt(page);
-    return categoryId
+    return categoryId && !isNaN(page)
       ? dispatch(
           fetchProducts(
-            numPage,
-            numPage,
+            page,
+            page,
             perPage,
             visualize,
             [],

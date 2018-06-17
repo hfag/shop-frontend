@@ -13,7 +13,7 @@ const StyledBill = styled.ul`
   }
 `;
 
-const Count = styled.span`
+const Quantity = styled.span`
   &:after {
     padding: 0 0.5rem;
     content: "x";
@@ -38,21 +38,21 @@ class Bill extends React.PureComponent {
     const taxes = "zzgl. MwSt., zzgl. Versandkosten";
 
     const normalSum = items.reduce(
-      (sum, { count, price }) => sum + count * price,
+      (sum, { quantity, price }) => sum + quantity * price,
       0
     );
     const discountSum = items.reduce(
-      (sum, { count, price, discountPrice }) =>
-        sum + count * (discountPrice ? discountPrice : price),
+      (sum, { quantity, price, discountPrice }) =>
+        sum + quantity * (discountPrice ? discountPrice : price),
       0
     );
 
     return (
       <StyledBill>
-        {items.map(({ count = 0, price, discountPrice }, index) => {
-          return count > 0 ? (
+        {items.map(({ quantity = 0, price, discountPrice }, index) => {
+          return quantity > 0 ? (
             <li key={index}>
-              <Count>{count}</Count>
+              <Quantity>{quantity}</Quantity>
               {price ? (
                 discountPrice ? (
                   <DiscountPrice>

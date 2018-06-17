@@ -1,22 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
 import isEqual from "lodash/isEqual";
-import Color from "color";
 
 import Thumbnail from "../containers/Thumbnail";
 import Card from "../components/Card";
 import Table from "../components/Table";
 import Button from "../components/Button";
 import Container from "../components/Container";
-import Placeholder from "../components/Placeholder";
 import Price from "../components/Price";
 import Link from "../components/Link";
 import Select from "../components/Select";
 import VariationSlider from "../components/VariationSlider";
-import { colors, shadows } from "../utilities/style";
+import { colors } from "../utilities/style";
 import { fetchProductCategories } from "../actions/product/categories";
 import { fetchProduct } from "../actions/product";
 import { addShoppingCartItem } from "../actions/shopping-cart";
@@ -65,13 +62,13 @@ class Product extends React.PureComponent {
           props.product.variations
         ),
         selectedAttributes: this.getDefaultAttributes(props.product.variations),
-        productCount: 1
+        quantity: 1
       };
     } else {
       this.state = {
         possibleAttributeValues: {},
         selectedAttributes: {},
-        productCount: 1
+        quantity: 1
       };
     }
   }
@@ -205,7 +202,7 @@ class Product extends React.PureComponent {
     const {
       selectedAttributes,
       possibleAttributeValues,
-      productCount
+      quantity
     } = this.state;
 
     const {
@@ -231,7 +228,7 @@ class Product extends React.PureComponent {
       discount.bulk[selectedVariation.id].reduce(
         (highestQuantity, nextDiscount) =>
           nextDiscount.qty >= highestQuantity.qty &&
-          nextDiscount.qty <= productCount
+          nextDiscount.qty <= quantity
             ? nextDiscount
             : highestQuantity,
         { qty: 1, ppu: price }
@@ -300,10 +297,10 @@ class Product extends React.PureComponent {
               <h4>Anzahl</h4>
               <Counter
                 type="number"
-                value={productCount}
+                value={quantity}
                 onChange={e =>
                   this.setState({
-                    productCount: Math.max(parseInt(e.currentTarget.value), 1)
+                    quantity: Math.max(parseInt(e.currentTarget.value), 1)
                   })
                 }
               />
@@ -388,7 +385,7 @@ class Product extends React.PureComponent {
                       {discount.bulk[selectedVariation.id].map(
                         ({ qty, ppu }, index) => (
                           <DiscountRow
-                            onClick={() => this.setState({ productCount: qty })}
+                            onClick={() => this.setState({ quantity: qty })}
                             selected={qty === discountRow.qty}
                             key={index}
                           >
@@ -411,7 +408,7 @@ class Product extends React.PureComponent {
                     items={[
                       {
                         price,
-                        count: productCount,
+                        quantity,
                         discountPrice:
                           discountRow.qty > 1 ? discountRow.ppu : undefined
                       }
@@ -419,15 +416,13 @@ class Product extends React.PureComponent {
                   />
                   <Button
                     disabled={
-                      !selectedVariation ||
-                      isNaN(productCount) ||
-                      productCount <= 0
+                      !selectedVariation || isNaN(quantity) || quantity <= 0
                     }
                     onClick={() =>
                       addToShoppingCart(
                         selectedVariation.id,
                         selectedAttributes,
-                        productCount
+                        quantity
                       )
                     }
                   >

@@ -344,7 +344,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   ...mapDispatchToProps,
   ...ownProps,
   /**
-   * Toggles the mobile burder menu
+   * Toggles the mobile burger menu
    * @returns {void}
    */
   toggleBurgerMenu() {

@@ -51,9 +51,83 @@ class VariationSlider extends React.PureComponent {
   constructor(props) {
     super(props);
 
+    const { variations = [], selectedAttributes } = props;
+
     this.state = {
-      showAll: true
+      showAll: true,
+      ...VariationSlider.getStateUpdates(variations, selectedAttributes)
     };
+  }
+
+  /**
+   * Called when the component is mounted, scrolls to the selected image
+   * @returns {void}
+   */
+  componentDidMount = () => {
+    if (this.state.activeImageIds.length === 1) {
+      window.requestAnimationFrame(this.scrollToActiveImage);
+    }
+  };
+
+  /**
+   * Derives the new props to the new state
+   * @param {Array<Object>} variations All possible variations
+   * @param {Object} selectedAttributes The selected attributes with its value
+   * @returns {void}
+   */
+  static getStateUpdates(variations, selectedAttributes) {
+    //map images to attributes
+    const imageMap = variations.reduce((imageMap, { attributes, imageId }) => {
+      const previousAttributes = imageMap[imageId];
+
+      imageMap[imageId] = previousAttributes
+        ? Object.keys(imageMap[imageId])
+            .filter(
+              attributeKey =>
+                attributeKey in attributes &&
+                attributes[attributeKey] === previousAttributes[attributeKey]
+            )
+            .reduce((attributeMap, attributeKey) => {
+              attributeMap[attributeKey] = previousAttributes[attributeKey];
+              return attributeMap;
+            }, {})
+        : attributes;
+
+      return imageMap;
+    }, {});
+    const activeImageIds = Object.keys(imageMap)
+      .map(imageId => parseInt(imageId))
+      .filter(imageId => {
+        for (let key in selectedAttributes) {
+          if (
+            !Object.prototype.hasOwnProperty.call(selectedAttributes, key) ||
+            selectedAttributes[key] === null
+          ) {
+            continue;
+          }
+          if (
+            key in imageMap[imageId] &&
+            imageMap[imageId][key] !== selectedAttributes[key]
+          ) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+    return { activeImageIds, imageMap };
+  }
+
+  /**
+   * Updates the stated based on new props
+   * @param {Object} props The new component props
+   * @param {Object} state The new state props
+   * @returns {Object} The new state
+   */
+  static getDerivedStateFromProps(props, state) {
+    const { variations = [], selectedAttributes } = props;
+    return VariationSlider.getStateUpdates(variations, selectedAttributes);
   }
 
   /**
@@ -182,54 +256,8 @@ class VariationSlider extends React.PureComponent {
   stopScrollingRight = () => this.stopAnimatedScrolling();
 
   render = () => {
-    const { variations = [], selectedAttributes } = this.props;
-    const { showAll } = this.state;
-
-    //map images to attributes
-    const imageMap = variations.reduce((imageMap, { attributes, imageId }) => {
-      const previousAttributes = imageMap[imageId];
-
-      imageMap[imageId] = previousAttributes
-        ? Object.keys(imageMap[imageId])
-            .filter(
-              attributeKey =>
-                attributeKey in attributes &&
-                attributes[attributeKey] === previousAttributes[attributeKey]
-            )
-            .reduce((attributeMap, attributeKey) => {
-              attributeMap[attributeKey] = previousAttributes[attributeKey];
-              return attributeMap;
-            }, {})
-        : attributes;
-
-      return imageMap;
-    }, {});
-
-    const activeImageIds = Object.keys(imageMap)
-      .map(id => parseInt(id))
-      .filter(imageId => {
-        for (let key in selectedAttributes) {
-          if (
-            !Object.prototype.hasOwnProperty.call(selectedAttributes, key) ||
-            selectedAttributes[key] === null
-          ) {
-            continue;
-          }
-
-          if (
-            key in imageMap[imageId] &&
-            imageMap[imageId][key] !== selectedAttributes[key]
-          ) {
-            return false;
-          }
-        }
-
-        return true;
-      });
-
-    if (activeImageIds.length === 1) {
-      window.requestAnimationFrame(this.scrollToActiveImage);
-    }
+    const { variations = [] } = this.props;
+    const { showAll, imageMap, activeImageIds } = this.state;
 
     return (
       <Slider>
@@ -247,6 +275,7 @@ class VariationSlider extends React.PureComponent {
                   pr={2}
                   pb={2}
                   active={
+                    activeImageIds.length > 1 &&
                     activeImageIds.length === Object.keys(imageMap).length
                       ? false
                       : activeImageIds.includes(imageId)

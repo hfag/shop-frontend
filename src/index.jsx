@@ -1,16 +1,17 @@
 //react
+import setLocale from "set-yup-locale";
 import React from "react";
 import ReactDOM from "react-dom";
 import { AppContainer } from "react-hot-loader";
 import createHistory from "history/createBrowserHistory";
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
-import { ConnectedRouter, routerMiddleware } from "react-router-redux";
+import { routerMiddleware } from "react-router-redux";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 import throttle from "lodash/throttle";
-import App from "App";
 
+import App from "./App";
 import reducers from "./reducers";
 import { loadState, saveState } from "./local-storage";
 import "scss/global.scss";

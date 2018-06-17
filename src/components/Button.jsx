@@ -6,13 +6,11 @@ import ProgressButton from "react-progress-button";
 
 import { colors } from "../utilities/style";
 const DISABLED = Color(colors.secondary)
-  .lighten(0.5)
+  .lighten(0.75)
   .rgb()
   .string();
 
-const ButtonWrapper = styled.div`
-  float: ${({ float }) => float || "none"};
-
+const Clearfix = styled.div`
   &:before,
   &:after {
     content: " ";
@@ -22,6 +20,10 @@ const ButtonWrapper = styled.div`
   &:after {
     clear: both;
   }
+`;
+
+const ButtonWrapper = styled.div`
+  float: ${({ float }) => float || "none"};
 
   .pb-container {
     display: inline-block;
@@ -142,27 +144,31 @@ const ButtonWrapper = styled.div`
 class Button extends React.PureComponent {
   render = () => {
     return (
-      <ButtonWrapper
-        height={this.props.height || "2rem"}
-        fullWidth={this.props.fullWidth}
-        float={this.props.float}
-      >
-        <ProgressButton
-          controlled={this.props.controlled}
-          classNamespace={this.props.classNamespace}
-          durationError={this.props.durationError}
-          durationSuccess={this.props.durationSuccess}
-          onClick={this.props.onClick}
-          onError={this.props.onError}
-          onSuccess={this.props.onSuccess}
-          state={this.props.state}
-          type={this.props.type}
-          form={this.props.form}
-          shouldAllowClickOnLoading={this.props.shouldAllowClickOnLoading}
+      <div>
+        <ButtonWrapper
+          height={this.props.height || "2rem"}
+          fullWidth={this.props.fullWidth}
+          float={this.props.float}
+          disabled={this.props.state === "disabled"}
         >
-          {this.props.children}
-        </ProgressButton>
-      </ButtonWrapper>
+          <ProgressButton
+            controlled={this.props.controlled}
+            classNamespace={this.props.classNamespace}
+            durationError={this.props.durationError}
+            durationSuccess={this.props.durationSuccess}
+            onClick={this.props.onClick}
+            onError={this.props.onError}
+            onSuccess={this.props.onSuccess}
+            state={this.props.state}
+            type={this.props.type}
+            form={this.props.form}
+            shouldAllowClickOnLoading={this.props.shouldAllowClickOnLoading}
+          >
+            {this.props.children}
+          </ProgressButton>
+        </ButtonWrapper>
+        <Clearfix />
+      </div>
     );
   };
 }

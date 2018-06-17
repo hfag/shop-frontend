@@ -33,8 +33,8 @@ const routes = [
     breadcrumb: generateStringBreadcrumb("Warenkorb")
   },
   {
-    path: "/checkout",
-    breadcrumb: generateStringBreadcrumb("Warenkorb")
+    path: "/kasse",
+    breadcrumb: generateStringBreadcrumb("Kasse")
   },
   {
     path: "/produkte/",

@@ -1,15 +1,14 @@
 import React from "react";
-import styled from "styled-components";
 import { withFormik, Form, Field } from "formik";
 import { Flex, Box } from "grid-styled";
 import * as yup from "yup";
-import get from "lodash/get";
+import MaskedInput from "react-text-mask";
 
-import { colors } from "../../utilities/style";
 import Button from "../../components/Button";
 import RelativeBox from "../../components/RelativeBox";
 import Link from "../../components/Link";
 import SelectField from "../../components/SelectField";
+import InputField from "../../components/InputField";
 
 const COUNTRIES = [
   { label: "Schweiz", value: "ch" },
@@ -45,102 +44,6 @@ const STATES = [
   { label: "Zürich", value: "ZH" }
 ];
 
-const CheckoutFieldWrapper = styled.div`
-  margin-bottom: 0.25rem;
-
-  ${({ checkbox }) =>
-    checkbox
-      ? `position: absolute;
-  top: 1.3rem;
-  left: -1.5rem;
-  right: 0;
-  `
-      : ""} /**/    
-  .checkout-label {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  input[type="text"],
-  input[type="search"],
-  input[type="number"],
-  input[type="email"],
-  input[type="tel"],
-  textarea {
-    width: 100%;
-    padding: 0.25rem 0.5rem;
-  }
-
-  input[type="checkbox"],
-  input[type="radio"] {
-    margin: 0.25rem 0.5rem 0.25rem 0;
-  }
-`;
-
-const ValidationErrors = styled.div`
-  color: ${colors.danger};
-`;
-
-/**
- * The checkout field component, rendering a label and input field
- * @returns {UnstyledCheckoutField} The checkout field
- */
-class CheckoutField extends React.Component {
-  render = () => {
-    const {
-      label,
-      name,
-      required = false,
-      placeholder,
-      type,
-      value: forceValue,
-      onChange: secondOnChange,
-      checkbox,
-      component,
-      children
-    } = this.props;
-    const Component = component ? component : "input";
-
-    return (
-      <CheckoutFieldWrapper checkbox={checkbox}>
-        {label && 
-          <label className="checkout-label" htmlFor={name}>
-            {label} {required ? "*" : "(optional)"}
-          </label>
-        }
-        <Field
-          name={name}
-          render={({
-            field: { value, onChange, onBlur },
-            form: { values, errors, touched, validateForm }
-          }) => 
-            <div>
-              <Component
-                name={name}
-                value={forceValue || value || ""}
-                onChange={
-                  secondOnChange
-                    ? e => {
-                        secondOnChange(e);
-                        return onChange(e);
-                      }
-                    : onChange
-                }
-                onBlur={onBlur}
-                placeholder={placeholder}
-                type={type}
-              />
-              {children}
-              {get(touched, name) && 
-                <ValidationErrors>{get(errors, name)}</ValidationErrors>
-              }
-            </div>
-          }
-        />
-      </CheckoutFieldWrapper>
-    );
-  };
-}
-
 /**
  * The inner checkout form
  * @returns {Component} The inner checkout form
@@ -162,31 +65,31 @@ const InnerCheckoutForm = ({
     <Flex>
       <Box width={[1, 1, 1 / 2, 1 / 2]} mr={3}>
         <h3>Rechnungsdetails</h3>
-        <CheckoutField
+        <InputField
           type="text"
           label="Zusatzzeile oben"
           name="billing_additional_line_above"
           required={false}
         />
-        <CheckoutField
+        <InputField
           type="text"
           label="Vorname"
           name="billing_first_name"
           required={true}
         />
-        <CheckoutField
+        <InputField
           type="text"
           label="Nachname"
           name="billing_last_name"
           required={true}
         />
-        <CheckoutField
+        <InputField
           type="text"
           label="Bezeichnung"
           name="billing_description"
           required={false}
         />
-        <CheckoutField
+        <InputField
           type="text"
           label="Firmenname"
           name="billing_company"
@@ -199,25 +102,25 @@ const InnerCheckoutForm = ({
           placeholder="Wählen Sie ein Land"
           options={COUNTRIES}
         />
-        <CheckoutField
+        <InputField
           type="text"
           label="Strasse"
           name="billing_address_1"
           required={true}
         />
-        <CheckoutField
+        <InputField
           type="text"
           label="Postfach"
           name="billing_post_office"
           required={false}
         />
-        <CheckoutField
+        <InputField
           type="number"
           label="Postleitzahl"
           name="billing_postcode"
           required={true}
         />
-        <CheckoutField
+        <InputField
           type="text"
           label="Ort / Stadt"
           name="billing_city"
@@ -230,13 +133,33 @@ const InnerCheckoutForm = ({
           placeholder="Wählen Sie einen Kanton"
           options={STATES}
         />
-        <CheckoutField
+        <InputField
           type="tel"
           label="Telefon"
           name="billing_phone"
           required={true}
+          component={MaskedInput}
+          showMask={false}
+          mask={[
+            "+",
+            "4",
+            "1",
+            " ",
+            /\d/,
+            /\d/,
+            " ",
+            /\d/,
+            /\d/,
+            /\d/,
+            " ",
+            /\d/,
+            /\d/,
+            " ",
+            /\d/,
+            /\d/
+          ]}
         />
-        <CheckoutField
+        <InputField
           type="email"
           label="E-Mail Adresse"
           name="billing_email"
@@ -244,7 +167,8 @@ const InnerCheckoutForm = ({
         />
       </Box>
       <RelativeBox width={[1, 1, 1 / 2, 1 / 2]} ml={3}>
-        <CheckoutField
+        <InputField
+          id="ship_to_different_address"
           name="ship_to_different_address"
           type="checkbox"
           value="1"
@@ -253,34 +177,38 @@ const InnerCheckoutForm = ({
           }
           checkbox={true}
         />
-        <h3>Lieferung an eine andere Adresse</h3>
+        <h3>
+          <label htmlFor="ship_to_different_address">
+            Lieferung an eine andere Adresse
+          </label>
+        </h3>
         {showShipping && 
           <div>
-            <CheckoutField
+            <InputField
               type="text"
               label="Zusatzzeile oben"
               name="shipping_additional_line_above"
               required={false}
             />
-            <CheckoutField
+            <InputField
               type="text"
               label="Vorname"
               name="shipping_first_name"
               required={true}
             />
-            <CheckoutField
+            <InputField
               type="text"
               label="Nachname"
               name="shipping_last_name"
               required={true}
             />
-            <CheckoutField
+            <InputField
               type="text"
               label="Bezeichnung"
               name="shipping_description"
               required={false}
             />
-            <CheckoutField
+            <InputField
               type="text"
               label="Firmenname"
               name="shipping_company"
@@ -293,25 +221,25 @@ const InnerCheckoutForm = ({
               placeholder="Wählen Sie ein Land"
               options={COUNTRIES}
             />
-            <CheckoutField
+            <InputField
               type="text"
               label="Strasse"
               name="shipping_address_1"
               required={true}
             />
-            <CheckoutField
+            <InputField
               type="text"
               label="Postfach"
               name="shipping_post_office"
               required={false}
             />
-            <CheckoutField
+            <InputField
               type="number"
               label="Postleitzahl"
               name="shipping_postcode"
               required={true}
             />
-            <CheckoutField
+            <InputField
               type="text"
               label="Ort / Stadt"
               name="shipping_city"
@@ -326,7 +254,7 @@ const InnerCheckoutForm = ({
             />
           </div>
         }
-        <CheckoutField
+        <InputField
           label="Bestellnotiz"
           name="order_comments"
           required={false}
@@ -348,7 +276,7 @@ const InnerCheckoutForm = ({
       </Box>
     </Flex>
     <br />
-    <CheckoutField id="terms" name="terms" type="checkbox" value="1">
+    <InputField id="terms" name="terms" type="checkbox" value="1">
       <label htmlFor="terms">
         Ich habe die{" "}
         <Link to="/" styled>
@@ -356,7 +284,7 @@ const InnerCheckoutForm = ({
         </Link>{" "}
         gelesen und akzeptiere diese *
       </label>
-    </CheckoutField>
+    </InputField>
     <Button
       fullWidth
       onClick={handleSubmit}

@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 
 import {
   fetchShoppingCart,
-  updateShoppingCartItem
+  updateShoppingCartItem,
+  submitOrder
 } from "../actions/shopping-cart";
 import {
   getShoppingCartFetching,
@@ -47,7 +48,8 @@ class Cart extends React.PureComponent {
       fees,
       taxes,
       total,
-      updateShoppingCartItem
+      updateShoppingCartItem,
+      submitOrder
     } = this.props;
     const { step, showShipping } = this.state;
 
@@ -72,7 +74,8 @@ class Cart extends React.PureComponent {
             <CheckoutForm
               setShowShipping={this.setShowShipping}
               showShipping={showShipping}
-              items={items}
+              submitOrder={submitOrder}
+              dispatch={dispatch}
             />
           )}
         </Card>
@@ -108,6 +111,16 @@ const mapDispatchToProps = dispatch => ({
    */
   updateShoppingCartItem(items, visualize = false) {
     return dispatch(updateShoppingCartItem(items, visualize));
+  },
+  /**
+   * Submits an order
+   * @param {Object} shippingAddress The shipping address
+   * @param {Object} billingAddress All billing address
+   * @param {string} [comments] Optional order comments
+   * @returns {Promise} The fetch promise
+   */
+  submitOrder(shippingAddress, billingAddress, comments) {
+    return dispatch(submitOrder(shippingAddress, billingAddress, comments));
   }
 });
 

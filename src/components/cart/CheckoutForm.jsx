@@ -3,6 +3,8 @@ import { withFormik, Form, Field } from "formik";
 import { Flex, Box } from "grid-styled";
 import * as yup from "yup";
 import MaskedInput from "react-text-mask";
+import PropTypes from "prop-types";
+import { push } from "react-router-redux";
 
 import Button from "../../components/Button";
 import RelativeBox from "../../components/RelativeBox";
@@ -60,7 +62,7 @@ const InnerCheckoutForm = ({
   isSubmitting,
   showShipping,
   setShowShipping
-}) => 
+}) => (
   <Form>
     <Flex>
       <Box width={[1, 1, 1 / 2, 1 / 2]} mr={3}>
@@ -182,7 +184,7 @@ const InnerCheckoutForm = ({
             Lieferung an eine andere Adresse
           </label>
         </h3>
-        {showShipping && 
+        {showShipping && (
           <div>
             <InputField
               type="text"
@@ -253,7 +255,7 @@ const InnerCheckoutForm = ({
               options={STATES}
             />
           </div>
-        }
+        )}
         <InputField
           label="Bestellnotiz"
           name="order_comments"
@@ -289,12 +291,12 @@ const InnerCheckoutForm = ({
       fullWidth
       onClick={handleSubmit}
       controlled
-      state={isValid ? "" : "disabled"}
+      state={isValid ? status : "disabled"}
     >
       Bestellung abschicken
     </Button>
   </Form>
-;
+);
 
 const CheckoutForm = withFormik({
   enableReinitialize: true,
@@ -404,16 +406,31 @@ const CheckoutForm = withFormik({
   handleSubmit: (
     values,
     {
-      props: { items, submitOrder },
-      setStatus,
-      setErrors /* setValues, setStatus, and other goodies */
+      props: { dispatch, submitOrder },
+      setStatus
+      /* setErrors, setValues, setStatus, and other goodies */
     }
   ) => {
+    const shippingAddress = {},
+      billingAddress = {},
+      comments = values["order_comments"];
+
+    Object.keys(values).forEach(key => {
+      if (key.startsWith("shipping_")) {
+        shippingAddress[key.replace("shipping_", "")] = values[key];
+      } else if (key.startsWith("billing_")) {
+        billingAddress[key.replace("billing_", "")] = values[key];
+      }
+    });
+
     setStatus("loading");
-    submitOrder(items)
+    submitOrder(shippingAddress, billingAddress, comments)
       .then(() => {
         setStatus("success");
-        setTimeout(() => setStatus(""), 300);
+        setTimeout(() => {
+          setStatus("");
+          dispatch(push("/profile/orders"));
+        }, 300);
       })
       .catch(e => {
         setStatus("error");
@@ -421,5 +438,12 @@ const CheckoutForm = withFormik({
       });
   }
 })(InnerCheckoutForm);
+
+CheckoutForm.propTypes = {
+  submitOrder: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  showShipping: PropTypes.bool.isRequired,
+  setShowShipping: PropTypes.func.isRequired
+};
 
 export default CheckoutForm;

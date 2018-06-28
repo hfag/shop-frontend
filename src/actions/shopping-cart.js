@@ -143,3 +143,92 @@ export const updateShoppingCartItem = (
       return Promise.reject(e);
     });
 };
+
+/**
+ * Submits an order
+ * @param {boolean} isFetching Whether the order is being submitted
+ * @param {string} error If there was an error during the request, this field should contain it
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @param {Object} shippingAddress The shipping address
+ * @param {Object} billingAddress The billing address
+ * @param {Object} comments Order comments
+ * @returns {Object} The redux action
+ */
+const submitOrderAction = createFetchAction(
+  "SUBMIT_ORDER",
+  "shippingAddress",
+  "billingAddress",
+  "comments",
+  "success"
+);
+
+/**
+ * Submits an order
+ * @param {Object} shippingAddress The shipping address
+ * @param {Object} billingAddress All billing address
+ * @param {string} comments Optional order comment
+ * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
+ * @returns {Promise} The redux thunk
+ */
+export const submitOrder = (
+  shippingAddress,
+  billingAddress,
+  comments = "",
+  visualize = false
+) => dispatch => {
+  dispatch(
+    submitOrderAction(
+      true,
+      null,
+      visualize,
+      shippingAddress,
+      billingAddress,
+      comments,
+      null
+    )
+  );
+
+  return fetchApi("/wp-json/hfag/submit-order", {
+    method: "POST",
+    credentials: "include",
+    body: JSON.stringify({
+      billingAddress,
+      shippingAddress,
+      comments
+    })
+  })
+    .then(({ json: order }) => {
+      if (order.error) {
+        return Promise.reject(new Error("Unknown error while adding"));
+      }
+
+      dispatch(
+        submitOrderAction(
+          false,
+          null,
+          visualize,
+          shippingAddress,
+          billingAddress,
+          comments,
+          true
+        )
+      );
+
+      return Promise.resolve(order);
+    })
+    .catch(e => {
+      dispatch(
+        submitOrderAction(
+          false,
+          e,
+          visualize,
+          shippingAddress,
+          billingAddress,
+          comments,
+          false
+        )
+      );
+
+      return Promise.reject(e);
+    });
+};

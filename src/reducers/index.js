@@ -9,6 +9,7 @@ import productSearch, * as fromProductSearch from "./product-search";
 import product, * as fromProduct from "./product";
 import attachment, * as fromAttachment from "./attachment";
 import shoppingCart, * as fromShoppingCart from "./shopping-cart";
+import countries, * as fromCountries from "./countries";
 
 /**
  * Checks whether the burger menu is open
@@ -287,6 +288,16 @@ export const getShoppingCartShipping = wrap(
   state => state.shoppingCart
 );
 
+/**
+ * Gets all countries
+ * @param {Object} state The redux state
+ * @returns {Object} All countries
+ */
+export const getCountries = wrap(
+  fromCountries.getCountries,
+  state => state.countries
+);
+
 export default combineReducers({
   router,
   loadingBar,
@@ -295,5 +306,6 @@ export default combineReducers({
   shoppingCart,
   authentication,
   product,
-  attachment
+  attachment,
+  countries
 });

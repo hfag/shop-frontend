@@ -6,13 +6,15 @@ import {
   updateShoppingCartItem,
   submitOrder
 } from "../actions/shopping-cart";
+import { fetchCountries } from "../actions/countries";
 import {
   getShoppingCartFetching,
   getShoppingCartItems,
   getShoppingCartTotal,
   getShoppingCartTaxes,
   getShoppingCartFees,
-  getShoppingCartShipping
+  getShoppingCartShipping,
+  getCountries
 } from "../reducers";
 import Container from "../components/Container";
 import CartForm from "../components/cart/CartForm";
@@ -32,6 +34,10 @@ class Cart extends React.PureComponent {
     };
   }
 
+  componentDidMount = () => {
+    this.props.fetchCountries();
+  };
+
   /**
    * Sets whether additional shipping address values should be displayed
    * @param {boolean} showShipping Whether the shiping address should be shown
@@ -49,7 +55,8 @@ class Cart extends React.PureComponent {
       taxes,
       total,
       updateShoppingCartItem,
-      submitOrder
+      submitOrder,
+      countries
     } = this.props;
     const { step, showShipping } = this.state;
 
@@ -75,6 +82,7 @@ class Cart extends React.PureComponent {
               setShowShipping={this.setShowShipping}
               showShipping={showShipping}
               submitOrder={submitOrder}
+              countries={countries}
               dispatch={dispatch}
             />
           )}
@@ -90,7 +98,8 @@ const mapStateToProps = state => ({
   total: getShoppingCartTotal(state),
   taxes: getShoppingCartTaxes(state),
   fees: getShoppingCartFees(state),
-  shipping: getShoppingCartShipping(state)
+  shipping: getShoppingCartShipping(state),
+  countries: getCountries(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -106,7 +115,7 @@ const mapDispatchToProps = dispatch => ({
   /**
    * Updates the shopping cart
    * @param {Array<Object>} items All cart items
-   * @param {*} visualize Whether the progress of this action should be visualized
+   * @param {boolean} visualize Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
   updateShoppingCartItem(items, visualize = false) {
@@ -121,6 +130,14 @@ const mapDispatchToProps = dispatch => ({
    */
   submitOrder(shippingAddress, billingAddress, comments) {
     return dispatch(submitOrder(shippingAddress, billingAddress, comments));
+  },
+  /**
+   * Fetches all countries
+   * @param {boolean} [visualize] Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchCountries(visualize = false) {
+    return dispatch(fetchCountries(visualize));
   }
 });
 

@@ -152,6 +152,7 @@ export const updateShoppingCartItem = (
  * @param {Object} shippingAddress The shipping address
  * @param {Object} billingAddress The billing address
  * @param {Object} comments Order comments
+ * @param {Object} success Success
  * @returns {Object} The redux action
  */
 const submitOrderAction = createFetchAction(
@@ -232,3 +233,9 @@ export const submitOrder = (
       return Promise.reject(e);
     });
 };
+
+/**
+ * Clears a shopping cart
+ * @returns {Object} The redux action
+ */
+export const clearShoppingCart = () => ({ type: "CLEAR_SHOPPING_CART" });

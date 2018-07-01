@@ -6,45 +6,25 @@ import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { push } from "react-router-redux";
 
+import { clearShoppingCart } from "../../actions/shopping-cart";
 import Button from "../../components/Button";
 import RelativeBox from "../../components/RelativeBox";
 import Link from "../../components/Link";
 import SelectField from "../../components/SelectField";
 import InputField from "../../components/InputField";
 
-const COUNTRIES = [
-  { label: "Schweiz", value: "ch" },
-  { label: "Liechtenstein", value: "li" }
-];
-
-const STATES = [
-  { label: "Aargau", value: "AG" },
-  { label: "Appenzell Ausserrhoden", value: "AR" },
-  { label: "Appenzell Innerrhoden", value: "IR" },
-  { label: "Basel-Landschaft", value: "BL" },
-  { label: "Basel-Stadt", value: "BS" },
-  { label: "Bern", value: "BE" },
-  { label: "Freiburg", value: "FR" },
-  { label: "Genf", value: "GE" },
-  { label: "Glarus", value: "GL" },
-  { label: "Graubünden", value: "GR" },
-  { label: "Jura", value: "JU" },
-  { label: "Luzern", value: "LU" },
-  { label: "Neuenburg", value: "NE" },
-  { label: "Nidwalden", value: "NW" },
-  { label: "Obwalden", value: "OW" },
-  { label: "Schaffhausen", value: "SH" },
-  { label: "Schwyz", value: "SZ" },
-  { label: "Solothurn", value: "SO" },
-  { label: "St. Gallen", value: "SG" },
-  { label: "Tessin", value: "TI" },
-  { label: "Thurgau", value: "TG" },
-  { label: "Uri", value: "UR" },
-  { label: "Waadt", value: "VD" },
-  { label: "Wallis", value: "VS" },
-  { label: "Zug", value: "ZG" },
-  { label: "Zürich", value: "ZH" }
-];
+/**
+ * Gets an state option list by country key
+ * @param {Object} countries The countries object
+ * @param {string} country The country key
+ * @returns {Array<Object>} The option list
+ */
+const getStateOptionsByCountry = (countries, country) => {
+  return Object.keys(countries[country].states).map(value => ({
+    value,
+    label: countries[country].states[value]
+  }));
+};
 
 /**
  * The inner checkout form
@@ -61,7 +41,8 @@ const InnerCheckoutForm = ({
   handleSubmit,
   isSubmitting,
   showShipping,
-  setShowShipping
+  setShowShipping,
+  countries
 }) => (
   <Form>
     <Flex>
@@ -102,7 +83,10 @@ const InnerCheckoutForm = ({
           name="billing_country"
           required={true}
           placeholder="Wählen Sie ein Land"
-          options={COUNTRIES}
+          options={Object.keys(countries).map(key => ({
+            value: key,
+            label: countries[key].name
+          }))}
         />
         <InputField
           type="text"
@@ -128,13 +112,19 @@ const InnerCheckoutForm = ({
           name="billing_city"
           required={true}
         />
-        <SelectField
-          label="Kanton"
-          name="billing_state"
-          required={true}
-          placeholder="Wählen Sie einen Kanton"
-          options={STATES}
-        />
+        {values["billing_country"] &&
+          countries[values["billing_country"]].states && (
+            <SelectField
+              label="Kanton"
+              name="billing_state"
+              required={true}
+              placeholder="Wählen Sie einen Kanton"
+              options={getStateOptionsByCountry(
+                countries,
+                values["billing_country"]
+              )}
+            />
+          )}
         <InputField
           type="tel"
           label="Telefon"
@@ -221,7 +211,10 @@ const InnerCheckoutForm = ({
               name="shipping_country"
               required={true}
               placeholder="Wählen Sie ein Land"
-              options={COUNTRIES}
+              options={Object.keys(countries).map(key => ({
+                value: key,
+                label: countries[key].name
+              }))}
             />
             <InputField
               type="text"
@@ -247,13 +240,19 @@ const InnerCheckoutForm = ({
               name="shipping_city"
               required={true}
             />
-            <SelectField
-              label="Kanton"
-              name="shipping_state"
-              required={true}
-              placeholder="Wählen Sie einen Kanton"
-              options={STATES}
-            />
+            {values["shipping_country"] &&
+              countries[values["shipping_country"]].states && (
+                <SelectField
+                  label="Kanton"
+                  name="shipping_country"
+                  required={true}
+                  placeholder="Wählen Sie einen Kanton"
+                  options={getStateOptionsByCountry(
+                    countries,
+                    values["shipping_country"]
+                  )}
+                />
+              )}
           </div>
         )}
         <InputField
@@ -301,108 +300,115 @@ const InnerCheckoutForm = ({
 const CheckoutForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: props => ({ payment_method: "feuerschutz_invoice" }),
-  validationSchema: yup.object().shape({
-    ship_to_different_address: yup.bool().default(false),
+  validationSchema: ({ countries }) => {
+    const states = [].concat.apply(
+      [],
+      Object.values(countries).map(country => Object.keys(country.states))
+    );
 
-    billing_additional_line_above: yup.string(),
-    shipping_additional_line_above: yup.string(),
+    return yup.object().shape({
+      ship_to_different_address: yup.bool().default(false),
 
-    billing_first_name: yup.string().required(),
-    shipping_first_name: yup.string().when("ship_to_different_address", {
-      is: true,
-      then: yup.string().required(),
-      otherwise: yup.string().notRequired()
-    }),
+      billing_additional_line_above: yup.string(),
+      shipping_additional_line_above: yup.string(),
 
-    billing_last_name: yup.string().required(),
-    shipping_last_name: yup.string().when("ship_to_different_address", {
-      is: true,
-      then: yup.string().required(),
-      otherwise: yup.string().notRequired()
-    }),
-
-    billing_description: yup.string(),
-    shipping_description: yup.string(),
-
-    billing_company: yup.string(),
-    shipping_company: yup.string(),
-
-    billing_country: yup
-      .string()
-      .oneOf(COUNTRIES.map(country => country.value))
-      .required(),
-    shipping_country: yup
-      .string()
-      .oneOf(COUNTRIES.map(country => country.value))
-      .when("ship_to_different_address", {
+      billing_first_name: yup.string().required(),
+      shipping_first_name: yup.string().when("ship_to_different_address", {
         is: true,
-        then: yup
-          .string()
-          .oneOf(COUNTRIES.map(country => country.value))
-          .required(),
-        otherwise: yup
-          .string()
-          .oneOf(COUNTRIES.map(country => country.value))
-          .notRequired()
+        then: yup.string().required(),
+        otherwise: yup.string().notRequired()
       }),
 
-    billing_address_1: yup.string().required(),
-    shipping_address_1: yup.string().when("ship_to_different_address", {
-      is: true,
-      then: yup.string().required(),
-      otherwise: yup.string().notRequired()
-    }),
-
-    billing_post_office: yup.string(),
-    shipping_post_office: yup.string(),
-
-    billing_postcode: yup.number().required(),
-    shipping_postcode: yup.number().when("ship_to_different_address", {
-      is: true,
-      then: yup.number().required(),
-      otherwise: yup.number().notRequired()
-    }),
-
-    billing_city: yup.string().required(),
-    shipping_city: yup.string().when("ship_to_different_address", {
-      is: true,
-      then: yup.string().required(),
-      otherwise: yup.string().notRequired()
-    }),
-
-    billing_state: yup
-      .string()
-      .oneOf(STATES.map(state => state.value))
-      .required(),
-    shipping_state: yup
-      .string()
-      .oneOf(STATES.map(state => state.value))
-      .when("ship_to_different_address", {
+      billing_last_name: yup.string().required(),
+      shipping_last_name: yup.string().when("ship_to_different_address", {
         is: true,
-        then: yup
-          .string()
-          .oneOf(STATES.map(state => state.value))
-          .required(),
-        otherwise: yup
-          .string()
-          .oneOf(STATES.map(state => state.value))
-          .notRequired()
+        then: yup.string().required(),
+        otherwise: yup.string().notRequired()
       }),
 
-    billing_phone: yup.string().required(),
-    billing_email: yup
-      .string()
-      .email()
-      .required(),
+      billing_description: yup.string(),
+      shipping_description: yup.string(),
 
-    terms: yup
-      .mixed()
-      .test(
-        "is-checked",
-        "Die AGBs müssen akzeptiert werden!",
-        value => value === true
-      )
-  }),
+      billing_company: yup.string(),
+      shipping_company: yup.string(),
+
+      billing_country: yup
+        .string()
+        .oneOf(Object.keys(countries))
+        .required(),
+      shipping_country: yup
+        .string()
+        .oneOf(Object.keys(countries))
+        .when("ship_to_different_address", {
+          is: true,
+          then: yup
+            .string()
+            .oneOf(Object.keys(countries))
+            .required(),
+          otherwise: yup
+            .string()
+            .oneOf(Object.keys(countries))
+            .notRequired()
+        }),
+
+      billing_address_1: yup.string().required(),
+      shipping_address_1: yup.string().when("ship_to_different_address", {
+        is: true,
+        then: yup.string().required(),
+        otherwise: yup.string().notRequired()
+      }),
+
+      billing_post_office: yup.string(),
+      shipping_post_office: yup.string(),
+
+      billing_postcode: yup.number().required(),
+      shipping_postcode: yup.number().when("ship_to_different_address", {
+        is: true,
+        then: yup.number().required(),
+        otherwise: yup.number().notRequired()
+      }),
+
+      billing_city: yup.string().required(),
+      shipping_city: yup.string().when("ship_to_different_address", {
+        is: true,
+        then: yup.string().required(),
+        otherwise: yup.string().notRequired()
+      }),
+
+      billing_state: yup
+        .string()
+        .oneOf(states)
+        .notRequired(),
+      shipping_state: yup
+        .string()
+        .oneOf(states.map(state => state.value))
+        .when("ship_to_different_address", {
+          is: true,
+          then: yup
+            .string()
+            .oneOf(states)
+            .notRequired(),
+          otherwise: yup
+            .string()
+            .oneOf(states)
+            .notRequired()
+        }),
+
+      billing_phone: yup.string().required(),
+      billing_email: yup
+        .string()
+        .email()
+        .required(),
+
+      terms: yup
+        .mixed()
+        .test(
+          "is-checked",
+          "Die AGBs müssen akzeptiert werden!",
+          value => value === true
+        )
+    });
+  },
   handleSubmit: (
     values,
     {
@@ -429,6 +435,7 @@ const CheckoutForm = withFormik({
         setStatus("success");
         setTimeout(() => {
           setStatus("");
+          dispatch(clearShoppingCart());
           dispatch(push("/profile/orders"));
         }, 300);
       })

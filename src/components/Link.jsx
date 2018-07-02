@@ -6,9 +6,10 @@ import PropTypes from "prop-types";
 import { colors } from "utilities/style";
 import Flexbar from "components/Flexbar";
 
-const UnstyledLink = styled.span`
+const UnstyledLink = styled.a`
   height: 100%;
   cursor: pointer;
+  text-decoration: none;
 
   color: ${({ negative }) =>
     negative ? colors.primaryContrast : colors.primary};
@@ -31,7 +32,9 @@ class Link extends React.PureComponent {
       styled,
       children,
       negative,
-      flex
+      flex,
+      target,
+      href
     } = this.props;
 
     const LinkComponent = styled ? StyledLink : UnstyledLink;
@@ -39,11 +42,22 @@ class Link extends React.PureComponent {
     let props = { negative };
 
     if (to) {
-      props.onClick = () => {
+      props.onClick = e => {
+        e.preventDefault();
+        e.stopPropagation();
         dispatch(push(to));
       };
+      props.href = to;
     } else if (onClick) {
       props.onClick = onClick;
+    }
+
+    if (href) {
+      props.href = href;
+    }
+
+    if (target) {
+      props.target = target;
     }
 
     return (
@@ -59,7 +73,9 @@ Link.propTypes = {
   to: PropTypes.string,
   onClick: PropTypes.func,
   styled: PropTypes.bool,
-  negative: PropTypes.bool
+  negative: PropTypes.bool,
+  href: PropTypes.string,
+  target: PropTypes.string
 };
 
 export default connect()(Link);

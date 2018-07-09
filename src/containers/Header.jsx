@@ -17,7 +17,8 @@ import {
   getShoppingCartFetching,
   getShoppingCartItems,
   getShoppingCartTotal,
-  getBurgerMenuOpen
+  getBurgerMenuOpen,
+  getIsAuthenticated
 } from "../reducers";
 import { colors, shadows } from "../utilities/style";
 import Container from "../components/Container";
@@ -151,6 +152,7 @@ class Header extends React.PureComponent {
   };
   render = () => {
     const {
+      isAuthenticated,
       toggleBurgerMenu,
       shoppingCartFetching,
       shoppingCartItems,
@@ -287,11 +289,19 @@ class Header extends React.PureComponent {
                         )}
                       </NavItem>
                       <NavItem>
-                        <Link to="/account" negative>
-                          <Circle negative padding="0.35rem">
-                            <SignInIcon size="30" />
-                          </Circle>
-                        </Link>
+                        {isAuthenticated ? (
+                          <Link to="/konto" negative flex>
+                            <Circle negative padding="0.35rem">
+                              <AccountIcon size="30" />
+                            </Circle>
+                          </Link>
+                        ) : (
+                          <Link to="/login" negative flex>
+                            <Circle negative padding="0.35rem">
+                              <SignInIcon size="30" />
+                            </Circle>
+                          </Link>
+                        )}
                       </NavItem>
                     </Flexbar>
                   </MediaQuery>
@@ -309,7 +319,8 @@ const mapStateToProps = state => ({
   isBurgerMenuOpen: getBurgerMenuOpen(state),
   shoppingCartFetching: getShoppingCartFetching(state),
   shoppingCartItems: getShoppingCartItems(state),
-  shoppingCartTotal: getShoppingCartTotal(state)
+  shoppingCartTotal: getShoppingCartTotal(state),
+  isAuthenticated: getIsAuthenticated(state)
 });
 
 const mapDispatchToProps = dispatch => ({

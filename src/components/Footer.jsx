@@ -71,8 +71,8 @@ class Footer extends React.PureComponent {
     return (
       <StyledFooter>
         <Container>
-          <Flex>
-            <Box width={[1, 1, 1 / 3, 1 / 3]} mx={3}>
+          <Flex flexWrap="wrap">
+            <Box width={[1, 1, 1 / 3, 1 / 3]} px={3}>
               <p>
                 <img className="logo" src={LogoNegative} />
               </p>
@@ -80,7 +80,7 @@ class Footer extends React.PureComponent {
               <br />
               Safety Signs and Security Products
             </Box>
-            <Box width={[1, 1, 1 / 3, 1 / 3]} mx={3}>
+            <Box width={[1, 1, 1 / 3, 1 / 3]} px={3}>
               <IconList>
                 <tbody>
                   <tr>
@@ -126,7 +126,7 @@ class Footer extends React.PureComponent {
                 </tbody>
               </IconList>
             </Box>
-            <Box width={[1, 1, 1 / 3, 1 / 3]} mx={3}>
+            <Box width={[1, 1, 1 / 3, 1 / 3]} px={3}>
               <h4>Über die Firma</h4>
               Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und
               Produkte in den Bereichen Sicherheitskennzeichnung und

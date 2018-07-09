@@ -1,31 +1,31 @@
 /**
- * The product search reducer
+ * The orders reducer
  * @param {Object} state The redux state
  * @param {Object} action The dispatched action
  * @returns {Object} The new state
  */
-const countriesReducer = (
-  state = { isFetching: false, error: null, countries: {} },
+const ordersReducer = (
+  state = { isFetching: false, error: null, orders: [] },
   action
 ) => {
   switch (action.type) {
-    case "FETCH_COUNTRIES":
+    case "FETCH_ORDERS":
       return {
         isFetching: action.isFetching,
         error:
           action.error || action.error === null ? action.error : state.error,
-        countries: action.countries ? action.countries : state.countries
+        orders: action.orders ? action.orders : state.orders
       };
     default:
       return state;
   }
 };
 
-export default countriesReducer;
+export default ordersReducer;
 
 /**
- * Gets all countries
+ * Gets all orders
  * @param {Object} state The redux state
- * @returns {Object} All countries
+ * @returns {Object} All orders
  */
-export const getCountries = state => state.countries;
+export const getOrders = state => state.orders;

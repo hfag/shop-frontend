@@ -23,9 +23,7 @@ const shoppingCartReducer = (
       return {
         isFetching: action.isFetching,
         error:
-          action._error || action._error === null
-            ? action._error
-            : state._error,
+          action.error || action.error === null ? action.error : state.error,
         items:
           action.cart && action.cart.items ? action.cart.items : state.items,
         total:

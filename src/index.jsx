@@ -44,9 +44,10 @@ const store = createStore(
 //storing *some* keys of the application state in the localstorage
 store.subscribe(
   throttle(() => {
-    const { authentication } = store.getState();
+    const { account, isAuthenticated } = store.getState();
     saveState({
-      authentication
+      account,
+      isAuthenticated
     });
   }, 1000)
 );

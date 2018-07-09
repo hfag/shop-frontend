@@ -9,7 +9,8 @@ import ProductCategories from "./containers/ProductCategories";
 import Product from "./containers/Product";
 import Account from "./containers/Account";
 import Cart from "./containers/Cart";
-import Login from "./components/Login";
+import Login from "./containers/Login";
+import Logout from "./containers/Logout";
 import Wrapper from "./components/Wrapper";
 
 /**
@@ -25,7 +26,8 @@ const App = ({ history, store }) => {
           <Route path="/produkte" component={ProductCategories} />
           <Route exact path="/produkt/:productSlug" component={Product} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/konto" component={Account} />
+          <Route exact path="/logout" component={Logout} />
+          <Route path="/konto" component={Account} />
           <Route exact path="/warenkorb" component={Cart} />
         </Wrapper>
       </ConnectedRouter>

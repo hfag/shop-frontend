@@ -45,8 +45,8 @@ const InnerCheckoutForm = ({
   countries
 }) => (
   <Form>
-    <Flex>
-      <Box width={[1, 1, 1 / 2, 1 / 2]} mr={3}>
+    <Flex flexWrap="wrap">
+      <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
         <h3>Rechnungsdetails</h3>
         <InputField
           type="text"
@@ -97,7 +97,7 @@ const InnerCheckoutForm = ({
         <InputField
           type="text"
           label="Postfach"
-          name="billing_post_office"
+          name="billing_post_office_box"
           required={false}
         />
         <InputField
@@ -158,7 +158,7 @@ const InnerCheckoutForm = ({
           required={true}
         />
       </Box>
-      <RelativeBox width={[1, 1, 1 / 2, 1 / 2]} ml={3}>
+      <RelativeBox width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
         <InputField
           id="ship_to_different_address"
           name="ship_to_different_address"
@@ -225,7 +225,7 @@ const InnerCheckoutForm = ({
             <InputField
               type="text"
               label="Postfach"
-              name="shipping_post_office"
+              name="shipping_post_office_box"
               required={false}
             />
             <InputField
@@ -244,7 +244,7 @@ const InnerCheckoutForm = ({
               countries[values["shipping_country"]].states && (
                 <SelectField
                   label="Kanton"
-                  name="shipping_country"
+                  name="shipping_state"
                   required={true}
                   placeholder="Wählen Sie einen Kanton"
                   options={getStateOptionsByCountry(
@@ -265,8 +265,8 @@ const InnerCheckoutForm = ({
       </RelativeBox>
     </Flex>
     <h3>Zahlungsmethoden</h3>
-    <Flex>
-      <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} mr={3}>
+    <Flex flexWrap="wrap">
+      <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} pr={3}>
         <Field
           name="payment_method"
           type="radio"
@@ -299,11 +299,16 @@ const InnerCheckoutForm = ({
 
 const CheckoutForm = withFormik({
   enableReinitialize: true,
-  mapPropsToValues: props => ({ payment_method: "feuerschutz_invoice" }),
+  mapPropsToValues: ({ values = {} }) => ({
+    payment_method: "feuerschutz_invoice",
+    ...values
+  }),
   validationSchema: ({ countries }) => {
     const states = [].concat.apply(
       [],
-      Object.values(countries).map(country => Object.keys(country.states))
+      Object.values(countries).map(
+        country => (country.states ? Object.keys(country.states) : [])
+      )
     );
 
     return yup.object().shape({
@@ -358,8 +363,8 @@ const CheckoutForm = withFormik({
         otherwise: yup.string().notRequired()
       }),
 
-      billing_post_office: yup.string(),
-      shipping_post_office: yup.string(),
+      billing_post_office_box: yup.string(),
+      shipping_post_office_box: yup.string(),
 
       billing_postcode: yup.number().required(),
       shipping_postcode: yup.number().when("ship_to_different_address", {
@@ -381,18 +386,8 @@ const CheckoutForm = withFormik({
         .notRequired(),
       shipping_state: yup
         .string()
-        .oneOf(states.map(state => state.value))
-        .when("ship_to_different_address", {
-          is: true,
-          then: yup
-            .string()
-            .oneOf(states)
-            .notRequired(),
-          otherwise: yup
-            .string()
-            .oneOf(states)
-            .notRequired()
-        }),
+        .oneOf(states)
+        .notRequired(),
 
       billing_phone: yup.string().required(),
       billing_email: yup
@@ -436,7 +431,7 @@ const CheckoutForm = withFormik({
         setTimeout(() => {
           setStatus("");
           dispatch(clearShoppingCart());
-          dispatch(push("/profile/orders"));
+          dispatch(push("/konto/bestellungen"));
         }, 300);
       })
       .catch(e => {
@@ -450,7 +445,8 @@ CheckoutForm.propTypes = {
   submitOrder: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   showShipping: PropTypes.bool.isRequired,
-  setShowShipping: PropTypes.func.isRequired
+  setShowShipping: PropTypes.func.isRequired,
+  countries: PropTypes.object.isRequired
 };
 
 export default CheckoutForm;

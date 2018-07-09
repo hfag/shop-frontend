@@ -4,12 +4,13 @@ import { loadingBarReducer as loadingBar } from "react-redux-loading-bar";
 import { routerReducer as router } from "react-router-redux";
 
 import { wrap } from "../utilities/reducer";
-import authentication, * as fromAuthentication from "./authentication";
 import productSearch, * as fromProductSearch from "./product-search";
 import product, * as fromProduct from "./product";
 import attachment, * as fromAttachment from "./attachment";
 import shoppingCart, * as fromShoppingCart from "./shopping-cart";
 import countries, * as fromCountries from "./countries";
+import account, * as fromAccount from "./account";
+import orders, * as fromOrders from "./orders";
 
 /**
  * Checks whether the burger menu is open
@@ -17,54 +18,6 @@ import countries, * as fromCountries from "./countries";
  * @returns {boolean} Whether the burger menu is open
  */
 export const getBurgerMenuOpen = state => state.burgerMenu.isOpen;
-
-/**
- * Checks whether the user is logged in
- * @param {object} state This state
- * @return {boolean} Whether the user is logged in
- */
-export const getLoggedIn = wrap(
-  fromAuthentication.getLoggedIn,
-  state => state.authentication
-);
-/**
- * Returns the authentication token
- * @param {object} state This state
- * @return {object} The woocommerce credentials
- */
-export const getCredentials = wrap(
-  fromAuthentication.getCredentials,
-  state => state.authentication
-);
-
-/**
- * Returns the authentication token
- * @param {object} state This state
- * @return {object} The jwt token
- */
-export const getAuthenticationToken = wrap(
-  fromAuthentication.getAuthenticationToken,
-  state => state.authentication
-);
-
-/**
- * Checks whether the token is currently being fetched
- * @param {object} state This state
- * @return {boolean} Whether the token is being fetched
- */
-export const getAuthenticationTokenFetching = wrap(
-  fromAuthentication.getAuthenticationTokenFetching,
-  state => state.authentication
-);
-/**
- * Returns the error of the jwt token
- * @param {object} state This state
- * @return {error} The current error
- */
-export const getAuthenticationTokenError = wrap(
-  fromAuthentication.getAuthenticationTokenError,
-  state => state.authentication
-);
 
 /**
  * Returns the product list
@@ -298,14 +251,54 @@ export const getCountries = wrap(
   state => state.countries
 );
 
-export default combineReducers({
+/**
+ * Gets the user account
+ * @param {Object} state The redux state
+ * @returns {Object} The user account
+ */
+export const getAccount = wrap(fromAccount.getAccount, state => state.account);
+
+/**
+ * Checks if the user is authenticated
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether the user is authenticated
+ */
+export const getIsAuthenticated = state => state.isAuthenticated;
+
+/**
+ * Gets all orders
+ * @param {Object} state The redux state
+ * @returns {Object} All orders
+ */
+export const getOrders = wrap(fromOrders.getOrders, state => state.orders);
+
+const appReducer = combineReducers({
   router,
   loadingBar,
   burgerMenu,
   productSearch,
   shoppingCart,
-  authentication,
   product,
   attachment,
-  countries
+  countries,
+  account,
+  orders,
+  isAuthenticated: (state = false, action) =>
+    action.type === "LOGIN_USER" && !action.isFetching ? action.success : state
 });
+
+/**
+ * Make sure that the state is removed if the user signed out of the application
+ * @param {Object} state The previous state
+ * @param {Object} action The action to process
+ * @returns {Object} The new state
+ */
+const rootReducer = (state, action) => {
+  if (action.type === "LOGOUT_USER") {
+    state = undefined;
+  }
+
+  return appReducer(state, action);
+};
+
+export default rootReducer;

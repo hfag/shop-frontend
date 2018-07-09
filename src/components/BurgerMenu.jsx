@@ -3,16 +3,17 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { elastic as Menu } from "react-burger-menu";
 import { decorator as reduxBurgerMenu } from "redux-burger-menu";
-import Link from "components/Link";
 import HomeIcon from "react-icons/lib/fa/home";
 import SearchIcon from "react-icons/lib/fa/search";
 import CartIcon from "react-icons/lib/fa/shopping-cart";
 import CheckoutIcon from "react-icons/lib/fa/money";
 import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
-import { getLoggedIn } from "reducers";
-import { colors } from "utilities/style";
-import NameSloganNegative from "img/logo/name_slogan_negative.svg";
+
+import Link from "../components/Link";
+import { colors } from "../utilities/style";
+import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
+import { getIsAuthenticated } from "../reducers";
 
 const BurgerLogo = styled.img`
   width: 100%;
@@ -44,7 +45,7 @@ const ReduxBurgerMenu = reduxBurgerMenu(Menu);
  */
 class BurgerMenu extends React.PureComponent {
   render = () => {
-    const { loggedIn } = this.props;
+    const { isAuthenticated } = this.props;
 
     return (
       <ReduxBurgerMenu right>
@@ -71,17 +72,19 @@ class BurgerMenu extends React.PureComponent {
             </Link>
           </BurgerItem>
           <BurgerItem>
-            <Link to="/account" negative flex>
-              {loggedIn ? (
+            {isAuthenticated ? (
+              <Link to="/konto" negative flex>
                 <span>
                   <AccountIcon />Mein Konto
                 </span>
-              ) : (
+              </Link>
+            ) : (
+              <Link to="/login" negative flex>
                 <span>
                   <SignInIcon />Login
                 </span>
-              )}
-            </Link>
+              </Link>
+            )}
           </BurgerItem>
         </BurgerList>
       </ReduxBurgerMenu>
@@ -90,7 +93,7 @@ class BurgerMenu extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  loggedIn: getLoggedIn(state)
+  isAuthenticated: getIsAuthenticated(state)
 });
 
 export default connect(mapStateToProps)(BurgerMenu);

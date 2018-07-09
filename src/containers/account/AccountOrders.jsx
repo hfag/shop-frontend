@@ -1,0 +1,30 @@
+import React from "react";
+import styled from "styled-components";
+import { connect } from "react-redux";
+
+import Order from "../../components/Order";
+import { getOrders } from "../../reducers";
+
+const OrdersWrapper = styled.div``;
+/**
+ * An order component
+ * @returns {Component} The component
+ */
+class Orders extends React.PureComponent {
+  render = () => {
+    const { orders } = this.props;
+
+    return (
+      <OrdersWrapper>
+        <h2>Bestellungen</h2>
+        <div>{orders.map(order => <Order key={order.id} order={order} />)}</div>
+      </OrdersWrapper>
+    );
+  };
+}
+
+const mapStateToProps = state => ({
+  orders: getOrders(state)
+});
+
+export default connect(mapStateToProps)(Orders);

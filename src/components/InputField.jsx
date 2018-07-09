@@ -23,6 +23,7 @@ const InputFieldWrapper = styled.div`
   input[type="search"],
   input[type="number"],
   input[type="email"],
+  input[type="password"],
   input[type="tel"],
   textarea {
     width: 100%;
@@ -48,7 +49,7 @@ class InputField extends React.Component {
     const {
       label,
       name,
-      required = false,
+      required,
       placeholder,
       type,
       value: forceValue,
@@ -64,7 +65,8 @@ class InputField extends React.Component {
       <InputFieldWrapper checkbox={checkbox}>
         {label && (
           <label className="checkout-label" htmlFor={name}>
-            {label} {required ? "*" : "(optional)"}
+            {label}{" "}
+            {required === true ? "*" : required === false ? "(optional)" : ""}
           </label>
         )}
         <Field

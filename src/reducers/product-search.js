@@ -13,9 +13,7 @@ const productSearchReducer = (
       return {
         isFetching: action.isFetching,
         error:
-          action._error || action._error === null
-            ? action._error
-            : state._error,
+          action.error || action.error === null ? action.error : state.error,
         sections: action.sections ? action.sections : state.sections
       };
     default:

@@ -14,7 +14,8 @@ import {
   getShoppingCartTaxes,
   getShoppingCartFees,
   getShoppingCartShipping,
-  getCountries
+  getCountries,
+  getAccount
 } from "../reducers";
 import Container from "../components/Container";
 import CartForm from "../components/cart/CartForm";
@@ -56,7 +57,9 @@ class Cart extends React.PureComponent {
       total,
       updateShoppingCartItem,
       submitOrder,
-      countries
+      countries,
+      account,
+      checkoutValues
     } = this.props;
     const { step, showShipping } = this.state;
 
@@ -79,6 +82,7 @@ class Cart extends React.PureComponent {
           />
           {step === "checkout" && (
             <CheckoutForm
+              values={checkoutValues}
               setShowShipping={this.setShowShipping}
               showShipping={showShipping}
               submitOrder={submitOrder}
@@ -92,15 +96,30 @@ class Cart extends React.PureComponent {
   };
 }
 
-const mapStateToProps = state => ({
-  isFetching: getShoppingCartFetching(state),
-  items: getShoppingCartItems(state),
-  total: getShoppingCartTotal(state),
-  taxes: getShoppingCartTaxes(state),
-  fees: getShoppingCartFees(state),
-  shipping: getShoppingCartShipping(state),
-  countries: getCountries(state)
-});
+const mapStateToProps = state => {
+  const account = getAccount(state);
+
+  return {
+    isFetching: getShoppingCartFetching(state),
+    items: getShoppingCartItems(state),
+    total: getShoppingCartTotal(state),
+    taxes: getShoppingCartTaxes(state),
+    fees: getShoppingCartFees(state),
+    shipping: getShoppingCartShipping(state),
+    countries: getCountries(state),
+    account: account,
+    checkoutValues: {
+      ...Object.keys(account.billing).reduce((object, key) => {
+        object["billing_" + key] = account.billing[key];
+        return object;
+      }, {}),
+      ...Object.keys(account.shipping).reduce((object, key) => {
+        object["shipping_" + key] = account.shipping[key];
+        return object;
+      }, {})
+    }
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   dispatch,

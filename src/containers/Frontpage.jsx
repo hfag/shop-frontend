@@ -13,8 +13,6 @@ class Frontpage extends React.PureComponent {
     return (
       <div>
         <ProductCategories />
-        <Link styled={false}>unstyled</Link>
-        <Link to="/login">Login</Link>
       </div>
     );
   };

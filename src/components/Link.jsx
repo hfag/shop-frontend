@@ -3,13 +3,17 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { colors } from "utilities/style";
-import Flexbar from "components/Flexbar";
+import { withRouter } from "react-router";
+
+import { colors } from "../utilities/style";
+import Flexbar from "./Flexbar";
 
 const UnstyledLink = styled.a`
   height: 100%;
   cursor: pointer;
   text-decoration: none;
+
+  font-weight: ${({ active }) => (active ? "bold" : "normal")};
 
   color: ${({ negative }) =>
     negative ? colors.primaryContrast : colors.primary};
@@ -61,7 +65,10 @@ class Link extends React.PureComponent {
     }
 
     return (
-      <LinkComponent {...props}>
+      <LinkComponent
+        {...props}
+        active={(href || to) === window.location.pathname}
+      >
         {flex ? <Flexbar>{children}</Flexbar> : children}
       </LinkComponent>
     );
@@ -78,4 +85,5 @@ Link.propTypes = {
   target: PropTypes.string
 };
 
-export default connect()(Link);
+const ConnectedLink = connect()(Link);
+export default withRouter(ConnectedLink);

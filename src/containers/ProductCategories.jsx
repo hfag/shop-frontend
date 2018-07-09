@@ -154,8 +154,7 @@ class ProductCategories extends React.PureComponent {
         )}
         <Route
           path={`${urlWithoutPage}/:categorySlug/:page`}
-          component={RoutedCategories}
-          parents={newParents}
+          render={props => <RoutedCategories {...props} parents={newParents} />}
         />
       </div>
     );

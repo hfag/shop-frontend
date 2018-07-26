@@ -3,21 +3,19 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
 import { push } from "react-router-redux";
-import Flex from "components/Flex";
-import Link from "components/Link";
-import Container from "components/Container";
-import Pagination from "components/Pagination";
-import CategoryItem from "containers/CategoryItem";
-import ProductItem from "containers/ProductItem";
-import { fetchProductCategories } from "actions/product/categories";
-import { fetchProducts } from "actions/product";
-import { fetchAttachments } from "actions/attachments";
 import {
   getProducts,
   getProductCategoryChildrenIdsById,
-  getProductCategoryById,
   getProductCategoryBySlug
 } from "reducers";
+
+import Flex from "../components/Flex";
+import Container from "../components/Container";
+import Pagination from "../components/Pagination";
+import CategoryItem from "../containers/CategoryItem";
+import ProductItem from "../containers/ProductItem";
+import { fetchProductCategories } from "../actions/product/categories";
+import { fetchProducts } from "../actions/product";
 
 const ITEMS_PER_PAGE = 30;
 

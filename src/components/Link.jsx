@@ -67,7 +67,7 @@ class Link extends React.PureComponent {
     return (
       <LinkComponent
         {...props}
-        active={(href || to) === window.location.pathname}
+        active={(href || to) === decodeURI(window.location.pathname)}
       >
         {flex ? <Flexbar>{children}</Flexbar> : children}
       </LinkComponent>

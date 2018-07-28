@@ -6,6 +6,7 @@ import { routerReducer as router } from "react-router-redux";
 import { wrap } from "../utilities/reducer";
 import productSearch, * as fromProductSearch from "./product-search";
 import product, * as fromProduct from "./product";
+import simpleProduct, * as fromSimpleProduct from "./product-simple";
 import attachment, * as fromAttachment from "./attachment";
 import shoppingCart, * as fromShoppingCart from "./shopping-cart";
 import countries, * as fromCountries from "./countries";
@@ -77,6 +78,27 @@ export const getProductBySlug = wrap(
 export const getProducts = wrap(
   fromProduct.getProducts,
   state => state.product
+);
+
+/**
+ * Returns the product with the specified sku
+ * @param {object} state This state
+ * @param {number} productSku The product sku
+ * @return {array} All product categories
+ */
+export const getSimpleProductBySku = wrap(
+  fromSimpleProduct.getSimpleProductBySku,
+  state => state.simpleProduct
+);
+
+/**
+ * Returns all products
+ * @param {object} state This state
+ * @return {array} All products
+ */
+export const getSimpleProducts = wrap(
+  fromSimpleProduct.getSimpleProducts,
+  state => state.simpleProduct
 );
 
 /**
@@ -279,6 +301,7 @@ const appReducer = combineReducers({
   productSearch,
   shoppingCart,
   product,
+  simpleProduct,
   attachment,
   countries,
   account,

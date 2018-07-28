@@ -108,16 +108,19 @@ const mapStateToProps = state => {
     shipping: getShoppingCartShipping(state),
     countries: getCountries(state),
     account: account,
-    checkoutValues: {
-      ...Object.keys(account.billing).reduce((object, key) => {
-        object["billing_" + key] = account.billing[key];
-        return object;
-      }, {}),
-      ...Object.keys(account.shipping).reduce((object, key) => {
-        object["shipping_" + key] = account.shipping[key];
-        return object;
-      }, {})
-    }
+    checkoutValues:
+      account.billing && account.shipping
+        ? {
+            ...Object.keys(account.billing).reduce((object, key) => {
+              object["billing_" + key] = account.billing[key];
+              return object;
+            }, {}),
+            ...Object.keys(account.shipping).reduce((object, key) => {
+              object["shipping_" + key] = account.shipping[key];
+              return object;
+            }, {})
+          }
+        : {}
   };
 };
 

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import { wrap, createAllIds, createById } from "utilities/reducer";
 
+import { wrap, createAllIds, createById } from "../../utilities/reducer";
 import categories, * as fromCategories from "./categories";
 import attributes, * as fromAttributes from "./attributes";
 
@@ -9,7 +9,7 @@ const itemName = "product";
 export {
   getAllItems as getProducts,
   getItemById as getProductBySlug
-} from "utilities/reducer";
+} from "../../utilities/reducer";
 
 export default combineReducers({
   byId: createById(itemName, "slug", (state, action) => {

@@ -11,6 +11,7 @@ import CheckoutIcon from "react-icons/lib/fa/money";
 import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
 import LoadingBar from "react-redux-loading-bar";
+import { Flex, Box } from "grid-styled";
 
 import { fetchShoppingCart } from "../actions/shopping-cart";
 import {
@@ -36,6 +37,7 @@ import Navbar from "../components/Navbar";
 import Searchbar from "../containers/Searchbar";
 import LogoNegative from "../../img/logo/logo_negative.svg";
 import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
+import Thumbnail from "./Thumbnail";
 
 const Counter = styled.div`
   margin-left: 0.5rem;
@@ -118,22 +120,22 @@ const Dropdown = styled.div`
   box-shadow: ${shadows.y};
 `;
 
-const ShoppingCartList = styled.ul`
+const ShoppingCartList = styled.div`
   width: 100%;
-  border-collapse: collapse;
   margin: 0 0 1rem 0;
   padding: 0;
   font-size: 0.8rem;
-  max-width: 100%;
 
-  li {
-    padding: 0.125rem 0.25rem;
-    text-align: right;
+  display: flex;
+  align-items: center;
+
+  & > div:first-child {
+    flex: 0 0 10%;
+    margin-right: 0.5rem;
   }
 
-  li:last-child {
-    border-top: ${colors.secondary} 1px solid;
-    padding-top: 0.25rem;
+  img {
+    width: 100%;
   }
 `;
 
@@ -254,23 +256,27 @@ class Header extends React.PureComponent {
                         </Link>
                         {this.state.showShoppingCartDropdown && (
                           <Dropdown>
-                            <ShoppingCartList>
-                              {shoppingCartItems.length > 0 ? (
-                                shoppingCartItems.map((item, index) => (
-                                  <li key={index}>
-                                    {item.quantity} x {item.title}
-                                  </li>
-                                ))
-                              ) : (
-                                <li>
-                                  Es befinden sich bisher noch keine Produkte im
-                                  Warenkorb.
-                                </li>
-                              )}
-                              <li>
-                                <Price>{shoppingCartTotal}</Price>
-                              </li>
-                            </ShoppingCartList>
+                            {shoppingCartItems.length > 0 ? (
+                              shoppingCartItems.map((item, index) => (
+                                <ShoppingCartList>
+                                  <div>
+                                    <Thumbnail
+                                      id={item.thumbnailId}
+                                      size="search-thumbnail"
+                                    />
+                                  </div>
+                                  <div>
+                                    <strong>{item.quantity}x</strong>{" "}
+                                    {item.title}
+                                  </div>
+                                </ShoppingCartList>
+                              ))
+                            ) : (
+                              <div>
+                                Es befinden sich bisher noch keine Produkte im
+                                Warenkorb.
+                              </div>
+                            )}
                             <Button
                               fullWidth
                               onClick={() =>
@@ -359,7 +365,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    * @returns {void}
    */
   toggleBurgerMenu() {
-    return setBurgerMenu(!isBurgerMenuOpen);
+    return mapDispatchToProps.setBurgerMenu(!mapStateToProps.isBurgerMenuOpen);
   }
 });
 

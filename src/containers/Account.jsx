@@ -11,11 +11,12 @@ import { getIsAuthenticated, getAccount } from "../reducers";
 import Container from "../components/Container";
 import Card from "../components/Card";
 import Link from "../components/Link";
-import Orders from "../containers/account/AccountOrders";
+import AccountOrders from "../containers/account/AccountOrders";
 import AccountOrder from "../components/account/AccountOrder";
 import AccountDashboard from "../containers/account/AccountDashboard";
 import AccountForm from "../components/account/AccountForm";
 import AddressForm from "../components/account/AddressForm";
+import AccountResellerDashboard from "./account/AccountResellerDashboard";
 import { updateAccount, updateAddress, fetchAccount } from "../actions/user";
 import { fetchOrders } from "../actions/orders";
 
@@ -95,7 +96,7 @@ class Account extends React.PureComponent {
                   <Link to={`${url}/bestellungen`}>Bestellungen</Link>
                 </li>
                 <li>
-                  <Link to={`${url}/rabatte`}>Rabatte</Link>
+                  <Link to={`${url}/wiederverkäufer`}>Wiederverkäufer</Link>
                 </li>
                 <li>
                   <Link to="/logout">Abmelden</Link>
@@ -153,10 +154,14 @@ class Account extends React.PureComponent {
                     />
                   )}
                 />
-                <Route path={`${url}/bestellungen`} component={Orders} />
+                <Route path={`${url}/bestellungen`} component={AccountOrders} />
                 <Route
                   path={`${url}/bestellung/:orderId`}
                   component={AccountOrder}
+                />
+                <Route
+                  path={`${url}/wiederverkäufer`}
+                  component={AccountResellerDashboard}
                 />
               </Switch>
             </Box>

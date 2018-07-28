@@ -5,7 +5,11 @@ import { connect } from "react-redux";
 import Order from "../../components/Order";
 import { getOrders } from "../../reducers";
 
-const OrdersWrapper = styled.div``;
+const OrdersWrapper = styled.div`
+  h2 {
+    margin-top: 0;
+  }
+`;
 /**
  * An order component
  * @returns {Component} The component

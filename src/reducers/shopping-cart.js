@@ -27,12 +27,14 @@ const shoppingCartReducer = (
         items:
           action.cart && action.cart.items ? action.cart.items : state.items,
         total:
-          action.cart && action.cart.total ? action.cart.total : state.total,
+          action.cart && action.cart.total !== null
+            ? action.cart.total
+            : state.total,
         taxes:
           action.cart && action.cart.taxes ? action.cart.taxes : state.taxes,
         fees: action.cart && action.cart.fees ? action.cart.fees : state.fees,
         shipping:
-          action.cart && action.cart.shipping
+          action.cart && action.cart.shipping !== null
             ? action.cart.shipping
             : state.shipping
       };

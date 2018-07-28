@@ -9,6 +9,7 @@ import CartIcon from "react-icons/lib/fa/shopping-cart";
 import CheckoutIcon from "react-icons/lib/fa/money";
 import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
+import { withRouter } from "react-router";
 
 import Link from "../components/Link";
 import { colors } from "../utilities/style";
@@ -57,18 +58,13 @@ class BurgerMenu extends React.PureComponent {
             </Link>
           </BurgerItem>
           <BurgerItem seperator>
-            <Link to="/search" negative flex>
+            <Link to="/suche" negative flex>
               <SearchIcon />Suche
             </Link>
           </BurgerItem>
-          <BurgerItem>
-            <Link to="/cart" negative flex>
-              <CartIcon />Warenkorb
-            </Link>
-          </BurgerItem>
           <BurgerItem seperator>
-            <Link to="/checkout" negative flex>
-              <CheckoutIcon />Zur Kasse
+            <Link to="/warenkorb" negative flex>
+              <CartIcon />Warenkorb
             </Link>
           </BurgerItem>
           <BurgerItem>
@@ -96,4 +92,6 @@ const mapStateToProps = state => ({
   isAuthenticated: getIsAuthenticated(state)
 });
 
-export default connect(mapStateToProps)(BurgerMenu);
+const ConnectedBurgerMenu = connect(mapStateToProps)(BurgerMenu);
+
+export default withRouter(ConnectedBurgerMenu);

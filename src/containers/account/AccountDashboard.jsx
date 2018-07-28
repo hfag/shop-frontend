@@ -22,10 +22,6 @@ const DashboardWrapper = styled.div`
  * @returns {Component} The component
  */
 class AccountDashboard extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = { registered: false };
-  }
   render = () => {
     const {
       dispatch,

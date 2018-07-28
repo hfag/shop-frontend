@@ -77,7 +77,7 @@ const InnerCartForm = ({
   total,
   enabled,
   onProceed
-}) => 
+}) => (
   <Form>
     <CartTable>
       <colgroup>
@@ -104,7 +104,7 @@ const InnerCartForm = ({
         <FieldArray
           name="items"
           render={({ move, swap, push, insert, unshift, pop, remove }) => {
-            return values.items.map((item, index) => 
+            return values.items.map((item, index) => (
               <tr key={index}>
                 <td>
                   <Thumbnail id={item.thumbnailId} />
@@ -123,7 +123,7 @@ const InnerCartForm = ({
                 </td>
                 <td>{item.sku}</td>
                 <td>
-                  {item.discountPrice ? 
+                  {item.discountPrice ? (
                     <div>
                       <div>
                         <Price strike>{item.price}</Price>
@@ -132,34 +132,34 @@ const InnerCartForm = ({
                         <Price>{item.discountPrice}</Price>
                       </div>
                     </div>
-                   : 
+                  ) : (
                     <Price>{item.price}</Price>
-                  }
+                  )}
                 </td>
                 <td>
-                  {enabled ? 
+                  {enabled ? (
                     <Field name={`items.${index}.quantity`} size="3" />
-                   : 
+                  ) : (
                     <span>{item.quantity}</span>
-                  }
+                  )}
                 </td>
                 <td>
                   <Price>{item.subtotal}</Price>
                 </td>
                 <td>
-                  {enabled && 
+                  {enabled && (
                     <Action>
                       <MdDelete onClick={() => remove(index)} />
                     </Action>
-                  }
+                  )}
                 </td>
               </tr>
-            );
+            ));
           }}
         />
         <tr>
           <td colSpan="7">
-            {enabled && 
+            {enabled && (
               <Button
                 float="right"
                 controlled
@@ -168,7 +168,7 @@ const InnerCartForm = ({
               >
                 Warenkorb aktualisieren
               </Button>
-            }
+            )}
           </td>
         </tr>
       </tbody>
@@ -180,7 +180,7 @@ const InnerCartForm = ({
           </td>
           <td />
         </tr>
-        {fees.map((fee, index) => 
+        {fees.map((fee, index) => (
           <tr key={index}>
             <td colSpan="5">{fee.name}</td>
             <td>
@@ -188,7 +188,7 @@ const InnerCartForm = ({
             </td>
             <td />
           </tr>
-        )}
+        ))}
         <tr className="total">
           <td colSpan="5">Zwischensumme</td>
           <td>
@@ -200,7 +200,7 @@ const InnerCartForm = ({
           </td>
           <td />
         </tr>
-        {taxes.map((tax, index) => 
+        {taxes.map((tax, index) => (
           <tr key={index}>
             <td colSpan="5">{tax.label}</td>
             <td>
@@ -208,7 +208,7 @@ const InnerCartForm = ({
             </td>
             <td />
           </tr>
-        )}
+        ))}
         <tr className="total">
           <td colSpan="5">Gesamtsumme</td>
           <td>
@@ -218,18 +218,20 @@ const InnerCartForm = ({
         </tr>
       </tfoot>
     </CartTable>
-    {enabled && 
-      <Button
-        controlled
-        float="right"
-        onClick={dirty ? () => {} : onProceed}
-        state={dirty ? "disabled" : ""}
-      >
-        Weiter zur Bestellung
-      </Button>
-    }
+    {enabled &&
+      values.items.length > 0 &&
+      total > 0 && (
+        <Button
+          controlled
+          float="right"
+          onClick={dirty ? () => {} : onProceed}
+          state={dirty ? "disabled" : ""}
+        >
+          Weiter zur Bestellung
+        </Button>
+      )}
   </Form>
-;
+);
 
 const CartForm = withFormik({
   enableReinitialize: true,

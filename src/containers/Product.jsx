@@ -268,13 +268,18 @@ class Product extends React.PureComponent {
             </Box>
           </Flex>
           <div dangerouslySetInnerHTML={{ __html: content }} />
-          <hr />
-          <h4>Wähle eine Variante</h4>
-          <VariationSlider
-            variations={variations}
-            selectedAttributes={selectedAttributes}
-            onSelect={this.onVariationSliderSelect}
-          />
+
+          {variations.length > 1 && (
+            <div>
+              <hr />
+              <h4>Wähle eine Variante</h4>
+              <VariationSlider
+                variations={variations}
+                selectedAttributes={selectedAttributes}
+                onSelect={this.onVariationSliderSelect}
+              />
+            </div>
+          )}
           <Flex flexWrap="wrap">
             {Object.keys(possibleAttributes)
               .filter(
@@ -422,7 +427,18 @@ class Product extends React.PureComponent {
                     onClick={() =>
                       addToShoppingCart(
                         selectedVariation.id,
-                        selectedAttributes,
+                        Object.keys(selectedAttributes).reduce(
+                          (object, attributeKey) => {
+                            object[
+                              this.getAttributeLabel(attributeKey)
+                            ] = this.getOptionLabel(
+                              attributeKey,
+                              selectedAttributes[attributeKey]
+                            );
+                            return object;
+                          },
+                          {}
+                        ),
                         quantity
                       )
                     }

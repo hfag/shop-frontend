@@ -41,7 +41,7 @@ const ProfileNavigation = styled.ul`
 
 const AccountContainer = styled(Container)`
   h1 {
-    margin: 0;
+    margin-top: 0;
   }
 `;
 

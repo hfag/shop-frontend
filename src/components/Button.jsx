@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Color from "color";
 import ProgressButton from "react-progress-button";
 
-import { colors } from "../utilities/style";
+import { colors, borders } from "../utilities/style";
 const DISABLED = Color(colors.secondary)
   .lighten(0.75)
   .rgb()
@@ -35,6 +35,7 @@ const ButtonWrapper = styled.div`
     width: 100%;
     height: ${({ height }) => height};
     padding: 0.375rem 1rem;
+    border-radius: ${borders.radius};
 
     color: #fff;
     background-color: ${({ disabled }) =>

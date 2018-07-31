@@ -39,6 +39,12 @@ const ProfileNavigation = styled.ul`
   }
 `;
 
+const AccountContainer = styled(Container)`
+  h1 {
+    margin: 0;
+  }
+`;
+
 /**
  * The account page
  * @returns {Component} The component
@@ -74,11 +80,11 @@ class Account extends React.PureComponent {
     } = this.props;
 
     return (
-      <Container>
-        <Card>
-          <h1>Mein Kundenkonto</h1>
-          <Flex flexWrap="wrap">
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={4}>
+      <AccountContainer>
+        <Flex flexWrap="wrap">
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={4}>
+            <Card>
+              <h1>Mein Kundenkonto</h1>
               <ProfileNavigation>
                 <li>
                   <Link to={url}>Übersicht</Link>
@@ -102,8 +108,10 @@ class Account extends React.PureComponent {
                   <Link to="/logout">Abmelden</Link>
                 </li>
               </ProfileNavigation>
-            </Box>
-            <Box width={[1, 1 / 2, 2 / 3, 2 / 3]} pr={3}>
+            </Card>
+          </Box>
+          <Box width={[1, 1 / 2, 2 / 3, 2 / 3]} pr={3}>
+            <Card>
               <Switch>
                 <Route
                   exact
@@ -164,10 +172,10 @@ class Account extends React.PureComponent {
                   component={AccountResellerDashboard}
                 />
               </Switch>
-            </Box>
-          </Flex>
-        </Card>
-      </Container>
+            </Card>
+          </Box>
+        </Flex>
+      </AccountContainer>
     );
   };
 }

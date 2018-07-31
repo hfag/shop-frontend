@@ -15,6 +15,11 @@ export const colors = {
   disabled: "#cccccc"
 };
 
+export const borders = {
+  radius: "5px",
+  inputRadius: "3px"
+};
+
 export const shadows = {
   y: "0px 2px 2px 0px rgba(0, 0, 0, 0.05)"
 };

@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { colors, shadows } from "utilities/style";
+
+import { colors, borders, shadows } from "../utilities/style";
 
 const CardWrapper = styled.div`
   margin: 1rem 0;
   padding: 1rem;
   background-color: ${colors.backgroundOverlay};
   box-shadow: ${shadows.y};
+  border-radius: ${borders.radius};
 `;
 
 /**

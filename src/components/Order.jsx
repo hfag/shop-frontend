@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { colors, shadows } from "utilities/style";
 
+import { colors, borders, shadows } from "../utilities/style";
 import Price from "./Price";
 import Link from "./Link";
 
@@ -9,6 +9,7 @@ const OrderWrapper = styled.div`
   margin-top: -1px; /*border*/
   padding: 1rem;
   border: #eee 1px solid;
+  border-radius: ${borders.radius};
 
   h4,
   h5 {

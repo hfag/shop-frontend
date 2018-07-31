@@ -3,7 +3,7 @@ import { Field } from "formik";
 import styled from "styled-components";
 import get from "lodash/get";
 
-import { colors } from "../utilities/style";
+import { colors, borders } from "../utilities/style";
 
 const InputFieldWrapper = styled.div`
   margin-bottom: 0.25rem;
@@ -18,6 +18,10 @@ const InputFieldWrapper = styled.div`
   .checkout-label {
     display: block;
     margin-bottom: 0.5rem;
+  }
+  input {
+    border-radius: ${borders.inputRadius};
+    border: ${colors.secondary} 1px solid;
   }
   input[type="text"],
   input[type="search"],

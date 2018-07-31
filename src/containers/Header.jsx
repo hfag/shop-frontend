@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
-import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import { action as toggleBurgerMenuAction } from "redux-burger-menu";
 import MenuIcon from "react-icons/lib/md/menu";
@@ -21,7 +20,7 @@ import {
   getBurgerMenuOpen,
   getIsAuthenticated
 } from "../reducers";
-import { colors, shadows } from "../utilities/style";
+import { colors, borders, shadows } from "../utilities/style";
 import Container from "../components/Container";
 import Flexbar from "../components/Flexbar";
 import Button from "../components/Button";
@@ -71,6 +70,7 @@ const Dropdown = styled.div`
 
   background-color: #fff;
   color: #000;
+  border-radius: ${borders.radius};
   box-shadow: ${shadows.y};
 `;
 

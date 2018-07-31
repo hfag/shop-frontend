@@ -110,7 +110,7 @@ class Account extends React.PureComponent {
               </ProfileNavigation>
             </Card>
           </Box>
-          <Box width={[1, 1 / 2, 2 / 3, 2 / 3]} pr={3}>
+          <Box width={[1, 1 / 2, 2 / 3, 2 / 3]}>
             <Card>
               <Switch>
                 <Route

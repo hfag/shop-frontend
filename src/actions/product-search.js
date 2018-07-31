@@ -19,8 +19,8 @@ const mapItem = section => section;
  */
 const searchProducts = createFetchAction(
   "SEARCH_PRODUCTS",
-  "query",
-  "sections"
+  "sections",
+  "query"
 );
 
 /**
@@ -33,6 +33,7 @@ export const reset = () => ({
 
 /**
  * Searches for products
+ * @param {boolean} isFetching Whether to visualize the progress of the request
  * @param {string} query The search query
  * @returns {function} A redux thunk
  */

@@ -44,59 +44,13 @@ const Counter = styled.div`
   font-size: 1.25rem;
 `;
 
-const AnimatedSearch = styled.div`
+const SearchWrapper = styled.div`
   width: 100%;
   margin-right: 1rem;
-
-  .searchbar-enter {
-    opacity: 0.01;
-    width: 0;
-
-    margin-left: auto;
-  }
-
-  .searchbar-enter.searchbar-enter-active {
-    opacity: 1;
-    width: 100%;
-    transition: all 500ms linear;
-  }
-
-  .searchbar-leave {
-    opacity: 1;
-    width: 100%;
-
-    margin-left: auto;
-  }
-
-  .searchbar-leave.searchbar-leave-active {
-    opacity: 0.01;
-    width: 0;
-    transition: all 300ms linear;
-  }
 `;
 
-const AnimatedSlogan = styled.div`
+const SloganWrapper = styled.div`
   height: 100%;
-
-  .slogan-enter {
-    opacity: 0.01;
-    width: 0;
-  }
-
-  .slogan-enter.slogan-enter-active {
-    opacity: 1;
-    transition: all 500ms linear;
-  }
-
-  .slogan-leave {
-    opacity: 1;
-    width: 0;
-  }
-
-  .slogan-leave.slogan-leave-active {
-    opacity: 0.01;
-    transition: all 300ms linear;
-  }
 `;
 
 const HeaderWrapper = styled.div`
@@ -146,7 +100,7 @@ const ShoppingCartList = styled.div`
 class Header extends React.PureComponent {
   constructor() {
     super();
-    this.state = { showSearch: false, showShoppingCartDropdown: false };
+    this.state = { showShoppingCartDropdown: false };
   }
   componentDidMount = () => {
     const { fetchShoppingCart } = this.props;
@@ -175,30 +129,20 @@ class Header extends React.PureComponent {
                     <NavItem>
                       <img src={LogoNegative} />
                     </NavItem>
-                    <MediaQuery md up>
-                      <CSSTransitionGroup
-                        component={AnimatedSlogan}
-                        transitionName="slogan"
-                        transitionEnterTimeout={500}
-                        transitionLeaveTimeout={300}
-                      >
-                        {!this.state.showSearch && (
-                          <NavItem>
-                            <img src={NameSloganNegative} />
-                          </NavItem>
-                        )}
-                      </CSSTransitionGroup>
+                    <MediaQuery lg up>
+                      <SloganWrapper>
+                        <NavItem>
+                          <img src={NameSloganNegative} />
+                        </NavItem>
+                      </SloganWrapper>
                     </MediaQuery>
                   </Flexbar>
                 </Link>
-                <CSSTransitionGroup
-                  component={AnimatedSearch}
-                  transitionName="searchbar"
-                  transitionEnterTimeout={500}
-                  transitionLeaveTimeout={300}
-                >
-                  {this.state.showSearch && <Searchbar />}
-                </CSSTransitionGroup>
+                <SearchWrapper>
+                  <MediaQuery md up>
+                    <Searchbar />
+                  </MediaQuery>
+                </SearchWrapper>
                 <Push left>
                   <MediaQuery md down>
                     <NavItem>
@@ -209,18 +153,6 @@ class Header extends React.PureComponent {
                   </MediaQuery>
                   <MediaQuery md up>
                     <Flexbar>
-                      <NavItem seperator>
-                        <Link
-                          onClick={() => {
-                            this.setState({
-                              showSearch: !this.state.showSearch
-                            });
-                          }}
-                          negative
-                        >
-                          <SearchIcon size="30" />
-                        </Link>
-                      </NavItem>
                       <NavItem seperator>
                         <Link
                           onClick={() => {
@@ -258,7 +190,7 @@ class Header extends React.PureComponent {
                           <Dropdown>
                             {shoppingCartItems.length > 0 ? (
                               shoppingCartItems.map((item, index) => (
-                                <ShoppingCartList>
+                                <ShoppingCartList key={index}>
                                   <div>
                                     <Thumbnail
                                       id={item.thumbnailId}

@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import styled from "styled-components";
 import Autosuggest from "react-autosuggest";
-import debouce from "lodash/debounce";
-import Flexbar from "components/Flexbar";
-import Link from "components/Link";
-import { colors, shadows } from "utilities/style";
-import { search, reset } from "actions/product-search";
-import { getProductSearchSections } from "reducers";
+import debounce from "lodash/debounce";
+
+import Flexbar from "../components/Flexbar";
+import Link from "../components/Link";
+import { colors, shadows } from "../utilities/style";
+import { search, reset } from "../actions/product-search";
+import { getProductSearchSections } from "../reducers";
 
 const StyledSearch = styled.div`
   position: relative;
@@ -51,6 +52,7 @@ const SuggestionContainer = styled.div`
 
 const Suggestion = styled.div`
   margin: 0.5rem;
+  font-size: 0.9rem;
   cursor: pointer;
 
   &:hover .name {
@@ -59,12 +61,13 @@ const Suggestion = styled.div`
 
   .price {
     margin-left: auto;
+    white-space: nowrap;
   }
 `;
 
 const SuggestionTitle = styled.div`
   margin: 0 0.5rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
   border-bottom: ${colors.primary} 1px solid;
 `;
@@ -98,12 +101,21 @@ const getSuggestionValue = suggestion => suggestion.title;
  */
 const renderSuggestion = suggestion => (
   <Suggestion>
-    <Flexbar>
-      <div className="name">{`${suggestion.title} (${
-        suggestion.variations
-      } Variante${suggestion.variations > 1 ? "n" : ""})`}</div>
-      <div className="price">ab {suggestion.price}</div>
-    </Flexbar>
+    {suggestion.type === "product" ? (
+      <Flexbar>
+        <div className="name">{`${suggestion.title} (${
+          suggestion.variations
+        } Variante${suggestion.variations > 1 ? "n" : ""})`}</div>
+        <div className="price">ab {suggestion.price}</div>
+      </Flexbar>
+    ) : (
+      <Flexbar>
+        <div className="name">{`${suggestion.title} (${
+          suggestion.count
+        } Produkt${suggestion.count > 1 ? "e" : ""})`}</div>
+        <div className="price" />
+      </Flexbar>
+    )}
   </Suggestion>
 );
 
@@ -169,8 +181,11 @@ class Searchbar extends React.PureComponent {
    * Called when the suggestions should be fetched
    * @returns {void}
    */
-  onSuggestionsFetchRequested = ({ value }) =>
-    this.props.dispatch(search(value));
+  onSuggestionsFetchRequested = debounce(
+    ({ value }) =>
+      value.trim() !== "" && this.props.dispatch(search(true, value)),
+    300
+  );
   /**
    * Called when all suggestions should be cleared
    * @returns {void}
@@ -206,10 +221,7 @@ class Searchbar extends React.PureComponent {
       <StyledSearch>
         <Autosuggest
           suggestions={sections}
-          onSuggestionsFetchRequested={debouce(
-            this.onSuggestionsFetchRequested,
-            300
-          )}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           onSuggestionSelected={this.onSuggestionSelected}
           shouldRenderSuggestions={this.shouldRenderSuggestions}
@@ -222,6 +234,7 @@ class Searchbar extends React.PureComponent {
           multiSection={true}
           renderSectionTitle={renderSectionTitle}
           getSectionSuggestions={getSectionSuggestions}
+          alwaysRenderSuggestions={true}
         />
       </StyledSearch>
     );

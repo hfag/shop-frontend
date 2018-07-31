@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled, { keyframes } from "styled-components";
-import { colors } from "utilities/style";
+
+import { colors, borders } from "../utilities/style";
 
 const pulse = keyframes`
 	0%{
@@ -17,6 +18,7 @@ const pulse = keyframes`
 
 const Placeholder = styled.div`
   background-color: ${({ error }) => (error ? colors.danger : colors.font)};
+  border-radius: ${borders.radius};
 
   padding-top: ${({ block }) => (block ? "100%" : "0")};
   height: ${({ height, text }) =>

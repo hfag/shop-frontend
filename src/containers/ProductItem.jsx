@@ -3,20 +3,22 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
-import Thumbnail from "containers/Thumbnail";
-import Placeholder from "components/Placeholder";
-import Link from "components/Link";
-import { colors, shadows } from "utilities/style";
-import { fetchProduct } from "actions/product";
+
+import Thumbnail from "../containers/Thumbnail";
+import Placeholder from "../components/Placeholder";
+import Link from "../components/Link";
+import { colors, borders, shadows } from "../utilities/style";
+import { fetchProduct } from "../actions/product";
 import {
   getProductCategories,
   getProductBySlug,
   getProductById
-} from "reducers";
+} from "../reducers";
 
 const StyledProduct = styled.div`
   background-color: #fff;
   box-shadow: ${shadows.y};
+  border-radius: ${borders.radius};
 
   /*display: flex; See https://bugzilla.mozilla.org/show_bug.cgi?id=958714*/
   flex-direction: column;

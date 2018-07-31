@@ -2,9 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { fetchAttachment } from "actions/attachments";
-import { getAttachmentById } from "reducers";
-import Placeholder from "components/Placeholder";
+
+import { fetchAttachment } from "../actions/attachments";
+import { getAttachmentById } from "../reducers";
+import Placeholder from "../components/Placeholder";
+import { borders } from "../utilities/style";
 
 const StyledThumbail = styled.div`
   img {
@@ -14,7 +16,8 @@ const StyledThumbail = styled.div`
         : "height: 100%; width: auto;"};
 
     /*max-height: 100%;
-		max-width: 100%;*/
+    max-width: 100%;*/
+    border-radius: ${borders.radius};
   }
 `;
 

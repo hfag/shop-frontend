@@ -3,16 +3,18 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
-import Thumbnail from "containers/Thumbnail";
-import Placeholder from "components/Placeholder";
-import Link from "components/Link";
-import { colors, shadows } from "utilities/style";
-import { fetchProductCategory } from "actions/product/categories";
-import { getProductCategoryById } from "reducers";
+
+import Thumbnail from "../containers/Thumbnail";
+import Placeholder from "../components/Placeholder";
+import Link from "../components/Link";
+import { fetchProductCategory } from "../actions/product/categories";
+import { getProductCategoryById } from "../reducers";
+import { colors, borders, shadows } from "../utilities/style";
 
 const StyledCategory = styled.div`
   background-color: #fff;
   box-shadow: ${shadows.y};
+  border-radius: ${borders.radius};
 
   /*display: flex; See https://bugzilla.mozilla.org/show_bug.cgi?id=958714*/
   flex-direction: column;
@@ -98,16 +100,12 @@ class CategoryItem extends React.PureComponent {
           <StyledCategory>
             <Thumbnail id={category ? category.thumbnailId : -1} />
             <div>
-              {category ? <Title>{category.name}</Title> : <Placeholder text />}
               {category ? (
-                parent ? (
-                  <Subtitle>{parent.name}</Subtitle>
-                ) : (
-                  ""
-                )
+                <Title>{category.name}</Title>
               ) : (
-                <Placeholder text />
+                <Placeholder text height={2} />
               )}
+              {category && parent ? <Subtitle>{parent.name}</Subtitle> : ""}
             </div>
           </StyledCategory>
         </Link>

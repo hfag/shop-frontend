@@ -19,7 +19,8 @@ const InputFieldWrapper = styled.div`
     display: block;
     margin-bottom: 0.5rem;
   }
-  input {
+  input,
+  textarea {
     border-radius: ${borders.inputRadius};
     border: ${colors.secondary} 1px solid;
   }

@@ -71,10 +71,11 @@ class ProductCategories extends React.PureComponent {
       return;
     }
 
-    // TODO: pls no
-    if (!window.loaded) {
-      fetchAllProductCategories();
-      window.loaded = true;
+    if ((!categoryIds || categoryIds.length === 0) && !this.loading) {
+      fetchAllProductCategories().then(() => {
+        this.loading = false;
+      });
+      this.loading = true;
     }
 
     fetchProducts();

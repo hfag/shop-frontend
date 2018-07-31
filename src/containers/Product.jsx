@@ -13,7 +13,7 @@ import Price from "../components/Price";
 import Link from "../components/Link";
 import Select from "../components/Select";
 import VariationSlider from "../components/VariationSlider";
-import { colors } from "../utilities/style";
+import { colors, borders } from "../utilities/style";
 import { fetchProductCategories } from "../actions/product/categories";
 import { fetchProduct } from "../actions/product";
 import { addShoppingCartItem } from "../actions/shopping-cart";
@@ -33,6 +33,7 @@ const Counter = styled.input`
   background-color: transparent;
   border: ${colors.secondary} 1px solid;
   padding: 0.25rem 0.5rem;
+  border-radius: ${borders.inputRadius};
 `;
 
 const DiscountTable = styled(Table)`

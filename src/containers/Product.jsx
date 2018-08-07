@@ -427,6 +427,7 @@ class Product extends React.PureComponent {
                     onClick={() =>
                       addToShoppingCart(
                         selectedVariation.id,
+                        /* get labels */
                         Object.keys(selectedAttributes).reduce(
                           (object, attributeKey) => {
                             object[

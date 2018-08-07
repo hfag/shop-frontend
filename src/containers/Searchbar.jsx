@@ -10,6 +10,7 @@ import Link from "../components/Link";
 import { colors, shadows } from "../utilities/style";
 import { search, reset } from "../actions/product-search";
 import { getProductSearchSections } from "../reducers";
+import Price from "../components/Price";
 
 const StyledSearch = styled.div`
   position: relative;
@@ -106,7 +107,9 @@ const renderSuggestion = suggestion => (
         <div className="name">{`${suggestion.title} (${
           suggestion.variations
         } Variante${suggestion.variations > 1 ? "n" : ""})`}</div>
-        <div className="price">ab {suggestion.price}</div>
+        <div className="price">
+          ab <Price>{suggestion.price}</Price>
+        </div>
       </Flexbar>
     ) : (
       <Flexbar>
@@ -234,7 +237,6 @@ class Searchbar extends React.PureComponent {
           multiSection={true}
           renderSectionTitle={renderSectionTitle}
           getSectionSuggestions={getSectionSuggestions}
-          alwaysRenderSuggestions={true}
         />
       </StyledSearch>
     );

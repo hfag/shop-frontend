@@ -33,3 +33,19 @@ export default accountReducer;
  * @returns {Object} All countries
  */
 export const getAccount = state => state.account;
+
+/**
+ * Gets the reseller discount for a product
+ * @param {Object} state The redux state
+ * @param {number} productId The product id
+ * @returns {number|boolean} The discount in percent
+ */
+export const getResellerDiscountByProductId = (state, productId) =>
+  state.account.discount[productId] || false;
+
+/**
+ * Gets the reseller discount for the current user
+ * @param {Object} state The redux state
+ * @returns {number|boolean} The discount
+ */
+export const getResellerDiscount = state => state.account.discount || false;

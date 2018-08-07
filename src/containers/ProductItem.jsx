@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
+import FaPercent from "react-icons/lib/fa/percent";
 
 import Thumbnail from "../containers/Thumbnail";
 import Placeholder from "../components/Placeholder";
@@ -12,8 +13,10 @@ import { fetchProduct } from "../actions/product";
 import {
   getProductCategories,
   getProductBySlug,
-  getProductById
+  getProductById,
+  getResellerDiscountByProductId
 } from "../reducers";
+import RelativeBox from "../components/RelativeBox";
 
 const StyledProduct = styled.div`
   background-color: #fff;
@@ -69,6 +72,24 @@ const Subtitle = styled.div`
   font-size: 0.8rem;
 `;
 
+const Discount = styled.div`
+  position: absolute !important;
+  top: -0.5rem;
+  right: 0rem;
+  width: 2rem;
+  height: 2rem;
+
+  padding: 0.25rem;
+  text-align: center;
+  line-height: 1.25rem;
+
+  background-color: #fff;
+  box-shadow: ${shadows.y};
+  border-radius: ${borders.radius};
+
+  z-index: 2;
+`;
+
 /**
  * Renders a single product item
  * @returns {Component} The component
@@ -83,10 +104,24 @@ class ProductItem extends React.PureComponent {
   };
 
   render = () => {
-    const { id: productId, product, categories, parents = [] } = this.props;
+    const {
+      id: productId,
+      product,
+      categories,
+      parents = [],
+      resellerDiscount
+    } = this.props;
 
     return (
-      <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
+      <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
+        {resellerDiscount && (
+          <Discount
+            data-balloon={`${resellerDiscount}% Rabatt für Wiederverkäufer`}
+            data-balloon-pos="up"
+          >
+            <FaPercent />
+          </Discount>
+        )}
         <Link to={"/produkt/" + product.slug}>
           <StyledProduct>
             <Thumbnail id={product ? product.thumbnailId : -1} />
@@ -106,7 +141,7 @@ class ProductItem extends React.PureComponent {
             </div>
           </StyledProduct>
         </Link>
-      </Box>
+      </RelativeBox>
     );
   };
 }
@@ -124,7 +159,8 @@ const mapStateToProps = (state, { id }) => {
         product,
         categories: getProductCategories(state).filter(category =>
           product.categoryIds.includes(category.id)
-        )
+        ),
+        resellerDiscount: getResellerDiscountByProductId(state, id)
       }
     : {};
 };

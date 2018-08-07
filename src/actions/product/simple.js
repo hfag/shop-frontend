@@ -10,7 +10,7 @@ const mapSimpleProduct = ({
   variationId,
   sku,
   name,
-  discount: { bulk, reseller },
+  discount: { bulk },
   price,
   meta
 }) => ({
@@ -18,7 +18,7 @@ const mapSimpleProduct = ({
   variationId,
   sku,
   name,
-  discount: { bulk, reseller },
+  discount: { bulk },
   price: parseFloat(price),
   meta
 });

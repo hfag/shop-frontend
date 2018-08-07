@@ -12,7 +12,7 @@ import {
   fetchSimpleProducts,
   clearSimpleProducts
 } from "../../actions/product/simple";
-import { getSimpleProducts } from "../../reducers";
+import { getSimpleProducts, getResellerDiscount } from "../../reducers";
 import { colors } from "../../utilities/style";
 import Price from "../../components/Price";
 
@@ -316,9 +316,25 @@ class AccountResellerDashboard extends React.PureComponent {
   };
 }
 
-const mapStateToProps = state => ({
-  products: getSimpleProducts(state)
-});
+const mapStateToProps = state => {
+  const products = getSimpleProducts(state),
+    resellerDiscount = getResellerDiscount(state);
+
+  return {
+    products: products.map(
+      product =>
+        resellerDiscount[product.id]
+          ? {
+              ...product,
+              discount: {
+                ...product.discount,
+                reseller: resellerDiscount[product.id]
+              }
+            }
+          : product
+    )
+  };
+};
 const mapDispatchToProps = dispatch => ({
   dispatch,
   /**

@@ -13,7 +13,8 @@ export const mapUser = ({
   role,
   billing,
   shipping,
-  created
+  created,
+  discount
 }) => ({
   firstName,
   lastName,
@@ -21,7 +22,11 @@ export const mapUser = ({
   role,
   billing,
   shipping,
-  created
+  created,
+  discount: Object.keys(discount).reduce((object, key) => {
+    object[parseInt(key)] = parseInt(discount[key]);
+    return object;
+  }, {})
 });
 /**
  * Updates a user's account details

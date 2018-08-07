@@ -281,6 +281,27 @@ export const getCountries = wrap(
 export const getAccount = wrap(fromAccount.getAccount, state => state.account);
 
 /**
+ * Gets the reseller discount for a product
+ * @param {Object} state The redux state
+ * @param {number} productId The product id
+ * @returns {number|boolean} The discount in percent
+ */
+export const getResellerDiscountByProductId = wrap(
+  fromAccount.getResellerDiscountByProductId,
+  state => state.account
+);
+
+/**
+ * Gets the reseller discount for the current user
+ * @param {Object} state The redux state
+ * @returns {number|boolean} The discount
+ */
+export const getResellerDiscount = wrap(
+  fromAccount.getResellerDiscount,
+  state => state.account
+);
+
+/**
  * Checks if the user is authenticated
  * @param {Object} state The redux state
  * @returns {boolean} Whether the user is authenticated

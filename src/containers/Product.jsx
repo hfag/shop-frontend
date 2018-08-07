@@ -20,7 +20,8 @@ import { addShoppingCartItem } from "../actions/shopping-cart";
 import {
   getProductCategories,
   getProductBySlug,
-  getProductAttributesBySlug
+  getProductAttributesBySlug,
+  getResellerDiscountByProductId
 } from "../reducers";
 import Bill from "../components/Bill";
 
@@ -474,7 +475,8 @@ const mapStateToProps = (
             product.categoryIds.includes(category.id)
           )
         : [],
-    attributes: getProductAttributesBySlug(state)
+    attributes: getProductAttributesBySlug(state),
+    resellerDiscount: getResellerDiscountByProductId(state, product.id)
   };
 };
 

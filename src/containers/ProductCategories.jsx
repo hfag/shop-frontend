@@ -181,7 +181,7 @@ const mapStateToProps = (
     productIds: category
       ? getProducts(state)
           .filter(product => product.categoryIds.includes(category.id))
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .sort((a, b) => b.order - a.order)
           .map(product => product.id)
           .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
       : [],

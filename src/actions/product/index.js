@@ -18,9 +18,10 @@ const itemName = "product";
 /**
  * Maps the received object properties to the ones that should be stored in the state
  * @param {Object} data The item to map
+ * @param {number} index The item index
  * @returns {Object} The mapped item
  */
-const mapItem = data => {
+const mapItem = (data, index) => {
   const {
     id,
     slug,
@@ -44,6 +45,7 @@ const mapItem = data => {
     thumbnailId,
     categoryIds,
     date,
+    order: index,
     discount: {
       bulk: discount.bulk_discount,
       reseller: discount.reseller_discount
@@ -212,8 +214,8 @@ export const fetchProducts = createFetchItemPageThunk(
     perPage,
     itemIds = [],
     categoryIds = [],
-    order = "desc",
-    orderby = "date"
+    order = "asc",
+    orderby = "menu_order"
   ) =>
     `/wp-json/wp/v2/product?page=${page}&per_page=${perPage}${
       itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""

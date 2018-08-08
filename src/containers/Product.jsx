@@ -476,7 +476,10 @@ const mapStateToProps = (
           )
         : [],
     attributes: getProductAttributesBySlug(state),
-    resellerDiscount: getResellerDiscountByProductId(state, product.id)
+    resellerDiscount: getResellerDiscountByProductId(
+      state,
+      (product && product.id) || 0
+    )
   };
 };
 

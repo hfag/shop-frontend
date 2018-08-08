@@ -21,7 +21,7 @@ const itemName = "product";
  * @param {number} index The item index
  * @returns {Object} The mapped item
  */
-const mapItem = (data, index) => {
+export const mapItem = (data, index) => {
   const {
     id,
     slug,
@@ -187,7 +187,7 @@ export const fetchAllProducts = createFetchAllItemsThunk(
  * @param {string} orderby What the items should by ordered by
  * @return {object} The redux action
  */
-const fetchItemsAction = createFetchItemsAction(
+export const fetchItemsAction = createFetchItemsAction(
   itemName,
   "itemIds",
   "categoryIds",

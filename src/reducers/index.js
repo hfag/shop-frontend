@@ -10,6 +10,7 @@ import simpleProduct, * as fromSimpleProduct from "./product-simple";
 import attachment, * as fromAttachment from "./attachment";
 import shoppingCart, * as fromShoppingCart from "./shopping-cart";
 import countries, * as fromCountries from "./countries";
+import sales, * as fromSales from "./sales";
 import account, * as fromAccount from "./account";
 import orders, * as fromOrders from "./orders";
 
@@ -274,6 +275,13 @@ export const getCountries = wrap(
 );
 
 /**
+ * Gets all sales
+ * @param {Object} state The redux state
+ * @returns {Object} All sales
+ */
+export const getSales = wrap(fromSales.getSales, state => state.sales);
+
+/**
  * Gets the user account
  * @param {Object} state The redux state
  * @returns {Object} The user account
@@ -325,6 +333,7 @@ const appReducer = combineReducers({
   simpleProduct,
   attachment,
   countries,
+  sales,
   account,
   orders,
   isAuthenticated: (state = false, action) =>

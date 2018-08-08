@@ -21,7 +21,8 @@ export const borders = {
 };
 
 export const shadows = {
-  y: "0px 2px 2px 0px rgba(0, 0, 0, 0.05)"
+  y: "0px 2px 2px 0px rgba(0, 0, 0, 0.05)",
+  highlight: "0px 0px 4px 1px rgba(44, 62, 80, 0.2)"
 };
 
 export const media = {

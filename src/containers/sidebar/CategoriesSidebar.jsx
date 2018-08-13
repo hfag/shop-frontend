@@ -15,6 +15,7 @@ import Placeholder from "../../components/Placeholder";
 import Link from "../../components/Link";
 import { fetchProductCategories } from "../../actions/product/categories";
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
+import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
 
 const ITEMS_PER_PAGE = 30;
 
@@ -145,9 +146,7 @@ class CategoriesSidebar extends React.PureComponent {
                   />
                 ))}
               </ul>
-            ) : (
-              <p>Keine weiteren Unterkategorien gefunden</p>
-            )}
+            ) : null /*<p>Keine weiteren Unterkategorien gefunden</p>*/}
           </div>
         )}
         <Route

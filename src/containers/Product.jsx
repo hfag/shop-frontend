@@ -201,6 +201,7 @@ class Product extends React.PureComponent {
       addToShoppingCart,
       resellerDiscount
     } = this.props;
+
     const {
       selectedAttributes,
       possibleAttributeValues,
@@ -262,12 +263,13 @@ class Product extends React.PureComponent {
     return (
       <Card>
         <h1>{title}</h1>
-        <Flex>
-          <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
-            <Thumbnail id={thumbnailId} />
-          </Box>
-        </Flex>
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+        {variations.length <= 1 && (
+          <Flex>
+            <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
+              <Thumbnail id={thumbnailId} />
+            </Box>
+          </Flex>
+        )}
 
         {variations.length > 1 && (
           <div>
@@ -320,7 +322,8 @@ class Product extends React.PureComponent {
                     {
                       selectedAttributes: this.getDefaultAttributes(
                         product.variations
-                      )
+                      ),
+                      quantity: 1
                     },
                     resolve
                   );
@@ -332,8 +335,105 @@ class Product extends React.PureComponent {
           </Box>
         </Flex>
         <Flex flexWrap="wrap">
+          {resellerDiscount === false ? (
+            discount.bulk &&
+            selectedVariation &&
+            discount.bulk[selectedVariation.id] &&
+            discount.bulk[selectedVariation.id].length > 0 && (
+              <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+                <h4>Mengenrabatt</h4>
+                <DiscountTable>
+                  <thead>
+                    <tr>
+                      <th>Anzahl (ab)</th>
+                      <th>Stückpreis</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {discount.bulk[selectedVariation.id].map(
+                      ({ qty, ppu }, index) => (
+                        <DiscountRow
+                          onClick={() => this.setState({ quantity: qty })}
+                          selected={qty === discountRow.qty}
+                          key={index}
+                        >
+                          <td>{qty}</td>
+                          <td>
+                            <Price>{parseFloat(ppu)}</Price>
+                          </td>
+                        </DiscountRow>
+                      )
+                    )}
+                  </tbody>
+                </DiscountTable>
+              </Box>
+            )
+          ) : (
+            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+              <h4>Wiederverkäuferrabatt</h4>
+              Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf
+              dieses Produkt.
+            </Box>
+          )}
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-            <h4>Zusammenfassung</h4>
+            {selectedVariation ? (
+              <div>
+                <h4>Preis</h4>
+                <Bill
+                  items={[
+                    {
+                      price,
+                      quantity,
+                      discountPrice: resellerDiscount
+                        ? (resellerDiscount / 100) * price
+                        : discountRow.qty > 1
+                          ? parseFloat(discountRow.ppu)
+                          : undefined
+                    }
+                  ]}
+                />
+                <Button
+                  disabled={
+                    !selectedVariation || isNaN(quantity) || quantity <= 0
+                  }
+                  onClick={() =>
+                    addToShoppingCart(
+                      selectedVariation.id,
+                      /* get labels */
+                      Object.keys(selectedAttributes).reduce(
+                        (object, attributeKey) => {
+                          object[
+                            this.getAttributeLabel(attributeKey)
+                          ] = this.getOptionLabel(
+                            attributeKey,
+                            selectedAttributes[attributeKey]
+                          );
+                          return object;
+                        },
+                        {}
+                      ),
+                      quantity
+                    )
+                  }
+                >
+                  Zum Warenkorb hinzufügen
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <h4>Preis</h4>
+                <p>Wähle zuerst eine Variante aus!</p>
+                <Button state="disabled">Zum Warenkorb hinzufügen</Button>
+              </div>
+            )}
+          </Box>
+        </Flex>
+        <Flex flexWrap="wrap">
+          <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          </Box>
+          <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
+            <h4>Spezifikationen</h4>
             <StyledTable>
               <tbody>
                 <tr>
@@ -374,85 +474,6 @@ class Product extends React.PureComponent {
               </tbody>
             </StyledTable>
           </Box>
-          {resellerDiscount === 0 &&
-            discount.bulk &&
-            selectedVariation &&
-            discount.bulk[selectedVariation.id] &&
-            discount.bulk[selectedVariation.id].length > 0 && (
-              <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-                <h4>Mengenrabatt</h4>
-                <DiscountTable>
-                  <thead>
-                    <tr>
-                      <th>Anzahl (ab)</th>
-                      <th>Stückpreis</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {discount.bulk[selectedVariation.id].map(
-                      ({ qty, ppu }, index) => (
-                        <DiscountRow
-                          onClick={() => this.setState({ quantity: qty })}
-                          selected={qty === discountRow.qty}
-                          key={index}
-                        >
-                          <td>{qty}</td>
-                          <td>
-                            <Price>{ppu}</Price>
-                          </td>
-                        </DiscountRow>
-                      )
-                    )}
-                  </tbody>
-                </DiscountTable>
-              </Box>
-            )}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-            {selectedVariation ? (
-              <div>
-                <h4>Preis</h4>
-                <Bill
-                  items={[
-                    {
-                      price,
-                      quantity,
-                      discountPrice: resellerDiscount
-                        ? (resellerDiscount / 100) * price
-                        : discountRow.qty > 1
-                          ? discountRow.ppu
-                          : undefined
-                    }
-                  ]}
-                />
-                <Button
-                  disabled={
-                    !selectedVariation || isNaN(quantity) || quantity <= 0
-                  }
-                  onClick={() =>
-                    addToShoppingCart(
-                      selectedVariation.id,
-                      /* get labels */
-                      Object.keys(selectedAttributes).reduce(
-                        (object, attributeKey) => {
-                          object[
-                            this.getAttributeLabel(attributeKey)
-                          ] = this.getOptionLabel(
-                            attributeKey,
-                            selectedAttributes[attributeKey]
-                          );
-                          return object;
-                        },
-                        {}
-                      ),
-                      quantity
-                    )
-                  }
-                >
-                  Zum Warenkorb hinzufügen
-                </Button>
-              </div>
-            ) : null /*"Wähle zuerst eine Variante aus"*/}
-          </Box>
         </Flex>
       </Card>
     );
@@ -480,7 +501,7 @@ const mapStateToProps = (
     attributes: getProductAttributesBySlug(state),
     resellerDiscount: getResellerDiscountByProductId(
       state,
-      (product && product.id) || 0
+      product && product.id
     )
   };
 };

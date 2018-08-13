@@ -84,7 +84,9 @@ Link.propTypes = {
   block: PropTypes.bool,
   negative: PropTypes.bool,
   href: PropTypes.string,
-  target: PropTypes.string
+  target: PropTypes.string,
+  rel: PropTypes.string,
+  title: PropTypes.string
 };
 
 const ConnectedLink = connect()(Link);

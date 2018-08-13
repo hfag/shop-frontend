@@ -87,6 +87,7 @@ class Thumbnail extends React.PureComponent {
         {thumbnail &&
           thumbnailUrl && (
             <img
+              alt={thumbnail.caption}
               className={
                 thumbnail.width < thumbnail.height ? "b-height" : "b-width"
               }

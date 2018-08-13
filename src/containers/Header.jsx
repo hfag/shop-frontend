@@ -127,8 +127,8 @@ class Header extends React.PureComponent {
               <FullHeightBox width={[0, 0, 0, 1 / 6]} pl={3} pr={2}>
                 <NavItem>
                   <MediaQuery lg up>
-                    <Link to="/">
-                      <img src={LogoNegative} />
+                    <Link to="/" title="Homepage">
+                      <img src={LogoNegative} alt="Logo" />
                     </Link>
                   </MediaQuery>
                 </NavItem>
@@ -136,13 +136,13 @@ class Header extends React.PureComponent {
               <FullHeightBox width={[1, 1, 5 / 6, 5 / 6]} pl={2}>
                 <Container>
                   <Flexbar>
-                    <Link to="/">
+                    <Link to="/" title="Homepage">
                       <NavItem>
                         <MediaQuery lg up>
-                          <img src={NameSloganNegative} />
+                          <img src={NameSloganNegative} alt="Slogan" />
                         </MediaQuery>
                         <MediaQuery lg down>
-                          <img src={LogoNegative} />
+                          <img src={LogoNegative} alt="Logo" />
                         </MediaQuery>
                       </NavItem>
                     </Link>

@@ -78,7 +78,7 @@ class Footer extends React.PureComponent {
           <Flex flexWrap="wrap">
             <Box width={[1, 1, 1 / 3, 1 / 3]} px={3}>
               <p>
-                <img className="logo" src={LogoNegative} />
+                <img className="logo" src={LogoNegative} alt="Logo" />
               </p>
               Hauser Feuerschutz AG
               <br />
@@ -97,6 +97,7 @@ class Footer extends React.PureComponent {
                       <Link
                         target="_blank"
                         href="https://www.google.ch/maps/place/Sonnmattweg+6,+5000+Aarau/@47.3971534,8.0412625,17z/data=!3m1!4b1!4m5!3m4!1s0x47903be72641ef39:0x35e802ea186c4a2d!8m2!3d47.3971534!4d8.0434512"
+                        rel="noopener"
                         negative
                       >
                         Sonnmattweg 6<br />CH 5000 Aarau

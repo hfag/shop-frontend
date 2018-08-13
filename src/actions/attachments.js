@@ -19,11 +19,12 @@ export const mapItem = ({
   caption,
   mime_type: mimeType,
   media_details: { width, height, sizes },
-  source_url: url
+  source_url: url,
+  caption: { rendered: renderedCaption }
 }) => ({
   id,
   date,
-  caption,
+  caption: renderedCaption,
   mimeType,
   width,
   height,

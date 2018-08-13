@@ -78,7 +78,7 @@ module.exports = {
               ],
               plugins: [
                 "@babel/plugin-proposal-object-rest-spread",
-                "transform-class-properties",
+                "@babel/plugin-proposal-class-properties",
                 "babel-plugin-styled-components",
                 "react-hot-loader/babel"
               ]

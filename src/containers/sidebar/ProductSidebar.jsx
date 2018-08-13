@@ -46,7 +46,7 @@ class ProductSidebar extends React.PureComponent {
               <div>{category.name}</div>
             </SidebarBreadcrumb>
           </Link>,
-          <hr />
+          <hr key="0" />
         ])}
 
         <SidebarBreadcrumb active={true}>

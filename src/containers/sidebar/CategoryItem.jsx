@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import Thumbnail from "../../containers/Thumbnail";
 import Placeholder from "../../components/Placeholder";
 import Link from "../../components/Link";
 import { getProductCategoryById } from "../../reducers";

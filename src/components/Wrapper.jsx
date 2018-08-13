@@ -8,7 +8,8 @@ import Header from "../containers/Header";
 import Breadcrumbs from "../containers/Breadcrumbs";
 import Footer from "../components/Footer";
 import Container from "./Container";
-import CategoriesSidebar from "../containers/CategoriesSidebar";
+import CategoriesSidebar from "../containers/sidebar/CategoriesSidebar";
+import ProductSidebar from "../containers/sidebar/ProductSidebar";
 import Card from "./Card";
 import MediaQuery from "./MediaQuery";
 
@@ -46,6 +47,10 @@ class Wrapper extends React.Component {
                     <Card>
                       <Switch>
                         <Route path="/produkte" component={CategoriesSidebar} />
+                        <Route
+                          path="/produkt/:productSlug"
+                          component={ProductSidebar}
+                        />
                         <Route path="/" component={CategoriesSidebar} />
                       </Switch>
                     </Card>

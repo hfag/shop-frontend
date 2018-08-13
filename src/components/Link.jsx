@@ -39,7 +39,9 @@ class Link extends React.PureComponent {
       negative,
       flex,
       target,
-      href
+      href,
+      rel,
+      title
     } = this.props;
 
     const LinkComponent = styled ? StyledLink : UnstyledLink;
@@ -63,6 +65,14 @@ class Link extends React.PureComponent {
 
     if (target) {
       props.target = target;
+    }
+
+    if (rel) {
+      props.rel = rel;
+    }
+
+    if (title) {
+      props.title = title;
     }
 
     return (

@@ -48,10 +48,6 @@ const SearchWrapper = styled.div`
   margin-right: 1rem;
 `;
 
-const SloganWrapper = styled.div`
-  height: 100%;
-`;
-
 const HeaderWrapper = styled.div`
   margin-top: 5rem;
 `;
@@ -93,6 +89,11 @@ const ShoppingCartList = styled.div`
   }
 `;
 
+const FullHeightBox = styled(Box)`
+  height: 100%;
+  position: relative;
+`;
+
 /**
  * The page header
  * @returns {Component} The component
@@ -122,130 +123,141 @@ class Header extends React.PureComponent {
         <BurgerMenu />
         <header>
           <Navbar>
-            <Container>
-              <Flexbar>
-                <Link to="/">
-                  <Flexbar>
-                    <NavItem>
+            <Flex>
+              <FullHeightBox width={[0, 0, 0, 1 / 6]} pl={3} pr={2}>
+                <NavItem>
+                  <MediaQuery lg up>
+                    <Link to="/">
                       <img src={LogoNegative} />
-                    </NavItem>
-                    <MediaQuery lg up>
-                      <SloganWrapper>
-                        <NavItem>
-                          <img src={NameSloganNegative} />
-                        </NavItem>
-                      </SloganWrapper>
-                    </MediaQuery>
-                  </Flexbar>
-                </Link>
-                <SearchWrapper>
-                  <MediaQuery md up>
-                    <Searchbar />
+                    </Link>
                   </MediaQuery>
-                </SearchWrapper>
-                <Push left>
-                  <MediaQuery md down>
-                    <NavItem>
-                      <Link onClick={toggleBurgerMenu} negative>
-                        <MenuIcon size="40" />
-                      </Link>
-                    </NavItem>
-                  </MediaQuery>
-                  <MediaQuery md up>
-                    <Flexbar>
-                      <NavItem seperator>
-                        <Link
-                          onClick={() => {
-                            this.setState({
-                              showShoppingCartDropdown: !this.state
-                                .showShoppingCartDropdown
-                            });
-                          }}
-                          negative
-                          flex
-                        >
-                          <CartIcon size="35" />
-                          <Counter>
-                            <Circle
-                              negative
-                              filled
-                              width="1.75rem"
-                              height="1.75rem"
-                              padding="0"
-                              centerChildren
-                            >
-                              <small>
-                                {shoppingCartFetching
-                                  ? ""
-                                  : shoppingCartItems.reduce(
-                                      (sum, item) => sum + item.quantity,
-                                      0
-                                    )}
-                              </small>
-                            </Circle>
-                          </Counter>
-                          <Triangle color="#fff" size="0.5rem" />
-                        </Link>
-                        {this.state.showShoppingCartDropdown && (
-                          <Dropdown>
-                            {shoppingCartItems.length > 0 ? (
-                              shoppingCartItems.map((item, index) => (
-                                <ShoppingCartList key={index}>
-                                  <div>
-                                    <Thumbnail
-                                      id={item.thumbnailId}
-                                      size="search-thumbnail"
-                                    />
-                                  </div>
-                                  <div>
-                                    <strong>{item.quantity}x</strong>{" "}
-                                    {item.title}
-                                  </div>
-                                </ShoppingCartList>
-                              ))
-                            ) : (
-                              <div>
-                                Es befinden sich bisher noch keine Produkte im
-                                Warenkorb.
-                              </div>
-                            )}
-                            <Button
-                              fullWidth
-                              onClick={() =>
-                                new Promise((resolve, reject) => {
-                                  redirect("/warenkorb");
-                                  this.setState(
-                                    { showShoppingCartDropdown: false },
-                                    resolve
-                                  );
-                                })
-                              }
-                            >
-                              Zum Warenkorb
-                            </Button>
-                          </Dropdown>
-                        )}
-                      </NavItem>
+                </NavItem>
+              </FullHeightBox>
+              <FullHeightBox width={[1, 1, 5 / 6, 5 / 6]} pl={2}>
+                <Container>
+                  <Flexbar>
+                    <Link to="/">
                       <NavItem>
-                        {isAuthenticated ? (
-                          <Link to="/konto" negative flex>
-                            <Circle negative padding="0.35rem">
-                              <AccountIcon size="30" />
-                            </Circle>
-                          </Link>
-                        ) : (
-                          <Link to="/login" negative flex>
-                            <Circle negative padding="0.35rem">
-                              <SignInIcon size="30" />
-                            </Circle>
-                          </Link>
-                        )}
+                        <MediaQuery lg up>
+                          <img src={NameSloganNegative} />
+                        </MediaQuery>
+                        <MediaQuery lg down>
+                          <img src={LogoNegative} />
+                        </MediaQuery>
                       </NavItem>
-                    </Flexbar>
-                  </MediaQuery>
-                </Push>
-              </Flexbar>
-            </Container>
+                    </Link>
+                    <SearchWrapper>
+                      <MediaQuery md up>
+                        <Searchbar />
+                      </MediaQuery>
+                    </SearchWrapper>
+                    <Push left>
+                      <MediaQuery md down>
+                        <NavItem>
+                          <Link onClick={toggleBurgerMenu} negative>
+                            <MenuIcon size="40" />
+                          </Link>
+                        </NavItem>
+                      </MediaQuery>
+                      <MediaQuery md up>
+                        <Flexbar>
+                          <NavItem seperator>
+                            <Link
+                              onClick={() => {
+                                this.setState({
+                                  showShoppingCartDropdown: !this.state
+                                    .showShoppingCartDropdown
+                                });
+                              }}
+                              negative
+                              flex
+                            >
+                              <CartIcon size="35" />
+                              <Counter>
+                                <Circle
+                                  negative
+                                  filled
+                                  width="1.75rem"
+                                  height="1.75rem"
+                                  padding="0"
+                                  centerChildren
+                                >
+                                  <small>
+                                    {shoppingCartFetching
+                                      ? ""
+                                      : shoppingCartItems.reduce(
+                                          (sum, item) => sum + item.quantity,
+                                          0
+                                        )}
+                                  </small>
+                                </Circle>
+                              </Counter>
+                              <Triangle color="#fff" size="0.5rem" />
+                            </Link>
+                            {this.state.showShoppingCartDropdown && (
+                              <Dropdown>
+                                {shoppingCartItems.length > 0 ? (
+                                  shoppingCartItems.map((item, index) => (
+                                    <ShoppingCartList key={index}>
+                                      <div>
+                                        <Thumbnail
+                                          id={item.thumbnailId}
+                                          size="search-thumbnail"
+                                        />
+                                      </div>
+                                      <div>
+                                        <strong>{item.quantity}x</strong>{" "}
+                                        {item.title}
+                                      </div>
+                                    </ShoppingCartList>
+                                  ))
+                                ) : (
+                                  <div>
+                                    Es befinden sich bisher noch keine Produkte
+                                    im Warenkorb.
+                                    <br />
+                                    <br />
+                                  </div>
+                                )}
+                                <Button
+                                  fullWidth
+                                  onClick={() =>
+                                    new Promise((resolve, reject) => {
+                                      redirect("/warenkorb");
+                                      this.setState(
+                                        { showShoppingCartDropdown: false },
+                                        resolve
+                                      );
+                                    })
+                                  }
+                                >
+                                  Zum Warenkorb
+                                </Button>
+                              </Dropdown>
+                            )}
+                          </NavItem>
+                          <NavItem>
+                            {isAuthenticated ? (
+                              <Link to="/konto" negative flex>
+                                <Circle negative padding="0.35rem">
+                                  <AccountIcon size="30" />
+                                </Circle>
+                              </Link>
+                            ) : (
+                              <Link to="/login" negative flex>
+                                <Circle negative padding="0.35rem">
+                                  <SignInIcon size="30" />
+                                </Circle>
+                              </Link>
+                            )}
+                          </NavItem>
+                        </Flexbar>
+                      </MediaQuery>
+                    </Push>
+                  </Flexbar>
+                </Container>
+              </FullHeightBox>
+            </Flex>
           </Navbar>
         </header>
       </HeaderWrapper>

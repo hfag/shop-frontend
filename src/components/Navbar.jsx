@@ -14,6 +14,10 @@ const Navbar = styled.div`
   height: 5rem;
 
   z-index: 99;
+
+  & > * {
+    height: 100%;
+  }
 `;
 
 export default Navbar;

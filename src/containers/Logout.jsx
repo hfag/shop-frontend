@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 
 import { logout } from "../actions/authentication";
-import Container from "../components/Container";
 import Card from "../components/Card";
 /**
  * The login page
@@ -15,11 +14,7 @@ class Logout extends React.PureComponent {
   };
 
   render = () => {
-    return (
-      <Container>
-        <Card>Abmelden...</Card>
-      </Container>
-    );
+    return <Card>Abmelden...</Card>;
   };
 }
 

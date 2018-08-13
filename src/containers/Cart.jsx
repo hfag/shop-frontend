@@ -17,7 +17,6 @@ import {
   getCountries,
   getAccount
 } from "../reducers";
-import Container from "../components/Container";
 import CartForm from "../components/cart/CartForm";
 import CheckoutForm from "../components/cart/CheckoutForm";
 import Card from "../components/Card";
@@ -66,32 +65,30 @@ class Cart extends React.PureComponent {
     const subtotalSum = items.reduce((sum, item) => sum + item.subtotal, 0);
 
     return (
-      <Container>
-        <Card>
-          <h1>Warenkorb</h1>
-          <CartForm
-            items={items}
-            shipping={shipping}
-            fees={fees}
-            taxes={taxes}
-            subtotalSum={subtotalSum}
-            total={total}
-            updateShoppingCartItem={updateShoppingCartItem}
-            enabled={step === "cart"}
-            onProceed={() => this.setState({ step: "checkout" })}
+      <Card>
+        <h1>Warenkorb</h1>
+        <CartForm
+          items={items}
+          shipping={shipping}
+          fees={fees}
+          taxes={taxes}
+          subtotalSum={subtotalSum}
+          total={total}
+          updateShoppingCartItem={updateShoppingCartItem}
+          enabled={step === "cart"}
+          onProceed={() => this.setState({ step: "checkout" })}
+        />
+        {step === "checkout" && (
+          <CheckoutForm
+            values={checkoutValues}
+            setShowShipping={this.setShowShipping}
+            showShipping={showShipping}
+            submitOrder={submitOrder}
+            countries={countries}
+            dispatch={dispatch}
           />
-          {step === "checkout" && (
-            <CheckoutForm
-              values={checkoutValues}
-              setShowShipping={this.setShowShipping}
-              showShipping={showShipping}
-              submitOrder={submitOrder}
-              countries={countries}
-              dispatch={dispatch}
-            />
-          )}
-        </Card>
-      </Container>
+        )}
+      </Card>
     );
   };
 }

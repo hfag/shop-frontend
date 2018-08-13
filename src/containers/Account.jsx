@@ -39,7 +39,7 @@ const ProfileNavigation = styled.ul`
   }
 `;
 
-const AccountContainer = styled(Container)`
+const AccountContainer = styled.div`
   h1 {
     margin-top: 0;
   }

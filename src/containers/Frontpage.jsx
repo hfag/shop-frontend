@@ -8,7 +8,6 @@ import FaPercent from "react-icons/lib/fa/percent";
 import Link from "../components/Link";
 import { getSales, getProducts } from "../reducers";
 import { fetchSales } from "../actions/sales";
-import Container from "../components/Container";
 import Thumbnail from "./Thumbnail";
 import Price from "../components/Price";
 import { colors, shadows, borders } from "../utilities/style";
@@ -69,7 +68,7 @@ class Frontpage extends React.PureComponent {
     return (
       <div>
         {saleProducts.length > 0 && (
-          <Container>
+          <div>
             <h2>Sonderangebote</h2>
             <SalesFlex flexWrap="wrap">
               {saleProducts.map(product => (
@@ -120,7 +119,7 @@ class Frontpage extends React.PureComponent {
               ))}
             </SalesFlex>
             <hr />
-          </Container>
+          </div>
         )}
         <ProductCategories />
       </div>

@@ -1,7 +1,6 @@
 import React, { Props } from "react";
 import { withBreadcrumbs } from "react-router-breadcrumbs-hoc";
 import Link from "components/Link";
-import Container from "components/Container";
 import Card from "components/Card";
 import CategoryBreadcrumb from "containers/breadcrumbs/CategoryBreadcrumb";
 import ProductBreadcrumb from "containers/breadcrumbs/ProductBreadcrumb";
@@ -73,13 +72,11 @@ const routes = [
  * @returns {Component} The breadcrumbs
  */
 const Breadcrumbs = ({ breadcrumbs }) => (
-  <Container>
-    <Card>
-      {breadcrumbs.map(({ breadcrumb, path, match }, index) => (
-        <Keyer key={index}>{breadcrumb}</Keyer>
-      ))}
-    </Card>
-  </Container>
+  <Card>
+    {breadcrumbs.map(({ breadcrumb, path, match }, index) => (
+      <Keyer key={index}>{breadcrumb}</Keyer>
+    ))}
+  </Card>
 );
 
 export default withBreadcrumbs(routes)(Breadcrumbs);

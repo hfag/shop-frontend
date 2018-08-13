@@ -7,7 +7,6 @@ const NavItem = styled.div`
 
   height: 100%;
 
-  width: auto;
   margin-right: 0.75rem;
   padding-right: 0.8rem;
 

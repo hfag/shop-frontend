@@ -10,7 +10,6 @@ import {
 } from "reducers";
 
 import Flex from "../components/Flex";
-import Container from "../components/Container";
 import Pagination from "../components/Pagination";
 import CategoryItem from "../containers/CategoryItem";
 import ProductItem from "../containers/ProductItem";
@@ -112,7 +111,7 @@ class ProductCategories extends React.PureComponent {
     return (
       <div>
         {active && (
-          <Container>
+          <div>
             <Flex flexWrap="wrap">
               {categoryIds.map(categoryId => (
                 <CategoryItem
@@ -149,7 +148,7 @@ class ProductCategories extends React.PureComponent {
                 onPageChange={this.onPageChange}
               />
             )}
-          </Container>
+          </div>
         )}
         <Route
           path={`${urlWithoutPage}/:categorySlug/:page`}

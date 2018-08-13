@@ -14,6 +14,7 @@ const UnstyledLink = styled.a`
   text-decoration: none;
 
   font-weight: ${({ active }) => (active ? "bold" : "normal")};
+  display: ${({ block }) => (block ? "inline-block" : "inline")};
 
   color: ${({ negative }) =>
     negative ? colors.primaryContrast : colors.primary};
@@ -80,6 +81,7 @@ Link.propTypes = {
   to: PropTypes.string,
   onClick: PropTypes.func,
   styled: PropTypes.bool,
+  block: PropTypes.bool,
   negative: PropTypes.bool,
   href: PropTypes.string,
   target: PropTypes.string

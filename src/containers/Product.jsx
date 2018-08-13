@@ -8,7 +8,6 @@ import Thumbnail from "../containers/Thumbnail";
 import Card from "../components/Card";
 import Table from "../components/Table";
 import Button from "../components/Button";
-import Container from "../components/Container";
 import Price from "../components/Price";
 import Link from "../components/Link";
 import Select from "../components/Select";
@@ -260,199 +259,197 @@ class Product extends React.PureComponent {
     );
 
     return (
-      <Container>
-        <Card>
-          <h1>{title}</h1>
-          <Flex>
-            <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
-              <Thumbnail id={thumbnailId} />
-            </Box>
-          </Flex>
-          <div dangerouslySetInnerHTML={{ __html: content }} />
+      <Card>
+        <h1>{title}</h1>
+        <Flex>
+          <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
+            <Thumbnail id={thumbnailId} />
+          </Box>
+        </Flex>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
 
-          {variations.length > 1 && (
-            <div>
-              <hr />
-              <h4>Wähle eine Variante</h4>
-              <VariationSlider
-                variations={variations}
-                selectedAttributes={selectedAttributes}
-                onSelect={this.onVariationSliderSelect}
-              />
-            </div>
-          )}
-          <Flex flexWrap="wrap">
-            {Object.keys(possibleAttributes)
-              .filter(
-                attributeKey => possibleAttributeValues[attributeKey].length > 1
-              )
-              .map(attributeKey => (
-                <Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-                  <h4>{this.getAttributeLabel(attributeKey)}</h4>
-                  <Select
-                    placeholder="Wählen Sie eine Eigenschaft"
-                    onChange={this.onChangeDropdown(attributeKey)}
-                    value={selectedAttributes[attributeKey]}
-                    options={possibleAttributes[attributeKey].map(value => ({
-                      label: this.getOptionLabel(attributeKey, value),
-                      value
-                    }))}
-                  />
-                </Box>
-              ))}
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-              <h4>Anzahl</h4>
-              <Counter
-                type="number"
-                value={quantity}
-                onChange={e =>
-                  this.setState({
-                    quantity: Math.max(parseInt(e.currentTarget.value), 1)
-                  })
-                }
-              />
-            </Box>
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-              <h4>Zurücksetzen</h4>
-              <Button
-                onClick={() =>
-                  new Promise((resolve, reject) => {
-                    this.setState(
-                      {
-                        selectedAttributes: this.getDefaultAttributes(
-                          product.variations
-                        )
-                      },
-                      resolve
-                    );
-                  })
-                }
-              >
-                Auswahl zurücksetzen
-              </Button>
-            </Box>
-          </Flex>
-          <Flex flexWrap="wrap">
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-              <h4>Zusammenfassung</h4>
-              <StyledTable>
-                <tbody>
-                  <tr>
-                    <td>Artikelnummer</td>
-                    <td>{sku}</td>
-                  </tr>
-                  <tr>
-                    <td>Kategorien</td>
+        {variations.length > 1 && (
+          <div>
+            <hr />
+            <h4>Wähle eine Variante</h4>
+            <VariationSlider
+              variations={variations}
+              selectedAttributes={selectedAttributes}
+              onSelect={this.onVariationSliderSelect}
+            />
+          </div>
+        )}
+        <Flex flexWrap="wrap">
+          {Object.keys(possibleAttributes)
+            .filter(
+              attributeKey => possibleAttributeValues[attributeKey].length > 1
+            )
+            .map(attributeKey => (
+              <Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+                <h4>{this.getAttributeLabel(attributeKey)}</h4>
+                <Select
+                  placeholder="Wählen Sie eine Eigenschaft"
+                  onChange={this.onChangeDropdown(attributeKey)}
+                  value={selectedAttributes[attributeKey]}
+                  options={possibleAttributes[attributeKey].map(value => ({
+                    label: this.getOptionLabel(attributeKey, value),
+                    value
+                  }))}
+                />
+              </Box>
+            ))}
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+            <h4>Anzahl</h4>
+            <Counter
+              type="number"
+              value={quantity}
+              onChange={e =>
+                this.setState({
+                  quantity: Math.max(parseInt(e.currentTarget.value), 1)
+                })
+              }
+            />
+          </Box>
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+            <h4>Zurücksetzen</h4>
+            <Button
+              onClick={() =>
+                new Promise((resolve, reject) => {
+                  this.setState(
+                    {
+                      selectedAttributes: this.getDefaultAttributes(
+                        product.variations
+                      )
+                    },
+                    resolve
+                  );
+                })
+              }
+            >
+              Auswahl zurücksetzen
+            </Button>
+          </Box>
+        </Flex>
+        <Flex flexWrap="wrap">
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+            <h4>Zusammenfassung</h4>
+            <StyledTable>
+              <tbody>
+                <tr>
+                  <td>Artikelnummer</td>
+                  <td>{sku}</td>
+                </tr>
+                <tr>
+                  <td>Kategorien</td>
+                  <td>
+                    {categories.length > 0
+                      ? categories
+                          .map(({ id, name }) => (
+                            <Link key={id} styled to={`category/${id}`}>
+                              {name}
+                            </Link>
+                          ))
+                          .reduce((prev, curr) => [prev, ", ", curr])
+                      : ""}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Produkt</td>
+                  <td>{title}</td>
+                </tr>
+                {Object.keys(selectedAttributes).map(attributeKey => (
+                  <tr key={attributeKey}>
+                    <td>{this.getAttributeLabel(attributeKey)}</td>
                     <td>
-                      {categories.length > 0
-                        ? categories
-                            .map(({ id, name }) => (
-                              <Link key={id} styled to={`category/${id}`}>
-                                {name}
-                              </Link>
-                            ))
-                            .reduce((prev, curr) => [prev, ", ", curr])
-                        : ""}
+                      {selectedAttributes[attributeKey]
+                        ? this.getOptionLabel(
+                            attributeKey,
+                            selectedAttributes[attributeKey]
+                          )
+                        : "-"}
                     </td>
                   </tr>
-                  <tr>
-                    <td>Produkt</td>
-                    <td>{title}</td>
-                  </tr>
-                  {Object.keys(selectedAttributes).map(attributeKey => (
-                    <tr key={attributeKey}>
-                      <td>{this.getAttributeLabel(attributeKey)}</td>
-                      <td>
-                        {selectedAttributes[attributeKey]
-                          ? this.getOptionLabel(
-                              attributeKey,
-                              selectedAttributes[attributeKey]
-                            )
-                          : "-"}
-                      </td>
+                ))}
+              </tbody>
+            </StyledTable>
+          </Box>
+          {discount.bulk &&
+            selectedVariation &&
+            discount.bulk[selectedVariation.id] &&
+            discount.bulk[selectedVariation.id].length > 0 && (
+              <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+                <h4>Mengenrabatt</h4>
+                <DiscountTable>
+                  <thead>
+                    <tr>
+                      <th>Anzahl (ab)</th>
+                      <th>Stückpreis</th>
                     </tr>
-                  ))}
-                </tbody>
-              </StyledTable>
-            </Box>
-            {discount.bulk &&
-              selectedVariation &&
-              discount.bulk[selectedVariation.id] &&
-              discount.bulk[selectedVariation.id].length > 0 && (
-                <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-                  <h4>Mengenrabatt</h4>
-                  <DiscountTable>
-                    <thead>
-                      <tr>
-                        <th>Anzahl (ab)</th>
-                        <th>Stückpreis</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {discount.bulk[selectedVariation.id].map(
-                        ({ qty, ppu }, index) => (
-                          <DiscountRow
-                            onClick={() => this.setState({ quantity: qty })}
-                            selected={qty === discountRow.qty}
-                            key={index}
-                          >
-                            <td>{qty}</td>
-                            <td>
-                              <Price>{ppu}</Price>
-                            </td>
-                          </DiscountRow>
-                        )
-                      )}
-                    </tbody>
-                  </DiscountTable>
-                </Box>
-              )}
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-              {selectedVariation ? (
-                <div>
-                  <h4>Preis</h4>
-                  <Bill
-                    items={[
-                      {
-                        price,
-                        quantity,
-                        discountPrice:
-                          discountRow.qty > 1 ? discountRow.ppu : undefined
-                      }
-                    ]}
-                  />
-                  <Button
-                    disabled={
-                      !selectedVariation || isNaN(quantity) || quantity <= 0
-                    }
-                    onClick={() =>
-                      addToShoppingCart(
-                        selectedVariation.id,
-                        /* get labels */
-                        Object.keys(selectedAttributes).reduce(
-                          (object, attributeKey) => {
-                            object[
-                              this.getAttributeLabel(attributeKey)
-                            ] = this.getOptionLabel(
-                              attributeKey,
-                              selectedAttributes[attributeKey]
-                            );
-                            return object;
-                          },
-                          {}
-                        ),
-                        quantity
+                  </thead>
+                  <tbody>
+                    {discount.bulk[selectedVariation.id].map(
+                      ({ qty, ppu }, index) => (
+                        <DiscountRow
+                          onClick={() => this.setState({ quantity: qty })}
+                          selected={qty === discountRow.qty}
+                          key={index}
+                        >
+                          <td>{qty}</td>
+                          <td>
+                            <Price>{ppu}</Price>
+                          </td>
+                        </DiscountRow>
                       )
+                    )}
+                  </tbody>
+                </DiscountTable>
+              </Box>
+            )}
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+            {selectedVariation ? (
+              <div>
+                <h4>Preis</h4>
+                <Bill
+                  items={[
+                    {
+                      price,
+                      quantity,
+                      discountPrice:
+                        discountRow.qty > 1 ? discountRow.ppu : undefined
                     }
-                  >
-                    Zum Warenkorb hinzufügen
-                  </Button>
-                </div>
-              ) : null /*"Wähle zuerst eine Variante aus"*/}
-            </Box>
-          </Flex>
-        </Card>
-      </Container>
+                  ]}
+                />
+                <Button
+                  disabled={
+                    !selectedVariation || isNaN(quantity) || quantity <= 0
+                  }
+                  onClick={() =>
+                    addToShoppingCart(
+                      selectedVariation.id,
+                      /* get labels */
+                      Object.keys(selectedAttributes).reduce(
+                        (object, attributeKey) => {
+                          object[
+                            this.getAttributeLabel(attributeKey)
+                          ] = this.getOptionLabel(
+                            attributeKey,
+                            selectedAttributes[attributeKey]
+                          );
+                          return object;
+                        },
+                        {}
+                      ),
+                      quantity
+                    )
+                  }
+                >
+                  Zum Warenkorb hinzufügen
+                </Button>
+              </div>
+            ) : null /*"Wähle zuerst eine Variante aus"*/}
+          </Box>
+        </Flex>
+      </Card>
     );
   };
 }

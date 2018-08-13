@@ -198,7 +198,8 @@ class Product extends React.PureComponent {
       product = {},
       attributes = {},
       categories,
-      addToShoppingCart
+      addToShoppingCart,
+      resellerDiscount
     } = this.props;
     const {
       selectedAttributes,
@@ -373,7 +374,8 @@ class Product extends React.PureComponent {
               </tbody>
             </StyledTable>
           </Box>
-          {discount.bulk &&
+          {resellerDiscount === 0 &&
+            discount.bulk &&
             selectedVariation &&
             discount.bulk[selectedVariation.id] &&
             discount.bulk[selectedVariation.id].length > 0 && (
@@ -414,8 +416,11 @@ class Product extends React.PureComponent {
                     {
                       price,
                       quantity,
-                      discountPrice:
-                        discountRow.qty > 1 ? discountRow.ppu : undefined
+                      discountPrice: resellerDiscount
+                        ? (resellerDiscount / 100) * price
+                        : discountRow.qty > 1
+                          ? discountRow.ppu
+                          : undefined
                     }
                   ]}
                 />

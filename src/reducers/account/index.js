@@ -41,7 +41,10 @@ export const getAccount = state => state.account;
  * @returns {number|boolean} The discount in percent
  */
 export const getResellerDiscountByProductId = (state, productId) =>
-  state.account.discount[productId] || false;
+  (state.account &&
+    state.account.discount &&
+    state.account.discount[productId]) ||
+  false;
 
 /**
  * Gets the reseller discount for the current user

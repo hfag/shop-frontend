@@ -15,6 +15,7 @@ import Card from "../components/Card";
 import { colors, borders } from "../utilities/style";
 import Placeholder from "../components/Placeholder";
 import Link from "../components/Link";
+import { fetchProductCategories } from "../actions/product/categories";
 
 const ITEMS_PER_PAGE = 30;
 
@@ -65,6 +66,10 @@ class CategoriesSidebar extends React.PureComponent {
     this.state = { active: window.location.pathname === props.match.url };
   }
 
+  componentDidMount = () => {
+    this.loadData();
+  };
+
   /**
    * Lifecycle method
    * @param {Object} prevProps The previous props
@@ -72,14 +77,57 @@ class CategoriesSidebar extends React.PureComponent {
    */
   componentDidUpdate = prevProps => {
     const {
-      match: { url }
+      match: {
+        params: { categorySlug, page },
+        url
+      },
+      category
     } = this.props;
+
+    if (
+      (categorySlug !== prevProps.categorySlug ||
+        page !== prevProps.page ||
+        (!prevProps.category && category)) &&
+      categorySlug &&
+      page
+    ) {
+      this.loadData();
+    }
 
     this.setState({
       active:
         !window.location.pathname.startsWith("/produkte/") ||
         window.location.pathname === url
     });
+  };
+
+  loadData = () => {
+    const {
+      categoryIds,
+      fetchAllProductCategories,
+      fetchProducts
+    } = this.props;
+
+    if (
+      this.props.match.path !== "/" &&
+      this.props.match.path !== "/produkte"
+    ) {
+      return;
+    }
+
+    //FIXME replace window.loading with something else
+    if (
+      (!categoryIds || categoryIds.length === 0) &&
+      !window.loadingCategories
+    ) {
+      this.loadingCategories = true;
+
+      fetchAllProductCategories().then(() => {
+        this.loadingCategories = false;
+      });
+    }
+
+    fetchProducts();
   };
 
   render = () => {
@@ -205,12 +253,62 @@ const mapDispatchToProps = (
     }
   }
 ) => ({
-  dispatch
+  dispatch,
+  /**
+   * Fetches all product catrgories
+   * @param {number} perPage The amount of items per page
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchAllProductCategories(perPage = ITEMS_PER_PAGE, visualize = true) {
+    return dispatch(fetchProductCategories(perPage, visualize));
+  },
+  /**
+   * Fetches the matching products
+   * @param {number} [categoryId=null] The category id
+   * @param {number} perPage The amount of products per page
+   * @param {visualize} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchProducts(categoryId = null, perPage = ITEMS_PER_PAGE, visualize = true) {
+    return categoryId && !isNaN(page)
+      ? dispatch(
+          fetchProducts(
+            page,
+            page,
+            perPage,
+            visualize,
+            [],
+            [parseInt(categoryId)]
+          )
+        )
+      : Promise.resolve();
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the matching products
+   * @param {number} perPage The amount of products per page
+   * @param {visualize} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchProducts(perPage = ITEMS_PER_PAGE, visualize = true) {
+    const page = parseInt(ownProps.match.params.page);
+    const categoryId = mapStateToProps.category
+      ? mapStateToProps.category.id
+      : null;
+    return mapDispatchToProps.fetchProducts(categoryId, perPage, visualize);
+  }
 });
 
 const ConnectedSidebar = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(CategoriesSidebar);
 
 const RoutedSidebar = withRouter(ConnectedSidebar);

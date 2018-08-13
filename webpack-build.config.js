@@ -9,6 +9,8 @@ const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 /*const RollbarSourceMapPlugin = require("rollbar-sourcemap-webpack-plugin");*/
 
 require("dotenv").config(); //include env file in here as well
@@ -79,6 +81,10 @@ module.exports = {
   },
 
   plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: "disabled",
+      generateStatsFile: true
+    }),
     new CleanWebpackPlugin(["dist/*.*"]),
     new HtmlWebpackPlugin({
       title: "Schilder Portal - Shop der Hauser Feuerschutz AG",

@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import styled from "styled-components";
-import { action as toggleBurgerMenuAction } from "redux-burger-menu";
 import MenuIcon from "react-icons/lib/md/menu";
 import SearchIcon from "react-icons/lib/fa/search";
 import CartIcon from "react-icons/lib/fa/shopping-cart";
@@ -30,13 +29,14 @@ import Push from "../components/Push";
 import Circle from "../components/Circle";
 import Link from "../components/Link";
 import MediaQuery from "../components/MediaQuery";
-import BurgerMenu from "../components/BurgerMenu";
+import BurgerMenu from "../containers/BurgerMenu";
 import NavItem from "../components/NavItem";
 import Navbar from "../components/Navbar";
 import Searchbar from "../containers/Searchbar";
 import LogoNegative from "../../img/logo/logo_negative.svg";
 import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
 import Thumbnail from "./Thumbnail";
+import { toggleBurgerMenu } from "../actions/burger-menu";
 
 const Counter = styled.div`
   margin-left: 0.5rem;
@@ -94,6 +94,11 @@ const FullHeightBox = styled(Box)`
   position: relative;
 `;
 
+const LogoLeft = styled.div`
+  padding: 0 0.5rem 0 1rem;
+  height: 100%;
+`;
+
 /**
  * The page header
  * @returns {Component} The component
@@ -124,41 +129,50 @@ class Header extends React.PureComponent {
         <header>
           <Navbar>
             <Flex>
-              <FullHeightBox width={[0, 0, 0, 1 / 6]} pl={3} pr={2}>
-                <NavItem>
-                  <MediaQuery lg up>
-                    <Link to="/" title="Homepage">
-                      <img src={LogoNegative} alt="Logo" />
-                    </Link>
-                  </MediaQuery>
-                </NavItem>
+              <FullHeightBox width={[0, 0, 0, 1 / 6]}>
+                <MediaQuery lg up>
+                  <LogoLeft>
+                    <NavItem>
+                      <Link to="/" title="Homepage">
+                        <img src={LogoNegative} alt="Logo" />
+                      </Link>
+                    </NavItem>
+                  </LogoLeft>
+                </MediaQuery>
               </FullHeightBox>
               <FullHeightBox width={[1, 1, 5 / 6, 5 / 6]} pl={2}>
                 <Container>
                   <Flexbar>
-                    <Link to="/" title="Homepage">
+                    <MediaQuery md up>
                       <NavItem>
-                        <MediaQuery lg up>
+                        <Link to="/" title="Homepage">
                           <img src={NameSloganNegative} alt="Slogan" />
-                        </MediaQuery>
-                        <MediaQuery lg down>
-                          <img src={LogoNegative} alt="Logo" />
-                        </MediaQuery>
+                        </Link>
                       </NavItem>
-                    </Link>
+                    </MediaQuery>
+
+                    <MediaQuery md down>
+                      <Flexbar>
+                        <NavItem>
+                          <Link onClick={toggleBurgerMenu} negative>
+                            <MenuIcon size="40" />
+                          </Link>
+                        </NavItem>
+
+                        <NavItem>
+                          <Link to="/" title="Homepage">
+                            <img src={LogoNegative} alt="Logo" />
+                          </Link>
+                        </NavItem>
+                      </Flexbar>
+                    </MediaQuery>
+
                     <SearchWrapper>
                       <MediaQuery md up>
                         <Searchbar />
                       </MediaQuery>
                     </SearchWrapper>
                     <Push left>
-                      <MediaQuery md down>
-                        <NavItem>
-                          <Link onClick={toggleBurgerMenu} negative>
-                            <MenuIcon size="40" />
-                          </Link>
-                        </NavItem>
-                      </MediaQuery>
                       <MediaQuery md up>
                         <Flexbar>
                           <NavItem seperator>
@@ -266,7 +280,6 @@ class Header extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  isBurgerMenuOpen: getBurgerMenuOpen(state),
   shoppingCartFetching: getShoppingCartFetching(state),
   shoppingCartItems: getShoppingCartItems(state),
   shoppingCartTotal: getShoppingCartTotal(state),
@@ -276,11 +289,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   /**
    * Sets the burger menu open state
-   * @param {boolean} open Whether the burger menu should be open
    * @returns {void}
    */
-  setBurgerMenu(open) {
-    return dispatch(toggleBurgerMenuAction(open));
+  toggleBurgerMenu() {
+    return dispatch(toggleBurgerMenu());
   },
   /**
    * Fetches the shopping cart
@@ -300,21 +312,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
-  ...mapStateToProps,
-  ...mapDispatchToProps,
-  ...ownProps,
-  /**
-   * Toggles the mobile burger menu
-   * @returns {void}
-   */
-  toggleBurgerMenu() {
-    return mapDispatchToProps.setBurgerMenu(!mapStateToProps.isBurgerMenuOpen);
-  }
-});
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
+  mapDispatchToProps
 )(Header);

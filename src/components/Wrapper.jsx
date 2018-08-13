@@ -30,16 +30,15 @@ const SidebarWrapper = styled.div`
 class Wrapper extends React.Component {
   render = () => {
     const { children } = this.props;
-    //"outer-container" and "page-wrap" are used by "react-burger-menu"
     return (
       <ThemeProvider
         theme={{
           breakpoints: ["36rem", "48rem", "62rem", "75rem"]
         }}
       >
-        <div id="outer-container">
+        <div>
           <Header />
-          <main id="page-wrap">
+          <main>
             <Flex>
               <Box width={[0, 0, 0, 1 / 6]}>
                 <MediaQuery lg up>

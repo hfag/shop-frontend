@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --config webpack-build.config.js",
+    "analyze": "webpack-bundle-analyzer ./dist/stats.json",
     "docs": "rm -rf ./docs/* && jsdoc src -c jsdoc.json",
     "prettier": "prettier --print-width 80 --tab-width 2 --trailing-comma none --arrow-parens avoid --write src/**/*",
     "lint": "eslint --ext .jsx --ext .js src/",
@@ -41,7 +42,6 @@
     "query-string": "^5.0.1",
     "react": "^16.1.1",
     "react-autosuggest": "^9.3.2",
-    "react-burger-menu": "^2.1.11",
     "react-collapse": "^4.0.3",
     "react-dom": "^16.0.0",
     "react-icons": "^2.2.7",
@@ -60,7 +60,6 @@
     "react-text-mask": "^5.4.2",
     "react-transition-group": "1.x",
     "redux": "^3.7.2",
-    "redux-burger-menu": "^0.2.2",
     "redux-thunk": "^2.2.0",
     "resolve-url-loader": "^2.2.0",
     "styled-components": "^3.2.6",

@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { reducer as burgerMenu } from "redux-burger-menu";
 import { loadingBarReducer as loadingBar } from "react-redux-loading-bar";
 import { routerReducer as router } from "react-router-redux";
 
@@ -13,13 +12,17 @@ import countries, * as fromCountries from "./countries";
 import sales, * as fromSales from "./sales";
 import account, * as fromAccount from "./account";
 import orders, * as fromOrders from "./orders";
+import burgerMenu, * as fromBurgerMenu from "./burger-menu";
 
 /**
  * Checks whether the burger menu is open
  * @param {Object} state This state
  * @returns {boolean} Whether the burger menu is open
  */
-export const getBurgerMenuOpen = state => state.burgerMenu.isOpen;
+export const getBurgerMenuOpen = wrap(
+  fromBurgerMenu.getBurgerMenuOpen,
+  state => state.burgerMenu
+);
 
 /**
  * Returns the product list

@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { LazyImage } from "react-lazy-images";
 
 import { fetchAttachment } from "../actions/attachments";
 import { getAttachmentById } from "../reducers";
@@ -26,12 +27,6 @@ const StyledThumbail = styled.div`
  * @returns {Component} The component
  */
 class Thumbnail extends React.PureComponent {
-  constructor() {
-    super();
-
-    this.state = { fetched: false, error: false };
-  }
-
   componentWillMount = () => {
     const { id, fetchThumbnail, thumbnail } = this.props;
 
@@ -48,24 +43,8 @@ class Thumbnail extends React.PureComponent {
     }
   }
 
-  /**
-   * Called when the image has loaded
-   * @param {Event} event The load event
-   * @returns {void}
-   */
-  onImageLoad = event => this.setState({ fetched: true });
-  /**
-   * Called when the image fetching resulted in an error
-   * @param {Event} event The load event
-   * @returns {void}
-   */
-  onImageError = event => {
-    this.setState({ error: true });
-  };
-
   render = () => {
     const { id, thumbnail, size = "feuerschutz_fix_width" } = this.props;
-    const { fetched, error } = this.state;
 
     const thumbnailUrl =
       thumbnail && thumbnail.mimeType && thumbnail.mimeType.startsWith("image/")
@@ -76,35 +55,35 @@ class Thumbnail extends React.PureComponent {
           : thumbnail.url
         : "";
 
-    const show = fetched && !error && thumbnail && thumbnailUrl;
-
     return (
       <StyledThumbail
         longerSide={
           thumbnail && thumbnail.width < thumbnail.height ? "height" : "width"
         }
       >
-        {thumbnail &&
-          thumbnailUrl && (
-            <img
-              alt={thumbnail.caption}
-              className={
-                thumbnail.width < thumbnail.height ? "b-height" : "b-width"
-              }
-              onLoad={this.onImageLoad}
-              onError={this.onImageError}
-              width={thumbnail.width}
-              height={thumbnail.height}
-              src={thumbnailUrl}
-              style={
-                show
-                  ? {}
-                  : { position: "absolute", width: 1, height: 1, zIndex: -1 }
-              }
-            />
-          )}
-
-        {!show && <Placeholder block error={error} />}
+        {thumbnail && thumbnailUrl ? (
+          <LazyImage
+            src={thumbnailUrl}
+            alt={thumbnail.caption}
+            placeholder={({ imageProps, ref }) => (
+              <div ref={ref}>
+                <Placeholder block />
+              </div>
+            )}
+            actual={({ imageProps }) => (
+              <img
+                {...imageProps}
+                className={
+                  thumbnail.width < thumbnail.height ? "b-height" : "b-width"
+                }
+                width={thumbnail.width}
+                height={thumbnail.height}
+              />
+            )}
+          />
+        ) : (
+          <Placeholder block />
+        )}
       </StyledThumbail>
     );
   };

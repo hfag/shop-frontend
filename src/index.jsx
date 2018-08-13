@@ -14,8 +14,10 @@ import throttle from "lodash/throttle";
 import App from "./App";
 import reducers from "./reducers";
 import { loadState, saveState } from "./local-storage";
-import "scss/global.scss";
+import "./scss/global.scss";
 
+/* polyfills */
+import "intersection-observer";
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
 

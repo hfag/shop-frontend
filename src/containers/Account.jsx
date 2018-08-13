@@ -4,6 +4,7 @@ import { push } from "react-router-redux";
 import { Flex, Box } from "grid-styled";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
+import universal from "react-universal-component";
 
 import { getCountries } from "../reducers";
 import { fetchCountries } from "../actions/countries";
@@ -16,7 +17,6 @@ import AccountOrder from "../components/account/AccountOrder";
 import AccountDashboard from "../containers/account/AccountDashboard";
 import AccountForm from "../components/account/AccountForm";
 import AddressForm from "../components/account/AddressForm";
-import AccountResellerDashboard from "./account/AccountResellerDashboard";
 import { updateAccount, updateAddress, fetchAccount } from "../actions/user";
 import { fetchOrders } from "../actions/orders";
 
@@ -44,6 +44,10 @@ const AccountContainer = styled.div`
     margin-top: 0;
   }
 `;
+
+const AccountResellerDashboard = universal(props =>
+  import(/* webpackChunkName: "reseller-dashboard" */ "./account/AccountResellerDashboard")
+);
 
 /**
  * The account page
@@ -169,7 +173,7 @@ class Account extends React.PureComponent {
                 />
                 <Route
                   path={`${url}/wiederverkäufer`}
-                  component={AccountResellerDashboard}
+                  component={() => <AccountResellerDashboard />}
                 />
               </Switch>
             </Card>

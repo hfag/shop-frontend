@@ -19,7 +19,7 @@ process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issue
 
 const context = __dirname;
 
-const PUBLIC_PATH = "/wp-content/themes/feuerschutz/";
+const PUBLIC_PATH = "/";
 const ROLLBAR_PUBLIC_ACCESS_TOKEN = "ffd21bafd45c4974aa0b8f5c07d6243a";
 const ROLLBAR_PRIVATE_ACCESS_TOKEN = process.env.ROLLBAR_PRIVATE_ACCESS_TOKEN;
 const VERSION = ChildProcess.execSync("git rev-parse HEAD")
@@ -31,7 +31,9 @@ module.exports = {
 
   context,
 
-  entry: [path.join(context, "src/index.jsx")],
+  entry: {
+    index: path.join(context, "src/index.jsx")
+  },
 
   devtool: "nosources-source-map",
 
@@ -42,7 +44,9 @@ module.exports = {
   },
 
   optimization: {
-    splitChunks: { chunks: "all" },
+    splitChunks: {
+      chunks: "all"
+    },
     minimize: true,
     minimizer: [
       new UglifyJSPlugin({
@@ -158,7 +162,9 @@ module.exports = {
               plugins: [
                 "babel-plugin-styled-components",
                 ["@babel/plugin-proposal-class-properties", { loose: false }],
-                "@babel/plugin-proposal-object-rest-spread"
+                "@babel/plugin-proposal-object-rest-spread",
+                "syntax-dynamic-import",
+                "universal-import"
               ]
             }
           }

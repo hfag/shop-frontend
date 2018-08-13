@@ -106,6 +106,16 @@ export const getSimpleProducts = wrap(
 );
 
 /**
+ * Returns whether simple products are being fetched
+ * @param {object} state This state
+ * @return {boolean} Whether simple items are being fetched
+ */
+export const isFetchingSimpleItems = wrap(
+  fromSimpleProduct.isFetchingSimpleItems,
+  state => state.simpleProduct
+);
+
+/**
  * Returns the product category with the specified slug
  * @param {object} state This state
  * @param {number} categorySlug The category slug

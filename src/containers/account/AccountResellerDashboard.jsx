@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Flex, Box } from "grid-styled";
 import styled from "styled-components";
 import ReactTable from "react-table";
 import fuzzy from "fuzzy";
@@ -12,7 +11,11 @@ import {
   fetchSimpleProducts,
   clearSimpleProducts
 } from "../../actions/product/simple";
-import { getSimpleProducts, getResellerDiscount } from "../../reducers";
+import {
+  getSimpleProducts,
+  getResellerDiscount,
+  isFetchingSimpleItems
+} from "../../reducers";
 import { colors } from "../../utilities/style";
 import Price from "../../components/Price";
 
@@ -157,37 +160,27 @@ class NameCell extends React.PureComponent {
  * @returns {Component} The component
  */
 class AccountResellerDashboard extends React.PureComponent {
-  constructor() {
-    super();
-
-    this.state = {
-      loading: false
-    };
-  }
-
   componentDidMount = () => {
-    const { fetchSimpleProducts } = this.props;
+    const { products, fetchSimpleProducts, isFetching, dispatch } = this.props;
 
-    fetchSimpleProducts().then(() => {
-      this.setState({ loading: false });
-    });
-    this.setState({ loading: true });
+    if (!isFetching && products.length === 0) {
+      fetchSimpleProducts();
+    }
   };
 
   componentWillUnmount = () => {
     const { clearSimpleProducts } = this.props;
-    clearSimpleProducts();
+    //clearSimpleProducts();
   };
 
   render = () => {
-    const { products, addToShoppingCart } = this.props;
-    const { loading } = this.state;
+    const { products, addToShoppingCart, isFetching } = this.props;
 
     return (
       <ResellerDashboardWrapper>
         <h2>Wiederverkäufer</h2>
         <StyledTable
-          loading={loading}
+          loading={isFetching}
           columns={[
             {
               Header: "SKU",
@@ -332,7 +325,8 @@ const mapStateToProps = state => {
               }
             }
           : product
-    )
+    ),
+    isFetching: isFetchingSimpleItems(state)
   };
 };
 const mapDispatchToProps = dispatch => ({

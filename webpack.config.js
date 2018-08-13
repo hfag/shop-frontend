@@ -1,10 +1,15 @@
 const path = require("path");
+const ChildProcess = require("child_process");
 
 const webpack = require("webpack");
 const Dotenv = require("dotenv-webpack");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const VERSION = ChildProcess.execSync("git rev-parse HEAD")
+  .toString()
+  .trim();
 
 process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issues/56
 
@@ -20,7 +25,7 @@ module.exports = {
   output: {
     path: path.join(context, "dist/"),
     filename: "bundle.js",
-    publicPath: "/dist"
+    publicPath: "/"
   },
 
   devtool: "cheap-source-map",
@@ -31,7 +36,8 @@ module.exports = {
   },
 
   optimization: {
-    minimize: false
+    minimize: false,
+    splitChunks: { chunks: "all" }
   },
 
   plugins: [
@@ -43,7 +49,13 @@ module.exports = {
       safe: true, // load .env.example (defaults to "false" which does not use dotenv-safe)
       systemvars: true
     }),
-    new BundleAnalyzerPlugin()
+    new BundleAnalyzerPlugin(),
+    new HtmlWebpackPlugin({
+      title: "Schilder Portal - Shop der Hauser Feuerschutz AG",
+      template: "index.ejs",
+      /*accessToken: ROLLBAR_PUBLIC_ACCESS_TOKEN,*/
+      version: VERSION
+    })
   ],
 
   resolve: {
@@ -80,7 +92,9 @@ module.exports = {
                 "@babel/plugin-proposal-object-rest-spread",
                 "@babel/plugin-proposal-class-properties",
                 "babel-plugin-styled-components",
-                "react-hot-loader/babel"
+                "react-hot-loader/babel",
+                "syntax-dynamic-import",
+                "universal-import"
               ]
             }
           }

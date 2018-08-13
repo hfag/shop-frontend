@@ -82,7 +82,7 @@ class BurgerMenu extends React.PureComponent {
       <div>
         <BurgerBackground onClick={toggleBurgerMenu} isOpen={isOpen} />
         <BurgerContainer isOpen={isOpen}>
-          <BurgerLogo src={NameSloganNegative} />
+          <BurgerLogo src={NameSloganNegative} alt="Slogan" />
           <BurgerList>
             <BurgerItem seperator>
               <Link to="https://feuerschutz.ch" negative flex>

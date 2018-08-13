@@ -45,6 +45,10 @@ const IconList = styled.table`
   td:last-child {
     padding-left: 1rem;
   }
+
+  a:hover {
+    text-decoration: underline;
+  }
 `;
 
 const Icon = styled.span`

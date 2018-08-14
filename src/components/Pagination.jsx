@@ -3,6 +3,8 @@ import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import { colors, shadows } from "utilities/style";
 
+import { borders } from "../utilities/style";
+
 const StyledPagination = styled.div`
   ul {
     list-style: none;
@@ -12,6 +14,7 @@ const StyledPagination = styled.div`
     background-color: #fff;
     padding: 0.25rem;
     box-shadow: ${shadows.y};
+    border-radius: ${borders.radius};
   }
   li {
     display: inline-block;

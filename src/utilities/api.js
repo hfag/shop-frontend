@@ -26,7 +26,10 @@ class ApiError extends Error {
  * @returns {Promise<Object>} The fetch promise
  */
 export const fetchApi = (url, options) => {
-  const token = localStorage.getItem("jwt-token");
+  const token =
+    (typeof window !== "undefined" &&
+      window.localStorage.getItem("jwt-token")) ||
+    undefined;
 
   if (!options.headers) {
     options.headers = new Headers();
@@ -57,7 +60,7 @@ export const fetchApi = (url, options) => {
 
               if (response.status === 401) {
                 //session expired
-                /*window.location =
+                /*typeof window !== 'undefined' && window.location =
 									"/login?redirect=" +
 									encodeURIComponent(window.location.pathname); //we can't use react-router in here as we don't have access to the store
 								return;*/

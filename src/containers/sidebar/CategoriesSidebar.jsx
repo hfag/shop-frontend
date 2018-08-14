@@ -27,7 +27,7 @@ class CategoriesSidebar extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { active: window.location.pathname === props.match.url };
+    this.state = { active: props.location.pathname === props.match.url };
   }
 
   componentDidMount = () => {
@@ -45,6 +45,7 @@ class CategoriesSidebar extends React.PureComponent {
         params: { categorySlug, page },
         url
       },
+      location: { pathname },
       category
     } = this.props;
 
@@ -59,9 +60,7 @@ class CategoriesSidebar extends React.PureComponent {
     }
 
     this.setState({
-      active:
-        !window.location.pathname.startsWith("/produkte/") ||
-        window.location.pathname === url
+      active: !pathname.startsWith("/produkte/") || pathname === url
     });
   };
 
@@ -84,10 +83,10 @@ class CategoriesSidebar extends React.PureComponent {
       (!categoryIds || categoryIds.length === 0) &&
       !window.loadingCategories
     ) {
-      this.loadingCategories = true;
+      window.loadingCategories = true;
 
       fetchAllProductCategories().then(() => {
-        this.loadingCategories = false;
+        window.loadingCategories = false;
       });
     }
 

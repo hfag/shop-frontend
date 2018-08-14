@@ -76,7 +76,7 @@ const BurgerBackground = styled.div`
  */
 class BurgerMenu extends React.PureComponent {
   render = () => {
-    const { isOpen, isAuthenticated, toggleBurgerMenu } = this.props;
+    const { isOpen = false, isAuthenticated, toggleBurgerMenu } = this.props;
 
     return (
       <div>

@@ -14,22 +14,22 @@ class CategoryBreadcrumb extends React.PureComponent {
   render = () => {
     const { categories } = this.props;
 
-    return categories.length > 0 ? 
-      categories.map((cat, index) => 
+    return categories.length > 0 ? (
+      categories.map((cat, index) => (
         <Keyer key={cat ? cat.slug : index}>
           <Breadcrumb>
             <Link to={"/produkte/" + cat.slug + "/1"}>{cat.name}</Link>
           </Breadcrumb>
         </Keyer>
-      )
-     : 
+      ))
+    ) : (
       <Placeholder text inline minWidth={5} />
-    ;
+    );
   };
 }
 
-const mapStateToProps = (state, { match: { url } }) => {
-  const slugs = window.location.pathname.replace(url, "").split("/");
+const mapStateToProps = (state, { match: { url }, location: { pathname } }) => {
+  const slugs = pathname.replace(url, "").split("/");
   slugs.shift();
   if (!isNaN(slugs[slugs.length - 1])) {
     slugs.pop();

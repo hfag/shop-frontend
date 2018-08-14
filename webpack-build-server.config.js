@@ -4,16 +4,11 @@ const ChildProcess = require("child_process");
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Dotenv = require("dotenv-webpack");
-const CompressionPlugin = require("compression-webpack-plugin");
 const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
-const PreloadWebpackPlugin = require("preload-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
-/*const RollbarSourceMapPlugin = require("rollbar-sourcemap-webpack-plugin");*/
+const nodeExternals = require("webpack-node-externals");
 
 require("dotenv").config(); //include env file in here as well
 
@@ -22,8 +17,6 @@ process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issue
 const context = __dirname;
 
 const PUBLIC_PATH = "/";
-const ROLLBAR_PUBLIC_ACCESS_TOKEN = "ffd21bafd45c4974aa0b8f5c07d6243a";
-const ROLLBAR_PRIVATE_ACCESS_TOKEN = process.env.ROLLBAR_PRIVATE_ACCESS_TOKEN;
 const VERSION = ChildProcess.execSync("git rev-parse HEAD")
   .toString()
   .trim();
@@ -31,17 +24,20 @@ const VERSION = ChildProcess.execSync("git rev-parse HEAD")
 module.exports = {
   mode: "production",
 
+  target: "node",
+  externals: [nodeExternals()],
+
   context,
 
   entry: {
-    index: path.join(context, "src/index.jsx")
+    index: path.join(context, "server/index.jsx")
   },
 
   devtool: "nosources-source-map",
 
   output: {
-    path: path.join(context, "dist/client/"),
-    filename: "[name].[chunkhash].js",
+    path: path.join(context, "dist/server/"),
+    filename: "[name].js",
     publicPath: PUBLIC_PATH
   },
 
@@ -78,7 +74,7 @@ module.exports = {
             hoist_funs: true,
             if_return: true,
             join_vars: true,
-            drop_console: true
+            drop_console: false
           },
           exclude: [/\.min\.js$/gi] // skip pre-minified libs
         }
@@ -91,15 +87,7 @@ module.exports = {
       analyzerMode: "disabled",
       generateStatsFile: true
     }),
-    new CleanWebpackPlugin(["dist/client/*.*"]),
-    new HtmlWebpackPlugin({
-      title: "Schilder Portal - Shop der Hauser Feuerschutz AG",
-      template: "index.prod.ejs",
-      /*accessToken: ROLLBAR_PUBLIC_ACCESS_TOKEN,*/
-      version: VERSION
-    }),
-    new ScriptExtHtmlWebpackPlugin({ defaultAttribute: "defer" }),
-    new PreloadWebpackPlugin({ include: "initial" }),
+    new CleanWebpackPlugin(["dist/server/*.*"]),
     new webpack.NoEmitOnErrorsPlugin(),
     new Dotenv({
       path: "./.env", // Path to .env file (this is the default)
@@ -108,27 +96,7 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: "[name].[chunkhash].css"
-    }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new CompressionPlugin({
-      asset: "[path].gz[query]",
-      algorithm: "gzip",
-      test: /\.js$|\.css$|\.html$/,
-      threshold: 10240,
-      minRatio: 0
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: "img/",
-        to: "img/",
-        toType: "dir"
-      }
-    ])
-    /*new RollbarSourceMapPlugin({
-			accessToken: ROLLBAR_PRIVATE_ACCESS_TOKEN,
-			version: VERSION,
-			publicPath: PUBLIC_PATH
-		})*/
+    })
   ],
 
   resolve: {
@@ -143,7 +111,10 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        include: [path.resolve(context, "src")],
+        include: [
+          path.resolve(context, "src"),
+          path.resolve(context, "server")
+        ],
 
         use: [
           {
@@ -178,6 +149,7 @@ module.exports = {
         test: /\.css$/,
         include: [
           path.resolve(context, "src"),
+          path.resolve(context, "server"),
           path.resolve(context, "node_modules")
         ],
 
@@ -194,6 +166,7 @@ module.exports = {
         test: /\.scss$/,
         include: [
           path.resolve(context, "src"),
+          path.resolve(context, "server"),
           path.resolve(context, "node_modules")
         ],
 

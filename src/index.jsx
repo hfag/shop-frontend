@@ -1,8 +1,6 @@
 //react
-import setLocale from "set-yup-locale";
 import React from "react";
 import ReactDOM from "react-dom";
-import { AppContainer } from "react-hot-loader";
 import createHistory from "history/createBrowserHistory";
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -11,6 +9,7 @@ import { routerMiddleware } from "react-router-redux";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 import throttle from "lodash/throttle";
 
+import "./set-yup-locale";
 import App from "./App";
 import reducers from "./reducers";
 import { loadState, saveState } from "./local-storage";
@@ -22,7 +21,7 @@ require("es6-promise").polyfill();
 require("isomorphic-fetch");
 
 //Load state from local storage and create history object
-const presistedState = loadState();
+const presistedState = { ...window.__INITIAL_DATA__, ...loadState() };
 const history = createHistory();
 
 //and the redux store
@@ -55,10 +54,8 @@ store.subscribe(
 );
 
 const render = Component => {
-  ReactDOM.render(
-    <AppContainer>
-      <Component history={history} store={store} />
-    </AppContainer>,
+  ReactDOM.hydrate(
+    <Component history={history} store={store} />,
     document.getElementById("root")
   );
 };

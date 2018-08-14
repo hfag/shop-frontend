@@ -41,7 +41,8 @@ class Link extends React.PureComponent {
       target,
       href,
       rel,
-      title
+      title,
+      location: { pathname }
     } = this.props;
 
     const LinkComponent = styled ? StyledLink : UnstyledLink;
@@ -76,10 +77,7 @@ class Link extends React.PureComponent {
     }
 
     return (
-      <LinkComponent
-        {...props}
-        active={(href || to) === decodeURI(window.location.pathname)}
-      >
+      <LinkComponent {...props} active={(href || to) === pathname}>
         {flex ? <Flexbar>{children}</Flexbar> : children}
       </LinkComponent>
     );

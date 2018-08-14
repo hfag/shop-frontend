@@ -26,7 +26,7 @@ class ProductCategories extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { active: window.location.pathname === props.match.url };
+    this.state = { active: props.location.pathname === props.match.url };
   }
   componentDidMount = () => {
     this.loadData();
@@ -43,6 +43,7 @@ class ProductCategories extends React.PureComponent {
         params: { categorySlug, page },
         url
       },
+      location: { pathname },
       category
     } = this.props;
     if (
@@ -55,7 +56,7 @@ class ProductCategories extends React.PureComponent {
       this.loadData();
     }
 
-    this.setState({ active: window.location.pathname === url });
+    this.setState({ active: pathname === url });
   };
   loadData = () => {
     const {
@@ -74,9 +75,9 @@ class ProductCategories extends React.PureComponent {
       !window.loadingCategories
     ) {
       fetchAllProductCategories().then(() => {
-        this.loadingCategories = false;
+        window.loadingCategories = false;
       });
-      this.loadingCategories = true;
+      window.loadingCategories = true;
     }
 
     fetchProducts();

@@ -80,6 +80,6 @@ app.get("/", renderApplication);
 app.use(express.static("./dist/client"));
 app.get("/*", renderApplication);
 
-app.listen(8080);
+app.listen(8100);
 
-console.log("Server listening on http://localhost:8080");
+console.log("Server listening on http://localhost:8100");

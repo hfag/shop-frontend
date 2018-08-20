@@ -28,13 +28,12 @@ before_deploy:
     dist/server
   - tar -zcf release/${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz
     dist/client
-  - ls -l
-  - ls -l release
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
   file_glob: true
   file: release/**/*
+  skip_cleanup: true
   on:
     repo: hfag/shop-frontend
 after_deploy:

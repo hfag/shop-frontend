@@ -132,7 +132,7 @@ class Footer extends React.PureComponent {
               </IconList>
             </Box>
             <Box width={[1, 1, 1 / 3, 1 / 3]} px={3}>
-              <h4>Über die Firma</h4>
+              <h4>Über die Hauser Feuerschutz AG</h4>
               Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und
               Produkte in den Bereichen Sicherheitskennzeichnung und
               Feuerschutz.

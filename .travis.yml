@@ -1,0 +1,42 @@
+language: node_js
+node_js:
+  - "7"
+cache:
+  directories:
+    - node_modules
+  yarn: true
+env:
+  global:
+    secure: OB9KuVZjZkO6F8h2jaWDAnz26inpCsVheubd9L2nS5ZFwaOeurGMnqXNwv7TFcF5hiqPiQgrZEtKQJz4gpD9OZXnRukINhGEDZmkUdpZBSgjzLRwV/p1WGxd0C4GS5pJZZJVu+jxMUG0P+pzUMY+i00WHgjLiNHvZ9q0QOn+FeWqrLMGqAl6zuNfrsEiAYXHOgeGn2MyB2B9863n4yc7dsPX0JlpGRzrLL2XFwreJeAFkkvk3UJpuXG4QFFlKQ9YLXmauKWnPJcrVOudvSgbDQzKTrWKzICDG6NUlbs5sJHxt83WqViyTxMwsXc0PnUg4kOpNVH4lAB5UB7U87JRjm7fV1rhRt2OO+r75QvNAYGdx/povPdemBn/IDXHhWVFUzHsq1T05XIoH/JU2U19jrPPXZ90hGadUB9lS1Ee4AaqFNQIYBiJlbbZEnq8TJ7kllqV8Np4anP4MzRy9ng2xheEa7HPLYntPwY27Nkz2d72cR3JKjVqZ+K16+f3DPicvUYUxZuNh3gxZrp/Jew13NQhj5ABQWmeINfpP+agpGnCZXmsZefpfo9nkYp6nSw4F0iFQK+l/z/tBBk2mDvbGb8xugZ/lv+JlNkm4yHyWxUXijonO/ZzKq7qwFk70UF5i8h4l/FBBMKlyAY3lotu7asClQ/lQw/PXV1eoQN7y7U=
+install:
+  - yarn install
+script:
+  - yarn build
+  - yarn build-server
+branches:
+  only:
+    - master
+    - staging
+before_deploy:
+  - git config --local user.name "Travis CI"
+  - git config --local user.email "contact@travis-ci.com"
+  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+  - cd dist
+  - tar -zcf ${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-server.tar.gz
+    server
+  - tar -zcf ${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz
+    client
+deploy:
+  provider: releases
+  prerelease: true
+  api_key: GITHUB_OAUTH_TOKEN
+  file:
+    - "${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz"
+    - "${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-server.tar.gz"
+  on:
+    repo: hfag/shop-frontend
+after_deploy:
+  - if [[ $TRAVIS_BRANCH =~ (master) ]]; then
+    RELEASE_ID=$(curl https://api.github.com/repos/hfag/shop-frontend/releases/latest | grep -m 1 id | sed "s/\"id\"://g;s/,//g" | xargs)
+    curl -u Tyratox:a757eaacd3289798d1ab7020093ecf237d29cfbc --request PATCH https://api.github.com/repos/hfag/shop-frontend/releases/$RELEASE_ID --data "{\"prerelease\":false}"
+    fi

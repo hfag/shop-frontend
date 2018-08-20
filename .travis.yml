@@ -30,7 +30,6 @@ before_deploy:
     client
 deploy:
   provider: releases
-  prerelease: true
   api_key: $GITHUB_OAUTH_TOKEN
   file:
     - "dist/${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz"
@@ -38,7 +37,7 @@ deploy:
   on:
     repo: hfag/shop-frontend
 after_deploy:
-  - if [[ $TRAVIS_BRANCH =~ (master) ]]; then
+  - if ! [[ $TRAVIS_BRANCH =~ (master) ]]; then
     RELEASE_ID=$(curl https://api.github.com/repos/hfag/shop-frontend/releases/latest |
     grep -m 1 id |
     sed "s/\"id\"://g;s/,//g" |
@@ -49,6 +48,6 @@ after_deploy:
 
     curl -u Tyratox:$GITHUB_OAUTH_TOKEN
     --request PATCH https://api.github.com/repos/hfag/shop-frontend/releases/$RELEASE_ID
-    --data "{\"prerelease\":false}"
+    --data "{\"prerelease\":true}"
     ;
     fi

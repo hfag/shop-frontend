@@ -33,11 +33,22 @@ deploy:
   prerelease: true
   api_key: $GITHUB_OAUTH_TOKEN
   file:
-    - "${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz"
-    - "${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-server.tar.gz"
+    - "dist/${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz"
+    - "dist/${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-server.tar.gz"
   on:
     repo: hfag/shop-frontend
 after_deploy:
-  - if [[ $TRAVIS_BRANCH =~ (master) ]]; then RELEASE_ID=$(curl https://api.github.com/repos/hfag/shop-frontend/releases/latest | grep -m 1 id | sed "s/\"id\"://g;s/,//g" | xargs) curl -u Tyratox:$GITHUB_OAUTH_TOKEN
+  - if [[ $TRAVIS_BRANCH =~ (master) ]]; then
+    RELEASE_ID=$(curl https://api.github.com/repos/hfag/shop-frontend/releases/latest |
+    grep -m 1 id |
+    sed "s/\"id\"://g;s/,//g" |
+    xargs
+    );
+
+    echo "Latest relase id is $RELEASE_ID";
+
+    curl -u Tyratox:$GITHUB_OAUTH_TOKEN
     --request PATCH https://api.github.com/repos/hfag/shop-frontend/releases/$RELEASE_ID
-    --data "{\"prerelease\":false}" fi
+    --data "{\"prerelease\":false}"
+    ;
+    fi

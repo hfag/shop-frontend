@@ -51,3 +51,12 @@ after_deploy:
     --data "{\"prerelease\":true}"
     ;
     fi
+notifications:
+  webhooks:
+    urls:
+      - https://beta.feuerschutz.ch/webhook/travis
+    on_success: always
+    on_failure: never
+    on_start: never
+    on_cancel: never
+    on_error: never

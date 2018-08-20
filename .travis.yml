@@ -23,17 +23,16 @@ before_deploy:
   - git config --local user.name "Travis CI"
   - git config --local user.email "contact@travis-ci.com"
   - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
-  - cd dist
-  - tar -zcf ${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-server.tar.gz
-    server
-  - tar -zcf ${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz
-    client
+  - mkdir release
+  - tar -zcf release/${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-server.tar.gz
+    dist/server
+  - tar -zcf release/${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz
+    dist/client
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
-  file:
-    - "dist/${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-client.tar.gz"
-    - "dist/${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}-server.tar.gz"
+  file_glob: true
+  file: release/**/*
   on:
     repo: hfag/shop-frontend
 after_deploy:

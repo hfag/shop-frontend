@@ -10,6 +10,8 @@ env:
     - secure: rFRf8UP0lljgh2fqobtDEXIu0xdmpTWtE4o5WWSsJaur9TO7rcMndoQASeOzTtI0P/U9PPoHJEp7l4lDRNC3aTuUx/LKsI4Cx7WTL+1WcP1u/ZkxWbhwBe1W5w1TgWNYMyE4Pu4w5PskAmuHaw6kn8c2OoZQChlPmc7k2eahCWd0ipfLtP7PBTFjokD6mNGBBDvXNxZIQTx6GeZ+/YmgvF/q1MvYOPNHI15HJhmwcL5+EP2VE0vqFdNIHvqz6vRZNv02TzNDOGT1jrsSLZ4XU+bymx6vT+OteqWvm/DKzpXdut7WQo6Z9Oa8/kgDJtkHW2p0kOwuj4mB7S5lVTHsKEw1Ao51yqJs9n+uhP+ra1h5e3njmSNg5nybuX7yoaCwDW3lUCXaO1H3pAgTl6xv0EUJb2AYgISESSdZb5gI2piwR+rUC1A+ZJozB5XOuIyeJ5lgKqLvoYChSN54OnDfZBZ5V7+CI2r5HKi7xvUqrNyYC9waKbqjyYruLOGQh/VQrqDev7koo4UhB63vntY/PkHYMl0ZBUZoMi2273mCPdyAify43ZhhuKGOgxVRxrpWA5gmti89vo3gVxDQ0av9xf3I3gZXvL8+SB7NPFIiOcPsmKtVqOmPJ7vBbDWRZEMQeR7ggU42E54bU+BFJZaqs/1ReCpEsEo/Q/NPQ2D/c4Q=
 install:
   - yarn install
+before_script:
+  - cp .env.example .env
 script:
   - yarn build
   - yarn build-server

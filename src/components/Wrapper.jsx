@@ -56,7 +56,7 @@ class Wrapper extends React.Component {
                   </SidebarWrapper>
                 </MediaQuery>
               </Box>
-              <Box width={[1, 1, 5 / 6, 5 / 6]}>
+              <Box width={[1, 1, 1, 5 / 6]}>
                 <Container>
                   <Breadcrumbs />
                   {children}

@@ -144,13 +144,14 @@ const ButtonWrapper = styled.div`
  */
 class Button extends React.PureComponent {
   render = () => {
+    const { state = "" } = this.props;
     return (
       <div>
         <ButtonWrapper
           height={this.props.height || "2rem"}
           fullWidth={this.props.fullWidth}
           float={this.props.float}
-          disabled={this.props.state === "disabled"}
+          disabled={state === "disabled"}
         >
           <ProgressButton
             controlled={this.props.controlled}
@@ -160,7 +161,7 @@ class Button extends React.PureComponent {
             onClick={this.props.onClick}
             onError={this.props.onError}
             onSuccess={this.props.onSuccess}
-            state={this.props.state}
+            state={state}
             type={this.props.type}
             form={this.props.form}
             shouldAllowClickOnLoading={this.props.shouldAllowClickOnLoading}

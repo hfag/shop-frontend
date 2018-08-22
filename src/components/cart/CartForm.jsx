@@ -9,6 +9,7 @@ import Table from "../../components/Table";
 import Thumbnail from "../../containers/Thumbnail";
 import UncontrolledCollapse from "../../components/UncontrolledCollapse";
 import { colors } from "../../utilities/style";
+import MediaQuery from "../MediaQuery";
 
 const Action = styled.span`
   cursor: pointer;
@@ -22,7 +23,7 @@ const Action = styled.span`
 `;
 
 const CartTable = styled(Table)`
-  table-layout: fixed;
+  table-layout: auto;
 
   col.image {
     width: 10%;
@@ -56,6 +57,11 @@ const CartTable = styled(Table)`
   }
 `;
 
+const TableScroll = styled.div`
+  max-width: 100%;
+  overflow: scroll;
+`;
+
 /**
  * The inner cart form
  * @returns {Component} The inner cart form
@@ -79,145 +85,147 @@ const InnerCartForm = ({
   onProceed
 }) => (
   <Form>
-    <CartTable>
-      <colgroup>
-        <col className="image" />
-        <col className="description" />
-        <col className="sku" />
-        <col className="price" />
-        <col className="quantity" />
-        <col className="subtotal" />
-        <col className="actions" />
-      </colgroup>
-      <thead>
-        <tr>
-          <th />
-          <th>Beschreibung</th>
-          <th>Artikelnummer</th>
-          <th>Preis</th>
-          <th>Anzahl</th>
-          <th>Subtotal</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        <FieldArray
-          name="items"
-          render={({ move, swap, push, insert, unshift, pop, remove }) => {
-            return values.items.map((item, index) => (
-              <tr key={index}>
-                <td>
-                  <Thumbnail id={item.thumbnailId} />
-                </td>
-                <td>
-                  <h4>{item.title}</h4>
-                  <UncontrolledCollapse
-                    openLink={"Zeige Details"}
-                    closeLink={"Weniger Details"}
-                    isOpenDefault={false}
-                  >
-                    <div
-                      dangerouslySetInnerHTML={{ __html: item.attributes }}
-                    />
-                  </UncontrolledCollapse>
-                </td>
-                <td>{item.sku}</td>
-                <td>
-                  {item.discountPrice ? (
-                    <div>
+    <TableScroll>
+      <CartTable>
+        <colgroup>
+          <col className="image" />
+          <col className="description" />
+          <col className="sku" />
+          <col className="price" />
+          <col className="quantity" />
+          <col className="subtotal" />
+          <col className="actions" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th />
+            <th>Beschreibung</th>
+            <th>Artikelnummer</th>
+            <th>Preis</th>
+            <th>Anzahl</th>
+            <th>Subtotal</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          <FieldArray
+            name="items"
+            render={({ move, swap, push, insert, unshift, pop, remove }) => {
+              return values.items.map((item, index) => (
+                <tr key={index}>
+                  <td style={{ minWidth: "100px" }}>
+                    <Thumbnail id={item.thumbnailId} />
+                  </td>
+                  <td>
+                    <h4>{item.title}</h4>
+                    <UncontrolledCollapse
+                      openLink={"Zeige Details"}
+                      closeLink={"Weniger Details"}
+                      isOpenDefault={false}
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{ __html: item.attributes }}
+                      />
+                    </UncontrolledCollapse>
+                  </td>
+                  <td>{item.sku}</td>
+                  <td>
+                    {item.discountPrice ? (
                       <div>
-                        <Price strike>{item.price}</Price>
+                        <div>
+                          <Price strike>{item.price}</Price>
+                        </div>
+                        <div>
+                          <Price>{item.discountPrice}</Price>
+                        </div>
                       </div>
-                      <div>
-                        <Price>{item.discountPrice}</Price>
-                      </div>
-                    </div>
-                  ) : (
-                    <Price>{item.price}</Price>
-                  )}
-                </td>
-                <td>
-                  {enabled ? (
-                    <Field name={`items.${index}.quantity`} size="3" />
-                  ) : (
-                    <span>{item.quantity}</span>
-                  )}
-                </td>
-                <td>
-                  <Price>{item.subtotal}</Price>
-                </td>
-                <td>
-                  {enabled && (
-                    <Action>
-                      <MdDelete onClick={() => remove(index)} />
-                    </Action>
-                  )}
-                </td>
-              </tr>
-            ));
-          }}
-        />
-        <tr>
-          <td colSpan="7">
-            {enabled && (
-              <Button
-                float="right"
-                controlled
-                onClick={handleSubmit}
-                state={dirty ? status : "disabled"}
-              >
-                Warenkorb aktualisieren
-              </Button>
-            )}
-          </td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan="5">Versand</td>
-          <td>
-            <Price>{shipping}</Price>
-          </td>
-          <td />
-        </tr>
-        {fees.map((fee, index) => (
-          <tr key={index}>
-            <td colSpan="5">{fee.name}</td>
+                    ) : (
+                      <Price>{item.price}</Price>
+                    )}
+                  </td>
+                  <td>
+                    {enabled ? (
+                      <Field name={`items.${index}.quantity`} size="3" />
+                    ) : (
+                      <span>{item.quantity}</span>
+                    )}
+                  </td>
+                  <td>
+                    <Price>{item.subtotal}</Price>
+                  </td>
+                  <td>
+                    {enabled && (
+                      <Action>
+                        <MdDelete onClick={() => remove(index)} />
+                      </Action>
+                    )}
+                  </td>
+                </tr>
+              ));
+            }}
+          />
+          <tr>
+            <td colSpan="7">
+              {enabled && (
+                <Button
+                  float="right"
+                  controlled
+                  onClick={handleSubmit}
+                  state={dirty ? status : "disabled"}
+                >
+                  Warenkorb aktualisieren
+                </Button>
+              )}
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan="5">Versand</td>
             <td>
-              <Price>{fee.amount}</Price>
+              <Price>{shipping}</Price>
             </td>
             <td />
           </tr>
-        ))}
-        <tr className="total">
-          <td colSpan="5">Zwischensumme</td>
-          <td>
-            <Price>
-              {subtotalSum +
-                shipping +
-                fees.reduce((sum, fee) => sum + fee.amount, 0)}
-            </Price>
-          </td>
-          <td />
-        </tr>
-        {taxes.map((tax, index) => (
-          <tr key={index}>
-            <td colSpan="5">{tax.label}</td>
+          {fees.map((fee, index) => (
+            <tr key={index}>
+              <td colSpan="5">{fee.name}</td>
+              <td>
+                <Price>{fee.amount}</Price>
+              </td>
+              <td />
+            </tr>
+          ))}
+          <tr className="total">
+            <td colSpan="5">Zwischensumme</td>
             <td>
-              <Price>{tax.amount}</Price>
+              <Price>
+                {subtotalSum +
+                  shipping +
+                  fees.reduce((sum, fee) => sum + fee.amount, 0)}
+              </Price>
             </td>
             <td />
           </tr>
-        ))}
-        <tr className="total">
-          <td colSpan="5">Gesamtsumme</td>
-          <td>
-            <Price>{total}</Price>
-          </td>
-          <td />
-        </tr>
-      </tfoot>
-    </CartTable>
+          {taxes.map((tax, index) => (
+            <tr key={index}>
+              <td colSpan="5">{tax.label}</td>
+              <td>
+                <Price>{tax.amount}</Price>
+              </td>
+              <td />
+            </tr>
+          ))}
+          <tr className="total">
+            <td colSpan="5">Gesamtsumme</td>
+            <td>
+              <Price>{total}</Price>
+            </td>
+            <td />
+          </tr>
+        </tfoot>
+      </CartTable>
+    </TableScroll>
     {enabled &&
       values.items.length > 0 &&
       total > 0 && (

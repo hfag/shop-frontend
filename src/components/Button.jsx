@@ -30,6 +30,7 @@ const ButtonWrapper = styled.div`
     width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
   }
   .pb-container .pb-button {
+    position: relative;
     border: none;
 
     width: 100%;

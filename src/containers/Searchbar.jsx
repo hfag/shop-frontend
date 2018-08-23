@@ -108,7 +108,7 @@ const renderSuggestion = suggestion => (
           suggestion.variations
         } Variante${suggestion.variations > 1 ? "n" : ""})`}</div>
         <div className="price">
-          ab <Price>{suggestion.price}</Price>
+          ab <Price>{parseFloat(suggestion.price)}</Price>
         </div>
       </Flexbar>
     ) : (
@@ -201,8 +201,16 @@ class Searchbar extends React.PureComponent {
    * @param {Object} props react-autosuggest props
    * @returns {void}
    */
-  onSuggestionSelected = (event, { suggestion }) =>
-    this.props.dispatch(push(suggestion.url));
+  onSuggestionSelected = (event, { suggestion }) => {
+    switch (suggestion.type) {
+      case "product":
+        return this.props.dispatch(push("/produkt/" + suggestion.slug));
+      case "taxonomy":
+        return this.props.dispatch(push("/produkte/" + suggestion.slug + "/1"));
+      default:
+        return;
+    }
+  };
   /**
    * Determines whether suggestions should be rendered
    * @returns {boolean} Whether the suggestions should be rendered

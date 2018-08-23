@@ -144,7 +144,26 @@ class Product extends React.PureComponent {
     }
   };
 
-  componentWillMount = () => {
+  componentDidMount = () => {
+    this.fetchData();
+  };
+
+  /**
+   * Function called when the component is updated
+   * @param {Object} prevProps The previous props
+   * @param {Object} prevState The previous state
+   * @param {Object} snapshot A snapshot
+   * @returns {void}
+   */
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if (
+      prevProps.match.params.productSlug !== this.props.match.params.productSlug
+    ) {
+      this.fetchData();
+    }
+  };
+
+  fetchData = () => {
     const { categories, fetchProduct, fetchAllProductCategories } = this.props;
 
     if (categories.length === 0) {

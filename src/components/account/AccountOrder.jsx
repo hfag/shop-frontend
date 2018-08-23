@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import ReactDOM from "react-dom";
 import ReactIframeResizer from "react-iframe-resizer-super";
 
 import Placeholder from "../Placeholder";
@@ -9,10 +8,8 @@ const API_URL = process.env.API_URL;
 
 const OrderWrapper = styled.div`
   iframe {
-    width: 100%;
-    height: 100%;
-
     border: none;
+    overflow-x: scroll !important;
   }
 `;
 /**
@@ -37,7 +34,8 @@ class AccountOrder extends React.PureComponent {
           iframeResizerOptions={{
             checkOrigin: false,
             autoResize: false,
-            resizedCallback: () => this.setState({ placeholder: false })
+            resizedCallback: () => this.setState({ placeholder: false }),
+            scrolling: true
           }}
           src={`${API_URL}/wp-json/hfag/user-order?orderId=${orderId}&format=html`}
         />

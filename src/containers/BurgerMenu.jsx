@@ -16,10 +16,12 @@ import { getIsAuthenticated, getBurgerMenuOpen } from "../reducers";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 
 const BurgerContainer = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
+
+  overflow-y: scroll;
 
   padding: 1rem;
   width: 250px;
@@ -56,7 +58,7 @@ const BurgerItem = styled.li`
 `;
 
 const BurgerBackground = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;

@@ -86,7 +86,7 @@ class Account extends React.PureComponent {
     return (
       <AccountContainer>
         <Flex flexWrap="wrap">
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={4}>
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
             <Card>
               <h1>Mein Kundenkonto</h1>
               <ProfileNavigation>

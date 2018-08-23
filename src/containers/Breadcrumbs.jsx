@@ -56,6 +56,10 @@ const routes = [
     breadcrumb: generateStringBreadcrumb("Bestellungen")
   },
   {
+    path: "/suche",
+    breadcrumb: generateStringBreadcrumb("Suche")
+  },
+  {
     path: "/produkte/",
     breadcrumb: CategoryBreadcrumb
   },

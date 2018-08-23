@@ -44,7 +44,7 @@ const SuggestionContainer = styled.div`
   border-bottom-left-radius: 0.2rem;
   border-bottom-right-radius: 0.2rem;
 
-  z-index: 1000;
+  z-index: 50;
 
   &:empty {
     display: none;

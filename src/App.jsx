@@ -13,6 +13,7 @@ import Login from "./containers/Login";
 import Logout from "./containers/Logout";
 import Wrapper from "./components/Wrapper";
 import ScrollToTop from "./components/ScrollToTop";
+import Search from "./containers/Search";
 
 /**
  * The app's root component
@@ -26,6 +27,7 @@ const App = ({ history, store }) => {
           <ScrollToTop>
             <Route exact path="/" component={Frontpage} />
             <Route path="/produkte" component={ProductCategories} />
+            <Route path="/suche" component={Search} />
             <Route exact path="/produkt/:productSlug" component={Product} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />

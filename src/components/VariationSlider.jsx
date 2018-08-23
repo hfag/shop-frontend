@@ -10,6 +10,11 @@ const Slider = styled.div`
   & > div:first-child {
     overflow-x: scroll;
   }
+
+  img {
+    width: 100% !important;
+    height: auto !important;
+  }
 `;
 const Slide = styled(Box)`
   flex-shrink: 0;

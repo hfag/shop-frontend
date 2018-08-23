@@ -17,7 +17,7 @@ const CardWrapper = styled.div`
  */
 class Card extends React.PureComponent {
   render = () => {
-    return <CardWrapper>{this.props.children}</CardWrapper>;
+    return <CardWrapper {...this.props}>{this.props.children}</CardWrapper>;
   };
 }
 

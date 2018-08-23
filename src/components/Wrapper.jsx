@@ -12,16 +12,7 @@ import CategoriesSidebar from "../containers/sidebar/CategoriesSidebar";
 import ProductSidebar from "../containers/sidebar/ProductSidebar";
 import Card from "./Card";
 import MediaQuery from "./MediaQuery";
-
-const SidebarWrapper = styled.div`
-  height: 100%;
-  padding-bottom: 2rem;
-
-  & > div {
-    /* card */
-    height: 100%;
-  }
-`;
+import Sidebar from "../containers/Sidebar";
 
 /**
  * The global wrapper component
@@ -41,20 +32,16 @@ class Wrapper extends React.Component {
           <main>
             <Flex>
               <Box width={[0, 0, 0, 1 / 6]}>
-                <MediaQuery lg up>
-                  <SidebarWrapper>
-                    <Card>
-                      <Switch>
-                        <Route path="/produkte" component={CategoriesSidebar} />
-                        <Route
-                          path="/produkt/:productSlug"
-                          component={ProductSidebar}
-                        />
-                        <Route path="/" component={CategoriesSidebar} />
-                      </Switch>
-                    </Card>
-                  </SidebarWrapper>
-                </MediaQuery>
+                <Sidebar>
+                  <Switch>
+                    <Route path="/produkte" component={CategoriesSidebar} />
+                    <Route
+                      path="/produkt/:productSlug"
+                      component={ProductSidebar}
+                    />
+                    <Route path="/" component={CategoriesSidebar} />
+                  </Switch>
+                </Sidebar>
               </Box>
               <Box width={[1, 1, 1, 5 / 6]}>
                 <Container>

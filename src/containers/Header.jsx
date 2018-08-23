@@ -29,7 +29,6 @@ import Push from "../components/Push";
 import Circle from "../components/Circle";
 import Link from "../components/Link";
 import MediaQuery from "../components/MediaQuery";
-import BurgerMenu from "../containers/BurgerMenu";
 import NavItem from "../components/NavItem";
 import Navbar from "../components/Navbar";
 import Searchbar from "../containers/Searchbar";
@@ -125,7 +124,6 @@ class Header extends React.PureComponent {
     return (
       <HeaderWrapper>
         <LoadingBar className="redux-loading-bar" />
-        <BurgerMenu />
         <header>
           <Navbar>
             <Flex>
@@ -140,10 +138,10 @@ class Header extends React.PureComponent {
                   </LogoLeft>
                 </MediaQuery>
               </FullHeightBox>
-              <FullHeightBox width={[1, 1, 5 / 6, 5 / 6]} pl={2}>
+              <FullHeightBox width={[1, 1, 1, 5 / 6]} pl={2}>
                 <Container>
                   <Flexbar>
-                    <MediaQuery md up>
+                    <MediaQuery lg up>
                       <NavItem>
                         <Link to="/" title="Homepage">
                           <img src={NameSloganNegative} alt="Slogan" />
@@ -151,7 +149,7 @@ class Header extends React.PureComponent {
                       </NavItem>
                     </MediaQuery>
 
-                    <MediaQuery md down>
+                    <MediaQuery lg down>
                       <Flexbar>
                         <NavItem>
                           <Link onClick={toggleBurgerMenu} negative>

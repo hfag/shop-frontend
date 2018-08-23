@@ -12,6 +12,7 @@ import Cart from "./containers/Cart";
 import Login from "./containers/Login";
 import Logout from "./containers/Logout";
 import Wrapper from "./components/Wrapper";
+import ScrollToTop from "./components/ScrollToTop";
 
 /**
  * The app's root component
@@ -22,13 +23,15 @@ const App = ({ history, store }) => {
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <Wrapper>
-          <Route exact path="/" component={Frontpage} />
-          <Route path="/produkte" component={ProductCategories} />
-          <Route exact path="/produkt/:productSlug" component={Product} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/logout" component={Logout} />
-          <Route path="/konto" component={Account} />
-          <Route exact path="/warenkorb" component={Cart} />
+          <ScrollToTop>
+            <Route exact path="/" component={Frontpage} />
+            <Route path="/produkte" component={ProductCategories} />
+            <Route exact path="/produkt/:productSlug" component={Product} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/logout" component={Logout} />
+            <Route path="/konto" component={Account} />
+            <Route exact path="/warenkorb" component={Cart} />
+          </ScrollToTop>
         </Wrapper>
       </ConnectedRouter>
     </Provider>

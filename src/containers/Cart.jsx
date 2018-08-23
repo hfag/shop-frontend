@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import universal from "react-universal-component";
+import { Flex, Box } from "grid-styled";
 
 import {
   fetchShoppingCart,
@@ -20,6 +22,12 @@ import {
 import CartForm from "../components/cart/CartForm";
 import CheckoutForm from "../components/cart/CheckoutForm";
 import Card from "../components/Card";
+import UncontrolledCollapse from "../components/UncontrolledCollapse";
+import Button from "../components/Button";
+
+const SkuSelection = universal(props =>
+  import(/* webpackChunkName: "sku-selection" */ "./SkuSelection")
+);
 
 /**
  * The cart page
@@ -30,7 +38,8 @@ class Cart extends React.PureComponent {
     super();
     this.state = {
       step: "cart",
-      showShipping: false
+      showShipping: false,
+      showSkuSelection: false
     };
   }
 
@@ -60,13 +69,21 @@ class Cart extends React.PureComponent {
       account,
       checkoutValues
     } = this.props;
-    const { step, showShipping } = this.state;
+    const { step, showShipping, showSkuSelection } = this.state;
 
     const subtotalSum = items.reduce((sum, item) => sum + item.subtotal, 0);
 
     return (
       <Card>
         <h1>Warenkorb</h1>
+
+        {showSkuSelection && (
+          <div>
+            <SkuSelection />
+            <hr />
+          </div>
+        )}
+
         <CartForm
           items={items}
           shipping={shipping}
@@ -77,7 +94,18 @@ class Cart extends React.PureComponent {
           updateShoppingCartItem={updateShoppingCartItem}
           enabled={step === "cart"}
           onProceed={() => this.setState({ step: "checkout" })}
+          lastRow={
+            !showSkuSelection && (
+              <Button
+                onClick={() => this.setState({ showSkuSelection: true })}
+                state=""
+              >
+                Suche nach Produkt
+              </Button>
+            )
+          }
         />
+
         {step === "checkout" && (
           <CheckoutForm
             values={checkoutValues}

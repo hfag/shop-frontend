@@ -4,7 +4,6 @@ import { push } from "react-router-redux";
 import { Flex, Box } from "grid-styled";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
-import universal from "react-universal-component";
 
 import { getCountries } from "../reducers";
 import { fetchCountries } from "../actions/countries";
@@ -44,10 +43,6 @@ const AccountContainer = styled.div`
     margin-top: 0;
   }
 `;
-
-const AccountResellerDashboard = universal(props =>
-  import(/* webpackChunkName: "reseller-dashboard" */ "./account/AccountResellerDashboard")
-);
 
 /**
  * The account page
@@ -104,9 +99,6 @@ class Account extends React.PureComponent {
                 </li>
                 <li>
                   <Link to={`${url}/bestellungen`}>Bestellungen</Link>
-                </li>
-                <li>
-                  <Link to={`${url}/wiederverkäufer`}>Wiederverkäufer</Link>
                 </li>
                 <li>
                   <Link to="/logout">Abmelden</Link>
@@ -170,10 +162,6 @@ class Account extends React.PureComponent {
                 <Route
                   path={`${url}/bestellung/:orderId`}
                   component={AccountOrder}
-                />
-                <Route
-                  path={`${url}/wiederverkäufer`}
-                  component={() => <AccountResellerDashboard />}
                 />
               </Switch>
             </Card>

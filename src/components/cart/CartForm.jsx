@@ -62,6 +62,13 @@ const TableScroll = styled.div`
   overflow: scroll;
 `;
 
+const LastRow = styled.div`
+  & > * {
+    float: right;
+    margin-left: 1rem;
+  }
+`;
+
 /**
  * The inner cart form
  * @returns {Component} The inner cart form
@@ -82,7 +89,8 @@ const InnerCartForm = ({
   subtotalSum,
   total,
   enabled,
-  onProceed
+  onProceed,
+  lastRow
 }) => (
   <Form>
     <TableScroll>
@@ -166,16 +174,18 @@ const InnerCartForm = ({
           />
           <tr>
             <td colSpan="7">
-              {enabled && (
-                <Button
-                  float="right"
-                  controlled
-                  onClick={handleSubmit}
-                  state={dirty ? status : "disabled"}
-                >
-                  Warenkorb aktualisieren
-                </Button>
-              )}
+              <LastRow>
+                {enabled && (
+                  <Button
+                    controlled
+                    onClick={handleSubmit}
+                    state={dirty ? status : "disabled"}
+                  >
+                    Warenkorb aktualisieren
+                  </Button>
+                )}
+                {lastRow}
+              </LastRow>
             </td>
           </tr>
         </tbody>

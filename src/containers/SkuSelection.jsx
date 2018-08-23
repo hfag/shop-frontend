@@ -5,21 +5,21 @@ import ReactTable from "react-table";
 import fuzzy from "fuzzy";
 import get from "lodash/get";
 
-import Button from "../../components/Button";
-import { addShoppingCartItem } from "../../actions/shopping-cart";
+import Button from "../components/Button";
+import { addShoppingCartItem } from "../actions/shopping-cart";
 import {
   fetchSimpleProducts,
   clearSimpleProducts
-} from "../../actions/product/simple";
+} from "../actions/product/simple";
 import {
   getSimpleProducts,
   getResellerDiscount,
   isFetchingSimpleItems
-} from "../../reducers";
-import { colors } from "../../utilities/style";
-import Price from "../../components/Price";
+} from "../reducers";
+import { colors } from "../utilities/style";
+import Price from "../components/Price";
 
-const ResellerDashboardWrapper = styled.div`
+const SkuSelectionWrapper = styled.div`
   h2 {
     margin-top: 0;
   }
@@ -156,10 +156,10 @@ class NameCell extends React.PureComponent {
 }
 
 /**
- * The account reseller dashboard
+ * The sku selection
  * @returns {Component} The component
  */
-class AccountResellerDashboard extends React.PureComponent {
+class SkuSelection extends React.PureComponent {
   componentDidMount = () => {
     const { products, fetchSimpleProducts, isFetching, dispatch } = this.props;
 
@@ -177,8 +177,7 @@ class AccountResellerDashboard extends React.PureComponent {
     const { products, addToShoppingCart, isFetching } = this.props;
 
     return (
-      <ResellerDashboardWrapper>
-        <h2>Wiederverkäufer</h2>
+      <SkuSelectionWrapper>
         <StyledTable
           loading={isFetching}
           columns={[
@@ -290,8 +289,8 @@ class AccountResellerDashboard extends React.PureComponent {
             }
           ]}
           data={products}
-          pageSizeOptions={[10, 20, 25, 50, 100]}
-          defaultPageSize={20}
+          pageSizeOptions={[5, 10, 20, 25, 50, 100]}
+          defaultPageSize={5}
           minRows={2}
           resizable={false}
           filterable
@@ -304,7 +303,7 @@ class AccountResellerDashboard extends React.PureComponent {
           ofText="von"
           rowsText="Zeilen"
         />
-      </ResellerDashboardWrapper>
+      </SkuSelectionWrapper>
     );
   };
 }
@@ -377,4 +376,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AccountResellerDashboard);
+)(SkuSelection);

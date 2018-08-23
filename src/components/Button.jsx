@@ -170,7 +170,7 @@ class Button extends React.PureComponent {
             {this.props.children}
           </ProgressButton>
         </ButtonWrapper>
-        <Clearfix />
+        {this.props.float && <Clearfix />}
       </div>
     );
   };

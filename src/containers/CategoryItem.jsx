@@ -58,11 +58,13 @@ const StyledCategory = styled.div`
 
 const Title = styled.div`
   font-weight: 500;
+  word-break: break-word;
 `;
 
 const Subtitle = styled.div`
   color: ${colors.fontLight};
   font-size: 0.8rem;
+  word-break: break-word;
 `;
 
 /**

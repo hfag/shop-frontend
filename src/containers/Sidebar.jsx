@@ -17,9 +17,14 @@ import MediaQuery from "../components/MediaQuery";
 import Card from "../components/Card";
 
 const BurgerContainer = styled.div`
+  height: 100%;
   z-index: 100;
 
   transition: all 0.3s ease-in;
+
+  .card {
+    height: 100%;
+  }
 
   ${media.maxLarge`
     position: fixed;
@@ -35,7 +40,6 @@ const BurgerContainer = styled.div`
     .card {
       box-shadow: none !important;
       margin: 0;
-      height: 100%;
     }
 `};
 `;
@@ -91,7 +95,7 @@ class Sidebar extends React.PureComponent {
     } = this.props;
 
     return (
-      <div>
+      <div style={{ height: "100%", paddingBottom: "2rem" }}>
         <BurgerBackground onClick={toggleBurgerMenu} isOpen={isOpen} />
         <BurgerContainer isOpen={isOpen}>
           <Card className="card">

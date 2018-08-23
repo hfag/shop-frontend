@@ -436,9 +436,11 @@ class Product extends React.PureComponent {
           </Box>
         </Flex>
         <Flex flexWrap="wrap">
-          <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
-            <div dangerouslySetInnerHTML={{ __html: content }} />
-          </Box>
+          {content && (
+            <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
+              <div dangerouslySetInnerHTML={{ __html: content }} />
+            </Box>
+          )}
           <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
             <h4>Spezifikationen</h4>
             <StyledTable>

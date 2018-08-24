@@ -260,7 +260,8 @@ class Product extends React.PureComponent {
       date,
       variations = [],
       discount = {},
-      fields = []
+      fields = [],
+      galleryImageIds = []
     } = product;
 
     const selectedVariation = variations.find(variation =>
@@ -331,7 +332,7 @@ class Product extends React.PureComponent {
         {uniqueImageIds.length <= 1 && (
           <Flex>
             <ThumbnailBox width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
-              <Thumbnail id={thumbnailId} />
+              <Thumbnail id={thumbnailId} size="shop_single" />
             </ThumbnailBox>
           </Flex>
         )}
@@ -522,6 +523,19 @@ class Product extends React.PureComponent {
           {content && (
             <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
               <div dangerouslySetInnerHTML={{ __html: content }} />
+              <h2>Bildergalerie</h2>
+              <Flex flexWrap="wrap">
+                {galleryImageIds.map(imageId => (
+                  <Box
+                    key={imageId}
+                    width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
+                    px={2}
+                    mb={2}
+                  >
+                    <Thumbnail id={imageId} size="medium" />
+                  </Box>
+                ))}
+              </Flex>
             </Box>
           )}
           <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>

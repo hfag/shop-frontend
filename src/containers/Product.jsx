@@ -23,6 +23,7 @@ import {
   getResellerDiscountByProductId
 } from "../reducers";
 import Bill from "../components/Bill";
+import { InputFieldWrapper } from "../components/InputField";
 
 const StyledTable = styled.table`
   word-wrap: break-word;
@@ -70,13 +71,15 @@ class Product extends React.PureComponent {
           props.product.variations
         ),
         selectedAttributes: this.getDefaultAttributes(props.product.variations),
-        quantity: 1
+        quantity: 1,
+        fieldValues: {}
       };
     } else {
       this.state = {
         possibleAttributeValues: {},
         selectedAttributes: {},
-        quantity: 1
+        quantity: 1,
+        fieldValues: {}
       };
     }
   }
@@ -219,6 +222,18 @@ class Product extends React.PureComponent {
       : optionValue;
   };
 
+  /**
+   * Called when a field changes
+   * @param {string} fieldLabel The field label
+   * @returns {void}
+   */
+  onChangeField = fieldLabel => e => {
+    const fieldValues = { ...this.state.fieldValues };
+
+    fieldValues[fieldLabel] = e.currentTarget.value;
+    this.setState({ fieldValues });
+  };
+
   render = () => {
     const {
       product = {},
@@ -231,6 +246,7 @@ class Product extends React.PureComponent {
     const {
       selectedAttributes,
       possibleAttributeValues,
+      fieldValues,
       quantity
     } = this.state;
 
@@ -243,7 +259,8 @@ class Product extends React.PureComponent {
       categoryIds,
       date,
       variations = [],
-      discount = {}
+      discount = {},
+      fields = []
     } = product;
 
     const selectedVariation = variations.find(variation =>
@@ -286,10 +303,32 @@ class Product extends React.PureComponent {
       })
     );
 
+    const uniqueImageIds = variations
+      .map(v => v.imageId)
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    const validatedFields = fields.reduce(
+      (validated, { label, type, maxLength }) => {
+        if (!validated) {
+          return validated;
+        }
+
+        const value = fieldValues[label] || "";
+        switch (type) {
+          case "text":
+          case "textarea":
+            return value !== "" && value.length <= maxLength;
+          default:
+            return false;
+        }
+      },
+      true
+    );
+
     return (
       <Card>
         <h1>{title}</h1>
-        {variations.length <= 1 && (
+        {uniqueImageIds.length <= 1 && (
           <Flex>
             <ThumbnailBox width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
               <Thumbnail id={thumbnailId} />
@@ -297,7 +336,7 @@ class Product extends React.PureComponent {
           </Flex>
         )}
 
-        {variations.length > 1 && (
+        {uniqueImageIds.length > 1 && (
           <div>
             <hr />
             <h4>Wähle eine Variante</h4>
@@ -339,6 +378,22 @@ class Product extends React.PureComponent {
               }
             />
           </Box>
+          {fields.map(({ label, placeholder, type, maxLength }, index) => (
+            <Box key={index} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+              <h4>{label}</h4>
+              {type === "text" && (
+                <InputFieldWrapper>
+                  <input
+                    type="text"
+                    placeholder={placeholder}
+                    maxLength={maxLength}
+                    onChange={this.onChangeField(label)}
+                    value={fieldValues[label] || ""}
+                  />
+                </InputFieldWrapper>
+              )}
+            </Box>
+          ))}
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
             <h4>Zurücksetzen</h4>
             <Button
@@ -402,7 +457,7 @@ class Product extends React.PureComponent {
             </Box>
           )}
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-            {selectedVariation ? (
+            {selectedVariation && validatedFields ? (
               <div>
                 <h4>Preis</h4>
                 <Bill
@@ -420,24 +475,30 @@ class Product extends React.PureComponent {
                 />
                 <Button
                   disabled={
-                    !selectedVariation || isNaN(quantity) || quantity <= 0
+                    !selectedVariation ||
+                    isNaN(quantity) ||
+                    quantity <= 0 ||
+                    !validatedFields
                   }
                   onClick={() =>
                     addToShoppingCart(
                       selectedVariation.id,
                       /* get labels */
-                      Object.keys(selectedAttributes).reduce(
-                        (object, attributeKey) => {
-                          object[
-                            this.getAttributeLabel(attributeKey)
-                          ] = this.getOptionLabel(
-                            attributeKey,
-                            selectedAttributes[attributeKey]
-                          );
-                          return object;
-                        },
-                        {}
-                      ),
+                      {
+                        ...Object.keys(selectedAttributes).reduce(
+                          (object, attributeKey) => {
+                            object[
+                              this.getAttributeLabel(attributeKey)
+                            ] = this.getOptionLabel(
+                              attributeKey,
+                              selectedAttributes[attributeKey]
+                            );
+                            return object;
+                          },
+                          {}
+                        ),
+                        ...fieldValues
+                      },
                       quantity
                     )
                   }
@@ -448,7 +509,10 @@ class Product extends React.PureComponent {
             ) : (
               <div>
                 <h4>Preis</h4>
-                <p>Wähle zuerst eine Variante aus!</p>
+                <p>
+                  Wählen Sie zuerst eine Variante und füllen alle benötigten
+                  Felder aus!
+                </p>
                 <Button state="disabled">Zum Warenkorb hinzufügen</Button>
               </div>
             )}

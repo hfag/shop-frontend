@@ -266,38 +266,36 @@ class VariationSlider extends React.PureComponent {
 
     return (
       <Slider>
-        {variations.length > 0 && (
-          <Flex
-            ref={ref => (this.slider = ref)}
-            flexWrap={showAll ? "wrap" : "nowrap"}
-          >
-            {Object.keys(imageMap)
-              .map(i => parseInt(i))
-              .map(imageId => (
-                <Slide
-                  key={imageId}
-                  width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
-                  pr={2}
-                  pb={2}
-                  active={
-                    activeImageIds.length > 1 &&
-                    activeImageIds.length === Object.keys(imageMap).length
-                      ? false
-                      : activeImageIds.includes(imageId)
-                  }
-                  ref={ref =>
-                    activeImageIds.includes(imageId) &&
-                    activeImageIds.length === 1
-                      ? (this.activeSlide = ref)
-                      : ""
-                  }
-                  onClick={this.onSelectImage(imageId, imageMap[imageId])}
-                >
-                  <Thumbnail id={imageId} />
-                </Slide>
-              ))}
-          </Flex>
-        )}
+        <Flex
+          ref={ref => (this.slider = ref)}
+          flexWrap={showAll ? "wrap" : "nowrap"}
+        >
+          {Object.keys(imageMap)
+            .map(i => parseInt(i))
+            .map(imageId => (
+              <Slide
+                key={imageId}
+                width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
+                pr={2}
+                pb={2}
+                active={
+                  activeImageIds.length > 1 &&
+                  activeImageIds.length === Object.keys(imageMap).length
+                    ? false
+                    : activeImageIds.includes(imageId)
+                }
+                ref={ref =>
+                  activeImageIds.includes(imageId) &&
+                  activeImageIds.length === 1
+                    ? (this.activeSlide = ref)
+                    : ""
+                }
+                onClick={this.onSelectImage(imageId, imageMap[imageId])}
+              >
+                <Thumbnail id={imageId} />
+              </Slide>
+            ))}
+        </Flex>
         {!showAll && (
           <Scrollers>
             <div

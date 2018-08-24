@@ -32,7 +32,8 @@ export const mapItem = (data, index) => {
     featured_media: thumbnailId,
     product_cat: categoryIds,
     date,
-    discount = { bulk_discount: {} }
+    discount = { bulk_discount: {} },
+    fields
   } = data.product ? data.product : data;
 
   return {
@@ -48,7 +49,15 @@ export const mapItem = (data, index) => {
     order: index,
     discount: {
       bulk: discount.bulk_discount
-    }
+    },
+    fields: fields.map(
+      ({ label, type, placeholder, max_length: maxLength }) => ({
+        label,
+        type,
+        placeholder,
+        maxLength
+      })
+    )
   };
 };
 

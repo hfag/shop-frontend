@@ -55,6 +55,11 @@ const CartTable = styled(Table)`
     border-top: ${colors.secondary} 1px solid;
     font-weight: bold;
   }
+
+  img {
+    width: 100% !important;
+    height: auto !important;
+  }
 `;
 
 const TableScroll = styled.div`
@@ -121,8 +126,8 @@ const InnerCartForm = ({
             render={({ move, swap, push, insert, unshift, pop, remove }) => {
               return values.items.map((item, index) => (
                 <tr key={index}>
-                  <td style={{ minWidth: "100px" }}>
-                    <Thumbnail id={item.thumbnailId} />
+                  <td style={{ minWidth: "100px", maxWidth: "100px" }}>
+                    <Thumbnail id={item.thumbnailId} size="medium" />
                   </td>
                   <td>
                     <h4>{item.title}</h4>

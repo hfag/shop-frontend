@@ -5,7 +5,7 @@ import get from "lodash/get";
 
 import { colors, borders } from "../utilities/style";
 
-const InputFieldWrapper = styled.div`
+export const InputFieldWrapper = styled.div`
   margin-bottom: 0.25rem;
 
   ${({ checkbox }) =>
@@ -15,7 +15,7 @@ const InputFieldWrapper = styled.div`
   left: -1.5rem;
   `
       : ""} /**/    
-  .checkout-label {
+  .input-label {
     display: block;
     margin-bottom: 0.5rem;
   }
@@ -69,7 +69,7 @@ class InputField extends React.Component {
     return (
       <InputFieldWrapper checkbox={checkbox}>
         {label && (
-          <label className="checkout-label" htmlFor={name}>
+          <label className="input-label" htmlFor={name}>
             {label}{" "}
             {required === true ? "*" : required === false ? "(optional)" : ""}
           </label>

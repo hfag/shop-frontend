@@ -128,7 +128,11 @@ class ProductItem extends React.PureComponent {
           <StyledProduct>
             <Thumbnail id={product ? product.thumbnailId : -1} />
             <div>
-              {product ? <Title>{product.title}</Title> : <Placeholder text />}
+              {product ? (
+                <Title dangerouslySetInnerHTML={{ __html: product.title }} />
+              ) : (
+                <Placeholder text />
+              )}
               {product ? (
                 categories ? (
                   categories.map(category => (

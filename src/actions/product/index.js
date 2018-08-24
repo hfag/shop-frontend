@@ -33,7 +33,7 @@ export const mapItem = (data, index) => {
     product_cat: categoryIds,
     date,
     discount = { bulk_discount: {} },
-    fields
+    fields = []
   } = data.product ? data.product : data;
 
   return {

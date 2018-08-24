@@ -103,7 +103,7 @@ class CategoryItem extends React.PureComponent {
             <Thumbnail id={category ? category.thumbnailId : -1} />
             <div>
               {category ? (
-                <Title>{category.name}</Title>
+                <Title dangerouslySetInnerHTML={{ __html: category.name }} />
               ) : (
                 <Placeholder text height={2} />
               )}

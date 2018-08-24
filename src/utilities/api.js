@@ -55,15 +55,27 @@ export const fetchApi = (url, options) => {
             .json()
             .then(json => {
               if (response.ok) {
+                if (json && json.errors && json.errors.length !== 0) {
+                  if (
+                    json.errors.length === 1 &&
+                    json.errors[0] ===
+                      "You have to be logged in to perform this action"
+                  ) {
+                    if (typeof window !== "undefined") {
+                      window.location =
+                        "/login?redirect=" +
+                        encodeURIComponent(window.location.pathname); //we can't use react-router in here as we don't have access to the store
+                    }
+
+                    return;
+                  }
+                }
+
                 return { json, response };
               }
 
-              if (response.status === 401) {
+              if (json.status === 401) {
                 //session expired
-                /*typeof window !== 'undefined' && window.location =
-									"/login?redirect=" +
-									encodeURIComponent(window.location.pathname); //we can't use react-router in here as we don't have access to the store
-								return;*/
               }
 
               return Promise.reject(

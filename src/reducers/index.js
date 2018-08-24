@@ -349,8 +349,14 @@ const appReducer = combineReducers({
   sales,
   account,
   orders,
-  isAuthenticated: (state = false, action) =>
-    action.type === "LOGIN_USER" && !action.isFetching ? action.success : state
+  isAuthenticated: (state = false, action) => {
+    switch (action.type) {
+      case "LOGIN_USER":
+        return !action.isFetching ? action.success : state;
+      default:
+        return state;
+    }
+  }
 });
 
 /**
@@ -361,6 +367,13 @@ const appReducer = combineReducers({
  */
 const rootReducer = (state, action) => {
   if (action.type === "LOGOUT_USER") {
+    state = undefined;
+  }
+
+  if (
+    action.type === "FETCH_SHOPPING_CART" &&
+    action.loggedIn !== getIsAuthenticated(state)
+  ) {
     state = undefined;
   }
 

@@ -4,11 +4,13 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import * as yup from "yup";
 import { Flex, Box } from "grid-styled";
+import queryString from "query-string";
 
-import { login, register } from "../actions/authentication";
+import { login, register, logout } from "../actions/authentication";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 import Card from "../components/Card";
+import { getIsAuthenticated } from "../reducers";
 
 /**
  * The inner login form
@@ -84,8 +86,21 @@ const LoginRegisterForm = withFormik({
 class Login extends React.PureComponent {
   constructor() {
     super();
-    this.state = { registered: false };
+
+    const { redirect } = queryString.parse(location.search);
+
+    this.state = { registered: false, redirect: redirect || undefined };
   }
+
+  componentDidMount = () => {
+    const { resetAuthentication, isAuthenticated } = this.props;
+    const { redirect } = this.state;
+
+    if (redirect && isAuthenticated) {
+      resetAuthentication();
+    }
+  };
+
   render = () => {
     const { dispatch, login, register } = this.props;
     return (
@@ -116,9 +131,18 @@ class Login extends React.PureComponent {
   };
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  isAuthenticated: getIsAuthenticated(state)
+});
 const mapDispatchToProps = dispatch => ({
   dispatch,
+  /**
+   * Resets the jwt token
+   * @returns {void}
+   */
+  resetAuthentication() {
+    return dispatch(logout());
+  },
   /**
    * Logs a user in
    * @param {string} username The email/username

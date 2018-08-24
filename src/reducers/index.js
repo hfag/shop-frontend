@@ -372,7 +372,8 @@ const rootReducer = (state, action) => {
 
   if (
     action.type === "FETCH_SHOPPING_CART" &&
-    action.loggedIn !== getIsAuthenticated(state)
+    action.loggedIn === false &&
+    getIsAuthenticated(state) === true
   ) {
     state = undefined;
   }

@@ -43,7 +43,10 @@ export const createAllIds = (
               ...state,
               ...action.items
                 .map(item => item[uniqueProperty])
-                .filter(id => !state.includes(id))
+                .filter(
+                  (id, index, ids) =>
+                    !state.includes(id) && ids.indexOf(id) === index
+                )
             ]
           : state.filter(item => !action.items.includes(item[uniqueProperty]))
         : state;

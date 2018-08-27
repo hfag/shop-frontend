@@ -19,7 +19,7 @@ const Product = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "product" */ "./containers/Product")
 );
 const Login = universalWithLoadingBar(props =>
-  import(/* webpackChunkName: "login" */ "./containers/login")
+  import(/* webpackChunkName: "login" */ "./containers/Login")
 );
 const Account = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "account" */ "./containers/Account")

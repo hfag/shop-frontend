@@ -28,6 +28,7 @@ import {
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
+import { InputFieldWrapper } from "../components/InputFieldWrapper";
 
 const StyledTable = styled.table`
   word-wrap: break-word;
@@ -504,10 +505,12 @@ class Product extends React.PureComponent {
                           ...fieldValues
                         },
                         quantity
-                      ).then(() =>
-                        ReactDOM.findDOMNode(
-                          this.crossSelling.current
-                        ).scrollIntoView()
+                      ).then(
+                        () =>
+                          this.crossSelling.current &&
+                          ReactDOM.findDOMNode(
+                            this.crossSelling.current
+                          ).scrollIntoView()
                       )
                     }
                   >

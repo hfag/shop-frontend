@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
 import isEqual from "lodash/isEqual";
+import Lightbox from "react-images";
 
 import Thumbnail from "../containers/Thumbnail";
 import Card from "../components/Card";
@@ -20,10 +21,10 @@ import {
   getProductCategories,
   getProductBySlug,
   getProductAttributesBySlug,
-  getResellerDiscountByProductId
+  getResellerDiscountByProductId,
+  getAttachments
 } from "../reducers";
 import Bill from "../components/Bill";
-import { InputFieldWrapper } from "../components/InputField";
 
 const StyledTable = styled.table`
   word-wrap: break-word;
@@ -50,6 +51,10 @@ const DiscountRow = styled.tr`
   color: ${({ selected }) => (selected ? "#fff" : "inherit")};
 `;
 
+const LightboxBox = styled(Box)`
+  cursor: zoom-in;
+`;
+
 /**
  * Renders the product page
  * @returns {Component} The component
@@ -58,23 +63,18 @@ class Product extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    if (props.product) {
-      this.state = {
-        possibleAttributeValues: this.getPossibleAttributeValues(
-          props.product.variations
-        ),
-        selectedAttributes: this.getDefaultAttributes(props.product.variations),
-        quantity: 1,
-        fieldValues: {}
-      };
-    } else {
-      this.state = {
-        possibleAttributeValues: {},
-        selectedAttributes: {},
-        quantity: 1,
-        fieldValues: {}
-      };
-    }
+    this.state = {
+      possibleAttributeValues: props.product
+        ? this.getPossibleAttributeValues(props.product.variations)
+        : {},
+      selectedAttributes: props.product
+        ? this.getDefaultAttributes(props.product.variations)
+        : {},
+      quantity: 1,
+      fieldValues: {},
+      isLightboxOpen: false,
+      currentLightboxImage: 1
+    };
   }
 
   /**
@@ -233,14 +233,17 @@ class Product extends React.PureComponent {
       attributes = {},
       categories,
       addToShoppingCart,
-      resellerDiscount
+      resellerDiscount,
+      galleryAttachments = []
     } = this.props;
 
     const {
       selectedAttributes,
       possibleAttributeValues,
       fieldValues,
-      quantity
+      quantity,
+      isLightboxOpen,
+      currentLightboxImage
     } = this.state;
 
     const {
@@ -518,17 +521,76 @@ class Product extends React.PureComponent {
               <div dangerouslySetInnerHTML={{ __html: content }} />
               <h2>Bildergalerie</h2>
               <Flex flexWrap="wrap">
-                {galleryImageIds.map(imageId => (
-                  <Box
+                {galleryImageIds.map((imageId, index) => (
+                  <LightboxBox
                     key={imageId}
                     width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
                     px={2}
                     mb={2}
+                    onClick={() =>
+                      this.setState({
+                        currentLightboxImage: index,
+                        isLightboxOpen: true
+                      })
+                    }
                   >
-                    <Thumbnail id={imageId} size="medium" />
-                  </Box>
+                    <Thumbnail id={imageId} size="shop_single" />
+                  </LightboxBox>
                 ))}
+                <LightboxBox
+                  width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
+                  px={2}
+                  mb={2}
+                  onClick={() =>
+                    this.setState({
+                      currentLightboxImage: galleryImageIds.length,
+                      isLightboxOpen: true
+                    })
+                  }
+                >
+                  <Thumbnail id={thumbnailId} size="shop_single" />
+                </LightboxBox>
               </Flex>
+              <Lightbox
+                images={galleryAttachments.map(attachment => ({
+                  src: attachment.url,
+                  /*caption: attachment.caption,*/
+                  srcSet: Object.values(attachment.sizes).map(
+                    size => `${size.source_url} ${size.width}w`
+                  ),
+                  thumbnail:
+                    attachment.sizes &&
+                    attachment.sizes.shop_single &&
+                    attachment.sizes.shop_single.source_url
+                }))}
+                isOpen={isLightboxOpen}
+                currentImage={currentLightboxImage}
+                onClickPrev={() =>
+                  this.setState({
+                    currentLightboxImage: Math.max(currentLightboxImage - 1, 0)
+                  })
+                }
+                onClickNext={() =>
+                  this.setState({
+                    currentLightboxImage: Math.min(
+                      currentLightboxImage + 1,
+                      galleryAttachments.length - 1
+                    )
+                  })
+                }
+                onClose={() => this.setState({ isLightboxOpen: false })}
+                imageCountSeparator={" von "}
+                leftArrowTitle={"Vorheriges Bild (linke Pfeiltaste)"}
+                rightArrowTitle={"Nächstes Bild (rechte Pfeiltaste)"}
+                closeButtonTitle={"Schliessen (Esc)"}
+                backdropClosesModal={true}
+                preventScroll={false}
+                showThumbnails={true}
+                onClickThumbnail={index =>
+                  this.setState({ currentLightboxImage: index })
+                }
+                theme={{}}
+              />
             </Box>
           )}
           <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
@@ -588,6 +650,11 @@ const mapStateToProps = (
   }
 ) => {
   const product = getProductBySlug(state, productSlug);
+  const galleryImageIds =
+    product && !product._isFetching
+      ? [...product.galleryImageIds, product.thumbnailId]
+      : [];
+
   return {
     productSlug,
     product: product && !product._isFetching ? product : {},
@@ -601,7 +668,12 @@ const mapStateToProps = (
     resellerDiscount: getResellerDiscountByProductId(
       state,
       product && product.id
-    )
+    ),
+    galleryAttachments:
+      galleryImageIds.length > 0 &&
+      getAttachments(state).filter(attachment =>
+        galleryImageIds.includes(attachment.id)
+      )
   };
 };
 

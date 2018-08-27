@@ -4,19 +4,29 @@ import { Route } from "react-router-dom";
 import { ConnectedRouter } from "react-router-redux";
 import { hot } from "react-hot-loader";
 import { Switch } from "react-router";
+import universal from "react-universal-component";
 
+import { universalWithLoadingBar } from "./utilities/universal";
 import Frontpage from "./containers/Frontpage";
 import ProductCategories from "./containers/ProductCategories";
-import Product from "./containers/Product";
-import Account from "./containers/Account";
-import Cart from "./containers/Cart";
-import Login from "./containers/Login";
 import Logout from "./containers/Logout";
 import Wrapper from "./components/Wrapper";
 import ScrollToTop from "./components/ScrollToTop";
 import Search from "./containers/Search";
 import Page404 from "./containers/404";
 
+const Product = universalWithLoadingBar(props =>
+  import(/* webpackChunkName: "product" */ "./containers/Product")
+);
+const Login = universalWithLoadingBar(props =>
+  import(/* webpackChunkName: "login" */ "./containers/login")
+);
+const Account = universalWithLoadingBar(props =>
+  import(/* webpackChunkName: "account" */ "./containers/Account")
+);
+const Cart = universalWithLoadingBar(props =>
+  import(/* webpackChunkName: "cart" */ "./containers/Cart")
+);
 
 /**
  * The app's root component

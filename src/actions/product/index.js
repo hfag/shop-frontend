@@ -34,7 +34,8 @@ export const mapItem = (data, index) => {
     date,
     discount = { bulk_discount: {} },
     fields = [],
-    galleryImageIds = []
+    galleryImageIds = [],
+    crossSellIds = []
   } = data.product ? data.product : data;
 
   return {
@@ -59,7 +60,8 @@ export const mapItem = (data, index) => {
         maxLength
       })
     ),
-    galleryImageIds
+    galleryImageIds,
+    crossSellIds
   };
 };
 
@@ -149,6 +151,10 @@ export const fetchProduct = createFetchSingleItemThunk(
             .map(mapAttachment)
         )
       );
+    }
+
+    if (item.product.crossSellIds && item.product.crossSellIds.length > 0) {
+      dispatch(fetchProducts(1, -1, 20, true, item.product.crossSellIds));
     }
 
     if (item.attributes) {

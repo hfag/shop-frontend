@@ -124,7 +124,7 @@ class ProductItem extends React.PureComponent {
             <FaPercent />
           </Discount>
         )}
-        <Link to={"/produkt/" + product.slug}>
+        <Link to={"/produkt/" + ((product && product.slug) || "")}>
           <StyledProduct>
             <Thumbnail id={product ? product.thumbnailId : -1} />
             <div>

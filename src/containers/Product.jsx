@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
@@ -22,9 +23,11 @@ import {
   getProductBySlug,
   getProductAttributesBySlug,
   getResellerDiscountByProductId,
-  getAttachments
+  getAttachments,
+  getProducts
 } from "../reducers";
 import Bill from "../components/Bill";
+import ProductItem from "./ProductItem";
 
 const StyledTable = styled.table`
   word-wrap: break-word;
@@ -75,6 +78,8 @@ class Product extends React.PureComponent {
       isLightboxOpen: false,
       currentLightboxImage: 1
     };
+
+    this.crossSelling = React.createRef();
   }
 
   /**
@@ -257,7 +262,8 @@ class Product extends React.PureComponent {
       variations = [],
       discount = {},
       fields = [],
-      galleryImageIds = []
+      galleryImageIds = [],
+      crossSellIds = []
     } = product;
 
     const selectedVariation = variations.find(variation =>
@@ -323,320 +329,343 @@ class Product extends React.PureComponent {
     );
 
     return (
-      <Card>
-        <h1>{title}</h1>
-        {uniqueImageIds.length <= 1 && (
-          <Flex>
-            <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
-              <Thumbnail id={thumbnailId} size="shop_single" />
-            </Box>
-          </Flex>
-        )}
+      <div>
+        <Card>
+          <h1>{title}</h1>
+          {uniqueImageIds.length <= 1 && (
+            <Flex>
+              <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
+                <Thumbnail id={thumbnailId} size="shop_single" />
+              </Box>
+            </Flex>
+          )}
 
-        {uniqueImageIds.length > 1 && (
-          <div>
-            <hr />
-            <h4>Wähle eine Variante</h4>
-            <VariationSlider
-              variations={variations}
-              selectedAttributes={selectedAttributes}
-              onSelect={this.onVariationSliderSelect}
-            />
-          </div>
-        )}
-        <Flex flexWrap="wrap">
-          {Object.keys(possibleAttributes)
-            .filter(
-              attributeKey => possibleAttributeValues[attributeKey].length > 1
-            )
-            .map(attributeKey => (
-              <Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-                <h4>{this.getAttributeLabel(attributeKey)}</h4>
-                <Select
-                  placeholder="Wählen Sie eine Eigenschaft"
-                  onChange={this.onChangeDropdown(attributeKey)}
-                  value={selectedAttributes[attributeKey]}
-                  options={possibleAttributes[attributeKey].map(value => ({
-                    label: this.getOptionLabel(attributeKey, value),
-                    value
-                  }))}
-                />
+          {uniqueImageIds.length > 1 && (
+            <div>
+              <hr />
+              <h4>Wähle eine Variante</h4>
+              <VariationSlider
+                variations={variations}
+                selectedAttributes={selectedAttributes}
+                onSelect={this.onVariationSliderSelect}
+              />
+            </div>
+          )}
+          <Flex flexWrap="wrap">
+            {Object.keys(possibleAttributes)
+              .filter(
+                attributeKey => possibleAttributeValues[attributeKey].length > 1
+              )
+              .map(attributeKey => (
+                <Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+                  <h4>{this.getAttributeLabel(attributeKey)}</h4>
+                  <Select
+                    placeholder="Wählen Sie eine Eigenschaft"
+                    onChange={this.onChangeDropdown(attributeKey)}
+                    value={selectedAttributes[attributeKey]}
+                    options={possibleAttributes[attributeKey].map(value => ({
+                      label: this.getOptionLabel(attributeKey, value),
+                      value
+                    }))}
+                  />
+                </Box>
+              ))}
+            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+              <h4>Anzahl</h4>
+              <Counter
+                type="number"
+                value={quantity}
+                onChange={e =>
+                  this.setState({
+                    quantity: Math.max(parseInt(e.currentTarget.value), 1)
+                  })
+                }
+              />
+            </Box>
+            {fields.map(({ label, placeholder, type, maxLength }, index) => (
+              <Box key={index} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+                <h4>{label}</h4>
+                {type === "text" && (
+                  <InputFieldWrapper>
+                    <input
+                      type="text"
+                      placeholder={placeholder}
+                      maxLength={maxLength}
+                      onChange={this.onChangeField(label)}
+                      value={fieldValues[label] || ""}
+                    />
+                  </InputFieldWrapper>
+                )}
               </Box>
             ))}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-            <h4>Anzahl</h4>
-            <Counter
-              type="number"
-              value={quantity}
-              onChange={e =>
-                this.setState({
-                  quantity: Math.max(parseInt(e.currentTarget.value), 1)
-                })
-              }
-            />
-          </Box>
-          {fields.map(({ label, placeholder, type, maxLength }, index) => (
-            <Box key={index} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-              <h4>{label}</h4>
-              {type === "text" && (
-                <InputFieldWrapper>
-                  <input
-                    type="text"
-                    placeholder={placeholder}
-                    maxLength={maxLength}
-                    onChange={this.onChangeField(label)}
-                    value={fieldValues[label] || ""}
+            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+              <h4>Zurücksetzen</h4>
+              <Button
+                onClick={() =>
+                  new Promise((resolve, reject) => {
+                    this.setState(
+                      {
+                        selectedAttributes: this.getDefaultAttributes(
+                          product.variations
+                        ),
+                        quantity: 1
+                      },
+                      resolve
+                    );
+                  })
+                }
+              >
+                Auswahl zurücksetzen
+              </Button>
+            </Box>
+          </Flex>
+          <Flex flexWrap="wrap">
+            {resellerDiscount === false ? (
+              discount.bulk &&
+              selectedVariation &&
+              discount.bulk[selectedVariation.id] &&
+              discount.bulk[selectedVariation.id].length > 0 && (
+                <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+                  <h4>Mengenrabatt</h4>
+                  <DiscountTable>
+                    <thead>
+                      <tr>
+                        <th>Anzahl (ab)</th>
+                        <th>Stückpreis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {discount.bulk[selectedVariation.id].map(
+                        ({ qty, ppu }, index) => (
+                          <DiscountRow
+                            onClick={() => this.setState({ quantity: qty })}
+                            selected={qty === discountRow.qty}
+                            key={index}
+                          >
+                            <td>{qty}</td>
+                            <td>
+                              <Price>{parseFloat(ppu)}</Price>
+                            </td>
+                          </DiscountRow>
+                        )
+                      )}
+                    </tbody>
+                  </DiscountTable>
+                </Box>
+              )
+            ) : (
+              <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+                <h4>Wiederverkäuferrabatt</h4>
+                Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf
+                dieses Produkt.
+              </Box>
+            )}
+            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+              {selectedVariation && validatedFields ? (
+                <div>
+                  <h4>Preis</h4>
+                  <Bill
+                    items={[
+                      {
+                        price,
+                        quantity,
+                        discountPrice: resellerDiscount
+                          ? (resellerDiscount / 100) * price
+                          : discountRow.qty > 1
+                            ? parseFloat(discountRow.ppu)
+                            : undefined
+                      }
+                    ]}
                   />
-                </InputFieldWrapper>
+                  <Button
+                    disabled={
+                      !selectedVariation ||
+                      isNaN(quantity) ||
+                      quantity <= 0 ||
+                      !validatedFields
+                    }
+                    onClick={() =>
+                      addToShoppingCart(
+                        selectedVariation.id,
+                        /* get labels */
+                        {
+                          ...Object.keys(selectedAttributes).reduce(
+                            (object, attributeKey) => {
+                              object[
+                                this.getAttributeLabel(attributeKey)
+                              ] = this.getOptionLabel(
+                                attributeKey,
+                                selectedAttributes[attributeKey]
+                              );
+                              return object;
+                            },
+                            {}
+                          ),
+                          ...fieldValues
+                        },
+                        quantity
+                      ).then(() =>
+                        ReactDOM.findDOMNode(
+                          this.crossSelling.current
+                        ).scrollIntoView()
+                      )
+                    }
+                  >
+                    Zum Warenkorb hinzufügen
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  <h4>Preis</h4>
+                  <p>
+                    Wählen Sie zuerst eine Variante und füllen alle benötigten
+                    Felder aus!
+                  </p>
+                  <Button state="disabled">Zum Warenkorb hinzufügen</Button>
+                </div>
               )}
             </Box>
-          ))}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-            <h4>Zurücksetzen</h4>
-            <Button
-              onClick={() =>
-                new Promise((resolve, reject) => {
-                  this.setState(
-                    {
-                      selectedAttributes: this.getDefaultAttributes(
-                        product.variations
-                      ),
-                      quantity: 1
-                    },
-                    resolve
-                  );
-                })
-              }
-            >
-              Auswahl zurücksetzen
-            </Button>
-          </Box>
-        </Flex>
-        <Flex flexWrap="wrap">
-          {resellerDiscount === false ? (
-            discount.bulk &&
-            selectedVariation &&
-            discount.bulk[selectedVariation.id] &&
-            discount.bulk[selectedVariation.id].length > 0 && (
-              <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-                <h4>Mengenrabatt</h4>
-                <DiscountTable>
-                  <thead>
-                    <tr>
-                      <th>Anzahl (ab)</th>
-                      <th>Stückpreis</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {discount.bulk[selectedVariation.id].map(
-                      ({ qty, ppu }, index) => (
-                        <DiscountRow
-                          onClick={() => this.setState({ quantity: qty })}
-                          selected={qty === discountRow.qty}
-                          key={index}
-                        >
-                          <td>{qty}</td>
-                          <td>
-                            <Price>{parseFloat(ppu)}</Price>
-                          </td>
-                        </DiscountRow>
-                      )
-                    )}
-                  </tbody>
-                </DiscountTable>
-              </Box>
-            )
-          ) : (
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-              <h4>Wiederverkäuferrabatt</h4>
-              Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf
-              dieses Produkt.
-            </Box>
-          )}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-            {selectedVariation && validatedFields ? (
-              <div>
-                <h4>Preis</h4>
-                <Bill
-                  items={[
-                    {
-                      price,
-                      quantity,
-                      discountPrice: resellerDiscount
-                        ? (resellerDiscount / 100) * price
-                        : discountRow.qty > 1
-                          ? parseFloat(discountRow.ppu)
-                          : undefined
-                    }
-                  ]}
-                />
-                <Button
-                  disabled={
-                    !selectedVariation ||
-                    isNaN(quantity) ||
-                    quantity <= 0 ||
-                    !validatedFields
-                  }
-                  onClick={() =>
-                    addToShoppingCart(
-                      selectedVariation.id,
-                      /* get labels */
-                      {
-                        ...Object.keys(selectedAttributes).reduce(
-                          (object, attributeKey) => {
-                            object[
-                              this.getAttributeLabel(attributeKey)
-                            ] = this.getOptionLabel(
-                              attributeKey,
-                              selectedAttributes[attributeKey]
-                            );
-                            return object;
-                          },
-                          {}
-                        ),
-                        ...fieldValues
-                      },
-                      quantity
-                    )
-                  }
-                >
-                  Zum Warenkorb hinzufügen
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <h4>Preis</h4>
-                <p>
-                  Wählen Sie zuerst eine Variante und füllen alle benötigten
-                  Felder aus!
-                </p>
-                <Button state="disabled">Zum Warenkorb hinzufügen</Button>
-              </div>
-            )}
-          </Box>
-        </Flex>
-        <Flex flexWrap="wrap">
-          {content && (
-            <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
-              <div dangerouslySetInnerHTML={{ __html: content }} />
-              <h2>Bildergalerie</h2>
-              <Flex flexWrap="wrap">
-                {galleryImageIds.map((imageId, index) => (
+          </Flex>
+          <Flex flexWrap="wrap">
+            {content && (
+              <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+                <h2>Bildergalerie</h2>
+                <Flex flexWrap="wrap">
+                  {galleryImageIds.map((imageId, index) => (
+                    <LightboxBox
+                      key={imageId}
+                      width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
+                      px={2}
+                      mb={2}
+                      onClick={() =>
+                        this.setState({
+                          currentLightboxImage: index,
+                          isLightboxOpen: true
+                        })
+                      }
+                    >
+                      <Thumbnail id={imageId} size="shop_single" />
+                    </LightboxBox>
+                  ))}
                   <LightboxBox
-                    key={imageId}
                     width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
                     px={2}
                     mb={2}
                     onClick={() =>
                       this.setState({
-                        currentLightboxImage: index,
+                        currentLightboxImage: galleryImageIds.length,
                         isLightboxOpen: true
                       })
                     }
                   >
-                    <Thumbnail id={imageId} size="shop_single" />
+                    <Thumbnail id={thumbnailId} size="shop_single" />
                   </LightboxBox>
-                ))}
-                <LightboxBox
-                  width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
-                  px={2}
-                  mb={2}
-                  onClick={() =>
+                </Flex>
+                <Lightbox
+                  images={galleryAttachments.map(attachment => ({
+                    src: attachment.url,
+                    /*caption: attachment.caption,*/
+                    srcSet: Object.values(attachment.sizes).map(
+                      size => `${size.source_url} ${size.width}w`
+                    ),
+                    thumbnail:
+                      attachment.sizes &&
+                      attachment.sizes.shop_single &&
+                      attachment.sizes.shop_single.source_url
+                  }))}
+                  isOpen={isLightboxOpen}
+                  currentImage={currentLightboxImage}
+                  onClickPrev={() =>
                     this.setState({
-                      currentLightboxImage: galleryImageIds.length,
-                      isLightboxOpen: true
+                      currentLightboxImage: Math.max(
+                        currentLightboxImage - 1,
+                        0
+                      )
                     })
                   }
-                >
-                  <Thumbnail id={thumbnailId} size="shop_single" />
-                </LightboxBox>
-              </Flex>
-              <Lightbox
-                images={galleryAttachments.map(attachment => ({
-                  src: attachment.url,
-                  /*caption: attachment.caption,*/
-                  srcSet: Object.values(attachment.sizes).map(
-                    size => `${size.source_url} ${size.width}w`
-                  ),
-                  thumbnail:
-                    attachment.sizes &&
-                    attachment.sizes.shop_single &&
-                    attachment.sizes.shop_single.source_url
-                }))}
-                isOpen={isLightboxOpen}
-                currentImage={currentLightboxImage}
-                onClickPrev={() =>
-                  this.setState({
-                    currentLightboxImage: Math.max(currentLightboxImage - 1, 0)
-                  })
-                }
-                onClickNext={() =>
-                  this.setState({
-                    currentLightboxImage: Math.min(
-                      currentLightboxImage + 1,
-                      galleryAttachments.length - 1
-                    )
-                  })
-                }
-                onClose={() => this.setState({ isLightboxOpen: false })}
-                imageCountSeparator={" von "}
-                leftArrowTitle={"Vorheriges Bild (linke Pfeiltaste)"}
-                rightArrowTitle={"Nächstes Bild (rechte Pfeiltaste)"}
-                closeButtonTitle={"Schliessen (Esc)"}
-                backdropClosesModal={true}
-                preventScroll={false}
-                showThumbnails={true}
-                onClickThumbnail={index =>
-                  this.setState({ currentLightboxImage: index })
-                }
-                theme={{}}
-              />
-            </Box>
-          )}
-          <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
-            <h4>Spezifikationen</h4>
-            <StyledTable>
-              <tbody>
-                <tr>
-                  <td>Artikelnummer</td>
-                  <td>{sku}</td>
-                </tr>
-                <tr>
-                  <td>Kategorien</td>
-                  <td>
-                    {categories.length > 0
-                      ? categories
-                          .map(({ id, name }) => (
-                            <Link key={id} styled to={`category/${id}`}>
-                              {name}
-                            </Link>
-                          ))
-                          .reduce((prev, curr) => [prev, ", ", curr])
-                      : ""}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Produkt</td>
-                  <td>{title}</td>
-                </tr>
-                {Object.keys(selectedAttributes).map(attributeKey => (
-                  <tr key={attributeKey}>
-                    <td>{this.getAttributeLabel(attributeKey)}</td>
+                  onClickNext={() =>
+                    this.setState({
+                      currentLightboxImage: Math.min(
+                        currentLightboxImage + 1,
+                        galleryAttachments.length - 1
+                      )
+                    })
+                  }
+                  onClose={() => this.setState({ isLightboxOpen: false })}
+                  imageCountSeparator={" von "}
+                  leftArrowTitle={"Vorheriges Bild (linke Pfeiltaste)"}
+                  rightArrowTitle={"Nächstes Bild (rechte Pfeiltaste)"}
+                  closeButtonTitle={"Schliessen (Esc)"}
+                  backdropClosesModal={true}
+                  preventScroll={false}
+                  showThumbnails={true}
+                  onClickThumbnail={index =>
+                    this.setState({ currentLightboxImage: index })
+                  }
+                  theme={{}}
+                />
+              </Box>
+            )}
+            <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
+              <h4>Spezifikationen</h4>
+              <StyledTable>
+                <tbody>
+                  <tr>
+                    <td>Artikelnummer</td>
+                    <td>{sku}</td>
+                  </tr>
+                  <tr>
+                    <td>Kategorien</td>
                     <td>
-                      {selectedAttributes[attributeKey]
-                        ? this.getOptionLabel(
-                            attributeKey,
-                            selectedAttributes[attributeKey]
-                          )
-                        : "-"}
+                      {categories.length > 0
+                        ? categories
+                            .map(({ id, name }) => (
+                              <Link key={id} styled to={`category/${id}`}>
+                                {name}
+                              </Link>
+                            ))
+                            .reduce((prev, curr) => [prev, ", ", curr])
+                        : ""}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </StyledTable>
-          </Box>
+                  <tr>
+                    <td>Produkt</td>
+                    <td>{title}</td>
+                  </tr>
+                  {Object.keys(selectedAttributes).map(attributeKey => (
+                    <tr key={attributeKey}>
+                      <td>{this.getAttributeLabel(attributeKey)}</td>
+                      <td>
+                        {selectedAttributes[attributeKey]
+                          ? this.getOptionLabel(
+                              attributeKey,
+                              selectedAttributes[attributeKey]
+                            )
+                          : "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </StyledTable>
+            </Box>
+          </Flex>
+        </Card>
+
+        {crossSellIds.length > 0 && (
+          <Card>
+            <h2 ref={this.crossSelling} style={{ margin: 0 }}>
+              Ergänzende Produkte
+            </h2>
+          </Card>
+        )}
+
+        <Flex flexWrap="wrap" style={{ margin: "0 -0.5rem" }}>
+          {crossSellIds.map(productId => (
+            <ProductItem key={productId} id={productId} />
+          ))}
         </Flex>
-      </Card>
+      </div>
     );
   };
 }
@@ -654,6 +683,9 @@ const mapStateToProps = (
     product && !product._isFetching
       ? [...product.galleryImageIds, product.thumbnailId]
       : [];
+
+  const crossSellIds =
+    (product && !product._isFetching && product.crossSellIds) || [];
 
   return {
     productSlug,

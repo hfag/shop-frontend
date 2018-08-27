@@ -50,13 +50,6 @@ const DiscountRow = styled.tr`
   color: ${({ selected }) => (selected ? "#fff" : "inherit")};
 `;
 
-const ThumbnailBox = styled(Box)`
-  img {
-    width: 100% !important;
-    height: auto !important;
-  }
-`;
-
 /**
  * Renders the product page
  * @returns {Component} The component
@@ -331,9 +324,9 @@ class Product extends React.PureComponent {
         <h1>{title}</h1>
         {uniqueImageIds.length <= 1 && (
           <Flex>
-            <ThumbnailBox width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
+            <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
               <Thumbnail id={thumbnailId} size="shop_single" />
-            </ThumbnailBox>
+            </Box>
           </Flex>
         )}
 

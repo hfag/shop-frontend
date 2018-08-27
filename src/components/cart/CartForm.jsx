@@ -55,11 +55,6 @@ const CartTable = styled(Table)`
     border-top: ${colors.secondary} 1px solid;
     font-weight: bold;
   }
-
-  img {
-    width: 100% !important;
-    height: auto !important;
-  }
 `;
 
 const TableScroll = styled.div`

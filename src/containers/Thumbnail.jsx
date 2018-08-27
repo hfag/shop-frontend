@@ -11,13 +11,9 @@ import { borders } from "../utilities/style";
 
 const StyledThumbail = styled.div`
   img {
-    ${({ longerSide }) =>
-      longerSide === "width"
-        ? "width: 100%; height: auto;"
-        : "height: 100%; width: auto;"};
+    width: 100%;
+    height: auto;
 
-    /*max-height: 100%;
-    max-width: 100%;*/
     border-radius: ${borders.radius};
   }
 `;
@@ -56,11 +52,7 @@ class Thumbnail extends React.PureComponent {
         : "";
 
     return (
-      <StyledThumbail
-        longerSide={
-          thumbnail && thumbnail.width < thumbnail.height ? "height" : "width"
-        }
-      >
+      <StyledThumbail>
         {thumbnail && thumbnailUrl ? (
           <LazyImage
             src={thumbnailUrl}

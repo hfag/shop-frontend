@@ -8,10 +8,6 @@ import Searchbar from "./Searchbar";
  * @returns {Component} The component
  */
 class Search extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = { registered: false };
-  }
   render = () => {
     return (
       <Card>

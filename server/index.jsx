@@ -10,6 +10,7 @@ import { matchRoutes } from "react-router-config";
 import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from "redux-thunk";
+import { Helmet } from "react-helmet";
 
 import "../src/set-yup-locale";
 import App from "./App";
@@ -69,7 +70,7 @@ const renderApplication = (request, response) => {
             "</head>",
             `${styleTags}<script>window.__INITIAL_DATA__ = ${JSON.stringify(
               store.getState()
-            )}</script></head>`
+            )}</script>${Helmet.renderStatic()}</head>`
           )
       );
     })

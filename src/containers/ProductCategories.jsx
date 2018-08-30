@@ -120,7 +120,11 @@ class ProductCategories extends React.PureComponent {
     return (
       <div>
         <Helmet>
-          <title>{stripTags(category && category.name)}</title>
+          <title>
+            {category
+              ? stripTags(category.name)
+              : "Shop der Hauser Feuerschutz AG"}
+          </title>
           <meta name="description" content="" />
           <link
             rel="canonical"

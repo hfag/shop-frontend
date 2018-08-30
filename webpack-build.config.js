@@ -10,6 +10,7 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 const PreloadWebpackPlugin = require("preload-webpack-plugin");
+const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
@@ -123,7 +124,13 @@ module.exports = {
         to: "img/",
         toType: "dir"
       }
-    ])
+    ]),
+    new FaviconsWebpackPlugin({
+      logo: "img/logo/logo-favicon.png",
+      persistentCache: true,
+      background: "#fff",
+      title: "Hauser Feuerschutz AG"
+    })
     /*new RollbarSourceMapPlugin({
 			accessToken: ROLLBAR_PRIVATE_ACCESS_TOKEN,
 			version: VERSION,

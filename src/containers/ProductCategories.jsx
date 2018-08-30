@@ -15,6 +15,10 @@ import CategoryItem from "../containers/CategoryItem";
 import ProductItem from "../containers/ProductItem";
 import { fetchProductCategories } from "../actions/product/categories";
 import { fetchProducts } from "../actions/product";
+import JsonLd from "../components/JsonLd";
+import { stripTags } from "../utilities";
+import { getAttachmentById } from "../reducers";
+import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 
 const ITEMS_PER_PAGE = 30;
 
@@ -101,7 +105,8 @@ class ProductCategories extends React.PureComponent {
       match: {
         params: { categorySlug, page },
         url
-      }
+      },
+      productsJsonLd
     } = this.props;
     const { active } = this.state;
 
@@ -113,6 +118,9 @@ class ProductCategories extends React.PureComponent {
 
     return (
       <div>
+        <JsonLd>
+          {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
+        </JsonLd>
         {active && (
           <div>
             <Flex flexWrap="wrap">
@@ -171,6 +179,11 @@ const mapStateToProps = (
   }
 ) => {
   const category = getProductCategoryBySlug(state, categorySlug);
+  const products = category
+    ? getProducts(state)
+        .filter(product => product.categoryIds.includes(category.id))
+        .sort((a, b) => a.order - b.order)
+    : [];
 
   return {
     categorySlug,
@@ -181,13 +194,17 @@ const mapStateToProps = (
         categorySlug && category ? category.id : 0
       ) || [],
     productIds: category
-      ? getProducts(state)
-          .filter(product => product.categoryIds.includes(category.id))
-          .sort((a, b) => a.order - b.order)
+      ? products
           .map(product => product.id)
           .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
       : [],
-    page
+    page,
+    productsJsonLd: products.map(product =>
+      productToJsonLd(
+        product,
+        attachmentToJsonLd(getAttachmentById(state, product.id))
+      )
+    )
   };
 };
 

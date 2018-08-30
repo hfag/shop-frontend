@@ -15,6 +15,7 @@ import Link from "../components/Link";
 import Select from "../components/Select";
 import VariationSlider from "../components/VariationSlider";
 import { colors, borders } from "../utilities/style";
+import { stripTags } from "../utilities";
 import { fetchProductCategories } from "../actions/product/categories";
 import { fetchProduct } from "../actions/product";
 import { addShoppingCartItem } from "../actions/shopping-cart";
@@ -24,11 +25,13 @@ import {
   getProductAttributesBySlug,
   getResellerDiscountByProductId,
   getAttachments,
-  getProducts
+  getProducts,
+  getAttachmentById
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
 import { InputFieldWrapper } from "../components/InputFieldWrapper";
+import JsonLd from "../components/JsonLd";
 
 const StyledTable = styled.table`
   word-wrap: break-word;
@@ -331,6 +334,41 @@ class Product extends React.PureComponent {
 
     return (
       <div>
+        <JsonLd>
+          {{
+            "@context": "http://schema.org/",
+            "@type": "Product",
+            name: stripTags(title),
+            image: galleryAttachments.map(
+              attachment =>
+                attachment.sizes &&
+                attachment.sizes.shop_single &&
+                attachment.sizes.shop_single.source_url
+            ),
+            description: "",
+            sku: sku,
+            offers: {
+              "@type": "AggregateOffer",
+              priceCurrency: "CHF",
+              lowPrice: variations.reduce(
+                (lowest, { price }) =>
+                  lowest < price && lowest !== 0 ? lowest : price,
+                0
+              ),
+              highPrice: variations.reduce(
+                (highest, { price }) =>
+                  highest > price && highest !== 0 ? highest : price,
+                0
+              ),
+              offerCount: variations.length,
+              availability: "InStock",
+              seller: {
+                "@type": "Organization",
+                name: "Hauser Feuerschutz AG"
+              }
+            }
+          }}
+        </JsonLd>
         <Card>
           <h1 dangerouslySetInnerHTML={{ __html: title }} />
           {uniqueImageIds.length <= 1 && (
@@ -686,9 +724,6 @@ const mapStateToProps = (
     product && !product._isFetching
       ? [...product.galleryImageIds, product.thumbnailId]
       : [];
-
-  const crossSellIds =
-    (product && !product._isFetching && product.crossSellIds) || [];
 
   return {
     productSlug,

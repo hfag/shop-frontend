@@ -16,28 +16,23 @@ import { toggleBurgerMenu } from "../actions/burger-menu";
 import MediaQuery from "../components/MediaQuery";
 import Card from "../components/Card";
 
-const BurgerContainer = styled.div`
+const BurgerContainer = styled(Card)`
   height: 100%;
   z-index: 100;
 
   transition: all 0.3s ease-in;
 
-  .card {
-    height: 100%;
-  }
-
   ${media.maxLarge`
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 250px;
-    
-    overflow-y: scroll;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 250px;
+      
+      overflow-y: scroll;
 
-    transform: translateX(${({ isOpen }) => (isOpen ? "0" : "-100%")});
+      transform: translateX(${({ isOpen }) => (isOpen ? "0" : "-100%")});
 
-    .card {
       box-shadow: none !important;
       margin: 0;
     }
@@ -98,44 +93,42 @@ class Sidebar extends React.PureComponent {
       <div style={{ height: "100%", paddingBottom: "2rem" }}>
         <BurgerBackground onClick={toggleBurgerMenu} isOpen={isOpen} />
         <BurgerContainer isOpen={isOpen}>
-          <Card className="card">
-            <MediaQuery lg down style={{ height: "auto" }}>
-              <BurgerLogo src={NameSlogan} alt="Slogan" />
-              <BurgerList>
-                <BurgerItem seperator>
-                  <Link to="/" flex>
-                    <HomeIcon />Home
+          <MediaQuery lg down style={{ height: "auto" }}>
+            <BurgerLogo src={NameSlogan} alt="Slogan" />
+            <BurgerList>
+              <BurgerItem seperator>
+                <Link to="/" flex>
+                  <HomeIcon />Home
+                </Link>
+              </BurgerItem>
+              <BurgerItem seperator>
+                <Link to="/suche" flex>
+                  <SearchIcon />Suche
+                </Link>
+              </BurgerItem>
+              <BurgerItem seperator>
+                <Link to="/warenkorb" flex>
+                  <CartIcon />Warenkorb
+                </Link>
+              </BurgerItem>
+              <BurgerItem seperator>
+                {isAuthenticated ? (
+                  <Link to="/konto" flex>
+                    <span>
+                      <AccountIcon />Mein Konto
+                    </span>
                   </Link>
-                </BurgerItem>
-                <BurgerItem seperator>
-                  <Link to="/suche" flex>
-                    <SearchIcon />Suche
+                ) : (
+                  <Link to="/login" flex>
+                    <span>
+                      <SignInIcon />Login
+                    </span>
                   </Link>
-                </BurgerItem>
-                <BurgerItem seperator>
-                  <Link to="/warenkorb" flex>
-                    <CartIcon />Warenkorb
-                  </Link>
-                </BurgerItem>
-                <BurgerItem seperator>
-                  {isAuthenticated ? (
-                    <Link to="/konto" flex>
-                      <span>
-                        <AccountIcon />Mein Konto
-                      </span>
-                    </Link>
-                  ) : (
-                    <Link to="/login" flex>
-                      <span>
-                        <SignInIcon />Login
-                      </span>
-                    </Link>
-                  )}
-                </BurgerItem>
-              </BurgerList>
-            </MediaQuery>
-            {children}
-          </Card>
+                )}
+              </BurgerItem>
+            </BurgerList>
+          </MediaQuery>
+          {children}
         </BurgerContainer>
       </div>
     );

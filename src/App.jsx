@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { ConnectedRouter } from "react-router-redux";
 import { hot } from "react-hot-loader";
 import { Switch } from "react-router";
-import universal from "react-universal-component";
+import { Helmet } from "react-helmet";
 
 import { universalWithLoadingBar } from "./utilities/universal";
 import Frontpage from "./containers/Frontpage";
@@ -37,6 +37,15 @@ const App = ({ history, store }) => {
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <Wrapper>
+          <Helmet>
+            <title>Shop der Hauser Feuerschutz AG</title>
+            <meta charSet="utf-8" />
+            <meta
+              name="description"
+              content="Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
+            />
+            <link rel="canonical" href="https://shop.feuerschutz.ch" />
+          </Helmet>
           <ScrollToTop>
             <Switch>
               <Route exact path="/" component={Frontpage} />

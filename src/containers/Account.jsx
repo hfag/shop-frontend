@@ -4,6 +4,7 @@ import { push } from "react-router-redux";
 import { Flex, Box } from "grid-styled";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 import { getCountries } from "../reducers";
 import { fetchCountries } from "../actions/countries";
@@ -80,6 +81,14 @@ class Account extends React.PureComponent {
 
     return (
       <AccountContainer>
+        <Helmet>
+          <title>Mein Kundenkonto bei der Hauser Feuerschutz AG</title>
+          <meta
+            name="description"
+            content="Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
+          />
+          <link rel="canonical" href="https://shop.feuerschutz.ch/konto" />
+        </Helmet>
         <Flex flexWrap="wrap">
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
             <Card>

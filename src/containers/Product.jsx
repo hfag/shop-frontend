@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
 import isEqual from "lodash/isEqual";
 import Lightbox from "react-images";
+import { Helmet } from "react-helmet";
 
 import Thumbnail from "../containers/Thumbnail";
 import Card from "../components/Card";
@@ -32,6 +33,7 @@ import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
 import { InputFieldWrapper } from "../components/InputFieldWrapper";
 import JsonLd from "../components/JsonLd";
+import { attachmentsToJsonLd, productToJsonLd } from "../utilities/json-ld";
 
 const StyledTable = styled.table`
   word-wrap: break-word;
@@ -257,9 +259,10 @@ class Product extends React.PureComponent {
 
     const {
       id,
+      slug,
       title,
       content,
-      excerpt,
+      description,
       thumbnailId,
       categoryIds,
       date,
@@ -334,40 +337,19 @@ class Product extends React.PureComponent {
 
     return (
       <div>
+        <Helmet>
+          <title>{stripTags(title)}</title>
+          <meta name="description" content={description} />
+          <link
+            rel="canonical"
+            href={"https://shop.feuerschutz.ch/produkt/" + slug}
+          />
+        </Helmet>
         <JsonLd>
           {{
             "@context": "http://schema.org/",
-            "@type": "Product",
-            name: stripTags(title),
-            image: galleryAttachments.map(
-              attachment =>
-                attachment.sizes &&
-                attachment.sizes.shop_single &&
-                attachment.sizes.shop_single.source_url
-            ),
-            description: "",
-            sku: sku,
-            offers: {
-              "@type": "AggregateOffer",
-              priceCurrency: "CHF",
-              lowPrice: variations.reduce(
-                (lowest, { price }) =>
-                  lowest < price && lowest !== 0 ? lowest : price,
-                0
-              ),
-              highPrice: variations.reduce(
-                (highest, { price }) =>
-                  highest > price && highest !== 0 ? highest : price,
-                0
-              ),
-              offerCount: variations.length,
-              availability: "InStock",
-              seller: {
-                "@type": "Organization",
-                name: "Hauser Feuerschutz AG"
-              }
-            }
-          }}
+            ...productToJsonLd(product, attachmentsToJsonLd(galleryAttachments))
+          }}}
         </JsonLd>
         <Card>
           <h1 dangerouslySetInnerHTML={{ __html: title }} />
@@ -740,10 +722,11 @@ const mapStateToProps = (
       product && product.id
     ),
     galleryAttachments:
-      galleryImageIds.length > 0 &&
-      getAttachments(state).filter(attachment =>
-        galleryImageIds.includes(attachment.id)
-      )
+      galleryImageIds.length > 0
+        ? getAttachments(state).filter(attachment =>
+            galleryImageIds.includes(attachment.id)
+          )
+        : []
   };
 };
 

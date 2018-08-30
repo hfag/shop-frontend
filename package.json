@@ -54,6 +54,7 @@
     "react-autosuggest": "^9.3.2",
     "react-collapse": "^4.0.3",
     "react-dom": "^16.0.0",
+    "react-helmet": "^5.2.0",
     "react-icons": "^2.2.7",
     "react-iframe-resizer-super": "^0.2.0",
     "react-images": "^0.5.19",

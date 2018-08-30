@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import universal from "react-universal-component";
-import { Flex, Box } from "grid-styled";
+import { Helmet } from "react-helmet";
 
 import {
   fetchShoppingCart,
@@ -75,6 +75,15 @@ class Cart extends React.PureComponent {
 
     return (
       <Card>
+        <Helmet>
+          <title>Warenkorb im Shop der Hauser Feuerschutz AG</title>
+          <meta
+            name="description"
+            content="Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
+          />
+          <link rel="canonical" href="https://shop.feuerschutz.ch/warenkorb" />
+        </Helmet>
+
         <h1>Warenkorb</h1>
 
         {showSkuSelection && (

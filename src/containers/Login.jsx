@@ -5,6 +5,7 @@ import { push } from "react-router-redux";
 import * as yup from "yup";
 import { Flex, Box } from "grid-styled";
 import queryString from "query-string";
+import { Helmet } from "react-helmet";
 
 import { login, register, logout } from "../actions/authentication";
 import InputField from "../components/InputField";
@@ -105,6 +106,14 @@ class Login extends React.PureComponent {
     const { dispatch, login, register } = this.props;
     return (
       <Card>
+        <Helmet>
+          <title>Anmelden bei der Hauser Feuerschutz AG</title>
+          <meta
+            name="description"
+            content="Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
+          />
+          <link rel="canonical" href="https://shop.feuerschutz.ch/login" />
+        </Helmet>
         <Flex flexWrap="wrap">
           <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
             <h1>Anmelden</h1>

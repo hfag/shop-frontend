@@ -8,6 +8,7 @@ import {
   getProductCategoryChildrenIdsById,
   getProductCategoryBySlug
 } from "reducers";
+import { Helmet } from "react-helmet";
 
 import Flex from "../components/Flex";
 import Pagination from "../components/Pagination";
@@ -118,6 +119,17 @@ class ProductCategories extends React.PureComponent {
 
     return (
       <div>
+        <Helmet>
+          <title>{stripTags(category && category.name)}</title>
+          <meta name="description" content="" />
+          <link
+            rel="canonical"
+            href={
+              category &&
+              "https://shop.feuerschutz.ch/produkte/" + category.slug
+            }
+          />
+        </Helmet>
         <JsonLd>
           {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
         </JsonLd>

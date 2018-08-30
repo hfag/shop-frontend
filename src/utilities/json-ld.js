@@ -14,16 +14,23 @@ export const productToJsonLd = (product, imageSchema = "") => ({
   offers: {
     "@type": "AggregateOffer",
     priceCurrency: "CHF",
-    lowPrice: product.variations.reduce(
-      (lowest, { price }) => (lowest < price && lowest !== 0 ? lowest : price),
-      0
-    ),
-    highPrice: product.variations.reduce(
-      (highest, { price }) =>
-        highest > price && highest !== 0 ? highest : price,
-      0
-    ),
-    offerCount: product.variations.length,
+    lowPrice:
+      product &&
+      product.variations &&
+      product.variations.reduce(
+        (lowest, { price }) =>
+          lowest < price && lowest !== 0 ? lowest : price,
+        0
+      ),
+    highPrice:
+      product &&
+      product.variations &&
+      product.variations.reduce(
+        (highest, { price }) =>
+          highest > price && highest !== 0 ? highest : price,
+        0
+      ),
+    offerCount: product && product.variations && product.variations.length,
     availability: "InStock",
     seller: {
       "@type": "Organization",

@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 
 import Card from "../components/Card";
 import Searchbar from "./Searchbar";
@@ -12,6 +13,14 @@ class Page404 extends React.PureComponent {
   render = () => {
     return (
       <Card>
+        <Helmet>
+          <title>Seite nicht gefunden! Fehler 404</title>
+          <meta
+            name="description"
+            content="Diese Seite konnte leider nicht gefunden werden. Verwenden Sie die Suche oder wenden Sie sich an unseren Kundensupport."
+          />
+          <link rel="canonical" href="https://shop.feuerschutz.ch/404" />
+        </Helmet>
         <h1>Fehler 404</h1>
         <p>
           Die Seite konnte nicht gefunden werden! Gehen Sie eine Seite zurück

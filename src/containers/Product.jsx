@@ -332,7 +332,7 @@ class Product extends React.PureComponent {
     return (
       <div>
         <Card>
-          <h1>{title}</h1>
+          <h1 dangerouslySetInnerHTML={{ __html: title }} />
           {uniqueImageIds.length <= 1 && (
             <Flex>
               <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>

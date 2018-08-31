@@ -202,6 +202,8 @@ class Searchbar extends React.PureComponent {
    * @returns {void}
    */
   onSuggestionSelected = (event, { suggestion }) => {
+    this.setState({ value: "" });
+
     switch (suggestion.type) {
       case "product":
         return this.props.dispatch(push("/produkt/" + suggestion.slug));

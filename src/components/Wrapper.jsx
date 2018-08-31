@@ -13,6 +13,7 @@ import ProductSidebar from "../containers/sidebar/ProductSidebar";
 import Card from "./Card";
 import MediaQuery from "./MediaQuery";
 import Sidebar from "../containers/Sidebar";
+import ScrollToTop from "./ScrollToTop";
 
 /**
  * The global wrapper component
@@ -27,7 +28,7 @@ class Wrapper extends React.Component {
           breakpoints: ["36rem", "48rem", "62rem", "75rem"]
         }}
       >
-        <div>
+        <ScrollToTop>
           <Header />
           <main>
             <Flex>
@@ -52,7 +53,7 @@ class Wrapper extends React.Component {
             </Flex>
           </main>
           <Footer />
-        </div>
+        </ScrollToTop>
       </ThemeProvider>
     );
   };

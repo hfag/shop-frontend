@@ -8,6 +8,7 @@ import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
 import LoadingBar from "react-redux-loading-bar";
 import { Flex, Box } from "grid-styled";
+import { Helmet } from "react-helmet";
 
 import { fetchShoppingCart } from "../actions/shopping-cart";
 import {
@@ -124,6 +125,23 @@ class Header extends React.PureComponent {
 
     return (
       <HeaderWrapper>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <meta name="keywords" content="" />
+          <meta name="author" content="Nico Hauser" />
+          <meta name="format-detection" content="telephone=no" />
+
+          <title>Shop der Hauser Feuerschutz AG</title>
+          <meta
+            name="description"
+            content="Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
+          />
+          <link rel="canonical" href={ABSOLUTE_URL} />
+        </Helmet>
         <JsonLd>
           {{
             "@context": "http://schema.org",

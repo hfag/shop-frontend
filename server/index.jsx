@@ -10,7 +10,7 @@ import { matchRoutes } from "react-router-config";
 import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from "redux-thunk";
-import { Helmet } from "react-helmet";
+import { Helmet as ReactHelmet } from "react-helmet";
 
 import "../src/set-yup-locale";
 import App from "./App";
@@ -61,16 +61,26 @@ const renderApplication = (request, response) => {
       );
 
       const styleTags = sheet.getStyleTags();
+      const reactHelmet = ReactHelmet.renderStatic();
 
       response.writeHead(200, { "Content-Type": "text/html" });
+
       response.end(
         indexHtml
           .replace('<div id="root"></div>', `<div id="root">${reactDom}</div>`)
           .replace(
-            "</head>",
-            `${styleTags}<script>window.__INITIAL_DATA__ = ${JSON.stringify(
+            "<head>",
+            `<head>
+            ${styleTags}<script>window.__INITIAL_DATA__ = ${JSON.stringify(
               store.getState()
-            )}</script>${Helmet.renderStatic()}</head>`
+            )}</script>${["base", "link", "meta", "script", "style", "title"]
+              .map(key => reactHelmet[key].toString())
+              .join("")}`
+          )
+          .replace("<html>", `<html ${reactHelmet.htmlAttributes.toString()}>`)
+          .replace(
+            "<body>",
+            `<body ${reactHelmet.bodyAttributes.toString()}>${reactHelmet.noscript.toString()}`
           )
       );
     })

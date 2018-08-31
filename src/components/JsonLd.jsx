@@ -7,9 +7,12 @@ import React from "react";
 class JsonLd extends React.PureComponent {
   render = () => {
     return (
-      <script type="application/ld+json">
-        {JSON.stringify(this.props.children)}
-      </script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(this.props.children)
+        }}
+      />
     );
   };
 }

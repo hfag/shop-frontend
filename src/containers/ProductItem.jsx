@@ -169,7 +169,7 @@ ProductItem.propTypes = {
 const mapStateToProps = (state, { id }) => {
   const product = getProductById(state, id);
 
-  return product
+  return product && product.categoryIds
     ? {
         product,
         categories: getProductCategories(state).filter(category =>

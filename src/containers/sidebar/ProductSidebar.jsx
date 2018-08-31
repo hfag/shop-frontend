@@ -75,7 +75,7 @@ const mapStateToProps = (
     productSlug,
     product: product && !product._isFetching ? product : {},
     categories:
-      product && !product._isFetching
+      product && !product._isFetching && product.categoryIds
         ? getProductCategories(state)
             .filter(category => product.categoryIds.includes(category.id))
             .map(category => {

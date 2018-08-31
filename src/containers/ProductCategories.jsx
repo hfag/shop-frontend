@@ -195,7 +195,7 @@ const mapStateToProps = (
   const category = getProductCategoryBySlug(state, categorySlug);
   const products = category
     ? getProducts(state)
-        .filter(product => product.categoryIds.includes(category.id))
+        .filter(product => product && product.categoryIds.includes(category.id))
         .sort((a, b) => a.order - b.order)
     : [];
 

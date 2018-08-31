@@ -17,6 +17,7 @@ import {
   getResellerDiscountByProductId
 } from "../reducers";
 import RelativeBox from "../components/RelativeBox";
+import Price from "../components/Price";
 
 const StyledProduct = styled.div`
   background-color: #fff;
@@ -132,6 +133,14 @@ class ProductItem extends React.PureComponent {
                 <Title dangerouslySetInnerHTML={{ __html: product.title }} />
               ) : (
                 <Placeholder text />
+              )}
+              {product.minPrice && (
+                <Subtitle>
+                  Ab{" "}
+                  <u>
+                    <Price>{parseInt(product.minPrice)}</Price>
+                  </u>
+                </Subtitle>
               )}
               {product ? (
                 categories ? (

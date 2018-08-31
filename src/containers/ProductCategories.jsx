@@ -132,11 +132,11 @@ class ProductCategories extends React.PureComponent {
             href={category && ABSOLUTE_URL + "/produkte/" + category.slug}
           />
         </Helmet>
-        <JsonLd>
-          {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
-        </JsonLd>
         {active && (
           <div>
+            <JsonLd>
+              {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
+            </JsonLd>
             <Flex flexWrap="wrap">
               {categoryIds.map(categoryId => (
                 <CategoryItem
@@ -216,7 +216,7 @@ const mapStateToProps = (
     productsJsonLd: products.map(product =>
       productToJsonLd(
         product,
-        attachmentToJsonLd(getAttachmentById(state, product.id))
+        attachmentToJsonLd(getAttachmentById(state, product.thumbnailId))
       )
     )
   };

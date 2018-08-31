@@ -3,9 +3,7 @@ import { connect } from "react-redux";
 import { push } from "react-router-redux";
 import styled from "styled-components";
 import MenuIcon from "react-icons/lib/md/menu";
-import SearchIcon from "react-icons/lib/fa/search";
 import CartIcon from "react-icons/lib/fa/shopping-cart";
-import CheckoutIcon from "react-icons/lib/fa/money";
 import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
 import LoadingBar from "react-redux-loading-bar";
@@ -16,10 +14,9 @@ import {
   getShoppingCartFetching,
   getShoppingCartItems,
   getShoppingCartTotal,
-  getBurgerMenuOpen,
   getIsAuthenticated
 } from "../reducers";
-import { colors, borders, shadows } from "../utilities/style";
+import { borders, shadows } from "../utilities/style";
 import Container from "../components/Container";
 import Flexbar from "../components/Flexbar";
 import Button from "../components/Button";
@@ -38,7 +35,8 @@ import Thumbnail from "./Thumbnail";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import JsonLd from "../components/JsonLd";
 
-const { ABSOLUTE_URL, PUBLIC_PATH } = process.env;
+const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
+const PUBLIC_PATH = process.env.PUBLIC_PATH;
 
 const Counter = styled.div`
   margin-left: 0.5rem;
@@ -126,63 +124,65 @@ class Header extends React.PureComponent {
 
     return (
       <HeaderWrapper>
+        <JsonLd>
+          {{
+            "@context": "http://schema.org",
+            "@type": "LocalBusiness ",
+            image: [
+              ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-1x1.png",
+              ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-4x3.png",
+              ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-16x9.png"
+            ],
+            logo: ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo.png",
+            "@id": ABSOLUTE_URL + "/#organization",
+            branchCode: "ch.feuerschutz.1",
+            name: "Hauser Feuerschutz AG",
+            priceRange: "$$",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "Sonnmattweg 6",
+              addressLocality: "Aarau",
+              addressRegion: "AG",
+              postalCode: "5000",
+              addressCountry: "CH"
+            },
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: 47.3971281,
+              longitude: 8.0434878
+            },
+            url: ABSOLUTE_URL,
+            telephone: "+41628340540",
+            openingHoursSpecification: [
+              {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday"
+                ],
+                opens: "09:00",
+                closes: "12:00"
+              },
+              {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday"
+                ],
+                opens: "13:30",
+                closes: "17:00"
+              }
+            ]
+          }}
+        </JsonLd>
         <LoadingBar className="redux-loading-bar" />
         <header>
-          <JsonLd>
-            {{
-              "@context": "http://schema.org",
-              "@type": "LocalBusiness ",
-              image: [
-                ABSOLUTE_URL + PUBLIC_PATH + "/img/logo/logo-1x1.png",
-                ABSOLUTE_URL + PUBLIC_PATH + "/img/logo/logo-4x3.png",
-                ABSOLUTE_URL + PUBLIC_PATH + "/img/logo/logo-16x9.png"
-              ],
-              logo: ABSOLUTE_URL + PUBLIC_PATH + "/img/logo/logo.png",
-              "@id": ABSOLUTE_URL,
-              name: "Hauser Feuerschutz AG",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Sonnmattweg 6",
-                addressLocality: "Aarau",
-                addressRegion: "AG",
-                postalCode: "5000",
-                addressCountry: "CH"
-              },
-              geo: {
-                "@type": "GeoCoordinates",
-                latitude: 47.3971281,
-                longitude: 8.0434878
-              },
-              url: ABSOLUTE_URL,
-              telephone: "+41628340540",
-              openingHoursSpecification: [
-                {
-                  "@type": "OpeningHoursSpecification",
-                  dayOfWeek: [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday"
-                  ],
-                  opens: "09:00",
-                  closes: "12:00"
-                },
-                {
-                  "@type": "OpeningHoursSpecification",
-                  dayOfWeek: [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday"
-                  ],
-                  opens: "13:30",
-                  closes: "17:00"
-                }
-              ]
-            }}
-          </JsonLd>
           <Navbar>
             <Flex>
               <FullHeightBox width={[0, 0, 0, 1 / 6]}>

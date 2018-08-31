@@ -1,5 +1,7 @@
 import { stripTags } from ".";
 
+const { ABSOLUTE_URL } = process.env;
+
 /**
  * Maps a product to a json-ld schema
  * @param {Object} product The product to map
@@ -16,13 +18,13 @@ export const productToJsonLd = (product, imageSchema = "") => ({
     "@type": "AggregateOffer",
     priceCurrency: "CHF",
     lowPrice:
-      product &&
-      product.variations &&
-      product.variations.reduce(
-        (lowest, { price }) =>
-          lowest < price && lowest !== 0 ? lowest : price,
-        0
-      ),
+      product && product.variations
+        ? product.variations.reduce(
+            (lowest, { price }) =>
+              lowest < price && lowest !== 0 ? lowest : price,
+            0
+          )
+        : product.minPrice,
     highPrice:
       product &&
       product.variations &&
@@ -46,8 +48,7 @@ export const productToJsonLd = (product, imageSchema = "") => ({
       name: "Kaufe Produkt"
     },
     seller: {
-      "@type": "Organization",
-      name: "Hauser Feuerschutz AG"
+      "@id": ABSOLUTE_URL + "/#organization"
     }
   }
 });
@@ -57,11 +58,7 @@ export const productToJsonLd = (product, imageSchema = "") => ({
  * @param {Object} attachment The attachment to map
  * @returns {Object} The mapped schema
  */
-export const attachmentToJsonLd = attachment =>
-  attachment &&
-  attachment.sizes &&
-  attachment.sizes.shop_single &&
-  attachment.sizes.shop_single.source_url;
+export const attachmentToJsonLd = attachment => attachment && attachment.url;
 
 /**
  * Maps multiple attachment to a json-ld schema

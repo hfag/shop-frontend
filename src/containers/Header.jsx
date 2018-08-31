@@ -131,7 +131,6 @@ class Header extends React.PureComponent {
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
-          <meta name="keywords" content="" />
           <meta name="author" content="Nico Hauser" />
           <meta name="format-detection" content="telephone=no" />
 

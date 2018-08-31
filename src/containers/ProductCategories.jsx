@@ -22,6 +22,7 @@ import { getAttachmentById } from "../reducers";
 import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 
 const ITEMS_PER_PAGE = 30;
+const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 /**
  * Renders all product categories
@@ -128,10 +129,7 @@ class ProductCategories extends React.PureComponent {
           <meta name="description" content="" />
           <link
             rel="canonical"
-            href={
-              category &&
-              "https://shop.feuerschutz.ch/produkte/" + category.slug
-            }
+            href={category && ABSOLUTE_URL + "/produkte/" + category.slug}
           />
         </Helmet>
         <JsonLd>

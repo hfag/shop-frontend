@@ -20,7 +20,7 @@ import reducers from "../src/reducers";
 //polyfills
 require("isomorphic-fetch");
 
-const PORT = process.env.PORT;
+const PORT = process.env.SERVER_PORT;
 
 //and the redux store
 const store = createStore(reducers, applyMiddleware(thunkMiddleware));

@@ -38,6 +38,8 @@ import Thumbnail from "./Thumbnail";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import JsonLd from "../components/JsonLd";
 
+const { ABSOLUTE_URL, PUBLIC_PATH } = process.env;
+
 const Counter = styled.div`
   margin-left: 0.5rem;
   font-size: 1.25rem;
@@ -131,13 +133,12 @@ class Header extends React.PureComponent {
               "@context": "http://schema.org",
               "@type": "LocalBusiness ",
               image: [
-                "https://shop.feuerschutz.ch/img/wp-content/themes/react-shop/img/logo/logo-1x1.png",
-                "https://shop.feuerschutz.ch/img/wp-content/themes/react-shop/img/logo/logo-4x3.png",
-                "https://shop.feuerschutz.ch/img/wp-content/themes/react-shop/img/logo/logo-16x9.png"
+                ABSOLUTE_URL + PUBLIC_PATH + "/img/logo/logo-1x1.png",
+                ABSOLUTE_URL + PUBLIC_PATH + "/img/logo/logo-4x3.png",
+                ABSOLUTE_URL + PUBLIC_PATH + "/img/logo/logo-16x9.png"
               ],
-              logo:
-                "https://shop.feuerschutz.ch/wp-content/themes/react-shop/img/logo/logo.png",
-              "@id": "https://shop.feuerschutz.ch",
+              logo: ABSOLUTE_URL + PUBLIC_PATH + "/img/logo/logo.png",
+              "@id": ABSOLUTE_URL,
               name: "Hauser Feuerschutz AG",
               address: {
                 "@type": "PostalAddress",
@@ -152,7 +153,7 @@ class Header extends React.PureComponent {
                 latitude: 47.3971281,
                 longitude: 8.0434878
               },
-              url: "https://shop.feuerschutz.ch",
+              url: ABSOLUTE_URL,
               telephone: "+41628340540",
               openingHoursSpecification: [
                 {

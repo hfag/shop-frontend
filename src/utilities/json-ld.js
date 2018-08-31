@@ -11,6 +11,7 @@ export const productToJsonLd = (product, imageSchema = "") => ({
   name: stripTags(product.title),
   image: imageSchema,
   description: product.description,
+  sku: product.sku,
   offers: {
     "@type": "AggregateOffer",
     priceCurrency: "CHF",
@@ -31,7 +32,19 @@ export const productToJsonLd = (product, imageSchema = "") => ({
         0
       ),
     offerCount: product && product.variations && product.variations.length,
+    itemCondition: "NewCondition",
     availability: "InStock",
+    availableAtOrFrom: "ch.feuerschutz.1",
+    availableDeliveryMethod: [
+      "OnSitePickup",
+      "http://purl.org/goodrelations/v1#DeliveryModeMail"
+    ],
+    deliveryLeadTime: 1,
+    potentialAction: {
+      "@type": "ViewAction",
+      target: "https://shop.feuerschutz.ch/produkt/" + product.slug,
+      name: "Kaufe Produkt"
+    },
     seller: {
       "@type": "Organization",
       name: "Hauser Feuerschutz AG"

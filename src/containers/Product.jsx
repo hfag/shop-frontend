@@ -25,15 +25,15 @@ import {
   getProductBySlug,
   getProductAttributesBySlug,
   getResellerDiscountByProductId,
-  getAttachments,
-  getProducts,
-  getAttachmentById
+  getAttachments
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
 import { InputFieldWrapper } from "../components/InputFieldWrapper";
 import JsonLd from "../components/JsonLd";
 import { attachmentsToJsonLd, productToJsonLd } from "../utilities/json-ld";
+
+const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const StyledTable = styled.table`
   word-wrap: break-word;
@@ -340,10 +340,7 @@ class Product extends React.PureComponent {
         <Helmet>
           <title>{stripTags(title)}</title>
           <meta name="description" content={description} />
-          <link
-            rel="canonical"
-            href={"https://shop.feuerschutz.ch/produkt/" + slug}
-          />
+          <link rel="canonical" href={ABSOLUTE_URL + "/produkt/" + slug} />
         </Helmet>
         <JsonLd>
           {{

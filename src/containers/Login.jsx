@@ -13,6 +13,8 @@ import Button from "../components/Button";
 import Card from "../components/Card";
 import { getIsAuthenticated } from "../reducers";
 
+const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
+
 /**
  * The inner login form
  * @param {Object} params The formik params
@@ -112,7 +114,7 @@ class Login extends React.PureComponent {
             name="description"
             content="Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
           />
-          <link rel="canonical" href="https://shop.feuerschutz.ch/login" />
+          <link rel="canonical" href={ABSOLUTE_URL + "/login"} />
         </Helmet>
         <Flex flexWrap="wrap">
           <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>

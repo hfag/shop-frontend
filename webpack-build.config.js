@@ -22,7 +22,7 @@ process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issue
 
 const context = __dirname;
 
-const PUBLIC_PATH = "/";
+const PUBLIC_PATH = process.env.PUBLIC_PATH;
 const ROLLBAR_PUBLIC_ACCESS_TOKEN = "ffd21bafd45c4974aa0b8f5c07d6243a";
 const ROLLBAR_PRIVATE_ACCESS_TOKEN = process.env.ROLLBAR_PRIVATE_ACCESS_TOKEN;
 const VERSION = ChildProcess.execSync("git rev-parse HEAD")

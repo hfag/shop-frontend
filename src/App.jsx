@@ -15,6 +15,8 @@ import ScrollToTop from "./components/ScrollToTop";
 import Search from "./containers/Search";
 import Page404 from "./containers/404";
 
+const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
+
 const Product = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "product" */ "./containers/Product")
 );
@@ -52,7 +54,7 @@ const App = ({ history, store }) => {
               name="description"
               content="Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
             />
-            <link rel="canonical" href="https://shop.feuerschutz.ch" />
+            <link rel="canonical" href={ABSOLUTE_URL} />
           </Helmet>
           <ScrollToTop>
             <Switch>

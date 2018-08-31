@@ -22,8 +22,9 @@ import {
 import CartForm from "../components/cart/CartForm";
 import CheckoutForm from "../components/cart/CheckoutForm";
 import Card from "../components/Card";
-import UncontrolledCollapse from "../components/UncontrolledCollapse";
 import Button from "../components/Button";
+
+const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const SkuSelection = universal(props =>
   import(/* webpackChunkName: "sku-selection" */ "./SkuSelection")
@@ -81,7 +82,7 @@ class Cart extends React.PureComponent {
             name="description"
             content="Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
           />
-          <link rel="canonical" href="https://shop.feuerschutz.ch/warenkorb" />
+          <link rel="canonical" href={ABSOLUTE_URL + "/warenkorb"} />
         </Helmet>
 
         <h1>Warenkorb</h1>

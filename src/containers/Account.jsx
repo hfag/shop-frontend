@@ -20,6 +20,8 @@ import AddressForm from "../components/account/AddressForm";
 import { updateAccount, updateAddress, fetchAccount } from "../actions/user";
 import { fetchOrders } from "../actions/orders";
 
+const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
+
 const ProfileNavigation = styled.ul`
   width: 100%;
   list-style: none;
@@ -87,7 +89,7 @@ class Account extends React.PureComponent {
             name="description"
             content="Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
           />
-          <link rel="canonical" href="https://shop.feuerschutz.ch/konto" />
+          <link rel="canonical" href={ABSOLUTE_URL + "/konto"} />
         </Helmet>
         <Flex flexWrap="wrap">
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>

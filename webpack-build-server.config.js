@@ -16,7 +16,7 @@ process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issue
 
 const context = __dirname;
 
-const PUBLIC_PATH = "/";
+const PUBLIC_PATH = process.env.PUBLIC_PATH;
 const VERSION = ChildProcess.execSync("git rev-parse HEAD")
   .toString()
   .trim();

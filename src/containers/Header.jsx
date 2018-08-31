@@ -153,6 +153,16 @@ class Header extends React.PureComponent {
             },
             url: ABSOLUTE_URL,
             telephone: "+41628340540",
+            contactPoint: [
+              {
+                "@type": "ContactPoint",
+                telephone: "+41628340540",
+                contactType: "customer service",
+                availableLanguage: ["German", "French", "Italian", "English"],
+                contactOption: "TollFree",
+                areaServed: ["CH"]
+              }
+            ],
             openingHoursSpecification: [
               {
                 "@type": "OpeningHoursSpecification",

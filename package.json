@@ -6,6 +6,7 @@
   "author": "Nico Hauser",
   "license": "UNLICENSED",
   "scripts": {
+    "start": "node dist/server/index.js",
     "dev": "webpack-dev-server",
     "build": "webpack --config webpack-build.config.js",
     "build-server": "webpack --config webpack-build-server.config.js",

@@ -120,6 +120,13 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       {
+        from: "robots.txt",
+        to: "robots.txt",
+        toType: "file"
+      }
+    ]),
+    new CopyWebpackPlugin([
+      {
         from: "img/",
         to: "img/",
         toType: "dir"

@@ -123,7 +123,7 @@ class ProductCategories extends React.PureComponent {
         <Helmet>
           <title>
             {category
-              ? stripTags(category.name)
+              ? stripTags(category.name) + " - Hauser Feuerschutz AG"
               : "Shop der Hauser Feuerschutz AG"}
           </title>
           <meta name="description" content="" />

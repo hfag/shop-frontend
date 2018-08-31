@@ -15,7 +15,7 @@ class Search extends React.PureComponent {
     return (
       <Card>
         <Helmet>
-          <title>{stripTags(title)}</title>
+          <title>Suchen Sie im Shop der Hauser Feuerschutz AG</title>
           <meta
             name="description"
             content="Suchen Sie im Shop der Hauser Feuerschutz AG nach Produkten wie dem Rettungswegschild oder nach Kategorien wie den Brandschutzzeichen."

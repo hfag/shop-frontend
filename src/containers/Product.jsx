@@ -338,7 +338,7 @@ class Product extends React.PureComponent {
     return (
       <div>
         <Helmet>
-          <title>{stripTags(title)}</title>
+          <title>{stripTags(title)} - Hauser Feuerschutz AG</title>
           <meta name="description" content={description} />
           <link rel="canonical" href={ABSOLUTE_URL + "/produkt/" + slug} />
         </Helmet>

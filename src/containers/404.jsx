@@ -16,7 +16,9 @@ class Page404 extends React.PureComponent {
     return (
       <Card>
         <Helmet>
-          <title>Seite nicht gefunden! Fehler 404</title>
+          <title>
+            Seite nicht gefunden! Fehler 404 - Hauser Feuerschutz AG
+          </title>
           <meta
             name="description"
             content="Diese Seite konnte leider nicht gefunden werden. Verwenden Sie die Suche oder wenden Sie sich an unseren Kundensupport."

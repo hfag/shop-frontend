@@ -5,13 +5,15 @@
  * @returns {Object} The new state
  */
 const salesReducer = (
-  state = { isFetching: false, error: null, sales: [] },
+  state = { isFetching: 0, lastFetched: 0, error: null, sales: [] },
   action
 ) => {
   switch (action.type) {
     case "FETCH_SALES":
       return {
-        isFetching: action.isFetching,
+        isFetching: state.isFetching + (action.isFetching ? 1 : -1),
+        lastFetched:
+          !action.isFetching && !action.error ? Date.now() : state.lastFetched,
         error:
           action.error || action.error === null ? action.error : state.error,
         sales: !action.isFetching && action.sales ? action.sales : state.sales
@@ -29,3 +31,10 @@ export default salesReducer;
  * @returns {Object} All sales
  */
 export const getSales = state => state.sales;
+
+/**
+ * Checks when the last time sales were fetched
+ * @param {Object} state The redux state
+ * @returns {number} The unix timestamp
+ */
+export const getSalesLastFetched = state => state.lastFetched;

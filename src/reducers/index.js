@@ -62,7 +62,6 @@ export const getProductById = wrap(
   fromProduct.getProductById,
   state => state.product
 );
-
 /**
  * Returns the product with the specified slug
  * @param {object} state This state
@@ -73,7 +72,6 @@ export const getProductBySlug = wrap(
   fromProduct.getProductBySlug,
   state => state.product
 );
-
 /**
  * Returns all products
  * @param {object} state This state
@@ -83,7 +81,6 @@ export const getProducts = wrap(
   fromProduct.getProducts,
   state => state.product
 );
-
 /**
  * Returns the product with the specified sku
  * @param {object} state This state
@@ -104,14 +101,22 @@ export const getSimpleProducts = wrap(
   fromSimpleProduct.getSimpleProducts,
   state => state.simpleProduct
 );
-
 /**
  * Returns whether simple products are being fetched
  * @param {object} state This state
  * @return {boolean} Whether simple items are being fetched
  */
-export const isFetchingSimpleItems = wrap(
-  fromSimpleProduct.isFetchingSimpleItems,
+export const isFetchingSimpleProducts = wrap(
+  fromSimpleProduct.isFetchingSimpleProducts,
+  state => state.simpleProduct
+);
+/**
+ * Returns the last time simple products were fetched
+ * @param {object} state This state
+ * @return {number} The unix timestamp
+ */
+export const getSimpleProductsLastFetched = wrap(
+  fromSimpleProduct.getSimpleProductsLastFetched,
   state => state.simpleProduct
 );
 
@@ -125,7 +130,6 @@ export const getProductCategoryBySlug = wrap(
   fromProduct.getProductCategoryBySlug,
   state => state.product
 );
-
 /**
  * Returns the product category with the specified id
  * @param {object} state This state
@@ -136,7 +140,6 @@ export const getProductCategoryById = wrap(
   fromProduct.getProductCategoryById,
   state => state.product
 );
-
 /**
  * Returns all product categories
  * @param {object} state This state
@@ -146,7 +149,6 @@ export const getProductCategories = wrap(
   fromProduct.getProductCategories,
   state => state.product
 );
-
 /**
  * Returns the children ids of the category with the specified id
  * @param {object} state This state
@@ -155,6 +157,24 @@ export const getProductCategories = wrap(
  */
 export const getProductCategoryChildrenIdsById = wrap(
   fromProduct.getProductCategoryChildrenIdsById,
+  state => state.product
+);
+/**
+ * Returns whether multiple product categories are being fetched
+ * @param {object} state This state
+ * @return {boolean} Whether product categories are being fetched
+ */
+export const isFetchingProductCategories = wrap(
+  fromProduct.isFetchingProductCategories,
+  state => state.product
+);
+/**
+ * Returns all product categories
+ * @param {object} state This state
+ * @return {array} All product categories
+ */
+export const getProductCategoriesLastFetched = wrap(
+  fromProduct.getProductCategoriesLastFetched,
   state => state.product
 );
 
@@ -168,7 +188,6 @@ export const getProductAttributeById = wrap(
   fromProduct.getProductAttributeById,
   state => state.product
 );
-
 /**
  * Returns all product attributes
  * @param {object} state This state
@@ -178,7 +197,6 @@ export const getProductAttributes = wrap(
   fromProduct.getProductAttributes,
   state => state.product
 );
-
 /**
  * Returns a slug => attribute map
  * @param {object} state The redux state
@@ -197,7 +215,6 @@ export const getAttachments = wrap(
   fromAttachment.getAttachments,
   state => state.attachment
 );
-
 /**
  * Retrieves the object with the specified id
  * @param {object} state This state
@@ -219,15 +236,6 @@ export const getShoppingCartError = wrap(
   state => state.shoppingCart
 );
 /**
- * Checks whether the shopping cart is currently being fetched
- * @param {Object} state The redux state
- * @returns {boolean} Whether the cart is currently being fetched
- */
-export const getShoppingCartFetching = wrap(
-  fromShoppingCart.getShoppingCartFetching,
-  state => state.shoppingCart
-);
-/**
  * Gets all items that are currenlty in the shopping cart
  * @param {Object} state The redux state
  * @returns {Array} The cart items
@@ -236,7 +244,6 @@ export const getShoppingCartItems = wrap(
   fromShoppingCart.getShoppingCartItems,
   state => state.shoppingCart
 );
-
 /**
  * Gets the total price of the cart
  * @param {Object} state The redux state
@@ -246,7 +253,6 @@ export const getShoppingCartTotal = wrap(
   fromShoppingCart.getShoppingCartTotal,
   state => state.shoppingCart
 );
-
 /**
  * Gets the shopping cart taxes
  * @param {Object} state The redux state
@@ -256,7 +262,6 @@ export const getShoppingCartTaxes = wrap(
   fromShoppingCart.getShoppingCartTaxes,
   state => state.shoppingCart
 );
-
 /**
  * Gets the shopping cart fees
  * @param {Object} state The redux state
@@ -266,7 +271,6 @@ export const getShoppingCartFees = wrap(
   fromShoppingCart.getShoppingCartFees,
   state => state.shoppingCart
 );
-
 /**
  * Gets the shopping shipping
  * @param {Object} state The redux state
@@ -274,6 +278,24 @@ export const getShoppingCartFees = wrap(
  */
 export const getShoppingCartShipping = wrap(
   fromShoppingCart.getShoppingCartShipping,
+  state => state.shoppingCart
+);
+/**
+ * Checks whether the shopping cart is currently being fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether the cart is being fetched
+ */
+export const isFetchingShoppingCart = wrap(
+  fromShoppingCart.isFetchingShoppingCart,
+  state => state.shoppingCart
+);
+/**
+ * Gets the last time the shopping cart was fetched
+ * @param {Object} state The redux state
+ * @returns {number} The unix timestamp
+ */
+export const getShoppingCartLastFetched = wrap(
+  fromShoppingCart.getShoppingCartLastFetched,
   state => state.shoppingCart
 );
 
@@ -286,6 +308,15 @@ export const getCountries = wrap(
   fromCountries.getCountries,
   state => state.countries
 );
+/**
+ * Gets the last time all countries were fetched
+ * @param {Object} state The redux state
+ * @returns {number} The unix timestamp
+ */
+export const getCountriesLastFetched = wrap(
+  fromCountries.getCountriesLastFetched,
+  state => state.countries
+);
 
 /**
  * Gets all sales
@@ -293,6 +324,15 @@ export const getCountries = wrap(
  * @returns {Object} All sales
  */
 export const getSales = wrap(fromSales.getSales, state => state.sales);
+/**
+ * Gets the last time all sales were fetched
+ * @param {Object} state The redux state
+ * @returns {number} The unix timestamp
+ */
+export const getSalesLastFetched = wrap(
+  fromSales.getSalesLastFetched,
+  state => state.sales
+);
 
 /**
  * Gets the user account
@@ -300,7 +340,15 @@ export const getSales = wrap(fromSales.getSales, state => state.sales);
  * @returns {Object} The user account
  */
 export const getAccount = wrap(fromAccount.getAccount, state => state.account);
-
+/**
+ * Gets the last time the user account was fetched
+ * @param {Object} state The redux state
+ * @returns {Object} The user account
+ */
+export const getAccountLastFetched = wrap(
+  fromAccount.getAccountLastFetched,
+  state => state.account
+);
 /**
  * Gets the reseller discount for a product
  * @param {Object} state The redux state
@@ -311,7 +359,6 @@ export const getResellerDiscountByProductId = wrap(
   fromAccount.getResellerDiscountByProductId,
   state => state.account
 );
-
 /**
  * Gets the reseller discount for the current user
  * @param {Object} state The redux state
@@ -335,6 +382,15 @@ export const getIsAuthenticated = state => state.isAuthenticated;
  * @returns {Object} All orders
  */
 export const getOrders = wrap(fromOrders.getOrders, state => state.orders);
+/**
+ * Gets the last time all orders were fetched
+ * @param {Object} state The redux state
+ * @returns {number} The unix timestamp
+ */
+export const getOrdersLastFetched = wrap(
+  fromOrders.getOrdersLastFetched,
+  state => state.orders
+);
 
 const appReducer = combineReducers({
   router,
@@ -352,7 +408,7 @@ const appReducer = combineReducers({
   isAuthenticated: (state = false, action) => {
     switch (action.type) {
       case "LOGIN_USER":
-        return !action.isFetching ? action.success : state;
+        return !action.isFetching && !action.error ? action.success : state;
       default:
         return state;
     }

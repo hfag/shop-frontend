@@ -6,8 +6,10 @@ const itemName = "productAttribute";
 
 export default createReducer(itemName);
 export {
-	getAllItems as getProductAttributes,
-	getItemById as getProductAttributeById
+  getAllItems as getProductAttributes,
+  getItemById as getProductAttributeById,
+  isFetching as isFetchingProductAttributes,
+  getLastFetched as getProductAttributesLastFetched
 } from "utilities/reducer";
 
 /**
@@ -16,7 +18,7 @@ export {
  * @returns {Object} The object mapping the slugs
  */
 export const getProductAttributesBySlug = state =>
-	state.allIds.reduce((object, id) => {
-		object[state.byId[id].slug] = state.byId[id];
-		return object;
-	}, {});
+  state.allIds.reduce((object, id) => {
+    object[state.byId[id].slug] = state.byId[id];
+    return object;
+  }, {});

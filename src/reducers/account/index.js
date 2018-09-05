@@ -5,7 +5,7 @@
  * @returns {Object} The new state
  */
 const accountReducer = (
-  state = { isFetching: false, error: null, account: {} },
+  state = { isFetching: 0, lastFetched: 0, error: null, account: {} },
   action
 ) => {
   switch (action.type) {
@@ -14,7 +14,8 @@ const accountReducer = (
     case "UPDATE_USER_ADDRESS":
     case "FETCH_USER_ACCOUNT":
       return {
-        isFetching: action.isFetching,
+        isFetching: state.isFetching + (action.isFetching ? 1 : -1),
+        lastFetched: !action.isFetching && !action.error ? Date.now() : state,
         error:
           action.error || action.error === null ? action.error : state.error,
         account:
@@ -28,11 +29,17 @@ const accountReducer = (
 export default accountReducer;
 
 /**
- * Gets all countries
+ * Gets the user account
  * @param {Object} state The redux state
- * @returns {Object} All countries
+ * @returns {Object} The user account
  */
 export const getAccount = state => state.account;
+/**
+ * Gets the last time the account was fetched
+ * @param {Object} state The redux state
+ * @returns {number} The unix timestamp
+ */
+export const getAccountLastFetched = state => state.lastFetched;
 
 /**
  * Gets the reseller discount for a product

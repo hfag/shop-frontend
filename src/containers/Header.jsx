@@ -12,7 +12,7 @@ import { Helmet } from "react-helmet";
 
 import { fetchShoppingCart } from "../actions/shopping-cart";
 import {
-  getShoppingCartFetching,
+  isFetchingShoppingCart,
   getShoppingCartItems,
   getShoppingCartTotal,
   getIsAuthenticated
@@ -363,7 +363,7 @@ class Header extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  shoppingCartFetching: getShoppingCartFetching(state),
+  shoppingCartFetching: isFetchingShoppingCart(state),
   shoppingCartItems: getShoppingCartItems(state),
   shoppingCartTotal: getShoppingCartTotal(state),
   isAuthenticated: getIsAuthenticated(state)

@@ -54,7 +54,6 @@ export const getProductCategoryById = wrap(
   fromCategories.getProductCategoryById,
   state => state.categories
 );
-
 /**
  * Returns the product category with the specified slug
  * @param {object} state This state
@@ -65,7 +64,6 @@ export const getProductCategoryBySlug = wrap(
   fromCategories.getProductCategoryBySlug,
   state => state.categories
 );
-
 /**
  * Returns all product categories
  * @param {object} state This state
@@ -75,7 +73,6 @@ export const getProductCategories = wrap(
   fromCategories.getProductCategories,
   state => state.categories
 );
-
 /**
  * Returns the children of the category with the specified id
  * @param {object} state This state
@@ -84,6 +81,24 @@ export const getProductCategories = wrap(
  */
 export const getProductCategoryChildrenIdsById = wrap(
   fromCategories.getProductCategoryChildrenIdsById,
+  state => state.categories
+);
+/**
+ * Returns whether multiple product categories are being fetched
+ * @param {object} state This state
+ * @return {boolean} Whether product categories are being fetched
+ */
+export const isFetchingProductCategories = wrap(
+  fromCategories.isFetchingProductCategories,
+  state => state.categories
+);
+/**
+ * Returns all product categories
+ * @param {object} state This state
+ * @return {array} All product categories
+ */
+export const getProductCategoriesLastFetched = wrap(
+  fromCategories.getProductCategoriesLastFetched,
   state => state.categories
 );
 
@@ -97,7 +112,6 @@ export const getProductAttributeById = wrap(
   fromAttributes.getProductAttributeById,
   state => state.attributes
 );
-
 /**
  * Returns all product attributes
  * @param {object} state This state
@@ -107,7 +121,6 @@ export const getProductAttributes = wrap(
   fromAttributes.getProductAttributes,
   state => state.attributes
 );
-
 /**
  * Returns a slug => attribute map
  * @param {object} state The redux state

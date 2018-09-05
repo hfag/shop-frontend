@@ -6,7 +6,9 @@ const itemName = "productCategory";
 export default createReducer(itemName, "slug");
 export {
   getAllItems as getProductCategories,
-  getItemById as getProductCategoryBySlug
+  getItemById as getProductCategoryBySlug,
+  getLastFetched as getProductCategoriesLastFetched,
+  isFetching as isFetchingProductCategories
 } from "utilities/reducer";
 
 /**

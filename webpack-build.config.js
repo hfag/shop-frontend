@@ -79,7 +79,7 @@ module.exports = {
             hoist_funs: true,
             if_return: true,
             join_vars: true,
-            drop_console: true
+            drop_console: false
           },
           exclude: [/\.min\.js$/gi] // skip pre-minified libs
         }

@@ -10,7 +10,7 @@ import {
 } from "../actions/shopping-cart";
 import { fetchCountries } from "../actions/countries";
 import {
-  getShoppingCartFetching,
+  isFetchingShoppingCart,
   getShoppingCartItems,
   getShoppingCartTotal,
   getShoppingCartTaxes,
@@ -135,7 +135,7 @@ const mapStateToProps = state => {
   const account = getAccount(state);
 
   return {
-    isFetching: getShoppingCartFetching(state),
+    isFetching: isFetchingShoppingCart(state),
     items: getShoppingCartItems(state),
     total: getShoppingCartTotal(state),
     taxes: getShoppingCartTaxes(state),

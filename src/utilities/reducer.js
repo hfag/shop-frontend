@@ -146,6 +146,52 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
 };
 
 /**
+ * Reducer storing whether multiple items are currently being fetched
+ * @param {string} name The singular item name
+ * @param {string} [uniqueProperty="id"] A unique property all items of the given type will have
+ * @param {function} [customCases=null] A function to handle other cases
+ * @returns {Array<number>} The new state
+ */
+export const createIsFetching = (
+  name,
+  uniqueProperty = "id",
+  customCases = null
+) => (state = 0, action) => {
+  switch (action.type) {
+    case "FETCH_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
+      return state + (action.isFetching ? 1 : -1);
+    default:
+      if (customCases) {
+        return customCases(state, action);
+      }
+      return state;
+  }
+};
+
+/**
+ * Reducer storing the last time multiple items were fetched
+ * @param {string} name The singular item name
+ * @param {string} [uniqueProperty="id"] A unique property all items of the given type will have
+ * @param {function} [customCases=null] A function to handle other cases
+ * @returns {Array<number>} The new state
+ */
+export const createLastFetched = (
+  name,
+  uniqueProperty = "id",
+  customCases = null
+) => (state = 0, action) => {
+  switch (action.type) {
+    case "FETCH_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
+      return action.isFetching ? state : Date.now();
+    default:
+      if (customCases) {
+        return customCases(state, action);
+      }
+      return state;
+  }
+};
+
+/**
  * Creates a normalized reducer
  * @param {string} name The item name used for the actions
  * @param {string} [uniqueProperty="id"] A unique property all items of the given type will have
@@ -154,7 +200,9 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
 export const createReducer = (name, uniqueProperty = "id") =>
   combineReducers({
     byId: createById(name, uniqueProperty),
-    allIds: createAllIds(name, uniqueProperty)
+    allIds: createAllIds(name, uniqueProperty),
+    isFetching: createIsFetching(name, uniqueProperty),
+    lastFetched: createLastFetched(name, uniqueProperty)
   });
 
 /**
@@ -171,6 +219,20 @@ export const getItemById = (state, itemId) => state.byId[itemId];
  * @returns {Array} All items
  */
 export const getAllItems = state => state.allIds.map(id => state.byId[id]);
+
+/**
+ * Checks whether the items is currently being fetched
+ * @param {Object} state The correct part of the redux state
+ * @returns {boolean} Whether multiple items are currently being fetched
+ */
+export const isFetching = state => state.isFetching !== 0;
+
+/**
+ * Checks when the last time multiple/all items were fetched
+ * @param {Object} state The correct part of the redux state
+ * @returns {number} The unix timestamp
+ */
+export const getLastFetched = state => state.lastFetched;
 
 /**
  * Wraps a function, useful for redux getters

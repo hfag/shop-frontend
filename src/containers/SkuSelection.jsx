@@ -14,7 +14,7 @@ import {
 import {
   getSimpleProducts,
   getResellerDiscount,
-  isFetchingSimpleItems
+  isFetchingSimpleProducts
 } from "../reducers";
 import { colors } from "../utilities/style";
 import Price from "../components/Price";
@@ -325,7 +325,7 @@ const mapStateToProps = state => {
             }
           : product
     ),
-    isFetching: isFetchingSimpleItems(state)
+    isFetching: isFetchingSimpleProducts(state)
   };
 };
 const mapDispatchToProps = dispatch => ({

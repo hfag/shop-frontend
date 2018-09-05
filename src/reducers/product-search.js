@@ -5,13 +5,13 @@
  * @returns {Object} The new state
  */
 const productSearchReducer = (
-  state = { isFetching: false, error: null, sections: [] },
+  state = { isFetching: 0, error: null, sections: [] },
   action
 ) => {
   switch (action.type) {
     case "SEARCH_PRODUCTS":
       return {
-        isFetching: action.isFetching,
+        isFetching: state.isFetching + (action.isFetching ? 1 : -1),
         error:
           action.error || action.error === null ? action.error : state.error,
         sections: action.sections ? action.sections : state.sections

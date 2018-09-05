@@ -6,7 +6,8 @@
  */
 const shoppingCartReducer = (
   state = {
-    isFetching: false,
+    isFetching: 0,
+    lastFetched: 0,
     error: null,
     items: [],
     total: 0,
@@ -21,7 +22,8 @@ const shoppingCartReducer = (
     case "ADD_SHOPPING_CART_ITEM":
     case "UPDATE_SHOPPING_CART":
       return {
-        isFetching: action.isFetching,
+        isFetching: state.isFetching + (action.isFetching ? 1 : -1),
+        lastFetched: !action.isFetching && !action.error ? Date.now() : state,
         error:
           action.error || action.error === null ? action.error : state.error,
         items:
@@ -56,7 +58,13 @@ export const getShoppingCartError = state => state.error;
  * @param {Object} state The redux state
  * @returns {boolean} Whether the cart is currently being fetched
  */
-export const getShoppingCartFetching = state => state.isFetching;
+export const isFetchingShoppingCart = state => state.isFetching !== 0;
+/**
+ * Gets when the shopping cart was fetched for the last time
+ * @param {Object} state The redux state
+ * @returns {number} The last time the shopping cart was fetched
+ */
+export const getShoppingCartLastFetched = state => state.lastFetched;
 /**
  * Gets all items that are currenlty in the shopping cart
  * @param {Object} state The redux state

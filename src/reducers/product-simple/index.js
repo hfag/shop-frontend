@@ -1,6 +1,11 @@
 import { combineReducers } from "redux";
 
-import { createById, createAllIds } from "../../utilities/reducer";
+import {
+  createById,
+  createAllIds,
+  createIsFetching,
+  createLastFetched
+} from "../../utilities/reducer";
 
 const itemName = "simple_product";
 
@@ -21,24 +26,13 @@ export default combineReducers({
         return state;
     }
   }),
-  isFetching: (state = false, action) => {
-    switch (action.type) {
-      case "FETCH_SIMPLE_PRODUCTS":
-        return action.isFetching;
-      default:
-        return state;
-    }
-  }
+  isFetching: createIsFetching(itemName, "sku"),
+  lastFetched: createLastFetched(itemName, "sku")
 });
 
 export {
   getAllItems as getSimpleProducts,
-  getItemById as getSimpleProductBySku
+  getItemById as getSimpleProductBySku,
+  getLastFetched as getSimpleProductsLastFetched,
+  isFetching as isFetchingSimpleProducts
 } from "utilities/reducer";
-
-/**
- * Checks if simple products are being fetched
- * @param {Object} state The redux state
- * @returns {boolean} Whether the simple items are being fetched
- */
-export const isFetchingSimpleItems = state => state.isFetching;

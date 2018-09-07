@@ -5,8 +5,10 @@ import Account from "../src/containers/Account";
 import Cart from "../src/containers/Cart";
 import Login from "../src/containers/Login";
 import Logout from "../src/containers/Logout";
-import { fetchProductCategories } from "../src/actions/product/categories";
-import { getProductCategories } from "../src/reducers";
+import { fetchCountries } from "../src/actions/countries";
+import { fetchProductIfNeeded } from "../src/actions/product";
+import { fetchAllProductCategoriesIfNeeded } from "../src/actions/product/categories";
+import Page404 from "../src/containers/404";
 
 const routes = [
   {
@@ -16,47 +18,146 @@ const routes = [
     /**
      * Fetches the required data for this route
      * @param {Object} store The redux store
+     * @param {Object} route The react-router route object
+     * @param {Object} match The react-router match object
      * @returns {Promise} The fetch promise
      */
-    fetchData(store) {
-      return store.dispatch(fetchProductCategories(100, false));
-    },
-    /**
-     * Checks whether the data needs to be (re-)fetched
-     * @param {Object} store The redux store
-     * @returns {boolean} Whether to fetch the data
-     */
-    shouldFetch(store) {
-      return getProductCategories(store.getState()).length === 0;
+    fetchData(store, route, match) {
+      return Promise.all([
+        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
+        store.dispatch(fetchCountries())
+      ]);
     }
   },
   {
     path: "/produkte",
-    component: ProductCategories
+    component: ProductCategories,
+    /**
+     * Fetches the required data for this route
+     * @param {Object} store The redux store
+     * @param {Object} route The react-router route object
+     * @param {Object} match The react-router match object
+     * @returns {Promise} The fetch promise
+     */
+    fetchData(store, route, match) {
+      return Promise.all([
+        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
+        store.dispatch(fetchCountries())
+      ]);
+    }
   },
   {
     path: "/produkt/:productSlug",
     component: Product,
-    exact: true
+    exact: true,
+    /**
+     * Fetches the required data for this route
+     * @param {Object} store The redux store
+     * @param {Object} route The react-router route object
+     * @param {Object} match The react-router match object
+     * @returns {Promise} The fetch promise
+     */
+    fetchData(
+      store,
+      route,
+      {
+        params: { productSlug }
+      }
+    ) {
+      return Promise.all([
+        store.dispatch(fetchProductIfNeeded(productSlug, false)),
+        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
+        store.dispatch(fetchCountries())
+      ]);
+    }
   },
   {
     path: "/login",
     component: Login,
-    exact: true
+    exact: true,
+    /**
+     * Fetches the required data for this route
+     * @param {Object} store The redux store
+     * @param {Object} route The react-router route object
+     * @param {Object} match The react-router match object
+     * @returns {Promise} The fetch promise
+     */
+    fetchData(store, route, match) {
+      return Promise.all([
+        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
+        store.dispatch(fetchCountries())
+      ]);
+    }
   },
   {
     path: "/logout",
     component: Logout,
-    exact: true
+    exact: true,
+    /**
+     * Fetches the required data for this route
+     * @param {Object} store The redux store
+     * @param {Object} route The react-router route object
+     * @param {Object} match The react-router match object
+     * @returns {Promise} The fetch promise
+     */
+    fetchData(store, route, match) {
+      return Promise.all([
+        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
+        store.dispatch(fetchCountries())
+      ]);
+    }
   },
   {
     path: "/konto",
-    component: Account
+    component: Account,
+    /**
+     * Fetches the required data for this route
+     * @param {Object} store The redux store
+     * @param {Object} route The react-router route object
+     * @param {Object} match The react-router match object
+     * @returns {Promise} The fetch promise
+     */
+    fetchData(store, route, match) {
+      return Promise.all([
+        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
+        store.dispatch(fetchCountries())
+      ]);
+    }
   },
   {
     path: "/warenkorb",
     component: Cart,
-    exact: true
+    exact: true,
+    /**
+     * Fetches the required data for this route
+     * @param {Object} store The redux store
+     * @param {Object} route The react-router route object
+     * @param {Object} match The react-router match object
+     * @returns {Promise} The fetch promise
+     */
+    fetchData(store, route, match) {
+      return Promise.all([
+        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
+        store.dispatch(fetchCountries())
+      ]);
+    }
+  },
+  {
+    component: Page404,
+    exact: true,
+    /**
+     * Fetches the required data for this route
+     * @param {Object} store The redux store
+     * @param {Object} route The react-router route object
+     * @param {Object} match The react-router match object
+     * @returns {Promise} The fetch promise
+     */
+    fetchData(store, route, match) {
+      return Promise.all([
+        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
+        store.dispatch(fetchCountries())
+      ]);
+    }
   }
 ];
 

@@ -13,6 +13,8 @@ import thunkMiddleware from "redux-thunk";
 import { Helmet as ReactHelmet } from "react-helmet";
 
 import "../src/set-yup-locale";
+import { setIn } from "formik";
+
 import App from "./App";
 import routes from "./routes";
 import reducers from "../src/reducers";
@@ -21,9 +23,6 @@ import reducers from "../src/reducers";
 require("isomorphic-fetch");
 
 const PORT = process.env.SERVER_PORT;
-
-//and the redux store
-const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 const indexHtml = fs.readFileSync("./dist/client/index.html").toString();
 
@@ -42,18 +41,20 @@ app.use(compression());
  * @returns {void}
  */
 const renderApplication = (request, response) => {
+  const store = createStore(reducers, applyMiddleware(thunkMiddleware));
   const sheet = new ServerStyleSheet();
   const context = {};
 
-  const promises = matchRoutes(routes, request.url).map(
+  const matchedRoutes = matchRoutes(routes, request.url);
+  const promises = matchedRoutes.map(
     ({ route, match }) =>
-      route.fetchData && route.shouldFetch(store)
-        ? route.fetchData(store)
-        : Promise.resolve()
+      route.fetchData ? route.fetchData(store, route, match) : Promise.resolve()
   );
 
   Promise.all(promises)
     .then(() => {
+      //Update state
+
       const reactDom = renderToString(
         <StyleSheetManager sheet={sheet.instance}>
           <App location={request.url} context={context} store={store} />
@@ -71,11 +72,13 @@ const renderApplication = (request, response) => {
           .replace(
             "<head>",
             `<head>
-            ${styleTags}<script>window.__INITIAL_DATA__ = ${JSON.stringify(
-              store.getState()
-            )}</script>${["base", "link", "meta", "script", "style", "title"]
+            ${["meta", "base", "link", "script", "style", "title"]
               .map(key => reactHelmet[key].toString())
-              .join("")}`
+              .join(
+                ""
+              )}${styleTags}<script>window.__INITIAL_DATA__ = ${JSON.stringify(
+              store.getState()
+            )}</script>`
           )
           .replace("<html>", `<html ${reactHelmet.htmlAttributes.toString()}>`)
           .replace(
@@ -85,7 +88,8 @@ const renderApplication = (request, response) => {
       );
     })
     .catch(e => {
-      response.end(e.toString());
+      response.end("Es ist ein Fehler aufgetreten!");
+      console.log(e);
     });
 };
 
@@ -95,4 +99,22 @@ app.get("/*", renderApplication);
 
 app.listen(PORT);
 
-console.log("Server listening on http://localhost:" + PORT);
+console.log("Server listening on http://localhost:" + PORT) + "!";
+/*setInterval(() => {
+  console.log("Checking cache...");
+  const now = Date.now();
+  const idsToRemove = Object.values(state.products.byId)
+    .filter(product => now - product._lastFetched < 1000 * 60 * 60 * 4)
+    .map(product => {
+      delete state.product.byId[product.id];
+      return product.id;
+    });
+  state.products.allIds = state.products.allIds.filter(
+    id => !idsToRemove.includes(id)
+  );
+  console.log("Removed " + idsToRemove.length + " products from cache!");
+
+  console.log("Done!");
+}, 1000 * 60 * 30);
+console.log("Cache clearing deamon initialized!");
+*/

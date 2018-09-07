@@ -4,7 +4,7 @@ import universal from "react-universal-component";
 import { Helmet } from "react-helmet";
 
 import {
-  fetchShoppingCart,
+  fetchShoppingCartIfNeeded,
   updateShoppingCartItem,
   submitOrder
 } from "../actions/shopping-cart";
@@ -46,6 +46,7 @@ class Cart extends React.PureComponent {
 
   componentDidMount = () => {
     this.props.fetchCountries();
+    this.props.fetchShoppingCartIfNeeded();
   };
 
   /**
@@ -166,8 +167,8 @@ const mapDispatchToProps = dispatch => ({
    * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchShoppingCart(visualize = false) {
-    return dispatch(fetchShoppingCart(visualize));
+  fetchShoppingCartIfNeeded(visualize = false) {
+    return dispatch(fetchShoppingCartIfNeeded(visualize));
   },
   /**
    * Updates the shopping cart

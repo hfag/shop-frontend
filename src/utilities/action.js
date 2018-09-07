@@ -62,14 +62,21 @@ export const createFetchSingleItemThunk = (
       const mappedItem = mapItem(item);
 
       if (callback) {
-        callback(dispatch, response, item, visualize, ...attributes);
+        return Promise.resolve(
+          callback(dispatch, response, item, visualize, ...attributes)
+        ).then(() => {
+          dispatch(
+            action(false, null, visualize, itemId, mappedItem, ...attributes)
+          );
+          return Promise.resolve({ item: mappedItem, originalItem: item });
+        });
+      } else {
+        dispatch(
+          action(false, null, visualize, itemId, mappedItem, ...attributes)
+        );
+
+        return Promise.resolve({ item: mappedItem, originalItem: item });
       }
-
-      dispatch(
-        action(false, null, visualize, itemId, mappedItem, ...attributes)
-      );
-
-      return Promise.resolve({ item: mappedItem, originalItem: item });
     })
     .catch(error => {
       dispatch(action(false, error, visualize, itemId, null, ...attributes));

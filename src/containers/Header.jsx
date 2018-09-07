@@ -10,7 +10,7 @@ import LoadingBar from "react-redux-loading-bar";
 import { Flex, Box } from "grid-styled";
 import { Helmet } from "react-helmet";
 
-import { fetchShoppingCart } from "../actions/shopping-cart";
+import { fetchShoppingCartIfNeeded } from "../actions/shopping-cart";
 import {
   isFetchingShoppingCart,
   getShoppingCartItems,
@@ -110,8 +110,8 @@ class Header extends React.PureComponent {
     this.state = { showShoppingCartDropdown: false };
   }
   componentDidMount = () => {
-    const { fetchShoppingCart } = this.props;
-    fetchShoppingCart();
+    const { fetchShoppingCartIfNeeded } = this.props;
+    fetchShoppingCartIfNeeded();
   };
   render = () => {
     const {
@@ -382,8 +382,8 @@ const mapDispatchToProps = dispatch => ({
    * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchShoppingCart(visualize = false) {
-    return dispatch(fetchShoppingCart());
+  fetchShoppingCartIfNeeded(visualize = false) {
+    return dispatch(fetchShoppingCartIfNeeded());
   },
   /**
    * Redirects the client to a url

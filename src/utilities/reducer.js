@@ -81,6 +81,8 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
   state = {},
   action
 ) => {
+  const NOW = Date.now();
+
   switch (action.type) {
     case "FETCH_" + changeCase.snakeCase(name).toUpperCase():
       return {
@@ -89,7 +91,8 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
           ...(state[action.itemId] ? state[action.itemId] : {}),
           ...action.item,
           _isFetching: action.isFetching,
-          _error: action.error
+          _error: action.error,
+          _lastFetched: NOW
         }
       };
     case "FETCH_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
@@ -102,7 +105,8 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
                 ...state[item[uniqueProperty]],
                 ...item,
                 _isFetching: action.isFetching,
-                _error: action.error
+                _error: action.error,
+                _lastFetched: NOW
               };
               if (action.page) {
                 object[item[uniqueProperty]]._page = action.page;
@@ -118,7 +122,8 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
             [action.item[uniqueProperty]]: {
               ...action.item,
               _isFetching: action.isFetching,
-              _error: action.error
+              _error: action.error,
+              _lastFetched: NOW
             }
           };
     case "UPDATE_" + changeCase.snakeCase(name).toUpperCase():
@@ -129,7 +134,8 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
               ...state[action.item[uniqueProperty]],
               ...action.item,
               _isFetching: action.isFetching,
-              _error: action.error
+              _error: action.error,
+              _lastFetched: NOW
             }
           }
         : state;

@@ -2,6 +2,7 @@ import { Promise } from "es6-promise";
 
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
+import { getShoppingCartLastFetched } from "../reducers";
 
 /**
  * Fetches the shopping cart
@@ -21,7 +22,7 @@ const fetchShoppingCartAction = createFetchAction(
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const fetchShoppingCart = (visualize = false) => dispatch => {
+const fetchShoppingCart = (visualize = false) => dispatch => {
   dispatch(fetchShoppingCartAction(true, null, visualize));
   return fetchApi(`/wp-json/hfag/shopping-cart`, {
     method: "GET",
@@ -37,6 +38,28 @@ export const fetchShoppingCart = (visualize = false) => dispatch => {
 
       return Promise.reject(e);
     });
+};
+/**
+ * Checks whether the shopping cart should be fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether the shopping cart shoud be fecthed
+ */
+const shouldFetchShoppingCart = state => {
+  return Date.now() - getShoppingCartLastFetched(state) > 1000 * 60 * 60 * 4;
+};
+/**
+ * Fetches the shopping cart if needed
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @returns {function} The redux thunk
+ */
+export const fetchShoppingCartIfNeeded = (visualize = false) => (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  return shouldFetchShoppingCart(state)
+    ? fetchShoppingCart(visualize)(dispatch)
+    : Promise.resolve();
 };
 
 /**

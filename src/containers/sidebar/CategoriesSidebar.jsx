@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
-import styled from "styled-components";
 import {
   getProducts,
   getProductCategoryChildrenIdsById,
@@ -10,10 +9,8 @@ import {
 } from "reducers";
 
 import CategoryItem from "../../containers/sidebar/CategoryItem";
-import Card from "../../components/Card";
-import Placeholder from "../../components/Placeholder";
 import Link from "../../components/Link";
-import { fetchProductCategories } from "../../actions/product/categories";
+import { fetchAllProductCategoriesIfNeeded } from "../../actions/product/categories";
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
 
@@ -65,11 +62,7 @@ class CategoriesSidebar extends React.PureComponent {
   };
 
   loadData = () => {
-    const {
-      categoryIds,
-      fetchAllProductCategories,
-      fetchProducts
-    } = this.props;
+    const { fetchAllProductCategoriesIfNeeded, fetchProducts } = this.props;
 
     if (
       this.props.match.path !== "/" &&
@@ -79,17 +72,7 @@ class CategoriesSidebar extends React.PureComponent {
     }
 
     //FIXME replace window.loading with something else
-    if (
-      (!categoryIds || categoryIds.length === 0) &&
-      !window.loadingCategories
-    ) {
-      window.loadingCategories = true;
-
-      fetchAllProductCategories().then(() => {
-        window.loadingCategories = false;
-      });
-    }
-
+    fetchAllProductCategoriesIfNeeded();
     fetchProducts();
   };
 
@@ -204,8 +187,11 @@ const mapDispatchToProps = (
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchAllProductCategories(perPage = ITEMS_PER_PAGE, visualize = true) {
-    return dispatch(fetchProductCategories(perPage, visualize));
+  fetchAllProductCategoriesIfNeeded(
+    perPage = ITEMS_PER_PAGE,
+    visualize = true
+  ) {
+    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
   },
   /**
    * Fetches the matching products

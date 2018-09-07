@@ -1,6 +1,9 @@
+import { Promise } from "es6-promise";
+
 import {
   fetchAttachmentsAction,
-  mapItem as mapAttachment
+  mapItem as mapAttachment,
+  fetchAttachments
 } from "../attachments";
 import { fetchAttributesAction, mapItem as mapAttribute } from "./attributes";
 import {
@@ -12,6 +15,7 @@ import {
   createFetchItemPageAction,
   createFetchItemsThunk
 } from "../../utilities/action";
+import { getProductBySlug } from "../../reducers";
 
 const itemName = "product";
 
@@ -123,14 +127,16 @@ const fetchItemAction = createFetchSingleItemAction(itemName);
 
 /**
  * Fetches a single item
- * @param {number} itemId The id of the requested item
+ * @param {number} slug The slug of the requested item
+ * @param {boolean} visualize Whether to visualize the progress
  * @returns {function}
  */
-export const fetchProduct = createFetchSingleItemThunk(
+const fetchProduct = createFetchSingleItemThunk(
   fetchItemAction,
   slug => `/wp-json/hfag/product?productSlug=${slug}`,
   mapItem,
   (dispatch, response, item) => {
+    const promises = [];
     if (item.variations && item.product && item.product.id) {
       dispatch(
         fetchVariationsAction(
@@ -153,10 +159,21 @@ export const fetchProduct = createFetchSingleItemThunk(
             .map(mapAttachment)
         )
       );
+
+      promises.push(
+        dispatch(
+          fetchAttachments(1, -1, 100, true, [
+            item.product.featured_media,
+            ...item.product.galleryImageIds
+          ])
+        )
+      );
     }
 
     if (item.product.crossSellIds && item.product.crossSellIds.length > 0) {
-      dispatch(fetchProducts(1, -1, 20, true, item.product.crossSellIds));
+      promises.push(
+        dispatch(fetchProducts(1, -1, 20, true, item.product.crossSellIds))
+      );
     }
 
     if (item.attributes) {
@@ -169,8 +186,44 @@ export const fetchProduct = createFetchSingleItemThunk(
         )
       );
     }
+
+    return Promise.all(promises);
   }
 );
+
+/**
+ * Checks whether the product should be fetched
+ * @param {string} slug The product slug
+ * @param {string} state The redux state
+ * @returns {boolean} Whether the product should be fetched
+ */
+const shouldFetchProduct = (slug, state) => {
+  const product = getProductBySlug(state, slug);
+  const invalidProduct =
+      !product ||
+      !product._lastFetched ||
+      Date.now() - product.lastFetched > 1000 * 60 * 60 * 4,
+    isFetchingProduct = !product || product._isFetching;
+
+  return invalidProduct && isFetchingProduct;
+};
+
+/**
+ * Fetches a product if needed
+ * @param {string} slug The product slug
+ * @param {boolean} visualize Whether to visualize the progress
+ * @returns {Promise} The fetch product
+ */
+export const fetchProductIfNeeded = (slug, visualize) => (
+  dispatch,
+  getState
+) => {
+  const state = getState(),
+    shouldFetch = shouldFetchProduct(slug, state);
+  return shouldFetch
+    ? fetchProduct(slug, visualize)(dispatch, state)
+    : Promise.resolve();
+};
 
 /**
  * Action called before and after fetching an item page

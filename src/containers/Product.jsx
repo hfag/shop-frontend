@@ -17,8 +17,8 @@ import Select from "../components/Select";
 import VariationSlider from "../components/VariationSlider";
 import { colors, borders } from "../utilities/style";
 import { stripTags } from "../utilities";
-import { fetchProductCategories } from "../actions/product/categories";
-import { fetchProduct } from "../actions/product";
+import { fetchAllProductCategoriesIfNeeded } from "../actions/product/categories";
+import { fetchProductIfNeeded } from "../actions/product";
 import { addShoppingCartItem } from "../actions/shopping-cart";
 import {
   getProductCategories,
@@ -171,13 +171,13 @@ class Product extends React.PureComponent {
   };
 
   fetchData = () => {
-    const { categories, fetchProduct, fetchAllProductCategories } = this.props;
+    const {
+      fetchProductIfNeeded,
+      fetchAllProductCategoriesIfNeeded
+    } = this.props;
 
-    if (categories.length === 0) {
-      fetchAllProductCategories();
-    }
-
-    fetchProduct();
+    fetchAllProductCategoriesIfNeeded();
+    fetchProductIfNeeded();
   };
 
   /**
@@ -741,33 +741,16 @@ const mapDispatchToProps = (
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchAllProductCategories(perPage = 30, visualize = true) {
-    return dispatch(fetchProductCategories(perPage, visualize));
+  fetchAllProductCategoriesIfNeeded(perPage = 30, visualize = true) {
+    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
   },
   /**
    * Fetches the product
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchProduct(visualize = true) {
-    return dispatch(fetchProduct(productSlug, visualize));
-  },
-  /**
-   * Fetches the product attributes
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchAttributes(visualize = true) {
-    return dispatch(fetchProductAttributes(visualize, productId));
-  },
-  /**
-   * Fetches the product variations
-   * @param {number|string} productId The productId
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchVariations(productId, visualize = true) {
-    return dispatch(fetchVariations(visualize, productId));
+  fetchProductIfNeeded(visualize = true) {
+    return dispatch(fetchProductIfNeeded(productSlug, visualize));
   },
   /**
    * Updates the shopping cart
@@ -801,19 +784,6 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   ...ownProps,
   ...mapStateToProps,
   ...mapDispatchToProps,
-  /**
-   * Fetches the product variations
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchVariations(visualize = true) {
-    return mapStateToProps.product
-      ? mapDispatchToProps.fetchVariations(
-          mapStateToProps.product.id,
-          visualize
-        )
-      : Promise.resolve();
-  },
   /**
    * Updates the shopping cart
    * @param {number|string} [variationId] The variation id

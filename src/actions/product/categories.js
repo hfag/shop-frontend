@@ -1,16 +1,22 @@
 import {
-	createFetchAction,
-	createFetchSingleItemAction,
-	createFetchSingleItemThunk,
-	createFetchItemsAction,
-	createFetchAllItemsThunk,
-	createFetchItemPageThunk,
-	createFetchItemPageAction
+  createFetchAction,
+  createFetchSingleItemAction,
+  createFetchSingleItemThunk,
+  createFetchItemsAction,
+  createFetchAllItemsThunk,
+  createFetchItemPageThunk,
+  createFetchItemPageAction
 } from "utilities/action";
 import {
-	fetchAttachmentsAction,
-	mapItem as mapAttachment
+  fetchAttachmentsAction,
+  mapItem as mapAttachment
 } from "actions/attachments";
+
+import {
+  getProductCategoriesLastFetched,
+  getProductCategories,
+  isFetchingProductCategories
+} from "../../reducers";
 
 const itemName = "productCategory";
 
@@ -20,21 +26,21 @@ const itemName = "productCategory";
  * @returns {Object} The mapped item
  */
 const mapItem = ({
-	id,
-	count,
-	description,
-	name,
-	slug,
-	parent,
-	thumbnail
+  id,
+  count,
+  description,
+  name,
+  slug,
+  parent,
+  thumbnail
 }) => ({
-	id,
-	count,
-	description,
-	name,
-	slug,
-	parent,
-	thumbnailId: thumbnail && thumbnail.id ? thumbnail.id : -1
+  id,
+  count,
+  description,
+  name,
+  slug,
+  parent,
+  thumbnailId: thumbnail && thumbnail.id ? thumbnail.id : -1
 });
 
 /**
@@ -45,17 +51,17 @@ const mapItem = ({
  * @returns {void}
  */
 const afterCategoryFetch = (dispatch, response, items) => {
-	dispatch(
-		fetchAttachmentsAction(
-			false,
-			null,
-			false,
-			items
-				.map(cat => cat.thumbnail)
-				.filter(t => t)
-				.map(mapAttachment)
-		)
-	);
+  dispatch(
+    fetchAttachmentsAction(
+      false,
+      null,
+      false,
+      items
+        .map(cat => cat.thumbnail)
+        .filter(t => t)
+        .map(mapAttachment)
+    )
+  );
 };
 
 /**
@@ -74,9 +80,9 @@ const fetchItemAction = createFetchSingleItemAction(itemName);
  * @returns {function}
  */
 export const fetchProductCategory = createFetchSingleItemThunk(
-	fetchItemAction,
-	id => `/wp-json/wp/v2/product_cat/${id}`,
-	mapItem
+  fetchItemAction,
+  id => `/wp-json/wp/v2/product_cat/${id}`,
+  mapItem
 );
 
 /**
@@ -95,13 +101,38 @@ const fetchItemsAction = createFetchItemsAction(itemName);
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const fetchAllProductCategories = createFetchAllItemsThunk(
-	fetchItemsAction,
-	(page, perPage) =>
-		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}`,
-	mapItem,
-	afterCategoryFetch
+const fetchAllProductCategories = createFetchAllItemsThunk(
+  fetchItemsAction,
+  (page, perPage) =>
+    `/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}`,
+  mapItem,
+  afterCategoryFetch
 );
+
+/**
+ * Checks whether all product categories should be fetched
+ * @returns {boolean} Whether to fetch all product categories
+ */
+const shouldFetchAllProductCategories = () => (dispatch, state) =>
+  getProductCategories(state).length === 0 ||
+  isFetchingProductCategories(state) ||
+  Date.now() - getProductCategoriesLastFetched(state) > 1000 * 60 * 60 * 4;
+
+/**
+ * Fetches all items if needed
+ * @param {number} perPage How many items should be fetched per page
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @returns {function} The redux thunk
+ */
+export const fetchAllProductCategoriesIfNeeded = (perPage, visualize) => (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  return shouldFetchAllProductCategories()(dispatch, state)
+    ? fetchAllProductCategories(perPage, visualize)(dispatch, state)
+    : Promise.resolve();
+};
 
 /**
  * Action called before and after fetching an item page
@@ -121,12 +152,12 @@ const fetchItemPageAction = createFetchItemPageAction(itemName, "itemIds");
  * @param {array} itemIds The item ids to fetch
  * @return {function} The redux thunk
  */
-export const fetchProductCategories = createFetchAllItemsThunk(
-	fetchItemPageAction,
-	(page, perPage, itemIds = []) =>
-		`/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}${
-			itemIds.length > 0 ? `&include[]=${itemIds.join("&include[]=")}` : ""
-		}`,
-	mapItem,
-	afterCategoryFetch
+const fetchProductCategories = createFetchAllItemsThunk(
+  fetchItemPageAction,
+  (page, perPage, itemIds = []) =>
+    `/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}${
+      itemIds.length > 0 ? `&include[]=${itemIds.join("&include[]=")}` : ""
+    }`,
+  mapItem,
+  afterCategoryFetch
 );

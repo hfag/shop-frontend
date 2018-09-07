@@ -9,7 +9,7 @@ import Thumbnail from "../containers/Thumbnail";
 import Placeholder from "../components/Placeholder";
 import Link from "../components/Link";
 import { colors, borders, shadows } from "../utilities/style";
-import { fetchProduct } from "../actions/product";
+import { fetchProductIfNeeded } from "../actions/product";
 import {
   getProductCategories,
   getProductBySlug,
@@ -99,21 +99,13 @@ const Discount = styled.div`
  */
 class ProductItem extends React.PureComponent {
   componentWillMount = () => {
-    const { id, product, fetchProduct } = this.props;
+    const { fetchProductIfNeeded } = this.props;
 
-    if (id > 0 && !product) {
-      fetchProduct();
-    }
+    fetchProductIfNeeded();
   };
 
   render = () => {
-    const {
-      id: productId,
-      product,
-      categories,
-      parents = [],
-      resellerDiscount
-    } = this.props;
+    const { product, categories, resellerDiscount } = this.props;
 
     return (
       <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
@@ -180,18 +172,37 @@ const mapStateToProps = (state, { id }) => {
     : {};
 };
 
-const mapDispatchToProps = (dispatch, { id }) => ({
+const mapDispatchToProps = dispatch => ({
+  /**
+   * Fetches a product
+   * @param {string} slug The product's slug
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchProductIfNeeded(slug, visualize = true) {
+    return dispatch(fetchProductIfNeeded(slug, visualize));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
   /**
    * Fetches a product
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchProduct(visualize = true) {
-    return dispatch(fetchProduct(id, visualize));
+  fetchProductIfNeeded(visualize = true) {
+    return mapDispatchToProps.fetchProductIfNeeded(
+      mapStateToProps.product.slug,
+      visualize
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(ProductItem);

@@ -14,7 +14,7 @@ import Flex from "../components/Flex";
 import Pagination from "../components/Pagination";
 import CategoryItem from "../containers/CategoryItem";
 import ProductItem from "../containers/ProductItem";
-import { fetchProductCategories } from "../actions/product/categories";
+import { fetchAllProductCategoriesIfNeeded } from "../actions/product/categories";
 import { fetchProducts } from "../actions/product";
 import JsonLd from "../components/JsonLd";
 import { stripTags } from "../utilities";
@@ -67,7 +67,7 @@ class ProductCategories extends React.PureComponent {
   loadData = () => {
     const {
       categoryIds,
-      fetchAllProductCategories,
+      fetchAllProductCategoriesIfNeeded,
       fetchProducts
     } = this.props;
 
@@ -75,17 +75,7 @@ class ProductCategories extends React.PureComponent {
       return;
     }
 
-    //FIXME replace window.loading with something else
-    if (
-      (!categoryIds || categoryIds.length === 0) &&
-      !window.loadingCategories
-    ) {
-      fetchAllProductCategories().then(() => {
-        window.loadingCategories = false;
-      });
-      window.loadingCategories = true;
-    }
-
+    fetchAllProductCategoriesIfNeeded();
     fetchProducts();
   };
   onPageChange = ({ selected }) => {
@@ -237,8 +227,11 @@ const mapDispatchToProps = (
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchAllProductCategories(perPage = ITEMS_PER_PAGE, visualize = true) {
-    return dispatch(fetchProductCategories(perPage, visualize));
+  fetchAllProductCategoriesIfNeeded(
+    perPage = ITEMS_PER_PAGE,
+    visualize = true
+  ) {
+    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
   },
   /**
    * Fetches the matching products

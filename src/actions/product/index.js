@@ -199,13 +199,14 @@ const fetchProduct = createFetchSingleItemThunk(
  */
 const shouldFetchProduct = (slug, state) => {
   const product = getProductBySlug(state, slug);
+  const listProduct = !product || !product.sku;
   const invalidProduct =
       !product ||
       !product._lastFetched ||
       Date.now() - product.lastFetched > 1000 * 60 * 60 * 4,
     isFetchingProduct = !product || product._isFetching;
 
-  return invalidProduct && isFetchingProduct;
+  return (invalidProduct && !isFetchingProduct) || listProduct;
 };
 
 /**

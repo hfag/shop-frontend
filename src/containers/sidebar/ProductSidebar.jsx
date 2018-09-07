@@ -33,14 +33,14 @@ class ProductSidebar extends React.PureComponent {
         <hr />
         {categories.map(category => [
           ...category.parents.map(category => (
-            <Link key={category.id} to={"/produkte/" + category.slug}>
+            <Link key={category.id} to={"/produkte/" + category.slug + "/1"}>
               <SidebarBreadcrumb active={false}>
                 <div>⌄</div>
                 <div>{category.name}</div>
               </SidebarBreadcrumb>
             </Link>
           )),
-          <Link key={category.id} to={"/produkte/" + category.slug}>
+          <Link key={category.id} to={"/produkte/" + category.slug + "/1"}>
             <SidebarBreadcrumb active={false}>
               <div>⌄</div>
               <div>{category.name}</div>

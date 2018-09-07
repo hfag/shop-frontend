@@ -101,7 +101,7 @@ class ProductItem extends React.PureComponent {
   componentWillMount = () => {
     const { fetchProductIfNeeded } = this.props;
 
-    fetchProductIfNeeded();
+    //fetchProductIfNeeded();
   };
 
   render = () => {

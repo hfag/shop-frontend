@@ -26,6 +26,10 @@ const StyledSearch = styled.div`
   }
 `;
 
+const Detail = styled.small`
+  font-size: 0.6rem;
+`;
+
 const SuggestionContainer = styled.div`
   position: absolute;
   top: 100%;
@@ -113,6 +117,7 @@ const renderSuggestion = suggestion => {
               ab <Price>{parseFloat(suggestion.price)}</Price>
             </div>
           </Flexbar>
+          <Detail>{suggestion.sku}</Detail>
         </Suggestion>
       );
     case "product_variation":
@@ -124,6 +129,7 @@ const renderSuggestion = suggestion => {
               <Price>{parseFloat(suggestion.price)}</Price>
             </div>
           </Flexbar>
+          <Detail>{suggestion.sku}</Detail>
         </Suggestion>
       );
     case "taxonomy":

@@ -25,7 +25,8 @@ import {
   getProductBySlug,
   getProductAttributesBySlug,
   getResellerDiscountByProductId,
-  getAttachments
+  getAttachments,
+  getAttachmentById
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
@@ -552,6 +553,19 @@ class Product extends React.PureComponent {
                 <div dangerouslySetInnerHTML={{ __html: content }} />
                 <h2>Bildergalerie</h2>
                 <Flex flexWrap="wrap">
+                  <LightboxBox
+                    width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
+                    px={2}
+                    mb={2}
+                    onClick={() =>
+                      this.setState({
+                        currentLightboxImage: 0,
+                        isLightboxOpen: true
+                      })
+                    }
+                  >
+                    <Thumbnail id={thumbnailId} size="large" />
+                  </LightboxBox>
                   {galleryImageIds.map((imageId, index) => (
                     <LightboxBox
                       key={imageId}
@@ -560,7 +574,7 @@ class Product extends React.PureComponent {
                       mb={2}
                       onClick={() =>
                         this.setState({
-                          currentLightboxImage: index,
+                          currentLightboxImage: index + 1,
                           isLightboxOpen: true
                         })
                       }
@@ -568,27 +582,14 @@ class Product extends React.PureComponent {
                       <Thumbnail id={imageId} size="large" />
                     </LightboxBox>
                   ))}
-                  <LightboxBox
-                    width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
-                    px={2}
-                    mb={2}
-                    onClick={() =>
-                      this.setState({
-                        currentLightboxImage: galleryImageIds.length,
-                        isLightboxOpen: true
-                      })
-                    }
-                  >
-                    <Thumbnail id={thumbnailId} size="large" />
-                  </LightboxBox>
                 </Flex>
                 <Lightbox
                   images={galleryAttachments.map(attachment => ({
                     src: attachment.url,
                     /*caption: attachment.caption,*/
-                    srcSet: Object.values(attachment.sizes).map(
-                      size => `${size.source_url} ${size.width}w`
-                    ),
+                    srcSet: Object.values(attachment.sizes)
+                      .sort((a, b) => a.width - b.width)
+                      .map(size => `${size.source_url} ${size.width}w`),
                     thumbnail:
                       attachment.sizes &&
                       attachment.sizes.shop_single &&
@@ -701,7 +702,7 @@ const mapStateToProps = (
   const product = getProductBySlug(state, productSlug);
   const galleryImageIds =
     product && !product._isFetching
-      ? [...product.galleryImageIds, product.thumbnailId]
+      ? [product.thumbnailId, ...product.galleryImageIds]
       : [];
 
   return {
@@ -720,8 +721,8 @@ const mapStateToProps = (
     ),
     galleryAttachments:
       galleryImageIds.length > 0
-        ? getAttachments(state).filter(attachment =>
-            galleryImageIds.includes(attachment.id)
+        ? galleryImageIds.map(attachmentId =>
+            getAttachmentById(state, attachmentId)
           )
         : []
   };

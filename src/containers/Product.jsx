@@ -353,7 +353,7 @@ class Product extends React.PureComponent {
           {uniqueImageIds.length <= 1 && (
             <Flex>
               <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
-                <Thumbnail id={thumbnailId} size="shop_single" />
+                <Thumbnail id={thumbnailId} size="large" />
               </Box>
             </Flex>
           )}
@@ -565,7 +565,7 @@ class Product extends React.PureComponent {
                         })
                       }
                     >
-                      <Thumbnail id={imageId} size="shop_single" />
+                      <Thumbnail id={imageId} size="large" />
                     </LightboxBox>
                   ))}
                   <LightboxBox
@@ -579,7 +579,7 @@ class Product extends React.PureComponent {
                       })
                     }
                   >
-                    <Thumbnail id={thumbnailId} size="shop_single" />
+                    <Thumbnail id={thumbnailId} size="large" />
                   </LightboxBox>
                 </Flex>
                 <Lightbox

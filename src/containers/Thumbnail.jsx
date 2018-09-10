@@ -40,7 +40,7 @@ class Thumbnail extends React.PureComponent {
   }
 
   render = () => {
-    const { id, thumbnail, size = "feuerschutz_fix_width" } = this.props;
+    const { id, thumbnail, size = "large" } = this.props;
 
     const thumbnailUrl =
       thumbnail && thumbnail.mimeType && thumbnail.mimeType.startsWith("image/")

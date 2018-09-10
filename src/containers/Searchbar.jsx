@@ -100,27 +100,47 @@ const getSuggestionValue = suggestion => suggestion.title;
  * @param {Object} suggestion The suggestion
  * @returns {Component} The component
  */
-const renderSuggestion = suggestion => (
-  <Suggestion>
-    {suggestion.type === "product" ? (
-      <Flexbar>
-        <div className="name">{`${suggestion.title} (${
-          suggestion.variations
-        } Variante${suggestion.variations > 1 ? "n" : ""})`}</div>
-        <div className="price">
-          ab <Price>{parseFloat(suggestion.price)}</Price>
-        </div>
-      </Flexbar>
-    ) : (
-      <Flexbar>
-        <div className="name">{`${suggestion.title} (${
-          suggestion.count
-        } Produkt${suggestion.count > 1 ? "e" : ""})`}</div>
-        <div className="price" />
-      </Flexbar>
-    )}
-  </Suggestion>
-);
+const renderSuggestion = suggestion => {
+  switch (suggestion.type) {
+    case "product":
+      return (
+        <Suggestion>
+          <Flexbar>
+            <div className="name">{`${suggestion.title} (${
+              suggestion.variations
+            } Variante${suggestion.variations > 1 ? "n" : ""})`}</div>
+            <div className="price">
+              ab <Price>{parseFloat(suggestion.price)}</Price>
+            </div>
+          </Flexbar>
+        </Suggestion>
+      );
+    case "product_variation":
+      return (
+        <Suggestion>
+          <Flexbar>
+            <div className="name">{suggestion.title}</div>
+            <div className="price">
+              <Price>{parseFloat(suggestion.price)}</Price>
+            </div>
+          </Flexbar>
+        </Suggestion>
+      );
+    case "taxonomy":
+      return (
+        <Suggestion>
+          <Flexbar>
+            <div className="name">{`${suggestion.title} (${
+              suggestion.count
+            } Produkt${suggestion.count > 1 ? "e" : ""})`}</div>
+            <div className="price" />
+          </Flexbar>
+        </Suggestion>
+      );
+    default:
+      return null;
+  }
+};
 
 /**
  * Renders the suggstion wrapper
@@ -207,6 +227,15 @@ class Searchbar extends React.PureComponent {
     switch (suggestion.type) {
       case "product":
         return this.props.dispatch(push("/produkt/" + suggestion.slug));
+      case "product_variation":
+        return this.props.dispatch(
+          push(
+            "/produkt/" +
+              suggestion.parent_slug +
+              "?variationId=" +
+              suggestion.id
+          )
+        );
       case "taxonomy":
         return this.props.dispatch(push("/produkte/" + suggestion.slug + "/1"));
       default:
@@ -233,7 +262,9 @@ class Searchbar extends React.PureComponent {
     return (
       <StyledSearch>
         <Autosuggest
-          suggestions={sections}
+          suggestions={sections.filter(
+            section => section.suggestions.length > 0
+          )}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           onSuggestionSelected={this.onSuggestionSelected}

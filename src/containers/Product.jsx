@@ -6,6 +6,7 @@ import { Flex, Box } from "grid-styled";
 import isEqual from "lodash/isEqual";
 import Lightbox from "react-images";
 import { Helmet } from "react-helmet";
+import queryString from "query-string";
 
 import Thumbnail from "../containers/Thumbnail";
 import Card from "../components/Card";
@@ -177,8 +178,22 @@ class Product extends React.PureComponent {
       fetchAllProductCategoriesIfNeeded
     } = this.props;
 
-    fetchAllProductCategoriesIfNeeded();
-    fetchProductIfNeeded();
+    Promise.all([
+      fetchAllProductCategoriesIfNeeded(),
+      fetchProductIfNeeded()
+    ]).then(() => {
+      const { variationId } = queryString.parse(location.search);
+
+      if (variationId && this.props.product && this.props.product.variations) {
+        this.setState({
+          selectedAttributes: (
+            this.props.product.variations.find(
+              variation => variation.id == variationId
+            ) || {}
+          ).attributes
+        });
+      }
+    });
   };
 
   /**

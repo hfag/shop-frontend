@@ -45,7 +45,7 @@ const renderApplication = (request, response) => {
   const sheet = new ServerStyleSheet();
   const context = {};
 
-  const matchedRoutes = matchRoutes(routes, request.url);
+  const matchedRoutes = matchRoutes(routes, request.url.split("?")[0]);
   const promises = matchedRoutes.map(
     ({ route, match }) =>
       route.fetchData ? route.fetchData(store, route, match) : Promise.resolve()

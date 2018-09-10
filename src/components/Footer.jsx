@@ -5,12 +5,14 @@ import Container from "components/Container";
 import MapMarker from "react-icons/lib/fa/map-marker";
 import Phone from "react-icons/lib/fa/phone";
 import Envelope from "react-icons/lib/fa/envelope";
+import { LazyImage } from "react-lazy-images";
 
 import { colors, media } from "../utilities/style";
 import Link from "./Link";
 import LogoNegative from "../../img/logo/logo_negative.svg";
 import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
 import MediaQuery from "./MediaQuery";
+import Placeholder from "./Placeholder";
 
 const StyledFooter = styled.footer`
   padding: 1rem;
@@ -94,9 +96,19 @@ class Footer extends React.PureComponent {
             <Container>
               <Flex flexWrap="wrap">
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
-                  <p>
-                    <img className="logo" src={LogoNegative} alt="Logo" />
-                  </p>
+                  <LazyImage
+                    src={LogoNegative}
+                    alt="Logo"
+                    placeholder={({ imageProps, ref }) => (
+                      <div ref={ref}>
+                        <Placeholder block />
+                      </div>
+                    )}
+                    actual={({ imageProps }) => (
+                      <img {...imageProps} className="logo" />
+                    )}
+                  />
+                  <br />
                   Hauser Feuerschutz AG
                   <br />
                   Safety Signs and Security Products

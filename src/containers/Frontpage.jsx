@@ -89,7 +89,9 @@ class Frontpage extends React.PureComponent {
                           <Thumbnail id={product.thumbnailId} />
                         </Box>
                         <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
-                          <h3>{product.title}</h3>
+                          <h3
+                            dangerouslySetInnerHTML={{ __html: product.title }}
+                          />
                           <p>
                             Nur <s>{product.price}</s>{" "}
                             <strong>

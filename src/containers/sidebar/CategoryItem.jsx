@@ -32,7 +32,11 @@ class CategoryItem extends React.PureComponent {
           }
         >
           <div>
-            {category ? category.name : <Placeholder text height={2} />}
+            {category ? (
+              <span dangerouslySetInnerHTML={{ __html: category.name }} />
+            ) : (
+              <Placeholder text height={2} />
+            )}
           </div>
         </Link>
       </li>

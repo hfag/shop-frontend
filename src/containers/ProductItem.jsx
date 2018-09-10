@@ -137,7 +137,10 @@ class ProductItem extends React.PureComponent {
               {product ? (
                 categories ? (
                   categories.map(category => (
-                    <Subtitle key={category.id}>{category.name}</Subtitle>
+                    <Subtitle
+                      key={category.id}
+                      dangerouslySetInnerHTML={{ __html: category.name }}
+                    />
                   ))
                 ) : (
                   ""

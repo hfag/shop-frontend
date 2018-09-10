@@ -101,7 +101,9 @@ class CategoriesSidebar extends React.PureComponent {
           <Link to={urlWithoutPage + "/1"}>
             <SidebarBreadcrumb active={active}>
               <div>⌄</div>
-              <div>{category && category.name}</div>
+              <div
+                dangerouslySetInnerHTML={{ __html: category && category.name }}
+              />
             </SidebarBreadcrumb>
           </Link>
         ) : (

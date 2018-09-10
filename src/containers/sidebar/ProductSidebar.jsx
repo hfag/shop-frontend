@@ -36,14 +36,14 @@ class ProductSidebar extends React.PureComponent {
             <Link key={category.id} to={"/produkte/" + category.slug + "/1"}>
               <SidebarBreadcrumb active={false}>
                 <div>⌄</div>
-                <div>{category.name}</div>
+                <div dangerouslySetInnerHTML={{ __html: category.name }} />
               </SidebarBreadcrumb>
             </Link>
           )),
           <Link key={category.id} to={"/produkte/" + category.slug + "/1"}>
             <SidebarBreadcrumb active={false}>
               <div>⌄</div>
-              <div>{category.name}</div>
+              <div dangerouslySetInnerHTML={{ __html: category.name }} />
             </SidebarBreadcrumb>
           </Link>,
           <hr key="0" />
@@ -51,7 +51,7 @@ class ProductSidebar extends React.PureComponent {
 
         <SidebarBreadcrumb active={true}>
           <div />
-          <div>{product.title}</div>
+          <div dangerouslySetInnerHTML={{ __html: product.title }} />
         </SidebarBreadcrumb>
 
         <hr />

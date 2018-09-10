@@ -9,6 +9,7 @@ import Placeholder from "../components/Placeholder";
 import { generateProductBreadcrumbs } from "./breadcrumbs/ProductBreadcrumb";
 import { generateCategoryBreadcrumbs } from "./breadcrumbs/CategoryBreadcrumb";
 import JsonLd from "../components/JsonLd";
+import { stripTags } from "../utilities";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -83,7 +84,9 @@ const routes = [
 const BreadcrumbWrapper = ({ breadcrumb: { url, name } }) => (
   <Breadcrumb>
     {url && name ? (
-      <Link to={url}>{name}</Link>
+      <Link to={url}>
+        <span dangerouslySetInnerHTML={{ __html: name }} />
+      </Link>
     ) : (
       <Placeholder text inline minWidth={5} />
     )}
@@ -120,7 +123,7 @@ const Breadcrumbs = ({ location, state }) => {
               itemListElement: breadcrumbs.map(({ name, url }, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
-                name,
+                name: stripTags(name),
                 item: ABSOLUTE_URL + url
               }))
             }}

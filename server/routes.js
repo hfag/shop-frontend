@@ -5,10 +5,11 @@ import Account from "../src/containers/Account";
 import Cart from "../src/containers/Cart";
 import Login from "../src/containers/Login";
 import Logout from "../src/containers/Logout";
-import { fetchCountries } from "../src/actions/countries";
+import { fetchCountriesIfNeeded } from "../src/actions/countries";
 import { fetchProductIfNeeded } from "../src/actions/product";
 import { fetchAllProductCategoriesIfNeeded } from "../src/actions/product/categories";
 import Page404 from "../src/containers/404";
+import { fetchSalesIfNeeded } from "../src/actions/sales";
 
 const routes = [
   {
@@ -24,8 +25,9 @@ const routes = [
      */
     fetchData(store, route, match) {
       return Promise.all([
+        store.dispatch(fetchSalesIfNeeded()),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountries())
+        store.dispatch(fetchCountriesIfNeeded())
       ]);
     }
   },
@@ -41,8 +43,9 @@ const routes = [
      */
     fetchData(store, route, match) {
       return Promise.all([
+        store.dispatch(fetchSalesIfNeeded()),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountries())
+        store.dispatch(fetchCountriesIfNeeded())
       ]);
     }
   },
@@ -67,7 +70,7 @@ const routes = [
       return Promise.all([
         store.dispatch(fetchProductIfNeeded(productSlug, false)),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountries())
+        store.dispatch(fetchCountriesIfNeeded())
       ]);
     }
   },
@@ -85,7 +88,7 @@ const routes = [
     fetchData(store, route, match) {
       return Promise.all([
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountries())
+        store.dispatch(fetchCountriesIfNeeded())
       ]);
     }
   },
@@ -103,7 +106,7 @@ const routes = [
     fetchData(store, route, match) {
       return Promise.all([
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountries())
+        store.dispatch(fetchCountriesIfNeeded())
       ]);
     }
   },
@@ -120,7 +123,7 @@ const routes = [
     fetchData(store, route, match) {
       return Promise.all([
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountries())
+        store.dispatch(fetchCountriesIfNeeded())
       ]);
     }
   },
@@ -138,7 +141,7 @@ const routes = [
     fetchData(store, route, match) {
       return Promise.all([
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountries())
+        store.dispatch(fetchCountriesIfNeeded())
       ]);
     }
   },
@@ -155,7 +158,7 @@ const routes = [
     fetchData(store, route, match) {
       return Promise.all([
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountries())
+        store.dispatch(fetchCountriesIfNeeded())
       ]);
     }
   }

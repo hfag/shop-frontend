@@ -1,5 +1,6 @@
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
+import { getCountriesLastFetched, isFetchingCountries } from "../reducers";
 
 /**
  * Fetches all countries and states
@@ -16,7 +17,7 @@ const fetchCountriesAction = createFetchAction("FETCH_COUNTRIES", "countries");
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const fetchCountries = (visualize = false) => dispatch => {
+const fetchCountries = (visualize = false) => dispatch => {
   dispatch(fetchCountriesAction(true, null, visualize));
   return fetchApi(`/wp-json/hfag/countries`, {
     method: "GET",
@@ -33,3 +34,25 @@ export const fetchCountries = (visualize = false) => dispatch => {
       return Promise.reject(e);
     });
 };
+
+/**
+ * Checks whether countries should be fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether the countries should be fetched
+ */
+const shouldFetchCountries = state =>
+  Date.now() - getCountriesLastFetched(state) > 1000 * 60 * 60 * 24 &&
+  !isFetchingCountries(state);
+
+/**
+ * Fetches all countries if needed
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @returns {function} The redux thunk
+ */
+export const fetchCountriesIfNeeded = (visualize = false) => (
+  dispatch,
+  getState
+) =>
+  shouldFetchCountries(getState())
+    ? fetchCountries(visualize)(dispatch, getState)
+    : Promise.resolve();

@@ -35,6 +35,13 @@ export const getCountries = state => state.countries;
 /**
  * Gets the last time fetched
  * @param {Object} state The redux state
- * @returns {Object} All countries
+ * @returns {number} The last time the countries were fetched
  */
 export const getCountriesLastFetched = state => state.lastFetched;
+
+/**
+ * Checks whether countries are being fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether countries are being fetched
+ */
+export const isFetchingCountries = state => state.isFetching !== 0;

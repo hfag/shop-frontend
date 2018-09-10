@@ -8,7 +8,7 @@ import {
   updateShoppingCartItem,
   submitOrder
 } from "../actions/shopping-cart";
-import { fetchCountries } from "../actions/countries";
+import { fetchCountriesIfNeeded } from "../actions/countries";
 import {
   isFetchingShoppingCart,
   getShoppingCartItems,
@@ -45,7 +45,7 @@ class Cart extends React.PureComponent {
   }
 
   componentDidMount = () => {
-    this.props.fetchCountries();
+    this.props.fetchCountriesIfNeeded();
     this.props.fetchShoppingCartIfNeeded();
   };
 
@@ -190,12 +190,12 @@ const mapDispatchToProps = dispatch => ({
     return dispatch(submitOrder(shippingAddress, billingAddress, comments));
   },
   /**
-   * Fetches all countries
+   * Fetches all countries if needed
    * @param {boolean} [visualize] Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchCountries(visualize = false) {
-    return dispatch(fetchCountries(visualize));
+  fetchCountriesIfNeeded(visualize = false) {
+    return dispatch(fetchCountriesIfNeeded(visualize));
   }
 });
 

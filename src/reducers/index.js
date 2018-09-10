@@ -317,6 +317,15 @@ export const getCountriesLastFetched = wrap(
   fromCountries.getCountriesLastFetched,
   state => state.countries
 );
+/**
+ * Checks whether countries are being fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether countries are being fetched
+ */
+export const isFetchingCountries = wrap(
+  fromCountries.isFetchingCountries,
+  state => state.countries
+);
 
 /**
  * Gets all sales
@@ -331,6 +340,15 @@ export const getSales = wrap(fromSales.getSales, state => state.sales);
  */
 export const getSalesLastFetched = wrap(
   fromSales.getSalesLastFetched,
+  state => state.sales
+);
+/**
+ * Checks whether sales are being fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether sales are being fetched
+ */
+export const isFetchingSales = wrap(
+  fromSales.isFetchingSales,
   state => state.sales
 );
 

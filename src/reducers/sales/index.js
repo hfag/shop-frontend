@@ -38,3 +38,10 @@ export const getSales = state => state.sales;
  * @returns {number} The unix timestamp
  */
 export const getSalesLastFetched = state => state.lastFetched;
+
+/**
+ * Checks whether sales are being fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether sales are being fetched
+ */
+export const isFetchingSales = state => state.isFetching !== 0;

@@ -7,7 +7,7 @@ import FaPercent from "react-icons/lib/fa/percent";
 
 import Link from "../components/Link";
 import { getSales, getProducts } from "../reducers";
-import { fetchSales } from "../actions/sales";
+import { fetchSalesIfNeeded } from "../actions/sales";
 import Thumbnail from "./Thumbnail";
 import Price from "../components/Price";
 import { colors, shadows, borders } from "../utilities/style";
@@ -61,7 +61,7 @@ const DiscountLogo = styled.span`
  */
 class Frontpage extends React.PureComponent {
   componentDidMount = () => {
-    this.props.fetchSales();
+    this.props.fetchSalesIfNeeded();
   };
   render = () => {
     const { saleProducts } = this.props;
@@ -144,12 +144,12 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   dispatch,
   /**
-   * Fetches all sales
+   * Fetches all sales if needed
    * @param {boolean} visualize Whether to visualize the progress
    * @returns {Promise} The fetch promise
    */
-  fetchSales(visualize = false) {
-    return dispatch(fetchSales(visualize));
+  fetchSalesIfNeeded(visualize = false) {
+    return dispatch(fetchSalesIfNeeded(visualize));
   }
 });
 

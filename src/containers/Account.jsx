@@ -7,7 +7,7 @@ import { Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import { getCountries } from "../reducers";
-import { fetchCountries } from "../actions/countries";
+import { fetchCountriesIfNeeded } from "../actions/countries";
 import { getIsAuthenticated, getAccount } from "../reducers";
 import Container from "../components/Container";
 import Card from "../components/Card";
@@ -56,7 +56,7 @@ class Account extends React.PureComponent {
     const {
       isAuthenticated,
       redirectToLogin,
-      fetchCountries,
+      fetchCountriesIfNeeded,
       fetchAccount,
       fetchOrders
     } = this.props;
@@ -65,7 +65,7 @@ class Account extends React.PureComponent {
       return redirectToLogin();
     }
 
-    fetchCountries();
+    fetchCountriesIfNeeded();
     fetchAccount();
     fetchOrders();
   };
@@ -207,12 +207,12 @@ const mapDispatchToProps = dispatch => ({
     return dispatch(push("/login"));
   },
   /**
-   * Fetches all countries
+   * Fetches all countries if needed
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchCountries(visualize = true) {
-    return dispatch(fetchCountries(visualize));
+  fetchCountriesIfNeeded(visualize = true) {
+    return dispatch(fetchCountriesIfNeeded(visualize));
   },
   /**
    * Fetches the user account

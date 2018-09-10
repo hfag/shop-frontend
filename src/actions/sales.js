@@ -4,6 +4,7 @@ import {
   mapItem as mapProduct,
   fetchItemsAction as fetchProductsAction
 } from "./product";
+import { getSalesLastFetched, isFetchingSales } from "../reducers";
 
 /**
  * Maps a sale object
@@ -38,7 +39,7 @@ const fetchSalesAction = createFetchAction("FETCH_SALES", "sales");
  * @param {boolean} visualize Whether to visualize the progress of this action
  * @returns {Promise} The fetch promise
  */
-export const fetchSales = (visualize = false) => dispatch => {
+const fetchSales = (visualize = false) => dispatch => {
   dispatch(fetchSalesAction(true, null, visualize, [], []));
 
   return fetchApi(`/wp-json/hfag/sales`, {
@@ -69,3 +70,22 @@ export const fetchSales = (visualize = false) => dispatch => {
       return Promise.reject(e);
     });
 };
+
+/**
+ * Checks whether sales need to be fetched
+ * @param {Object} state The redux state
+ * @returns {boolean} Whether the sales should be fetched
+ */
+const shouldFetchSales = state =>
+  Date.now() - getSalesLastFetched(state) > 1000 * 60 * 10 &&
+  !isFetchingSales(state);
+
+/**
+ * Fetches all sales if needed
+ * @param {boolean} visualize Whether to visualize the progress of this action
+ * @returns {Promise} The fetch promise
+ */
+export const fetchSalesIfNeeded = (visualize = false) => (dispatch, getState) =>
+  shouldFetchSales(getState())
+    ? fetchSales(visualize)(dispatch, getState)
+    : Promise.resolve();

@@ -136,7 +136,7 @@ module.exports = {
       logo: "img/logo/logo-favicon.png",
       persistentCache: true,
       background: "#fff",
-      title: "Hauser Feuerschutz AG"
+      title: "Feuerschutz"
     })
     /*new RollbarSourceMapPlugin({
 			accessToken: ROLLBAR_PRIVATE_ACCESS_TOKEN,

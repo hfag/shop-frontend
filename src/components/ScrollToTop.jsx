@@ -12,7 +12,13 @@ import { getBurgerMenuOpen } from "../reducers";
 class ScrollToTop extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {
-      if (this.props.burgerMenuOpen) {
+      if (
+        this.props.burgerMenuOpen &&
+        !(
+          this.props.location.pathname.includes("/produkte/") ||
+          this.props.location.pathname === "/"
+        )
+      ) {
         this.props.dispatch(toggleBurgerMenu());
       }
       window.scrollTo(0, 0);

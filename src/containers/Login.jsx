@@ -51,7 +51,7 @@ const LoginRegisterForm = withFormik({
   validationSchema: yup.object().shape({
     username: yup
       .string()
-      .email()
+      /*.email()*/
       .required(),
     password: yup
       .string()

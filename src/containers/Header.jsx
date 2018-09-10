@@ -15,7 +15,8 @@ import {
   isFetchingShoppingCart,
   getShoppingCartItems,
   getShoppingCartTotal,
-  getIsAuthenticated
+  getIsAuthenticated,
+  getAccount
 } from "../reducers";
 import { borders, shadows } from "../utilities/style";
 import Container from "../components/Container";
@@ -100,6 +101,10 @@ const LogoLeft = styled.div`
   height: 100%;
 `;
 
+const Login = styled.span`
+  font-weight: normal;
+  white-space: nowrap;
+`;
 /**
  * The page header
  * @returns {Component} The component
@@ -115,6 +120,7 @@ class Header extends React.PureComponent {
   };
   render = () => {
     const {
+      account,
       isAuthenticated,
       toggleBurgerMenu,
       shoppingCartFetching,
@@ -336,15 +342,14 @@ class Header extends React.PureComponent {
                           <NavItem>
                             {isAuthenticated ? (
                               <Link to="/konto" negative flex>
-                                <Circle negative padding="0.35rem">
-                                  <AccountIcon size="30" />
-                                </Circle>
+                                <Login>
+                                  >{`${account.firstName} ${account.lastName}`}
+                                </Login>
+                                <Triangle color="#fff" size="0.5rem" />
                               </Link>
                             ) : (
                               <Link to="/login" negative flex>
-                                <Circle negative padding="0.35rem">
-                                  <SignInIcon size="30" />
-                                </Circle>
+                                <Login>Login</Login>
                               </Link>
                             )}
                           </NavItem>
@@ -366,7 +371,8 @@ const mapStateToProps = state => ({
   shoppingCartFetching: isFetchingShoppingCart(state),
   shoppingCartItems: getShoppingCartItems(state),
   shoppingCartTotal: getShoppingCartTotal(state),
-  isAuthenticated: getIsAuthenticated(state)
+  isAuthenticated: getIsAuthenticated(state),
+  account: getAccount(state)
 });
 
 const mapDispatchToProps = dispatch => ({

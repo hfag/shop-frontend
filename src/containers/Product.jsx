@@ -430,6 +430,16 @@ class Product extends React.PureComponent {
                     />
                   </InputFieldWrapper>
                 )}
+                {type === "textarea" && (
+                  <InputFieldWrapper>
+                    <textarea
+                      placeholder={placeholder}
+                      maxLength={maxLength}
+                      onChange={this.onChangeField(label)}
+                      value={fieldValues[label] || ""}
+                    />
+                  </InputFieldWrapper>
+                )}
               </Box>
             ))}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
@@ -607,8 +617,8 @@ class Product extends React.PureComponent {
                       .map(size => `${size.source_url} ${size.width}w`),
                     thumbnail:
                       attachment.sizes &&
-                      attachment.sizes.shop_single &&
-                      attachment.sizes.shop_single.source_url
+                      attachment.sizes.large &&
+                      attachment.sizes.large.source_url
                   }))}
                   isOpen={isLightboxOpen}
                   currentImage={currentLightboxImage}

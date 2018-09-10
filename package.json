@@ -31,6 +31,7 @@
     "change-case": "^3.0.1",
     "color": "^3.0.0",
     "compression": "^1.7.3",
+    "decode-html": "^2.0.0",
     "dotenv": "^5.0.1",
     "dotenv-webpack": "^1.5.5",
     "es6-promise": "^4.1.1",

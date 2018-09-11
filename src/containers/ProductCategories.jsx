@@ -20,6 +20,8 @@ import JsonLd from "../components/JsonLd";
 import { stripTags } from "../utilities";
 import { getAttachmentById } from "../reducers";
 import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
+import Card from "../components/Card";
+import OverflowCard from "../components/OverflowCard";
 
 const ITEMS_PER_PAGE = 30;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
@@ -116,7 +118,14 @@ class ProductCategories extends React.PureComponent {
               ? stripTags(category.name) + " - Hauser Feuerschutz AG"
               : "Shop der Hauser Feuerschutz AG"}
           </title>
-          <meta name="description" content="" />
+          <meta
+            name="description"
+            content={
+              category &&
+              category.description &&
+              stripTags(category.description)
+            }
+          />
           <link
             rel="canonical"
             href={category && ABSOLUTE_URL + "/produkte/" + category.slug}
@@ -127,6 +136,16 @@ class ProductCategories extends React.PureComponent {
             <JsonLd>
               {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
             </JsonLd>
+            {category &&
+              category.description && (
+                <OverflowCard>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: category.description
+                    }}
+                  />
+                </OverflowCard>
+              )}
             <Flex flexWrap="wrap">
               {categoryIds.map(categoryId => (
                 <CategoryItem

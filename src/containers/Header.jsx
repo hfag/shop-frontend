@@ -4,8 +4,6 @@ import { push } from "react-router-redux";
 import styled from "styled-components";
 import MenuIcon from "react-icons/lib/md/menu";
 import CartIcon from "react-icons/lib/fa/shopping-cart";
-import AccountIcon from "react-icons/lib/fa/user";
-import SignInIcon from "react-icons/lib/fa/sign-in";
 import LoadingBar from "react-redux-loading-bar";
 import { Flex, Box } from "grid-styled";
 import { Helmet } from "react-helmet";

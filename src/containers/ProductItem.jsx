@@ -69,7 +69,7 @@ const Title = styled.div`
   word-break: break-word;
 `;
 
-const Subtitle = styled.div`
+const Subtitle = styled.span`
   color: ${colors.fontLight};
   font-size: 0.8rem;
   word-break: break-word;
@@ -127,27 +127,38 @@ class ProductItem extends React.PureComponent {
                 <Placeholder text />
               )}
               {product.minPrice && (
-                <Subtitle>
-                  Ab{" "}
-                  <u>
-                    <Price>{parseInt(product.minPrice)}</Price>
-                  </u>
-                </Subtitle>
+                <div>
+                  <Subtitle>
+                    Ab{" "}
+                    <u>
+                      <Price>{parseInt(product.minPrice)}</Price>
+                    </u>
+                  </Subtitle>
+                </div>
               )}
               {product ? (
                 categories ? (
-                  categories.map(category => (
-                    <Subtitle
-                      key={category.id}
-                      dangerouslySetInnerHTML={{ __html: category.name }}
-                    />
-                  ))
+                  categories
+                    .map(category => (
+                      <Subtitle
+                        key={category.id}
+                        dangerouslySetInnerHTML={{ __html: category.name }}
+                      />
+                    ))
+                    .slice(0, 2)
+                    .reduce(
+                      (all, item) => (all ? [...all, ", ", item] : [item]),
+                      false
+                    )
                 ) : (
                   ""
                 )
               ) : (
                 <Placeholder text />
               )}
+              {product &&
+                categories &&
+                categories.length > 2 && <span>, ...</span>}
             </div>
           </StyledProduct>
         </Link>

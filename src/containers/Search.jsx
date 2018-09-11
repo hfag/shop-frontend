@@ -1,8 +1,13 @@
 import React from "react";
 import { Helmet } from "react-helmet";
+import queryString from "query-string";
 
 import Card from "../components/Card";
-import Searchbar from "./Searchbar";
+import {
+  getProductSearchSections,
+  getLastProductSearchQuery
+} from "../reducers";
+import SkuSelection from "./SkuSelection";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -12,6 +17,8 @@ const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
  */
 class Search extends React.PureComponent {
   render = () => {
+    const { query } = queryString.parse(location.search);
+
     return (
       <Card>
         <Helmet>
@@ -22,7 +29,7 @@ class Search extends React.PureComponent {
           />
           <link rel="canonical" href={ABSOLUTE_URL + "/suche"} />
         </Helmet>
-        <Searchbar />
+        <SkuSelection query={query} />
       </Card>
     );
   };

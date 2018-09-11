@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import ReactTable from "react-table";
+import PropTypes from "prop-types";
 import fuzzy from "fuzzy";
 import get from "lodash/get";
 
@@ -174,7 +175,7 @@ class SkuSelection extends React.PureComponent {
   };
 
   render = () => {
-    const { products, addToShoppingCart, isFetching } = this.props;
+    const { query = "", products, addToShoppingCart, isFetching } = this.props;
 
     return (
       <SkuSelectionWrapper>
@@ -295,6 +296,7 @@ class SkuSelection extends React.PureComponent {
           resizable={false}
           filterable
           defaultResized={[{ id: "expander", value: 50 }]}
+          defaultFiltered={[{ id: "name", value: query }]}
           previousText="Vorherige"
           nextText="Nächste"
           loadingText="Lade..."
@@ -307,6 +309,10 @@ class SkuSelection extends React.PureComponent {
     );
   };
 }
+
+SkuSelection.propTypes = {
+  query: PropTypes.string
+};
 
 const mapStateToProps = state => {
   const products = getSimpleProducts(state),

@@ -5,7 +5,7 @@
  * @returns {Object} The new state
  */
 const productSearchReducer = (
-  state = { isFetching: 0, error: null, sections: [] },
+  state = { isFetching: 0, error: null, sections: [], lastQuery: "" },
   action
 ) => {
   switch (action.type) {
@@ -14,8 +14,11 @@ const productSearchReducer = (
         isFetching: state.isFetching + (action.isFetching ? 1 : -1),
         error:
           action.error || action.error === null ? action.error : state.error,
-        sections: action.sections ? action.sections : state.sections
+        sections: action.sections ? action.sections : state.sections,
+        lastQuery: action.query || state.lastQuery
       };
+    case "RESET_PRODUCT_SEARCH":
+      return { isFetching: 0, error: null, sections: [], lastQuery: "" };
     default:
       return state;
   }
@@ -42,3 +45,11 @@ export const getProductSearchFetching = productSearch =>
  * @returns {Error} The current error
  */
 export const getProductSearchError = productSearch => productSearch.error;
+
+/**
+ * Returns the last product search query
+ * @param {Object} productSearch This part of the redux state
+ * @returns {Error} The last query
+ */
+export const getLastProductSearchQuery = productSearch =>
+  productSearch.lastQuery;

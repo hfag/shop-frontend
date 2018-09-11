@@ -4,12 +4,16 @@ import { push } from "react-router-redux";
 import styled from "styled-components";
 import Autosuggest from "react-autosuggest";
 import debounce from "lodash/debounce";
+import { withRouter } from "react-router";
 
 import Flexbar from "../components/Flexbar";
 import Link from "../components/Link";
 import { colors, shadows } from "../utilities/style";
 import { search, reset } from "../actions/product-search";
-import { getProductSearchSections } from "../reducers";
+import {
+  getProductSearchSections,
+  getLastProductSearchQuery
+} from "../reducers";
 import Price from "../components/Price";
 
 const StyledSearch = styled.div`
@@ -143,6 +147,12 @@ const renderSuggestion = suggestion => {
           </Flexbar>
         </Suggestion>
       );
+    case "show-more":
+      return (
+        <Suggestion>
+          <div className="name">{suggestion.title}</div>
+        </Suggestion>
+      );
     default:
       return null;
   }
@@ -182,7 +192,10 @@ const renderSectionTitle = section => {
  * @param {Object} section The section
  * @returns {Array<Object>} An array of suggestions
  */
-const getSectionSuggestions = section => section.suggestions;
+const getSectionSuggestions = section => [
+  ...section.suggestions,
+  { title: "Zeige mehr..", type: "show-more" }
+];
 
 /**
  * The searchbar component
@@ -212,14 +225,16 @@ class Searchbar extends React.PureComponent {
    */
   onSuggestionsFetchRequested = debounce(
     ({ value }) =>
-      value.trim() !== "" && this.props.dispatch(search(true, value)),
+      value.trim() !== "" &&
+      value.trim() !== this.props.lastQuery.trim() &&
+      this.props.dispatch(search(true, value)),
     300
   );
   /**
    * Called when all suggestions should be cleared
    * @returns {void}
    */
-  onSuggestionsClearRequested = () => this.props.dispatch(reset());
+  onSuggestionsClearRequested = () => {}; /*this.props.dispatch(reset());*/
 
   /**
    * Called when a suggestion is selected
@@ -244,6 +259,9 @@ class Searchbar extends React.PureComponent {
         );
       case "taxonomy":
         return this.props.dispatch(push("/produkte/" + suggestion.slug + "/1"));
+      case "show-more":
+        this.props.dispatch(push(`/suche?query=${this.state.value}`));
+        return this.setState({ value: "" });
       default:
         return;
     }
@@ -256,13 +274,20 @@ class Searchbar extends React.PureComponent {
 
   render = () => {
     const { value } = this.state;
-    const { sections } = this.props;
+    const { dispatch, sections, lastQuery } = this.props;
 
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
       placeholder: "Suche nach einem Produkt",
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
+      onKeyDown: e => {
+        if (e.keyCode === 13) {
+          if (this.state.value.trim() !== lastQuery.trim()) {
+            this.onSuggestionsFetchRequested({ value: this.state.value });
+          }
+        }
+      }
     };
 
     return (
@@ -291,7 +316,9 @@ class Searchbar extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  sections: getProductSearchSections(state)
+  sections: getProductSearchSections(state),
+  lastQuery: getLastProductSearchQuery(state)
 });
 
-export default connect(mapStateToProps)(Searchbar);
+const ConnectedSearchbar = connect(mapStateToProps)(Searchbar);
+export default withRouter(ConnectedSearchbar);

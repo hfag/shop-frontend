@@ -51,6 +51,15 @@ export const getProductSearchError = wrap(
   fromProductSearch.getProductSearchError,
   state => state.productSearch
 );
+/**
+ * Returns the last product search query
+ * @param {Object} productSearch This part of the redux state
+ * @returns {Error} The last query
+ */
+export const getLastProductSearchQuery = wrap(
+  fromProductSearch.getLastProductSearchQuery,
+  state => state.productSearch
+);
 
 /**
  * Returns the product with the specified

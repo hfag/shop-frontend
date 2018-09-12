@@ -235,11 +235,14 @@ class Product extends React.PureComponent {
   getOptionLabel = (attributeKey, optionValue) => {
     const { attributes = {} } = this.props;
 
-    return attributes[attributeKey] && attributes[attributeKey].isTaxonomy
-      ? attributes[attributeKey].options.find(
-          option => option.slug === optionValue
-        ).name
-      : optionValue;
+    if (attributes[attributeKey] && attributes[attributeKey].isTaxonomy) {
+      const option = attributes[attributeKey].options.find(
+        option => option.slug === optionValue
+      );
+      return option ? option.name : optionValue;
+    } else {
+      return optionValue;
+    }
   };
 
   /**
@@ -517,7 +520,13 @@ class Product extends React.PureComponent {
                           ? (resellerDiscount / 100) * price
                           : discountRow.qty > 1
                             ? parseFloat(discountRow.ppu)
-                            : undefined
+                            : undefined,
+                        unit:
+                          selectedAttributes["pa_unit"] &&
+                          this.getOptionLabel(
+                            "pa_unit",
+                            selectedAttributes["pa_unit"]
+                          )
                       }
                     ]}
                   />

@@ -49,26 +49,29 @@ class Bill extends React.PureComponent {
 
     return (
       <StyledBill>
-        {items.map(({ quantity = 0, price, discountPrice }, index) => {
-          return quantity > 0 ? (
-            <li key={index}>
-              <Quantity>{quantity}</Quantity>
-              {price ? (
-                discountPrice ? (
-                  <DiscountPrice>
-                    <Price strike>{price}</Price> <Price>{discountPrice}</Price>
-                  </DiscountPrice>
+        {items.map(
+          ({ quantity = 0, price, discountPrice, unit = false }, index) => {
+            return quantity > 0 ? (
+              <li key={index}>
+                <Quantity>{quantity + (unit ? " " + unit : "")}</Quantity>
+                {price ? (
+                  discountPrice ? (
+                    <DiscountPrice>
+                      <Price strike>{price}</Price>{" "}
+                      <Price>{discountPrice}</Price>
+                    </DiscountPrice>
+                  ) : (
+                    <Price>{price}</Price>
+                  )
                 ) : (
-                  <Price>{price}</Price>
-                )
-              ) : (
-                ""
-              )}
-            </li>
-          ) : (
-            <li key={index} />
-          );
-        })}
+                  ""
+                )}
+              </li>
+            ) : (
+              <li key={index} />
+            );
+          }
+        )}
         <Sum>
           {items.length > 0 ? (
             normalSum === discountSum ? (

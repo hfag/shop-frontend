@@ -60,6 +60,7 @@ const CartTable = styled(Table)`
 const TableScroll = styled.div`
   max-width: 100%;
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 `;
 
 const LastRow = styled.div`

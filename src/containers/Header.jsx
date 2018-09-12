@@ -341,7 +341,7 @@ class Header extends React.PureComponent {
                             {isAuthenticated ? (
                               <Link to="/konto" negative flex>
                                 <Login>
-                                  >{`${account.firstName} ${account.lastName}`}
+                                  {`${account.firstName} ${account.lastName}`}
                                 </Login>
                                 <Triangle color="#fff" size="0.5rem" />
                               </Link>

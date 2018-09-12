@@ -5,6 +5,10 @@ import {
   fetchItemsAction as fetchProductsAction
 } from "./product";
 import { getSalesLastFetched, isFetchingSales } from "../reducers";
+import {
+  fetchAttachmentsAction,
+  mapItem as mapAttachment
+} from "./attachments";
 
 /**
  * Maps a sale object
@@ -24,15 +28,29 @@ export const mapSale = ({
   salePrice,
   saleEnd
 });
+
+/**
+ * Maps sticky posts
+ * @param {Object} post The post to map
+ * @returns {Object} The mapped post
+ */
+const mapStickyPost = ({ slug, title, thumbnail, description }) => ({
+  slug,
+  title,
+  description,
+  thumbnailId: thumbnail.id
+});
+
 /**
  * Fetches all sales
  * @param {boolean} isFetching Whether the the login is in progress
  * @param {string} error If there was an error during the request, this field should contain it
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {Object} sales What products are on sale
+ * @param {Object} posts Sticky posts
  * @returns {object} The redux action
  */
-const fetchSalesAction = createFetchAction("FETCH_SALES", "sales");
+const fetchSalesAction = createFetchAction("FETCH_SALES", "sales", "posts");
 
 /**
  * Fetches all sales
@@ -46,8 +64,28 @@ const fetchSales = (visualize = false) => dispatch => {
     method: "GET",
     credentials: "include"
   })
-    .then(({ json: { sales, products } }) => {
-      dispatch(fetchSalesAction(false, null, visualize, sales.map(mapSale)));
+    .then(({ json: { sales, products, posts } }) => {
+      dispatch(
+        fetchSalesAction(
+          false,
+          null,
+          visualize,
+          sales.map(mapSale),
+          posts.map(mapStickyPost)
+        )
+      );
+
+      dispatch(
+        fetchAttachmentsAction(
+          false,
+          null,
+          false,
+          posts
+            .map(post => post.thumbnail)
+            .filter(t => t)
+            .map(mapAttachment)
+        )
+      );
 
       dispatch(
         fetchProductsAction(
@@ -62,7 +100,7 @@ const fetchSales = (visualize = false) => dispatch => {
         )
       );
 
-      return Promise.resolve({ sales, products });
+      return Promise.resolve({ sales, products, posts });
     })
     .catch(e => {
       dispatch(fetchSalesAction(false, e, visualize, [], []));

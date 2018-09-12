@@ -7,6 +7,7 @@ import productSearch, * as fromProductSearch from "./product-search";
 import product, * as fromProduct from "./product";
 import simpleProduct, * as fromSimpleProduct from "./product-simple";
 import attachment, * as fromAttachment from "./attachment";
+import post, * as fromPost from "./post";
 import shoppingCart, * as fromShoppingCart from "./shopping-cart";
 import countries, * as fromCountries from "./countries";
 import sales, * as fromSales from "./sales";
@@ -236,6 +237,20 @@ export const getAttachmentById = wrap(
 );
 
 /**
+ * Returns all attachments
+ * @param {object} state This state
+ * @return {array} All attachments
+ */
+export const getPosts = wrap(fromPost.getPosts, state => state.post);
+/**
+ * Retrieves the object with the specified id
+ * @param {object} state This state
+ * @param {number} id The object id
+ * @return {object} The requested object
+ */
+export const getPostBySlug = wrap(fromPost.getPostBySlug, state => state.post);
+
+/**
  * Retrieves the latest fetch error
  * @param {Object} state The redux state
  * @returns {Error} The fetch error
@@ -343,6 +358,15 @@ export const isFetchingCountries = wrap(
  */
 export const getSales = wrap(fromSales.getSales, state => state.sales);
 /**
+ * Gets all sticky posts
+ * @param {Object} state The redux state
+ * @returns {Object} All sales
+ */
+export const getStickyPosts = wrap(
+  fromSales.getStickyPosts,
+  state => state.sales
+);
+/**
  * Gets the last time all sales were fetched
  * @param {Object} state The redux state
  * @returns {number} The unix timestamp
@@ -428,6 +452,7 @@ const appReducer = combineReducers({
   product,
   simpleProduct,
   attachment,
+  post,
   countries,
   sales,
   account,

@@ -6,11 +6,12 @@ import ProductCategories from "containers/ProductCategories";
 import FaPercent from "react-icons/lib/fa/percent";
 
 import Link from "../components/Link";
-import { getSales, getProducts } from "../reducers";
+import { getSales, getProducts, getStickyPosts } from "../reducers";
 import { fetchSalesIfNeeded } from "../actions/sales";
 import Thumbnail from "./Thumbnail";
 import Price from "../components/Price";
 import { colors, shadows, borders } from "../utilities/style";
+import Card from "../components/Card";
 
 const SalesFlex = styled(Flex)`
   margin: 0 -0.5rem;
@@ -22,6 +23,7 @@ const SaleWrapper = styled.div`
   background-color: #fff;
   box-shadow: ${shadows.y};
   border-radius: ${borders.radius};
+  word-break: break-word;
 
   h3 {
     margin-top: 0;
@@ -64,65 +66,96 @@ class Frontpage extends React.PureComponent {
     this.props.fetchSalesIfNeeded();
   };
   render = () => {
-    const { saleProducts } = this.props;
+    const { saleProducts, posts } = this.props;
     return (
       <div>
-        {saleProducts.length > 0 && (
-          <div>
-            <h2>Sonderangebote</h2>
-            <SalesFlex flexWrap="wrap">
-              {saleProducts.map(product => (
-                <Box
-                  width={[1, 1, 1 / 3, 1 / 3]}
-                  px={2}
-                  mb={3}
-                  key={product.id}
-                >
-                  <SaleWrapper>
-                    <Link to={`/produkt/${product.slug}`}>
-                      <DiscountLogo>
-                        <FaPercent />
-                      </DiscountLogo>
+        {saleProducts.length > 0 ||
+          (posts.length > 0 && (
+            <div>
+              <h2>News und Aktionen</h2>
+              <SalesFlex flexWrap="wrap">
+                {posts.map(post => (
+                  <Box
+                    width={[1, 1, 1 / 3, 1 / 3]}
+                    px={2}
+                    mb={3}
+                    key={post.slug}
+                  >
+                    <SaleWrapper>
+                      <Link to={`/beitrag/${post.slug}`}>
+                        <Flex>
+                          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={2}>
+                            <Thumbnail id={post.thumbnailId} />
+                          </Box>
+                          <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
+                            <h3
+                              dangerouslySetInnerHTML={{ __html: post.title }}
+                            />
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: post.description
+                              }}
+                            />
+                          </Box>
+                        </Flex>
+                      </Link>
+                    </SaleWrapper>
+                  </Box>
+                ))}
+                {saleProducts.map(product => (
+                  <Box
+                    width={[1, 1, 1 / 3, 1 / 3]}
+                    px={2}
+                    mb={3}
+                    key={product.id}
+                  >
+                    <SaleWrapper>
+                      <Link to={`/produkt/${product.slug}`}>
+                        <DiscountLogo>
+                          <FaPercent />
+                        </DiscountLogo>
 
-                      <Flex>
-                        <Box width={[1, 1, 1 / 2, 1 / 2]} pr={2}>
-                          <Thumbnail id={product.thumbnailId} />
-                        </Box>
-                        <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
-                          <h3
-                            dangerouslySetInnerHTML={{ __html: product.title }}
-                          />
-                          <p>
-                            Nur <s>{product.price}</s>{" "}
-                            <strong>
-                              <Price>{product.salePrice}</Price>
-                            </strong>
-                          </p>
-                          <p>
-                            Nur{" "}
-                            {product.saleEnd ? (
-                              <span>
-                                bis am{" "}
-                                <strong>
-                                  {new Date(
-                                    product.saleEnd * 1000
-                                  ).toLocaleDateString()}
-                                </strong>!
-                              </span>
-                            ) : (
-                              "für kurze Zeit!"
-                            )}
-                          </p>
-                        </Box>
-                      </Flex>
-                    </Link>
-                  </SaleWrapper>
-                </Box>
-              ))}
-            </SalesFlex>
-            <hr />
-          </div>
-        )}
+                        <Flex>
+                          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={2}>
+                            <Thumbnail id={product.thumbnailId} />
+                          </Box>
+                          <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
+                            <h3
+                              dangerouslySetInnerHTML={{
+                                __html: product.title
+                              }}
+                            />
+                            <p>
+                              Nur <s>{product.price}</s>{" "}
+                              <strong>
+                                <Price>{parseFloat(product.salePrice)}</Price>
+                              </strong>
+                            </p>
+                            <p>
+                              Nur{" "}
+                              {product.saleEnd ? (
+                                <span>
+                                  bis am{" "}
+                                  <strong>
+                                    {new Date(
+                                      product.saleEnd * 1000
+                                    ).toLocaleDateString()}
+                                  </strong>!
+                                </span>
+                              ) : (
+                                "für kurze Zeit!"
+                              )}
+                            </p>
+                          </Box>
+                        </Flex>
+                      </Link>
+                    </SaleWrapper>
+                  </Box>
+                ))}
+              </SalesFlex>
+              <hr />
+            </div>
+          ))}
         <ProductCategories />
       </div>
     );
@@ -140,7 +173,8 @@ const mapStateToProps = state => {
       .map(product => ({
         ...sales.find(s => s.productId == product.id),
         ...product
-      }))
+      })),
+    posts: getStickyPosts(state)
   };
 };
 const mapDispatchToProps = dispatch => ({

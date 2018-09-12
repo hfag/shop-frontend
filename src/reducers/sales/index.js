@@ -5,7 +5,7 @@
  * @returns {Object} The new state
  */
 const salesReducer = (
-  state = { isFetching: 0, lastFetched: 0, error: null, sales: [] },
+  state = { isFetching: 0, lastFetched: 0, error: null, sales: [], posts: [] },
   action
 ) => {
   switch (action.type) {
@@ -16,7 +16,8 @@ const salesReducer = (
           !action.isFetching && !action.error ? Date.now() : state.lastFetched,
         error:
           action.error || action.error === null ? action.error : state.error,
-        sales: !action.isFetching && action.sales ? action.sales : state.sales
+        sales: !action.isFetching && action.sales ? action.sales : state.sales,
+        posts: !action.isFetching && action.posts ? action.posts : state.posts
       };
     default:
       return state;
@@ -31,6 +32,13 @@ export default salesReducer;
  * @returns {Object} All sales
  */
 export const getSales = state => state.sales;
+
+/**
+ * Gets all sticky posts
+ * @param {Object} state The redux state
+ * @returns {Object} All sales
+ */
+export const getStickyPosts = state => state.posts;
 
 /**
  * Checks when the last time sales were fetched

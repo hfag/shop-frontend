@@ -16,14 +16,14 @@ const More = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  height: ${({ maxHeight }) => maxHeight / 4 || 5}rem;
+  height: ${({ maxHeight }) => maxHeight / 3 || 7}rem;
 
   cursor: pointer;
 
   background-image: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.25),
-    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.9),
     rgba(255, 255, 255, 1)
   );
 `;

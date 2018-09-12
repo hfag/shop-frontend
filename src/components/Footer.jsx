@@ -112,6 +112,16 @@ class Footer extends React.PureComponent {
                   Hauser Feuerschutz AG
                   <br />
                   Safety Signs and Security Products
+                  <br />
+                  <br />
+                  <Link
+                    target="_blank"
+                    href="https://feuerschutz.ch"
+                    rel="noopener"
+                    negative
+                  >
+                    Zu unserer Firmen-Homepage
+                  </Link>
                 </BorderBox>
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
                   <IconList>

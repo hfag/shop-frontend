@@ -90,14 +90,17 @@ class Login extends React.PureComponent {
   constructor() {
     super();
 
-    const { redirect } = queryString.parse(location.search);
-
-    this.state = { registered: false, redirect: redirect || undefined };
+    this.state = { registered: false, redirect: undefined };
   }
 
   componentDidMount = () => {
+    const { redirect } = queryString.parse(location.search);
+
     const { resetAuthentication, isAuthenticated } = this.props;
-    const { redirect } = this.state;
+
+    if (redirect) {
+      this.setState({ redirect });
+    }
 
     if (redirect && isAuthenticated) {
       resetAuthentication();

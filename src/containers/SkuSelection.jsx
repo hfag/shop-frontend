@@ -48,6 +48,7 @@ const StyledTable = styled(ReactTable)`
     &:first-child {
       flex: 1 0 20% !important;
       word-break: break-all;
+      hyphens: auto;
     }
     &:nth-child(2) {
       flex: 2 1 60% !important;
@@ -183,20 +184,32 @@ class SkuSelection extends React.PureComponent {
           loading={isFetching}
           columns={[
             {
-              Header: "SKU",
+              Header: "Artikelnummer",
               accessor: "sku",
-              filterAll: true,
-              filterMethod: fuzzyFilter,
-              minWidth: 150
+              minWidth: 150,
+              filterMethod: (filter, row, column) => {
+                const id = filter.pivotId || filter.id;
+                return row[id] !== undefined
+                  ? String(row[id])
+                      .toLocaleLowerCase()
+                      .startsWith(filter.value.toLocaleLowerCase())
+                  : true;
+              }
             },
             {
               id: "name",
               Header: "Name",
               accessor: e =>
-                e.name + (e.meta ? " " + Object.values(e.meta).join(" ") : ""),
+                e.name +
+                (e.meta
+                  ? " " +
+                    Object.keys(e.meta)
+                      .map(key => `${key}: ${e.meta[key]}`)
+                      .join(" ")
+                  : ""),
+              minWidth: 150,
               filterAll: true,
               filterMethod: fuzzyFilter,
-              minWidth: 150,
               Cell: ({ row: { _original: product }, isExpanded }) => (
                 <NameCell
                   product={product}

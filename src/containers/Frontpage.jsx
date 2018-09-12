@@ -125,7 +125,7 @@ class Frontpage extends React.PureComponent {
                             }}
                           />
                           <p>
-                            Nur <s>{product.price}</s>{" "}
+                            Statt <s>{product.price}</s>{" "}
                             <strong>
                               <Price>{parseFloat(product.salePrice)}</Price>
                             </strong>

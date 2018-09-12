@@ -66,12 +66,14 @@ const fetchSales = (visualize = false) => dispatch => {
   })
     .then(({ json: { sales, products, posts } }) => {
       dispatch(
-        fetchSalesAction(
+        fetchAttachmentsAction(
           false,
           null,
-          visualize,
-          sales.map(mapSale),
-          posts.map(mapStickyPost)
+          false,
+          posts
+            .map(post => post.thumbnail)
+            .filter(t => t)
+            .map(mapAttachment)
         )
       );
 
@@ -80,8 +82,8 @@ const fetchSales = (visualize = false) => dispatch => {
           false,
           null,
           false,
-          posts
-            .map(post => post.thumbnail)
+          products
+            .map(product => product.thumbnail)
             .filter(t => t)
             .map(mapAttachment)
         )
@@ -97,6 +99,16 @@ const fetchSales = (visualize = false) => dispatch => {
           [],
           "",
           ""
+        )
+      );
+
+      dispatch(
+        fetchSalesAction(
+          false,
+          null,
+          visualize,
+          sales.map(mapSale),
+          posts.map(mapStickyPost)
         )
       );
 

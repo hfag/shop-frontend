@@ -7,6 +7,7 @@ import {
   getProductCategoryChildrenIdsById,
   getProductCategoryBySlug
 } from "reducers";
+import ChevronDown from "react-icons/lib/fa/chevron-down";
 
 import CategoryItem from "../../containers/sidebar/CategoryItem";
 import Link from "../../components/Link";
@@ -100,7 +101,9 @@ class CategoriesSidebar extends React.PureComponent {
         {categorySlug ? (
           <Link to={urlWithoutPage + "/1"}>
             <SidebarBreadcrumb active={active}>
-              <div>⌄</div>
+              <div>
+                <ChevronDown />
+              </div>
               <div
                 dangerouslySetInnerHTML={{ __html: category && category.name }}
               />
@@ -109,7 +112,9 @@ class CategoriesSidebar extends React.PureComponent {
         ) : (
           <Link to="/">
             <SidebarBreadcrumb active={active}>
-              <div>⌄</div>
+              <div>
+                <ChevronDown />
+              </div>
               <div>Startseite</div>
             </SidebarBreadcrumb>
           </Link>

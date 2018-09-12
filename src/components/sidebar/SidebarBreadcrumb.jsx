@@ -10,6 +10,17 @@ const SidebarBreadcrumb = styled.div`
 
   display: flex;
 
+  svg {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 0.75rem;
+    height: auto;
+    vertical-align: top !important;
+    margin-right: 0.2rem;
+  }
+
   & > div:first-child {
     margin-right: 0.25rem;
   }

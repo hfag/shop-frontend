@@ -2,11 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import ChevronDown from "react-icons/lib/fa/chevron-down";
 
-import Thumbnail from "../../containers/Thumbnail";
-import Placeholder from "../../components/Placeholder";
 import Link from "../../components/Link";
-import { colors, borders, shadows } from "../../utilities/style";
 import {
   getProductCategories,
   getProductBySlug,
@@ -26,7 +24,9 @@ class ProductSidebar extends React.PureComponent {
       <SidebarListWrapper>
         <Link to="/">
           <SidebarBreadcrumb active={false}>
-            <div>⌄</div>
+            <div>
+              <ChevronDown />
+            </div>
             <div>Startseite</div>
           </SidebarBreadcrumb>
         </Link>
@@ -35,14 +35,18 @@ class ProductSidebar extends React.PureComponent {
           ...category.parents.map(category => (
             <Link key={category.id} to={"/produkte/" + category.slug + "/1"}>
               <SidebarBreadcrumb active={false}>
-                <div>⌄</div>
+                <div>
+                  <ChevronDown />
+                </div>
                 <div dangerouslySetInnerHTML={{ __html: category.name }} />
               </SidebarBreadcrumb>
             </Link>
           )),
           <Link key={category.id} to={"/produkte/" + category.slug + "/1"}>
             <SidebarBreadcrumb active={false}>
-              <div>⌄</div>
+              <div>
+                <ChevronDown />
+              </div>
               <div dangerouslySetInnerHTML={{ __html: category.name }} />
             </SidebarBreadcrumb>
           </Link>,

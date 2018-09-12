@@ -290,7 +290,7 @@ const InnerCheckoutForm = ({
       fullWidth
       onClick={handleSubmit}
       controlled
-      state={isValid ? status : "disabled"}
+      state={isSubmitting || !isValid ? "disabled" : status}
     >
       Bestellung abschicken
     </Button>

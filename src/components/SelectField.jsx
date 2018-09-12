@@ -28,17 +28,10 @@ class SelectField extends React.PureComponent {
       <Field
         name={this.props.name}
         render={({
-          field: { name, value /*, onChange, onBlur*/, isValid },
-          form: { values, errors, touched, setFieldValue, setFieldTouched },
-
-          ...props
+          field: { name, value },
+          form: { errors, touched, setFieldValue, setFieldTouched }
         }) => {
           const { options } = this.props;
-
-          const fieldTouched = get(touched, name, false),
-            fieldErrors = get(errors, name, false),
-            valid = !fieldErrors && fieldTouched,
-            invalid = fieldErrors && fieldTouched;
 
           if (
             value &&
@@ -68,7 +61,7 @@ class SelectField extends React.PureComponent {
                 {...this.props}
                 options={options}
               />
-              {invalid && <ValidationErrors>{fieldErrors}</ValidationErrors>}
+              <ValidationErrors>{get(errors, name, false)}</ValidationErrors>
             </SelectFieldWrapper>
           );
         }}

@@ -63,9 +63,7 @@ class InputField extends React.Component {
                 {...props}
               />
               {children}
-              {get(touched, name) && (
-                <ValidationErrors>{get(errors, name)}</ValidationErrors>
-              )}
+              <ValidationErrors>{get(errors, name)}</ValidationErrors>
             </div>
           )}
         />

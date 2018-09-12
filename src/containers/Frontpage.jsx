@@ -73,13 +73,13 @@ class Frontpage extends React.PureComponent {
         {saleProducts.length > 0 ||
           (posts.length > 0 && (
             <div>
-              <h2>News und Aktionen</h2>
+              <h2 style={{ marginBottom: 0 }}>News und Aktionen</h2>
               <SalesFlex flexWrap="wrap">
                 {posts.map(post => (
                   <Box
                     width={[1, 1, 1 / 3, 1 / 3]}
                     px={2}
-                    mb={3}
+                    mt={3}
                     key={post.slug}
                   >
                     <SaleWrapper>
@@ -107,7 +107,7 @@ class Frontpage extends React.PureComponent {
                   <Box
                     width={[1, 1, 1 / 3, 1 / 3]}
                     px={2}
-                    mb={3}
+                    mt={3}
                     key={product.id}
                   >
                     <SaleWrapper>

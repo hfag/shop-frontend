@@ -68,6 +68,7 @@ const routes = [
       }
     ) {
       return Promise.all([
+        store.dispatch(fetchSalesIfNeeded()),
         store.dispatch(fetchProductIfNeeded(productSlug, false)),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
         store.dispatch(fetchCountriesIfNeeded())
@@ -87,6 +88,7 @@ const routes = [
      */
     fetchData(store, route, match) {
       return Promise.all([
+        store.dispatch(fetchSalesIfNeeded()),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
         store.dispatch(fetchCountriesIfNeeded())
       ]);
@@ -105,6 +107,7 @@ const routes = [
      */
     fetchData(store, route, match) {
       return Promise.all([
+        store.dispatch(fetchSalesIfNeeded()),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
         store.dispatch(fetchCountriesIfNeeded())
       ]);
@@ -122,6 +125,7 @@ const routes = [
      */
     fetchData(store, route, match) {
       return Promise.all([
+        store.dispatch(fetchSalesIfNeeded()),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
         store.dispatch(fetchCountriesIfNeeded())
       ]);
@@ -140,6 +144,7 @@ const routes = [
      */
     fetchData(store, route, match) {
       return Promise.all([
+        store.dispatch(fetchSalesIfNeeded()),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
         store.dispatch(fetchCountriesIfNeeded())
       ]);
@@ -157,6 +162,7 @@ const routes = [
      */
     fetchData(store, route, match) {
       return Promise.all([
+        store.dispatch(fetchSalesIfNeeded()),
         store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
         store.dispatch(fetchCountriesIfNeeded())
       ]);

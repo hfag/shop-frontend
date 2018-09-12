@@ -7,11 +7,9 @@ import FaPercent from "react-icons/lib/fa/percent";
 
 import Link from "../components/Link";
 import { getSales, getProducts, getStickyPosts } from "../reducers";
-import { fetchSalesIfNeeded } from "../actions/sales";
 import Thumbnail from "./Thumbnail";
 import Price from "../components/Price";
 import { colors, shadows, borders } from "../utilities/style";
-import Card from "../components/Card";
 
 const SalesFlex = styled(Flex)`
   margin: 0 -0.5rem;
@@ -63,9 +61,6 @@ const DiscountLogo = styled.span`
  * @returns {Component} The component
  */
 class Frontpage extends React.PureComponent {
-  componentDidMount = () => {
-    this.props.fetchSalesIfNeeded();
-  };
   render = () => {
     const { saleProducts, posts } = this.props;
     return (
@@ -176,19 +171,5 @@ const mapStateToProps = state => {
     posts: getStickyPosts(state)
   };
 };
-const mapDispatchToProps = dispatch => ({
-  dispatch,
-  /**
-   * Fetches all sales if needed
-   * @param {boolean} visualize Whether to visualize the progress
-   * @returns {Promise} The fetch promise
-   */
-  fetchSalesIfNeeded(visualize = false) {
-    return dispatch(fetchSalesIfNeeded(visualize));
-  }
-});
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Frontpage);
+export default connect(mapStateToProps)(Frontpage);

@@ -34,6 +34,7 @@ import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
 import Thumbnail from "./Thumbnail";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import JsonLd from "../components/JsonLd";
+import { fetchSalesIfNeeded } from "../actions/sales";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 const PUBLIC_PATH = process.env.PUBLIC_PATH;
@@ -113,8 +114,9 @@ class Header extends React.PureComponent {
     this.state = { showShoppingCartDropdown: false };
   }
   componentDidMount = () => {
-    const { fetchShoppingCartIfNeeded } = this.props;
+    const { fetchShoppingCartIfNeeded, fetchSalesIfNeeded } = this.props;
     fetchShoppingCartIfNeeded();
+    fetchSalesIfNeeded();
   };
   render = () => {
     const {
@@ -396,6 +398,14 @@ const mapDispatchToProps = dispatch => ({
    */
   redirect(url) {
     return dispatch(push(url));
+  },
+  /**
+   * Fetches all sales if needed
+   * @param {boolean} visualize Whether to visualize the progress
+   * @returns {Promise} The fetch promise
+   */
+  fetchSalesIfNeeded(visualize = false) {
+    return dispatch(fetchSalesIfNeeded(visualize));
   }
 });
 

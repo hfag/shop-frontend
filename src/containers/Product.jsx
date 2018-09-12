@@ -27,7 +27,8 @@ import {
   getProductAttributesBySlug,
   getResellerDiscountByProductId,
   getAttachments,
-  getAttachmentById
+  getAttachmentById,
+  getSales
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
@@ -264,7 +265,8 @@ class Product extends React.PureComponent {
       categories,
       addToShoppingCart,
       resellerDiscount,
-      galleryAttachments = []
+      galleryAttachments = [],
+      sales
     } = this.props;
 
     const {
@@ -295,7 +297,13 @@ class Product extends React.PureComponent {
     const selectedVariation = variations.find(variation =>
         isEqual(variation.attributes, selectedAttributes)
       ),
-      { sku, price } = selectedVariation || {};
+      { sku, price } = selectedVariation || {},
+      flashSale = selectedVariation
+        ? sales.find(
+            sale =>
+              sale.productId === id && sale.variationId === selectedVariation.id
+          )
+        : null;
 
     const discountRow = (discount.bulk &&
       selectedVariation &&
@@ -514,13 +522,15 @@ class Product extends React.PureComponent {
                   <Bill
                     items={[
                       {
-                        price,
+                        price: flashSale ? parseFloat(flashSale.price) : price,
                         quantity,
                         discountPrice: resellerDiscount
                           ? (resellerDiscount / 100) * price
-                          : discountRow.qty > 1
-                            ? parseFloat(discountRow.ppu)
-                            : undefined,
+                          : flashSale
+                            ? parseFloat(flashSale.salePrice)
+                            : discountRow.qty > 1
+                              ? parseFloat(discountRow.ppu)
+                              : undefined,
                         unit:
                           selectedAttributes["pa_unit"] &&
                           this.getOptionLabel(
@@ -758,7 +768,8 @@ const mapStateToProps = (
         ? galleryImageIds.map(attachmentId =>
             getAttachmentById(state, attachmentId)
           )
-        : []
+        : [],
+    sales: getSales(state)
   };
 };
 

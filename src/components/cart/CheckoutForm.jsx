@@ -431,7 +431,7 @@ const CheckoutForm = withFormik({
         setTimeout(() => {
           setStatus("");
           dispatch(clearShoppingCart());
-          dispatch(push("/konto/bestellungen"));
+          dispatch(push("/bestaetigung"));
         }, 300);
       })
       .catch(e => {

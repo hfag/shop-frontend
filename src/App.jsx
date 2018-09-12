@@ -12,6 +12,7 @@ import Logout from "./containers/Logout";
 import Wrapper from "./components/Wrapper";
 import Search from "./containers/Search";
 import Page404 from "./containers/404";
+import Confirmation from "./containers/Confirmation";
 
 const Product = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "product" */ "./containers/Product")
@@ -44,6 +45,7 @@ const App = ({ history, store }) => {
             <Route exact path="/logout" component={Logout} />
             <Route path="/konto" component={Account} />
             <Route exact path="/warenkorb" component={Cart} />
+            <Route exact path="/bestaetigung" component={Confirmation} />
             <Route component={Page404} />
           </Switch>
         </Wrapper>

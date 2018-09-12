@@ -67,12 +67,14 @@ const StyledProduct = styled.div`
 const Title = styled.div`
   font-weight: 500;
   word-break: break-word;
+  hyphens: auto;
 `;
 
 const Subtitle = styled.span`
   color: ${colors.fontLight};
   font-size: 0.8rem;
   word-break: break-word;
+  hyphens: auto;
 `;
 
 const Discount = styled.div`

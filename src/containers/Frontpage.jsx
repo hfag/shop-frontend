@@ -24,6 +24,7 @@ const SaleWrapper = styled.div`
   box-shadow: ${shadows.y};
   border-radius: ${borders.radius};
   word-break: break-word;
+  hyphens: auto;
 
   h3 {
     margin-top: 0;

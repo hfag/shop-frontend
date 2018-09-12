@@ -21,6 +21,7 @@ const BurgerContainer = styled(Card)`
   z-index: 100;
 
   transition: all 0.3s ease-in;
+  -webkit-overflow-scrolling: touch;
 
   ${media.maxLarge`
       position: fixed;

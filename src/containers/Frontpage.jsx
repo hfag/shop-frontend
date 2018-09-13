@@ -147,9 +147,9 @@ class Frontpage extends React.PureComponent {
                 </Box>
               ))}
             </SalesFlex>
-            <hr />
           </div>
         )}
+        <h2>Kategorien</h2>
         <ProductCategories />
       </div>
     );

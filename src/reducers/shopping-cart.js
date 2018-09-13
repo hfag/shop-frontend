@@ -40,6 +40,17 @@ const shoppingCartReducer = (
             ? action.cart.shipping
             : state.shipping
       };
+    case "CLEAR_SHOPPING_CART":
+      return {
+        isFetching: 0,
+        lastFetched: 0,
+        error: null,
+        items: [],
+        total: 0,
+        shipping: 0,
+        taxes: [],
+        fees: []
+      };
     default:
       return state;
   }

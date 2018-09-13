@@ -33,8 +33,6 @@ module.exports = {
     index: path.join(context, "server/index.jsx")
   },
 
-  devtool: "nosources-source-map",
-
   output: {
     path: path.join(context, "dist/server/"),
     filename: "[name].js",
@@ -42,44 +40,7 @@ module.exports = {
   },
 
   optimization: {
-    splitChunks: {
-      chunks: "all"
-    },
-    minimize: true,
-    minimizer: [
-      new UglifyJSPlugin({
-        uglifyOptions: {
-          parallel: true,
-          sourceMap: true,
-          output: {
-            comments: false
-          },
-          compress: {
-            unsafe_comps: true,
-            properties: true,
-            keep_fargs: false,
-            pure_getters: true,
-            collapse_vars: true,
-            unsafe: true,
-            warnings: false,
-            sequences: true,
-            dead_code: true,
-            drop_debugger: true,
-            comparisons: true,
-            conditionals: true,
-            evaluate: true,
-            booleans: true,
-            loops: true,
-            unused: true,
-            hoist_funs: true,
-            if_return: true,
-            join_vars: true,
-            drop_console: false
-          },
-          exclude: [/\.min\.js$/gi] // skip pre-minified libs
-        }
-      })
-    ]
+    minimize: false
   },
 
   plugins: [
@@ -126,10 +87,8 @@ module.exports = {
                   {
                     modules: false,
                     targets: {
-                      browsers: ["> 1%", "last 2 major versions", "IE 10"]
-                    },
-                    // for uglifyjs...
-                    forceAllTransforms: true
+                      node: "current"
+                    }
                   }
                 ],
                 "@babel/preset-react"

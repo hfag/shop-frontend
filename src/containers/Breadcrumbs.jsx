@@ -11,6 +11,7 @@ import { generateCategoryBreadcrumbs } from "./breadcrumbs/CategoryBreadcrumb";
 import JsonLd from "../components/JsonLd";
 import { stripTags } from "../utilities";
 import { generatePostBreadcrumbs } from "./breadcrumbs/PostBreadcrumb";
+import { generatePageBreadcrumbs } from "./breadcrumbs/PageBreadcrumb";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -78,6 +79,10 @@ const routes = [
   {
     path: "/beitrag/:postSlug",
     breadcrumb: generatePostBreadcrumbs
+  },
+  {
+    path: "/seite/:pageSlug",
+    breadcrumb: generatePageBreadcrumbs
   }
 ];
 

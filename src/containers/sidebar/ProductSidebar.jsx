@@ -32,8 +32,21 @@ class ProductSidebar extends React.PureComponent {
         </Link>
         <hr />
         {categories.map(category => [
-          ...category.parents.map(category => (
-            <Link key={category.id} to={"/produkte/" + category.slug + "/1"}>
+          ...category.parents.map((category, index) => (
+            <Link
+              key={category.id}
+              to={
+                "/produkte/" +
+                (index > 0
+                  ? category.parents
+                      .slice(0, index)
+                      .map(category => category.slug)
+                      .join("/") + "/"
+                  : "") +
+                category.slug +
+                "/1"
+              }
+            >
               <SidebarBreadcrumb active={false}>
                 <div>
                   <ChevronDown />
@@ -42,7 +55,18 @@ class ProductSidebar extends React.PureComponent {
               </SidebarBreadcrumb>
             </Link>
           )),
-          <Link key={category.id} to={"/produkte/" + category.slug + "/1"}>
+          <Link
+            key={category.id}
+            to={
+              "/produkte/" +
+              (category.parents.length > 0
+                ? category.parents.map(category => category.slug).join("/") +
+                  "/"
+                : "") +
+              category.slug +
+              "/1"
+            }
+          >
             <SidebarBreadcrumb active={false}>
               <div>
                 <ChevronDown />

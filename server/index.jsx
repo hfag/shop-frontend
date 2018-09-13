@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 
+import sizeOf from "object-sizeof";
 import express from "express";
 import compression from "compression";
 import helmet from "helmet";
@@ -13,20 +14,27 @@ import thunkMiddleware from "redux-thunk";
 import { Helmet as ReactHelmet } from "react-helmet";
 
 import "../src/set-yup-locale";
-import { setIn } from "formik";
 
 import App from "./App";
 import routes from "./routes";
-import reducers from "../src/reducers";
+import reducers, {
+  getProducts,
+  getProductAttributes,
+  getAttachments,
+  getProductCategories,
+  getSales
+} from "../src/reducers";
 
 //polyfills
 require("isomorphic-fetch");
 
 const PORT = process.env.SERVER_PORT;
+const DELETE_INTERVAL_IN_MINUTES = 1;
 
 const indexHtml = fs.readFileSync("./dist/client/index.html").toString();
 
 const app = express();
+const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 app.use(helmet.dnsPrefetchControl());
 app.use(helmet.ieNoOpen());
@@ -41,7 +49,6 @@ app.use(compression());
  * @returns {void}
  */
 const renderApplication = (request, response) => {
-  const store = createStore(reducers, applyMiddleware(thunkMiddleware));
   const sheet = new ServerStyleSheet();
   const context = {};
 
@@ -90,6 +97,7 @@ const renderApplication = (request, response) => {
     .catch(e => {
       response.end("Es ist ein Fehler aufgetreten!");
       console.log(e);
+      console.log(store.getState());
     });
 };
 
@@ -100,21 +108,90 @@ app.get("/*", renderApplication);
 app.listen(PORT);
 
 console.log("Server listening on http://localhost:" + PORT) + "!";
-/*setInterval(() => {
-  console.log("Checking cache...");
-  const now = Date.now();
-  const idsToRemove = Object.values(state.products.byId)
-    .filter(product => now - product._lastFetched < 1000 * 60 * 60 * 4)
-    .map(product => {
-      delete state.product.byId[product.id];
-      return product.id;
-    });
-  state.products.allIds = state.products.allIds.filter(
-    id => !idsToRemove.includes(id)
-  );
-  console.log("Removed " + idsToRemove.length + " products from cache!");
+setInterval(() => {
+  console.log("Checking store cache...");
 
-  console.log("Done!");
-}, 1000 * 60 * 30);
+  const state = store.getState();
+  const lastSize = sizeOf(state);
+
+  const products = getProducts(state),
+    now = Date.now();
+  const saleProductIds = getSales(state).map(sale => sale.productId);
+  const invalidProductSlugs = products
+    .filter(
+      product =>
+        product &&
+        now - product._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
+        !saleProductIds.includes(product.id)
+    )
+    .map(product => product.slug);
+
+  store.dispatch({
+    type: "DELETE_PRODUCTS",
+    isFetching: false,
+    itemIds: invalidProductSlugs
+  });
+  console.log(`Deleted ${invalidProductSlugs.length} products from the store.`);
+
+  const attributes = getProductAttributes(state);
+  const invalidAttributeIds = attributes
+    .filter(
+      attribute =>
+        attribute &&
+        now - attribute._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES
+    )
+    .map(attribute => attribute.id);
+
+  store.dispatch({
+    type: "DELETE_ATTRIBUTES",
+    isFetching: false,
+    itemIds: invalidAttributeIds
+  });
+  console.log(
+    `Deleted ${invalidAttributeIds.length} attributes from the store.`
+  );
+
+  const attachments = getAttachments(state);
+  const productCategoryThumbnailIds = getProductCategories(state).map(
+    category => category.thumbnailId
+  );
+  const invalidAttachmentIds = attachments
+    .filter(
+      attachment =>
+        attachment &&
+        (now - attachment._lastFetched >
+          1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
+          !productCategoryThumbnailIds.includes(attachment.id))
+    )
+    .map(attachment => attachment.id);
+
+  store.dispatch({
+    type: "DELETE_ATTACHMENTS",
+    isFetching: false,
+    itemIds: invalidAttachmentIds
+  });
+  console.log(
+    `Deleted ${invalidAttachmentIds.length} attachments from the store.`
+  );
+
+  const posts = getProductAttributes(state);
+  const invalidPostSlugs = posts
+    .filter(
+      post =>
+        post && now - post._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES
+    )
+    .map(post => post.slug);
+
+  store.dispatch({
+    type: "DELETE_POSTS",
+    isFetching: false,
+    itemIds: invalidPostSlugs
+  });
+  console.log(`Deleted ${invalidPostSlugs.length} posts from the store.`);
+
+  console.log(
+    "Done! Store size is now about ",
+    lastSize - sizeOf(store.getState()) + " bytes smaller"
+  );
+}, 1000 * 60 * DELETE_INTERVAL_IN_MINUTES);
 console.log("Cache clearing deamon initialized!");
-*/

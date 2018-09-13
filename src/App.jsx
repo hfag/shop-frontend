@@ -14,6 +14,7 @@ import Search from "./containers/Search";
 import Page404 from "./containers/404";
 import Confirmation from "./containers/Confirmation";
 import Post from "./containers/Post";
+import Page from "./containers/Page";
 
 const Product = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "product" */ "./containers/Product")
@@ -43,6 +44,7 @@ const App = ({ history, store }) => {
             <Route path="/suche" component={Search} />
             <Route exact path="/produkt/:productSlug" component={Product} />
             <Route exact path="/beitrag/:postSlug" component={Post} />
+            <Route exact path="/seite/:pageSlug" component={Page} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
             <Route path="/konto" component={Account} />

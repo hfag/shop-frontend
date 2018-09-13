@@ -280,7 +280,7 @@ const InnerCheckoutForm = ({
     <InputField id="terms" name="terms" type="checkbox" value="1">
       <label htmlFor="terms">
         Ich habe die{" "}
-        <Link to="/" styled>
+        <Link to="/seite/agbs" styled>
           Allgemeinen Geschäftsbedingungen
         </Link>{" "}
         gelesen und akzeptiere diese *

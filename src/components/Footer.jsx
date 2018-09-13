@@ -74,9 +74,6 @@ const Icon = styled.span`
   display: inline-block;
 
   & > svg {
-    width: 100%;
-    height: auto;
-
     display: block;
     margin: 0 auto;
   }

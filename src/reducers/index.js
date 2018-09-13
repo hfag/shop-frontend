@@ -8,6 +8,7 @@ import product, * as fromProduct from "./product";
 import simpleProduct, * as fromSimpleProduct from "./product-simple";
 import attachment, * as fromAttachment from "./attachment";
 import post, * as fromPost from "./post";
+import page, * as fromPage from "./page";
 import shoppingCart, * as fromShoppingCart from "./shopping-cart";
 import countries, * as fromCountries from "./countries";
 import sales, * as fromSales from "./sales";
@@ -237,9 +238,9 @@ export const getAttachmentById = wrap(
 );
 
 /**
- * Returns all attachments
+ * Returns all posts
  * @param {object} state This state
- * @return {array} All attachments
+ * @return {array} All posts
  */
 export const getPosts = wrap(fromPost.getPosts, state => state.post);
 /**
@@ -249,6 +250,20 @@ export const getPosts = wrap(fromPost.getPosts, state => state.post);
  * @return {object} The requested object
  */
 export const getPostBySlug = wrap(fromPost.getPostBySlug, state => state.post);
+
+/**
+ * Returns all pages
+ * @param {object} state This state
+ * @return {array} All pages
+ */
+export const getPages = wrap(fromPage.getPages, state => state.page);
+/**
+ * Retrieves the object with the specified id
+ * @param {object} state This state
+ * @param {number} id The object id
+ * @return {object} The requested object
+ */
+export const getPageBySlug = wrap(fromPage.getPageBySlug, state => state.page);
 
 /**
  * Retrieves the latest fetch error
@@ -453,6 +468,7 @@ const appReducer = combineReducers({
   simpleProduct,
   attachment,
   post,
+  page,
   countries,
   sales,
   account,

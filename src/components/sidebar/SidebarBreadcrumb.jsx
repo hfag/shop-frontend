@@ -17,6 +17,7 @@ const SidebarBreadcrumb = styled.div`
 
     width: 0.75rem;
     height: auto;
+    max-height: 0.75rem; /*IE11*/
     vertical-align: top !important;
     margin-right: 0.2rem;
   }

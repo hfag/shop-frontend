@@ -23,8 +23,8 @@ process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issue
 const context = __dirname;
 
 const PUBLIC_PATH = process.env.PUBLIC_PATH;
-const ROLLBAR_PUBLIC_ACCESS_TOKEN = "ffd21bafd45c4974aa0b8f5c07d6243a";
-const ROLLBAR_PRIVATE_ACCESS_TOKEN = process.env.ROLLBAR_PRIVATE_ACCESS_TOKEN;
+/*const ROLLBAR_PUBLIC_ACCESS_TOKEN = "ffd21bafd45c4974aa0b8f5c07d6243a";
+const ROLLBAR_PRIVATE_ACCESS_TOKEN = process.env.ROLLBAR_PRIVATE_ACCESS_TOKEN;*/
 const VERSION = ChildProcess.execSync("git rev-parse HEAD")
   .toString()
   .trim();
@@ -35,7 +35,7 @@ module.exports = {
   context,
 
   entry: {
-    index: path.join(context, "src/index.jsx")
+    index: ["@babel/polyfill", path.join(context, "src/index.jsx")]
   },
 
   devtool: "nosources-source-map",
@@ -80,9 +80,9 @@ module.exports = {
             if_return: true,
             join_vars: true,
             drop_console: false
-          },
-          exclude: [/\.min\.js$/gi] // skip pre-minified libs
-        }
+          }
+        },
+        exclude: [/\.min\.js$/gi] // skip pre-minified libs
       })
     ]
   },
@@ -157,7 +157,10 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        include: [path.resolve(context, "src")],
+        include: [
+          path.resolve(context, "src"),
+          path.resolve(context, "node_modules")
+        ],
 
         use: [
           {
@@ -167,12 +170,12 @@ module.exports = {
                 [
                   "@babel/preset-env",
                   {
-                    modules: false,
                     targets: {
-                      browsers: ["> 1%", "last 2 major versions", "IE 10"]
+                      browsers: ["> 0.25%", "last 2 major versions", "IE 11"]
                     },
                     // for uglifyjs...
                     forceAllTransforms: true
+                    /*useBuiltIns: "entry"*/
                   }
                 ],
                 "@babel/preset-react"

@@ -8,9 +8,9 @@ import {
 
 import { fetchApi } from "../utilities/api";
 import { fetchAttachmentAction } from "./attachments";
-import { getPostBySlug } from "../reducers";
+import { getPageBySlug } from "../reducers";
 
-const itemName = "post";
+const itemName = "page";
 
 /**
  * Maps an item so we can store it in the state
@@ -21,15 +21,13 @@ export const mapItem = ({
   id,
   slug,
   title: { rendered: title },
-  content: { rendered: content },
-  featured_media: thumbnailId
+  content: { rendered: content }
 }) => ({
   id,
   slug,
   title,
   content,
-  description: "",
-  thumbnailId
+  description: ""
 });
 
 /**
@@ -41,72 +39,63 @@ export const mapItem = ({
  * @param {object} item The received item
  * @returns {object} The redux action
  */
-export const fetchPostAction = createFetchSingleItemAction(itemName);
+export const fetchPageAction = createFetchSingleItemAction(itemName);
 
 /**
- * Fetches a post by it's slug
- * @param {number} postSlug The slug of the post
+ * Fetches a page by it's slug
+ * @param {number} pageSlug The slug of the page
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {function} The redux thunk
  */
-const fetchPost = (postSlug, visualize = true) => dispatch => {
-  dispatch(fetchPostAction(true, null, visualize, postSlug));
+const fetchPage = (pageSlug, visualize = true) => dispatch => {
+  dispatch(fetchPageAction(true, null, visualize, pageSlug));
 
-  return fetchApi(`/wp-json/wp/v2/posts?slug=${postSlug}&_embed`, {
+  return fetchApi(`/wp-json/wp/v2/pages?slug=${pageSlug}`, {
     method: "GET"
   })
     .then(({ json: items }) => {
       if (items.length > 0) {
         dispatch(
-          fetchAttachmentAction(
-            false,
-            null,
-            false,
-            items[0]._embedded["wp:featuredmedia"][0].id,
-            items[0]._embedded["wp:featuredmedia"][0]
-          )
-        );
-        dispatch(
-          fetchPostAction(false, null, visualize, postSlug, mapItem(items[0]))
+          fetchPageAction(false, null, visualize, pageSlug, mapItem(items[0]))
         );
 
         return Promise.resolve({ item: items[0] });
       } else {
         dispatch(
-          fetchPostAction(
+          fetchPageAction(
             false,
-            new Error("No post was found"),
+            new Error("No page was found"),
             visualize,
-            postSlug
+            pageSlug
           )
         );
       }
     })
     .catch(err => {
-      dispatch(fetchPostAction(true, err, visualize, postSlug));
+      dispatch(fetchPageAction(true, err, visualize, pageSlug));
     });
 };
 
 /**
- * Checks whether the post should be fetched
+ * Checks whether the page should be fetched
  * @param {string} slug The product slug
  * @param {string} state The redux state
  * @returns {boolean} Whether the product should be fetched
  */
-const shouldFetchPost = (slug, state) => {
-  const post = getPostBySlug(state, slug);
-  return !post || Date.now() - post._lastFetched > 1000 * 60 * 60 * 4;
+const shouldFetchPage = (slug, state) => {
+  const page = getPageBySlug(state, slug);
+  return !page || Date.now() - page._lastFetched > 1000 * 60 * 60 * 4;
 };
 
 /**
- * Fetches a product if needed
- * @param {string} slug The product slug
+ * Fetches a page if needed
+ * @param {string} slug The page slug
  * @param {boolean} visualize Whether to visualize the progress
- * @returns {Promise} The fetch product
+ * @returns {Promise} The fetch promise
  */
-export const fetchPostIfNeeded = (slug, visualize) => (dispatch, getState) =>
-  shouldFetchPost(slug, getState())
-    ? fetchPost(slug, visualize)(dispatch, getState)
+export const fetchPageIfNeeded = (slug, visualize) => (dispatch, getState) =>
+  shouldFetchPage(slug, getState())
+    ? fetchPage(slug, visualize)(dispatch, getState)
     : Promise.resolve();
 
 /**
@@ -120,7 +109,7 @@ export const fetchPostIfNeeded = (slug, visualize) => (dispatch, getState) =>
  * @param {string} orderby What the items should by ordered by
  * @return {object} The redux action
  */
-export const fetchPostsAction = createFetchItemsAction(itemName, "itemIds");
+export const fetchPagesAction = createFetchItemsAction(itemName, "itemIds");
 
 /**
  * Fetches the specified items
@@ -131,8 +120,8 @@ export const fetchPostsAction = createFetchItemsAction(itemName, "itemIds");
  * @param {array} itemIds Only the specified product ids will be fetched
  * @return {function}
  */
-export const fetchPosts = createFetchItemPageThunk(
-  fetchPostsAction,
+export const fetchPages = createFetchItemPageThunk(
+  fetchPagesAction,
   (
     page,
     perPage,
@@ -141,7 +130,7 @@ export const fetchPosts = createFetchItemPageThunk(
     order = "desc",
     orderby = "date"
   ) =>
-    `/wp-json/wp/v2/posts?page=${page}&per_page=${perPage}${
+    `/wp-json/wp/v2/pages?page=${page}&per_page=${perPage}${
       itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
     }`,
   mapItem

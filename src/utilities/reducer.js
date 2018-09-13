@@ -62,6 +62,10 @@ export const createAllIds = (
       return !action.isFetching && action.itemId
         ? state.filter(id => id != action.itemId)
         : state;
+    case "DELETE_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
+      return !action.isFetching && action.itemIds
+        ? state.filter(id => !action.itemIds.includes(id))
+        : state;
     default:
       if (customCases) {
         return customCases(state, action);
@@ -142,6 +146,15 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
     case "DELETE_" + changeCase.snakeCase(name).toUpperCase():
       return !action.isFetching && action.itemId
         ? removeKey(state, action.itemId)
+        : state;
+    case "DELETE_" + changeCase.snakeCase(pluralize(name)).toUpperCase():
+      return !action.isFetching && action.itemIds
+        ? Object.keys(state)
+            .filter(id => !action.itemIds.includes(id))
+            .reduce((object, id) => {
+              object[id] = state[id];
+              return object;
+            }, {})
         : state;
     default:
       if (customCases) {

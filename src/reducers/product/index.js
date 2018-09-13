@@ -1,6 +1,12 @@
 import { combineReducers } from "redux";
 
-import { wrap, createAllIds, createById } from "../../utilities/reducer";
+import {
+  wrap,
+  createAllIds,
+  createById,
+  createIsFetching,
+  createLastFetched
+} from "../../utilities/reducer";
 import categories, * as fromCategories from "./categories";
 import attributes, * as fromAttributes from "./attributes";
 
@@ -29,6 +35,8 @@ export default combineReducers({
     }
   }),
   allIds: createAllIds(itemName, "slug"),
+  isFetching: createIsFetching(itemName, "slug"),
+  lastFetched: createLastFetched(itemName, "slug"),
   categories,
   attributes
 });

@@ -17,8 +17,17 @@ export const generateCategoryBreadcrumbs = ({ url }, { pathname }, state) => {
     .map(slug => getProductCategoryBySlug(state, slug))
     .filter(c => c);
 
-  return categories.map(({ slug, name }) => ({
-    url: "/produkte/" + slug + "/1",
+  return categories.map(({ slug, name }, index) => ({
+    url:
+      "/produkte/" +
+      (index > 0
+        ? categories
+            .slice(0, index)
+            .map(category => category.slug)
+            .join("/") + "/"
+        : "") +
+      slug +
+      "/1",
     name: name
   }));
 };

@@ -31,11 +31,22 @@ export const generateProductBreadcrumbs = (
     current = parents[parents.length - 1];
   }
 
+  const reversedParents = parents.reverse();
+
   return [
-    ...parents.reverse().map(category => ({
-      url: "/produkte/" + category.slug + "/1",
+    ...reversedParents.map((category, index) => ({
+      url:
+        "/produkte/" +
+        (index > 0
+          ? reversedParents
+              .slice(0, index)
+              .map(category => category.slug)
+              .join("/") + "/"
+          : "") +
+        category.slug +
+        "/1",
       name: category.name
     })),
-    { url: "/produkte/" + productSlug, name: product.title }
+    { url: "/produkt/" + productSlug, name: product.title }
   ];
 };

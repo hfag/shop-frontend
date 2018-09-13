@@ -5,7 +5,7 @@ import { Flex, Box } from "grid-styled";
 
 import Card from "../components/Card";
 import { getPostBySlug } from "../reducers";
-import { fetchPostBySlug } from "../actions/posts";
+import { fetchPostIfNeeded } from "../actions/posts";
 import { stripTags } from "../utilities";
 import Thumbnail from "./Thumbnail";
 
@@ -17,9 +17,9 @@ const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
  */
 class Post extends React.PureComponent {
   componentDidMount = () => {
-    const { post, fetchPost } = this.props;
+    const { post, fetchPostIfNeeded } = this.props;
     if (!post) {
-      fetchPost();
+      fetchPostIfNeeded();
     }
   };
   render = () => {
@@ -27,11 +27,11 @@ class Post extends React.PureComponent {
     return (
       <Card>
         <Helmet>
-          <title>{post.title}</title>
+          <title>{stripTags(post.title)}</title>
           <meta name="description" content={stripTags(post.description)} />
           <link rel="canonical" href={ABSOLUTE_URL + "/" + post.slug} />
         </Helmet>
-        <h1>{post.title}</h1>
+        <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
         <Flex>
           <Box width={[1 / 2, 1 / 2, 1 / 4, 1 / 4]}>
             <Thumbnail id={post.thumbnailId} />
@@ -65,8 +65,8 @@ const mapDispatchToProps = (
    * Fetches the current post
    * @returns {Promise} The fetch promise
    */
-  fetchPost() {
-    return dispatch(fetchPostBySlug(postSlug));
+  fetchPostIfNeeded() {
+    return dispatch(fetchPostIfNeeded(postSlug));
   }
 });
 

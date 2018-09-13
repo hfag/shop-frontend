@@ -1,3 +1,8 @@
+/* polyfills */
+import "@babel/polyfill";
+import "intersection-observer";
+import "isomorphic-fetch";
+
 //react
 import React from "react";
 import ReactDOM from "react-dom";
@@ -14,11 +19,6 @@ import App from "./App";
 import reducers from "./reducers";
 import { loadState, saveState } from "./local-storage";
 import "./scss/global.scss";
-
-/* polyfills */
-import "intersection-observer";
-require("es6-promise").polyfill();
-require("isomorphic-fetch");
 
 //Load state from local storage and create history object
 const presistedState = { ...window.__INITIAL_DATA__, ...loadState() };

@@ -9,8 +9,6 @@ import {
   getProductCategoryBySlug
 } from "reducers";
 import { Helmet } from "react-helmet";
-import ChevronLeft from "react-icons/lib/fa/chevron-left";
-import ChevronRight from "react-icons/lib/fa/chevron-right";
 
 import Flex from "../components/Flex";
 import Pagination from "../components/Pagination";
@@ -178,8 +176,8 @@ class ProductCategories extends React.PureComponent {
                 pageCount={Math.ceil(productIds.length / ITEMS_PER_PAGE)}
                 pageRangeDisplayed={5}
                 marginPagesDisplayed={1}
-                previousLabel={ChevronLeft}
-                nextLabel={ChevronRight}
+                previousLabel={"<"}
+                nextLabel={">"}
                 forcePage={parseInt(page) - 1}
                 onPageChange={this.onPageChange}
               />

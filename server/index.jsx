@@ -29,7 +29,7 @@ import reducers, {
 require("isomorphic-fetch");
 
 const PORT = process.env.SERVER_PORT;
-const DELETE_INTERVAL_IN_MINUTES = 1;
+const DELETE_INTERVAL_IN_MINUTES = 17;
 
 const indexHtml = fs.readFileSync("./dist/client/index.html").toString();
 

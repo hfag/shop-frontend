@@ -10,7 +10,6 @@ import Frontpage from "./containers/Frontpage";
 import ProductCategories from "./containers/ProductCategories";
 import Logout from "./containers/Logout";
 import Wrapper from "./components/Wrapper";
-import Search from "./containers/Search";
 import Page404 from "./containers/404";
 import Confirmation from "./containers/Confirmation";
 import Post from "./containers/Post";
@@ -27,6 +26,9 @@ const Account = universalWithLoadingBar(props =>
 );
 const Cart = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "cart" */ "./containers/Cart")
+);
+const Search = universalWithLoadingBar(props =>
+  import(/* webpackChunkName: "search" */ "./containers/Search")
 );
 
 /**

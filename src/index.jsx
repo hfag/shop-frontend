@@ -25,8 +25,10 @@ const presistedState = { ...window.__INITIAL_DATA__, ...loadState() };
 const history = createHistory();
 
 history.listen(location => {
+  if(window.ga){
   window.ga("set", "page", location.pathname + location.search);
   window.ga("send", "pageview");
+  }
 });
 
 //and the redux store

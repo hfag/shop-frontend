@@ -123,7 +123,7 @@ const InnerCartForm = ({
               return values.items.map((item, index) => (
                 <tr key={index}>
                   <td style={{ minWidth: "100px", maxWidth: "100px" }}>
-                    <Thumbnail id={item.thumbnailId} size="medium" />
+                    <Thumbnail id={item.thumbnailId} />
                   </td>
                   <td>
                     <h4>{item.title}</h4>

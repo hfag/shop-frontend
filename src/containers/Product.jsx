@@ -380,7 +380,7 @@ class Product extends React.PureComponent {
           {uniqueImageIds.length <= 1 && (
             <Flex>
               <Box width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}>
-                <Thumbnail id={thumbnailId} size="large" />
+                <Thumbnail id={thumbnailId} size="medium" />
               </Box>
             </Flex>
           )}
@@ -609,7 +609,7 @@ class Product extends React.PureComponent {
                       })
                     }
                   >
-                    <Thumbnail id={thumbnailId} size="large" />
+                    <Thumbnail id={thumbnailId} />
                   </LightboxBox>
                   {galleryImageIds.map((imageId, index) => (
                     <LightboxBox
@@ -624,7 +624,7 @@ class Product extends React.PureComponent {
                         })
                       }
                     >
-                      <Thumbnail id={imageId} size="large" />
+                      <Thumbnail id={imageId} size="thumbnail" />
                     </LightboxBox>
                   ))}
                 </Flex>
@@ -637,8 +637,8 @@ class Product extends React.PureComponent {
                       .map(size => `${size.source_url} ${size.width}w`),
                     thumbnail:
                       attachment.sizes &&
-                      attachment.sizes.large &&
-                      attachment.sizes.large.source_url
+                      attachment.sizes.thumbnail &&
+                      attachment.sizes.thumbnail.source_url
                   }))}
                   isOpen={isLightboxOpen}
                   currentImage={currentLightboxImage}

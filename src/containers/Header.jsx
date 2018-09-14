@@ -305,7 +305,7 @@ class Header extends React.PureComponent {
                                       <div>
                                         <Thumbnail
                                           id={item.thumbnailId}
-                                          size="search-thumbnail"
+                                          size="thumbnail"
                                         />
                                       </div>
                                       <div>

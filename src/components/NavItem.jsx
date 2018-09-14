@@ -29,6 +29,7 @@ const NavItem = styled.div`
   img {
     height: 100%;
     width: auto;
+    max-width: none;
   }
 `;
 

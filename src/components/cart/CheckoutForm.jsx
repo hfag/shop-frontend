@@ -436,11 +436,11 @@ const CheckoutForm = withFormik({
             value: total || 20,
             currency: "CHF",
             transaction_id: transactionId,
-            event_callback: () => {}
+            event_callback: () => {
+              dispatch(clearShoppingCart());
+              dispatch(push("/bestaetigung"));
+            }
           });
-
-          dispatch(clearShoppingCart());
-          dispatch(push("/bestaetigung"));
         }, 300);
       })
       .catch(e => {

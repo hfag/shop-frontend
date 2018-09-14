@@ -157,6 +157,7 @@ class Header extends React.PureComponent {
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'AW-1071177824');
+              gtag('config', 'UA-125788575-1');
             `}
           </script>
         </Helmet>

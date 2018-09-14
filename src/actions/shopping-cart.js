@@ -1,5 +1,3 @@
-import { Promise } from "es6-promise";
-
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
 import { getShoppingCartLastFetched } from "../reducers";

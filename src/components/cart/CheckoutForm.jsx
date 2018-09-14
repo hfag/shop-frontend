@@ -426,10 +426,19 @@ const CheckoutForm = withFormik({
 
     setStatus("loading");
     submitOrder(shippingAddress, billingAddress, comments)
-      .then(() => {
+      .then(({ transactionId, total }) => {
         setStatus("success");
         setTimeout(() => {
           setStatus("");
+
+          window.gtag("event", "conversion", {
+            send_to: "AW-1071177824/lHaaCK-nsokBEODA4_4D",
+            value: total || 20,
+            currency: "CHF",
+            transaction_id: transactionId,
+            event_callback: () => {}
+          });
+
           dispatch(clearShoppingCart());
           dispatch(push("/bestaetigung"));
         }, 300);

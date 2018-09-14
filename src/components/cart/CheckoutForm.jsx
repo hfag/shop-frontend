@@ -433,14 +433,14 @@ const CheckoutForm = withFormik({
 
           window.gtag("event", "conversion", {
             send_to: "AW-1071177824/lHaaCK-nsokBEODA4_4D",
-            value: total || 20,
+            value: total,
             currency: "CHF",
             transaction_id: transactionId,
-            event_callback: () => {
-              dispatch(clearShoppingCart());
-              dispatch(push("/bestaetigung"));
-            }
+            event_callback: () => {}
           });
+
+          dispatch(clearShoppingCart());
+          dispatch(push("/bestaetigung"));
         }, 300);
       })
       .catch(e => {

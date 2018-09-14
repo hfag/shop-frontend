@@ -220,7 +220,7 @@ export const submitOrder = (
     })
   })
     .then(({ json: order }) => {
-      if (order.errors) {
+      if (order.errors && order.errors.length > 0) {
         return Promise.reject(new Error("Unknown error while adding"));
       }
 

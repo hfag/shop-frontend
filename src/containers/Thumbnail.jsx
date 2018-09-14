@@ -70,6 +70,9 @@ class Thumbnail extends React.PureComponent {
                 }
                 width={thumbnail.width}
                 height={thumbnail.height}
+                srcSet={Object.values(thumbnail.sizes)
+                  .sort((a, b) => a.width - b.width)
+                  .map(size => `${size.source_url} ${size.width}w`)}
               />
             )}
           />

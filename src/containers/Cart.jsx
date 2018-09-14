@@ -111,7 +111,7 @@ class Cart extends React.PureComponent {
                 onClick={() => this.setState({ showSkuSelection: true })}
                 state=""
               >
-                Suche nach Produkt
+                Suche Produkt
               </Button>
             )
           }

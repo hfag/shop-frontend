@@ -6,7 +6,7 @@ import { createFetchItemsAction } from "../../utilities/action";
  * @returns {Object} The mapped object
  */
 const mapSimpleProduct = ({
-  id,
+  slug,
   variationId,
   sku,
   name,
@@ -14,7 +14,7 @@ const mapSimpleProduct = ({
   price,
   meta
 }) => ({
-  id,
+  slug,
   variationId,
   sku,
   name,

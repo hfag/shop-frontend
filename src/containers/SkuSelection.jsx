@@ -19,6 +19,7 @@ import {
 } from "../reducers";
 import { colors } from "../utilities/style";
 import Price from "../components/Price";
+import Link from "../components/Link";
 
 const SkuSelectionWrapper = styled.div`
   h2 {
@@ -111,7 +112,11 @@ class NameCell extends React.PureComponent {
 
     return (
       <div>
-        <strong dangerouslySetInnerHTML={{ __html: product.name }} />
+        <Link
+          to={`/produkt/${product.slug}/?variationId=${product.variationId}`}
+        >
+          <strong dangerouslySetInnerHTML={{ __html: product.name }} />
+        </Link>
         <div>
           {product.meta && (
             <small>

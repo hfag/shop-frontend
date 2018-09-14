@@ -190,8 +190,9 @@ setInterval(() => {
   console.log(`Deleted ${invalidPostSlugs.length} posts from the store.`);
 
   console.log(
-    "Done! Store size is now about ",
-    lastSize - sizeOf(store.getState()) + " bytes smaller"
+    "Done! Store size is now about",
+    lastSize - sizeOf(store.getState()),
+    " bytes smaller"
   );
 }, 1000 * 60 * DELETE_INTERVAL_IN_MINUTES);
 console.log("Cache clearing deamon initialized!");

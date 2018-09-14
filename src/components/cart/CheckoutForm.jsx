@@ -430,7 +430,8 @@ const CheckoutForm = withFormik({
         setStatus("success");
         setTimeout(() => {
           setStatus("");
-
+          
+          if(window.gtag){
           window.gtag("event", "conversion", {
             send_to: "AW-1071177824/lHaaCK-nsokBEODA4_4D",
             value: total,
@@ -438,6 +439,7 @@ const CheckoutForm = withFormik({
             transaction_id: transactionId,
             event_callback: () => {}
           });
+          }
 
           dispatch(clearShoppingCart());
           dispatch(push("/bestaetigung"));

@@ -1,3 +1,5 @@
+import ReactGA from "react-ga";
+
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
 import { mapUser } from "./user";
@@ -28,6 +30,12 @@ export const login = (username, password, visualize = false) => dispatch => {
     body: JSON.stringify({ username, password })
   })
     .then(({ json: { account } }) => {
+      ReactGA.event({
+        category: "account",
+        action: "login",
+        label: (account && account.role) || "no-role"
+      });
+
       dispatch(loginAction(false, null, visualize, mapUser(account), true));
 
       return Promise.resolve();

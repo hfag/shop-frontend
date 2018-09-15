@@ -146,20 +146,6 @@ class Header extends React.PureComponent {
             content="Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
           />
           <link rel="canonical" href={ABSOLUTE_URL} />
-
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=AW-1071177824"
-          />
-          <script>
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'AW-1071177824');
-              gtag('config', 'UA-125788575-1');
-            `}
-          </script>
         </Helmet>
         <JsonLd>
           {{

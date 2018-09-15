@@ -6,6 +6,7 @@ import { hot } from "react-hot-loader";
 import { Switch } from "react-router";
 
 import { universalWithLoadingBar } from "./utilities/universal";
+import GoogleAnalyticsTracker from "./components/GoogleAnalyticsTracker";
 import Frontpage from "./containers/Frontpage";
 import ProductCategories from "./containers/ProductCategories";
 import Logout from "./containers/Logout";
@@ -40,6 +41,7 @@ const App = ({ history, store }) => {
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <Wrapper>
+          <Route component={GoogleAnalyticsTracker} />
           <Switch>
             <Route exact path="/" component={Frontpage} />
             <Route path="/produkte" component={ProductCategories} />

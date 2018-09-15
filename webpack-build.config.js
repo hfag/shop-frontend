@@ -44,7 +44,7 @@ module.exports = {
   devtool: "nosources-source-map",
 
   output: {
-    path: path.join(context, "dist/client/"),
+    path: path.join(context, "dist/client-build/"),
     filename: "[name].[chunkhash].js",
     publicPath: PUBLIC_PATH
   },
@@ -95,7 +95,7 @@ module.exports = {
       analyzerMode: "disabled",
       generateStatsFile: true
     }),
-    new CleanWebpackPlugin(["dist/client/*.*"]),
+    new CleanWebpackPlugin(["dist/client-build/*.*"]),
     new HtmlWebpackPlugin({
       title: "Schilder Portal - Shop der Hauser Feuerschutz AG",
       template: "index.prod.ejs",
@@ -152,8 +152,9 @@ module.exports = {
     new WebpackShellPlugin({
       onBuildStart: [],
       onBuildEnd: [
-        "cd dist/client/icons-* && sed -i '' -e 's/standalone/browser/g' manifest.json",
-        "cd dist/client/icons-* && sed -i '' -e 's/en-US/de-CH/g' manifest.json"
+        "cd dist/client-build/icons-* && sed -i '' -e 's/standalone/browser/g' manifest.json",
+        "cd dist/client-build/icons-* && sed -i '' -e 's/en-US/de-CH/g' manifest.json",
+        "sleep 5 && node ./smooth-update.js"
       ]
     })
     /*new RollbarSourceMapPlugin({

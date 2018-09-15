@@ -71,6 +71,11 @@ const Dropdown = styled.div`
   box-shadow: ${shadows.y};
 `;
 
+const UserDropdown = styled(Dropdown)`
+  left: 0;
+  right: 0;
+`;
+
 const ShoppingCartList = styled.div`
   width: 100%;
   margin: 0 0 1rem 0;
@@ -111,7 +116,7 @@ const Login = styled.span`
 class Header extends React.PureComponent {
   constructor() {
     super();
-    this.state = { showShoppingCartDropdown: false };
+    this.state = { dropdown: false };
   }
   componentDidMount = () => {
     const { fetchShoppingCartIfNeeded, fetchSalesIfNeeded } = this.props;
@@ -268,8 +273,10 @@ class Header extends React.PureComponent {
                             <Link
                               onClick={() => {
                                 this.setState({
-                                  showShoppingCartDropdown: !this.state
-                                    .showShoppingCartDropdown
+                                  dropdown:
+                                    this.state.dropdown === "cart"
+                                      ? false
+                                      : "cart"
                                 });
                               }}
                               negative
@@ -297,7 +304,7 @@ class Header extends React.PureComponent {
                               </Counter>
                               <Triangle color="#fff" size="0.5rem" />
                             </Link>
-                            {this.state.showShoppingCartDropdown && (
+                            {this.state.dropdown === "cart" && (
                               <Dropdown>
                                 {shoppingCartItems.length > 0 ? (
                                   shoppingCartItems.map((item, index) => (
@@ -341,12 +348,39 @@ class Header extends React.PureComponent {
                           </NavItem>
                           <NavItem>
                             {isAuthenticated ? (
-                              <Link to="/konto" negative flex>
-                                <Login>
-                                  {`${account.firstName} ${account.lastName}`}
-                                </Login>
-                                <Triangle color="#fff" size="0.5rem" />
-                              </Link>
+                              <div>
+                                <Link
+                                  onClick={() => {
+                                    this.setState({
+                                      dropdown:
+                                        this.state.dropdown === "user"
+                                          ? false
+                                          : "user"
+                                    });
+                                  }}
+                                  negative
+                                  flex
+                                >
+                                  <Login>
+                                    {`${account.firstName} ${account.lastName}`}
+                                  </Login>
+                                  <Triangle color="#fff" size="0.5rem" />
+                                </Link>
+                                {this.state.dropdown === "user" && (
+                                  <UserDropdown>
+                                    <div>
+                                      <Link to="/konto" active={false}>
+                                        Zum Konto
+                                      </Link>
+                                    </div>
+                                    <div>
+                                      <Link to="/logout" active={false}>
+                                        Abmelden
+                                      </Link>
+                                    </div>
+                                  </UserDropdown>
+                                )}
+                              </div>
                             ) : (
                               <Link to="/login" negative flex>
                                 <Login>Login</Login>

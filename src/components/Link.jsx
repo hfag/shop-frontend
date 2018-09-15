@@ -31,6 +31,7 @@ const StyledLink = styled(UnstyledLink)`
 class Link extends React.PureComponent {
   render = () => {
     const {
+      active,
       dispatch,
       to,
       onClick,
@@ -77,7 +78,12 @@ class Link extends React.PureComponent {
     }
 
     return (
-      <LinkComponent {...props} active={(href || to) === pathname}>
+      <LinkComponent
+        {...props}
+        active={
+          typeof active !== "undefined" ? active : (href || to) === pathname
+        }
+      >
         {flex ? <Flexbar>{children}</Flexbar> : children}
       </LinkComponent>
     );

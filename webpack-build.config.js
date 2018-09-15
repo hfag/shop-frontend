@@ -109,7 +109,10 @@ module.exports = {
       externals: [
         {
           module: "gtag",
-          entry: "https://www.googletagmanager.com/gtag/js?id=AW-1071177824",
+          entry: {
+            path: "https://www.googletagmanager.com/gtag/js?id=AW-1071177824",
+            type: "js"
+          },
           global: "gtag",
           attributes: { async: "true" },
           append: true

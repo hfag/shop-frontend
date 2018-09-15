@@ -27,7 +27,7 @@ before_deploy:
   - tar -zcf release/react-frontend-${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}-server.tar.gz
     dist/server
   - tar -zcf release/react-frontend-${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}-client.tar.gz
-    dist/client
+    dist/client-build
 deploy:
   name: "v1.0#${TRAVIS_BUILD_NUMBER}"
   provider: releases

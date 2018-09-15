@@ -52,7 +52,7 @@ class AccountDashboard extends React.PureComponent {
             </Flex>
           </Box>
           <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
-            <h2 className="no-margin-top">Letzte Bestellungen</h2>
+            <h2 className="no-margin-top">Letzte 3 Bestellungen</h2>
             {orders
               .sort((a, b) => a.created - b.created)
               .slice(0, 3)

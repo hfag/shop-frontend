@@ -12,6 +12,7 @@ import RelativeBox from "../../components/RelativeBox";
 import Link from "../../components/Link";
 import SelectField from "../../components/SelectField";
 import InputField from "../../components/InputField";
+import InlinePage from "../../containers/InlinePage";
 
 /**
  * Gets an state option list by country key
@@ -277,13 +278,11 @@ const InnerCheckoutForm = ({
       </Box>
     </Flex>
     <br />
+    <InlinePage slug="agbs" />
     <InputField id="terms" name="terms" type="checkbox" value="1">
       <label htmlFor="terms">
-        Ich habe die{" "}
-        <Link to="/seite/agbs" styled>
-          Allgemeinen Geschäftsbedingungen
-        </Link>{" "}
-        gelesen und akzeptiere diese *
+        Ich habe die Allgemeinen Geschäftsbedingungen gelesen und akzeptiere
+        diese *
       </label>
     </InputField>
     <Button

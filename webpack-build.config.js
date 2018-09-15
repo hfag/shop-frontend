@@ -16,6 +16,9 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 /*const RollbarSourceMapPlugin = require("rollbar-sourcemap-webpack-plugin");*/
 
+const AppleStatusBarPlugin = require("./build/AppleStatusBarPlugin");
+const WebpackShellPlugin = require("./build/WebpackShellPlugin");
+
 require("dotenv").config(); //include env file in here as well
 
 process.traceDeprecation = true; //https://github.com/webpack/loader-utils/issues/56
@@ -144,6 +147,14 @@ module.exports = {
       persistentCache: true,
       background: "#fff",
       title: "Feuerschutz"
+    }),
+    new AppleStatusBarPlugin("black"),
+    new WebpackShellPlugin({
+      onBuildStart: [],
+      onBuildEnd: [
+        "cd dist/client/icons-* && sed -i '' -e 's/standalone/browser/g' manifest.json",
+        "cd dist/client/icons-* && sed -i '' -e 's/en-US/de-CH/g' manifest.json"
+      ]
     })
     /*new RollbarSourceMapPlugin({
 			accessToken: ROLLBAR_PRIVATE_ACCESS_TOKEN,

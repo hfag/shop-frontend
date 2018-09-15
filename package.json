@@ -42,6 +42,7 @@
     "grid-styled": "^3.2.1",
     "helmet": "^3.13.0",
     "history": "^4.7.2",
+    "html-webpack-externals-plugin": "^3.8.0",
     "iframe-resizer": "^3.6.1",
     "intersection-observer": "^0.5.0",
     "isomorphic-fetch": "^2.2.1",

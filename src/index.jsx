@@ -68,3 +68,12 @@ const render = Component => {
 };
 
 render(App);
+
+if (typeof window !== "undefined") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = (...args) => {
+    window.dataLayer.push(args);
+  };
+  window.gtag("js", new Date());
+  window.gtag("config", process.env.AW_TRACKING_ID);
+}

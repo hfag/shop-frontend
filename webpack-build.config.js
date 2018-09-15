@@ -12,6 +12,7 @@ const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 const PreloadWebpackPlugin = require("preload-webpack-plugin");
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 /*const RollbarSourceMapPlugin = require("rollbar-sourcemap-webpack-plugin");*/
@@ -104,6 +105,17 @@ module.exports = {
     }),
     new ScriptExtHtmlWebpackPlugin({ defaultAttribute: "defer" }),
     new PreloadWebpackPlugin({ include: "initial" }),
+    new HtmlWebpackExternalsPlugin({
+      externals: [
+        {
+          module: "gtag",
+          entry: "https://www.googletagmanager.com/gtag/js?id=AW-1071177824",
+          global: "gtag",
+          attributes: { async: "true" },
+          append: true
+        }
+      ]
+    }),
     new webpack.NoEmitOnErrorsPlugin(),
     new Dotenv({
       path: "./.env", // Path to .env file (this is the default)

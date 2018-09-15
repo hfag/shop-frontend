@@ -132,6 +132,13 @@ module.exports = {
         toType: "dir"
       }
     ]),
+    new CopyWebpackPlugin([
+      {
+        from: "wp-content/",
+        to: "wp-content/",
+        toType: "dir"
+      }
+    ]),
     new FaviconsWebpackPlugin({
       logo: "img/logo/logo-favicon.png",
       persistentCache: true,

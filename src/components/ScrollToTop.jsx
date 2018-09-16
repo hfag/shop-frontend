@@ -14,10 +14,7 @@ class ScrollToTop extends React.Component {
     if (this.props.location !== prevProps.location) {
       if (
         this.props.burgerMenuOpen &&
-        !(
-          this.props.location.pathname.includes("/produkte/") ||
-          this.props.location.pathname === "/"
-        )
+        !this.props.location.pathname.includes("/produkt-kategorie/")
       ) {
         this.props.dispatch(toggleBurgerMenu());
       }

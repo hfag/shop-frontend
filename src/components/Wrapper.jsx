@@ -35,7 +35,10 @@ class Wrapper extends React.Component {
               <Box width={[0, 0, 0, 1 / 6]}>
                 <Sidebar>
                   <Switch>
-                    <Route path="/produkte" component={CategoriesSidebar} />
+                    <Route
+                      path="/produkt-kategorie"
+                      component={CategoriesSidebar}
+                    />
                     <Route
                       path="/produkt/:productSlug"
                       component={ProductSidebar}

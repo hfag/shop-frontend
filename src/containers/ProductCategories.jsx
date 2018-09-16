@@ -87,7 +87,7 @@ class ProductCategories extends React.PureComponent {
       }
     } = this.props;
     this.props.dispatch(
-      push("/produkte/" + categorySlug + "/" + (selected + 1))
+      push("/produkt-kategorie/" + categorySlug + "/" + (selected + 1))
     );
   };
   render = () => {
@@ -128,7 +128,9 @@ class ProductCategories extends React.PureComponent {
           />
           <link
             rel="canonical"
-            href={category && ABSOLUTE_URL + "/produkte/" + category.slug}
+            href={
+              category && ABSOLUTE_URL + "/produkt-kategorie/" + category.slug
+            }
           />
         </Helmet>
         {active && (

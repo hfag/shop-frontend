@@ -36,7 +36,7 @@ class ProductSidebar extends React.PureComponent {
             <Link
               key={category.id}
               to={
-                "/produkte/" +
+                "/produkt-kategorie/" +
                 (index > 0
                   ? category.parents
                       .slice(0, index)
@@ -58,7 +58,7 @@ class ProductSidebar extends React.PureComponent {
           <Link
             key={category.id}
             to={
-              "/produkte/" +
+              "/produkt-kategorie/" +
               (category.parents.length > 0
                 ? category.parents.map(category => category.slug).join("/") +
                   "/"

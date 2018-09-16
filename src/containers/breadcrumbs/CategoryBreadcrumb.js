@@ -19,7 +19,7 @@ export const generateCategoryBreadcrumbs = ({ url }, { pathname }, state) => {
 
   return categories.map(({ slug, name }, index) => ({
     url:
-      "/produkte/" +
+      "/produkt-kategorie/" +
       (index > 0
         ? categories
             .slice(0, index)

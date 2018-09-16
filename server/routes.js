@@ -36,7 +36,7 @@ const routes = [
     }
   },
   {
-    path: "/produkte",
+    path: "/produkt-kategorie",
     component: ProductCategories,
     /**
      * Fetches the required data for this route

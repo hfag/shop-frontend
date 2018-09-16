@@ -94,7 +94,7 @@ class CategoryItem extends React.PureComponent {
         <Link
           to={
             category
-              ? "/produkte/" +
+              ? "/produkt-kategorie/" +
                 (parents.length > 0 ? parents.join("/") + "/" : "") +
                 category.slug +
                 "/1"

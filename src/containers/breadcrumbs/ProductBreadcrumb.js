@@ -36,7 +36,7 @@ export const generateProductBreadcrumbs = (
   return [
     ...reversedParents.map((category, index) => ({
       url:
-        "/produkte/" +
+        "/produkt-kategorie/" +
         (index > 0
           ? reversedParents
               .slice(0, index)

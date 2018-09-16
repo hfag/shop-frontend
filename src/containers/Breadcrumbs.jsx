@@ -69,7 +69,7 @@ const routes = [
     breadcrumb: generateStringBreadcrumb("Suche")
   },
   {
-    path: "/produkte/",
+    path: "/produkt-kategorie/",
     breadcrumb: generateCategoryBreadcrumbs
   },
   {

@@ -258,7 +258,9 @@ class Searchbar extends React.PureComponent {
           )
         );
       case "taxonomy":
-        return this.props.dispatch(push("/produkte/" + suggestion.slug + "/1"));
+        return this.props.dispatch(
+          push("/produkt-kategorie/" + suggestion.slug + "/1")
+        );
       case "show-more":
         this.props.dispatch(push(`/suche?query=${this.state.value}`));
         return this.setState({ value: "" });

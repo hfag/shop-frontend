@@ -58,7 +58,7 @@ class CategoriesSidebar extends React.PureComponent {
     }
 
     this.setState({
-      active: !pathname.startsWith("/produkte/") || pathname === url
+      active: !pathname.startsWith("/produkt-kategorie/") || pathname === url
     });
   };
 
@@ -67,7 +67,7 @@ class CategoriesSidebar extends React.PureComponent {
 
     if (
       this.props.match.path !== "/" &&
-      this.props.match.path !== "/produkte"
+      this.props.match.path !== "/produkt-kategorie"
     ) {
       return;
     }

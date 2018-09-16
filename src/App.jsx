@@ -44,7 +44,7 @@ const App = ({ history, store }) => {
           <Route component={GoogleAnalyticsTracker} />
           <Switch>
             <Route exact path="/" component={Frontpage} />
-            <Route path="/produkte" component={ProductCategories} />
+            <Route path="/produkt-kategorie" component={ProductCategories} />
             <Route path="/suche" component={Search} />
             <Route exact path="/produkt/:productSlug" component={Product} />
             <Route exact path="/beitrag/:postSlug" component={Post} />

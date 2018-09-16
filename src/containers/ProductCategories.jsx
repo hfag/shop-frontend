@@ -120,11 +120,7 @@ class ProductCategories extends React.PureComponent {
           </title>
           <meta
             name="description"
-            content={
-              category &&
-              category.description &&
-              stripTags(category.description)
-            }
+            content={category && category.shortDescription}
           />
           <link
             rel="canonical"

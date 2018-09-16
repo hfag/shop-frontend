@@ -54,17 +54,29 @@ class ProductCategories extends React.PureComponent {
       location: { pathname },
       category
     } = this.props;
-    if (
-      (categorySlug !== prevProps.categorySlug ||
-        page !== prevProps.page ||
-        (!prevProps.category && category)) &&
-      categorySlug &&
-      page
-    ) {
-      this.loadData();
-    }
 
-    this.setState({ active: pathname === url });
+    this.setState({ active: pathname === url }, () => {
+      if (
+        (categorySlug !== prevProps.categorySlug ||
+          page !== prevProps.page ||
+          (!prevProps.category && category)) &&
+        categorySlug &&
+        page
+      ) {
+        this.loadData();
+      }
+
+      if (
+        (this.state.active ||
+          window.location.pathname.split("/").length === 3) &&
+        (!page || isNaN(page)) &&
+        pathname !== "/"
+      ) {
+        this.props.dispatch(
+          push(pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1")
+        );
+      }
+    });
   };
   loadData = () => {
     const {

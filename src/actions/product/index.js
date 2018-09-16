@@ -302,6 +302,7 @@ export const fetchProducts = createFetchItemPageThunk(
         null,
         false,
         items
+        .filter(product => product._embedded && product._embedded["wp:featuredmedia"] && product._embedded["wp:featuredmedia"].length > 0)
           .map(product => product._embedded["wp:featuredmedia"][0])
           .filter(t => t)
           .map(mapAttachment)

@@ -4,7 +4,6 @@ const ChildProcess = require("child_process");
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Dotenv = require("dotenv-webpack");
-const CompressionPlugin = require("compression-webpack-plugin");
 const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -129,13 +128,6 @@ module.exports = {
       filename: "[name].[chunkhash].css"
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new CompressionPlugin({
-      asset: "[path].gz[query]",
-      algorithm: "gzip",
-      test: /\.js$|\.css$|\.html$/,
-      threshold: 10240,
-      minRatio: 0
-    }),
     new CopyWebpackPlugin([
       {
         from: "robots.txt",

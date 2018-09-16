@@ -48,6 +48,33 @@ export const login = (username, password, visualize = false) => dispatch => {
 };
 
 /**
+ * Logs a user in
+ * @param {string} username The username/email
+ * @returns {Promise} The fetch promise
+ */
+export const resetPassword = username => dispatch => {
+  const formData = new FormData();
+  formData.append("user_login", username);
+
+  return fetchApi(
+    `/wp-login.php?action=lostpassword`,
+    {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+      headers: new Headers()
+    },
+    false
+  ).then(response => {
+    if (response.ok) {
+      return Promise.resolve(response);
+    } else {
+      return Promise.reject(response);
+    }
+  });
+};
+
+/**
  * Logs a user out
  * @returns {Object} The redux action
  */

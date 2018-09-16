@@ -7,11 +7,17 @@ import { Flex, Box } from "grid-styled";
 import queryString from "query-string";
 import { Helmet } from "react-helmet";
 
-import { login, register, logout } from "../actions/authentication";
+import {
+  login,
+  register,
+  logout,
+  resetPassword
+} from "../actions/authentication";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import { getIsAuthenticated } from "../reducers";
+import Link from "../components/Link";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -41,6 +47,26 @@ const InnerLoginRegisterForm = ({
     <br />
     <Button fullWidth controlled state={isValid ? status : "disabled"}>
       {submitText}
+    </Button>
+  </Form>
+);
+
+/**
+ * The inner login form
+ * @param {Object} params The formik params
+ * @returns {Component} The component
+ */
+const InnerPasswordResetForm = ({ isValid, status = "" }) => (
+  <Form>
+    <InputField
+      type="text"
+      label="E-Mail Adresse"
+      name="username"
+      required={true}
+    />
+    <br />
+    <Button fullWidth controlled state={isValid ? status : "disabled"}>
+      Zurücksetzen
     </Button>
   </Form>
 );
@@ -82,6 +108,39 @@ const LoginRegisterForm = withFormik({
   }
 })(InnerLoginRegisterForm);
 
+const PasswordResetForm = withFormik({
+  enableReinitialize: true,
+  mapPropsToValues: props => ({}),
+  validationSchema: yup.object().shape({
+    username: yup
+      .string()
+      .email()
+      .required()
+  }),
+  handleSubmit: (
+    { username },
+    {
+      props: { resetPassword, callback },
+      setStatus
+      /* setErrors, setValues, setStatus, and other goodies */
+    }
+  ) => {
+    setStatus("loading");
+    resetPassword(username)
+      .then(() => {
+        setStatus("success");
+        setTimeout(() => {
+          setStatus("");
+          callback();
+        }, 300);
+      })
+      .catch(e => {
+        setStatus("error");
+        setTimeout(() => setStatus(""), 300);
+      });
+  }
+})(InnerPasswordResetForm);
+
 /**
  * The login page
  * @returns {Component} The component
@@ -108,7 +167,7 @@ class Login extends React.PureComponent {
   };
 
   render = () => {
-    const { dispatch, login, register } = this.props;
+    const { dispatch, login, register, resetPassword } = this.props;
     return (
       <Card>
         <Helmet>
@@ -120,15 +179,17 @@ class Login extends React.PureComponent {
           <link rel="canonical" href={ABSOLUTE_URL + "/login"} />
         </Helmet>
         <Flex flexWrap="wrap">
-          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
             <h1>Anmelden</h1>
             <LoginRegisterForm
               action={login}
               callback={() => dispatch(push("/konto"))}
               submitText="Anmelden"
             />
+            <h1>Passwort vergessen?</h1>
+            <PasswordResetForm resetPassword={resetPassword} />
           </Box>
-          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
             {this.state.registered && (
               <div>Sie sollten in Kürze eine Bestätigungsemail erhalten.</div>
             )}
@@ -176,6 +237,14 @@ const mapDispatchToProps = dispatch => ({
    */
   register(username, password, visualize = true) {
     return dispatch(register(username, password, visualize));
+  },
+  /**
+   * Resets a user password
+   * @param {string} username The username/email
+   * @returns {Promise} The fetch promise
+   */
+  resetPassword(username) {
+    return dispatch(resetPassword(username));
   }
 });
 

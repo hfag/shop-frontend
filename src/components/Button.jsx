@@ -33,6 +33,8 @@ const ButtonWrapper = styled.div`
     position: relative;
     border: none;
 
+    outline: none;
+
     width: 100%;
     height: ${({ height }) => height};
     padding: 0.375rem 1rem;

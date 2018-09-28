@@ -14,7 +14,6 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
-/*const RollbarSourceMapPlugin = require("rollbar-sourcemap-webpack-plugin");*/
 
 const AppleStatusBarPlugin = require("./build/AppleStatusBarPlugin");
 const WebpackShellPlugin = require("./build/WebpackShellPlugin");
@@ -164,11 +163,6 @@ module.exports = {
         "sleep 5 && node ./smooth-update.js"
       ]
     })
-    /*new RollbarSourceMapPlugin({
-			accessToken: ROLLBAR_PRIVATE_ACCESS_TOKEN,
-			version: VERSION,
-			publicPath: PUBLIC_PATH
-		})*/
   ],
 
   resolve: {

@@ -517,7 +517,7 @@ class Product extends React.PureComponent {
               </Box>
             )}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-              {selectedVariation && validatedFields ? (
+              {selectedVariation ? (
                 <div>
                   <h4>Preis</h4>
                   <Bill
@@ -542,11 +542,13 @@ class Product extends React.PureComponent {
                     ]}
                   />
                   <Button
-                    disabled={
+                    state={
                       !selectedVariation ||
                       isNaN(quantity) ||
                       quantity <= 0 ||
                       !validatedFields
+                        ? "disabled"
+                        : ""
                     }
                     onClick={() =>
                       addToShoppingCart(
@@ -583,10 +585,7 @@ class Product extends React.PureComponent {
               ) : (
                 <div>
                   <h4>Preis</h4>
-                  <p>
-                    Wählen Sie zuerst eine Variante und füllen alle benötigten
-                    Felder aus!
-                  </p>
+                  <p>Wählen Sie zuerst eine Variante aus!</p>
                   <Button state="disabled">Zum Warenkorb hinzufügen</Button>
                 </div>
               )}

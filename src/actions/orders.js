@@ -70,3 +70,19 @@ export const fetchOrders = (visualize = false) => dispatch => {
       return Promise.reject(e);
     });
 };
+
+/**
+ * Tracks a conversion event
+ * @param {number} total The total order amount
+ * @param {string} currency The currency abbreviation
+ * @param {number} transactionId The transaction id / order id
+ * @returns {Object} The redux action
+ */
+export const trackConversion = (total, currency, transactionId) => ({
+  type: "TRACK_CONVERSION",
+  payload: {
+    total,
+    currency,
+    transactionId
+  }
+});

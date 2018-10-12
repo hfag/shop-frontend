@@ -6,6 +6,7 @@ import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { push } from "react-router-redux";
 
+import { trackConversion } from "../../actions/orders";
 import { clearShoppingCart } from "../../actions/shopping-cart";
 import Button from "../../components/Button";
 import RelativeBox from "../../components/RelativeBox";
@@ -430,15 +431,7 @@ const CheckoutForm = withFormik({
         setTimeout(() => {
           setStatus("");
 
-          if (window.gtag) {
-            window.gtag("event", "conversion", {
-              send_to: "AW-1071177824/lHaaCK-nsokBEODA4_4D",
-              value: total,
-              currency: "CHF",
-              transaction_id: transactionId,
-              event_callback: () => {}
-            });
-          }
+          dispatch(trackConversion(total || 0, "CHF", transactionId || "-1"));
 
           dispatch(clearShoppingCart());
           dispatch(push("/bestaetigung"));

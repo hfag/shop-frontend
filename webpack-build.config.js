@@ -103,20 +103,6 @@ module.exports = {
     }),
     new ScriptExtHtmlWebpackPlugin({ defaultAttribute: "defer" }),
     new PreloadWebpackPlugin({ include: "initial" }),
-    new HtmlWebpackExternalsPlugin({
-      externals: [
-        {
-          module: "gtag",
-          entry: {
-            path: "https://www.googletagmanager.com/gtag/js?id=AW-1071177824",
-            type: "js"
-          },
-          global: "gtag",
-          attributes: { async: "true" },
-          append: true
-        }
-      ]
-    }),
     new webpack.NoEmitOnErrorsPlugin(),
     new Dotenv({
       path: "./.env", // Path to .env file (this is the default)

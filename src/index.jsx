@@ -39,9 +39,21 @@ const store = createStore(
     applyMiddleware(
       thunkMiddleware,
       routerMiddleware(history),
+      /* show loading animation */
       store => next => action => {
         if (action.visualize === true) {
           store.dispatch(action.isFetching ? showLoading() : hideLoading());
+        }
+        return next(action);
+      },
+      /* do google analytics */
+      store => next => action => {
+        if (action.type.startsWith("TRACK_") && action.payload) {
+          window.dataLayer = window.dataLayer || [];
+          dataLayer.push({
+            event: action.type,
+            payload: action.payload
+          });
         }
         return next(action);
       }
@@ -69,11 +81,17 @@ const render = Component => {
 
 render(App);
 
+/* Begin Google Tag Manager */
 if (typeof window !== "undefined") {
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = (...args) => {
-    window.dataLayer.push(args);
-  };
-  window.gtag("js", new Date());
-  window.gtag("config", process.env.AW_TRACKING_ID);
+  window["dataLayer"] = window["dataLayer"] || [];
+  window["dataLayer"].push({
+    "gtm.start": new Date().getTime(),
+    event: "gtm.js"
+  });
+  let f = document.getElementsByTagName("script")[0],
+    j = document.createElement("script");
+  j.async = true;
+  j.src = "https://www.googletagmanager.com/gtm.js?id=GTM-M72QNLR";
+  f.parentNode.insertBefore(j, f);
 }
+/* End Google Tag Manager */

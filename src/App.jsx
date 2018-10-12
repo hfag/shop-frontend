@@ -41,7 +41,7 @@ const App = ({ history, store }) => {
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <Wrapper>
-          <Route component={GoogleAnalyticsTracker} />
+          <GoogleAnalyticsTracker />
           <Switch>
             <Route exact path="/" component={Frontpage} />
             <Route path="/produkt-kategorie" component={ProductCategories} />

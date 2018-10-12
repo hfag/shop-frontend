@@ -1,5 +1,3 @@
-import ReactGA from "react-ga";
-
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
 import { mapUser } from "./user";
@@ -16,6 +14,22 @@ import { mapUser } from "./user";
 const loginAction = createFetchAction("LOGIN_USER", "account", "success");
 
 /**
+ * Tracks the user authentication event
+ * @param {number} id The user id
+ * @param {string} role The user role
+ * @returns {Object} The redux action
+ */
+const trackAuthentication = (id, role) => ({
+  type: "TRACK_AUTHENTICATION",
+  payload: {
+    user: {
+      id,
+      role
+    }
+  }
+});
+
+/**
  * Logs a user in
  * @param {string} username The username/email
  * @param {string} password The user's password
@@ -30,13 +44,9 @@ export const login = (username, password, visualize = false) => dispatch => {
     body: JSON.stringify({ username, password })
   })
     .then(({ json: { account } }) => {
-      ReactGA.event({
-        category: "account",
-        action: "login",
-        label: (account && account.role) || "no-role"
-      });
-
       dispatch(loginAction(false, null, visualize, mapUser(account), true));
+
+      trackAuthentication(account.id || "-1", account.role || "no-role");
 
       return Promise.resolve();
     })

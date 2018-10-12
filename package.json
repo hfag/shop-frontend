@@ -93,7 +93,6 @@
     "react-autosuggest": "^9.3.2",
     "react-collapse": "^4.0.3",
     "react-dom": "^16.0.0",
-    "react-ga": "^2.5.3",
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.2.0",
     "react-icons": "^2.2.7",

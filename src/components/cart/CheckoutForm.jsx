@@ -132,26 +132,6 @@ const InnerCheckoutForm = ({
           label="Telefon"
           name="billing_phone"
           required={true}
-          component={MaskedInput}
-          showMask={false}
-          mask={[
-            "+",
-            "4",
-            "1",
-            " ",
-            /\d/,
-            /\d/,
-            " ",
-            /\d/,
-            /\d/,
-            /\d/,
-            " ",
-            /\d/,
-            /\d/,
-            " ",
-            /\d/,
-            /\d/
-          ]}
         />
         <InputField
           type="email"

@@ -685,8 +685,8 @@ class Product extends React.PureComponent {
                     <td>
                       {categories.length > 0
                         ? categories
-                            .map(({ id, name }) => (
-                              <Link key={id} styled to={`category/${id}`}>
+                            .map(({ id, name, slug }) => (
+                              <Link key={id} styled to={`produkt-kategorie/${slug}`}>
                                 {name}
                               </Link>
                             ))

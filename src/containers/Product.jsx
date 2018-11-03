@@ -689,7 +689,7 @@ class Product extends React.PureComponent {
                               <Link
                                 key={id}
                                 styled
-                                to={`/produkt-kategorie/${slug}`}
+                                to={`/produkt-kategorie/${slug}/1`}
                               >
                                 {name}
                               </Link>

@@ -2,7 +2,6 @@ import React from "react";
 import { withFormik, Form } from "formik";
 import PropTypes from "prop-types";
 import * as yup from "yup";
-import MaskedInput from "react-text-mask";
 import styled from "styled-components";
 
 import Button from "../Button";
@@ -95,26 +94,6 @@ const InnerAccountForm = ({
           label="Telefon"
           name="phone"
           required={true}
-          component={MaskedInput}
-          showMask={false}
-          mask={[
-            "+",
-            "4",
-            "1",
-            " ",
-            /\d/,
-            /\d/,
-            " ",
-            /\d/,
-            /\d/,
-            /\d/,
-            " ",
-            /\d/,
-            /\d/,
-            " ",
-            /\d/,
-            /\d/
-          ]}
         />
         <InputField
           type="email"

@@ -67,7 +67,7 @@ const InnerAccountForm = ({
       name="post_office_box"
       required={false}
     />
-    <InputField type="text" label="Postleihzahl" name="postcode" required={true} />
+    <InputField type="text" label="Postleitzahl" name="postcode" required={true} />
     <InputField type="text" label="Ort / Stadt" name="city" required={true} />
     <SelectField
       label="Kanton"

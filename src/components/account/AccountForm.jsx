@@ -77,7 +77,11 @@ const AccountForm = withFormik({
       .test("is-required", "Dieses Feld darf nicht leer sein", function(value) {
         const { password, passwordConfirmation } = this.parent;
         return password || passwordConfirmation ? value : true;
-      }),
+      })
+      .oneOf(
+        [yup.ref("passwordConfirmation")],
+        "Die beiden Passwörter müssen übereinstimmen!"
+      ),
     passwordConfirmation: yup
       .string()
       .min(7)

@@ -35,6 +35,7 @@ import Thumbnail from "./Thumbnail";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import JsonLd from "../components/JsonLd";
 import { fetchSalesIfNeeded } from "../actions/sales";
+import RestrictedView from "./RestrictedView";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 const PUBLIC_PATH = process.env.PUBLIC_PATH;
@@ -373,6 +374,18 @@ class Header extends React.PureComponent {
                                         Zum Konto
                                       </Link>
                                     </div>
+                                    <RestrictedView>
+                                      <div>
+                                        <Link href="https://api.feuerschutz.ch/wp-admin">
+                                          Shop-Admin
+                                        </Link>
+                                      </div>
+                                      <div>
+                                        <Link href="https://feuerschutz.ch/wp-login.php?action=login">
+                                          Netzwerk-Admin
+                                        </Link>
+                                      </div>
+                                    </RestrictedView>
                                     <div>
                                       <Link to="/logout" active={false}>
                                         Abmelden

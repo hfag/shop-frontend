@@ -43,12 +43,18 @@ export const login = (username, password, visualize = false) => dispatch => {
     credentials: "include",
     body: JSON.stringify({ username, password })
   })
-    .then(({ json: { account } }) => {
-      dispatch(loginAction(false, null, visualize, mapUser(account), true));
+    .then(({ json: { success, account, code } }) => {
+      if (success) {
+        dispatch(loginAction(false, null, visualize, mapUser(account), true));
 
-      trackAuthentication(account.id || "-1", account.role || "no-role");
+        trackAuthentication(account.id || "-1", account.role || "no-role");
 
-      return Promise.resolve();
+        return Promise.resolve();
+      } else {
+        dispatch(loginAction(false, code, visualize, null, false));
+
+        return Promise.reject(code);
+      }
     })
     .catch(e => {
       dispatch(loginAction(false, e, visualize, null, false));
@@ -115,10 +121,16 @@ export const register = (username, password, visualize = false) => dispatch => {
     credentials: "include",
     body: JSON.stringify({ username, password })
   })
-    .then(({ json }) => {
-      dispatch(registrationAction(false, null, visualize));
+    .then(({ json: { success, code } }) => {
+      if (success) {
+        dispatch(registrationAction(false, null, visualize));
 
-      return Promise.resolve();
+        return Promise.resolve();
+      } else {
+        dispatch(registrationAction(false, code, visualize));
+
+        return Promise.reject(code);
+      }
     })
     .catch(e => {
       dispatch(registrationAction(false, e, visualize));

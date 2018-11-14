@@ -6,6 +6,7 @@ import SearchIcon from "react-icons/lib/fa/search";
 import CartIcon from "react-icons/lib/fa/shopping-cart";
 import AccountIcon from "react-icons/lib/fa/user";
 import SignInIcon from "react-icons/lib/fa/sign-in";
+import GearsIcon from "react-icons/lib/fa/cogs";
 import { withRouter } from "react-router";
 
 import Link from "../components/Link";
@@ -15,6 +16,7 @@ import { getIsAuthenticated, getBurgerMenuOpen } from "../reducers";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import MediaQuery from "../components/MediaQuery";
 import Card from "../components/Card";
+import RestrictedView from "./RestrictedView";
 
 const BurgerContainer = styled(Card)`
   height: 100%;
@@ -126,6 +128,21 @@ class Sidebar extends React.PureComponent {
                     </span>
                   </Link>
                 )}
+                <RestrictedView>
+                  <Link href="https://api.feuerschutz.ch/wp-admin" flex>
+                    <span>
+                      <GearsIcon />Shop-Admin
+                    </span>
+                  </Link>
+                  <Link
+                    href="https://feuerschutz.ch/wp-login.php?action=login"
+                    flex
+                  >
+                    <span>
+                      <GearsIcon />Netzwerk-Admin
+                    </span>
+                  </Link>
+                </RestrictedView>
               </BurgerItem>
             </BurgerList>
           </MediaQuery>

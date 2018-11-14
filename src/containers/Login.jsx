@@ -17,7 +17,7 @@ import InputField from "../components/InputField";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import { getIsAuthenticated } from "../reducers";
-import Link from "../components/Link";
+import Message from "../components/Message";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -29,7 +29,9 @@ const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 const InnerLoginRegisterForm = ({
   isValid,
   status = "",
-  submitText = "Abschicken"
+  submitText = "Abschicken",
+  message = "",
+  confirmation = false
 }) => (
   <Form>
     <InputField
@@ -44,7 +46,16 @@ const InnerLoginRegisterForm = ({
       name="password"
       required={true}
     />
+    {confirmation && (
+      <InputField
+        type="password"
+        label="Passwort bestätigen"
+        name="passwordConfirmation"
+        required={true}
+      />
+    )}
     <br />
+    {message}
     <Button fullWidth controlled state={isValid ? status : "disabled"}>
       {submitText}
     </Button>
@@ -56,7 +67,7 @@ const InnerLoginRegisterForm = ({
  * @param {Object} params The formik params
  * @returns {Component} The component
  */
-const InnerPasswordResetForm = ({ isValid, status = "" }) => (
+const InnerPasswordResetForm = ({ isValid, status = "", message = "" }) => (
   <Form>
     <InputField
       type="text"
@@ -65,6 +76,7 @@ const InnerPasswordResetForm = ({ isValid, status = "" }) => (
       required={true}
     />
     <br />
+    {message}
     <Button fullWidth controlled state={isValid ? status : "disabled"}>
       Zurücksetzen
     </Button>
@@ -74,21 +86,38 @@ const InnerPasswordResetForm = ({ isValid, status = "" }) => (
 const LoginRegisterForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: props => ({}),
-  validationSchema: yup.object().shape({
-    username: yup
-      .string()
-      /*.email()*/
-      .required(),
-    password: yup
-      .string()
-      .min(7)
-      .required()
-  }),
+  validationSchema: ({ confirmation }) =>
+    yup.object().shape({
+      username: yup
+        .string()
+        /*.email()*/
+        .required(),
+      password: yup
+        .string()
+        .when(
+          [],
+          schema =>
+            confirmation
+              ? schema
+                  .min(7)
+                  .oneOf(
+                    [yup.ref("passwordConfirmation")],
+                    "Die beiden Passwörter müssen übereinstimmen!"
+                  )
+              : schema
+        )
+        .required(),
+      passwordConfirmation: yup
+        .string()
+        .min(7)
+        .when([], schema => (confirmation ? schema.required() : schema))
+    }),
   handleSubmit: (
     { username, password },
     {
       props: { action, callback },
-      setStatus
+      setStatus,
+      setErrors
       /* setErrors, setValues, setStatus, and other goodies */
     }
   ) => {
@@ -102,6 +131,18 @@ const LoginRegisterForm = withFormik({
         }, 300);
       })
       .catch(e => {
+        switch (e) {
+          case "existing_user_email":
+            setErrors({
+              username: "Diese E-Mail wurde bereits registriert!"
+            });
+            break;
+          case "incorrect_password":
+          default:
+            setErrors({ password: "Das Passwort stimmt nicht!" });
+            break;
+        }
+
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });
@@ -149,7 +190,11 @@ class Login extends React.PureComponent {
   constructor() {
     super();
 
-    this.state = { registered: false, redirect: undefined };
+    this.state = {
+      registered: false,
+      resetPassword: false,
+      redirect: undefined
+    };
   }
 
   componentDidMount = () => {
@@ -187,15 +232,28 @@ class Login extends React.PureComponent {
               submitText="Anmelden"
             />
             <h1>Passwort vergessen?</h1>
-            <PasswordResetForm resetPassword={resetPassword} />
+            <PasswordResetForm
+              resetPassword={resetPassword}
+              message={
+                this.state.resetPassword && (
+                  <Message>Sie sollten in Kürze eine E-Mail erhalten.</Message>
+                )
+              }
+              callback={() => this.setState({ resetPassword: true })}
+            />
           </Box>
           <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
-            {this.state.registered && (
-              <div>Sie sollten in Kürze eine Bestätigungsemail erhalten.</div>
-            )}
             <h1>Neues Kundenkonto anlegen</h1>
             <LoginRegisterForm
               action={register}
+              confirmation
+              message={
+                this.state.registered && (
+                  <Message>
+                    Sie sollten in Kürze eine Bestätigungsemail erhalten.
+                  </Message>
+                )
+              }
               callback={() => this.setState({ registered: true })}
               submitText="Kundenkonto anlegen"
             />

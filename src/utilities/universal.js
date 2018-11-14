@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import universal from "react-universal-component";
 
 import Wrapper from "../components/Wrapper";
+import Card from "../components/Card";
 
 /**
  * Injects a component with the loading bar
@@ -26,19 +27,18 @@ export const injectLoadingBar = Component =>
  */
 export const universalOptions = ({
   loading = props => <Wrapper />,
-  error = props => (
+  error = (props, error) => (
     <Wrapper>
-      <Header />
-      <MainContainer>
-        <Container>
-          Es ist ein unerwarteter Fehler aufgetreten. Bitte melde dies dem
-          Support!
-        </Container>>
-      </MainContainer>
+      <Card>
+        Es ist ein unerwarteter Fehler aufgetreten. Bitte melde dies dem
+        Support!
+      </Card>
     </Wrapper>
   ),
   timeout = 15000,
-  onError = (error, info) => {},
+  onError = (error, info) => {
+    console.error(error);
+  },
   onLoad = (module, info, props, context) => {},
   minDelay = 0,
   alwaysDelay = false,

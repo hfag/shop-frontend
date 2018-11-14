@@ -7,6 +7,7 @@ import Address from "../../components/Address";
 import Button from "../../components/Button";
 import Order from "../../components/Order";
 import { getOrders } from "../../reducers";
+import Link from "../../components/Link";
 
 const DashboardWrapper = styled.div`
   .no-margin {
@@ -31,28 +32,61 @@ class AccountDashboard extends React.PureComponent {
       orders
     } = this.props;
 
+    const billingEmpty = Object.keys(billingAddress).reduce(
+      (empty, key) => empty || billingAddress[key] !== ""
+    );
+
+    const shippingEmpty = Object.keys(shippingAddress).reduce(
+      (empty, key) => empty || shippingAddress[key] !== ""
+    );
+
     return (
       <DashboardWrapper>
         <Flex flexWrap="wrap">
           <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
-            <h2 className="no-margin">
-              {firstName} {lastName}
-            </h2>
-            <div>{email}</div>
+            {firstName && lastName && email ? (
+              <div>
+                <h2 className="no-margin">
+                  {firstName} {lastName}
+                </h2>
+                <div>{email}</div>
+              </div>
+            ) : (
+              <div>
+                Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen
+                angesprochen werden möchten, können Sie{" "}
+                <Link to="/konto/details">hier</Link> Ihren Namen hinterlegen.
+              </div>
+            )}
+
             <br />
             <Flex flexWrap="wrap">
               <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
                 <h4 className="no-margin">Rechnung</h4>
-                <Address address={billingAddress} />
+                {billingEmpty ? (
+                  <div>
+                    Sie haben noch keine Rechnungsaddresse hinterlegt. Falls sie
+                    möchten dass diese bei jeder Bestellung von selbst
+                    ausgefüllt wird, fügen Sie{" "}
+                    <Link to="/konto/rechnungsadresse">hier</Link> eine hinzu.
+                  </div>
+                ) : (
+                  <Address address={billingAddress} />
+                )}
               </Box>
-              <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
-                <h4 className="no-margin">Lieferung</h4>
-                <Address address={shippingAddress} />
-              </Box>
+              {!shippingEmpty && (
+                <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+                  <h4 className="no-margin">Lieferung</h4>
+                  <Address address={shippingAddress} />
+                </Box>
+              )}
             </Flex>
           </Box>
           <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
             <h2 className="no-margin-top">Letzte 3 Bestellungen</h2>
+            {orders.length === 0 && (
+              <div>Sie haben noch keine Bestellung getätigt.</div>
+            )}
             {orders
               .sort((a, b) => a.created - b.created)
               .slice(0, 3)

@@ -21,6 +21,9 @@ class Orders extends React.PureComponent {
     return (
       <OrdersWrapper>
         <h2>Bestellungen</h2>
+        {orders.length === 0 && (
+          <div>Sie haben noch keine Bestellung getätigt.</div>
+        )}
         <div>{orders.map(order => <Order key={order.id} order={order} />)}</div>
       </OrdersWrapper>
     );

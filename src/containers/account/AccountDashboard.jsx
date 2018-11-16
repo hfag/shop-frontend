@@ -33,11 +33,13 @@ class AccountDashboard extends React.PureComponent {
     } = this.props;
 
     const billingEmpty = Object.keys(billingAddress).reduce(
-      (empty, key) => empty || billingAddress[key] !== ""
+      (empty, key) => empty && billingAddress[key] !== "",
+      true
     );
 
     const shippingEmpty = Object.keys(shippingAddress).reduce(
-      (empty, key) => empty || shippingAddress[key] !== ""
+      (empty, key) => empty && shippingAddress[key] !== "",
+      true
     );
 
     return (

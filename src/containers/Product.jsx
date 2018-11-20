@@ -628,8 +628,8 @@ class Product extends React.PureComponent {
                   ))}
                 </Flex>
                 <Lightbox
-                  images={galleryAttachments.map(attachment => ({
-                    src: attachment.url,
+                  images={galleryAttachments.filter(e => e).map(attachment => ({
+                    src: attachment.url || "",
                     /*caption: attachment.caption,*/
                     srcSet: Object.values(attachment.sizes)
                       .sort((a, b) => a.width - b.width)

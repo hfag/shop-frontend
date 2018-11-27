@@ -32,11 +32,6 @@ class Post extends React.PureComponent {
           <link rel="canonical" href={ABSOLUTE_URL + "/" + post.slug} />
         </Helmet>
         <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
-        <Flex>
-          <Box width={[1 / 2, 1 / 2, 1 / 4, 1 / 4]}>
-            <Thumbnail id={post.thumbnailId} />
-          </Box>
-        </Flex>
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
       </Card>
     );

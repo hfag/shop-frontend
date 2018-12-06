@@ -18,8 +18,8 @@ const CircleWrapper = styled.div`
         ? colors.primary
         : colors.primaryContrast
       : filled
-        ? colors.primaryContrast
-        : colors.primary}};
+      ? colors.primaryContrast
+      : colors.primary}};
 
 	${({ filled, negative }) =>
     filled

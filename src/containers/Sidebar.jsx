@@ -101,37 +101,43 @@ class Sidebar extends React.PureComponent {
             <BurgerList>
               <BurgerItem seperator>
                 <Link to="/" flex>
-                  <HomeIcon />Home
+                  <HomeIcon />
+                  Home
                 </Link>
               </BurgerItem>
               <BurgerItem seperator>
                 <Link to="/suche" flex>
-                  <SearchIcon />Suche
+                  <SearchIcon />
+                  Suche
                 </Link>
               </BurgerItem>
               <BurgerItem seperator>
                 <Link to="/warenkorb" flex>
-                  <CartIcon />Warenkorb
+                  <CartIcon />
+                  Warenkorb
                 </Link>
               </BurgerItem>
               <BurgerItem seperator>
                 {isAuthenticated ? (
                   <Link to="/konto" flex>
                     <span>
-                      <AccountIcon />Mein Konto
+                      <AccountIcon />
+                      Mein Konto
                     </span>
                   </Link>
                 ) : (
                   <Link to="/login" flex>
                     <span>
-                      <SignInIcon />Login
+                      <SignInIcon />
+                      Login
                     </span>
                   </Link>
                 )}
                 <RestrictedView>
                   <Link href="https://api.feuerschutz.ch/wp-admin" flex>
                     <span>
-                      <GearsIcon />Shop-Admin
+                      <GearsIcon />
+                      Shop-Admin
                     </span>
                   </Link>
                   <Link
@@ -139,7 +145,8 @@ class Sidebar extends React.PureComponent {
                     flex
                   >
                     <span>
-                      <GearsIcon />Netzwerk-Admin
+                      <GearsIcon />
+                      Netzwerk-Admin
                     </span>
                   </Link>
                 </RestrictedView>

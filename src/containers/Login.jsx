@@ -94,17 +94,15 @@ const LoginRegisterForm = withFormik({
         .required(),
       password: yup
         .string()
-        .when(
-          [],
-          schema =>
-            confirmation
-              ? schema
-                  .min(7)
-                  .oneOf(
-                    [yup.ref("passwordConfirmation")],
-                    "Die beiden Passwörter müssen übereinstimmen!"
-                  )
-              : schema
+        .when([], schema =>
+          confirmation
+            ? schema
+                .min(7)
+                .oneOf(
+                  [yup.ref("passwordConfirmation")],
+                  "Die beiden Passwörter müssen übereinstimmen!"
+                )
+            : schema
         )
         .required(),
       passwordConfirmation: yup

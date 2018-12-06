@@ -146,16 +146,15 @@ class ProductCategories extends React.PureComponent {
             <JsonLd>
               {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
             </JsonLd>
-            {category &&
-              category.description && (
-                <OverflowCard>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: category.description
-                    }}
-                  />
-                </OverflowCard>
-              )}
+            {category && category.description && (
+              <OverflowCard>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: category.description
+                  }}
+                />
+              </OverflowCard>
+            )}
             <Flex flexWrap="wrap">
               {categoryIds.map(categoryId => (
                 <CategoryItem

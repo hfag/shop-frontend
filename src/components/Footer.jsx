@@ -136,7 +136,8 @@ class Footer extends React.PureComponent {
                             rel="noopener"
                             negative
                           >
-                            Sonnmattweg 6<br />CH 5000 Aarau
+                            Sonnmattweg 6<br />
+                            CH 5000 Aarau
                           </Link>
                         </td>
                       </tr>

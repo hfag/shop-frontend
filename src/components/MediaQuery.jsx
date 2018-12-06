@@ -12,21 +12,21 @@ export default styled.div`
       ? sm
         ? media.minSmall`${b}`
         : md
-          ? media.minMedium`${b}`
-          : lg
-            ? media.minLarge`${b}`
-            : xlg
-              ? media.minXLarge`${b}`
-              : ""
+        ? media.minMedium`${b}`
+        : lg
+        ? media.minLarge`${b}`
+        : xlg
+        ? media.minXLarge`${b}`
+        : ""
       : down
-        ? sm
-          ? media.maxSmall`${b}`
-          : md
-            ? media.maxMedium`${b}`
-            : lg
-              ? media.maxLarge`${b}`
-              : xlg
-                ? media.maxXLarge`${b}`
-                : ""
-        : ""};
+      ? sm
+        ? media.maxSmall`${b}`
+        : md
+        ? media.maxMedium`${b}`
+        : lg
+        ? media.maxLarge`${b}`
+        : xlg
+        ? media.maxXLarge`${b}`
+        : ""
+      : ""};
 `;

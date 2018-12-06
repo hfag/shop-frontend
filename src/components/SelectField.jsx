@@ -48,8 +48,8 @@ class SelectField extends React.PureComponent {
                 {this.props.required === true
                   ? "*"
                   : this.props.required === false
-                    ? "(optional)"
-                    : ""}
+                  ? "(optional)"
+                  : ""}
               </label>
               <Select
                 value={value}

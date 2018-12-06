@@ -269,7 +269,8 @@ class SkuSelection extends React.PureComponent {
                     ) : (
                       <div>
                         <Price>{product.price}</Price>
-                        <br />mit Mengenrabatt
+                        <br />
+                        mit Mengenrabatt
                       </div>
                     )
                   ) : product.discount.reseller ? (
@@ -337,17 +338,16 @@ const mapStateToProps = state => {
     resellerDiscount = getResellerDiscount(state);
 
   return {
-    products: products.map(
-      product =>
-        resellerDiscount[product.id]
-          ? {
-              ...product,
-              discount: {
-                ...product.discount,
-                reseller: resellerDiscount[product.id]
-              }
+    products: products.map(product =>
+      resellerDiscount[product.id]
+        ? {
+            ...product,
+            discount: {
+              ...product.discount,
+              reseller: resellerDiscount[product.id]
             }
-          : product
+          }
+        : product
     ),
     isFetching: isFetchingSimpleProducts(state)
   };

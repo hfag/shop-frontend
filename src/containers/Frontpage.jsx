@@ -134,7 +134,8 @@ class Frontpage extends React.PureComponent {
                                   {new Date(
                                     product.saleEnd * 1000
                                   ).toLocaleDateString()}
-                                </strong>!
+                                </strong>
+                                !
                               </span>
                             ) : (
                               "für kurze Zeit!"

@@ -158,9 +158,9 @@ class ProductItem extends React.PureComponent {
               ) : (
                 <Placeholder text />
               )}
-              {product &&
-                categories &&
-                categories.length > 2 && <span>, ...</span>}
+              {product && categories && categories.length > 2 && (
+                <span>, ...</span>
+              )}
             </div>
           </StyledProduct>
         </Link>

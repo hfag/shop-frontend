@@ -373,7 +373,8 @@ class Product extends React.PureComponent {
           {{
             "@context": "http://schema.org/",
             ...productToJsonLd(product, attachmentsToJsonLd(galleryAttachments))
-          }}}
+          }}
+          }
         </JsonLd>
         <Card>
           <h1 dangerouslySetInnerHTML={{ __html: title }} />
@@ -528,10 +529,10 @@ class Product extends React.PureComponent {
                         discountPrice: resellerDiscount
                           ? (resellerDiscount / 100) * price
                           : flashSale
-                            ? parseFloat(flashSale.salePrice)
-                            : discountRow.qty > 1
-                              ? parseFloat(discountRow.ppu)
-                              : undefined,
+                          ? parseFloat(flashSale.salePrice)
+                          : discountRow.qty > 1
+                          ? parseFloat(discountRow.ppu)
+                          : undefined,
                         unit:
                           selectedAttributes["pa_unit"] &&
                           this.getOptionLabel(
@@ -628,17 +629,19 @@ class Product extends React.PureComponent {
                   ))}
                 </Flex>
                 <Lightbox
-                  images={galleryAttachments.filter(e => e).map(attachment => ({
-                    src: attachment.url || "",
-                    /*caption: attachment.caption,*/
-                    srcSet: Object.values(attachment.sizes)
-                      .sort((a, b) => a.width - b.width)
-                      .map(size => `${size.source_url} ${size.width}w`),
-                    thumbnail:
-                      attachment.sizes &&
-                      attachment.sizes.thumbnail &&
-                      attachment.sizes.thumbnail.source_url
-                  }))}
+                  images={galleryAttachments
+                    .filter(e => e)
+                    .map(attachment => ({
+                      src: attachment.url || "",
+                      /*caption: attachment.caption,*/
+                      srcSet: Object.values(attachment.sizes)
+                        .sort((a, b) => a.width - b.width)
+                        .map(size => `${size.source_url} ${size.width}w`),
+                      thumbnail:
+                        attachment.sizes &&
+                        attachment.sizes.thumbnail &&
+                        attachment.sizes.thumbnail.source_url
+                    }))}
                   isOpen={isLightboxOpen}
                   currentImage={currentLightboxImage}
                   onClickPrev={() =>

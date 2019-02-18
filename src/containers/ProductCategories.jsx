@@ -58,7 +58,7 @@ class ProductCategories extends React.PureComponent {
     this.setState({ active: pathname === url }, () => {
       if (
         (categorySlug !== prevProps.categorySlug ||
-          page !== prevProps.page ||
+          /*page !== prevProps.page ||*/
           (!prevProps.category && category)) &&
         categorySlug &&
         page
@@ -104,6 +104,7 @@ class ProductCategories extends React.PureComponent {
   };
   render = () => {
     const {
+      totalProductCount,
       category,
       categoryIds,
       productIds,
@@ -180,9 +181,9 @@ class ProductCategories extends React.PureComponent {
                   .fill()
                   .map((el, index) => <CategoryItem key={index} id={-1} />)}
             </Flex>
-            {productIds.length !== 0 && (
+            {totalProductCount !== 0 && (
               <Pagination
-                pageCount={Math.ceil(productIds.length / ITEMS_PER_PAGE)}
+                pageCount={Math.ceil(totalProductCount / ITEMS_PER_PAGE)}
                 pageRangeDisplayed={5}
                 marginPagesDisplayed={1}
                 previousLabel={"<"}
@@ -230,6 +231,7 @@ const mapStateToProps = (
           .map(product => product.id)
           .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
       : [],
+    totalProductCount: category ? products.length : 0,
     page,
     productsJsonLd: products.map(product =>
       productToJsonLd(
@@ -271,14 +273,7 @@ const mapDispatchToProps = (
   fetchProducts(categoryId = null, perPage = ITEMS_PER_PAGE, visualize = true) {
     return categoryId && !isNaN(page)
       ? dispatch(
-          fetchProducts(
-            page,
-            page,
-            perPage,
-            visualize,
-            [],
-            [parseInt(categoryId)]
-          )
+          fetchProducts(1, -1, perPage, visualize, [], [parseInt(categoryId)])
         )
       : Promise.resolve();
   }

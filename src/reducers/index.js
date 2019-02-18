@@ -15,6 +15,7 @@ import sales, * as fromSales from "./sales";
 import account, * as fromAccount from "./account";
 import orders, * as fromOrders from "./orders";
 import burgerMenu, * as fromBurgerMenu from "./burger-menu";
+import language, * as fromLanguage from "./language";
 
 /**
  * Checks whether the burger menu is open
@@ -458,6 +459,16 @@ export const getOrdersLastFetched = wrap(
   state => state.orders
 );
 
+/**
+ * Gets the current language
+ * @param {Object} state The current redux state
+ * @returns {string} The current language string
+ */
+export const getLanguage = wrap(
+  fromLanguage.getLanguage,
+  state => state.language
+);
+
 const appReducer = combineReducers({
   router,
   loadingBar,
@@ -473,6 +484,7 @@ const appReducer = combineReducers({
   sales,
   account,
   orders,
+  language,
   isAuthenticated: (state = false, action) => {
     switch (action.type) {
       case "LOGIN_USER":

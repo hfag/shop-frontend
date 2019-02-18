@@ -14,13 +14,13 @@ import {
   getShoppingCartItems,
   getShoppingCartTotal,
   getIsAuthenticated,
-  getAccount
+  getAccount,
+  getLanguage
 } from "../reducers";
 import { borders, shadows } from "../utilities/style";
 import Container from "../components/Container";
 import Flexbar from "../components/Flexbar";
 import Button from "../components/Button";
-import Price from "../components/Price";
 import Triangle from "../components/Triangle";
 import Push from "../components/Push";
 import Circle from "../components/Circle";
@@ -36,6 +36,9 @@ import { toggleBurgerMenu } from "../actions/burger-menu";
 import JsonLd from "../components/JsonLd";
 import { fetchSalesIfNeeded } from "../actions/sales";
 import RestrictedView from "./RestrictedView";
+import GermanIcon from "../../img/locales/de.svg";
+import FrenchIcon from "../../img/locales/fr.svg";
+import { switchLanguage } from "../actions/language";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 const PUBLIC_PATH = process.env.PUBLIC_PATH;
@@ -77,6 +80,17 @@ const UserDropdown = styled(Dropdown)`
   right: 0;
 `;
 
+const LanguageSelecton = styled(Dropdown)`
+  left: -1rem;
+  right: -1rem;
+
+  img {
+    width: 15px;
+    height: 15px;
+    margin-right: 0.5rem;
+  }
+`;
+
 const ShoppingCartList = styled.div`
   width: 100%;
   margin: 0 0 1rem 0;
@@ -110,6 +124,18 @@ const Login = styled.span`
   font-weight: normal;
   white-space: nowrap;
 `;
+
+const LANGUAGES = {
+  de: {
+    label: "Deutsch",
+    url: GermanIcon
+  },
+  fr: {
+    label: "Français",
+    url: FrenchIcon
+  }
+};
+
 /**
  * The page header
  * @returns {Component} The component
@@ -132,7 +158,9 @@ class Header extends React.PureComponent {
       shoppingCartFetching,
       shoppingCartItems,
       shoppingCartTotal,
-      redirect
+      redirect,
+      language,
+      switchLanguage
     } = this.props;
 
     return (
@@ -245,7 +273,6 @@ class Header extends React.PureComponent {
                         </Link>
                       </NavItem>
                     </MediaQuery>
-
                     <MediaQuery lg down>
                       <Flexbar>
                         <NavItem>
@@ -253,7 +280,6 @@ class Header extends React.PureComponent {
                             <MenuIcon size="40" />
                           </Link>
                         </NavItem>
-
                         <NavItem>
                           <Link to="/" title="Homepage">
                             <img src={LogoNegative} alt="Logo" />
@@ -261,7 +287,6 @@ class Header extends React.PureComponent {
                         </NavItem>
                       </Flexbar>
                     </MediaQuery>
-
                     <SearchWrapper>
                       <MediaQuery md up>
                         <Searchbar />
@@ -270,6 +295,50 @@ class Header extends React.PureComponent {
                     <Push left>
                       <MediaQuery md up>
                         <Flexbar>
+                          <NavItem seperator>
+                            <Link
+                              onClick={() => {
+                                this.setState({
+                                  dropdown:
+                                    this.state.dropdown === "language"
+                                      ? false
+                                      : "language"
+                                });
+                              }}
+                              negative
+                              flex
+                            >
+                              <img
+                                width="30"
+                                height="30"
+                                src={LANGUAGES[language].url}
+                              />
+                              <Triangle color="#fff" size="0.5rem" />
+                            </Link>
+                            {this.state.dropdown === "language" && (
+                              <LanguageSelecton>
+                                {Object.keys(LANGUAGES).map(languageKey => (
+                                  <div key={languageKey}>
+                                    <Link
+                                      onClick={() => {
+                                        switchLanguage(languageKey);
+                                        window.location = "/";
+                                      }}
+                                      active={language === languageKey}
+                                      flex
+                                    >
+                                      <img
+                                        width="15"
+                                        height="15"
+                                        src={LANGUAGES[languageKey].url}
+                                      />
+                                      {LANGUAGES[languageKey].label}
+                                    </Link>
+                                  </div>
+                                ))}
+                              </LanguageSelecton>
+                            )}
+                          </NavItem>
                           <NavItem seperator>
                             <Link
                               onClick={() => {
@@ -336,7 +405,7 @@ class Header extends React.PureComponent {
                                     new Promise((resolve, reject) => {
                                       redirect("/warenkorb");
                                       this.setState(
-                                        { showShoppingCartDropdown: false },
+                                        { dropdown: false },
                                         resolve
                                       );
                                     })
@@ -420,6 +489,7 @@ class Header extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
+  language: getLanguage(state),
   shoppingCartFetching: isFetchingShoppingCart(state),
   shoppingCartItems: getShoppingCartItems(state),
   shoppingCartTotal: getShoppingCartTotal(state),
@@ -458,6 +528,14 @@ const mapDispatchToProps = dispatch => ({
    */
   fetchSalesIfNeeded(visualize = false) {
     return dispatch(fetchSalesIfNeeded(visualize));
+  },
+  /**
+   * Switches the language
+   * @param {string} language The new language
+   * @returns {void}
+   */
+  switchLanguage(language) {
+    return dispatch(switchLanguage(language));
   }
 });
 

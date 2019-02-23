@@ -322,7 +322,7 @@ class Header extends React.PureComponent {
                                     <Link
                                       onClick={() => {
                                         switchLanguage(languageKey);
-                                        window.location = "/";
+                                        window.location.href = "/";
                                       }}
                                       active={language === languageKey}
                                       flex

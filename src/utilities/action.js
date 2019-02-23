@@ -133,7 +133,6 @@ export const createFetchItemPageThunk = (
     method: "GET"
   }).then(({ json: items, response }) => {
     const total = parseInt(response.headers.get("x-wp-total"));
-
     const mappedItems = items.map(mapItem);
 
     if (

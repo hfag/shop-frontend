@@ -13,12 +13,18 @@ import thunkMiddleware from "redux-thunk";
 import { routerMiddleware } from "react-router-redux";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 import throttle from "lodash/throttle";
+import { addLocaleData } from "react-intl";
+import localeDe from "react-intl/locale-data/de";
+import localeFr from "react-intl/locale-data/fr";
 
 import "./set-yup-locale";
 import App from "./App";
 import reducers from "./reducers";
 import { loadState, saveState } from "./local-storage";
 import "./scss/global.scss";
+
+//Set languages
+addLocaleData([...localeDe, ...localeFr]);
 
 //Load state from local storage and create history object
 const presistedState = { ...window.__INITIAL_DATA__, ...loadState() };

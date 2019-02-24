@@ -5,7 +5,7 @@
  * @returns {string} The new language
  */
 const languageReducer = (
-  state = typeof window !== undefined
+  state = typeof window !== "undefined"
     ? localStorage.getItem("language") || "de"
     : "de",
   action

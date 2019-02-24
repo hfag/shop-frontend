@@ -46,7 +46,7 @@ const MESSAGES = {
  */
 const App = ({ history, store }) => {
   const lang =
-    typeof window !== undefined
+    typeof window !== "undefined"
       ? localStorage.getItem("language") || "de"
       : "de";
 

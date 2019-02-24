@@ -45,7 +45,10 @@ const MESSAGES = {
  * @returns {Component} The component
  */
 const App = ({ history, store }) => {
-  const lang = localStorage.getItem("language") || "de";
+  const lang =
+    typeof window !== undefined
+      ? localStorage.getItem("language") || "de"
+      : "de";
 
   return (
     <Provider store={store}>

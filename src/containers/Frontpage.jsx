@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
 import ProductCategories from "containers/ProductCategories";
 import FaPercent from "react-icons/lib/fa/percent";
+import { FormattedMessage } from "react-intl";
 
 import Link from "../components/Link";
 import { getSales, getProducts, getStickyPosts } from "../reducers";
@@ -150,7 +151,12 @@ class Frontpage extends React.PureComponent {
             </SalesFlex>
           </div>
         )}
-        <h2>Kategorien</h2>
+        <h2>
+          <FormattedMessage
+            id="Frontpage.titles.categories"
+            defaultMessage="Kategorien"
+          />
+        </h2>
         <ProductCategories />
       </div>
     );

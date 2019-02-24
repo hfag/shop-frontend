@@ -1,0 +1,27 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "babel-plugin-styled-components",
+    ["@babel/plugin-proposal-class-properties", { "loose": false }],
+    "@babel/plugin-proposal-object-rest-spread",
+    "syntax-dynamic-import",
+    "universal-import",
+    [
+      "react-intl",
+      {
+        "messagesDir": "./src/messages/"
+      }
+    ]
+  ]
+}

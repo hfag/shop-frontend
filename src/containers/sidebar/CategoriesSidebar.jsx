@@ -15,7 +15,7 @@ import { fetchAllProductCategoriesIfNeeded } from "../../actions/product/categor
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
 
-const ITEMS_PER_PAGE = 30;
+const ITEMS_PER_PAGE = 60;
 
 /**
  * Renders all product categories

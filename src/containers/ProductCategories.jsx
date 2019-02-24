@@ -23,7 +23,7 @@ import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 import Card from "../components/Card";
 import OverflowCard from "../components/OverflowCard";
 
-const ITEMS_PER_PAGE = 30;
+const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 /**

@@ -139,7 +139,9 @@ const LoginRegisterForm = withFormik({
             setErrors({ password: "Das Passwort stimmt nicht!" });
             break;
           default:
-            setErrors({ password: "Es ist ein unbekannter Fehler aufgetreten!" });
+            setErrors({
+              password: "Es ist ein unbekannter Fehler aufgetreten!"
+            });
             break;
         }
 

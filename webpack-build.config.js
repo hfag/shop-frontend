@@ -40,7 +40,7 @@ module.exports = {
     index: ["@babel/polyfill", path.join(context, "src/index.jsx")]
   },
 
-  devtool: "none",
+  devtool: "nosources-source-map",
 
   output: {
     path: path.join(context, "dist/client-build/"),

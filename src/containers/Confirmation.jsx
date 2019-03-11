@@ -1,6 +1,5 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import queryString from "query-string";
 
 import Card from "../components/Card";
 import {

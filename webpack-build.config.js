@@ -62,12 +62,11 @@ module.exports = {
             comments: false
           },
           compress: {
-            unsafe_comps: true,
+            unsafe: false,
             properties: true,
             keep_fargs: false,
             pure_getters: true,
             collapse_vars: true,
-            unsafe: true,
             warnings: false,
             sequences: true,
             dead_code: true,

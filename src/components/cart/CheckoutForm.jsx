@@ -286,8 +286,8 @@ const CheckoutForm = withFormik({
   validationSchema: ({ countries }) => {
     const states = [].concat.apply(
       [],
-      Object.values(countries).map(
-        country => (country.states ? Object.keys(country.states) : [])
+      Object.values(countries).map(country =>
+        country.states ? Object.keys(country.states) : []
       )
     );
 
@@ -363,11 +363,11 @@ const CheckoutForm = withFormik({
       billing_state: yup
         .string()
         .oneOf(states)
-        .notRequired(),
+        .required(),
       shipping_state: yup
         .string()
         .oneOf(states)
-        .notRequired(),
+        .required(),
 
       billing_phone: yup.string().required(),
       billing_email: yup

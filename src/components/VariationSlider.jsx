@@ -11,10 +11,14 @@ const Slider = styled.div`
     overflow-x: scroll;
   }
 `;
-const Slide = styled(Box)`
-  flex-shrink: 0;
 
-  opacity: ${({ active = false }) => (active ? 1 : 0.5)};
+const StyledBox = styled(Box)`
+  flex-shrink: 0;
+`;
+
+const Slide = styled.div`
+  width: 100%;
+  opacity: ${({ isSlideActive = false }) => (isSlideActive ? 1 : 0.5)};
 
   cursor: pointer;
 
@@ -268,27 +272,30 @@ class VariationSlider extends React.PureComponent {
           {Object.keys(imageMap)
             .map(i => parseInt(i))
             .map(imageId => (
-              <Slide
+              <Box
                 key={imageId}
                 width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
                 pr={2}
                 pb={2}
-                active={
-                  activeImageIds.length > 1 &&
-                  activeImageIds.length === Object.keys(imageMap).length
-                    ? false
-                    : activeImageIds.includes(imageId)
-                }
-                ref={ref =>
-                  activeImageIds.includes(imageId) &&
-                  activeImageIds.length === 1
-                    ? (this.activeSlide = ref)
-                    : ""
-                }
-                onClick={this.onSelectImage(imageId, imageMap[imageId])}
               >
-                <Thumbnail id={imageId} />
-              </Slide>
+                <Slide
+                  isSlideActive={
+                    activeImageIds.length > 1 &&
+                    activeImageIds.length === Object.keys(imageMap).length
+                      ? false
+                      : activeImageIds.includes(imageId)
+                  }
+                  ref={ref =>
+                    activeImageIds.includes(imageId) &&
+                    activeImageIds.length === 1
+                      ? (this.activeSlide = ref)
+                      : ""
+                  }
+                  onClick={this.onSelectImage(imageId, imageMap[imageId])}
+                >
+                  <Thumbnail id={imageId} />
+                </Slide>
+              </Box>
             ))}
         </Flex>
         {!showAll && (

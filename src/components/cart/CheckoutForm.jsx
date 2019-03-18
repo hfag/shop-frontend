@@ -401,10 +401,11 @@ const CheckoutForm = withFormik({
   ) => {
     const shippingAddress = {},
       billingAddress = {},
-      comments = values["order_comments"];
+      comments = values["order_comments"],
+      shipToDifferentAddress = values["ship_to_different_address"];
 
     Object.keys(values).forEach(key => {
-      if (key.startsWith("shipping_")) {
+      if (key.startsWith("shipping_") && shipToDifferentAddress) {
         shippingAddress[key.replace("shipping_", "")] = values[key];
       } else if (key.startsWith("billing_")) {
         billingAddress[key.replace("billing_", "")] = values[key];

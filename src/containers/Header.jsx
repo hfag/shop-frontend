@@ -138,6 +138,7 @@ class Header extends React.PureComponent {
     return (
       <HeaderWrapper>
         <Helmet>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
           <meta charSet="utf-8" />
           <meta
             name="viewport"

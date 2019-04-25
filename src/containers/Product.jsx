@@ -28,7 +28,8 @@ import {
   getResellerDiscountByProductId,
   getAttachments,
   getAttachmentById,
-  getSales
+  getSales,
+  getLanguageFetchString
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
@@ -757,6 +758,7 @@ const mapStateToProps = (
       : [];
 
   return {
+    languageFetchString: getLanguageFetchString(state),
     productSlug,
     product: product && !product._isFetching ? product : {},
     categories:
@@ -791,19 +793,23 @@ const mapDispatchToProps = (
   /**
    * Fetches all product categories
    * @param {number} perPage How many items per page
+   * @param {string} language The language string
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchAllProductCategoriesIfNeeded(perPage = 30, visualize = true) {
-    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
+  fetchAllProductCategoriesIfNeeded(perPage = 30, language, visualize = true) {
+    return dispatch(
+      fetchAllProductCategoriesIfNeeded(perPage, language, visualize)
+    );
   },
   /**
    * Fetches the product
+   * @param {string} language The language string
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchProductIfNeeded(visualize = true) {
-    return dispatch(fetchProductIfNeeded(productSlug, visualize));
+  fetchProductIfNeeded(language, visualize = true) {
+    return dispatch(fetchProductIfNeeded(productSlug, language, visualize));
   },
   /**
    * Updates the shopping cart
@@ -811,6 +817,7 @@ const mapDispatchToProps = (
    * @param {number|string} [variationId] The variation id
    * @param {Object} [variation] The variation attributes
    * @param {number} [quantity=1] The quantity
+   * @param {string} language The language string
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {function} The redux thunk
    */
@@ -819,6 +826,7 @@ const mapDispatchToProps = (
     variationId,
     variation,
     quantity = 1,
+    language,
     visualize = true
   ) {
     return dispatch(
@@ -827,6 +835,7 @@ const mapDispatchToProps = (
         variationId,
         variation,
         quantity,
+        language,
         visualize
       )
     );
@@ -837,6 +846,31 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   ...ownProps,
   ...mapStateToProps,
   ...mapDispatchToProps,
+  /**
+   * Fetches all product categories
+   * @param {number} perPage How many items per page
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchAllProductCategoriesIfNeeded(perPage = 30, visualize = true) {
+    return mapDispatchToProps.fetchAllProductCategoriesIfNeeded(
+      perPage,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
+  },
+  /**
+   * Fetches the product
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchProductIfNeeded(visualize = true) {
+    return mapDispatchToProps.fetchProductIfNeeded(
+      productSlug,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
+  },
   /**
    * Updates the shopping cart
    * @param {number|string} [variationId] The variation id
@@ -852,6 +886,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
           variationId,
           variation,
           quantity,
+          mapStateToProps.languageFetchString,
           visualize
         )
       : Promise.resolve();

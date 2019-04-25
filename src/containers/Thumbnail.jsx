@@ -95,15 +95,35 @@ const mapStateToProps = (state, { id }) => ({
 const mapDispatchToProps = (dispatch, { id }) => ({
   /**
    * Fetches a thumbnail
+   * @param {string} language The language string
+   * @param {boolean} visualize Whether to visualize the progress
+   * @returns {Promise} The fetch promise
+   */
+  fetchThumbnail(language, visualize = true) {
+    return dispatch(fetchAttachment(id, language, visualize));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches a thumbnail
    * @param {boolean} visualize Whether to visualize the progress
    * @returns {Promise} The fetch promise
    */
   fetchThumbnail(visualize = true) {
-    return dispatch(fetchAttachment(id, visualize));
+    return mapDispatchToProps.fetchAttachment(
+      id,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Thumbnail);

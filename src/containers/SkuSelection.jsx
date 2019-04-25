@@ -15,7 +15,8 @@ import {
 import {
   getSimpleProducts,
   getResellerDiscount,
-  isFetchingSimpleProducts
+  isFetchingSimpleProducts,
+  getLanguageFetchString
 } from "../reducers";
 import { colors } from "../utilities/style";
 import Price from "../components/Price";
@@ -338,6 +339,7 @@ const mapStateToProps = state => {
     resellerDiscount = getResellerDiscount(state);
 
   return {
+    languageFetchString: getLanguageFetchString(state),
     products: products.map(product =>
       resellerDiscount[product.id]
         ? {
@@ -375,6 +377,41 @@ const mapDispatchToProps = dispatch => ({
    * @param {number|string} [variationId] The variation id
    * @param {Object} [variation] The variation attributes
    * @param {number} [quantity=1] The quantity
+   * @param {string} language The language string
+   * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
+   * @returns {function} The redux thunk
+   */
+  addToShoppingCart(
+    productId,
+    variationId,
+    variation,
+    quantity = 1,
+    language,
+    visualize = true
+  ) {
+    return dispatch(
+      addShoppingCartItem(
+        productId,
+        variationId,
+        variation,
+        quantity,
+        language,
+        visualize
+      )
+    );
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Updates the shopping cart
+   * @param {number|string} productId The product id
+   * @param {number|string} [variationId] The variation id
+   * @param {Object} [variation] The variation attributes
+   * @param {number} [quantity=1] The quantity
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {function} The redux thunk
    */
@@ -385,19 +422,19 @@ const mapDispatchToProps = dispatch => ({
     quantity = 1,
     visualize = true
   ) {
-    return dispatch(
-      addShoppingCartItem(
-        productId,
-        variationId,
-        variation,
-        quantity,
-        visualize
-      )
+    return mapDispatchToProps.addShoppingCartItem(
+      productId,
+      variationId,
+      variation,
+      quantity,
+      mapStateToProps.languageFetchString,
+      visualize
     );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(SkuSelection);

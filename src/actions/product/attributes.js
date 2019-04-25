@@ -1,10 +1,6 @@
 import {
-  createFetchAction,
-  createFetchSingleItemAction,
-  createFetchSingleItemThunk,
   createFetchItemsAction,
-  createFetchItemsThunk,
-  createFetchItemPageAction
+  createFetchItemsThunk
 } from "utilities/action";
 
 const itemName = "productAttribute";
@@ -48,12 +44,14 @@ export const fetchAttributesAction = createFetchItemsAction(
 
 /**
  * Fetches a single item
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {number} productSlug The product slug
  * @returns {function}
  */
 export const fetchProductAttributes = createFetchItemsThunk(
   fetchAttributesAction,
-  slug => `/wp-json/hfag/product-attributes?productSlug=${slug}`,
+  (language, slug) =>
+    `${language}/wp-json/hfag/product-attributes?productSlug=${slug}`,
   mapItem
 );

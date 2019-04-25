@@ -15,6 +15,7 @@ import sales, * as fromSales from "./sales";
 import account, * as fromAccount from "./account";
 import orders, * as fromOrders from "./orders";
 import burgerMenu, * as fromBurgerMenu from "./burger-menu";
+import { getLanguageFromPathname } from "../utilities/i18n";
 
 /**
  * Checks whether the burger menu is open
@@ -457,6 +458,26 @@ export const getOrdersLastFetched = wrap(
   fromOrders.getOrdersLastFetched,
   state => state.orders
 );
+
+/**
+ * Gets the current language based on the router location
+ * @param {Object} state The redux state
+ * @returns {string} The language key
+ */
+export const getLanguage = state => {
+  return getLanguageFromPathname(state.router.location.pathname);
+};
+
+/**
+ * Gets the current language based on the router location
+ * @param {Object} state The redux state
+ * @returns {string} The language key
+ */
+export const getLanguageFetchString = state => {
+  const language = getLanguage(state);
+  //return "" i.e. no prefix for backwards compat
+  return language === "de" ? "" : "/" + language;
+};
 
 const appReducer = combineReducers({
   router,

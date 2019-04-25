@@ -126,14 +126,15 @@ const fetchItemAction = createFetchSingleItemAction(itemName);
 /**
  * Fetches a single item
  * @param {number} slug The slug of the requested item
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {function}
  */
 const fetchProduct = createFetchSingleItemThunk(
   fetchItemAction,
-  slug => `/wp-json/hfag/product?productSlug=${slug}`,
+  (slug, language) => `${language}/wp-json/hfag/product?productSlug=${slug}`,
   mapItem,
-  (dispatch, response, item) => {
+  (dispatch, response, item, language) => {
     const promises = [];
     if (item.variations && item.product && item.product.id) {
       dispatch(
@@ -160,7 +161,7 @@ const fetchProduct = createFetchSingleItemThunk(
 
       promises.push(
         dispatch(
-          fetchAttachments(1, -1, 100, true, [
+          fetchAttachments(1, -1, 100, language, true, [
             item.product.featured_media,
             ...item.product.galleryImageIds
           ])
@@ -210,17 +211,18 @@ const shouldFetchProduct = (slug, state) => {
 /**
  * Fetches a product if needed
  * @param {string} slug The product slug
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {Promise} The fetch product
  */
-export const fetchProductIfNeeded = (slug, visualize) => (
+export const fetchProductIfNeeded = (slug, language, visualize) => (
   dispatch,
   getState
 ) => {
   const state = getState(),
     shouldFetch = shouldFetchProduct(slug, state);
   return shouldFetch
-    ? fetchProduct(slug, visualize)(dispatch, state)
+    ? fetchProduct(slug, language, visualize)(dispatch, state)
     : Promise.resolve();
 };
 
@@ -237,12 +239,14 @@ const fetchItemPageAction = createFetchItemPageAction(itemName);
 /**
  * Fetches all items
  * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @return {function}
  */
 export const fetchAllProducts = createFetchAllItemsThunk(
   fetchItemPageAction,
-  (page, perPage) => `/wp-json/wp/v2/product?page=${page}&per_page=${perPage}`,
+  (page, perPage, language) =>
+    `${language}/wp-json/wp/v2/product?page=${page}&per_page=${perPage}`,
   mapItem
 );
 
@@ -270,6 +274,7 @@ export const fetchItemsAction = createFetchItemsAction(
  * @param {number} page The first page to fetch
  * @param {number} pageTo The last page to fetch, -1 for all
  * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {array} itemIds Only the specified product ids will be fetched
  * @param {array} categoryIds If specified only items of the given categories will be fetched
@@ -282,12 +287,13 @@ export const fetchProducts = createFetchItemPageThunk(
   (
     page,
     perPage,
+    language,
     itemIds = [],
     categoryIds = [],
     order = "asc",
     orderby = "menu_order"
   ) =>
-    `/wp-json/wp/v2/product?page=${page}&per_page=${perPage}${
+    `${language}/wp-json/wp/v2/product?page=${page}&per_page=${perPage}${
       itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
     }${
       categoryIds.length > 0
@@ -331,13 +337,15 @@ const fetchVariationsAction = createFetchItemsAction(
 
 /**
  * Fetches all product variations for one product
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {array} productSlug The product slug these variations are related to
  * @return {function}
  */
 export const fetchVariations = createFetchItemsThunk(
   fetchVariationsAction,
-  productSlug => `/wp-json/hfag/product-variations?productSlug=${productSlug}`,
+  (language, productSlug) =>
+    `${language}/wp-json/hfag/product-variations?productSlug=${productSlug}`,
   mapVariation,
   (dispatch, items) => {
     dispatch(

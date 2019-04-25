@@ -44,6 +44,7 @@ const mapStateToProps = (
     }
   }
 ) => ({
+  languageFetchString: getLanguageFetchString(state),
   page: getPageBySlug(state, pageSlug)
 });
 const mapDispatchToProps = (
@@ -56,14 +57,31 @@ const mapDispatchToProps = (
 ) => ({
   /**
    * Fetches the current post
+   * @param {string} language The language string
+   * @returns {Promise} The fetch promise
+   */
+  fetchPageIfNeeded(language) {
+    return dispatch(fetchPageIfNeeded(language, pageSlug));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the current post
    * @returns {Promise} The fetch promise
    */
   fetchPageIfNeeded() {
-    return dispatch(fetchPageIfNeeded(pageSlug));
+    return mapDispatchToProps.fetchPageIfNeeded(
+      mapStateToProps.languageFetchString
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Page);

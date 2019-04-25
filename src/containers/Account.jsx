@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import { getCountries } from "../reducers";
+import { getCountries, getLanguageFetchString } from "../reducers";
 import { fetchCountriesIfNeeded } from "../actions/countries";
 import { getIsAuthenticated, getAccount } from "../reducers";
 import Container from "../components/Container";
@@ -186,6 +186,7 @@ class Account extends React.PureComponent {
 const mapStateToProps = state => {
   const account = getAccount(state);
   return {
+    languageFetchString: getLanguageFetchString(state),
     isAuthenticated: getIsAuthenticated(state),
     accountDetails: {
       firstName: account ? account.firstName : "",
@@ -208,11 +209,90 @@ const mapDispatchToProps = dispatch => ({
   },
   /**
    * Fetches all countries if needed
+   * @param {string} language The language string
+   * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchCountriesIfNeeded(language, visualize = true) {
+    return dispatch(fetchCountriesIfNeeded(language, visualize));
+  },
+  /**
+   * Fetches the user account
+   * @param {string} language The language string
+   * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchAccount(language, visualize = true) {
+    return dispatch(fetchAccount(language, visualize));
+  },
+  /**
+   * Fetches the user's orders
+   * @param {string} language The language string
+   * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchOrders(language, visualize = true) {
+    return dispatch(fetchOrders(language, visualize));
+  },
+  /**
+   * Updates the user's account
+   * @param {string} firstName The user's new first name
+   * @param {string} lastName The user's new last name
+   * @param {string} email The user's new email
+   * @param {string} password The user's current password
+   * @param {string} newPassword The user's new password
+   * @param {string} language The language string
+   * @param {boolean} [visualize=false] Whether to visualize the progress
+   * @returns {Promise} The fetch promise
+   */
+  updateAccount(
+    firstName,
+    lastName,
+    email,
+    password,
+    newPassword,
+    language,
+    visualize = false
+  ) {
+    return dispatch(
+      updateAccount(
+        firstName,
+        lastName,
+        email,
+        password,
+        newPassword,
+        language,
+        visualize
+      )
+    );
+  },
+  /**
+   * Updates the user's address
+   * @param {string} language The language string
+   * @param {Object} address The address values
+   * @param {string} type The address type (billing, shipping)
+   * @param {boolean} [visualize=false] Whether to visualize the progress
+   * @returns {Promise} The fetch promise
+   */
+  updateAddress(language, address, type, visualize = false) {
+    return dispatch(updateAddress(address, type, language, visualize));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches all countries if needed
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
   fetchCountriesIfNeeded(visualize = true) {
-    return dispatch(fetchCountriesIfNeeded(visualize));
+    return mapDispatchToProps.fetchCountriesIfNeeded(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   },
   /**
    * Fetches the user account
@@ -220,7 +300,10 @@ const mapDispatchToProps = dispatch => ({
    * @returns {Promise} The fetch promise
    */
   fetchAccount(visualize = true) {
-    return dispatch(fetchAccount(visualize));
+    return mapDispatchToProps.fetchAccount(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   },
   /**
    * Fetches the user's orders
@@ -228,7 +311,10 @@ const mapDispatchToProps = dispatch => ({
    * @returns {Promise} The fetch promise
    */
   fetchOrders(visualize = true) {
-    return dispatch(fetchOrders(visualize));
+    return mapDispatchToProps.fetchOrders(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   },
   /**
    * Updates the user's account
@@ -248,15 +334,14 @@ const mapDispatchToProps = dispatch => ({
     newPassword,
     visualize = false
   ) {
-    return dispatch(
-      updateAccount(
-        firstName,
-        lastName,
-        email,
-        password,
-        newPassword,
-        visualize
-      )
+    return mapDispatchToProps.updateAccount(
+      firstName,
+      lastName,
+      email,
+      password,
+      newPassword,
+      mapStateToProps.languageFetchString,
+      visualize
     );
   },
   /**
@@ -267,11 +352,17 @@ const mapDispatchToProps = dispatch => ({
    * @returns {Promise} The fetch promise
    */
   updateAddress(address, type, visualize = false) {
-    return dispatch(updateAddress(address, type, visualize));
+    return mapDispatchToProps.updateAddress(
+      address,
+      type,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Account);

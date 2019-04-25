@@ -9,10 +9,13 @@ import Thumbnail from "../containers/Thumbnail";
 import Placeholder from "../components/Placeholder";
 import Link from "../components/Link";
 import { fetchProductCategory } from "../actions/product/categories";
-import { getProductCategoryById } from "../reducers";
+import {
+  getProductCategoryById,
+  getLanguageFetchString,
+  getLanguage
+} from "../reducers";
 import { colors, borders, shadows } from "../utilities/style";
 import { getUrlPartByKeyAndLanguage } from "../utilities/urls";
-import { getLanguageFromLocation } from "../utilities/i18n";
 
 const StyledCategory = styled.div`
   background-color: #fff;
@@ -78,11 +81,17 @@ const Subtitle = styled.div`
  */
 
 const CategoryItem = React.memo(
-  ({ id: categoryId, category, parents = [], dispatch, location, match }) => {
+  ({
+    id: categoryId,
+    category,
+    parents = [],
+    dispatch,
+    language,
+    languageFetchKey
+  }) => {
     const url = useMemo(
       () => {
         if (category && category.slug) {
-          const language = getLanguageFromLocation(location);
           const base = getUrlPartByKeyAndLanguage("productCategory", language);
           const parentString =
             parents.length > 0 ? parents.join("/") + "/" : "";
@@ -92,16 +101,16 @@ const CategoryItem = React.memo(
 
         return "";
       },
-      [category, parents, location]
+      [category, parents, language]
     );
 
     useEffect(
       () => {
         if (categoryId && categoryId > 0 && !category) {
-          dispatch(fetchProductCategory(categoryId));
+          dispatch(fetchProductCategory(categoryId, languageFetchKey));
         }
       },
-      [categoryId]
+      [categoryId, languageFetchKey]
     );
 
     //don't show empty categories
@@ -139,13 +148,17 @@ const mapStateToProps = (state, { id }) => {
 
   return category
     ? {
+        language: getLanguage(state),
+        languageFetchKey: getLanguageFetchString(state),
         category,
         parent: category.parent
           ? getProductCategoryById(state, category.parent)
           : undefined
       }
-    : {};
+    : {
+        language: getLanguage(state),
+        languageFetchKey: getLanguageFetchString(state)
+      };
 };
 
-const ConnectedCategoryItem = connect(mapStateToProps)(CategoryItem);
-export default withRouter(ConnectedCategoryItem);
+export default connect(mapStateToProps)(CategoryItem);

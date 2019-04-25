@@ -1,10 +1,8 @@
 import {
-  createFetchAction,
   createFetchSingleItemAction,
   createFetchSingleItemThunk,
   createFetchItemsAction,
   createFetchAllItemsThunk,
-  createFetchItemPageThunk,
   createFetchItemPageAction
 } from "utilities/action";
 import {
@@ -79,11 +77,13 @@ const fetchItemAction = createFetchSingleItemAction(itemName);
 /**
  * Fetches a single item
  * @param {number} itemId The id of the requested item
+ * @param {string} language The language string
+ * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function}
  */
 export const fetchProductCategory = createFetchSingleItemThunk(
   fetchItemAction,
-  id => `/wp-json/wp/v2/product_cat/${id}`,
+  (id, language) => `${language}/wp-json/wp/v2/product_cat/${id}`,
   mapItem
 );
 
@@ -100,13 +100,14 @@ const fetchItemsAction = createFetchItemsAction(itemName);
 /**
  * Fetches all items
  * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
 const fetchAllProductCategories = createFetchAllItemsThunk(
   fetchItemsAction,
-  (page, perPage) =>
-    `/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}`,
+  (page, perPage, language) =>
+    `${language}/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}`,
   mapItem,
   afterCategoryFetch
 );
@@ -123,16 +124,18 @@ const shouldFetchAllProductCategories = () => (dispatch, state) =>
 /**
  * Fetches all items if needed
  * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const fetchAllProductCategoriesIfNeeded = (perPage, visualize) => (
-  dispatch,
-  getState
-) => {
+export const fetchAllProductCategoriesIfNeeded = (
+  perPage,
+  language,
+  visualize
+) => (dispatch, getState) => {
   const state = getState();
   return shouldFetchAllProductCategories()(dispatch, state)
-    ? fetchAllProductCategories(perPage, visualize)(dispatch, state)
+    ? fetchAllProductCategories(perPage, language, visualize)(dispatch, state)
     : Promise.resolve();
 };
 
@@ -150,16 +153,18 @@ const fetchItemPageAction = createFetchItemPageAction(itemName, "itemIds");
 /**
  * Fetches specified items
  * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {array} itemIds The item ids to fetch
  * @return {function} The redux thunk
  */
-const fetchProductCategories = createFetchAllItemsThunk(
+/*const fetchProductCategories = createFetchAllItemsThunk(
   fetchItemPageAction,
-  (page, perPage, itemIds = []) =>
-    `/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}${
+  (page, perPage, language, itemIds = []) =>
+    `${language}/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}${
       itemIds.length > 0 ? `&include[]=${itemIds.join("&include[]=")}` : ""
     }`,
   mapItem,
   afterCategoryFetch
 );
+*/

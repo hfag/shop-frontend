@@ -6,7 +6,7 @@ import "isomorphic-fetch";
 //react
 import React from "react";
 import ReactDOM from "react-dom";
-import createHistory from "history/createBrowserHistory";
+import { createBrowserHistory as createHistory } from "history";
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";

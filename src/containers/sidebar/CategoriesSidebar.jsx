@@ -11,7 +11,6 @@ import { FaChevronDown as ChevronDown } from "react-icons/fa";
 
 import CategoryItem from "../../containers/sidebar/CategoryItem";
 import Link from "../../components/Link";
-import { fetchAllProductCategoriesIfNeeded } from "../../actions/product/categories";
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
 
@@ -56,19 +55,6 @@ const CategoriesSidebar = React.memo(
     const newParents = useMemo(
       () => (categorySlug ? [...parents, categorySlug] : []),
       [categorySlug, parents]
-    );
-
-    useEffect(
-      () => {
-        //load data
-        fetchAllProductCategoriesIfNeeded();
-
-        /*if (!active || !category || !categoryId) {
-          return;
-        }
-        fetchProducts(categoryId);*/
-      },
-      [categoryId]
     );
 
     return (
@@ -154,74 +140,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch,
-  {
-    match: {
-      params: { categorySlug, page = 1 }
-    }
-  }
-) => ({
-  dispatch,
-  /**
-   * Fetches all product catrgories
-   * @param {number} perPage The amount of items per page
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchAllProductCategoriesIfNeeded(
-    perPage = ITEMS_PER_PAGE,
-    visualize = true
-  ) {
-    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
-  },
-  /**
-   * Fetches the matching products
-   * @param {number} [categoryId=null] The category id
-   * @param {number} perPage The amount of products per page
-   * @param {visualize} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProducts(categoryId = null, perPage = ITEMS_PER_PAGE, visualize = true) {
-    return categoryId && !isNaN(page)
-      ? dispatch(
-          fetchProducts(
-            page,
-            page,
-            perPage,
-            visualize,
-            [],
-            [parseInt(categoryId)]
-          )
-        )
-      : Promise.resolve();
-  }
-});
-
-const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
-  ...ownProps,
-  ...mapStateToProps,
-  ...mapDispatchToProps,
-  /**
-   * Fetches the matching products
-   * @param {number} perPage The amount of products per page
-   * @param {visualize} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProducts(perPage = ITEMS_PER_PAGE, visualize = true) {
-    const page = parseInt(ownProps.match.params.page);
-    const categoryId = mapStateToProps.category
-      ? mapStateToProps.category.id
-      : null;
-    return mapDispatchToProps.fetchProducts(categoryId, perPage, visualize);
-  }
-});
-
-const ConnectedSidebar = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(CategoriesSidebar);
+const ConnectedSidebar = connect(mapStateToProps)(CategoriesSidebar);
 
 const RoutedSidebar = withRouter(ConnectedSidebar);
 

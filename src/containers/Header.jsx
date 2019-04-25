@@ -13,7 +13,8 @@ import {
   getShoppingCartItems,
   getShoppingCartTotal,
   getIsAuthenticated,
-  getAccount
+  getAccount,
+  getLanguageFetchString
 } from "../reducers";
 import Container from "../components/Container";
 import Flexbar from "../components/Flexbar";
@@ -245,6 +246,7 @@ const Header = React.memo(
 );
 
 const mapStateToProps = state => ({
+  languageFetchString: getLanguageFetchString(state),
   shoppingCartFetching: isFetchingShoppingCart(state),
   shoppingCartItems: getShoppingCartItems(state),
   shoppingCartTotal: getShoppingCartTotal(state),
@@ -262,11 +264,12 @@ const mapDispatchToProps = dispatch => ({
   },
   /**
    * Fetches the shopping cart
+   * @param {string} language The language string
    * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchShoppingCartIfNeeded(visualize = false) {
-    return dispatch(fetchShoppingCartIfNeeded());
+  fetchShoppingCartIfNeeded(language, visualize = false) {
+    return dispatch(fetchShoppingCartIfNeeded(language, visualize));
   },
   /**
    * Redirects the client to a url
@@ -278,15 +281,45 @@ const mapDispatchToProps = dispatch => ({
   },
   /**
    * Fetches all sales if needed
+   * @param {string} language The language string
+   * @param {boolean} visualize Whether to visualize the progress
+   * @returns {Promise} The fetch promise
+   */
+  fetchSalesIfNeeded(language, visualize = false) {
+    return dispatch(fetchSalesIfNeeded(language, visualize));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the shopping cart
+   * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchShoppingCartIfNeeded(visualize = false) {
+    return mapDispatchToProps.fetchShoppingCartIfNeeded(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
+  },
+  /**
+   * Fetches all sales if needed
    * @param {boolean} visualize Whether to visualize the progress
    * @returns {Promise} The fetch promise
    */
   fetchSalesIfNeeded(visualize = false) {
-    return dispatch(fetchSalesIfNeeded(visualize));
+    return mapDispatchToProps.fetchSalesIfNeeded(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Header);

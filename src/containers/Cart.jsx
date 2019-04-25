@@ -17,7 +17,8 @@ import {
   getShoppingCartFees,
   getShoppingCartShipping,
   getCountries,
-  getAccount
+  getAccount,
+  getLanguageFetchString
 } from "../reducers";
 import CartForm from "../components/cart/CartForm";
 import CheckoutForm from "../components/cart/CheckoutForm";
@@ -136,6 +137,7 @@ const mapStateToProps = state => {
   const account = getAccount(state);
 
   return {
+    languageFetchString: getLanguageFetchString(state),
     isFetching: isFetchingShoppingCart(state),
     items: getShoppingCartItems(state),
     total: getShoppingCartTotal(state),
@@ -164,11 +166,68 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
   /**
    * Fetches the shopping cart
+   * @param {string} language The language string
+   * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchShoppingCartIfNeeded(language, visualize = false) {
+    return dispatch(fetchShoppingCartIfNeeded(language, visualize));
+  },
+  /**
+   * Updates the shopping cart
+   * @param {Array<Object>} items All cart items
+   * @param {string} language The language string
+   * @param {boolean} visualize Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  updateShoppingCartItem(items, language, visualize = false) {
+    return dispatch(updateShoppingCartItem(items, language, visualize));
+  },
+  /**
+   * Submits an order
+   * @param {string} language The language string
+   * @param {Object} shippingAddress The shipping address
+   * @param {Object} billingAddress All billing address
+   * @param {string} [comments] Optional order comments
+   * @param {boolean} visualize Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  submitOrder(language, shippingAddress, billingAddress, comments, visualize) {
+    return dispatch(
+      submitOrder(
+        shippingAddress,
+        billingAddress,
+        comments,
+        language,
+        visualize
+      )
+    );
+  },
+  /**
+   * Fetches all countries if needed
+   * @param {string} language The language string
+   * @param {boolean} [visualize] Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchCountriesIfNeeded(language, visualize = false) {
+    return dispatch(fetchCountriesIfNeeded(language, visualize));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the shopping cart
    * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
   fetchShoppingCartIfNeeded(visualize = false) {
-    return dispatch(fetchShoppingCartIfNeeded(visualize));
+    return mapDispatchToProps.fetchShoppingCartIfNeeded(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   },
   /**
    * Updates the shopping cart
@@ -177,17 +236,28 @@ const mapDispatchToProps = dispatch => ({
    * @returns {Promise} The fetch promise
    */
   updateShoppingCartItem(items, visualize = false) {
-    return dispatch(updateShoppingCartItem(items, visualize));
+    return mapDispatchToProps.updateShoppingCartItem(
+      items,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   },
   /**
    * Submits an order
    * @param {Object} shippingAddress The shipping address
    * @param {Object} billingAddress All billing address
    * @param {string} [comments] Optional order comments
+   * @param {boolean} visualize Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  submitOrder(shippingAddress, billingAddress, comments) {
-    return dispatch(submitOrder(shippingAddress, billingAddress, comments));
+  submitOrder(shippingAddress, billingAddress, comments, visualize = false) {
+    return mapDispatchToProps.submitOrder(
+      shippingAddress,
+      billingAddress,
+      comments,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   },
   /**
    * Fetches all countries if needed
@@ -195,11 +265,15 @@ const mapDispatchToProps = dispatch => ({
    * @returns {Promise} The fetch promise
    */
   fetchCountriesIfNeeded(visualize = false) {
-    return dispatch(fetchCountriesIfNeeded(visualize));
+    return mapDispatchToProps.fetchCountriesIfNeeded(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Cart);

@@ -18,7 +18,7 @@ import { fetchAllProductCategoriesIfNeeded } from "../actions/product/categories
 import { fetchProducts } from "../actions/product";
 import JsonLd from "../components/JsonLd";
 import { stripTags } from "../utilities";
-import { getAttachmentById } from "../reducers";
+import { getAttachmentById, getLanguageFetchString } from "../reducers";
 import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 import Card from "../components/Card";
 import OverflowCard from "../components/OverflowCard";
@@ -202,6 +202,7 @@ const mapStateToProps = (
     : [];
 
   return {
+    languageFetchString: getLanguageFetchString(state),
     categorySlug,
     category,
     categoryIds:
@@ -230,6 +231,56 @@ const mapDispatchToProps = dispatch => ({
   /**
    * Fetches all product catrgories
    * @param {number} perPage The amount of items per page
+   * @param {string} language The language string
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchAllProductCategoriesIfNeeded(
+    perPage = ITEMS_PER_PAGE,
+    language,
+    visualize = true
+  ) {
+    return dispatch(
+      fetchAllProductCategoriesIfNeeded(perPage, language, visualize)
+    );
+  },
+  /**
+   * Fetches the matching products
+   * @param {number} [categoryId=null] The category id
+   * @param {number} perPage The amount of products per page
+   * @param {string} language The language string
+   * @param {visualize} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchProducts(
+    categoryId,
+    perPage = ITEMS_PER_PAGE,
+    language,
+    visualize = true
+  ) {
+    return categoryId /*&& !isNaN(page)*/
+      ? dispatch(
+          fetchProducts(
+            1,
+            -1,
+            perPage,
+            language,
+            visualize,
+            [],
+            [parseInt(categoryId)]
+          )
+        )
+      : Promise.reject("Called fetchProducts without valid categoryId");
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches all product catrgories
+   * @param {number} perPage The amount of items per page
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
@@ -237,7 +288,11 @@ const mapDispatchToProps = dispatch => ({
     perPage = ITEMS_PER_PAGE,
     visualize = true
   ) {
-    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
+    return mapDispatchToProps.fetchAllProductCategoriesIfNeeded(
+      perPage,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   },
   /**
    * Fetches the matching products
@@ -248,8 +303,11 @@ const mapDispatchToProps = dispatch => ({
    */
   fetchProducts(categoryId, perPage = ITEMS_PER_PAGE, visualize = true) {
     return categoryId /*&& !isNaN(page)*/
-      ? dispatch(
-          fetchProducts(1, -1, perPage, visualize, [], [parseInt(categoryId)])
+      ? mapDispatchToProps.fetchProducts(
+          categoryId,
+          perPage,
+          mapStateToProps.languageFetchString,
+          visualize
         )
       : Promise.reject("Called fetchProducts without valid categoryId");
   }
@@ -257,7 +315,8 @@ const mapDispatchToProps = dispatch => ({
 
 const ConnectedCategories = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(ProductCategories);
 
 const RoutedCategories = withRouter(ConnectedCategories);

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Flex, Box } from "grid-styled";
 
 import Card from "../components/Card";
-import { getPostBySlug } from "../reducers";
+import { getPostBySlug, getLanguageFetchString } from "../reducers";
 import { fetchPostIfNeeded } from "../actions/posts";
 import { stripTags } from "../utilities";
 import Thumbnail from "./Thumbnail";
@@ -46,6 +46,7 @@ const mapStateToProps = (
     }
   }
 ) => ({
+  languageFetchString: getLanguageFetchString(state),
   post: getPostBySlug(state, postSlug)
 });
 const mapDispatchToProps = (
@@ -58,14 +59,32 @@ const mapDispatchToProps = (
 ) => ({
   /**
    * Fetches the current post
+   * @param {string} language The language string
+   * @returns {Promise} The fetch promise
+   */
+  fetchPostIfNeeded(language) {
+    return dispatch(fetchPostIfNeeded(language, postSlug));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the current post
    * @returns {Promise} The fetch promise
    */
   fetchPostIfNeeded() {
-    return dispatch(fetchPostIfNeeded(postSlug));
+    return mapDispatchToProps.fetchPostIfNeeded(
+      mapStateToProps.languageFetchString,
+      postSlug
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Post);

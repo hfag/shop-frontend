@@ -15,12 +15,12 @@ import {
   getProductCategories,
   getProductBySlug,
   getProductById,
-  getResellerDiscountByProductId
+  getResellerDiscountByProductId,
+  getLanguage
 } from "../reducers";
 import RelativeBox from "../components/RelativeBox";
 import Price from "../components/Price";
 import { getUrlPartByKeyAndLanguage } from "../utilities/urls";
-import { getLanguageFromLocation } from "../utilities/i18n";
 
 const StyledProduct = styled.div`
   background-color: #fff;
@@ -99,24 +99,10 @@ const Discount = styled.div`
 `;
 
 const ProductItem = React.memo(
-  ({
-    product,
-    categories,
-    resellerDiscount,
-    fetchProductIfNeeded,
-    location
-  }) => {
-    /*useEffect(
-      () => {
-        fetchProductIfNeeded(product.slug); we don't need to fetch the whole product, just a preview
-      },
-      [product.slug]
-    );*/
-
+  ({ product, categories, resellerDiscount, language }) => {
     const url = useMemo(
       () => {
         if (product && product.slug) {
-          const language = getLanguageFromLocation(location);
           const base = getUrlPartByKeyAndLanguage("product", language);
 
           return `/${language}/${base}/${product.slug}/`;
@@ -124,7 +110,7 @@ const ProductItem = React.memo(
 
         return "";
       },
-      [product, location]
+      [product, language]
     );
 
     return (
@@ -197,30 +183,14 @@ const mapStateToProps = (state, { id }) => {
 
   return product && product.categoryIds
     ? {
+        language: getLanguage(state),
         product,
         categories: getProductCategories(state).filter(category =>
           product.categoryIds.includes(category.id)
         ),
         resellerDiscount: getResellerDiscountByProductId(state, id)
       }
-    : {};
+    : { language: getLanguage(state) };
 };
 
-const mapDispatchToProps = dispatch => ({
-  /**
-   * Fetches a product
-   * @param {string} slug The product's slug
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProductIfNeeded(slug, visualize = true) {
-    return dispatch(fetchProductIfNeeded(slug, visualize));
-  }
-});
-
-const ConnectedProductItem = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProductItem);
-
-export default withRouter(ConnectedProductItem);
+export default connect(mapStateToProps)(ProductItem);

@@ -25,12 +25,9 @@ class ApiError extends Error {
  * Fetches an url
  * @param {string} url The url to fetch
  * @param {Object} options Fetch options
- * @param {string} lang A parameter to explicitly define the fetch language
  * @returns {Promise<Object>} The fetch promise
  */
-export const fetchApi = (url, options, lang) => {
-  const language = lang ? lang : getLanguageFromCurrentWindow();
-
+export const fetchApi = (url, options) => {
   if (!options.headers && options.body) {
     options.headers = new Headers();
     options.headers.append("Content-Type", "application/json");
@@ -49,10 +46,7 @@ export const fetchApi = (url, options, lang) => {
   }*/
 
   //de *must* fallback to no directory for backwards compat
-  return fetch(
-    API_URL + (language && language !== "de" ? "/" + language : "") + url,
-    options
-  ).then(response =>
+  return fetch(API_URL + url, options).then(response =>
     response
       .json()
       .then(json => {

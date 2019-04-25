@@ -12,7 +12,8 @@ import { colors, shadows } from "../utilities/style";
 import { search, reset } from "../actions/product-search";
 import {
   getProductSearchSections,
-  getLastProductSearchQuery
+  getLastProductSearchQuery,
+  getLanguageFetchString
 } from "../reducers";
 import Price from "../components/Price";
 
@@ -227,7 +228,7 @@ class Searchbar extends React.PureComponent {
     ({ value }) =>
       value.trim() !== "" &&
       value.trim() !== this.props.lastQuery.trim() &&
-      this.props.dispatch(search(true, value)),
+      this.props.dispatch(search(this.props.languageFetchString, true, value)),
     300
   );
   /**
@@ -318,6 +319,7 @@ class Searchbar extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
+  languageFetchString: getLanguageFetchString(state),
   sections: getProductSearchSections(state),
   lastQuery: getLastProductSearchQuery(state)
 });

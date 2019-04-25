@@ -54,13 +54,14 @@ const fetchSalesAction = createFetchAction("FETCH_SALES", "sales", "posts");
 
 /**
  * Fetches all sales
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress of this action
  * @returns {Promise} The fetch promise
  */
-const fetchSales = (visualize = false) => dispatch => {
+const fetchSales = (language, visualize = false) => dispatch => {
   dispatch(fetchSalesAction(true, null, visualize, [], []));
 
-  return fetchApi(`/wp-json/hfag/sales`, {
+  return fetchApi(`${language}/wp-json/hfag/sales`, {
     method: "GET",
     credentials: "include"
   })
@@ -132,10 +133,14 @@ const shouldFetchSales = state =>
 
 /**
  * Fetches all sales if needed
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress of this action
  * @returns {Promise} The fetch promise
  */
-export const fetchSalesIfNeeded = (visualize = false) => (dispatch, getState) =>
+export const fetchSalesIfNeeded = (language, visualize = false) => (
+  dispatch,
+  getState
+) =>
   shouldFetchSales(getState())
-    ? fetchSales(visualize)(dispatch, getState)
+    ? fetchSales(language, visualize)(dispatch, getState)
     : Promise.resolve();

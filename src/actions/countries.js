@@ -14,12 +14,13 @@ const fetchCountriesAction = createFetchAction("FETCH_COUNTRIES", "countries");
 
 /**
  * Fetches all countries
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-const fetchCountries = (visualize = false) => dispatch => {
+const fetchCountries = (language, visualize = false) => dispatch => {
   dispatch(fetchCountriesAction(true, null, visualize));
-  return fetchApi(`/wp-json/hfag/countries`, {
+  return fetchApi(`${language}/wp-json/hfag/countries`, {
     method: "GET",
     credentials: "include"
   })
@@ -46,13 +47,14 @@ const shouldFetchCountries = state =>
 
 /**
  * Fetches all countries if needed
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const fetchCountriesIfNeeded = (visualize = false) => (
+export const fetchCountriesIfNeeded = (language, visualize = false) => (
   dispatch,
   getState
 ) =>
   shouldFetchCountries(getState())
-    ? fetchCountries(visualize)(dispatch, getState)
+    ? fetchCountries(language, visualize)(dispatch, getState)
     : Promise.resolve();

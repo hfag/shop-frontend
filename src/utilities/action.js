@@ -52,10 +52,10 @@ export const createFetchSingleItemThunk = (
   endpoint,
   mapItem = item => item,
   callback
-) => (itemId, visualize = false, ...attributes) => dispatch => {
+) => (itemId, language, visualize = false, ...attributes) => dispatch => {
   dispatch(action(true, null, visualize, itemId, null, ...attributes));
 
-  return fetchApi(endpoint(itemId, ...attributes), {
+  return fetchApi(endpoint(itemId, language, ...attributes), {
     method: "GET"
   })
     .then(({ json: item, response }) => {
@@ -63,7 +63,7 @@ export const createFetchSingleItemThunk = (
 
       if (callback) {
         return Promise.resolve(
-          callback(dispatch, response, item, visualize, ...attributes)
+          callback(dispatch, response, item, language, visualize, ...attributes)
         ).then(() => {
           dispatch(
             action(false, null, visualize, itemId, mappedItem, ...attributes)
@@ -124,12 +124,13 @@ export const createFetchItemPageThunk = (
   page = 1,
   pageTo = -1,
   perPage = 10,
+  language,
   visualize = false,
   ...attributes
 ) => dispatch => {
   dispatch(action(true, null, visualize, [], page, ...attributes));
 
-  return fetchApi(endpoint(page, perPage, ...attributes), {
+  return fetchApi(endpoint(page, perPage, language, ...attributes), {
     method: "GET"
   }).then(({ json: items, response }) => {
     const total = parseInt(response.headers.get("x-wp-total"));
@@ -146,6 +147,7 @@ export const createFetchItemPageThunk = (
           items,
           page,
           perPage,
+          language,
           visualize,
           total,
           ...attributes
@@ -160,6 +162,7 @@ export const createFetchItemPageThunk = (
         page + 1,
         pageTo,
         perPage,
+        language,
         visualize,
         ...attributes
       )(dispatch).then(
@@ -208,13 +211,14 @@ export const createFetchAllItemsThunk = (
   endpoint,
   mapItem = item => item,
   callback
-) => (perPage = 10, visualize = false, ...attributes) => dispatch => {
+) => (perPage = 10, language, visualize = false, ...attributes) => dispatch => {
   dispatch(action(true, null, visualize, [], null, ...attributes));
 
   return createFetchItemPageThunk(action, endpoint, mapItem, callback)(
     1,
     -1,
     perPage,
+    language,
     visualize,
     ...attributes
   )(dispatch)
@@ -243,17 +247,17 @@ export const createFetchItemsThunk = (
   endpoint,
   mapItem = item => item,
   callback
-) => (visualize = false, ...attributes) => dispatch => {
+) => (language, visualize = false, ...attributes) => dispatch => {
   dispatch(action(true, null, visualize, [], ...attributes));
 
-  return fetchApi(endpoint(...attributes), {
+  return fetchApi(endpoint(language, ...attributes), {
     method: "GET"
   })
     .then(({ json: items }) => {
       const mappedItems = items.map(mapItem);
 
       if (callback) {
-        callback(dispatch, items, visualize, ...attributes);
+        callback(dispatch, items, language, visualize, ...attributes);
       }
 
       dispatch(action(false, null, visualize, mappedItems, ...attributes));
@@ -290,10 +294,10 @@ export const createCreateItemThunk = (
   action,
   endpoint,
   mapItem = item => item
-) => (item, visualize = false, ...attributes) => dispatch => {
-  dispatch(action(true, null, visualize, item, ...attributes));
+) => (item, language, visualize = false, ...attributes) => dispatch => {
+  dispatch(action(true, null, language, visualize, item, ...attributes));
 
-  return fetchApi(endpoint(item, ...attributes), {
+  return fetchApi(endpoint(item, language, ...attributes), {
     method: "POST",
     body: JSON.stringify(item)
   })
@@ -336,10 +340,10 @@ export const createUpdateItemThunk = (
   action,
   endpoint,
   mapItem = item => item
-) => (itemId, item, visualize = false, ...attributes) => dispatch => {
+) => (itemId, item, language, visualize = false, ...attributes) => dispatch => {
   dispatch(action(true, null, visualize, itemId, item, ...attributes));
 
-  return fetchApi(endpoint(itemId, item, ...attributes), {
+  return fetchApi(endpoint(itemId, item, language, ...attributes), {
     method: "PUT",
     body: JSON.stringify(item),
     headers: new Headers({
@@ -383,12 +387,13 @@ export const createDeleteItemAction = (name, ...attributes) =>
  */
 export const createDeleteItemThunk = (action, endpoint) => (
   itemId,
+  language,
   visualize = false,
   ...attributes
 ) => dispatch => {
   dispatch(action(true, null, visualize, itemId, ...attributes));
 
-  return fetchApi(endpoint(itemId, ...attributes), {
+  return fetchApi(endpoint(itemId, language, ...attributes), {
     method: "DELETE",
     headers: new Headers({
       "Content-Type": "application/json"
@@ -401,46 +406,6 @@ export const createDeleteItemThunk = (action, endpoint) => (
     })
     .catch(error => {
       dispatch(action(false, error, visualize, itemId, ...attributes));
-
-      return Promise.reject(error);
-    });
-};
-
-/**
- * Creates a redux action for deleting one item of a type
- * @param {string} name The singular name of the item type
- * @returns {function} The redux action
- */
-export const createRemoveSingleItemAction = name =>
-  createFetchAction(
-    "DELETE_" + changeCase.snakeCase(name).toUpperCase(),
-    "itemId",
-    "item"
-  );
-
-/**
- * Creates a redux thunk that deletes a single item of a certain type
- * @param {function} action The action that should be dispatched
- * @param {function} endpoint A function generating the endpoint url based on the item id and the passed arguments
- * @returns {function} The redux thunk
- */
-export const createRemoveSingleItemThunk = (action, endpoint) => (
-  itemId,
-  args = {},
-  visualize = false
-) => dispatch => {
-  dispatch(action(true, null, visualize, itemId));
-
-  return fetchApi(endpoint(itemId, args), {
-    method: "DELETE"
-  })
-    .then(() => {
-      dispatch(action(false, null, visualize, itemId));
-
-      return Promise.resolve();
-    })
-    .catch(error => {
-      dispatch(action(false, error, visualize, itemId));
 
       return Promise.reject(error);
     });

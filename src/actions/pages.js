@@ -1,8 +1,6 @@
 import {
   createFetchSingleItemAction,
-  createFetchSingleItemThunk,
   createFetchItemsAction,
-  createFetchAllItemsThunk,
   createFetchItemPageThunk
 } from "utilities/action";
 
@@ -43,14 +41,15 @@ export const fetchPageAction = createFetchSingleItemAction(itemName);
 
 /**
  * Fetches a page by it's slug
+ * @param {string} language The language string
  * @param {number} pageSlug The slug of the page
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {function} The redux thunk
  */
-const fetchPage = (pageSlug, visualize = true) => dispatch => {
+const fetchPage = (language, pageSlug, visualize = true) => dispatch => {
   dispatch(fetchPageAction(true, null, visualize, pageSlug));
 
-  return fetchApi(`/wp-json/wp/v2/pages?slug=${pageSlug}`, {
+  return fetchApi(`${language}/wp-json/wp/v2/pages?slug=${pageSlug}`, {
     method: "GET"
   })
     .then(({ json: items }) => {
@@ -89,13 +88,17 @@ const shouldFetchPage = (slug, state) => {
 
 /**
  * Fetches a page if needed
+ * @param {string} language The language string
  * @param {string} slug The page slug
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {Promise} The fetch promise
  */
-export const fetchPageIfNeeded = (slug, visualize) => (dispatch, getState) =>
+export const fetchPageIfNeeded = (language, slug, visualize) => (
+  dispatch,
+  getState
+) =>
   shouldFetchPage(slug, getState())
-    ? fetchPage(slug, visualize)(dispatch, getState)
+    ? fetchPage(language, slug, visualize)(dispatch, getState)
     : Promise.resolve();
 
 /**
@@ -116,6 +119,7 @@ export const fetchPagesAction = createFetchItemsAction(itemName, "itemIds");
  * @param {number} page The first page to fetch
  * @param {number} pageTo The last page to fetch, -1 for all
  * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {array} itemIds Only the specified product ids will be fetched
  * @return {function}
@@ -125,12 +129,13 @@ export const fetchPages = createFetchItemPageThunk(
   (
     page,
     perPage,
+    language,
     itemIds = [],
     categoryIds = [],
     order = "desc",
     orderby = "date"
   ) =>
-    `/wp-json/wp/v2/pages?page=${page}&per_page=${perPage}${
+    `${language}/wp-json/wp/v2/pages?page=${page}&per_page=${perPage}${
       itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
     }`,
   mapItem

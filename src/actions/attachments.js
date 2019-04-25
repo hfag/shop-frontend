@@ -2,7 +2,6 @@ import {
   createFetchSingleItemAction,
   createFetchSingleItemThunk,
   createFetchItemsAction,
-  createFetchAllItemsThunk,
   createFetchItemPageThunk
 } from "utilities/action";
 
@@ -45,12 +44,13 @@ export const fetchAttachmentAction = createFetchSingleItemAction(itemName);
 /**
  * Fetches a single item
  * @param {number} itemId The id of the requested item
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function}
  */
 export const fetchAttachment = createFetchSingleItemThunk(
   fetchAttachmentAction,
-  id => `/wp-json/wp/v2/media/${id}`,
+  (id, language) => `${language}/wp-json/wp/v2/media/${id}`,
   mapItem
 );
 
@@ -75,6 +75,7 @@ export const fetchAttachmentsAction = createFetchItemsAction(
  * @param {number} page The first page to fetch
  * @param {number} pageTo The last page to fetch, -1 for all
  * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {array} itemIds Only the specified product ids will be fetched
  * @return {function}
@@ -84,12 +85,13 @@ export const fetchAttachments = createFetchItemPageThunk(
   (
     page,
     perPage,
+    language,
     itemIds = [],
     categoryIds = [],
     order = "desc",
     orderby = "date"
   ) =>
-    `/wp-json/wp/v2/media?page=${page}&per_page=${perPage}${
+    `${language}/wp-json/wp/v2/media?page=${page}&per_page=${perPage}${
       itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
     }`,
   mapItem

@@ -50,12 +50,13 @@ const fetchOrdersAction = createFetchAction("FETCH_ORDERS", "orders");
 
 /**
  * Fetches a user's orders
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress of this action
  * @returns {Promise} The fetch promise
  */
-export const fetchOrders = (visualize = false) => dispatch => {
+export const fetchOrders = (language, visualize = false) => dispatch => {
   dispatch(fetchOrdersAction(true, null, visualize));
-  return fetchApi(`/wp-json/hfag/user-orders`, {
+  return fetchApi(`${language}/wp-json/hfag/user-orders`, {
     method: "GET",
     credentials: "include"
   })

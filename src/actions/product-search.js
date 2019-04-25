@@ -1,4 +1,3 @@
-import { fetchApi } from "utilities/api";
 import { createFetchAction, createFetchItemsThunk } from "utilities/action";
 
 /**
@@ -33,12 +32,13 @@ export const reset = () => ({
 
 /**
  * Searches for products
- * @param {boolean} isFetching Whether to visualize the progress of the request
+ * @param {string} language The language string
+ * @param {boolean} visualize Whether to visualize the progress of the request
  * @param {string} query The search query
  * @returns {function} A redux thunk
  */
 export const search = createFetchItemsThunk(
   searchProducts,
-  query => `/wp-json/hfag/suggestions?query=${query}`,
+  (language, query) => `${language}/wp-json/hfag/suggestions?query=${query}`,
   mapItem
 );

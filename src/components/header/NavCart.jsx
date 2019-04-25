@@ -34,9 +34,11 @@ const ShoppingCartList = styled.div`
 
 const NavCart = React.memo(
   ({
+    language,
     shoppingCartFetching,
     shoppingCartItems,
     shoppingCartTotal,
+    redirect,
     dropdown,
     setDropdown
   }) => {
@@ -93,7 +95,7 @@ const NavCart = React.memo(
               fullWidth
               onClick={() =>
                 new Promise((resolve, reject) => {
-                  redirect("/warenkorb");
+                  redirect(`/${language}/warenkorb`);
                   setDropdown(false);
                 })
               }

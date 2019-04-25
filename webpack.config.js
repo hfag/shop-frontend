@@ -62,7 +62,8 @@ module.exports = {
     modules: [path.resolve(context, "src"), "node_modules"],
     extensions: [".js", ".jsx", ".css", ".scss"],
     alias: {
-      img: path.resolve(context, "img")
+      img: path.resolve(context, "img"),
+      "react-dom": "@hot-loader/react-dom"
     }
   },
 

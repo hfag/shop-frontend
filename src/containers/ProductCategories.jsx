@@ -102,18 +102,15 @@ const ProductCategories = React.memo(
       [categorySlug, urlWithoutPage]
     );
 
-    useEffect(
-      () => {
-        //load data
-        fetchAllProductCategoriesIfNeeded();
+    useEffect(() => {
+      //load data
+      fetchAllProductCategoriesIfNeeded();
 
-        if (!active || !category || !categoryId) {
-          return;
-        }
-        fetchProducts(categoryId);
-      },
-      [categoryId]
-    );
+      if (!active || !category || !categoryId) {
+        return;
+      }
+      fetchProducts(categoryId);
+    }, [categoryId]);
 
     useEffect(() => {
       if (active && (!page || isNaN(page)) && categorySlug) {

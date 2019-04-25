@@ -16,7 +16,7 @@ const Login = styled.span`
 `;
 
 const NavUser = React.memo(
-  ({ account, isAuthenticated, dropdown, setDropdown }) => {
+  ({ language, account, isAuthenticated, dropdown, setDropdown }) => {
     return isAuthenticated ? (
       <div>
         <Link
@@ -34,7 +34,7 @@ const NavUser = React.memo(
         {dropdown === "user" && (
           <UserDropdown>
             <div>
-              <Link to="/konto" active={false}>
+              <Link to={`/${language}/konto`} active={false}>
                 Zum Konto
               </Link>
             </div>
@@ -51,7 +51,7 @@ const NavUser = React.memo(
               </div>
             </RestrictedView>
             <div>
-              <Link to="/logout" active={false}>
+              <Link to={`/${language}/logout`} active={false}>
                 Abmelden
               </Link>
             </div>
@@ -59,7 +59,7 @@ const NavUser = React.memo(
         )}
       </div>
     ) : (
-      <Link to="/login" negative flex>
+      <Link to={`/${language}/login`} negative flex>
         <Login>Login</Login>
       </Link>
     );

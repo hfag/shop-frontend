@@ -14,7 +14,8 @@ import {
   getShoppingCartTotal,
   getIsAuthenticated,
   getAccount,
-  getLanguageFetchString
+  getLanguageFetchString,
+  getLanguage
 } from "../reducers";
 import Container from "../components/Container";
 import Flexbar from "../components/Flexbar";
@@ -148,7 +149,8 @@ const Header = React.memo(
     shoppingCartTotal,
     redirect,
     fetchShoppingCartIfNeeded,
-    fetchSalesIfNeeded
+    fetchSalesIfNeeded,
+    language
   }) => {
     const [dropdown, setDropdown] = useState(false);
 
@@ -169,7 +171,7 @@ const Header = React.memo(
                 <MediaQuery lg up>
                   <LogoLeft>
                     <NavItem>
-                      <Link to="/" title="Homepage">
+                      <Link to={`/${language}`} title="Homepage">
                         <img src={LogoNegative} alt="Logo" />
                       </Link>
                     </NavItem>
@@ -181,7 +183,7 @@ const Header = React.memo(
                   <Flexbar>
                     <MediaQuery lg up>
                       <NavItem>
-                        <Link to="/" title="Homepage">
+                        <Link to={`/${language}`} title="Homepage">
                           <img src={NameSloganNegative} alt="Slogan" />
                         </Link>
                       </NavItem>
@@ -194,7 +196,7 @@ const Header = React.memo(
                           </Link>
                         </NavItem>
                         <NavItem>
-                          <Link to="/" title="Homepage">
+                          <Link to={`/${language}`} title="Homepage">
                             <img src={LogoNegative} alt="Logo" />
                           </Link>
                         </NavItem>
@@ -216,15 +218,18 @@ const Header = React.memo(
                           </NavItem>
                           <NavItem seperator>
                             <NavCart
+                              language={language}
                               shoppingCartFetching={shoppingCartFetching}
                               shoppingCartItems={shoppingCartItems}
                               shoppingCartTotal={shoppingCartTotal}
+                              redirect={redirect}
                               dropdown={dropdown}
                               setDropdown={setDropdown}
                             />
                           </NavItem>
                           <NavItem>
                             <NavUser
+                              language={language}
                               isAuthenticated={isAuthenticated}
                               account={account}
                               dropdown={dropdown}
@@ -247,6 +252,7 @@ const Header = React.memo(
 
 const mapStateToProps = state => ({
   languageFetchString: getLanguageFetchString(state),
+  language: getLanguage(state),
   shoppingCartFetching: isFetchingShoppingCart(state),
   shoppingCartItems: getShoppingCartItems(state),
   shoppingCartTotal: getShoppingCartTotal(state),

@@ -89,29 +89,22 @@ const CategoryItem = React.memo(
     language,
     languageFetchKey
   }) => {
-    const url = useMemo(
-      () => {
-        if (category && category.slug) {
-          const base = getUrlPartByKeyAndLanguage("productCategory", language);
-          const parentString =
-            parents.length > 0 ? parents.join("/") + "/" : "";
+    const url = useMemo(() => {
+      if (category && category.slug) {
+        const base = getUrlPartByKeyAndLanguage("productCategory", language);
+        const parentString = parents.length > 0 ? parents.join("/") + "/" : "";
 
-          return `/${language}/${base}/${parentString}${category.slug}/1`;
-        }
+        return `/${language}/${base}/${parentString}${category.slug}/1`;
+      }
 
-        return "";
-      },
-      [category, parents, language]
-    );
+      return "";
+    }, [category, parents, language]);
 
-    useEffect(
-      () => {
-        if (categoryId && categoryId > 0 && !category) {
-          dispatch(fetchProductCategory(categoryId, languageFetchKey));
-        }
-      },
-      [categoryId, languageFetchKey]
-    );
+    useEffect(() => {
+      if (categoryId && categoryId > 0 && !category) {
+        dispatch(fetchProductCategory(categoryId, languageFetchKey));
+      }
+    }, [categoryId, languageFetchKey]);
 
     //don't show empty categories
     if (category && !category.count) {

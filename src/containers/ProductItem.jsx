@@ -100,18 +100,15 @@ const Discount = styled.div`
 
 const ProductItem = React.memo(
   ({ product, categories, resellerDiscount, language }) => {
-    const url = useMemo(
-      () => {
-        if (product && product.slug) {
-          const base = getUrlPartByKeyAndLanguage("product", language);
+    const url = useMemo(() => {
+      if (product && product.slug) {
+        const base = getUrlPartByKeyAndLanguage("product", language);
 
-          return `/${language}/${base}/${product.slug}/`;
-        }
+        return `/${language}/${base}/${product.slug}/`;
+      }
 
-        return "";
-      },
-      [product, language]
-    );
+      return "";
+    }, [product, language]);
 
     return (
       <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>

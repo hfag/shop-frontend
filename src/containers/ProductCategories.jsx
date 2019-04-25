@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
@@ -26,127 +26,110 @@ import OverflowCard from "../components/OverflowCard";
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
-/**
- * Renders all product categories
- * @returns {Component} The component
- */
-class ProductCategories extends React.PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = { active: props.location.pathname === props.match.url };
-  }
-  componentDidMount = () => {
-    this.loadData();
-  };
-
-  /**
-   * Lifecycle method
-   * @param {Object} prevProps The previous props
-   * @returns {void}
-   */
-  componentDidUpdate = prevProps => {
-    const {
-      match: {
-        params: { categorySlug, page },
-        url
-      },
-      location: { pathname },
-      category
-    } = this.props;
-
-    this.setState({ active: pathname === url }, () => {
-      if (
-        (categorySlug !== prevProps.categorySlug ||
-          /*page !== prevProps.page ||*/
-          (!prevProps.category && category)) &&
-        categorySlug &&
-        page
-      ) {
-        this.loadData();
+const Head = React.memo(({ category }) => {
+  return (
+    <Helmet
+      title={
+        category
+          ? stripTags(category.name) + " - Hauser Feuerschutz AG"
+          : "Shop der Hauser Feuerschutz AG"
       }
+      meta={[
+        { name: "description", content: category && category.shortDescription }
+      ]}
+      link={[
+        {
+          rel: "canonical",
+          href: category && ABSOLUTE_URL + "/produkt-kategorie/" + category.slug
+        }
+      ]}
+    />
+  );
+});
 
-      if (
-        (this.state.active ||
-          window.location.pathname.split("/").length === 3) &&
-        (!page || isNaN(page)) &&
-        pathname !== "/"
-      ) {
-        this.props.dispatch(
+const RichSnippet = React.memo(({ productsJsonLd }) => (
+  <JsonLd>
+    {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
+  </JsonLd>
+));
+
+const ProductCategories = React.memo(
+  ({
+    location: { pathname },
+    match: {
+      url,
+      params: { categorySlug, page }
+    },
+    category,
+    fetchAllProductCategoriesIfNeeded,
+    fetchProducts,
+    dispatch,
+    /* render props*/
+    totalProductCount,
+    categoryIds,
+    productIds,
+    parents = [],
+    productsJsonLd
+  }) => {
+    const categoryId = (category && category.id) || 0;
+
+    //check if endings match
+    const active = useMemo(
+      () => pathname.substring(pathname.length - url.length) === url,
+      [pathname, url]
+    );
+
+    const urlWithoutPage = useMemo(
+      () =>
+        page
+          ? url
+              .split("/")
+              .slice(0, -1)
+              .join("/")
+          : url,
+      [page, url]
+    );
+
+    const newParents = useMemo(
+      () => (categorySlug ? [...parents, categorySlug] : []),
+      [categorySlug, parents]
+    );
+
+    const onPageChange = useCallback(
+      ({ selected }) => {
+        dispatch(push(`${urlWithoutPage}/${selected + 1}`));
+      },
+      [categorySlug, urlWithoutPage]
+    );
+
+    useEffect(
+      () => {
+        //load data
+        fetchAllProductCategoriesIfNeeded();
+
+        if (!active || !category || !categoryId) {
+          return;
+        }
+        fetchProducts(categoryId);
+      },
+      [categoryId]
+    );
+
+    useEffect(() => {
+      if (active && (!page || isNaN(page)) && categorySlug) {
+        //exclude frontpage
+        dispatch(
           push(pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1")
         );
       }
-    });
-  };
-  loadData = () => {
-    const {
-      categoryIds,
-      fetchAllProductCategoriesIfNeeded,
-      fetchProducts
-    } = this.props;
-
-    if (!this.state.active) {
-      return;
-    }
-
-    fetchAllProductCategoriesIfNeeded();
-    fetchProducts();
-  };
-  onPageChange = ({ selected }) => {
-    const {
-      match: {
-        params: { categorySlug, page }
-      }
-    } = this.props;
-    this.props.dispatch(
-      push("/produkt-kategorie/" + categorySlug + "/" + (selected + 1))
-    );
-  };
-  render = () => {
-    const {
-      totalProductCount,
-      category,
-      categoryIds,
-      productIds,
-      parents = [],
-      match: {
-        params: { categorySlug, page },
-        url
-      },
-      productsJsonLd
-    } = this.props;
-    const { active } = this.state;
-
-    const pathSegments = url.split("/");
-    pathSegments.pop();
-    const urlWithoutPage = page ? pathSegments.join("/") : url;
-
-    const newParents = categorySlug ? [...parents, categorySlug] : [];
+    }, []); //only run this once on the initial render
 
     return (
       <div>
-        <Helmet>
-          <title>
-            {category
-              ? stripTags(category.name) + " - Hauser Feuerschutz AG"
-              : "Shop der Hauser Feuerschutz AG"}
-          </title>
-          <meta
-            name="description"
-            content={category && category.shortDescription}
-          />
-          <link
-            rel="canonical"
-            href={
-              category && ABSOLUTE_URL + "/produkt-kategorie/" + category.slug
-            }
-          />
-        </Helmet>
         {active && (
           <div>
-            <JsonLd>
-              {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
-            </JsonLd>
+            <Head category={category} />
+            <RichSnippet productsJsonLd={productsJsonLd} />
             {category && category.description && (
               <OverflowCard>
                 <div
@@ -189,7 +172,7 @@ class ProductCategories extends React.PureComponent {
                 previousLabel={"<"}
                 nextLabel={">"}
                 forcePage={parseInt(page) - 1}
-                onPageChange={this.onPageChange}
+                onPageChange={onPageChange}
               />
             )}
           </div>
@@ -200,8 +183,8 @@ class ProductCategories extends React.PureComponent {
         />
       </div>
     );
-  };
-}
+  }
+);
 
 const mapStateToProps = (
   state,
@@ -242,14 +225,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch,
-  {
-    match: {
-      params: { categorySlug, page = 1 }
-    }
-  }
-) => ({
+const mapDispatchToProps = dispatch => ({
   dispatch,
   /**
    * Fetches all product catrgories
@@ -270,38 +246,18 @@ const mapDispatchToProps = (
    * @param {visualize} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchProducts(categoryId = null, perPage = ITEMS_PER_PAGE, visualize = true) {
-    return categoryId && !isNaN(page)
+  fetchProducts(categoryId, perPage = ITEMS_PER_PAGE, visualize = true) {
+    return categoryId /*&& !isNaN(page)*/
       ? dispatch(
           fetchProducts(1, -1, perPage, visualize, [], [parseInt(categoryId)])
         )
-      : Promise.resolve();
-  }
-});
-
-const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
-  ...ownProps,
-  ...mapStateToProps,
-  ...mapDispatchToProps,
-  /**
-   * Fetches the matching products
-   * @param {number} perPage The amount of products per page
-   * @param {visualize} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProducts(perPage = ITEMS_PER_PAGE, visualize = true) {
-    const page = parseInt(ownProps.match.params.page);
-    const categoryId = mapStateToProps.category
-      ? mapStateToProps.category.id
-      : null;
-    return mapDispatchToProps.fetchProducts(categoryId, perPage, visualize);
+      : Promise.reject("Called fetchProducts without valid categoryId");
   }
 });
 
 const ConnectedCategories = connect(
   mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
+  mapDispatchToProps
 )(ProductCategories);
 
 const RoutedCategories = withRouter(ConnectedCategories);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
@@ -21,80 +21,55 @@ const ITEMS_PER_PAGE = 60;
  * Renders all product categories
  * @returns {Component} The component
  */
-class CategoriesSidebar extends React.PureComponent {
-  constructor(props) {
-    super(props);
 
-    this.state = { active: props.location.pathname === props.match.url };
-  }
+const CategoriesSidebar = React.memo(
+  ({
+    category,
+    categoryIds,
+    productIds,
+    parents = [],
+    location: { pathname },
+    match: {
+      params: { categorySlug, page },
+      url
+    }
+  }) => {
+    const categoryId = (category && category.id) || 0;
 
-  componentDidMount = () => {
-    this.loadData();
-  };
+    //check if endings match
+    const active = useMemo(
+      () => pathname.substring(pathname.length - url.length) === url,
+      [pathname, url]
+    );
 
-  /**
-   * Lifecycle method
-   * @param {Object} prevProps The previous props
-   * @returns {void}
-   */
-  componentDidUpdate = prevProps => {
-    const {
-      match: {
-        params: { categorySlug, page },
-        url
+    const urlWithoutPage = useMemo(
+      () =>
+        page
+          ? url
+              .split("/")
+              .slice(0, -1)
+              .join("/")
+          : url,
+      [page, url]
+    );
+
+    const newParents = useMemo(
+      () => (categorySlug ? [...parents, categorySlug] : []),
+      [categorySlug, parents]
+    );
+
+    useEffect(
+      () => {
+        //load data
+        fetchAllProductCategoriesIfNeeded();
+
+        /*if (!active || !category || !categoryId) {
+          return;
+        }
+        fetchProducts(categoryId);*/
       },
-      location: { pathname },
-      category
-    } = this.props;
-
-    if (
-      (categorySlug !== prevProps.categorySlug ||
-        page !== prevProps.page ||
-        (!prevProps.category && category)) &&
-      categorySlug &&
-      page
-    ) {
-      this.loadData();
-    }
-
-    this.setState({
-      active: !pathname.startsWith("/produkt-kategorie/") || pathname === url
-    });
-  };
-
-  loadData = () => {
-    const { fetchAllProductCategoriesIfNeeded, fetchProducts } = this.props;
-
-    if (
-      this.props.match.path !== "/" &&
-      this.props.match.path !== "/produkt-kategorie"
-    ) {
-      return;
-    }
-
-    //FIXME replace window.loading with something else
-    fetchAllProductCategoriesIfNeeded();
-    fetchProducts();
-  };
-
-  render = () => {
-    const {
-      category,
-      categoryIds,
-      productIds,
-      parents = [],
-      match: {
-        params: { categorySlug, page },
-        url
-      }
-    } = this.props;
-    const { active } = this.state;
-
-    const pathSegments = url.split("/");
-    pathSegments.pop();
-    const urlWithoutPage = page ? pathSegments.join("/") : url;
-
-    const newParents = categorySlug ? [...parents, categorySlug] : [];
+      [categoryId]
+    );
 
     return (
       <SidebarListWrapper>
@@ -144,8 +119,8 @@ class CategoriesSidebar extends React.PureComponent {
         />
       </SidebarListWrapper>
     );
-  };
-}
+  }
+);
 
 const mapStateToProps = (
   state,

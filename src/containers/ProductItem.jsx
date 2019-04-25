@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -95,19 +95,14 @@ const Discount = styled.div`
   z-index: 2;
 `;
 
-/**
- * Renders a single product item
- * @returns {Component} The component
- */
-class ProductItem extends React.PureComponent {
-  componentWillMount = () => {
-    const { fetchProductIfNeeded } = this.props;
-
-    //fetchProductIfNeeded();
-  };
-
-  render = () => {
-    const { product, categories, resellerDiscount } = this.props;
+const ProductItem = React.memo(
+  ({ product, categories, resellerDiscount, fetchProductIfNeeded }) => {
+    /*useEffect(
+      () => {
+        fetchProductIfNeeded(product.slug); we don't need to fetch the whole product, just a preview
+      },
+      [product.slug]
+    );*/
 
     return (
       <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
@@ -166,8 +161,8 @@ class ProductItem extends React.PureComponent {
         </Link>
       </RelativeBox>
     );
-  };
-}
+  }
+);
 
 ProductItem.propTypes = {
   id: PropTypes.number.isRequired,
@@ -200,25 +195,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
-  ...ownProps,
-  ...mapStateToProps,
-  ...mapDispatchToProps,
-  /**
-   * Fetches a product
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProductIfNeeded(visualize = true) {
-    return mapDispatchToProps.fetchProductIfNeeded(
-      mapStateToProps.product.slug,
-      visualize
-    );
-  }
-});
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
+  mapDispatchToProps
 )(ProductItem);

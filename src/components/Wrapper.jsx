@@ -36,14 +36,14 @@ class Wrapper extends React.Component {
                 <Sidebar>
                   <Switch>
                     <Route
-                      path="/produkt-kategorie"
+                      path="/:lang/produkt-kategorie"
                       component={CategoriesSidebar}
                     />
                     <Route
-                      path="/produkt/:productSlug"
+                      path="/:lang/produkt/:productSlug"
                       component={ProductSidebar}
                     />
-                    <Route path="/" component={CategoriesSidebar} />
+                    <Route path="*" component={CategoriesSidebar} />
                   </Switch>
                 </Sidebar>
               </Box>

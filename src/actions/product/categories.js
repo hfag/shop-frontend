@@ -116,9 +116,9 @@ const fetchAllProductCategories = createFetchAllItemsThunk(
  * @returns {boolean} Whether to fetch all product categories
  */
 const shouldFetchAllProductCategories = () => (dispatch, state) =>
-  getProductCategories(state).length === 0 ||
-  isFetchingProductCategories(state) ||
-  Date.now() - getProductCategoriesLastFetched(state) > 1000 * 60 * 60 * 4;
+  (getProductCategories(state).length === 0 ||
+    Date.now() - getProductCategoriesLastFetched(state) > 1000 * 60 * 60 * 4) &&
+  !isFetchingProductCategories(state);
 
 /**
  * Fetches all items if needed

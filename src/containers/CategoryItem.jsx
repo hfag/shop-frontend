@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
+import { withRouter } from "react-router";
 
 import Thumbnail from "../containers/Thumbnail";
 import Placeholder from "../components/Placeholder";
@@ -10,6 +11,8 @@ import Link from "../components/Link";
 import { fetchProductCategory } from "../actions/product/categories";
 import { getProductCategoryById } from "../reducers";
 import { colors, borders, shadows } from "../utilities/style";
+import { getUrlPartByKeyAndLanguage } from "../utilities/urls";
+import { getLanguageFromLocation } from "../utilities/i18n";
 
 const StyledCategory = styled.div`
   background-color: #fff;
@@ -73,34 +76,42 @@ const Subtitle = styled.div`
  * A single category item
  * @returns {Component} The component
  */
-class CategoryItem extends React.PureComponent {
-  componentWillMount = () => {
-    const { id, category, fetchProductCategory } = this.props;
 
-    if (id > 0 && !category) {
-      fetchProductCategory();
-    }
-  };
+const CategoryItem = React.memo(
+  ({ id: categoryId, category, parents = [], dispatch, location, match }) => {
+    const url = useMemo(
+      () => {
+        if (category) {
+          const language = getLanguageFromLocation(location);
+          const base = getUrlPartByKeyAndLanguage("productCategory", language);
+          const parentString =
+            parents.length > 0 ? parents.join("/") + "/" : "";
 
-  render = () => {
-    const { id: categoryId, category, parent, parents = [] } = this.props;
+          return `/${language}/${base}/${parentString}${category.slug}/1`;
+        }
 
+        return "";
+      },
+      [category, parents, location]
+    );
+
+    useEffect(
+      () => {
+        if (categoryId && categoryId > 0 && !category) {
+          dispatch(fetchProductCategory(categoryId));
+        }
+      },
+      [categoryId]
+    );
+
+    //don't show empty categories
     if (category && !category.count) {
       return null;
     }
 
     return (
       <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
-        <Link
-          to={
-            category
-              ? "/produkt-kategorie/" +
-                (parents.length > 0 ? parents.join("/") + "/" : "") +
-                category.slug +
-                "/1"
-              : ""
-          }
-        >
+        <Link to={url}>
           <StyledCategory>
             <Thumbnail id={category ? category.thumbnailId : -1} />
             <div>
@@ -115,8 +126,8 @@ class CategoryItem extends React.PureComponent {
         </Link>
       </Box>
     );
-  };
-}
+  }
+);
 
 CategoryItem.propTypes = {
   id: PropTypes.number.isRequired,
@@ -136,17 +147,5 @@ const mapStateToProps = (state, { id }) => {
     : {};
 };
 
-const mapDispatchToProps = (dispatch, { id }) => ({
-  /**
-   * Fetches the product category
-   * @returns {Promise} The fetch promise
-   */
-  fetchProductCategory() {
-    return dispatch(fetchProductCategory(id));
-  }
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CategoryItem);
+const ConnectedCategoryItem = connect(mapStateToProps)(CategoryItem);
+export default withRouter(ConnectedCategoryItem);

@@ -197,7 +197,7 @@ const fetchProduct = createFetchSingleItemThunk(
  */
 const shouldFetchProduct = (slug, state) => {
   const product = getProductBySlug(state, slug);
-  const listProduct = !product || !product.sku;
+  const listProduct = !product || !product.sku; //if the sku is present, we fetched this product in detail, otherwise just to list
   const invalidProduct =
       !product ||
       !product._lastFetched ||
@@ -302,7 +302,12 @@ export const fetchProducts = createFetchItemPageThunk(
         null,
         false,
         items
-        .filter(product => product._embedded && product._embedded["wp:featuredmedia"] && product._embedded["wp:featuredmedia"].length > 0)
+          .filter(
+            product =>
+              product._embedded &&
+              product._embedded["wp:featuredmedia"] &&
+              product._embedded["wp:featuredmedia"].length > 0
+          )
           .map(product => product._embedded["wp:featuredmedia"][0])
           .filter(t => t)
           .map(mapAttachment)

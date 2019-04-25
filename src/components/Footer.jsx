@@ -2,9 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
 import Container from "components/Container";
-import MapMarker from "react-icons/lib/fa/map-marker";
-import Phone from "react-icons/lib/fa/phone";
-import Envelope from "react-icons/lib/fa/envelope";
+import {
+  FaMapMarker as MapMarker,
+  FaPhone as Phone,
+  FaEnvelope as Envelope
+} from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
 
 import { colors, media } from "../utilities/style";

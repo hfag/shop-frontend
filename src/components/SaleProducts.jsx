@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
-import FaPercent from "react-icons/lib/fa/percent";
+import { FaPercent } from "react-icons/fa";
 
 import Link from "./Link";
 import Price from "./Price";

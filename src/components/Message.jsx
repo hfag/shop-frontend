@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import MdInfo from "react-icons/lib/md/info-outline";
+import { MdInfoOutline } from "react-icons/md";
 
 import { colors, borders } from "../utilities/style";
 import Flexbar from "./Flexbar";
@@ -26,7 +26,7 @@ class Message extends React.PureComponent {
     return (
       <MessageWrapper>
         <Flexbar>
-          <MdInfo color={colors.info} />
+          <MdInfoOutline color={colors.info} />
           {this.props.children}
         </Flexbar>
       </MessageWrapper>

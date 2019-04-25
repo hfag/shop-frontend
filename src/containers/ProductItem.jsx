@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
-import FaPercent from "react-icons/lib/fa/percent";
+import { FaPercent } from "react-icons/fa";
 import { withRouter } from "react-router";
 
 import Thumbnail from "../containers/Thumbnail";

@@ -1,12 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import HomeIcon from "react-icons/lib/fa/home";
-import SearchIcon from "react-icons/lib/fa/search";
-import CartIcon from "react-icons/lib/fa/shopping-cart";
-import AccountIcon from "react-icons/lib/fa/user";
-import SignInIcon from "react-icons/lib/fa/sign-in";
-import GearsIcon from "react-icons/lib/fa/cogs";
+import {
+  FaHome as HomeIcon,
+  FaSearch as SearchIcon,
+  FaShoppingCart as CartIcon,
+  FaUser as AccountIcon,
+  FaSignInAlt as SignInIcon,
+  FaCogs as GearsIcon
+} from "react-icons/fa";
 import { withRouter } from "react-router";
 
 import Link from "../components/Link";

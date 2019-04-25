@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import ChevronDown from "react-icons/lib/fa/chevron-down";
+import { FaChevronDown as ChevronDown } from "react-icons/fa";
 
 import Link from "../../components/Link";
 import {

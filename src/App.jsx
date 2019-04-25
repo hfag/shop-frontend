@@ -23,7 +23,6 @@ import {
   isLanguageSupported,
   getLanguageFromLocation
 } from "./utilities/i18n";
-import { getLanguage } from "./reducers";
 
 const Product = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "product" */ "./containers/Product")

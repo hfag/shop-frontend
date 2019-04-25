@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { withFormik, Form, FieldArray, Field } from "formik";
-import MdDelete from "react-icons/lib/md/delete";
+import { MdDelete } from "react-icons/md";
 
 import Button from "../../components/Button";
 import Price from "../../components/Price";
@@ -237,18 +237,16 @@ const InnerCartForm = ({
         </tfoot>
       </CartTable>
     </TableScroll>
-    {enabled &&
-      values.items.length > 0 &&
-      total > 0 && (
-        <Button
-          controlled
-          float="right"
-          onClick={dirty ? () => {} : onProceed}
-          state={dirty ? "disabled" : ""}
-        >
-          Weiter zur Bestellung
-        </Button>
-      )}
+    {enabled && values.items.length > 0 && total > 0 && (
+      <Button
+        controlled
+        float="right"
+        onClick={dirty ? () => {} : onProceed}
+        state={dirty ? "disabled" : ""}
+      >
+        Weiter zur Bestellung
+      </Button>
+    )}
   </Form>
 );
 

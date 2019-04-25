@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ChevronDown from "react-icons/lib/fa/chevron-down";
+import { FaChevronDown } from "react-icons/fa";
 
 import Card from "./Card";
 
@@ -28,7 +28,7 @@ const More = styled.div`
   );
 `;
 
-const Icon = styled(ChevronDown)`
+const Icon = styled(FaChevronDown)`
   position: absolute;
   left: 50%;
   bottom: 1rem;

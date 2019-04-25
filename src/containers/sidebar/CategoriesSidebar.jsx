@@ -7,7 +7,7 @@ import {
   getProductCategoryChildrenIdsById,
   getProductCategoryBySlug
 } from "reducers";
-import ChevronDown from "react-icons/lib/fa/chevron-down";
+import { FaChevronDown as ChevronDown } from "react-icons/fa";
 
 import CategoryItem from "../../containers/sidebar/CategoryItem";
 import Link from "../../components/Link";

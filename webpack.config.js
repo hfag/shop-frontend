@@ -28,7 +28,7 @@ module.exports = {
     publicPath: "/"
   },
 
-  devtool: "cheap-source-map",
+  devtool: "none",
   devServer: {
     contentBase: ".",
     hot: true,

@@ -28,11 +28,11 @@ const getStateOptionsByCountry = (countries, country) => {
 };
 
 /**
- * The inner account form
+ * The inner address form
  * @param {Object} params The formik params
  * @returns {Component} The component
  */
-const InnerAccountForm = ({
+const InnerAddressForm = ({
   values,
   isValid,
   status = "",
@@ -67,7 +67,12 @@ const InnerAccountForm = ({
       name="post_office_box"
       required={false}
     />
-    <InputField type="text" label="Postleitzahl" name="postcode" required={true} />
+    <InputField
+      type="text"
+      label="Postleitzahl"
+      name="postcode"
+      required={true}
+    />
     <InputField type="text" label="Ort / Stadt" name="city" required={true} />
     <SelectField
       label="Kanton"
@@ -85,17 +90,12 @@ const InnerAccountForm = ({
         countries[values.country] &&
         countries[values.country].states
           ? getStateOptionsByCountry(countries, values["country"])
-          : []
+          : [{ value: "AG", label: "Keine Angabe" }]
       }
     />
     {type === "billing" && (
       <div>
-        <InputField
-          type="tel"
-          label="Telefon"
-          name="phone"
-          required={true}
-        />
+        <InputField type="tel" label="Telefon" name="phone" required={true} />
         <InputField
           type="email"
           label="E-Mail Adresse"
@@ -111,7 +111,7 @@ const InnerAccountForm = ({
   </FormWrapper>
 );
 
-const AccountForm = withFormik({
+const AddressForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: ({
     values: {
@@ -177,7 +177,7 @@ const AccountForm = withFormik({
       state: yup
         .string()
         .oneOf(states)
-        .notRequired(),
+        .required(),
 
       phone:
         type === "billing"
@@ -206,13 +206,13 @@ const AccountForm = withFormik({
         setTimeout(() => setStatus(""), 300);
       });
   }
-})(InnerAccountForm);
+})(InnerAddressForm);
 
-AccountForm.propTypes = {
+AddressForm.propTypes = {
   updateAddress: PropTypes.func.isRequired,
   countries: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
   values: PropTypes.object.isRequired
 };
 
-export default AccountForm;
+export default AddressForm;

@@ -286,8 +286,8 @@ const CheckoutForm = withFormik({
   validationSchema: ({ countries }) => {
     const states = [].concat.apply(
       [],
-      Object.values(countries).map(
-        country => (country.states ? Object.keys(country.states) : [])
+      Object.values(countries).map(country =>
+        country.states ? Object.keys(country.states) : []
       )
     );
 
@@ -363,11 +363,18 @@ const CheckoutForm = withFormik({
       billing_state: yup
         .string()
         .oneOf(states)
-        .notRequired(),
-      shipping_state: yup
-        .string()
-        .oneOf(states)
-        .notRequired(),
+        .required(),
+      shipping_state: yup.string().when("ship_to_different_address", {
+        is: true,
+        then: yup
+          .string()
+          .oneOf(states)
+          .required(),
+        otherwise: yup
+          .string()
+          .oneOf(states)
+          .notRequired()
+      }),
 
       billing_phone: yup.string().required(),
       billing_email: yup
@@ -394,10 +401,11 @@ const CheckoutForm = withFormik({
   ) => {
     const shippingAddress = {},
       billingAddress = {},
-      comments = values["order_comments"];
+      comments = values["order_comments"],
+      shipToDifferentAddress = values["ship_to_different_address"];
 
     Object.keys(values).forEach(key => {
-      if (key.startsWith("shipping_")) {
+      if (key.startsWith("shipping_") && shipToDifferentAddress) {
         shippingAddress[key.replace("shipping_", "")] = values[key];
       } else if (key.startsWith("billing_")) {
         billingAddress[key.replace("billing_", "")] = values[key];

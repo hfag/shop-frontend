@@ -81,7 +81,7 @@ const CategoryItem = React.memo(
   ({ id: categoryId, category, parents = [], dispatch, location, match }) => {
     const url = useMemo(
       () => {
-        if (category) {
+        if (category && category.slug) {
           const language = getLanguageFromLocation(location);
           const base = getUrlPartByKeyAndLanguage("productCategory", language);
           const parentString =

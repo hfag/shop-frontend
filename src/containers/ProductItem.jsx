@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
 import FaPercent from "react-icons/lib/fa/percent";
+import { withRouter } from "react-router";
 
 import Thumbnail from "../containers/Thumbnail";
 import Placeholder from "../components/Placeholder";
@@ -18,6 +19,8 @@ import {
 } from "../reducers";
 import RelativeBox from "../components/RelativeBox";
 import Price from "../components/Price";
+import { getUrlPartByKeyAndLanguage } from "../utilities/urls";
+import { getLanguageFromLocation } from "../utilities/i18n";
 
 const StyledProduct = styled.div`
   background-color: #fff;
@@ -96,13 +99,33 @@ const Discount = styled.div`
 `;
 
 const ProductItem = React.memo(
-  ({ product, categories, resellerDiscount, fetchProductIfNeeded }) => {
+  ({
+    product,
+    categories,
+    resellerDiscount,
+    fetchProductIfNeeded,
+    location
+  }) => {
     /*useEffect(
       () => {
         fetchProductIfNeeded(product.slug); we don't need to fetch the whole product, just a preview
       },
       [product.slug]
     );*/
+
+    const url = useMemo(
+      () => {
+        if (product && product.slug) {
+          const language = getLanguageFromLocation(location);
+          const base = getUrlPartByKeyAndLanguage("product", language);
+
+          return `/${language}/${base}/${product.slug}/`;
+        }
+
+        return "";
+      },
+      [product, location]
+    );
 
     return (
       <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
@@ -114,7 +137,7 @@ const ProductItem = React.memo(
             <FaPercent />
           </Discount>
         )}
-        <Link to={"/produkt/" + ((product && product.slug) || "")}>
+        <Link to={url}>
           <StyledProduct>
             <Thumbnail id={product ? product.thumbnailId : -1} />
             <div>
@@ -195,7 +218,9 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
+const ConnectedProductItem = connect(
   mapStateToProps,
   mapDispatchToProps
 )(ProductItem);
+
+export default withRouter(ConnectedProductItem);

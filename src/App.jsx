@@ -20,7 +20,8 @@ import messagesDe from "./locales/de.json";
 import messagesFr from "./locales/fr.json";
 import {
   getLanguageFromCurrentWindow,
-  isLanguageSupported
+  isLanguageSupported,
+  getLanguageFromLocation
 } from "./utilities/i18n";
 import { getLanguage } from "./reducers";
 
@@ -96,7 +97,7 @@ const Routes = ({
  * @returns {Component} The component
  */
 const App = ({ history, store }) => {
-  const lang = getLanguage(store.getState());
+  const lang = getLanguageFromLocation(history.location);
 
   return (
     <Provider store={store}>

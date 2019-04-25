@@ -24,6 +24,12 @@ import reducers, {
   getProductCategories,
   getSales
 } from "../src/reducers";
+import {
+  supportedLanguages,
+  filterLanguage,
+  getLanguageFromPathname,
+  DEFAULT_LANGUAGE
+} from "../src/utilities/i18n";
 
 //polyfills
 require("isomorphic-fetch");
@@ -34,7 +40,11 @@ const DELETE_INTERVAL_IN_MINUTES = 17;
 const indexHtml = fs.readFileSync("./dist/client/index.html").toString();
 
 const app = express();
-const store = createStore(reducers, applyMiddleware(thunkMiddleware));
+const availableLanguages = supportedLanguages;
+const storeByLanguage = availableLanguages.reduce((object, languageKey) => {
+  object[languageKey] = createStore(reducers, applyMiddleware(thunkMiddleware));
+  return object;
+}, {});
 
 app.use(helmet.dnsPrefetchControl());
 app.use(helmet.ieNoOpen());
@@ -51,11 +61,20 @@ app.use(compression());
 const renderApplication = (request, response) => {
   const sheet = new ServerStyleSheet();
   const context = {};
+  let url = request.url;
 
-  const matchedRoutes = matchRoutes(routes, request.url.split("?")[0]);
-  const promises = matchedRoutes.map(
-    ({ route, match }) =>
-      route.fetchData ? route.fetchData(store, route, match) : Promise.resolve()
+  //decide on a language / store
+  let language = getLanguageFromPathname(url, "no-language");
+  if (language === "no-language") {
+    //if the requested path doesn't contain a language, treat it as if the default would be preprended
+    url = `${DEFAULT_LANGUAGE}/${url}`;
+    language = DEFAULT_LANGUAGE;
+  }
+  const store = storeByLanguage[language];
+
+  const matchedRoutes = matchRoutes(routes, url.split("?")[0]);
+  const promises = matchedRoutes.map(({ route, match }) =>
+    route.fetchData ? route.fetchData(store, route, match) : Promise.resolve()
   );
 
   Promise.all(promises)
@@ -64,7 +83,7 @@ const renderApplication = (request, response) => {
 
       const reactDom = renderToString(
         <StyleSheetManager sheet={sheet.instance}>
-          <App location={request.url} context={context} store={store} />
+          <App location={url} context={context} store={store} />
         </StyleSheetManager>
       );
 
@@ -111,88 +130,96 @@ console.log("Server listening on http://localhost:" + PORT) + "!";
 setInterval(() => {
   console.log("Checking store cache...");
 
-  const state = store.getState();
-  const lastSize = sizeOf(state);
+  Object.keys(storeByLanguage).forEach(languageKey => {
+    const store = storeByLanguage[languageKey];
+    console.log("Start checking store for language key", languageKey);
 
-  const products = getProducts(state),
-    now = Date.now();
-  const saleProductIds = getSales(state).map(sale => sale.productId);
-  const invalidProductSlugs = products
-    .filter(
-      product =>
-        product &&
-        now - product._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
-        !saleProductIds.includes(product.id)
-    )
-    .map(product => product.slug);
+    const state = store.getState();
+    const lastSize = sizeOf(state);
 
-  store.dispatch({
-    type: "DELETE_PRODUCTS",
-    isFetching: false,
-    itemIds: invalidProductSlugs
+    const products = getProducts(state),
+      now = Date.now();
+    const saleProductIds = getSales(state).map(sale => sale.productId);
+    const invalidProductSlugs = products
+      .filter(
+        product =>
+          product &&
+          now - product._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
+          !saleProductIds.includes(product.id)
+      )
+      .map(product => product.slug);
+
+    store.dispatch({
+      type: "DELETE_PRODUCTS",
+      isFetching: false,
+      itemIds: invalidProductSlugs
+    });
+    console.log(
+      `Deleted ${invalidProductSlugs.length} products from the store.`
+    );
+
+    const attributes = getProductAttributes(state);
+    const invalidAttributeIds = attributes
+      .filter(
+        attribute =>
+          attribute &&
+          now - attribute._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES
+      )
+      .map(attribute => attribute.id);
+
+    store.dispatch({
+      type: "DELETE_ATTRIBUTES",
+      isFetching: false,
+      itemIds: invalidAttributeIds
+    });
+    console.log(
+      `Deleted ${invalidAttributeIds.length} attributes from the store.`
+    );
+
+    const attachments = getAttachments(state);
+    const productCategoryThumbnailIds = getProductCategories(state).map(
+      category => category.thumbnailId
+    );
+    const invalidAttachmentIds = attachments
+      .filter(
+        attachment =>
+          attachment &&
+          (now - attachment._lastFetched >
+            1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
+            !productCategoryThumbnailIds.includes(attachment.id))
+      )
+      .map(attachment => attachment.id);
+
+    store.dispatch({
+      type: "DELETE_ATTACHMENTS",
+      isFetching: false,
+      itemIds: invalidAttachmentIds
+    });
+    console.log(
+      `Deleted ${invalidAttachmentIds.length} attachments from the store.`
+    );
+
+    const posts = getProductAttributes(state);
+    const invalidPostSlugs = posts
+      .filter(
+        post =>
+          post &&
+          now - post._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES
+      )
+      .map(post => post.slug);
+
+    store.dispatch({
+      type: "DELETE_POSTS",
+      isFetching: false,
+      itemIds: invalidPostSlugs
+    });
+    console.log(`Deleted ${invalidPostSlugs.length} posts from the store.`);
+
+    console.log(
+      "Done! Store size is now about",
+      lastSize - sizeOf(store.getState()),
+      " bytes smaller"
+    );
   });
-  console.log(`Deleted ${invalidProductSlugs.length} products from the store.`);
-
-  const attributes = getProductAttributes(state);
-  const invalidAttributeIds = attributes
-    .filter(
-      attribute =>
-        attribute &&
-        now - attribute._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES
-    )
-    .map(attribute => attribute.id);
-
-  store.dispatch({
-    type: "DELETE_ATTRIBUTES",
-    isFetching: false,
-    itemIds: invalidAttributeIds
-  });
-  console.log(
-    `Deleted ${invalidAttributeIds.length} attributes from the store.`
-  );
-
-  const attachments = getAttachments(state);
-  const productCategoryThumbnailIds = getProductCategories(state).map(
-    category => category.thumbnailId
-  );
-  const invalidAttachmentIds = attachments
-    .filter(
-      attachment =>
-        attachment &&
-        (now - attachment._lastFetched >
-          1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
-          !productCategoryThumbnailIds.includes(attachment.id))
-    )
-    .map(attachment => attachment.id);
-
-  store.dispatch({
-    type: "DELETE_ATTACHMENTS",
-    isFetching: false,
-    itemIds: invalidAttachmentIds
-  });
-  console.log(
-    `Deleted ${invalidAttachmentIds.length} attachments from the store.`
-  );
-
-  const posts = getProductAttributes(state);
-  const invalidPostSlugs = posts
-    .filter(
-      post =>
-        post && now - post._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES
-    )
-    .map(post => post.slug);
-
-  store.dispatch({
-    type: "DELETE_POSTS",
-    isFetching: false,
-    itemIds: invalidPostSlugs
-  });
-  console.log(`Deleted ${invalidPostSlugs.length} posts from the store.`);
-
-  console.log(
-    "Done! Store size is now about",
-    lastSize - sizeOf(store.getState()),
-    " bytes smaller"
-  );
 }, 1000 * 60 * DELETE_INTERVAL_IN_MINUTES);
 console.log("Cache clearing deamon initialized!");

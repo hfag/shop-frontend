@@ -19,7 +19,7 @@ export const isLanguageSupported = language =>
  * @param {string} [fallback] The fallback language
  * @returns {string} The language that should be used
  */
-const filterLanguage = (language, fallback = DEFAULT_LANGUAGE) =>
+export const filterLanguage = (language, fallback = DEFAULT_LANGUAGE) =>
   isLanguageSupported(language) ? language : fallback;
 
 /**
@@ -36,6 +36,19 @@ export const getLanguageFromLocation = (
     location.pathname && location.pathname.split("/")[1],
     fallback
   );
+};
+
+/**
+ * Gets the language from a given pathname
+ * @param {string} pathname The pathname
+ * @param {string} [fallback] The fallback language
+ * @returns {string} The language
+ */
+export const getLanguageFromPathname = (
+  pathname,
+  fallback = DEFAULT_LANGUAGE
+) => {
+  return filterLanguage(pathname.split("/")[1], fallback);
 };
 
 /**

@@ -25,11 +25,11 @@ class ApiError extends Error {
  * Fetches an url
  * @param {string} url The url to fetch
  * @param {Object} options Fetch options
- * @param {boolean} parseResponse Whether to parse the response
+ * @param {string} lang A parameter to explicitly define the fetch language
  * @returns {Promise<Object>} The fetch promise
  */
-export const fetchApi = (url, options, parseResponse = true) => {
-  const language = getLanguageFromCurrentWindow();
+export const fetchApi = (url, options, lang) => {
+  const language = lang ? lang : getLanguageFromCurrentWindow();
 
   if (!options.headers && options.body) {
     options.headers = new Headers();
@@ -53,50 +53,46 @@ export const fetchApi = (url, options, parseResponse = true) => {
     API_URL + (language && language !== "de" ? "/" + language : "") + url,
     options
   ).then(response =>
-    parseResponse
-      ? response.status == 204
-        ? null
-        : response
-            .json()
-            .then(json => {
-              if (response.ok) {
-                if (json && json.errors && json.errors.length !== 0) {
-                  if (
-                    json.errors.length === 1 &&
-                    json.errors[0] ===
-                      "You have to be logged in to perform this action"
-                  ) {
-                    if (typeof window !== "undefined") {
-                      window.location =
-                        "/login?redirect=" +
-                        encodeURIComponent(window.location.pathname); //we can't use react-router in here as we don't have access to the store
-                    }
-
-                    return;
-                  }
-                }
-
-                return { json, response };
+    response
+      .json()
+      .then(json => {
+        if (response.ok) {
+          if (json && json.errors && json.errors.length !== 0) {
+            if (
+              json.errors.length === 1 &&
+              json.errors[0] ===
+                "You have to be logged in to perform this action"
+            ) {
+              if (typeof window !== "undefined") {
+                window.location =
+                  "/login?redirect=" +
+                  encodeURIComponent(window.location.pathname); //we can't use react-router in here as we don't have access to the store
               }
 
-              if (json.status === 401) {
-                //session expired
-              }
+              return;
+            }
+          }
 
-              return Promise.reject(
-                new ApiError(
-                  json.message,
-                  response.status,
-                  response.statusText,
-                  json.errors
-                )
-              );
-            })
-            .catch(e =>
-              Promise.reject(
-                new ApiError(e.message, response.status, response.statusText)
-              )
-            )
-      : response
+          return { json, response };
+        }
+
+        if (json.status === 401) {
+          //session expired
+        }
+
+        return Promise.reject(
+          new ApiError(
+            json.message,
+            response.status,
+            response.statusText,
+            json.errors
+          )
+        );
+      })
+      .catch(e =>
+        Promise.reject(
+          new ApiError(e.message, response.status, response.statusText)
+        )
+      )
   );
 };

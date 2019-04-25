@@ -18,11 +18,7 @@ import Post from "./containers/Post";
 import Page from "./containers/Page";
 import messagesDe from "./locales/de.json";
 import messagesFr from "./locales/fr.json";
-import {
-  getLanguageFromCurrentWindow,
-  isLanguageSupported,
-  getLanguageFromLocation
-} from "./utilities/i18n";
+import { isLanguageSupported, getLanguageFromLocation } from "./utilities/i18n";
 
 const Product = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "product" */ "./containers/Product")

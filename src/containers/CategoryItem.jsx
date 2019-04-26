@@ -15,7 +15,7 @@ import {
   getLanguage
 } from "../reducers";
 import { colors, borders, shadows } from "../utilities/style";
-import { getUrlPartByKeyAndLanguage } from "../utilities/urls";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const StyledCategory = styled.div`
   background-color: #fff;
@@ -92,7 +92,7 @@ const CategoryItem = React.memo(
   }) => {
     const url = useMemo(() => {
       if (category && category.slug) {
-        const base = getUrlPartByKeyAndLanguage("productCategory", language);
+        const base = pathnamesByLanguage[language].productCategory;
         const parentString = parents.length > 0 ? parents.join("/") + "/" : "";
 
         return `/${language}/${base}/${parentString}${category.slug}/1`;

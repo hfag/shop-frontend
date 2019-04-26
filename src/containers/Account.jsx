@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import { getCountries, getLanguageFetchString } from "../reducers";
+import { getCountries, getLanguageFetchString, getLanguage } from "../reducers";
 import { fetchCountriesIfNeeded } from "../actions/countries";
 import { getIsAuthenticated, getAccount } from "../reducers";
 import Container from "../components/Container";
@@ -19,6 +19,7 @@ import AccountForm from "../components/account/AccountForm";
 import AddressForm from "../components/account/AddressForm";
 import { updateAccount, updateAddress, fetchAccount } from "../actions/user";
 import { fetchOrders } from "../actions/orders";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -72,6 +73,7 @@ class Account extends React.PureComponent {
 
   render = () => {
     const {
+      language,
       countries,
       accountDetails,
       billingAddress,
@@ -89,7 +91,12 @@ class Account extends React.PureComponent {
             name="description"
             content="Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
           />
-          <link rel="canonical" href={ABSOLUTE_URL + "/konto"} />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${
+              pathnamesByLanguage[language].account
+            }`}
+          />
         </Helmet>
         <Flex flexWrap="wrap">
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
@@ -100,19 +107,39 @@ class Account extends React.PureComponent {
                   <Link to={url}>Übersicht</Link>
                 </li>
                 <li>
-                  <Link to={`${url}/details`}>Details</Link>
+                  <Link to={`${url}/${pathnamesByLanguage[language].details}`}>
+                    Details
+                  </Link>
                 </li>
                 <li>
-                  <Link to={`${url}/rechnungsadresse`}>Rechnungsadresse</Link>
+                  <Link
+                    to={`${url}/${
+                      pathnamesByLanguage[language].billingAddress
+                    }`}
+                  >
+                    Rechnungsadresse
+                  </Link>
                 </li>
                 <li>
-                  <Link to={`${url}/lieferadresse`}>Lieferadresse</Link>
+                  <Link
+                    to={`${url}/${
+                      pathnamesByLanguage[language].shippingAddress
+                    }`}
+                  >
+                    Lieferadresse
+                  </Link>
                 </li>
                 <li>
-                  <Link to={`${url}/bestellungen`}>Bestellungen</Link>
+                  <Link to={`${url}/${pathnamesByLanguage[language].orders}`}>
+                    Bestellungen
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/logout">Abmelden</Link>
+                  <Link
+                    to={`/${language}/${pathnamesByLanguage[language].logout}`}
+                  >
+                    Abmelden
+                  </Link>
                 </li>
               </ProfileNavigation>
             </Card>
@@ -134,7 +161,7 @@ class Account extends React.PureComponent {
                 />
                 <Route
                   exact
-                  path={`${url}/details`}
+                  path={`${url}/${pathnamesByLanguage[language].details}`}
                   render={props => (
                     <AccountForm
                       {...props}
@@ -145,7 +172,9 @@ class Account extends React.PureComponent {
                 />
                 <Route
                   exact
-                  path={`${url}/rechnungsadresse`}
+                  path={`${url}/${
+                    pathnamesByLanguage[language].billingAddress
+                  }`}
                   render={props => (
                     <AddressForm
                       {...props}
@@ -158,7 +187,9 @@ class Account extends React.PureComponent {
                 />
                 <Route
                   exact
-                  path={`${url}/lieferadresse`}
+                  path={`${url}/${
+                    pathnamesByLanguage[language].shippingAddress
+                  }`}
                   render={props => (
                     <AddressForm
                       {...props}
@@ -169,9 +200,14 @@ class Account extends React.PureComponent {
                     />
                   )}
                 />
-                <Route path={`${url}/bestellungen`} component={AccountOrders} />
                 <Route
-                  path={`${url}/bestellung/:orderId`}
+                  path={`${url}/${pathnamesByLanguage[language].orders}`}
+                  component={AccountOrders}
+                />
+                <Route
+                  path={`${url}/${
+                    pathnamesByLanguage[language].orders
+                  }/:orderId`}
                   component={AccountOrder}
                 />
               </Switch>
@@ -186,6 +222,7 @@ class Account extends React.PureComponent {
 const mapStateToProps = state => {
   const account = getAccount(state);
   return {
+    language: getLanguage(state),
     languageFetchString: getLanguageFetchString(state),
     isAuthenticated: getIsAuthenticated(state),
     accountDetails: {
@@ -202,10 +239,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   /**
    * Redirects the client to the login page
+   * @param {string} language The language
    * @returns {void}
    */
-  redirectToLogin() {
-    return dispatch(push("/login"));
+  redirectToLogin(language) {
+    return dispatch(
+      push(`/${language}/${pathnamesByLanguage[language].login}`)
+    );
   },
   /**
    * Fetches all countries if needed
@@ -283,6 +323,13 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   ...ownProps,
   ...mapStateToProps,
   ...mapDispatchToProps,
+  /**
+   * Redirects the client to the login page
+   * @returns {void}
+   */
+  redirectToLogin() {
+    return mapDispatchToProps.redirectToLogin(mapStateToProps.language);
+  },
   /**
    * Fetches all countries if needed
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized

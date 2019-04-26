@@ -29,13 +29,15 @@ import {
   getAttachments,
   getAttachmentById,
   getSales,
-  getLanguageFetchString
+  getLanguageFetchString,
+  getLanguage
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
 import { InputFieldWrapper } from "../components/InputFieldWrapper";
 import JsonLd from "../components/JsonLd";
 import { attachmentsToJsonLd, productToJsonLd } from "../utilities/json-ld";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -261,6 +263,7 @@ class Product extends React.PureComponent {
 
   render = () => {
     const {
+      language,
       product = {},
       attributes = {},
       categories,
@@ -368,7 +371,12 @@ class Product extends React.PureComponent {
         <Helmet>
           <title>{stripTags(title)} - Hauser Feuerschutz AG</title>
           <meta name="description" content={description} />
-          <link rel="canonical" href={ABSOLUTE_URL + "/produkt/" + slug} />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${
+              pathnamesByLanguage[language].product
+            }/${slug}`}
+          />
         </Helmet>
         <JsonLd>
           {{
@@ -693,7 +701,9 @@ class Product extends React.PureComponent {
                               <Link
                                 key={id}
                                 styled
-                                to={`/produkt-kategorie/${slug}/1`}
+                                to={`/${language}/${
+                                  pathnamesByLanguage[language].productCategory
+                                }/${slug}/1`}
                               >
                                 {name}
                               </Link>
@@ -758,6 +768,7 @@ const mapStateToProps = (
       : [];
 
   return {
+    language: getLanguage(state),
     languageFetchString: getLanguageFetchString(state),
     productSlug,
     product: product && !product._isFetching ? product : {},
@@ -866,7 +877,6 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    */
   fetchProductIfNeeded(visualize = true) {
     return mapDispatchToProps.fetchProductIfNeeded(
-      productSlug,
       mapStateToProps.languageFetchString,
       visualize
     );

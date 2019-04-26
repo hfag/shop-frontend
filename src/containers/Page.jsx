@@ -3,9 +3,10 @@ import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 
 import Card from "../components/Card";
-import { getPageBySlug } from "../reducers";
+import { getPageBySlug, getLanguage } from "../reducers";
 import { fetchPageIfNeeded } from "../actions/pages";
 import { stripTags } from "../utilities";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -21,13 +22,18 @@ class Page extends React.PureComponent {
     }
   };
   render = () => {
-    const { page = {} } = this.props;
+    const { language, page = {} } = this.props;
     return (
       <Card>
         <Helmet>
           <title>{stripTags(page.title)}</title>
           <meta name="description" content={stripTags(page.description)} />
-          <link rel="canonical" href={ABSOLUTE_URL + "/" + page.slug} />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${
+              pathnamesByLanguage[language].page
+            }/${page.slug}`}
+          />
         </Helmet>
         <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
         <div dangerouslySetInnerHTML={{ __html: page.content }} />
@@ -44,6 +50,7 @@ const mapStateToProps = (
     }
   }
 ) => ({
+  language: getLanguage(state),
   languageFetchString: getLanguageFetchString(state),
   page: getPageBySlug(state, pageSlug)
 });

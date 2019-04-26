@@ -4,10 +4,15 @@ import { connect } from "react-redux";
 import { Flex, Box } from "grid-styled";
 
 import Card from "../components/Card";
-import { getPostBySlug, getLanguageFetchString } from "../reducers";
+import {
+  getPostBySlug,
+  getLanguageFetchString,
+  getLanguage
+} from "../reducers";
 import { fetchPostIfNeeded } from "../actions/posts";
 import { stripTags } from "../utilities";
 import Thumbnail from "./Thumbnail";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -23,13 +28,18 @@ class Post extends React.PureComponent {
     }
   };
   render = () => {
-    const { post = {} } = this.props;
+    const { language, post = {} } = this.props;
     return (
       <Card>
         <Helmet>
           <title>{stripTags(post.title)}</title>
           <meta name="description" content={stripTags(post.description)} />
-          <link rel="canonical" href={ABSOLUTE_URL + "/" + post.slug} />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${
+              pathnamesByLanguage[language].post
+            }/${post.slug}`}
+          />
         </Helmet>
         <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -46,6 +56,7 @@ const mapStateToProps = (
     }
   }
 ) => ({
+  language: getLanguage(state),
   languageFetchString: getLanguageFetchString(state),
   post: getPostBySlug(state, postSlug)
 });

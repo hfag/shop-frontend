@@ -1,6 +1,8 @@
 import { connectRouter } from "connected-react-router";
 
-import history from "../redux-history";
-
-const router = connectRouter(history);
-export default router;
+/**
+ * Creates a router reducer
+ * @param {Object} history The history object
+ * @returns {function} The reducer
+ */
+export const createRouterReducer = history => connectRouter(history);

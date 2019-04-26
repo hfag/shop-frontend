@@ -4,8 +4,9 @@ import PropTypes from "prop-types";
 
 import Placeholder from "../../components/Placeholder";
 import Link from "../../components/Link";
-import { getProductCategoryById } from "../../reducers";
+import { getProductCategoryById, getLanguage } from "../../reducers";
 import { colors, borders, shadows } from "../../utilities/style";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 /**
  * A single category item
@@ -13,7 +14,13 @@ import { colors, borders, shadows } from "../../utilities/style";
  */
 class CategoryItem extends React.PureComponent {
   render = () => {
-    const { id: categoryId, category, parent, parents = [] } = this.props;
+    const {
+      language,
+      id: categoryId,
+      category,
+      parent,
+      parents = []
+    } = this.props;
 
     if (category && !category.count) {
       return null;
@@ -24,10 +31,11 @@ class CategoryItem extends React.PureComponent {
         <Link
           to={
             category
-              ? "/produkt-kategorie/" +
-                (parents.length > 0 ? parents.join("/") + "/" : "") +
-                category.slug +
-                "/1"
+              ? `/${language}/${
+                  pathnamesByLanguage[language].productCategory
+                }/${parents.length > 0 ? parents.join("/") + "/" : ""}${
+                  category.slug
+                }/1`
               : ""
           }
         >
@@ -54,12 +62,13 @@ const mapStateToProps = (state, { id }) => {
 
   return category
     ? {
+        language: getLanguage(state),
         category,
         parent: category.parent
           ? getProductCategoryById(state, category.parent)
           : undefined
       }
-    : {};
+    : { language: getLanguage(state) };
 };
 
 const mapDispatchToProps = (dispatch, { id }) => ({

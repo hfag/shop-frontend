@@ -18,15 +18,20 @@ import { fetchAllProductCategoriesIfNeeded } from "../actions/product/categories
 import { fetchProducts } from "../actions/product";
 import JsonLd from "../components/JsonLd";
 import { stripTags } from "../utilities";
-import { getAttachmentById, getLanguageFetchString } from "../reducers";
+import {
+  getAttachmentById,
+  getLanguageFetchString,
+  getLanguage
+} from "../reducers";
 import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 import Card from "../components/Card";
 import OverflowCard from "../components/OverflowCard";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
-const Head = React.memo(({ category }) => {
+const Head = React.memo(({ language, category }) => {
   return (
     <Helmet
       title={
@@ -40,7 +45,11 @@ const Head = React.memo(({ category }) => {
       link={[
         {
           rel: "canonical",
-          href: category && ABSOLUTE_URL + "/produkt-kategorie/" + category.slug
+          href:
+            category &&
+            `${ABSOLUTE_URL}/${language}/${
+              pathnamesByLanguage[language].productCategories
+            }/${category.slug}`
         }
       ]}
     />
@@ -65,6 +74,7 @@ const ProductCategories = React.memo(
     fetchProducts,
     dispatch,
     /* render props*/
+    language,
     totalProductCount,
     categoryIds,
     productIds,
@@ -125,7 +135,7 @@ const ProductCategories = React.memo(
       <div>
         {active && (
           <div>
-            <Head category={category} />
+            <Head language={language} category={category} />
             <RichSnippet productsJsonLd={productsJsonLd} />
             {category && category.description && (
               <OverflowCard>
@@ -199,6 +209,7 @@ const mapStateToProps = (
     : [];
 
   return {
+    language: getLanguage(state),
     languageFetchString: getLanguageFetchString(state),
     categorySlug,
     category,

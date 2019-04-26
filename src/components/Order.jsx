@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { colors, borders, shadows } from "../utilities/style";
 import Price from "./Price";
 import Link from "./Link";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const OrderWrapper = styled.div`
   margin-top: -1px; /*border*/
@@ -83,7 +84,12 @@ class Order extends React.PureComponent {
 
     return (
       <OrderWrapper>
-        <Link to={"/konto/bestellung/" + id} styled>
+        <Link
+          to={`/${language}/${pathnamesByLanguage[language].account}/${
+            pathnamesByLanguage[language].orders
+          }/${id}`}
+          styled
+        >
           <h4>
             Bestellung #{id} vom {date.toLocaleDateString()}
           </h4>

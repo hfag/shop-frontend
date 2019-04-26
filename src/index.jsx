@@ -10,6 +10,7 @@ import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import { routerMiddleware } from "connected-react-router";
+import { createBrowserHistory } from "history";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 import throttle from "lodash/throttle";
 import { addLocaleData } from "react-intl";
@@ -18,16 +19,18 @@ import localeFr from "react-intl/locale-data/fr";
 
 import "./set-yup-locale";
 import App from "./App";
-import reducers from "./reducers";
+import { createRootReducer } from "./reducers";
 import { loadState, saveState } from "./local-storage";
 import "./scss/global.scss";
-import history from "./redux-history";
 
 //Set languages
 addLocaleData([...localeDe, ...localeFr]);
 
 //Load state from local storage and create history object
 const presistedState = { ...window.__INITIAL_DATA__, ...loadState() };
+
+//create a history object
+const history = createBrowserHistory();
 
 history.listen(location => {
   if (window.ga) {
@@ -38,7 +41,7 @@ history.listen(location => {
 
 //and the redux store
 const store = createStore(
-  reducers,
+  createRootReducer(history),
   presistedState,
   composeWithDevTools(
     applyMiddleware(

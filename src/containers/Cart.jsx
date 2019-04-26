@@ -18,12 +18,14 @@ import {
   getShoppingCartShipping,
   getCountries,
   getAccount,
-  getLanguageFetchString
+  getLanguageFetchString,
+  getLanguage
 } from "../reducers";
 import CartForm from "../components/cart/CartForm";
 import CheckoutForm from "../components/cart/CheckoutForm";
 import Card from "../components/Card";
 import Button from "../components/Button";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -59,6 +61,7 @@ class Cart extends React.PureComponent {
 
   render = () => {
     const {
+      language,
       dispatch,
       isFetching,
       items,
@@ -84,7 +87,12 @@ class Cart extends React.PureComponent {
             name="description"
             content="Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
           />
-          <link rel="canonical" href={ABSOLUTE_URL + "/warenkorb"} />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${
+              pathnamesByLanguage[language].language
+            }`}
+          />
         </Helmet>
 
         <h1>Warenkorb</h1>
@@ -120,6 +128,7 @@ class Cart extends React.PureComponent {
 
         {step === "checkout" && (
           <CheckoutForm
+            language={language}
             values={checkoutValues}
             setShowShipping={this.setShowShipping}
             showShipping={showShipping}
@@ -137,6 +146,7 @@ const mapStateToProps = state => {
   const account = getAccount(state);
 
   return {
+    language: getLanguage(state),
     languageFetchString: getLanguageFetchString(state),
     isFetching: isFetchingShoppingCart(state),
     items: getShoppingCartItems(state),

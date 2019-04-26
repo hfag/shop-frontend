@@ -14,6 +14,7 @@ import Link from "../../components/Link";
 import SelectField from "../../components/SelectField";
 import InputField from "../../components/InputField";
 import InlinePage from "../../containers/InlinePage";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 /**
  * Gets an state option list by country key
@@ -394,7 +395,7 @@ const CheckoutForm = withFormik({
   handleSubmit: (
     values,
     {
-      props: { dispatch, submitOrder },
+      props: { language, dispatch, submitOrder },
       setStatus
       /* setErrors, setValues, setStatus, and other goodies */
     }
@@ -422,7 +423,9 @@ const CheckoutForm = withFormik({
           dispatch(trackConversion(total || 0, "CHF", transactionId || "-1"));
 
           dispatch(clearShoppingCart());
-          dispatch(push("/bestaetigung"));
+          dispatch(
+            push(`/${language}/${pathnamesByLanguage[language].confirmation}`)
+          );
         }, 300);
       })
       .catch(e => {
@@ -433,6 +436,7 @@ const CheckoutForm = withFormik({
 })(InnerCheckoutForm);
 
 CheckoutForm.propTypes = {
+  language: PropTypes.string.isRequired,
   submitOrder: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   showShipping: PropTypes.bool.isRequired,

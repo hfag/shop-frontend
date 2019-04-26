@@ -16,6 +16,7 @@ import {
   getLanguageFetchString
 } from "../reducers";
 import Price from "../components/Price";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const StyledSearch = styled.div`
   position: relative;
@@ -244,26 +245,42 @@ class Searchbar extends React.PureComponent {
    * @returns {void}
    */
   onSuggestionSelected = (event, { suggestion }) => {
+    const { language } = this.props;
     this.setState({ value: "" });
 
     switch (suggestion.type) {
       case "product":
-        return this.props.dispatch(push("/produkt/" + suggestion.slug));
+        return this.props.dispatch(
+          push(
+            `/${language}/${pathnamesByLanguage[language].product}/${
+              suggestion.slug
+            }`
+          )
+        );
       case "product_variation":
         return this.props.dispatch(
           push(
-            "/produkt/" +
-              suggestion.parent_slug +
-              "?variationId=" +
-              suggestion.id
+            `/${language}/${pathnamesByLanguage[language].product}/${
+              suggestion.parent_slug
+            }?variationId=${suggestion.id}`
           )
         );
       case "taxonomy":
         return this.props.dispatch(
-          push("/produkt-kategorie/" + suggestion.slug + "/1")
+          push(
+            `/${language}/${pathnamesByLanguage[language].productCategory}/${
+              suggestion.slug
+            }/1`
+          )
         );
       case "show-more":
-        this.props.dispatch(push(`/suche?query=${this.state.value}`));
+        this.props.dispatch(
+          push(
+            `/${language}/${pathnamesByLanguage[language].search}?query=${
+              this.state.value
+            }`
+          )
+        );
         return this.setState({ value: "" });
       default:
         return;

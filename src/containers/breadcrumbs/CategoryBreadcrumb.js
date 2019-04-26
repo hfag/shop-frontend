@@ -1,4 +1,5 @@
-import { getProductCategoryBySlug } from "reducers";
+import { getLanguage, getProductCategoryBySlug } from "../../reducers";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 /**
  * Generates the breadcrumb array for a category
@@ -17,17 +18,17 @@ export const generateCategoryBreadcrumbs = ({ url }, { pathname }, state) => {
     .map(slug => getProductCategoryBySlug(state, slug))
     .filter(c => c);
 
+  const language = getLanguage(state);
+
   return categories.map(({ slug, name }, index) => ({
-    url:
-      "/produkt-kategorie/" +
-      (index > 0
+    url: `/${language}/${pathnamesByLanguage[language].productCategory}/${
+      index > 0
         ? categories
             .slice(0, index)
             .map(category => category.slug)
             .join("/") + "/"
-        : "") +
-      slug +
-      "/1",
+        : ""
+    }${slug}/1`,
     name: name
   }));
 };

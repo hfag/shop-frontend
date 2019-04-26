@@ -8,21 +8,23 @@ import Link from "../../components/Link";
 import {
   getProductCategories,
   getProductBySlug,
-  getProductCategoryById
+  getProductCategoryById,
+  getLanguage
 } from "../../reducers";
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
+import { pathnamesByLanguage } from "../../utilities/urls";
 /**
  * Renders a single product item
  * @returns {Component} The component
  */
 class ProductSidebar extends React.PureComponent {
   render = () => {
-    const { id: productId, product, categories } = this.props;
+    const { language, id: productId, product, categories } = this.props;
 
     return (
       <SidebarListWrapper>
-        <Link to="/">
+        <Link to={`/${language}/`}>
           <SidebarBreadcrumb active={false}>
             <div>
               <ChevronDown />
@@ -35,17 +37,16 @@ class ProductSidebar extends React.PureComponent {
           ...category.parents.map((category, index) => (
             <Link
               key={category.id}
-              to={
-                "/produkt-kategorie/" +
-                (index > 0
+              to={`/${language}/${
+                pathnamesByLanguage[language].productCategory
+              }/${
+                index > 0
                   ? category.parents
                       .slice(0, index)
                       .map(category => category.slug)
                       .join("/") + "/"
-                  : "") +
-                category.slug +
-                "/1"
-              }
+                  : ""
+              }${category.slug}/1`}
             >
               <SidebarBreadcrumb active={false}>
                 <div>
@@ -57,15 +58,14 @@ class ProductSidebar extends React.PureComponent {
           )),
           <Link
             key={category.id}
-            to={
-              "/produkt-kategorie/" +
-              (category.parents.length > 0
+            to={`/${language}/${
+              pathnamesByLanguage[language].productCategory
+            }/${
+              category.parents.length > 0
                 ? category.parents.map(category => category.slug).join("/") +
                   "/"
-                : "") +
-              category.slug +
-              "/1"
-            }
+                : ""
+            }${category.slug}/1`}
           >
             <SidebarBreadcrumb active={false}>
               <div>
@@ -100,6 +100,7 @@ const mapStateToProps = (
 ) => {
   const product = getProductBySlug(state, productSlug);
   return {
+    language: getLanguage(state),
     productSlug,
     product: product && !product._isFetching ? product : {},
     categories:

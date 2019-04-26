@@ -1,12 +1,11 @@
 import React from "react";
 import { Helmet } from "react-helmet";
+import { connect } from "react-redux";
 
 import Card from "../components/Card";
-import {
-  getProductSearchSections,
-  getLastProductSearchQuery
-} from "../reducers";
+import { getLanguage } from "../reducers";
 import Link from "../components/Link";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -15,7 +14,7 @@ const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
  * @returns {Component} The component
  */
 class Confirmation extends React.PureComponent {
-  render = () => {
+  render = ({ language }) => {
     return (
       <Card>
         <Helmet>
@@ -24,7 +23,12 @@ class Confirmation extends React.PureComponent {
             name="description"
             content="Bestätigungsseite nach einer Bestellung"
           />
-          <link rel="canonical" href={ABSOLUTE_URL + "/bestaetigung"} />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${
+              pathnamesByLanguage[language].confirmation
+            }`}
+          />
         </Helmet>
         <h1>Bestellbestätigung</h1>
         <p>
@@ -42,4 +46,6 @@ class Confirmation extends React.PureComponent {
   };
 }
 
-export default Confirmation;
+const mapStateToProps = state => ({ language: getLanguage(state) });
+
+export default connect(mapStateToProps)(Confirmation);

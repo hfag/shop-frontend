@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { LazyImage } from "react-lazy-images";
 
 import { fetchAttachment } from "../actions/attachments";
-import { getAttachmentById } from "../reducers";
+import { getAttachmentById, getLanguageFetchString } from "../reducers";
 import Placeholder from "../components/Placeholder";
 import { borders } from "../utilities/style";
 
@@ -90,7 +90,8 @@ Thumbnail.propTypes = {
 };
 
 const mapStateToProps = (state, { id }) => ({
-  thumbnail: getAttachmentById(state, id)
+  thumbnail: getAttachmentById(state, id),
+  languageFetchString: getLanguageFetchString(state)
 });
 const mapDispatchToProps = (dispatch, { id }) => ({
   /**
@@ -114,8 +115,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    * @returns {Promise} The fetch promise
    */
   fetchThumbnail(visualize = true) {
-    return mapDispatchToProps.fetchAttachment(
-      id,
+    return mapDispatchToProps.fetchThumbnail(
       mapStateToProps.languageFetchString,
       visualize
     );

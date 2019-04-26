@@ -1,4 +1,5 @@
-import { getPageBySlug } from "../../reducers";
+import { getPageBySlug, getLanguage } from "../../reducers";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 /**
  * Generates the breadcrumb array for a category
@@ -13,8 +14,10 @@ export const generatePageBreadcrumbs = (
   state
 ) => {
   const page = getPageBySlug(state, pageSlug) || {};
+  const language = getLanguage(state);
+
   return {
-    url: `/seite/${page.slug}`,
+    url: `/${language}/${pathnamesByLanguage[language].page}/${page.slug}`,
     name: page.title
   };
 };

@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { Route } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
 import { hot } from "react-hot-loader/root";
-import { Switch, Redirect } from "react-router";
+import { Switch, Redirect, withRouter } from "react-router";
 import { IntlProvider } from "react-intl";
 
 import { universalWithLoadingBar } from "./utilities/universal";
@@ -19,6 +19,7 @@ import Page from "./containers/Page";
 import messagesDe from "./locales/de.json";
 import messagesFr from "./locales/fr.json";
 import { isLanguageSupported, getLanguageFromLocation } from "./utilities/i18n";
+import { pathnamesByLanguage } from "./utilities/urls";
 
 const Product = universalWithLoadingBar(props =>
   import(/* webpackChunkName: "product" */ "./containers/Product")
@@ -66,22 +67,40 @@ const Routes = ({
     );
   }
 
+  const pathnames = pathnamesByLanguage[lang];
+
   return (
     <Switch>
       <Route exact path={`/${lang}/`} component={Frontpage} />
       <Route
-        path={`/${lang}/produkt-kategorie`}
+        path={`/${lang}/${pathnames.productCategory}`}
         component={ProductCategories}
       />
-      <Route exact path={`/${lang}/suche`} component={Search} />
-      <Route exact path={`/${lang}/produkt/:productSlug`} component={Product} />
-      <Route exact path={`/${lang}/beitrag/:postSlug`} component={Post} />
-      <Route exact path={`/${lang}/seite/:pageSlug`} component={Page} />
-      <Route exact path={`/${lang}/login`} component={Login} />
-      <Route exact path={`/${lang}/logout`} component={Logout} />
-      <Route path={`/${lang}/konto`} component={Account} />
-      <Route exact path={`/${lang}/warenkorb`} component={Cart} />
-      <Route exact path={`/${lang}/bestaetigung`} component={Confirmation} />
+      <Route exact path={`/${lang}/${pathnames.search}`} component={Search} />
+      <Route
+        exact
+        path={`/${lang}/${pathnames.product}/:productSlug`}
+        component={Product}
+      />
+      <Route
+        exact
+        path={`/${lang}/${pathnames.post}/:postSlug`}
+        component={Post}
+      />
+      <Route
+        exact
+        path={`/${lang}/${pathnames.page}/:pageSlug`}
+        component={Page}
+      />
+      <Route exact path={`/${lang}/${pathnames.login}`} component={Login} />
+      <Route exact path={`/${lang}/${pathnames.logout}`} component={Logout} />
+      <Route path={`/${lang}/${pathnames.account}`} component={Account} />
+      <Route exact path={`/${lang}/${pathnames.cart}`} component={Cart} />
+      <Route
+        exact
+        path={`/${lang}/${pathnames.confirmation}`}
+        component={Confirmation}
+      />
       <Route component={Page404} />
     </Switch>
   );

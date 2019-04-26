@@ -14,10 +14,12 @@ import Page from "../src/containers/Page";
 import { fetchSalesIfNeeded } from "../src/actions/sales";
 import { fetchPostIfNeeded } from "../src/actions/posts";
 import { fetchPageIfNeeded } from "../src/actions/pages";
+import { pathnamesByLanguage } from "../src/utilities/urls";
+import { supportedLanguages } from "../src/utilities/i18n";
 
-const routes = [
+const i18nRoutes = [
   {
-    path: "/",
+    path: language => `/${language}/`,
     component: Frontpage,
     exact: true,
     /**
@@ -39,7 +41,8 @@ const routes = [
     }
   },
   {
-    path: "/produkt-kategorie",
+    path: language =>
+      `/${language}/${pathnamesByLanguage[language].productCategory}`,
     component: ProductCategories,
     /**
      * Fetches the required data for this route
@@ -60,7 +63,8 @@ const routes = [
     }
   },
   {
-    path: "/produkt/:productSlug",
+    path: language =>
+      `/${language}/${pathnamesByLanguage[language].product}/:productSlug`,
     component: Product,
     exact: true,
     /**
@@ -92,7 +96,8 @@ const routes = [
     }
   },
   {
-    path: "/beitrag/:postSlug",
+    path: language =>
+      `/${language}/${pathnamesByLanguage[language].post}/:postSlug`,
     component: Post,
     exact: true,
     /**
@@ -122,7 +127,8 @@ const routes = [
     }
   },
   {
-    path: "/seite/:pageSlug",
+    path: language =>
+      `/${language}/${pathnamesByLanguage[language].page}/:pageSlug`,
     component: Page,
     exact: true,
     /**
@@ -152,7 +158,7 @@ const routes = [
     }
   },
   {
-    path: "/login",
+    path: language => `/${language}/${pathnamesByLanguage[language].login}`,
     component: Login,
     exact: true,
     /**
@@ -174,7 +180,7 @@ const routes = [
     }
   },
   {
-    path: "/logout",
+    path: language => `/${language}/${pathnamesByLanguage[language].Logout}`,
     component: Logout,
     exact: true,
     /**
@@ -196,7 +202,7 @@ const routes = [
     }
   },
   {
-    path: "/konto",
+    path: language => `/${language}/${pathnamesByLanguage[language].account}`,
     component: Account,
     /**
      * Fetches the required data for this route
@@ -217,7 +223,7 @@ const routes = [
     }
   },
   {
-    path: "/warenkorb",
+    path: language => `/${language}/${pathnamesByLanguage[language].cart}`,
     component: Cart,
     exact: true,
     /**
@@ -240,7 +246,6 @@ const routes = [
   },
   {
     component: Page404,
-    exact: true,
     /**
      * Fetches the required data for this route
      * @param {Object} store The redux store
@@ -260,5 +265,17 @@ const routes = [
     }
   }
 ];
+
+const routes = [];
+i18nRoutes.forEach(({ path, component, exact, fetchData }) => {
+  supportedLanguages.forEach(language => {
+    routes.push({
+      path: path ? path(language) : undefined,
+      component,
+      exact,
+      fetchData
+    });
+  });
+});
 
 export default routes;

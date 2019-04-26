@@ -14,11 +14,16 @@ import { withRouter } from "react-router";
 import Link from "../components/Link";
 import { media, colors } from "../utilities/style";
 import NameSlogan from "../../img/logo/name_slogan.svg";
-import { getIsAuthenticated, getBurgerMenuOpen } from "../reducers";
+import {
+  getIsAuthenticated,
+  getBurgerMenuOpen,
+  getLanguage
+} from "../reducers";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import MediaQuery from "../components/MediaQuery";
 import Card from "../components/Card";
 import RestrictedView from "./RestrictedView";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const BurgerContainer = styled(Card)`
   height: 100%;
@@ -88,6 +93,7 @@ const BurgerBackground = styled.div`
 class Sidebar extends React.PureComponent {
   render = () => {
     const {
+      language,
       isOpen = false,
       isAuthenticated,
       toggleBurgerMenu,
@@ -102,33 +108,45 @@ class Sidebar extends React.PureComponent {
             <BurgerLogo src={NameSlogan} alt="Slogan" />
             <BurgerList>
               <BurgerItem seperator>
-                <Link to="/" flex>
+                <Link to={`/${language}/`} flex>
                   <HomeIcon />
-                  Home
+                  Startseite
                 </Link>
               </BurgerItem>
               <BurgerItem seperator>
-                <Link to="/suche" flex>
+                <Link
+                  to={`/${language}/${pathnamesByLanguage[language].search}`}
+                  flex
+                >
                   <SearchIcon />
                   Suche
                 </Link>
               </BurgerItem>
               <BurgerItem seperator>
-                <Link to="/warenkorb" flex>
+                <Link
+                  to={`/${language}/${pathnamesByLanguage[language].cart}`}
+                  flex
+                >
                   <CartIcon />
                   Warenkorb
                 </Link>
               </BurgerItem>
               <BurgerItem seperator>
                 {isAuthenticated ? (
-                  <Link to="/konto" flex>
+                  <Link
+                    to={`/${language}/${pathnamesByLanguage[language].account}`}
+                    flex
+                  >
                     <span>
                       <AccountIcon />
                       Mein Konto
                     </span>
                   </Link>
                 ) : (
-                  <Link to="/login" flex>
+                  <Link
+                    to={`/${language}/${pathnamesByLanguage[language].login}`}
+                    flex
+                  >
                     <span>
                       <SignInIcon />
                       Login
@@ -163,6 +181,7 @@ class Sidebar extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
+  language: getLanguage(state),
   isAuthenticated: getIsAuthenticated(state),
   isOpen: getBurgerMenuOpen(state)
 });

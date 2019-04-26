@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Link from "../Link";
 import Dropdown from "../Dropdown";
 import RestrictedView from "../../containers/RestrictedView";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import Triangle from "../Triangle";
 
 const UserDropdown = styled(Dropdown)`
   left: 0;
@@ -34,7 +36,10 @@ const NavUser = React.memo(
         {dropdown === "user" && (
           <UserDropdown>
             <div>
-              <Link to={`/${language}/konto`} active={false}>
+              <Link
+                to={`/${language}/${pathnamesByLanguage[language].account}`}
+                active={false}
+              >
                 Zum Konto
               </Link>
             </div>
@@ -51,7 +56,10 @@ const NavUser = React.memo(
               </div>
             </RestrictedView>
             <div>
-              <Link to={`/${language}/logout`} active={false}>
+              <Link
+                to={`/${language}/${pathnamesByLanguage[language].logout}`}
+                active={false}
+              >
                 Abmelden
               </Link>
             </div>
@@ -59,7 +67,11 @@ const NavUser = React.memo(
         )}
       </div>
     ) : (
-      <Link to={`/${language}/login`} negative flex>
+      <Link
+        to={`/${language}/${pathnamesByLanguage[language].login}`}
+        negative
+        flex
+      >
         <Login>Login</Login>
       </Link>
     );

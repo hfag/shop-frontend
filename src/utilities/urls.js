@@ -1,6 +1,6 @@
 import { getLanguageFromCurrentWindow, getLanguageFromLocation } from "./i18n";
 
-const pathnamesByLanguage = {
+export const pathnamesByLanguage = {
   de: {
     productCategory: "produkt-kategorie",
     search: "suche",
@@ -10,6 +10,10 @@ const pathnamesByLanguage = {
     login: "login",
     logout: "logout",
     account: "konto",
+    orders: "bestellungen",
+    details: "details",
+    billingAddress: "rechnungsadresse",
+    shippingAddress: "lieferadresse",
     cart: "warenkorb",
     confirmation: "bestaetigung"
   },
@@ -22,19 +26,14 @@ const pathnamesByLanguage = {
     login: "login",
     logout: "logout",
     account: "compte",
+    orders: "commandes",
+    details: "details",
+    billingAddress: "adresse-de-facturation",
+    shippingAddress: "adresse-de-livraison",
     cart: "panier-d-achat",
     confirmation: "confirmation"
   }
 };
-
-/**
- * Gets the url part by a key and a lanuage
- * @param {string} urlKey The url key to retrieve
- * @param {string} language The language key
- * @returns {string} The url part
- */
-export const getUrlPartByKeyAndLanguage = (urlKey, language = "de") =>
-  pathnamesByLanguage[language][urlKey];
 
 /**
  * Gets the url part by a key and the given location language

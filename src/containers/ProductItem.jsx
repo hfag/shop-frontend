@@ -20,7 +20,7 @@ import {
 } from "../reducers";
 import RelativeBox from "../components/RelativeBox";
 import Price from "../components/Price";
-import { getUrlPartByKeyAndLanguage } from "../utilities/urls";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const StyledProduct = styled.div`
   background-color: #fff;
@@ -102,7 +102,7 @@ const ProductItem = React.memo(
   ({ product, categories, resellerDiscount, language }) => {
     const url = useMemo(() => {
       if (product && product.slug) {
-        const base = getUrlPartByKeyAndLanguage("product", language);
+        const base = pathnamesByLanguage[language].product;
 
         return `/${language}/${base}/${product.slug}/`;
       }

@@ -1,4 +1,5 @@
 import { getLanguageFromCurrentWindow } from "./i18n";
+import { pathnamesByLanguage } from "./urls";
 
 const API_URL = process.env.API_URL;
 
@@ -58,9 +59,12 @@ export const fetchApi = (url, options) => {
                 "You have to be logged in to perform this action"
             ) {
               if (typeof window !== "undefined") {
-                window.location =
-                  "/login?redirect=" +
-                  encodeURIComponent(window.location.pathname); //we can't use react-router in here as we don't have access to the store
+                //we can't use react-router in here as we don't have access to the store
+                const lang = getLanguageFromCurrentWindow();
+
+                window.location = `/${lang}/${
+                  pathnamesByLanguage[lang].login
+                }?redirect=${encodeURIComponent(window.location.pathname)}`;
               }
 
               return;

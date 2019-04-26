@@ -13,6 +13,7 @@ import CategoryItem from "../../containers/sidebar/CategoryItem";
 import Link from "../../components/Link";
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
+import { getLanguage } from "../../reducers";
 
 const ITEMS_PER_PAGE = 60;
 
@@ -23,6 +24,7 @@ const ITEMS_PER_PAGE = 60;
 
 const CategoriesSidebar = React.memo(
   ({
+    language,
     category,
     categoryIds,
     productIds,
@@ -71,7 +73,7 @@ const CategoriesSidebar = React.memo(
             </SidebarBreadcrumb>
           </Link>
         ) : (
-          <Link to="/">
+          <Link to={`/${language}/`}>
             <SidebarBreadcrumb active={active}>
               <div>
                 <ChevronDown />
@@ -119,6 +121,7 @@ const mapStateToProps = (
   const category = getProductCategoryBySlug(state, categorySlug);
 
   return {
+    language: getLanguage(state),
     categorySlug,
     category,
     categoryIds:

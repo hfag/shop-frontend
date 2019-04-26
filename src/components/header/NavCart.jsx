@@ -7,6 +7,8 @@ import Dropdown from "../Dropdown";
 import Circle from "../Circle";
 import Button from "../Button";
 import Triangle from "../Triangle";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import Thumbnail from "../../containers/Thumbnail";
 
 const Counter = styled.div`
   margin-left: 0.5rem;
@@ -95,7 +97,9 @@ const NavCart = React.memo(
               fullWidth
               onClick={() =>
                 new Promise((resolve, reject) => {
-                  redirect(`/${language}/warenkorb`);
+                  redirect(
+                    `/${language}/${pathnamesByLanguage[language].cart}`
+                  );
                   setDropdown(false);
                 })
               }

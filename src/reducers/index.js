@@ -14,7 +14,7 @@ import sales, * as fromSales from "./sales";
 import account, * as fromAccount from "./account";
 import orders, * as fromOrders from "./orders";
 import burgerMenu, * as fromBurgerMenu from "./burger-menu";
-import router from "./router";
+import { createRouterReducer } from "./router";
 import {
   getLanguageFromPathname,
   languageToFetchString
@@ -480,38 +480,44 @@ export const getLanguageFetchString = state => {
   return languageToFetchString(getLanguage(state));
 };
 
-const appReducer = combineReducers({
-  router,
-  loadingBar,
-  burgerMenu,
-  productSearch,
-  shoppingCart,
-  product,
-  simpleProduct,
-  attachment,
-  post,
-  page,
-  countries,
-  sales,
-  account,
-  orders,
-  isAuthenticated: (state = false, action) => {
-    switch (action.type) {
-      case "LOGIN_USER":
-        return !action.isFetching && !action.error ? action.success : state;
-      default:
-        return state;
+/**
+ * Creates the app reducer
+ * @param {Object} history The history object
+ * @returns {function} The app reducer
+ */
+const createAppReducer = history =>
+  combineReducers({
+    router: createRouterReducer(history),
+    loadingBar,
+    burgerMenu,
+    productSearch,
+    shoppingCart,
+    product,
+    simpleProduct,
+    attachment,
+    post,
+    page,
+    countries,
+    sales,
+    account,
+    orders,
+    isAuthenticated: (state = false, action) => {
+      switch (action.type) {
+        case "LOGIN_USER":
+          return !action.isFetching && !action.error ? action.success : state;
+        default:
+          return state;
+      }
     }
-  }
-});
+  });
 
 /**
- * Make sure that the state is removed if the user signed out of the application
- * @param {Object} state The previous state
- * @param {Object} action The action to process
- * @returns {Object} The new state
+ * Creates the root reducer based on the app reducer
+ * Make sure that the state is removed if the user signed out of the application.
+ * @param {function} appReducer The app reducer
+ * @returns {function} The root reducer
  */
-const rootReducer = (state, action) => {
+const rootReducer = appReducer => (state, action) => {
   if (action.type === "LOGOUT_USER") {
     state = undefined;
   }
@@ -527,4 +533,10 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
-export default rootReducer;
+/**
+ * Creates the root reducer
+ * @param {Object} history The history object
+ * @returns {function} The root reducer
+ */
+export const createRootReducer = history =>
+  rootReducer(createAppReducer(history));

@@ -16,11 +16,13 @@ import {
   getSimpleProducts,
   getResellerDiscount,
   isFetchingSimpleProducts,
-  getLanguageFetchString
+  getLanguageFetchString,
+  getLanguage
 } from "../reducers";
 import { colors } from "../utilities/style";
 import Price from "../components/Price";
 import Link from "../components/Link";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const SkuSelectionWrapper = styled.div`
   h2 {
@@ -108,13 +110,15 @@ class NameCell extends React.PureComponent {
     this.state = { counter: 1 };
   }
   render = () => {
-    const { product, isExpanded, addToShoppingCart } = this.props;
+    const { language, product, isExpanded, addToShoppingCart } = this.props;
     const { counter } = this.state;
 
     return (
       <div>
         <Link
-          to={`/produkt/${product.slug}/?variationId=${product.variationId}`}
+          to={`/${language}/${pathnamesByLanguage[language].product}/${
+            product.slug
+          }/?variationId=${product.variationId}`}
         >
           <strong dangerouslySetInnerHTML={{ __html: product.name }} />
         </Link>
@@ -339,6 +343,7 @@ const mapStateToProps = state => {
     resellerDiscount = getResellerDiscount(state);
 
   return {
+    language: getLanguage(state),
     languageFetchString: getLanguageFetchString(state),
     products: products.map(product =>
       resellerDiscount[product.id]

@@ -7,6 +7,7 @@ import Link from "./Link";
 import Price from "./Price";
 import Thumbnail from "../containers/Thumbnail";
 import { colors, shadows, borders } from "../utilities/style";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const SalesFlex = styled(Flex)`
   margin: 0 -0.5rem;
@@ -53,11 +54,13 @@ const DiscountLogo = styled.span`
   }
 `;
 
-const Post = React.memo(({ post }) => {
+const Post = React.memo(({ language, post }) => {
   return (
     <Box width={[1, 1, 1 / 3, 1 / 3]} px={2} mt={3}>
       <SaleWrapper>
-        <Link to={`/beitrag/${post.slug}`}>
+        <Link
+          to={`/${language}/${pathnamesByLanguage[language].post}/${post.slug}`}
+        >
           <Flex>
             <Box width={[1, 1, 1 / 2, 1 / 2]} pr={2}>
               <Thumbnail id={post.thumbnailId} />
@@ -77,12 +80,14 @@ const Post = React.memo(({ post }) => {
   );
 });
 
-const Product = React.memo(({ product }) => {
+const Product = React.memo(({ language, product }) => {
   return (
     <Box width={[1, 1, 1 / 3, 1 / 3]} px={2} mt={3}>
       <SaleWrapper>
         <Link
-          to={`/produkt/${product.slug}?variationId=${product.variationId}`}
+          to={`/${language}/${pathnamesByLanguage[language].product}/${
+            product.slug
+          }?variationId=${product.variationId}`}
         >
           <DiscountLogo>
             <FaPercent />
@@ -126,20 +131,22 @@ const Product = React.memo(({ product }) => {
   );
 });
 
-const SaleProducts = React.memo(({ posts = [], saleProducts = [] }) => {
-  return (
-    <div>
-      <h2 style={{ marginBottom: 0 }}>News und Aktionen</h2>
-      <SalesFlex flexWrap="wrap">
-        {posts.map(post => (
-          <Post post={post} key={post.slug} />
-        ))}
-        {saleProducts.map(product => (
-          <Product product={product} key={product.id} />
-        ))}
-      </SalesFlex>
-    </div>
-  );
-});
+const SaleProducts = React.memo(
+  ({ language, posts = [], saleProducts = [] }) => {
+    return (
+      <div>
+        <h2 style={{ marginBottom: 0 }}>News und Aktionen</h2>
+        <SalesFlex flexWrap="wrap">
+          {posts.map(post => (
+            <Post language={language} post={post} key={post.slug} />
+          ))}
+          {saleProducts.map(product => (
+            <Product language={language} product={product} key={product.id} />
+          ))}
+        </SalesFlex>
+      </div>
+    );
+  }
+);
 
 export default SaleProducts;

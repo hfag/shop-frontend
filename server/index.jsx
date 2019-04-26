@@ -11,14 +11,17 @@ import { matchRoutes } from "react-router-config";
 import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from "redux-thunk";
+import { routerMiddleware } from "connected-react-router";
 import { push } from "connected-react-router";
 import { Helmet as ReactHelmet } from "react-helmet";
+import { createMemoryHistory } from "history";
 
 import "../src/set-yup-locale";
 
 import App from "./App";
 import routes from "./routes";
-import reducers, {
+import {
+  createRootReducer,
   getProducts,
   getProductAttributes,
   getAttachments,
@@ -27,7 +30,6 @@ import reducers, {
 } from "../src/reducers";
 import {
   supportedLanguages,
-  filterLanguage,
   getLanguageFromPathname,
   DEFAULT_LANGUAGE,
   languageToFetchString
@@ -42,11 +44,35 @@ const DELETE_INTERVAL_IN_MINUTES = 17;
 const indexHtml = fs.readFileSync("./dist/client/index.html").toString();
 
 const app = express();
-const availableLanguages = supportedLanguages;
-const storeByLanguage = availableLanguages.reduce((object, languageKey) => {
-  object[languageKey] = createStore(reducers, applyMiddleware(thunkMiddleware));
-  //navigate to the startpage of the given language so 'getLanguage' will work as expected
-  object[languageKey].dispatch(push(`/${languageKey}/`));
+
+/**
+ * Creates a new store
+ * @param {Object} history The history object
+ * @param {Object} initialState initial state values
+ * @returns {Object} The new store
+ */
+const createNewStore = (history, initialState = {}) =>
+  createStore(
+    createRootReducer(history),
+    initialState,
+    applyMiddleware(thunkMiddleware, routerMiddleware(history))
+  );
+/**
+ * Removes the location data from the state
+ * @param {Object} state The state to remove the location from
+ * @returns {Object} The same state (by reference)
+ */
+const removeLocation = state => {
+  delete state.router;
+  return state;
+};
+
+const storeByLanguage = supportedLanguages.reduce((object, languageKey) => {
+  const history = createMemoryHistory({
+    initialEntries: [`/${languageKey}/`]
+  });
+  object[languageKey] = createNewStore(history);
+
   return object;
 }, {});
 
@@ -78,6 +104,9 @@ const renderApplication = (request, response) => {
   const languageFetchString = languageToFetchString(language);
 
   const matchedRoutes = matchRoutes(routes, url.split("?")[0]);
+  const history = createMemoryHistory({
+    initialEntries: [url]
+  });
   const promises = matchedRoutes.map(({ route, match }) =>
     route.fetchData
       ? route.fetchData(store, route, match, languageFetchString)
@@ -86,7 +115,11 @@ const renderApplication = (request, response) => {
 
   Promise.all(promises)
     .then(() => {
-      //Update state
+      //Update state, now copy the store and dispatch a navigation
+      const clonedStore = createNewStore(
+        history,
+        removeLocation(store.getState())
+      );
 
       const reactDom = renderToString(
         <StyleSheetManager sheet={sheet.instance}>
@@ -94,7 +127,7 @@ const renderApplication = (request, response) => {
             location={url}
             language={language}
             context={context}
-            store={store}
+            store={clonedStore}
           />
         </StyleSheetManager>
       );
@@ -115,7 +148,7 @@ const renderApplication = (request, response) => {
               .join(
                 ""
               )}${styleTags}<script>window.__INITIAL_DATA__ = ${JSON.stringify(
-              store.getState()
+              clonedStore.getState()
             )}</script>`
           )
           .replace("<html>", `<html ${reactHelmet.htmlAttributes.toString()}>`)

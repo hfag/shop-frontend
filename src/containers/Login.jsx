@@ -16,8 +16,9 @@ import {
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 import Card from "../components/Card";
-import { getIsAuthenticated } from "../reducers";
+import { getIsAuthenticated, getLanguage } from "../reducers";
 import Message from "../components/Message";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -214,7 +215,7 @@ class Login extends React.PureComponent {
   };
 
   render = () => {
-    const { dispatch, login, register, resetPassword } = this.props;
+    const { language, dispatch, login, register, resetPassword } = this.props;
     return (
       <Card>
         <Helmet>
@@ -223,14 +224,21 @@ class Login extends React.PureComponent {
             name="description"
             content="Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
           />
-          <link rel="canonical" href={ABSOLUTE_URL + "/login"} />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${pathnamesByLanguage[language].login}`}
+          />
         </Helmet>
         <Flex flexWrap="wrap">
           <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
             <h1>Anmelden</h1>
             <LoginRegisterForm
               action={login}
-              callback={() => dispatch(push("/konto"))}
+              callback={() =>
+                dispatch(
+                  push(`/${language}/${pathnamesByLanguage[language].account}`)
+                )
+              }
               submitText="Anmelden"
             />
             <h1>Passwort vergessen?</h1>
@@ -267,6 +275,7 @@ class Login extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
+  language: getLanguage(state),
   isAuthenticated: getIsAuthenticated(state)
 });
 const mapDispatchToProps = dispatch => ({

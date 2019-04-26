@@ -6,8 +6,9 @@ import styled from "styled-components";
 import Address from "../../components/Address";
 import Button from "../../components/Button";
 import Order from "../../components/Order";
-import { getOrders } from "../../reducers";
+import { getOrders, getLanguage } from "../../reducers";
 import Link from "../../components/Link";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 const DashboardWrapper = styled.div`
   .no-margin {
@@ -25,6 +26,7 @@ const DashboardWrapper = styled.div`
 class AccountDashboard extends React.PureComponent {
   render = () => {
     const {
+      language,
       dispatch,
       accountDetails: { firstName, lastName, email },
       billingAddress,
@@ -57,7 +59,14 @@ class AccountDashboard extends React.PureComponent {
               <div>
                 Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen
                 angesprochen werden möchten, können Sie{" "}
-                <Link to="/konto/details">hier</Link> Ihren Namen hinterlegen.
+                <Link
+                  to={`/${language}/${pathnamesByLanguage[language].account}/${
+                    pathnamesByLanguage[language].details
+                  }`}
+                >
+                  hier
+                </Link>{" "}
+                Ihren Namen hinterlegen.
               </div>
             )}
 
@@ -70,7 +79,14 @@ class AccountDashboard extends React.PureComponent {
                     Sie haben noch keine Rechnungsaddresse hinterlegt. Falls sie
                     möchten dass diese bei jeder Bestellung von selbst
                     ausgefüllt wird, fügen Sie{" "}
-                    <Link to="/konto/rechnungsadresse">hier</Link> eine hinzu.
+                    <Link
+                      to={`/${language}/${
+                        pathnamesByLanguage[language].account
+                      }/${pathnamesByLanguage[language].billingAddress}`}
+                    >
+                      hier
+                    </Link>{" "}
+                    eine hinzu.
                   </div>
                 ) : (
                   <Address address={billingAddress} />
@@ -92,7 +108,9 @@ class AccountDashboard extends React.PureComponent {
             {orders
               .sort((a, b) => a.created - b.created)
               .slice(0, 3)
-              .map(order => <Order key={order.id} order={order} compact />)}
+              .map(order => (
+                <Order key={order.id} order={order} compact />
+              ))}
           </Box>
         </Flex>
       </DashboardWrapper>
@@ -101,6 +119,7 @@ class AccountDashboard extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
+  language: getLanguage(state),
   orders: getOrders(state)
 });
 const mapDispatchToProps = dispatch => ({

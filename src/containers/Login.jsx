@@ -1,7 +1,7 @@
 import React from "react";
 import { withFormik, Form } from "formik";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import * as yup from "yup";
 import { Flex, Box } from "grid-styled";
 import queryString from "query-string";

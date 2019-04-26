@@ -1,4 +1,4 @@
-import { windowExists } from "./ssr";
+import { isClient } from "./ssr";
 
 export const supportedLanguages = ["de", "fr"];
 
@@ -58,5 +58,14 @@ export const getLanguageFromPathname = (
  * @returns {string} The language
  */
 export const getLanguageFromCurrentWindow = (fallback = DEFAULT_LANGUAGE) => {
-  return windowExists() ? getLanguageFromLocation(window.location) : fallback;
+  return isClient ? getLanguageFromLocation(window.location) : fallback;
 };
+
+/**
+ * Converts a language string to a language fetch string. mostly /language/ but
+ * return "" i.e. no prefix for backwards compat if language === "de"
+ * @param {string} language the language
+ * @returns {string} the language fetch string
+ */
+export const languageToFetchString = language =>
+  language === "de" ? "" : "/" + language;

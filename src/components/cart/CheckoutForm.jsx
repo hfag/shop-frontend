@@ -4,7 +4,7 @@ import { Flex, Box } from "grid-styled";
 import * as yup from "yup";
 import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 
 import { trackConversion } from "../../actions/orders";
 import { clearShoppingCart } from "../../actions/shopping-cart";

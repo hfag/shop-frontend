@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";

@@ -63,7 +63,7 @@ const mapDispatchToProps = (
    * @returns {Promise} The fetch promise
    */
   fetchPostIfNeeded(language) {
-    return dispatch(fetchPostIfNeeded(language, postSlug));
+    return dispatch(fetchPostIfNeeded(postSlug, language));
   }
 });
 
@@ -77,8 +77,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    */
   fetchPostIfNeeded() {
     return mapDispatchToProps.fetchPostIfNeeded(
-      mapStateToProps.languageFetchString,
-      postSlug
+      mapStateToProps.languageFetchString
     );
   }
 });

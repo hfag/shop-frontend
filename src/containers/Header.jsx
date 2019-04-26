@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import styled from "styled-components";
 import { MdMenu } from "react-icons/md";
 import LoadingBar from "react-redux-loading-bar";

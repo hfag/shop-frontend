@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import {
   getProducts,
   getProductCategoryChildrenIdsById,

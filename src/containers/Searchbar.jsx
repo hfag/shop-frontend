@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import styled from "styled-components";
 import Autosuggest from "react-autosuggest";
 import debounce from "lodash/debounce";

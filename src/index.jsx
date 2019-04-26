@@ -6,11 +6,10 @@ import "isomorphic-fetch";
 //react
 import React from "react";
 import ReactDOM from "react-dom";
-import { createBrowserHistory as createHistory } from "history";
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
-import { routerMiddleware } from "react-router-redux";
+import { routerMiddleware } from "connected-react-router";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 import throttle from "lodash/throttle";
 import { addLocaleData } from "react-intl";
@@ -22,13 +21,13 @@ import App from "./App";
 import reducers from "./reducers";
 import { loadState, saveState } from "./local-storage";
 import "./scss/global.scss";
+import history from "./redux-history";
 
 //Set languages
 addLocaleData([...localeDe, ...localeFr]);
 
 //Load state from local storage and create history object
 const presistedState = { ...window.__INITIAL_DATA__, ...loadState() };
-const history = createHistory();
 
 history.listen(location => {
   if (window.ga) {

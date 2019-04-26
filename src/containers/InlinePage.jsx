@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch, { slug: pageSlug }) => ({
    * @returns {Promise} The fetch promise
    */
   fetchPageIfNeeded(language) {
-    return dispatch(fetchPageIfNeeded(language, pageSlug));
+    return dispatch(fetchPageIfNeeded(pageSlug, language));
   }
 });
 

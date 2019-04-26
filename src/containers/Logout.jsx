@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 
 import { logout } from "../actions/authentication";
 import Card from "../components/Card";

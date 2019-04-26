@@ -61,7 +61,7 @@ const mapDispatchToProps = (
    * @returns {Promise} The fetch promise
    */
   fetchPageIfNeeded(language) {
-    return dispatch(fetchPageIfNeeded(language, pageSlug));
+    return dispatch(fetchPageIfNeeded(pageSlug, language));
   }
 });
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import { Flex, Box } from "grid-styled";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";

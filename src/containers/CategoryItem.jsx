@@ -84,6 +84,7 @@ const CategoryItem = React.memo(
   ({
     id: categoryId,
     category,
+    parent,
     parents = [],
     dispatch,
     language,

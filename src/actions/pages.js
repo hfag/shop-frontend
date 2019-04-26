@@ -41,12 +41,12 @@ export const fetchPageAction = createFetchSingleItemAction(itemName);
 
 /**
  * Fetches a page by it's slug
- * @param {string} language The language string
  * @param {number} pageSlug The slug of the page
+ * @param {string} language The language fetch string
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {function} The redux thunk
  */
-const fetchPage = (language, pageSlug, visualize = true) => dispatch => {
+const fetchPage = (pageSlug, language, visualize = true) => dispatch => {
   dispatch(fetchPageAction(true, null, visualize, pageSlug));
 
   return fetchApi(`${language}/wp-json/wp/v2/pages?slug=${pageSlug}`, {
@@ -88,17 +88,17 @@ const shouldFetchPage = (slug, state) => {
 
 /**
  * Fetches a page if needed
- * @param {string} language The language string
  * @param {string} slug The page slug
+ * @param {string} language The language fetch string
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {Promise} The fetch promise
  */
-export const fetchPageIfNeeded = (language, slug, visualize) => (
+export const fetchPageIfNeeded = (slug, language, visualize) => (
   dispatch,
   getState
 ) =>
   shouldFetchPage(slug, getState())
-    ? fetchPage(language, slug, visualize)(dispatch, getState)
+    ? fetchPage(slug, language, visualize)(dispatch, getState)
     : Promise.resolve();
 
 /**

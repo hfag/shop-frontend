@@ -19,12 +19,10 @@ const MESSAGES = {
  * The app's root component
  * @returns {Component} The component
  */
-const App = ({ location, context, store }) => {
-  const lang = getLanguageFromPathname(location);
-
+const App = ({ location, language, context, store }) => {
   return (
     <Provider store={store}>
-      <IntlProvider locale={lang} messages={MESSAGES[lang]}>
+      <IntlProvider locale={language} messages={MESSAGES[language]}>
         <StaticRouter location={location} context={context}>
           <Wrapper>{renderRoutes(routes)}</Wrapper>
         </StaticRouter>

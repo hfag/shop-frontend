@@ -43,12 +43,12 @@ export const fetchPostAction = createFetchSingleItemAction(itemName);
 
 /**
  * Fetches a post by it's slug
- * @param {string} language The language string
  * @param {number} postSlug The slug of the post
+ * @param {string} language The language fetch string
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {function} The redux thunk
  */
-const fetchPost = (language, postSlug, visualize = true) => dispatch => {
+const fetchPost = (postSlug, language, visualize = true) => dispatch => {
   dispatch(fetchPostAction(true, null, visualize, postSlug));
 
   return fetchApi(`${language}/wp-json/wp/v2/posts?slug=${postSlug}&_embed`, {
@@ -99,17 +99,17 @@ const shouldFetchPost = (slug, state) => {
 
 /**
  * Fetches a product if needed
- * @param {string} language The language string
  * @param {string} slug The product slug
+ * @param {string} language The language fetch string
  * @param {boolean} visualize Whether to visualize the progress
  * @returns {Promise} The fetch product
  */
-export const fetchPostIfNeeded = (language, slug, visualize) => (
+export const fetchPostIfNeeded = (slug, language, visualize) => (
   dispatch,
   getState
 ) =>
   shouldFetchPost(slug, getState())
-    ? fetchPost(language, slug, visualize)(dispatch, getState)
+    ? fetchPost(slug, language, visualize)(dispatch, getState)
     : Promise.resolve();
 
 /**

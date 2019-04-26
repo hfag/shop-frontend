@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import { loadingBarReducer as loadingBar } from "react-redux-loading-bar";
-import { routerReducer as router } from "react-router-redux";
 
 import { wrap } from "../utilities/reducer";
 import productSearch, * as fromProductSearch from "./product-search";
@@ -15,7 +14,11 @@ import sales, * as fromSales from "./sales";
 import account, * as fromAccount from "./account";
 import orders, * as fromOrders from "./orders";
 import burgerMenu, * as fromBurgerMenu from "./burger-menu";
-import { getLanguageFromPathname } from "../utilities/i18n";
+import router from "./router";
+import {
+  getLanguageFromPathname,
+  languageToFetchString
+} from "../utilities/i18n";
 
 /**
  * Checks whether the burger menu is open
@@ -474,9 +477,7 @@ export const getLanguage = state => {
  * @returns {string} The language key
  */
 export const getLanguageFetchString = state => {
-  const language = getLanguage(state);
-  //return "" i.e. no prefix for backwards compat
-  return language === "de" ? "" : "/" + language;
+  return languageToFetchString(getLanguage(state));
 };
 
 const appReducer = combineReducers({

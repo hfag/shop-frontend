@@ -11,6 +11,7 @@ import { matchRoutes } from "react-router-config";
 import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from "redux-thunk";
+import { push } from "connected-react-router";
 import { Helmet as ReactHelmet } from "react-helmet";
 
 import "../src/set-yup-locale";
@@ -28,7 +29,8 @@ import {
   supportedLanguages,
   filterLanguage,
   getLanguageFromPathname,
-  DEFAULT_LANGUAGE
+  DEFAULT_LANGUAGE,
+  languageToFetchString
 } from "../src/utilities/i18n";
 
 //polyfills
@@ -43,6 +45,8 @@ const app = express();
 const availableLanguages = supportedLanguages;
 const storeByLanguage = availableLanguages.reduce((object, languageKey) => {
   object[languageKey] = createStore(reducers, applyMiddleware(thunkMiddleware));
+  //navigate to the startpage of the given language so 'getLanguage' will work as expected
+  object[languageKey].dispatch(push(`/${languageKey}/`));
   return object;
 }, {});
 
@@ -71,10 +75,13 @@ const renderApplication = (request, response) => {
     language = DEFAULT_LANGUAGE;
   }
   const store = storeByLanguage[language];
+  const languageFetchString = languageToFetchString(language);
 
   const matchedRoutes = matchRoutes(routes, url.split("?")[0]);
   const promises = matchedRoutes.map(({ route, match }) =>
-    route.fetchData ? route.fetchData(store, route, match) : Promise.resolve()
+    route.fetchData
+      ? route.fetchData(store, route, match, languageFetchString)
+      : Promise.resolve()
   );
 
   Promise.all(promises)
@@ -83,7 +90,12 @@ const renderApplication = (request, response) => {
 
       const reactDom = renderToString(
         <StyleSheetManager sheet={sheet.instance}>
-          <App location={url} context={context} store={store} />
+          <App
+            location={url}
+            language={language}
+            context={context}
+            store={store}
+          />
         </StyleSheetManager>
       );
 

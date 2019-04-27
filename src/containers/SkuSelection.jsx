@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import ReactTable from "react-table";
 import PropTypes from "prop-types";
 import fuzzy from "fuzzy";
 import get from "lodash/get";
+import { defineMessages, injectIntl } from "react-intl";
 
 import Button from "../components/Button";
 import { addShoppingCartItem } from "../actions/shopping-cart";
@@ -23,6 +24,19 @@ import { colors } from "../utilities/style";
 import Price from "../components/Price";
 import Link from "../components/Link";
 import { pathnamesByLanguage } from "../utilities/urls";
+import productMessages from "../i18n/product";
+import pagination from "../i18n/pagination";
+
+const messages = defineMessages({
+  loading: {
+    id: "SkuSelection.loading",
+    defaultMessage: "Lade..."
+  },
+  noProductsFound: {
+    id: "SkuSelection.noProductsFound",
+    defaultMessage: "Keine Produkte gefunden"
+  }
+});
 
 const SkuSelectionWrapper = styled.div`
   h2 {
@@ -103,15 +117,10 @@ const fuzzyFilter = (filter, rows, column) =>
  * The name cell
  * @returns {Component} The name cell
  */
-class NameCell extends React.PureComponent {
-  constructor() {
-    super();
 
-    this.state = { counter: 1 };
-  }
-  render = () => {
-    const { language, product, isExpanded, addToShoppingCart } = this.props;
-    const { counter } = this.state;
+const NameCell = React.memo(
+  injectIntl(({ language, product, isExpanded, addToShoppingCart, intl }) => {
+    const [counter, setCounter] = useState(1);
 
     return (
       <div>
@@ -140,9 +149,7 @@ class NameCell extends React.PureComponent {
                 type="text"
                 value={counter}
                 size="2"
-                onChange={e =>
-                  this.setState({ counter: e.currentTarget.value })
-                }
+                onChange={e => setCounter(e.currentTarget.value)}
               />
               <Button
                 fullWidth
@@ -157,15 +164,15 @@ class NameCell extends React.PureComponent {
                   )
                 }
               >
-                In den Warenkorb
+                {intl.formatMessage(productMessages.addToCart)}
               </Button>
             </AddToCart>
           )}
         </div>
       </div>
     );
-  };
-}
+  })
+);
 
 /**
  * The sku selection
@@ -186,7 +193,14 @@ class SkuSelection extends React.PureComponent {
   };
 
   render = () => {
-    const { query = "", products, addToShoppingCart, isFetching } = this.props;
+    const {
+      language,
+      query = "",
+      products,
+      addToShoppingCart,
+      isFetching,
+      intl
+    } = this.props;
 
     return (
       <SkuSelectionWrapper>
@@ -194,7 +208,7 @@ class SkuSelection extends React.PureComponent {
           loading={isFetching}
           columns={[
             {
-              Header: "Artikelnummer",
+              Header: intl.formatMessage(productMessages.sku),
               accessor: "sku",
               minWidth: 150,
               filterMethod: (filter, row, column) => {
@@ -208,7 +222,7 @@ class SkuSelection extends React.PureComponent {
             },
             {
               id: "name",
-              Header: "Name",
+              Header: intl.formatMessage(productMessages.name),
               accessor: e =>
                 e.name +
                 (e.meta
@@ -222,6 +236,7 @@ class SkuSelection extends React.PureComponent {
               filterMethod: fuzzyFilter,
               Cell: ({ row: { _original: product }, isExpanded }) => (
                 <NameCell
+                  language={language}
                   product={product}
                   isExpanded={isExpanded}
                   addToShoppingCart={addToShoppingCart}
@@ -230,7 +245,7 @@ class SkuSelection extends React.PureComponent {
             },
             {
               id: "price",
-              Header: "Preis",
+              Header: intl.formatMessage(productMessages.price),
               accessor: product =>
                 product.discount && product.discount.reseller
                   ? (product.price * product.discount.reseller) / 100
@@ -247,8 +262,12 @@ class SkuSelection extends React.PureComponent {
                         <BulkDiscountTable>
                           <thead>
                             <tr>
-                              <th>Stück</th>
-                              <th>Preis</th>
+                              <th>
+                                {intl.formatMessage(productMessages.pieces)}
+                              </th>
+                              <th>
+                                {intl.formatMessage(productMessages.price)}
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -275,7 +294,7 @@ class SkuSelection extends React.PureComponent {
                       <div>
                         <Price>{product.price}</Price>
                         <br />
-                        mit Mengenrabatt
+                        {intl.formatMessage(productMessages.withBulkDiscount)}
                       </div>
                     )
                   ) : product.discount.reseller ? (
@@ -321,13 +340,13 @@ class SkuSelection extends React.PureComponent {
           filterable
           defaultResized={[{ id: "expander", value: 50 }]}
           defaultFiltered={[{ id: "name", value: query }]}
-          previousText="Vorherige"
-          nextText="Nächste"
-          loadingText="Lade..."
-          noDataText="Keine Produkte gefunden"
-          pageText="Seite"
-          ofText="von"
-          rowsText="Zeilen"
+          previousText={intl.formatMessage(pagination.previous)}
+          nextText={intl.formatMessage(pagination.next)}
+          loadingText={intl.formatMessage(messages.loading)}
+          noDataText={intl.formatMessage(messages.noProductsFound)}
+          pageText={intl.formatMessage(pagination.page)}
+          ofText={intl.formatMessage(pagination.of)}
+          rowsText={intl.formatMessage(pagination.rows)}
         />
       </SkuSelectionWrapper>
     );
@@ -370,11 +389,12 @@ const mapDispatchToProps = dispatch => ({
   },
   /**
    * Fetches all simple products
+   * @param {string} language The language string
    * @param {boolean} [visualize=true] Whether the action should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchSimpleProducts(visualize = false) {
-    return dispatch(fetchSimpleProducts(visualize));
+  fetchSimpleProducts(language, visualize = false) {
+    return dispatch(fetchSimpleProducts(language, visualize));
   },
   /**
    * Updates the shopping cart
@@ -412,6 +432,17 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   ...mapStateToProps,
   ...mapDispatchToProps,
   /**
+   * Fetches all simple products
+   * @param {boolean} [visualize=true] Whether the action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchSimpleProducts(visualize = false) {
+    return mapDispatchToProps.fetchSimpleProducts(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
+  },
+  /**
    * Updates the shopping cart
    * @param {number|string} productId The product id
    * @param {number|string} [variationId] The variation id
@@ -427,7 +458,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
     quantity = 1,
     visualize = true
   ) {
-    return mapDispatchToProps.addShoppingCartItem(
+    return mapDispatchToProps.addToShoppingCart(
       productId,
       variationId,
       variation,
@@ -438,8 +469,10 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   }
 });
 
+const TranslatedSkuSelection = injectIntl(SkuSelection);
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps
-)(SkuSelection);
+)(TranslatedSkuSelection);

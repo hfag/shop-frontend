@@ -1,0 +1,10 @@
+[
+  {
+    "id": "form.noInformation",
+    "defaultMessage": "Keine Angabe"
+  },
+  {
+    "id": "form.saveChanges",
+    "defaultMessage": "Änderungen speichern"
+  }
+]

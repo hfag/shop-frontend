@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
 import { FaPercent } from "react-icons/fa";
-import { withRouter } from "react-router";
+import { defineMessages, injectIntl } from "react-intl";
 
 import Thumbnail from "../containers/Thumbnail";
 import Placeholder from "../components/Placeholder";
@@ -21,6 +21,13 @@ import {
 import RelativeBox from "../components/RelativeBox";
 import Price from "../components/Price";
 import { pathnamesByLanguage } from "../utilities/urls";
+
+const messages = defineMessages({
+  discountForResellers: {
+    id: "ProductItem.discountForResellers",
+    defaultMessage: "Rabatt für Wiederverkäufer"
+  }
+});
 
 const StyledProduct = styled.div`
   background-color: #fff;
@@ -99,7 +106,7 @@ const Discount = styled.div`
 `;
 
 const ProductItem = React.memo(
-  ({ product, categories, resellerDiscount, language }) => {
+  injectIntl(({ product, categories, resellerDiscount, language, intl }) => {
     const url = useMemo(() => {
       if (product && product.slug) {
         const base = pathnamesByLanguage[language].product;
@@ -114,7 +121,11 @@ const ProductItem = React.memo(
       <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
         {resellerDiscount && (
           <Discount
-            data-balloon={`${resellerDiscount}% Rabatt für Wiederverkäufer`}
+            data-balloon={
+              resellerDiscount +
+              "% " +
+              intl.formatMessage(messages.discountForResellers)
+            }
             data-balloon-pos="up"
           >
             <FaPercent />
@@ -167,7 +178,7 @@ const ProductItem = React.memo(
         </Link>
       </RelativeBox>
     );
-  }
+  })
 );
 
 ProductItem.propTypes = {

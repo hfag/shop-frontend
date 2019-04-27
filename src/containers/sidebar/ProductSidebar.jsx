@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { defineMessages, injectIntl } from "react-intl";
 import { FaChevronDown as ChevronDown } from "react-icons/fa";
 
 import Link from "../../components/Link";
@@ -14,14 +15,10 @@ import {
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
 import { pathnamesByLanguage } from "../../utilities/urls";
-/**
- * Renders a single product item
- * @returns {Component} The component
- */
-class ProductSidebar extends React.PureComponent {
-  render = () => {
-    const { language, id: productId, product, categories } = this.props;
+import page from "../../i18n/page";
 
+const ProductSidebar = React.memo(
+  injectIntl(({ language, id: productId, product, categories, intl }) => {
     return (
       <SidebarListWrapper>
         <Link to={`/${language}/`}>
@@ -29,7 +26,7 @@ class ProductSidebar extends React.PureComponent {
             <div>
               <ChevronDown />
             </div>
-            <div>Startseite</div>
+            <div>{intl.formatMessage(page.home)}</div>
           </SidebarBreadcrumb>
         </Link>
         <hr />
@@ -85,8 +82,8 @@ class ProductSidebar extends React.PureComponent {
         <hr />
       </SidebarListWrapper>
     );
-  };
-}
+  })
+);
 
 ProductSidebar.propTypes = {};
 

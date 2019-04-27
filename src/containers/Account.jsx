@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import { Flex, Box } from "grid-styled";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { defineMessages, injectIntl } from "react-intl";
 
 import { getCountries, getLanguageFetchString, getLanguage } from "../reducers";
 import { fetchCountriesIfNeeded } from "../actions/countries";
@@ -20,6 +21,33 @@ import AddressForm from "../components/account/AddressForm";
 import { updateAccount, updateAddress, fetchAccount } from "../actions/user";
 import { fetchOrders } from "../actions/orders";
 import { pathnamesByLanguage } from "../utilities/urls";
+import address from "../i18n/address";
+import order from "../i18n/order";
+import user from "../i18n/user";
+
+const messages = defineMessages({
+  siteTitle: {
+    id: "Account.siteTitle",
+    defaultMessage: "Mein Kundenkonto bei der Hauser Feuerschutz AG"
+  },
+  siteDescription: {
+    id: "Account.siteDescription",
+    defaultMessage:
+      "Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
+  },
+  myAccount: {
+    id: "Account.myAccount",
+    defaultMessage: "Mein Kundenkonto"
+  },
+  overview: {
+    id: "Account.overview",
+    defaultMessage: "Übersicht"
+  },
+  details: {
+    id: "Account.details",
+    defaultMessage: "Details"
+  }
+});
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -52,27 +80,10 @@ const AccountContainer = styled.div`
  * The account page
  * @returns {Component} The component
  */
-class Account extends React.PureComponent {
-  componentDidMount = () => {
-    const {
-      isAuthenticated,
-      redirectToLogin,
-      fetchCountriesIfNeeded,
-      fetchAccount,
-      fetchOrders
-    } = this.props;
 
-    if (!isAuthenticated) {
-      return redirectToLogin();
-    }
-
-    fetchCountriesIfNeeded();
-    fetchAccount();
-    fetchOrders();
-  };
-
-  render = () => {
-    const {
+const Account = React.memo(
+  injectIntl(
+    ({
       language,
       countries,
       accountDetails,
@@ -80,144 +91,170 @@ class Account extends React.PureComponent {
       shippingAddress,
       updateAccount,
       updateAddress,
-      match: { url }
-    } = this.props;
+      match: { url },
+      isAuthenticated,
+      redirectToLogin,
+      fetchCountriesIfNeeded,
+      fetchAccount,
+      fetchOrders,
+      intl
+    }) => {
+      useEffect(() => {
+        if (!isAuthenticated) {
+          return redirectToLogin();
+        }
 
-    return (
-      <AccountContainer>
-        <Helmet>
-          <title>Mein Kundenkonto bei der Hauser Feuerschutz AG</title>
-          <meta
-            name="description"
-            content="Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
+        fetchCountriesIfNeeded();
+        fetchAccount();
+        fetchOrders();
+      }, []);
+
+      return (
+        <AccountContainer>
+          <Helmet
+            title={intl.formatMessage(messages.siteTitle)}
+            meta={[
+              {
+                name: "description",
+                content: intl.formatMessage(messages.siteDescription)
+              }
+            ]}
+            link={[
+              {
+                rel: "canonical",
+                href: `${ABSOLUTE_URL}/${language}/${
+                  pathnamesByLanguage[language].account
+                }`
+              }
+            ]}
           />
-          <link
-            rel="canonical"
-            href={`${ABSOLUTE_URL}/${language}/${
-              pathnamesByLanguage[language].account
-            }`}
-          />
-        </Helmet>
-        <Flex flexWrap="wrap">
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
-            <Card>
-              <h1>Mein Kundenkonto</h1>
-              <ProfileNavigation>
-                <li>
-                  <Link to={url}>Übersicht</Link>
-                </li>
-                <li>
-                  <Link to={`${url}/${pathnamesByLanguage[language].details}`}>
-                    Details
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={`${url}/${
+          <Flex flexWrap="wrap">
+            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
+              <Card>
+                <h1>{intl.formatMessage(messages.myAccount)}</h1>
+                <ProfileNavigation>
+                  <li>
+                    <Link to={url}>
+                      {intl.formatMessage(messages.overview)}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={`${url}/${pathnamesByLanguage[language].details}`}
+                    >
+                      {intl.formatMessage(messages.details)}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={`${url}/${
+                        pathnamesByLanguage[language].billingAddress
+                      }`}
+                    >
+                      {intl.formatMessage(address.billingAddress)}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={`${url}/${
+                        pathnamesByLanguage[language].shippingAddress
+                      }`}
+                    >
+                      {intl.formatMessage(address.shippingAddress)}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={`${url}/${pathnamesByLanguage[language].orders}`}>
+                      {intl.formatMessage(order.orders)}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={`/${language}/${
+                        pathnamesByLanguage[language].logout
+                      }`}
+                    >
+                      {intl.formatMessage(user.logout)}
+                    </Link>
+                  </li>
+                </ProfileNavigation>
+              </Card>
+            </Box>
+            <Box width={[1, 1 / 2, 2 / 3, 2 / 3]}>
+              <Card>
+                <Switch>
+                  <Route
+                    exact
+                    path={url}
+                    render={props => (
+                      <AccountDashboard
+                        {...props}
+                        accountDetails={accountDetails}
+                        billingAddress={billingAddress}
+                        shippingAddress={shippingAddress}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path={`${url}/${pathnamesByLanguage[language].details}`}
+                    render={props => (
+                      <AccountForm
+                        {...props}
+                        updateAccount={updateAccount}
+                        values={accountDetails}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path={`${url}/${
                       pathnamesByLanguage[language].billingAddress
                     }`}
-                  >
-                    Rechnungsadresse
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={`${url}/${
+                    render={props => (
+                      <AddressForm
+                        {...props}
+                        updateAddress={updateAddress}
+                        type="billing"
+                        countries={countries}
+                        values={billingAddress}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path={`${url}/${
                       pathnamesByLanguage[language].shippingAddress
                     }`}
-                  >
-                    Lieferadresse
-                  </Link>
-                </li>
-                <li>
-                  <Link to={`${url}/${pathnamesByLanguage[language].orders}`}>
-                    Bestellungen
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={`/${language}/${pathnamesByLanguage[language].logout}`}
-                  >
-                    Abmelden
-                  </Link>
-                </li>
-              </ProfileNavigation>
-            </Card>
-          </Box>
-          <Box width={[1, 1 / 2, 2 / 3, 2 / 3]}>
-            <Card>
-              <Switch>
-                <Route
-                  exact
-                  path={url}
-                  render={props => (
-                    <AccountDashboard
-                      {...props}
-                      accountDetails={accountDetails}
-                      billingAddress={billingAddress}
-                      shippingAddress={shippingAddress}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path={`${url}/${pathnamesByLanguage[language].details}`}
-                  render={props => (
-                    <AccountForm
-                      {...props}
-                      updateAccount={updateAccount}
-                      values={accountDetails}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path={`${url}/${
-                    pathnamesByLanguage[language].billingAddress
-                  }`}
-                  render={props => (
-                    <AddressForm
-                      {...props}
-                      updateAddress={updateAddress}
-                      type="billing"
-                      countries={countries}
-                      values={billingAddress}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path={`${url}/${
-                    pathnamesByLanguage[language].shippingAddress
-                  }`}
-                  render={props => (
-                    <AddressForm
-                      {...props}
-                      updateAddress={updateAddress}
-                      type="shipping"
-                      countries={countries}
-                      values={shippingAddress}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${url}/${pathnamesByLanguage[language].orders}`}
-                  component={AccountOrders}
-                />
-                <Route
-                  path={`${url}/${
-                    pathnamesByLanguage[language].orders
-                  }/:orderId`}
-                  component={AccountOrder}
-                />
-              </Switch>
-            </Card>
-          </Box>
-        </Flex>
-      </AccountContainer>
-    );
-  };
-}
+                    render={props => (
+                      <AddressForm
+                        {...props}
+                        updateAddress={updateAddress}
+                        type="shipping"
+                        countries={countries}
+                        values={shippingAddress}
+                      />
+                    )}
+                  />
+                  <Route
+                    path={`${url}/${pathnamesByLanguage[language].orders}`}
+                    component={AccountOrders}
+                  />
+                  <Route
+                    path={`${url}/${
+                      pathnamesByLanguage[language].orders
+                    }/:orderId`}
+                    component={AccountOrder}
+                  />
+                </Switch>
+              </Card>
+            </Box>
+          </Flex>
+        </AccountContainer>
+      );
+    }
+  )
+);
 
 const mapStateToProps = state => {
   const account = getAccount(state);

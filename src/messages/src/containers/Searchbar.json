@@ -1,0 +1,10 @@
+[
+  {
+    "id": "Searchbar.placeholder",
+    "defaultMessage": "Suche nach einem Produkt"
+  },
+  {
+    "id": "Searchbar.showMore",
+    "defaultMessage": "Zeige mehr..."
+  }
+]

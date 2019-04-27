@@ -1,0 +1,10 @@
+[
+  {
+    "id": "SkuSelection.loading",
+    "defaultMessage": "Lade..."
+  },
+  {
+    "id": "SkuSelection.noProductsFound",
+    "defaultMessage": "Keine Produkte gefunden"
+  }
+]

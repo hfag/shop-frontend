@@ -6,6 +6,7 @@ import { MdMenu } from "react-icons/md";
 import LoadingBar from "react-redux-loading-bar";
 import { Flex, Box } from "grid-styled";
 import { Helmet } from "react-helmet";
+import { defineMessages, injectIntl } from "react-intl";
 
 import { fetchShoppingCartIfNeeded } from "../actions/shopping-cart";
 import {
@@ -36,6 +37,15 @@ import { fetchSalesIfNeeded } from "../actions/sales";
 import LanguageSwitcher from "../components/header/LanguageSwitcher";
 import NavCart from "../components/header/NavCart";
 import NavUser from "../components/header/NavUser";
+import shop from "../i18n/shop";
+
+const messages = defineMessages({
+  siteDescription: {
+    id: "Header.siteDescription",
+    defaultMessage:
+      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
+  }
+});
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 const PUBLIC_PATH = process.env.PUBLIC_PATH;
@@ -59,25 +69,29 @@ const LogoLeft = styled.div`
   height: 100%;
 `;
 
-const Head = React.memo(() => {
-  return (
-    <Helmet
-      title="Shop der Hauser Feuerschutz AG"
-      meta={[
-        { charset: "utf-8" },
-        { name: "viewport", content: "width=device-width, initial-scale=1.0" },
-        { name: "author", content: "Nico Hauser" },
-        { name: "format-detection", content: "telephone=no" },
-        {
-          name: "description",
-          content:
-            "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
-        }
-      ]}
-      link={[{ rel: "canonical", href: ABSOLUTE_URL }]}
-    />
-  );
-});
+const Head = React.memo(
+  injectIntl(({ intl }) => {
+    return (
+      <Helmet
+        title={intl.formatMessage(shop.siteTitle)}
+        meta={[
+          { charset: "utf-8" },
+          {
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0"
+          },
+          { name: "author", content: "Nico Hauser" },
+          { name: "format-detection", content: "telephone=no" },
+          {
+            name: "description",
+            content: intl.formatMessage(messages.siteDescription)
+          }
+        ]}
+        link={[{ rel: "canonical", href: ABSOLUTE_URL }]}
+      />
+    );
+  })
+);
 
 const RichSnippet = React.memo(() => {
   return (

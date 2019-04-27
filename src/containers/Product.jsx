@@ -7,6 +7,7 @@ import isEqual from "lodash/isEqual";
 import Lightbox from "react-images";
 import { Helmet } from "react-helmet";
 import queryString from "query-string";
+import { defineMessages, injectIntl } from "react-intl";
 
 import Thumbnail from "../containers/Thumbnail";
 import Card from "../components/Card";
@@ -38,6 +39,59 @@ import { InputFieldWrapper } from "../components/InputFieldWrapper";
 import JsonLd from "../components/JsonLd";
 import { attachmentsToJsonLd, productToJsonLd } from "../utilities/json-ld";
 import { pathnamesByLanguage } from "../utilities/urls";
+import productMessages from "../i18n/product";
+
+const messages = defineMessages({
+  chooseAVariation: {
+    id: "Product.chooseAVariation",
+    defaultMessage: "Wähle eine Variante"
+  },
+  chooseAnAttribute: {
+    id: "Product.chooseAnAttribute",
+    defaultMessage: "Wählen Sie eine Eigenschaft"
+  },
+  reset: {
+    id: "Product.reset",
+    defaultMessage: "Zurücksetzen"
+  },
+  resetSelection: {
+    id: "Product.resetSelection",
+    defaultMessage: "Auswahl zurücksetzen"
+  },
+  resellerDiscountMessage: {
+    id: "Product.resellerDiscountMessage",
+    defaultMessage:
+      "Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
+  },
+  mustSelectVariation: {
+    id: "Product.mustSelectVariation",
+    defaultMessage: "Wählen Sie zuerst eine Variante aus!"
+  },
+  imageGallery: {
+    id: "Product.imageGallery",
+    defaultMessage: "Bildergalerie"
+  },
+  specifications: {
+    id: "Product.specifications",
+    defaultMessage: "Spezifikationen"
+  },
+  additionalProducts: {
+    id: "Product.additionalProducts",
+    defaultMessage: "Ergänzende Produkte"
+  },
+  previousImage: {
+    id: "Product.previousImage",
+    defaultMessage: "Vorheriges Bild (linke Pfeiltaste)"
+  },
+  nextImage: {
+    id: "Product.nextImage",
+    defaultMessage: "Nächstes Bild (rechte Pfeiltaste)"
+  },
+  closeLightbox: {
+    id: "Product.closeLightBox",
+    defaultMessage: "Schliessen (Esc)"
+  }
+});
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -270,7 +324,8 @@ class Product extends React.PureComponent {
       addToShoppingCart,
       resellerDiscount,
       galleryAttachments = [],
-      sales
+      sales,
+      intl
     } = this.props;
 
     const {
@@ -398,7 +453,7 @@ class Product extends React.PureComponent {
           {uniqueImageIds.length > 1 && (
             <div>
               <hr />
-              <h4>Wähle eine Variante</h4>
+              <h4>{intl.formatMessage(messages.chooseAVariation)}</h4>
               <VariationSlider
                 variations={variations}
                 selectedAttributes={selectedAttributes}
@@ -415,7 +470,7 @@ class Product extends React.PureComponent {
                 <Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
                   <h4>{this.getAttributeLabel(attributeKey)}</h4>
                   <Select
-                    placeholder="Wählen Sie eine Eigenschaft"
+                    placeholder={intl.formatMessage(messages.chooseAnAttribute)}
                     onChange={this.onChangeDropdown(attributeKey)}
                     value={selectedAttributes[attributeKey]}
                     options={possibleAttributes[attributeKey].map(value => ({
@@ -426,7 +481,7 @@ class Product extends React.PureComponent {
                 </Box>
               ))}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-              <h4>Anzahl</h4>
+              <h4>{intl.formatMessage(productMessages.quantity)}</h4>
               <Counter
                 type="number"
                 value={quantity}
@@ -464,7 +519,7 @@ class Product extends React.PureComponent {
               </Box>
             ))}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-              <h4>Zurücksetzen</h4>
+              <h4>{intl.formatMessage(messages.reset)}</h4>
               <Button
                 onClick={() =>
                   new Promise((resolve, reject) => {
@@ -480,7 +535,7 @@ class Product extends React.PureComponent {
                   })
                 }
               >
-                Auswahl zurücksetzen
+                {intl.formatMessage(messages.resetSelection)}
               </Button>
             </Box>
           </Flex>
@@ -492,12 +547,17 @@ class Product extends React.PureComponent {
               discount.bulk[selectedVariation.id] &&
               discount.bulk[selectedVariation.id].length > 0 && (
                 <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-                  <h4>Mengenrabatt</h4>
+                  <h4>{intl.formatMessage(productMessages.bulkDiscount)}</h4>
                   <DiscountTable>
                     <thead>
                       <tr>
-                        <th>Anzahl (ab)</th>
-                        <th>Stückpreis</th>
+                        <th>
+                          {intl.formatMessage(productMessages.quantity)} (
+                          {intl.formatMessage(productMessages.from)})
+                        </th>
+                        <th>
+                          {intl.formatMessage(productMessages.pricePerUnit)}
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -521,15 +581,16 @@ class Product extends React.PureComponent {
               )
             ) : (
               <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-                <h4>Wiederverkäuferrabatt</h4>
-                Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf
-                dieses Produkt.
+                <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
+                {intl.formatMessage(messages.resellerDiscountMessage, {
+                  resellerDiscount
+                })}
               </Box>
             )}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
               {selectedVariation ? (
                 <div>
-                  <h4>Preis</h4>
+                  <h4>{intl.formatMessage(productMessages.price)}</h4>
                   <Bill
                     items={[
                       {
@@ -589,14 +650,16 @@ class Product extends React.PureComponent {
                       )
                     }
                   >
-                    Zum Warenkorb hinzufügen
+                    {intl.formatMessage(productMessages.addToCart)}
                   </Button>
                 </div>
               ) : (
                 <div>
-                  <h4>Preis</h4>
-                  <p>Wählen Sie zuerst eine Variante aus!</p>
-                  <Button state="disabled">Zum Warenkorb hinzufügen</Button>
+                  <h4>{intl.formatMessage(productMessages.price)}</h4>
+                  <p>{intl.formatMessage(messages.mustSelectVariation)}</p>
+                  <Button state="disabled">
+                    {intl.formatMessage(productMessages.addToCart)}
+                  </Button>
                 </div>
               )}
             </Box>
@@ -605,7 +668,7 @@ class Product extends React.PureComponent {
             {content && (
               <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
                 <div dangerouslySetInnerHTML={{ __html: content }} />
-                <h2>Bildergalerie</h2>
+                <h2>{intl.formatMessage(messages.imageGallery)}</h2>
                 <Flex flexWrap="wrap">
                   <LightboxBox
                     width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
@@ -671,9 +734,9 @@ class Product extends React.PureComponent {
                   }
                   onClose={() => this.setState({ isLightboxOpen: false })}
                   imageCountSeparator={" von "}
-                  leftArrowTitle={"Vorheriges Bild (linke Pfeiltaste)"}
-                  rightArrowTitle={"Nächstes Bild (rechte Pfeiltaste)"}
-                  closeButtonTitle={"Schliessen (Esc)"}
+                  leftArrowTitle={intl.formatMessage(messages.previousImage)}
+                  rightArrowTitle={intl.formatMessage(messages.nextImage)}
+                  closeButtonTitle={intl.formatMessage(messages.closeLightbox)}
                   backdropClosesModal={true}
                   preventScroll={false}
                   showThumbnails={true}
@@ -685,15 +748,15 @@ class Product extends React.PureComponent {
               </Box>
             )}
             <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
-              <h4>Spezifikationen</h4>
+              <h4>{intl.formatMessage(messages.specifications)}</h4>
               <StyledTable>
                 <tbody>
                   <tr>
-                    <td>Artikelnummer</td>
+                    <td>{intl.formatMessage(productMessages.sku)}</td>
                     <td>{sku}</td>
                   </tr>
                   <tr>
-                    <td>Kategorien</td>
+                    <td>{intl.formatMessage(productMessages.categories)}</td>
                     <td>
                       {categories.length > 0
                         ? categories
@@ -713,7 +776,7 @@ class Product extends React.PureComponent {
                     </td>
                   </tr>
                   <tr>
-                    <td>Produkt</td>
+                    <td>{intl.formatMessage(productMessages.product)}</td>
                     <td>{title}</td>
                   </tr>
                   {Object.keys(selectedAttributes).map(attributeKey => (
@@ -738,7 +801,7 @@ class Product extends React.PureComponent {
         {crossSellIds.length > 0 && (
           <Card>
             <h2 ref={this.crossSelling} style={{ margin: 0 }}>
-              Ergänzende Produkte
+              {intl.formatMessage(messages.additionalProducts)}
             </h2>
           </Card>
         )}
@@ -764,7 +827,7 @@ const mapStateToProps = (
   const product = getProductBySlug(state, productSlug);
   const galleryImageIds =
     product && !product._isFetching
-      ? [product.thumbnailId, ...product.galleryImageIds]
+      ? [product.thumbnailId, ...(product.galleryImageIds || [])]
       : [];
 
   return {
@@ -903,8 +966,10 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   }
 });
 
+const TranslatedProduct = injectIntl(Product);
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps
-)(Product);
+)(TranslatedProduct);

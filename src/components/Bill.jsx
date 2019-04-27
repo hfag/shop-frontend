@@ -1,9 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { defineMessages, injectIntl } from "react-intl";
 
 import { colors } from "../utilities/style";
 import Price from "./Price";
+
+const messages = defineMessages({
+  taxes: {
+    id: "Bill.taxes",
+    defaultMessage: "zzgl. MwSt., zzgl. Versandkosten"
+  }
+});
 
 const StyledBill = styled.ul`
   padding: 0;
@@ -28,14 +36,9 @@ const Sum = styled.li`
 `;
 const Taxes = styled.li``;
 
-/**
- * Renders a bill like component
- * @returns {Component} The component
- */
-class Bill extends React.PureComponent {
-  render = () => {
-    const { items } = this.props;
-    const taxes = "zzgl. MwSt., zzgl. Versandkosten";
+const Bill = React.memo(
+  injectIntl(({ items, intl }) => {
+    const taxes = intl.formatMessage(messages.taxes);
 
     const normalSum = items.reduce(
       (sum, { quantity, price }) => sum + quantity * price,
@@ -88,8 +91,8 @@ class Bill extends React.PureComponent {
         <Taxes>{taxes}</Taxes>
       </StyledBill>
     );
-  };
-}
+  })
+);
 
 Bill.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired

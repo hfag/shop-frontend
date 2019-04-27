@@ -1,0 +1,50 @@
+[
+  {
+    "id": "Product.chooseAVariation",
+    "defaultMessage": "Wähle eine Variante"
+  },
+  {
+    "id": "Product.chooseAnAttribute",
+    "defaultMessage": "Wählen Sie eine Eigenschaft"
+  },
+  {
+    "id": "Product.reset",
+    "defaultMessage": "Zurücksetzen"
+  },
+  {
+    "id": "Product.resetSelection",
+    "defaultMessage": "Auswahl zurücksetzen"
+  },
+  {
+    "id": "Product.resellerDiscountMessage",
+    "defaultMessage": "Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
+  },
+  {
+    "id": "Product.mustSelectVariation",
+    "defaultMessage": "Wählen Sie zuerst eine Variante aus!"
+  },
+  {
+    "id": "Product.imageGallery",
+    "defaultMessage": "Bildergalerie"
+  },
+  {
+    "id": "Product.specifications",
+    "defaultMessage": "Spezifikationen"
+  },
+  {
+    "id": "Product.additionalProducts",
+    "defaultMessage": "Ergänzende Produkte"
+  },
+  {
+    "id": "Product.previousImage",
+    "defaultMessage": "Vorheriges Bild (linke Pfeiltaste)"
+  },
+  {
+    "id": "Product.nextImage",
+    "defaultMessage": "Nächstes Bild (rechte Pfeiltaste)"
+  },
+  {
+    "id": "Product.closeLightBox",
+    "defaultMessage": "Schliessen (Esc)"
+  }
+]

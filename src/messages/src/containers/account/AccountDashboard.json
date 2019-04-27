@@ -1,0 +1,14 @@
+[
+  {
+    "id": "AccountDashboard.provideName",
+    "defaultMessage": "Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen angesprochen werden möchten, können Sie {here} Ihren Namen hinterlegen."
+  },
+  {
+    "id": "AccountDashboard.provideAddress",
+    "defaultMessage": "Sie haben noch keine Rechnungsaddresse hinterlegt. Falls sie möchten dass diese bei jeder Bestellung von selbst ausgefüllt wird, fügen Sie {here} eine hinzu."
+  },
+  {
+    "id": "AccountDashboard.here",
+    "defaultMessage": "hier"
+  }
+]

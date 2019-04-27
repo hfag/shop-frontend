@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import ProductCategories from "containers/ProductCategories";
-import { FormattedMessage } from "react-intl";
+import { defineMessages, injectIntl } from "react-intl";
 
 import {
   getSales,
@@ -11,26 +11,30 @@ import {
 } from "../reducers";
 import SaleProducts from "../components/SaleProducts";
 
-const Frontpage = React.memo(({ language, saleProducts, posts }) => {
-  return (
-    <div>
-      {(saleProducts.length > 0 || posts.length > 0) && (
-        <SaleProducts
-          language={language}
-          saleProducts={saleProducts}
-          posts={posts}
-        />
-      )}
-      <h2>
-        <FormattedMessage
-          id="Frontpage.titles.categories"
-          defaultMessage="Kategorien"
-        />
-      </h2>
-      <ProductCategories />
-    </div>
-  );
+const messages = defineMessages({
+  categories: {
+    id: "Frontpage.categories",
+    defaultMessage: "Kategorien"
+  }
 });
+
+const Frontpage = React.memo(
+  injectIntl(({ language, saleProducts, posts, intl }) => {
+    return (
+      <div>
+        {(saleProducts.length > 0 || posts.length > 0) && (
+          <SaleProducts
+            language={language}
+            saleProducts={saleProducts}
+            posts={posts}
+          />
+        )}
+        <h2>{intl.formatMessage(messages.categories)}</h2>
+        <ProductCategories />
+      </div>
+    );
+  })
+);
 
 const mapStateToProps = state => {
   const sales = getSales(state),

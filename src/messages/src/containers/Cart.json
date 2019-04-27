@@ -1,0 +1,18 @@
+[
+  {
+    "id": "Cart.siteTitle",
+    "defaultMessage": "Warenkorb im Shop der Hauser Feuerschutz AG"
+  },
+  {
+    "id": "Cart.siteDescription",
+    "defaultMessage": "Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
+  },
+  {
+    "id": "Cart.cart",
+    "defaultMessage": "Warenkorb"
+  },
+  {
+    "id": "Cart.searchProduct",
+    "defaultMessage": "Suche Produkt"
+  }
+]

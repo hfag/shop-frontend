@@ -3,10 +3,13 @@ import { withFormik, Form } from "formik";
 import PropTypes from "prop-types";
 import * as yup from "yup";
 import styled from "styled-components";
+import { injectIntl } from "react-intl";
 
 import Button from "../Button";
 import InputField from "../InputField";
 import SelectField from "../../components/SelectField";
+import address from "../../i18n/address";
+import form from "../../i18n/form";
 
 const FormWrapper = styled(Form)`
   h2 {
@@ -32,83 +35,115 @@ const getStateOptionsByCountry = (countries, country) => {
  * @param {Object} params The formik params
  * @returns {Component} The component
  */
-const InnerAddressForm = ({
-  values,
-  isValid,
-  status = "",
-  countries,
-  type = "billing"
-}) => (
-  <FormWrapper>
-    <h2>{type === "billing" ? "Rechnungsadresse" : "Lieferadresse"}</h2>
-    <InputField
-      type="text"
-      label="Zusatzzeile oben"
-      name="additional_line_above"
-      required={false}
-    />
-    <InputField type="text" label="Vorname" name="first_name" required={true} />
-    <InputField type="text" label="Nachname" name="last_name" required={true} />
-    <InputField type="text" label="Firma" name="company" required={false} />
-    <SelectField
-      label="Land"
-      name="country"
-      required={true}
-      placeholder="Wählen Sie ein Land"
-      options={Object.keys(countries).map(key => ({
-        value: key,
-        label: countries[key].name
-      }))}
-    />
-    <InputField type="text" label="Strasse" name="address_1" required={true} />
-    <InputField
-      type="text"
-      label="Postfach"
-      name="post_office_box"
-      required={false}
-    />
-    <InputField
-      type="text"
-      label="Postleitzahl"
-      name="postcode"
-      required={true}
-    />
-    <InputField type="text" label="Ort / Stadt" name="city" required={true} />
-    <SelectField
-      label="Kanton"
-      name="state"
-      required={
-        values.country &&
-        countries[values.country] &&
-        countries[values.country].states
-          ? true
-          : undefined
-      }
-      placeholder="Wählen Sie einen Kanton"
-      options={
-        values.country &&
-        countries[values.country] &&
-        countries[values.country].states
-          ? getStateOptionsByCountry(countries, values["country"])
-          : [{ value: "AG", label: "Keine Angabe" }]
-      }
-    />
-    {type === "billing" && (
-      <div>
-        <InputField type="tel" label="Telefon" name="phone" required={true} />
+const InnerAddressForm = React.memo(
+  injectIntl(
+    ({ values, isValid, status = "", countries, type = "billing", intl }) => (
+      <FormWrapper>
+        <h2>
+          {type === "billing"
+            ? intl.formatMessage(address.billingAddress)
+            : intl.formatMessage(address.shippingAddress)}
+        </h2>
         <InputField
-          type="email"
-          label="E-Mail Adresse"
-          name="email"
+          type="text"
+          label={intl.formatMessage(address.additionalLineAbove)}
+          name="additional_line_above"
+          required={false}
+        />
+        <InputField
+          type="text"
+          label={intl.formatMessage(address.firstName)}
+          name="first_name"
           required={true}
         />
-      </div>
-    )}
-    <br />
-    <Button fullWidth controlled state={isValid ? status : "disabled"}>
-      Änderungen speichern
-    </Button>
-  </FormWrapper>
+        <InputField
+          type="text"
+          label={intl.formatMessage(address.lastName)}
+          name="last_name"
+          required={true}
+        />
+        <InputField
+          type="text"
+          label={intl.formatMessage(address.company)}
+          name="company"
+          required={false}
+        />
+        <SelectField
+          label={intl.formatMessage(address.country)}
+          name="country"
+          required={true}
+          placeholder={intl.formatMessage(address.chooseCountry)}
+          options={Object.keys(countries).map(key => ({
+            value: key,
+            label: countries[key].name
+          }))}
+        />
+        <InputField
+          type="text"
+          label={intl.formatMessage(address.street)}
+          name="address_1"
+          required={true}
+        />
+        <InputField
+          type="text"
+          label={intl.formatMessage(address.postOfficeBox)}
+          name="post_office_box"
+          required={false}
+        />
+        <InputField
+          type="text"
+          label={intl.formatMessage(address.postcode)}
+          name="postcode"
+          required={true}
+        />
+        <InputField
+          type="text"
+          label={intl.formatMessage(address.city)}
+          name="city"
+          required={true}
+        />
+        <SelectField
+          label={intl.formatMessage(address.state)}
+          name="state"
+          required={
+            values.country &&
+            countries[values.country] &&
+            countries[values.country].states
+              ? true
+              : undefined
+          }
+          placeholder={intl.formatMessage(address.chooseState)}
+          options={
+            values.country &&
+            countries[values.country] &&
+            countries[values.country].states
+              ? getStateOptionsByCountry(countries, values["country"])
+              : [{ value: "AG", label: intl.formatMessage(form.noInformation) }]
+          }
+        />
+        {type === "billing" && (
+          <div>
+            <InputField
+              type="tel"
+              label={intl.formatMessage(address.phone)}
+              name="phone"
+              required={true}
+            />
+            <InputField
+              type="email"
+              label={intl.formatMessage(address.email)}
+              name="email"
+              required={true}
+            />
+          </div>
+        )}
+        <br />
+        <Button fullWidth controlled state={isValid ? status : "disabled"}>
+          {intl.formatMessage(form.saveChanges)}
+        </Button>
+      </FormWrapper>
+    )
+  )
 );
 
 const AddressForm = withFormik({

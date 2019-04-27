@@ -8,6 +8,7 @@ import {
   FaEnvelope as Envelope
 } from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
+import { defineMessages, injectIntl } from "react-intl";
 
 import { colors, media } from "../utilities/style";
 import Link from "./Link";
@@ -15,6 +16,22 @@ import LogoNegative from "../../img/logo/logo_negative.svg";
 import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
 import MediaQuery from "./MediaQuery";
 import Placeholder from "./Placeholder";
+
+const messages = defineMessages({
+  toHomepage: {
+    id: "Footer.toHomepage",
+    defaultMessage: "Zu unserer Firmen-Homepage"
+  },
+  aboutTitle: {
+    id: "Footer.aboutTitle",
+    defaultMessage: "Über die Hauser Feuerschutz AG"
+  },
+  about: {
+    id: "Footer.about",
+    defaultMessage:
+      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung und Feuerschutz."
+  }
+});
 
 const StyledFooter = styled.footer`
   padding: 1rem;
@@ -81,12 +98,8 @@ const Icon = styled.span`
   }
 `;
 
-/**
- * The page footer
- * @returns {Component} The component
- */
-class Footer extends React.PureComponent {
-  render = () => {
+const Footer = React.memo(
+  injectIntl(({ intl }) => {
     return (
       <StyledFooter>
         <Flex>
@@ -119,7 +132,7 @@ class Footer extends React.PureComponent {
                     rel="noopener"
                     negative
                   >
-                    Zu unserer Firmen-Homepage
+                    {intl.formatMessage(messages.toHomepage)}
                   </Link>
                 </BorderBox>
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
@@ -171,10 +184,8 @@ class Footer extends React.PureComponent {
                   </IconList>
                 </BorderBox>
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
-                  <h4>Über die Hauser Feuerschutz AG</h4>
-                  Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und
-                  Produkte in den Bereichen Sicherheitskennzeichnung und
-                  Feuerschutz.
+                  <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
+                  {intl.formatMessage(messages.about)}
                 </BorderBox>
               </Flex>
             </Container>
@@ -182,7 +193,7 @@ class Footer extends React.PureComponent {
         </Flex>
       </StyledFooter>
     );
-  };
-}
+  })
+);
 
 export default Footer;

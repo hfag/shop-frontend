@@ -3,9 +3,13 @@ import { withFormik, Form } from "formik";
 import * as yup from "yup";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { defineMessages, injectIntl, intlShape } from "react-intl";
 
 import Button from "../Button";
 import InputField from "../InputField";
+import address from "../../i18n/address";
+import form from "../../i18n/form";
+import validation from "../../i18n/validation";
 
 const FormWrapper = styled(Form)`
   h2 {
@@ -13,42 +17,69 @@ const FormWrapper = styled(Form)`
   }
 `;
 
+const messages = defineMessages({
+  password: {
+    id: "AccountForm.password",
+    defaultMessage: "Aktuelles Passwort (leer lassen um nichts zu ändern)"
+  },
+  newPassword: {
+    id: "AccountForm.newPassword",
+    defaultMessage: "Neues Passwort (leer lassen um nichts zu ändern)"
+  },
+  passwordConfirmation: {
+    id: "AccountForm.passwordConfirmation",
+    defaultMessage: "Bestätige das neue Passwort"
+  }
+});
+
 /**
  * The inner account form
  * @param {Object} params The formik params
  * @returns {Component} The component
  */
-const InnerAccountForm = ({ dirty, isValid, status = "" }) => (
-  <FormWrapper>
-    <h2>Konto-Details</h2>
-    <InputField type="text" label="Vorname" name="firstName" required={true} />
-    <InputField type="text" label="Nachname" name="lastName" required={true} />
-    <InputField
-      type="text"
-      label="E-Mail Adresse"
-      name="email"
-      required={true}
-    />
-    <InputField
-      type="password"
-      label="Aktuelles Passwort (leer lassen um nichts zu ändern)"
-      name="password"
-    />
-    <InputField
-      type="password"
-      label="Neues Passwort (leer lassen um nichts zu ändern)"
-      name="newPassword"
-    />
-    <InputField
-      type="password"
-      label="Bestätige das neue Passwort"
-      name="passwordConfirmation"
-    />
-    <br />
-    <Button fullWidth controlled state={isValid ? status : "disabled"}>
-      Änderungen speichern
-    </Button>
-  </FormWrapper>
+const InnerAccountForm = React.memo(
+  injectIntl(({ dirty, isValid, status = "", intl }) => (
+    <FormWrapper>
+      <h2>Konto-Details</h2>
+      <InputField
+        type="text"
+        label={intl.formatMessage(address.firstName)}
+        name="firstName"
+        required={true}
+      />
+      <InputField
+        type="text"
+        label={intl.formatMessage(address.lastName)}
+        name="lastName"
+        required={true}
+      />
+      <InputField
+        type="text"
+        label={intl.formatMessage(address.email)}
+        name="email"
+        required={true}
+      />
+      <InputField
+        type="password"
+        label={intl.formatMessage(messages.password)}
+        name="password"
+      />
+      <InputField
+        type="password"
+        label={intl.formatMessage(messages.newPassword)}
+        name="newPassword"
+      />
+      <InputField
+        type="password"
+        label={intl.formatMessage(messages.passwordConfirmation)}
+        name="passwordConfirmation"
+      />
+      <br />
+      <Button fullWidth controlled state={isValid ? status : "disabled"}>
+        {intl.formatMessage(form.saveChanges)}
+      </Button>
+    </FormWrapper>
+  ))
 );
 
 const AccountForm = withFormik({
@@ -58,43 +89,45 @@ const AccountForm = withFormik({
     lastName,
     email
   }),
-  validationSchema: yup.object().shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    email: yup
-      .string()
-      .email()
-      .required(),
-    password: yup
-      .string()
-      .test("is-required", "Dieses Feld darf nicht leer sein", function(value) {
-        const { newPassword, passwordConfirmation } = this.parent;
-        return newPassword || passwordConfirmation ? value : true;
-      }),
-    newPassword: yup
-      .string()
-      .min(7)
-      .test("is-required", "Dieses Feld darf nicht leer sein", function(value) {
-        const { password, passwordConfirmation } = this.parent;
-        return password || passwordConfirmation ? value : true;
-      })
-      .oneOf(
-        [yup.ref("passwordConfirmation")],
-        "Die beiden Passwörter müssen übereinstimmen!"
-      ),
-    passwordConfirmation: yup
-      .string()
-      .min(7)
-      .when(
-        ["password", "newPassword"],
-        (password, newPassword, schema) =>
+  validationSchema: ({ intl }) => {
+    const isRequiredString = intl.formatMessage(validation.isRequired);
+
+    return yup.object().shape({
+      firstName: yup.string().required(),
+      lastName: yup.string().required(),
+      email: yup
+        .string()
+        .email()
+        .required(),
+      password: yup
+        .string()
+        .test("is-required", isRequiredString, function(value) {
+          const { newPassword, passwordConfirmation } = this.parent;
+          return newPassword || passwordConfirmation ? value : true;
+        }),
+      newPassword: yup
+        .string()
+        .min(7)
+        .test("is-required", isRequiredString, function(value) {
+          const { password, passwordConfirmation } = this.parent;
+          return password || passwordConfirmation ? value : true;
+        })
+        .oneOf(
+          [yup.ref("passwordConfirmation")],
+          intl.formatMessage(validation.passwordsMustMatch)
+        ),
+      passwordConfirmation: yup
+        .string()
+        .min(7)
+        .when(["password", "newPassword"], (password, newPassword, schema) =>
           password || newPassword ? schema.required() : schema
-      )
-      .test("is-required", "Dieses Feld darf nicht leer sein", function(value) {
-        const { password, newPassword } = this.parent;
-        return password || newPassword ? value : true;
-      })
-  }),
+        )
+        .test("is-required", isRequiredString, function(value) {
+          const { password, newPassword } = this.parent;
+          return password || newPassword ? value : true;
+        })
+    });
+  },
   handleSubmit: (
     { firstName, lastName, email, password, newPassword },
     {
@@ -119,8 +152,9 @@ const AccountForm = withFormik({
 })(InnerAccountForm);
 
 AccountForm.propTypes = {
+  intl: intlShape.isRequired,
   updateAccount: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired
 };
 
-export default AccountForm;
+export default injectIntl(AccountForm);

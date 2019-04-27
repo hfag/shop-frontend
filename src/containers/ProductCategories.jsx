@@ -9,6 +9,7 @@ import {
   getProductCategoryBySlug
 } from "reducers";
 import { Helmet } from "react-helmet";
+import { defineMessages, injectIntl } from "react-intl";
 
 import Flex from "../components/Flex";
 import Pagination from "../components/Pagination";
@@ -27,34 +28,40 @@ import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 import Card from "../components/Card";
 import OverflowCard from "../components/OverflowCard";
 import { pathnamesByLanguage } from "../utilities/urls";
+import shop from "../i18n/shop";
 
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
-const Head = React.memo(({ language, category }) => {
-  return (
-    <Helmet
-      title={
-        category
-          ? stripTags(category.name) + " - Hauser Feuerschutz AG"
-          : "Shop der Hauser Feuerschutz AG"
-      }
-      meta={[
-        { name: "description", content: category && category.shortDescription }
-      ]}
-      link={[
-        {
-          rel: "canonical",
-          href:
-            category &&
-            `${ABSOLUTE_URL}/${language}/${
-              pathnamesByLanguage[language].productCategories
-            }/${category.slug}`
+const Head = React.memo(
+  injectIntl(({ language, category, intl }) => {
+    return (
+      <Helmet
+        title={
+          category
+            ? stripTags(category.name) + " - Hauser Feuerschutz AG"
+            : intl.formatMessage(shop.siteTitle)
         }
-      ]}
-    />
-  );
-});
+        meta={[
+          {
+            name: "description",
+            content: category && category.shortDescription
+          }
+        ]}
+        link={[
+          {
+            rel: "canonical",
+            href:
+              category &&
+              `${ABSOLUTE_URL}/${language}/${
+                pathnamesByLanguage[language].productCategories
+              }/${category.slug}`
+          }
+        ]}
+      />
+    );
+  })
+);
 
 const RichSnippet = React.memo(({ productsJsonLd }) => (
   <JsonLd>

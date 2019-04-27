@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import universal from "react-universal-component";
 import { Helmet } from "react-helmet";
+import { defineMessages, injectIntl } from "react-intl";
 
 import {
   fetchShoppingCartIfNeeded,
@@ -26,6 +27,26 @@ import CheckoutForm from "../components/cart/CheckoutForm";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import { pathnamesByLanguage } from "../utilities/urls";
+
+const messages = defineMessages({
+  siteTitle: {
+    id: "Cart.siteTitle",
+    defaultMessage: "Warenkorb im Shop der Hauser Feuerschutz AG"
+  },
+  siteDescription: {
+    id: "Cart.siteDescription",
+    defaultMessage:
+      "Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
+  },
+  cart: {
+    id: "Cart.cart",
+    defaultMessage: "Warenkorb"
+  },
+  searchProduct: {
+    id: "Cart.searchProduct",
+    defaultMessage: "Suche Produkt"
+  }
+});
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -73,7 +94,8 @@ class Cart extends React.PureComponent {
       submitOrder,
       countries,
       account,
-      checkoutValues
+      checkoutValues,
+      intl
     } = this.props;
     const { step, showShipping, showSkuSelection } = this.state;
 
@@ -82,10 +104,10 @@ class Cart extends React.PureComponent {
     return (
       <Card>
         <Helmet>
-          <title>Warenkorb im Shop der Hauser Feuerschutz AG</title>
+          <title>{intl.formatMessage(messages.siteTitle)}</title>
           <meta
             name="description"
-            content="Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
+            content={intl.formatMessage(messages.siteDescription)}
           />
           <link
             rel="canonical"
@@ -95,7 +117,7 @@ class Cart extends React.PureComponent {
           />
         </Helmet>
 
-        <h1>Warenkorb</h1>
+        <h1>{intl.formatMessage(messages.cart)}</h1>
 
         {showSkuSelection && (
           <div>
@@ -120,7 +142,7 @@ class Cart extends React.PureComponent {
                 onClick={() => this.setState({ showSkuSelection: true })}
                 state=""
               >
-                Suche Produkt
+                {intl.formatMessage(messages.searchProduct)}
               </Button>
             )
           }
@@ -282,8 +304,10 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   }
 });
 
+const TranslatedCart = injectIntl(Cart);
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps
-)(Cart);
+)(TranslatedCart);

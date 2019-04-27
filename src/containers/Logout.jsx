@@ -1,23 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
+import { defineMessages, injectIntl } from "react-intl";
 
 import { logout } from "../actions/authentication";
 import Card from "../components/Card";
 import { getLanguage } from "../reducers";
-/**
- * The login page
- * @returns {Component} The component
- */
-class Logout extends React.PureComponent {
-  componentDidMount = () => {
-    this.props.logout();
-  };
+import user from "../i18n/user";
 
-  render = () => {
-    return <Card>Abmelden...</Card>;
-  };
-}
+const Logout = React.memo(
+  injectIntl(({ logout, intl }) => {
+    useEffect(() => {
+      logout();
+    }, []);
+
+    return <Card>{intl.formatMessage(user.logout)}...</Card>;
+  })
+);
 
 const mapStateToProps = state => ({ language: getLanguage(state) });
 const mapDispatchToProps = dispatch => ({

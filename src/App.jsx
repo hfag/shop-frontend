@@ -54,17 +54,7 @@ const Routes = ({
   location: { pathname }
 }) => {
   if (!isLanguageSupported(lang)) {
-    return (
-      <Redirect
-        to={
-          "/de/" +
-          pathname
-            .split("/")
-            .slice(1)
-            .join("/")
-        }
-      />
-    );
+    return <Redirect to={`/de${pathname}`} />;
   }
 
   const pathnames = pathnamesByLanguage[lang];

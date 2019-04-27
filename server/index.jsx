@@ -97,7 +97,7 @@ const renderApplication = (request, response) => {
   let language = getLanguageFromPathname(url, "no-language");
   if (language === "no-language") {
     //if the requested path doesn't contain a language, treat it as if the default would be preprended
-    url = `${DEFAULT_LANGUAGE}/${url}`;
+    url = `/${DEFAULT_LANGUAGE}/${url}`;
     language = DEFAULT_LANGUAGE;
   }
   const store = storeByLanguage[language];
@@ -165,7 +165,7 @@ const renderApplication = (request, response) => {
     });
 };
 
-app.get("/", renderApplication);
+app.get("/", (request, response) => response.redirect("/de/"));
 app.use(express.static("./dist/client"));
 app.get("/*", renderApplication);
 

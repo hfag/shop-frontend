@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Flex, Box } from "grid-styled";
 import styled from "styled-components";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, injectIntl, FormattedMessage } from "react-intl";
 
 import Address from "../../components/Address";
 import Button from "../../components/Button";
@@ -72,17 +72,20 @@ const AccountDashboard = React.memo(
                 </div>
               ) : (
                 <div>
-                  {intl.formatMessage(messages.provideName, {
-                    here: (
-                      <Link
-                        to={`/${language}/${
-                          pathnamesByLanguage[language].account
-                        }/${pathnamesByLanguage[language].details}`}
-                      >
-                        {intl.formatMessage(messages.here)}
-                      </Link>
-                    )
-                  })}
+                  <FormattedMessage
+                    id="AccountDashboard.provideName"
+                    values={{
+                      here: (
+                        <Link
+                          to={`/${language}/${
+                            pathnamesByLanguage[language].account
+                          }/${pathnamesByLanguage[language].details}`}
+                        >
+                          {intl.formatMessage(messages.here)}
+                        </Link>
+                      )
+                    }}
+                  />
                 </div>
               )}
 
@@ -94,17 +97,22 @@ const AccountDashboard = React.memo(
                   </h4>
                   {billingEmpty ? (
                     <div>
-                      {intl.formatMessage(messages.provideAddress, {
-                        here: (
-                          <Link
-                            to={`/${language}/${
-                              pathnamesByLanguage[language].account
-                            }/${pathnamesByLanguage[language].billingAddress}`}
-                          >
-                            {intl.formatMessage(messages.here)}
-                          </Link>
-                        )
-                      })}
+                      <FormattedMessage
+                        id="AccountDashboard.provideAddress"
+                        values={{
+                          here: (
+                            <Link
+                              to={`/${language}/${
+                                pathnamesByLanguage[language].account
+                              }/${
+                                pathnamesByLanguage[language].billingAddress
+                              }`}
+                            >
+                              {intl.formatMessage(messages.here)}
+                            </Link>
+                          )
+                        }}
+                      />
                     </div>
                   ) : (
                     <Address address={billingAddress} />

@@ -2,12 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import { Flex, Box } from "grid-styled";
 import { FaPercent } from "react-icons/fa";
+import { defineMessages, injectIntl } from "react-intl";
 
 import Link from "./Link";
 import Price from "./Price";
 import Thumbnail from "../containers/Thumbnail";
 import { colors, shadows, borders } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
+
+const messages = defineMessages({
+  newsAndDiscounts: {
+    id: "SaleProducts.newsAndDiscounts",
+    defaultMessage: "News und Aktionen"
+  }
+});
 
 const SalesFlex = styled(Flex)`
   margin: 0 -0.5rem;
@@ -132,10 +140,12 @@ const Product = React.memo(({ language, product }) => {
 });
 
 const SaleProducts = React.memo(
-  ({ language, posts = [], saleProducts = [] }) => {
+  injectIntl(({ language, posts = [], saleProducts = [], intl }) => {
     return (
       <div>
-        <h2 style={{ marginBottom: 0 }}>News und Aktionen</h2>
+        <h2 style={{ marginBottom: 0 }}>
+          {intl.formatMessage(messages.newsAndDiscounts)}
+        </h2>
         <SalesFlex flexWrap="wrap">
           {posts.map(post => (
             <Post language={language} post={post} key={post.slug} />
@@ -146,7 +156,7 @@ const SaleProducts = React.memo(
         </SalesFlex>
       </div>
     );
-  }
+  })
 );
 
 export default SaleProducts;

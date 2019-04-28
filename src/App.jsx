@@ -38,8 +38,8 @@ const Search = universalWithLoadingBar(props =>
 );
 
 const MESSAGES = {
-  ...messagesDe,
-  ...messagesFr
+  de: messagesDe,
+  fr: messagesFr
 };
 
 /**
@@ -105,7 +105,7 @@ const App = ({ history, store }) => {
 
   return (
     <Provider store={store}>
-      <IntlProvider locale={lang} messages={MESSAGES[lang]}>
+      <IntlProvider locale={lang} messages={MESSAGES[lang]} defaultLocale="de">
         <ConnectedRouter history={history}>
           <Wrapper>
             <GoogleAnalyticsTracker />

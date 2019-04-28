@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, injectIntl, FormattedMessage } from "react-intl";
 
 import Card from "../components/Card";
 import { getLanguage } from "../reducers";
@@ -55,12 +55,17 @@ const Confirmation = React.memo(
         <h1>{intl.formatMessage(messages.title)}</h1>
         <p>{intl.formatMessage(messages.message)}</p>
         <p>
-          {intl.formatMessage(messages.support, {
-            mail: (
-              <Link href="mailto:info@feuerschutz.ch">info@feuerschutz.ch</Link>
-            ),
-            phone: <Link href="tel:+41628340540">062 834 05 40</Link>
-          })}
+          <FormattedMessage
+            id="Confirmation.support"
+            values={{
+              mail: (
+                <Link href="mailto:info@feuerschutz.ch">
+                  info@feuerschutz.ch
+                </Link>
+              ),
+              phone: <Link href="tel:+41628340540">062 834 05 40</Link>
+            }}
+          />
         </p>
       </Card>
     );

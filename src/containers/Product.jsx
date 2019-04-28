@@ -7,7 +7,7 @@ import isEqual from "lodash/isEqual";
 import Lightbox from "react-images";
 import { Helmet } from "react-helmet";
 import queryString from "query-string";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, injectIntl, FormattedMessage } from "react-intl";
 
 import Thumbnail from "../containers/Thumbnail";
 import Card from "../components/Card";
@@ -582,9 +582,12 @@ class Product extends React.PureComponent {
             ) : (
               <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
                 <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
-                {intl.formatMessage(messages.resellerDiscountMessage, {
-                  resellerDiscount
-                })}
+                <FormattedMessage
+                  id="Product.resellerDiscountMessage"
+                  values={{
+                    resellerDiscount
+                  }}
+                />
               </Box>
             )}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>

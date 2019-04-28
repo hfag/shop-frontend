@@ -31,7 +31,7 @@
   "Account.myAccount": "Mon compte",
   "Account.overview": "Survol",
   "Account.details": "Précisions",
-  "AccountDashboard.provideName": "Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen angesprochen werden möchten, können Sie {here} Ihren Namen hinterlegen.",
+  "AccountDashboard.provideName": "Nous ne savons pas grand-chose sur vous. Si vous voulez être addressé par nom, vous pouvez entrer votre nom {here}.",
   "AccountDashboard.provideAddress": "Vous n'avez pas encore d'adresse de facturation {here}",
   "AccountDashboard.here": "ici",
   "Cart.siteTitle": "Panier dans la boutique Hauser Feuerschutz AG",

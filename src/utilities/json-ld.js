@@ -5,10 +5,10 @@ const { ABSOLUTE_URL } = process.env;
 /**
  * Maps a product to a json-ld schema
  * @param {Object} product The product to map
- * @param {Array|string} [imageSchema=""] The image schema
+ * @param {Array|string} [imageSchema] The image schema
  * @returns {Object} The json-ld schema
  */
-export const productToJsonLd = (product, imageSchema = "") => ({
+export const productToJsonLd = (product, imageSchema) => ({
   "@type": "Product",
   name: stripTags(product.title),
   image: imageSchema,
@@ -33,7 +33,8 @@ export const productToJsonLd = (product, imageSchema = "") => ({
           highest > price && highest !== 0 ? highest : price,
         0
       ),
-    offerCount: product && product.variations && product.variations.length,
+    offerCount:
+      (product && product.variations && product.variations.length) || undefined,
     itemCondition: "NewCondition",
     availability: "InStock",
     availableAtOrFrom: "ch.feuerschutz.1",

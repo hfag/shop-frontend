@@ -38,7 +38,7 @@ const mapStickyPost = ({ slug, title, thumbnail, description }) => ({
   slug,
   title,
   description,
-  thumbnailId: thumbnail.id
+  thumbnailId: (thumbnail && thumbnail.id) || -1
 });
 
 /**

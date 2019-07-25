@@ -1,6 +1,7 @@
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
 import { getShoppingCartLastFetched } from "../reducers";
+import { trackAddingCartItem, trackClearingCart } from "../utilities/analytics";
 
 /**
  * Fetches the shopping cart
@@ -81,8 +82,10 @@ const addShoppingCartItemAction = createFetchAction(
  * @param {number|string} [variationId] The variation id
  * @param {Object} [variation] The variation attributes
  * @param {number} [quantity=1] The quantity
+ * @param {Object} analytics The analytics data
  * @param {string} language The language string
  * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
+ *
  * @returns {function} The redux thunk
  */
 export const addShoppingCartItem = (
@@ -90,6 +93,7 @@ export const addShoppingCartItem = (
   variationId,
   variation,
   quantity = 1,
+  { sku, productName, minPrice },
   language,
   visualize = false
 ) => dispatch => {
@@ -110,6 +114,15 @@ export const addShoppingCartItem = (
         return Promise.reject(new Error("Unknown error while adding"));
       }
 
+      trackAddingCartItem(
+        sku,
+        productName,
+        undefined,
+        minPrice,
+        quantity,
+        cart.total
+      );
+
       dispatch(addShoppingCartItemAction(false, null, visualize, cart));
 
       return Promise.resolve(cart);
@@ -122,14 +135,14 @@ export const addShoppingCartItem = (
 };
 
 /**
- * Adds an item to the shopping cart
+ * Updates the shopping cart
  * @param {boolean} isFetching Whether the cart is currently being updated
  * @param {string} error If there was an error during the request, this field should contain it
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} cart The received shopping cart
  * @returns {object} The redux action
  */
-const updateShoppingCartItemAction = createFetchAction(
+const updateShoppingCartAction = createFetchAction(
   "UPDATE_SHOPPING_CART",
   "cart"
 );
@@ -137,16 +150,18 @@ const updateShoppingCartItemAction = createFetchAction(
 /**
  * Updates the shopping cart
  * @param {Array<Object>} items All items that should be in the shopping cart
+ * @param {Array<Object>} oldItems The previous shopping cart items
  * @param {string} language The language string
  * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const updateShoppingCartItem = (
+export const updateShoppingCart = (
   items,
+  oldItems,
   language,
   visualize = false
 ) => dispatch => {
-  dispatch(updateShoppingCartItemAction(true, null, visualize));
+  dispatch(updateShoppingCartAction(true, null, visualize));
 
   return fetchApi(`${language}/wp-json/hfag/shopping-cart`, {
     method: "PUT",
@@ -157,15 +172,15 @@ export const updateShoppingCartItem = (
   })
     .then(({ json: cart }) => {
       if (cart.error) {
-        return Promise.reject(new Error("Unknown error while adding"));
+        return Promise.reject(new Error("Unknown error while updating cart"));
       }
 
-      dispatch(updateShoppingCartItemAction(false, null, visualize, cart));
+      dispatch(updateShoppingCartAction(false, null, visualize, cart));
 
       return Promise.resolve(cart);
     })
     .catch(e => {
-      dispatch(updateShoppingCartItemAction(false, e, visualize));
+      dispatch(updateShoppingCartAction(false, e, visualize));
 
       return Promise.reject(e);
     });
@@ -264,7 +279,16 @@ export const submitOrder = (
 };
 
 /**
- * Clears a shopping cart
+ * The shopping cart clearing action
  * @returns {Object} The redux action
  */
-export const clearShoppingCart = () => ({ type: "CLEAR_SHOPPING_CART" });
+const clearShoppingCartAction = () => ({ type: "CLEAR_SHOPPING_CART" });
+
+/**
+ * Clears the shopping cart
+ * @returns {function} The redux thunk
+ */
+export const clearShoppingCart = () => dispatch => {
+  trackClearingCart();
+  dispatch(clearShoppingCartAction());
+};

@@ -315,13 +315,13 @@ const CartForm = withFormik({
   handleSubmit: (
     { items },
     {
-      props: { updateShoppingCartItem },
+      props: { updateShoppingCart },
       setStatus,
       setErrors /* setValues, setStatus, and other goodies */
     }
   ) => {
     setStatus("loading");
-    updateShoppingCartItem(items)
+    updateShoppingCart(items)
       .then(() => {
         setStatus("success");
         setTimeout(() => setStatus(""), 300);

@@ -894,6 +894,9 @@ const mapDispatchToProps = (
    * @param {number|string} [variationId] The variation id
    * @param {Object} [variation] The variation attributes
    * @param {number} [quantity=1] The quantity
+   * @param {string} sku The sku
+   * @param {string} productName The product name
+   * @param {number} minPrice The minimum price
    * @param {string} language The language string
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {function} The redux thunk
@@ -903,6 +906,9 @@ const mapDispatchToProps = (
     variationId,
     variation,
     quantity = 1,
+    sku,
+    productName,
+    minPrice,
     language,
     visualize = true
   ) {
@@ -912,6 +918,7 @@ const mapDispatchToProps = (
         variationId,
         variation,
         quantity,
+        { sku, productName, minPrice },
         language,
         visualize
       )
@@ -956,12 +963,18 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    * @returns {function} The redux thunk
    */
   addToShoppingCart(variationId, variation, quantity = 1, visualize = true) {
+    const { id: productId, sku, title, minPrice } =
+      mapStateToProps.product || {};
+
     return mapStateToProps.product
       ? mapDispatchToProps.addToShoppingCart(
-          mapStateToProps.product.id,
+          productId,
           variationId,
           variation,
           quantity,
+          sku,
+          title,
+          minPrice,
           mapStateToProps.languageFetchString,
           visualize
         )

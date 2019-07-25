@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 import { push } from "connected-react-router";
 import { defineMessages, injectIntl } from "react-intl";
 
-import { trackConversion } from "../../actions/orders";
 import { clearShoppingCart } from "../../actions/shopping-cart";
 import Button from "../../components/Button";
 import RelativeBox from "../../components/RelativeBox";
@@ -18,6 +17,7 @@ import InlinePage from "../../containers/InlinePage";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import address from "../../i18n/address";
 import order from "../../i18n/order";
+import { trackOrder } from "../../utilities/analytics";
 
 const messages = defineMessages({
   shipToDifferentAddress: {
@@ -463,7 +463,7 @@ const CheckoutForm = injectIntl(
           setTimeout(() => {
             setStatus("");
 
-            dispatch(trackConversion(total || 0, "CHF", transactionId || "-1"));
+            trackOrder(transactionId, total);
 
             dispatch(clearShoppingCart());
             dispatch(

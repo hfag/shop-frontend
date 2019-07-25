@@ -171,7 +171,9 @@ const fetchProduct = createFetchSingleItemThunk(
 
     if (item.product.crossSellIds && item.product.crossSellIds.length > 0) {
       promises.push(
-        dispatch(fetchProducts(1, -1, 20, true, item.product.crossSellIds))
+        dispatch(
+          fetchProducts(1, -1, 20, language, true, item.product.crossSellIds)
+        )
       );
     }
 

@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Provider } from "react-redux";
 import { Route } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
 import { hot } from "react-hot-loader/root";
-import { Switch, Redirect, withRouter } from "react-router";
+import { Switch, Redirect } from "react-router";
 import { IntlProvider } from "react-intl";
 
 import { universalWithLoadingBar } from "./utilities/universal";
-import GoogleAnalyticsTracker from "./components/GoogleAnalyticsTracker";
 import Frontpage from "./containers/Frontpage";
 import ProductCategories from "./containers/ProductCategories";
 import Logout from "./containers/Logout";
@@ -54,7 +53,7 @@ const Routes = ({
   location: { pathname }
 }) => {
   if (!isLanguageSupported(lang)) {
-    return <Redirect to={`/de${pathname}`} />;
+    return <div>x</div>;
   }
 
   const pathnames = pathnamesByLanguage[lang];
@@ -108,7 +107,6 @@ const App = ({ history, store }) => {
       <IntlProvider locale={lang} messages={MESSAGES[lang]} defaultLocale="de">
         <ConnectedRouter history={history}>
           <Wrapper>
-            <GoogleAnalyticsTracker />
             <Switch>
               <Route path="/:lang/" component={Routes} />
               <Redirect to="/de/" />

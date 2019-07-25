@@ -6,7 +6,7 @@ import { defineMessages, injectIntl } from "react-intl";
 
 import {
   fetchShoppingCartIfNeeded,
-  updateShoppingCartItem,
+  updateShoppingCart,
   submitOrder
 } from "../actions/shopping-cart";
 import { fetchCountriesIfNeeded } from "../actions/countries";
@@ -90,7 +90,7 @@ class Cart extends React.PureComponent {
       fees,
       taxes,
       total,
-      updateShoppingCartItem,
+      updateShoppingCart,
       submitOrder,
       countries,
       account,
@@ -133,7 +133,7 @@ class Cart extends React.PureComponent {
           taxes={taxes}
           subtotalSum={subtotalSum}
           total={total}
-          updateShoppingCartItem={updateShoppingCartItem}
+          updateShoppingCart={updateShoppingCart}
           enabled={step === "cart"}
           onProceed={() => this.setState({ step: "checkout" })}
           lastRow={
@@ -208,12 +208,13 @@ const mapDispatchToProps = dispatch => ({
   /**
    * Updates the shopping cart
    * @param {Array<Object>} items All cart items
+   * @param {Array<Object>} oldItems The old cart items
    * @param {string} language The language string
    * @param {boolean} visualize Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  updateShoppingCartItem(items, language, visualize = false) {
-    return dispatch(updateShoppingCartItem(items, language, visualize));
+  updateShoppingCart(items, oldItems, language, visualize = false) {
+    return dispatch(updateShoppingCart(items, oldItems, language, visualize));
   },
   /**
    * Submits an order
@@ -267,9 +268,10 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    * @param {boolean} visualize Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  updateShoppingCartItem(items, visualize = false) {
-    return mapDispatchToProps.updateShoppingCartItem(
+  updateShoppingCart(items, visualize = false) {
+    return mapDispatchToProps.updateShoppingCart(
       items,
+      mapStateToProps.items,
       mapStateToProps.languageFetchString,
       visualize
     );

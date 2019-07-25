@@ -160,7 +160,10 @@ const NameCell = React.memo(
                     product.id,
                     product.variationId,
                     product.meta,
-                    counter
+                    counter,
+                    product.sku,
+                    product.title,
+                    product.minPrice
                   )
                 }
               >
@@ -402,6 +405,9 @@ const mapDispatchToProps = dispatch => ({
    * @param {number|string} [variationId] The variation id
    * @param {Object} [variation] The variation attributes
    * @param {number} [quantity=1] The quantity
+   * @param {string} sku The product sku
+   * @param {string} productName The product name
+   * @param {number} minPrice The min price
    * @param {string} language The language string
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {function} The redux thunk
@@ -411,6 +417,9 @@ const mapDispatchToProps = dispatch => ({
     variationId,
     variation,
     quantity = 1,
+    sku,
+    productName,
+    minPrice,
     language,
     visualize = true
   ) {
@@ -420,6 +429,7 @@ const mapDispatchToProps = dispatch => ({
         variationId,
         variation,
         quantity,
+        { sku, productName, minPrice },
         language,
         visualize
       )
@@ -448,6 +458,9 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    * @param {number|string} [variationId] The variation id
    * @param {Object} [variation] The variation attributes
    * @param {number} [quantity=1] The quantity
+   * @param {string} sku The product sku
+   * @param {string} productName The product name
+   * @param {number} minPrice The min price
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {function} The redux thunk
    */
@@ -456,6 +469,9 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
     variationId,
     variation,
     quantity = 1,
+    sku,
+    productName,
+    minPrice,
     visualize = true
   ) {
     return mapDispatchToProps.addToShoppingCart(

@@ -41,17 +41,17 @@ const ButtonWrapper = styled.div`
     border-radius: ${borders.radius};
 
     color: #fff;
-    background-color: ${({ disabled }) =>
-      disabled ? DISABLED : colors.secondary};
+    background-color: ${({ state }) =>
+      state === "disabled" ? DISABLED : colors.secondary};
 
-    cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+    cursor: ${({ state }) => (state === "disabled" ? "not-allowed" : "pointer")};
 
     transition: all 0.3s ease-in-out;
     transition: background-color 0.15s ease-in-out;
 
     &:hover {
-      background-color: ${({ disabled }) =>
-        disabled
+      background-color: ${({ state }) =>
+        state === "disabled"
           ? DISABLED
           : Color(colors.secondary)
               .darken(0.25)
@@ -75,7 +75,7 @@ const ButtonWrapper = styled.div`
     fill: none;
   }
   .pb-container .pb-button svg.pb-progress-circle {
-    animation: spin 0.9s infinite cubic-bezier(0.085, 0.26, 0.935, 0.71);
+    animation: ${({state}) => state === "loading" ? "spin 0.9s infinite cubic-bezier(0.085, 0.26, 0.935, 0.71)" : "none"};
   }
   .pb-container .pb-button svg.pb-progress-circle path {
     stroke: ${colors.secondary};
@@ -154,7 +154,7 @@ class Button extends React.PureComponent {
           height={this.props.height || "2rem"}
           fullWidth={this.props.fullWidth}
           float={this.props.float}
-          disabled={state === "disabled"}
+          state={state}
         >
           <ProgressButton
             controlled={this.props.controlled}

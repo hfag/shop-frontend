@@ -1,6 +1,7 @@
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
 import { mapUser } from "./user";
+import { trackUserId, untrackUserId, trackEvent } from "../utilities/analytics";
 
 /**
  * Logs a user in
@@ -12,22 +13,6 @@ import { mapUser } from "./user";
  * @returns {object} The redux action
  */
 const loginAction = createFetchAction("LOGIN_USER", "account", "success");
-
-/**
- * Tracks the user authentication event
- * @param {number} id The user id
- * @param {string} role The user role
- * @returns {Object} The redux action
- */
-const trackAuthentication = (id, role) => ({
-  type: "TRACK_AUTHENTICATION",
-  payload: {
-    user: {
-      id,
-      role
-    }
-  }
-});
 
 /**
  * Logs a user in
@@ -47,7 +32,8 @@ export const login = (username, password, visualize = false) => dispatch => {
       if (success) {
         dispatch(loginAction(false, null, visualize, mapUser(account), true));
 
-        trackAuthentication(account.id || "-1", account.role || "no-role");
+        trackUserId(account.id);
+        trackEvent("Authentication", "Login");
 
         return Promise.resolve();
       } else {
@@ -94,9 +80,19 @@ export const resetPassword = username => dispatch => {
  * Logs a user out
  * @returns {Object} The redux action
  */
-export const logout = () => ({
+const logoutAction = () => ({
   type: "LOGOUT_USER"
 });
+
+/**
+ * Logs a user out
+ * @returns {Object} The redux action
+ */
+export const logout = () => dispatch => {
+  dispatch(logoutAction());
+  untrackUserId();
+  trackEvent("Authentication", "Logout");
+};
 
 /**
  * Registers a user

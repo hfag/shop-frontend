@@ -1,4 +1,5 @@
-import { createFetchAction, createFetchItemsThunk } from "utilities/action";
+import { createFetchAction, createFetchItemsThunk } from "../utilities/action";
+import { trackSiteSearch } from "../utilities/analytics";
 
 /**
  * Maps the received object properties to the ones that should be stored in the state
@@ -40,5 +41,12 @@ export const reset = () => ({
 export const search = createFetchItemsThunk(
   searchProducts,
   (language, query) => `${language}/wp-json/hfag/suggestions?query=${query}`,
-  mapItem
+  mapItem,
+  (dispatch, sections, language, visualize, query) => {
+    trackSiteSearch(
+      query,
+      false,
+      sections.reduce((counter, section) => counter + section.suggestions, 0)
+    );
+  }
 );

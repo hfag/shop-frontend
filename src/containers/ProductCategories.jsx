@@ -161,9 +161,6 @@ const ProductCategories = React.memo(
                   parents={newParents}
                 />
               ))}
-            </Flex>
-            {categoryIds.length > 0 && productIds.length > 0 && <hr />}
-            <Flex flexWrap="wrap">
               {productIds.map(productId => (
                 <ProductItem
                   key={productId}
@@ -171,13 +168,13 @@ const ProductCategories = React.memo(
                   parents={newParents}
                 />
               ))}
-
               {categoryIds.length === 0 &&
                 productIds.length === 0 &&
                 new Array(12)
                   .fill()
                   .map((el, index) => <CategoryItem key={index} id={-1} />)}
             </Flex>
+
             {totalProductCount !== 0 && (
               <Pagination
                 pageCount={Math.ceil(totalProductCount / ITEMS_PER_PAGE)}

@@ -44,7 +44,8 @@ const ButtonWrapper = styled.div`
     background-color: ${({ state }) =>
       state === "disabled" ? DISABLED : colors.secondary};
 
-    cursor: ${({ state }) => (state === "disabled" ? "not-allowed" : "pointer")};
+    cursor: ${({ state }) =>
+      state === "disabled" ? "not-allowed" : "pointer"};
 
     transition: all 0.3s ease-in-out;
     transition: background-color 0.15s ease-in-out;
@@ -75,7 +76,10 @@ const ButtonWrapper = styled.div`
     fill: none;
   }
   .pb-container .pb-button svg.pb-progress-circle {
-    animation: ${({state}) => state === "loading" ? "spin 0.9s infinite cubic-bezier(0.085, 0.26, 0.935, 0.71)" : "none"};
+    animation: ${({ state }) =>
+      state === "loading"
+        ? "spin 0.9s infinite cubic-bezier(0.085, 0.26, 0.935, 0.71)"
+        : "none"};
   }
   .pb-container .pb-button svg.pb-progress-circle path {
     stroke: ${colors.secondary};

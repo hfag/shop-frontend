@@ -93,18 +93,18 @@ export const trackProductCategoryView = name =>
  * @param {string} category The product category name
  * @param {number} price The product's price
  * @param {number} quantity The quantity
- * @param {number} total The total after removing the item
+ * @param {number} total The total after adding the item
  * @returns {void}
  */
 export const trackAddingCartItem = (
   sku,
   name,
-  category,
+  category = [],
   price,
   quantity,
   total
 ) => {
-  paq.push(["setEcommerceView", sku, name, category, price, quantity]);
+  paq.push(["addEcommerceItem", sku, name, category, price, quantity]);
   paq.push("trackEcommerceCartUpdate", total);
 };
 

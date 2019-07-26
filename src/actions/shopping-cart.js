@@ -1,7 +1,13 @@
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
 import { getShoppingCartLastFetched } from "../reducers";
-import { trackAddingCartItem, trackClearingCart } from "../utilities/analytics";
+import {
+  trackAddingCartItem,
+  trackClearingCart,
+  addCartItem,
+  trackCartUpdate,
+  clearCart
+} from "../utilities/analytics";
 
 /**
  * Fetches the shopping cart
@@ -31,11 +37,18 @@ const fetchShoppingCart = (language, visualize = false) => dispatch => {
     .then(({ json: cart }) => {
       dispatch(fetchShoppingCartAction(false, null, visualize, cart));
 
+      clearCart();
+
+      for (const item of cart.items) {
+        addCartItem(item.sku, item.title, undefined, item.price, item.quantity);
+      }
+
+      trackCartUpdate(cart.total);
+
       return Promise.resolve(cart);
     })
     .catch(e => {
       dispatch(fetchShoppingCartAction(false, e, visualize));
-
       return Promise.reject(e);
     });
 };
@@ -129,7 +142,6 @@ export const addShoppingCartItem = (
     })
     .catch(e => {
       dispatch(addShoppingCartItemAction(false, e, visualize));
-
       return Promise.reject(e);
     });
 };
@@ -174,6 +186,14 @@ export const updateShoppingCart = (
       if (cart.error) {
         return Promise.reject(new Error("Unknown error while updating cart"));
       }
+
+      clearCart();
+
+      for (const item of cart.items) {
+        addCartItem(item.sku, item.title, undefined, item.price, item.quantity);
+      }
+
+      trackCartUpdate(cart.total);
 
       dispatch(updateShoppingCartAction(false, null, visualize, cart));
 

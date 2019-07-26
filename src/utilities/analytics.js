@@ -15,7 +15,8 @@ paq.push(["setDomains", ["*.shop.feuerschutz.ch"]]);
 paq.push(["trackVisibleContentImpressions", true]);
 
 //track page view
-//paq.push(["trackPageView"]);
+paq.push(["setCustomUrl", window.location.pathname + window.location.search]);
+paq.push(["trackPageView"]);
 
 /**
  * Tracks search results
@@ -93,19 +94,46 @@ export const trackProductCategoryView = name =>
  * @param {string} category The product category name
  * @param {number} price The product's price
  * @param {number} quantity The quantity
+ * @returns {void}
+ */
+export const addCartItem = (
+  sku,
+  name,
+  category = ["Uncategorized"],
+  price,
+  quantity
+) => {
+  paq.push(["addEcommerceItem", sku, name, category, price, quantity]);
+};
+
+/**
+ * Updates the cart
+ * @param {number} total The total after the update
+ * @returns {void}
+ */
+export const trackCartUpdate = total =>
+  paq.push("trackEcommerceCartUpdate", total);
+
+/**
+ * Adds an item to a cart
+ * @param {string} sku The product sku
+ * @param {string} name The product name
+ * @param {string} category The product category name
+ * @param {number} price The product's price
+ * @param {number} quantity The quantity
  * @param {number} total The total after adding the item
  * @returns {void}
  */
 export const trackAddingCartItem = (
   sku,
   name,
-  category = [],
+  category,
   price,
   quantity,
   total
 ) => {
-  paq.push(["addEcommerceItem", sku, name, category, price, quantity]);
-  paq.push("trackEcommerceCartUpdate", total);
+  addCartItem(sku, name, category, price, quantity);
+  trackCartUpdate(total);
 };
 
 /**
@@ -116,16 +144,22 @@ export const trackAddingCartItem = (
  */
 export const trackRemovingCartItem = (sku, total) => {
   paq.push(["removeEcommerceItem", sku]);
-  paq.push("trackEcommerceCartUpdate", total);
+  trackCartUpdate(total);
 };
 
 /**
  * Clears the cart
  * @returns {void}
  */
+export const clearCart = () => paq.push(["clearEcommerceCart"]);
+
+/**
+ * Clears the cart
+ * @returns {void}
+ */
 export const trackClearingCart = () => {
-  paq.push(["clearCart", sku]);
-  paq.push("trackEcommerceCartUpdate", 0);
+  clearCart();
+  trackCartUpdate(0);
 };
 
 /**

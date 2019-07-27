@@ -46,7 +46,10 @@ export const search = createFetchItemsThunk(
     trackSiteSearch(
       query,
       false,
-      sections.reduce((counter, section) => counter + section.suggestions, 0)
+      sections.reduce(
+        (counter, section) => counter + section.suggestions.length,
+        0
+      )
     );
   }
 );

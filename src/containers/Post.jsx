@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 import { Flex, Box } from "grid-styled";
@@ -13,40 +13,34 @@ import { fetchPostIfNeeded } from "../actions/posts";
 import { stripTags } from "../utilities";
 import Thumbnail from "./Thumbnail";
 import { pathnamesByLanguage } from "../utilities/urls";
+import { trackPageView } from "../utilities/analytics";
+import Link from "../components/Link";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
-/**
- * The search page
- * @returns {Component} The component
- */
-class Post extends React.PureComponent {
-  componentDidMount = () => {
-    const { post, fetchPostIfNeeded } = this.props;
-    if (!post) {
-      fetchPostIfNeeded();
-    }
-  };
-  render = () => {
-    const { language, post = {} } = this.props;
-    return (
-      <Card>
-        <Helmet>
-          <title>{stripTags(post.title)}</title>
-          <meta name="description" content={stripTags(post.description)} />
-          <link
-            rel="canonical"
-            href={`${ABSOLUTE_URL}/${language}/${
-              pathnamesByLanguage[language].post
-            }/${post.slug}`}
-          />
-        </Helmet>
-        <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
-      </Card>
-    );
-  };
-}
+const Post = React.memo(({ language, post = {}, fetchPostIfNeeded }) => {
+  useEffect(() => {
+    fetchPostIfNeeded();
+    trackPageView();
+  }, [post]);
+
+  return (
+    <Card>
+      <Helmet>
+        <title>{stripTags(post.title)}</title>
+        <meta name="description" content={stripTags(post.description)} />
+        <link
+          rel="canonical"
+          href={`${ABSOLUTE_URL}/${language}/${
+            pathnamesByLanguage[language].post
+          }/${post.slug}`}
+        />
+      </Helmet>
+      <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
+      <div dangerouslySetInnerHTML={{ __html: post.content }} />
+    </Card>
+  );
+});
 
 const mapStateToProps = (
   state,

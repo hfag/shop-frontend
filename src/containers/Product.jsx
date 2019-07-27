@@ -40,6 +40,7 @@ import JsonLd from "../components/JsonLd";
 import { attachmentsToJsonLd, productToJsonLd } from "../utilities/json-ld";
 import { pathnamesByLanguage } from "../utilities/urls";
 import productMessages from "../i18n/product";
+import { setProductView, trackPageView } from "../utilities/analytics";
 
 const messages = defineMessages({
   chooseAVariation: {
@@ -241,6 +242,13 @@ class Product extends React.PureComponent {
       fetchProductIfNeeded()
     ]).then(() => {
       const { variationId } = queryString.parse(location.search);
+
+      setProductView(
+        this.props.product.sku,
+        this.props.product.title,
+        this.props.product.minPrice
+      );
+      trackPageView();
 
       if (variationId && this.props.product && this.props.product.variations) {
         this.setState({

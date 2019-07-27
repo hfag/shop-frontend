@@ -7,6 +7,7 @@ import Card from "../components/Card";
 import { getLanguage } from "../reducers";
 import Link from "../components/Link";
 import { pathnamesByLanguage } from "../utilities/urls";
+import { trackPageView } from "../utilities/analytics";
 
 const messages = defineMessages({
   siteTitle: {
@@ -37,6 +38,10 @@ const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const Confirmation = React.memo(
   injectIntl(({ language, intl }) => {
+    useEffect(() => {
+      trackPageView();
+    });
+
     return (
       <Card>
         <Helmet>

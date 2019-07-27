@@ -34,9 +34,9 @@ const presistedState = { ...window.__INITIAL_DATA__, ...loadState() };
 //create a history object
 const history = createBrowserHistory();
 
-history.listen(location => {
+/*history.listen(location => {
   trackPageView(location.pathname + location.search);
-});
+});*/
 
 //and the redux store
 const store = createStore(

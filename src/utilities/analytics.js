@@ -14,19 +14,24 @@ paq.push(["setDomains", ["*.shop.feuerschutz.ch"]]);
 //tracks content impressions
 paq.push(["trackVisibleContentImpressions", true]);
 
-//track page view
-paq.push(["setCustomUrl", window.location.pathname + window.location.search]);
-paq.push(["trackPageView"]);
+window.onload = () => {
+  //track page view after cart has been loaded
+  paq.push(["setCustomUrl", window.location.pathname + window.location.search]);
+  paq.push(["trackPageView"]);
+};
 
 /**
  * Tracks search results
  * @param {string} keyword Search keyword searched for
  * @param {string|boolean} [category=false] Search category selected in your search engine. If you do not need this, set to false
- * @param {number|boolean} [results=false] Number of results on the Search results page. Zero indicates a 'No Result Search Keyword'. Set to false if you don't know
+ * @param {number|boolean} [resultCount=false] Number of results on the Search results page. Zero indicates a 'No Result Search Keyword'. Set to false if you don't know
  * @returns {void}
  */
-export const trackSiteSearch = (keyword, category = false, results = false) =>
-  paq.push(["trackSiteSearch", keyword, category, results]);
+export const trackSiteSearch = (
+  keyword,
+  category = false,
+  resultCount = false
+) => paq.push(["trackSiteSearch", keyword, category, resultCount]);
 
 /**
  * Tracks a new page view and deletes previous custom variables
@@ -35,7 +40,11 @@ export const trackSiteSearch = (keyword, category = false, results = false) =>
  * @param {number} [generationTime=0] The time it took to generate the page
  * @returns {void}
  */
-export const trackPageView = (url, previousUrl, generationTime = 0) => {
+export const trackPageView = (
+  url = location.pathname + location.search,
+  previousUrl = undefined,
+  generationTime = 0
+) => {
   paq.push(["setCustomUrl", url]);
   if (previousUrl) {
     paq.push(["setReferrerUrl", previousUrl]);
@@ -76,7 +85,7 @@ export const trackGoal = (goalId, value) =>
  * @param {number} price The product price
  * @returns {void}
  */
-export const trackProductView = (sku, name, price) =>
+export const setProductView = (sku, name, price) =>
   paq.push(["setEcommerceView", sku, name, false, price]);
 
 /**
@@ -84,7 +93,7 @@ export const trackProductView = (sku, name, price) =>
  * @param {string} name The product category name
  * @returns {void}
  */
-export const trackProductCategoryView = name =>
+export const setProductCategoryView = name =>
   paq.push(["setEcommerceView", false, false, name]);
 
 /**
@@ -112,7 +121,7 @@ export const addCartItem = (
  * @returns {void}
  */
 export const trackCartUpdate = total =>
-  paq.push("trackEcommerceCartUpdate", total);
+  paq.push(["trackEcommerceCartUpdate", total]);
 
 /**
  * Adds an item to a cart

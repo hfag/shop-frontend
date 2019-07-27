@@ -96,7 +96,8 @@ const NavCart = React.memo(
                       <Thumbnail id={item.thumbnailId} size="thumbnail" />
                     </div>
                     <div>
-                      <strong>{item.quantity}x</strong> {item.title}
+                      <strong>{item.quantity}x</strong>{" "}
+                      <span dangerouslySetInnerHTML={{ __html: item.title }} />
                     </div>
                   </ShoppingCartList>
                 ))

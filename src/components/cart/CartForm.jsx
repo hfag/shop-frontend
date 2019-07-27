@@ -171,22 +171,24 @@ const InnerCartForm = React.memo(
                         <Thumbnail id={item.thumbnailId} />
                       </td>
                       <td>
-                        <h4>{item.title}</h4>
-                        <UncontrolledCollapse
-                          openLink={intl.formatMessage(
-                            messages.showMoreDetails
-                          )}
-                          closeLink={intl.formatMessage(
-                            messages.showLessDetails
-                          )}
-                          isOpenDefault={false}
-                        >
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: item.attributes
-                            }}
-                          />
-                        </UncontrolledCollapse>
+                        <h4 dangerouslySetInnerHTML={{ __html: item.title }} />
+                        {item.attributes.length > 0 && (
+                          <UncontrolledCollapse
+                            openLink={intl.formatMessage(
+                              messages.showMoreDetails
+                            )}
+                            closeLink={intl.formatMessage(
+                              messages.showLessDetails
+                            )}
+                            isOpenDefault={false}
+                          >
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: item.attributes
+                              }}
+                            />
+                          </UncontrolledCollapse>
+                        )}
                       </td>
                       <td>{item.sku}</td>
                       <td>

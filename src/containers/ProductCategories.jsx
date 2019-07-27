@@ -29,6 +29,7 @@ import Card from "../components/Card";
 import OverflowCard from "../components/OverflowCard";
 import { pathnamesByLanguage } from "../utilities/urls";
 import shop from "../i18n/shop";
+import { setProductCategoryView, trackPageView } from "../utilities/analytics";
 
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
@@ -124,9 +125,14 @@ const ProductCategories = React.memo(
       fetchAllProductCategoriesIfNeeded();
 
       if (!active || !category || !categoryId) {
+        trackPageView();
         return;
       }
+
       fetchProducts(categoryId);
+
+      setProductCategoryView(stripTags(category.name));
+      trackPageView();
     }, [categoryId]);
 
     useEffect(() => {

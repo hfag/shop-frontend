@@ -1,17 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import queryString from "query-string";
 import { defineMessages, injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
 import Card from "../components/Card";
-import {
-  getProductSearchSections,
-  getLastProductSearchQuery,
-  getLanguage
-} from "../reducers";
+import { getLanguage } from "../reducers";
 import SkuSelection from "./SkuSelection";
 import { pathnamesByLanguage } from "../utilities/urls";
+import { trackPageView } from "../utilities/analytics";
 
 const messages = defineMessages({
   siteTitle: {
@@ -30,6 +27,10 @@ const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 const Search = React.memo(
   injectIntl(({ language, intl }) => {
     const { query } = queryString.parse(location.search);
+
+    useEffect(() => {
+      trackPageView();
+    }, []);
 
     return (
       <Card>

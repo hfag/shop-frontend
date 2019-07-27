@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import fuzzy from "fuzzy";
 import get from "lodash/get";
 import { defineMessages, injectIntl } from "react-intl";
+import debounce from "lodash/debounce";
 
 import Button from "../components/Button";
 import { addShoppingCartItem } from "../actions/shopping-cart";
@@ -26,6 +27,7 @@ import Link from "../components/Link";
 import { pathnamesByLanguage } from "../utilities/urls";
 import productMessages from "../i18n/product";
 import pagination from "../i18n/pagination";
+import { trackSiteSearch } from "../utilities/analytics";
 
 const messages = defineMessages({
   loading: {
@@ -94,6 +96,10 @@ const AddToCart = styled.div`
   }
 `;
 
+const debouncedSearch = debounce((keyword, resultCount) => {
+  trackSiteSearch(keyword, false, resultCount);
+}, 300);
+
 /**
  * Filters data rows
  * @param {Object} filter The filter object
@@ -101,8 +107,8 @@ const AddToCart = styled.div`
  * @param {Object} column The column
  * @returns {Array<boolean>} An array of booleans indicating what items should be displayed
  */
-const fuzzyFilter = (filter, rows, column) =>
-  fuzzy
+const fuzzyFilter = (filter, rows, column) => {
+  const results = fuzzy
     .filter(filter.value, rows, {
       pre: "<strong>",
       post: "</strong>",
@@ -112,6 +118,13 @@ const fuzzyFilter = (filter, rows, column) =>
           : get(e, column.accessor)
     })
     .map(e => e.original);
+
+  if (filter.value.length > 0) {
+    debouncedSearch(filter.value, results.length);
+  }
+
+  return results;
+};
 
 /**
  * The name cell

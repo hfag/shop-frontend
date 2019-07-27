@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { withFormik, Form } from "formik";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
@@ -23,6 +23,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 import address from "../i18n/address";
 import user from "../i18n/user";
 import validation from "../i18n/validation";
+import { trackPageView } from "../utilities/analytics";
 
 const messages = defineMessages({
   siteTitle: {
@@ -246,103 +247,98 @@ const PasswordResetForm = withFormik({
   }
 })(InnerPasswordResetForm);
 
-/**
- * The login page
- * @returns {Component} The component
- */
-class Login extends React.PureComponent {
-  constructor() {
-    super();
-
-    this.state = {
-      registered: false,
-      resetPassword: false,
-      redirect: undefined
-    };
-  }
-
-  componentDidMount = () => {
-    const { redirect } = queryString.parse(location.search);
-
-    const { resetAuthentication, isAuthenticated } = this.props;
-
-    if (redirect) {
-      this.setState({ redirect });
-    }
-
-    if (redirect && isAuthenticated) {
-      resetAuthentication();
-    }
-  };
-
-  render = () => {
-    const {
+const Login = React.memo(
+  injectIntl(
+    ({
+      resetAuthentication,
+      isAuthenticated,
       language,
       dispatch,
       login,
       register,
       resetPassword,
       intl
-    } = this.props;
-    return (
-      <Card>
-        <Helmet>
-          <title>{intl.formatMessage(messages.siteTitle)}</title>
-          <meta
-            name="description"
-            content={intl.formatMessage(messages.siteDescription)}
-          />
-          <link
-            rel="canonical"
-            href={`${ABSOLUTE_URL}/${pathnamesByLanguage[language].login}`}
-          />
-        </Helmet>
-        <Flex flexWrap="wrap">
-          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
-            <h1>{intl.formatMessage(user.login)}</h1>
-            <LoginRegisterForm
-              action={login}
-              callback={() =>
-                dispatch(
-                  push(`/${language}/${pathnamesByLanguage[language].account}`)
-                )
-              }
-              submitText={intl.formatMessage(user.login)}
+    }) => {
+      const [didRegister, setDidRegister] = useState(false);
+      const [didResetPassword, setDidResetPassword] = useState(false);
+      const [redirect, setRedirect] = useState(undefined);
+
+      useEffect(() => {
+        const { redirect } = queryString.parse(location.search);
+
+        if (redirect) {
+          setRedirect(redirect);
+        }
+
+        if (redirect && isAuthenticated) {
+          resetAuthentication();
+        }
+
+        trackPageView();
+      }, []);
+
+      return (
+        <Card>
+          <Helmet>
+            <title>{intl.formatMessage(messages.siteTitle)}</title>
+            <meta
+              name="description"
+              content={intl.formatMessage(messages.siteDescription)}
             />
-            <h1>{intl.formatMessage(messages.passwordForgotten)}</h1>
-            <PasswordResetForm
-              resetPassword={resetPassword}
-              message={
-                this.state.resetPassword && (
-                  <Message>
-                    {intl.formatMessage(messages.confirmationEmail)}
-                  </Message>
-                )
-              }
-              callback={() => this.setState({ resetPassword: true })}
+            <link
+              rel="canonical"
+              href={`${ABSOLUTE_URL}/${pathnamesByLanguage[language].login}`}
             />
-          </Box>
-          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
-            <h1>{intl.formatMessage(messages.newAccount)}</h1>
-            <LoginRegisterForm
-              action={register}
-              confirmation
-              message={
-                this.state.registered && (
-                  <Message>
-                    {intl.formatMessage(messages.confirmationEmail)}
-                  </Message>
-                )
-              }
-              callback={() => this.setState({ registered: true })}
-              submitText={intl.formatMessage(messages.createAccount)}
-            />
-          </Box>
-        </Flex>
-      </Card>
-    );
-  };
-}
+          </Helmet>
+          <Flex flexWrap="wrap">
+            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
+              <h1>{intl.formatMessage(user.login)}</h1>
+              <LoginRegisterForm
+                action={login}
+                callback={() =>
+                  dispatch(
+                    push(
+                      `/${language}/${pathnamesByLanguage[language].account}`
+                    )
+                  )
+                }
+                submitText={intl.formatMessage(user.login)}
+              />
+              <h1>{intl.formatMessage(messages.passwordForgotten)}</h1>
+              <PasswordResetForm
+                resetPassword={resetPassword}
+                message={
+                  didResetPassword && (
+                    <Message>
+                      {intl.formatMessage(messages.confirmationEmail)}
+                    </Message>
+                  )
+                }
+                callback={() => setDidResetPassword(true)}
+              />
+            </Box>
+            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
+              <h1>{intl.formatMessage(messages.newAccount)}</h1>
+              <LoginRegisterForm
+                action={register}
+                confirmation
+                message={
+                  didRegister && (
+                    <Message>
+                      {intl.formatMessage(messages.confirmationEmail)}
+                    </Message>
+                  )
+                }
+                callback={() => setDidRegister(true)}
+                submitText={intl.formatMessage(messages.createAccount)}
+              />
+            </Box>
+          </Flex>
+        </Card>
+      );
+    }
+  )
+);
 
 const mapStateToProps = state => ({
   language: getLanguage(state),
@@ -387,9 +383,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const TranslatedLogin = injectIntl(Login);
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TranslatedLogin);
+)(Login);

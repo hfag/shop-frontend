@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import universal from "react-universal-component";
 import { Helmet } from "react-helmet";
@@ -27,6 +27,7 @@ import CheckoutForm from "../components/cart/CheckoutForm";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import { pathnamesByLanguage } from "../utilities/urls";
+import { trackPageView } from "../utilities/analytics";
 
 const messages = defineMessages({
   siteTitle: {
@@ -58,30 +59,12 @@ const SkuSelection = universal(props =>
  * The cart page
  * @returns {Component} The component
  */
-class Cart extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      step: "cart",
-      showShipping: false,
-      showSkuSelection: false
-    };
-  }
 
-  componentDidMount = () => {
-    this.props.fetchCountriesIfNeeded();
-    this.props.fetchShoppingCartIfNeeded();
-  };
-
-  /**
-   * Sets whether additional shipping address values should be displayed
-   * @param {boolean} showShipping Whether the shiping address should be shown
-   * @returns {void}
-   */
-  setShowShipping = showShipping => this.setState({ showShipping });
-
-  render = () => {
-    const {
+const Cart = React.memo(
+  injectIntl(
+    ({
+      fetchCountriesIfNeeded,
+      fetchShoppingCartIfNeeded,
       language,
       dispatch,
       isFetching,
@@ -96,73 +79,83 @@ class Cart extends React.PureComponent {
       account,
       checkoutValues,
       intl
-    } = this.props;
-    const { step, showShipping, showSkuSelection } = this.state;
+    }) => {
+      const [step, setStep] = useState("cart");
+      const [showShipping, setShowShipping] = useState(false);
+      const [showSkuSelection, setShowSkuSelection] = useState(false);
 
-    const subtotalSum = items.reduce((sum, item) => sum + item.subtotal, 0);
+      useEffect(() => {
+        fetchCountriesIfNeeded();
+        fetchShoppingCartIfNeeded();
 
-    return (
-      <Card>
-        <Helmet>
-          <title>{intl.formatMessage(messages.siteTitle)}</title>
-          <meta
-            name="description"
-            content={intl.formatMessage(messages.siteDescription)}
+        trackPageView();
+      }, []);
+
+      const subtotalSum = items.reduce((sum, item) => sum + item.subtotal, 0);
+
+      return (
+        <Card>
+          <Helmet>
+            <title>{intl.formatMessage(messages.siteTitle)}</title>
+            <meta
+              name="description"
+              content={intl.formatMessage(messages.siteDescription)}
+            />
+            <link
+              rel="canonical"
+              href={`${ABSOLUTE_URL}/${language}/${
+                pathnamesByLanguage[language].language
+              }`}
+            />
+          </Helmet>
+
+          <h1>{intl.formatMessage(messages.cart)}</h1>
+
+          {showSkuSelection && (
+            <div>
+              <SkuSelection />
+              <hr />
+            </div>
+          )}
+
+          <CartForm
+            items={items}
+            shipping={shipping}
+            fees={fees}
+            taxes={taxes}
+            subtotalSum={subtotalSum}
+            total={total}
+            updateShoppingCart={updateShoppingCart}
+            enabled={step === "cart"}
+            onProceed={() => this.setState({ step: "checkout" })}
+            lastRow={
+              !showSkuSelection && (
+                <Button
+                  onClick={() => this.setState({ showSkuSelection: true })}
+                  state=""
+                >
+                  {intl.formatMessage(messages.searchProduct)}
+                </Button>
+              )
+            }
           />
-          <link
-            rel="canonical"
-            href={`${ABSOLUTE_URL}/${language}/${
-              pathnamesByLanguage[language].language
-            }`}
-          />
-        </Helmet>
 
-        <h1>{intl.formatMessage(messages.cart)}</h1>
-
-        {showSkuSelection && (
-          <div>
-            <SkuSelection />
-            <hr />
-          </div>
-        )}
-
-        <CartForm
-          items={items}
-          shipping={shipping}
-          fees={fees}
-          taxes={taxes}
-          subtotalSum={subtotalSum}
-          total={total}
-          updateShoppingCart={updateShoppingCart}
-          enabled={step === "cart"}
-          onProceed={() => this.setState({ step: "checkout" })}
-          lastRow={
-            !showSkuSelection && (
-              <Button
-                onClick={() => this.setState({ showSkuSelection: true })}
-                state=""
-              >
-                {intl.formatMessage(messages.searchProduct)}
-              </Button>
-            )
-          }
-        />
-
-        {step === "checkout" && (
-          <CheckoutForm
-            language={language}
-            values={checkoutValues}
-            setShowShipping={this.setShowShipping}
-            showShipping={showShipping}
-            submitOrder={submitOrder}
-            countries={countries}
-            dispatch={dispatch}
-          />
-        )}
-      </Card>
-    );
-  };
-}
+          {step === "checkout" && (
+            <CheckoutForm
+              language={language}
+              values={checkoutValues}
+              setShowShipping={this.setShowShipping}
+              showShipping={showShipping}
+              submitOrder={submitOrder}
+              countries={countries}
+              dispatch={dispatch}
+            />
+          )}
+        </Card>
+      );
+    }
+  )
+);
 
 const mapStateToProps = state => {
   const account = getAccount(state);
@@ -306,10 +299,8 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   }
 });
 
-const TranslatedCart = injectIntl(Cart);
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps
-)(TranslatedCart);
+)(Cart);

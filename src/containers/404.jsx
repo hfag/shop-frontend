@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 import { defineMessages, injectIntl } from "react-intl";
@@ -7,6 +7,7 @@ import Card from "../components/Card";
 import Searchbar from "./Searchbar";
 import Link from "../components/Link";
 import { getLanguage } from "../reducers";
+import { trackPageView } from "../utilities/analytics";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -33,6 +34,10 @@ const messages = defineMessages({
 
 const Page404 = React.memo(
   injectIntl(({ language, intl }) => {
+    useEffect(() => {
+      trackPageView();
+    });
+
     return (
       <Card>
         <Helmet>

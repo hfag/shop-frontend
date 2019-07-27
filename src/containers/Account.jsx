@@ -24,6 +24,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 import address from "../i18n/address";
 import order from "../i18n/order";
 import user from "../i18n/user";
+import { trackPageView } from "../utilities/analytics";
 
 const messages = defineMessages({
   siteTitle: {
@@ -91,6 +92,7 @@ const Account = React.memo(
       shippingAddress,
       updateAccount,
       updateAddress,
+      location,
       match: { url },
       isAuthenticated,
       redirectToLogin,
@@ -108,6 +110,11 @@ const Account = React.memo(
         fetchAccount();
         fetchOrders();
       }, []);
+
+      useEffect(() => {
+        //route change
+        trackPageView();
+      }, [location]);
 
       return (
         <AccountContainer>

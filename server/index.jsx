@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import url from "url";
 
 import sizeOf from "object-sizeof";
 import express from "express";
@@ -165,7 +166,14 @@ const renderApplication = (request, response) => {
     });
 };
 
-app.get("/", (request, response) => response.redirect("/de/"));
+app.get("/", (request, response) =>
+  response.redirect(
+    url.format({
+      pathname: "/de/",
+      query: request.query
+    })
+  )
+);
 app.use(express.static("./dist/client"));
 app.get("/*", renderApplication);
 

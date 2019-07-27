@@ -72,7 +72,7 @@ const RichSnippet = React.memo(({ productsJsonLd }) => (
 
 const ProductCategories = React.memo(
   ({
-    location: { pathname },
+    location: { pathname, search },
     match: {
       url,
       params: { categorySlug, page }
@@ -139,7 +139,9 @@ const ProductCategories = React.memo(
       if (active && (!page || isNaN(page)) && categorySlug) {
         //exclude frontpage
         dispatch(
-          push(pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1")
+          push(
+            pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1" + search
+          )
         );
       }
     }, []); //only run this once on the initial render

@@ -50,10 +50,10 @@ const Routes = ({
   match: {
     params: { lang }
   },
-  location: { pathname }
+  location: { pathname, search }
 }) => {
   if (!isLanguageSupported(lang)) {
-    return <div>x</div>;
+    return <Redirect to={`/de${pathname}${search}`} />;
   }
 
   const pathnames = pathnamesByLanguage[lang];
@@ -109,7 +109,7 @@ const App = ({ history, store }) => {
           <Wrapper>
             <Switch>
               <Route path="/:lang/" component={Routes} />
-              <Redirect to="/de/" />
+              <Redirect to={`/de/${window.location.search}`} />
             </Switch>
           </Wrapper>
         </ConnectedRouter>

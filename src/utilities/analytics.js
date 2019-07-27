@@ -1,31 +1,30 @@
 import { isClient } from "./ssr";
 
+//prevents memory leak while ssr
+let paq = { push: () => {} };
+
 if (isClient) {
   window._paq = window._paq || [];
-
-  const paq = window._paq;
-
-  //paq.push(["requireConsent"]);
-  //paq.push(["rememberConsentGiven"]); stored in localStorage
-
-  //Measure time spent on site
-  paq.push(["enableHeartBeatTimer"]);
-
-  //
-  paq.push(["setDomains", ["*.shop.feuerschutz.ch"]]);
-
-  //tracks content impressions
-  paq.push(["trackVisibleContentImpressions", true]);
-
-  window.onload = () => {
-    //track page view after cart has been loaded
-    paq.push([
-      "setCustomUrl",
-      window.location.pathname + window.location.search
-    ]);
-    paq.push(["trackPageView"]);
-  };
+  paq = window._paq;
 }
+
+//paq.push(["requireConsent"]);
+//paq.push(["rememberConsentGiven"]); stored in localStorage
+
+//Measure time spent on site
+paq.push(["enableHeartBeatTimer"]);
+
+//
+paq.push(["setDomains", ["*.shop.feuerschutz.ch"]]);
+
+//tracks content impressions
+paq.push(["trackVisibleContentImpressions", true]);
+
+window.onload = () => {
+  //track page view after cart has been loaded
+  paq.push(["setCustomUrl", window.location.pathname + window.location.search]);
+  paq.push(["trackPageView"]);
+};
 
 /**
  * Tracks search results

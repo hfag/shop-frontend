@@ -6,6 +6,15 @@ let paq = { push: () => {} };
 if (isClient) {
   window._paq = window._paq || [];
   paq = window._paq;
+
+  window.onload = () => {
+    //track page view after cart has been loaded
+    paq.push([
+      "setCustomUrl",
+      window.location.pathname + window.location.search
+    ]);
+    paq.push(["trackPageView"]);
+  };
 }
 
 //paq.push(["requireConsent"]);
@@ -19,12 +28,6 @@ paq.push(["setDomains", ["*.shop.feuerschutz.ch"]]);
 
 //tracks content impressions
 paq.push(["trackVisibleContentImpressions", true]);
-
-window.onload = () => {
-  //track page view after cart has been loaded
-  paq.push(["setCustomUrl", window.location.pathname + window.location.search]);
-  paq.push(["trackPageView"]);
-};
 
 /**
  * Tracks search results

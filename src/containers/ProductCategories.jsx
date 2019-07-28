@@ -44,18 +44,18 @@ const Head = React.memo(
             : intl.formatMessage(shop.siteTitle)}
         </title>
         {category && (
-          <React.Fragment>
-            <meta name="description" content={category.shortDescription} />
-            <link
-              rel="canonical"
-              href={
-                category &&
-                `${ABSOLUTE_URL}/${language}/${
-                  pathnamesByLanguage[language].productCategories
-                }/${category.slug}`
-              }
-            />
-          </React.Fragment>
+          <meta name="description" content={category.shortDescription} />
+        )}
+        {category && (
+          <link
+            rel="canonical"
+            href={
+              category &&
+              `${ABSOLUTE_URL}/${language}/${
+                pathnamesByLanguage[language].productCategories
+              }/${category.slug}`
+            }
+          />
         )}
       </Helmet>
     );

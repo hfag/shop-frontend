@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
-import { FaLanguage } from "react-icons/fa";
 import { withRouter } from "react-router";
 
 import Dropdown from "../Dropdown";
@@ -12,6 +11,8 @@ const LanguageSelection = styled(Dropdown)`
   left: -1rem;
   right: -1rem;
 `;
+
+const CurrentLanguage = styled.div``;
 
 const LANGUAGES = {
   de: {
@@ -34,26 +35,27 @@ const LanguageSwitcher = React.memo(({ dropdown, setDropdown, location }) => {
         negative
         flex
       >
-        <FaLanguage color="#fff" size={30} />
+        <CurrentLanguage>{LANGUAGES[language].label}</CurrentLanguage>
         <Triangle color="#fff" size="0.5rem" />
       </Link>
       {dropdown === "language" && (
         <LanguageSelection>
-          {Object.keys(LANGUAGES).map(languageKey => (
-            <div key={languageKey}>
-              <Link
-                onClick={() => {
-                  window.location.href = `/${languageKey}/`; /*`/${languageKey}/${location.pathname
+          {Object.keys(LANGUAGES)
+            .filter(languageKey => languageKey !== language)
+            .map(languageKey => (
+              <div key={languageKey}>
+                <Link
+                  onClick={() => {
+                    window.location.href = `/${languageKey}/`; /*`/${languageKey}/${location.pathname
                     .split("/")
                     .slice(2)
                     .join("/")}`;*/
-                }}
-                active={language === languageKey}
-              >
-                {LANGUAGES[languageKey].label}
-              </Link>
-            </div>
-          ))}
+                  }}
+                >
+                  {LANGUAGES[languageKey].label}
+                </Link>
+              </div>
+            ))}
         </LanguageSelection>
       )}
     </React.Fragment>

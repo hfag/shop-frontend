@@ -64,7 +64,7 @@ const DiscountLogo = styled.span`
 
 const Post = React.memo(({ language, post }) => {
   return (
-    <Box width={[1, 1, 1 / 3, 1 / 3]} px={2} mt={3}>
+    <Box width={[1, 1, 1 / 2, 1 / 3]} px={2} mt={3}>
       <SaleWrapper>
         <Link
           to={`/${language}/${pathnamesByLanguage[language].post}/${post.slug}`}

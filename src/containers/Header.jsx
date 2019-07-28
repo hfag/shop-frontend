@@ -212,11 +212,19 @@ const Header = React.memo(
                       </Flexbar>
                     </MediaQuery>
                     <SearchWrapper>
-                      <MediaQuery md up>
+                      <MediaQuery lg up>
                         <Searchbar />
                       </MediaQuery>
                     </SearchWrapper>
                     <Push left>
+                      <MediaQuery md down>
+                        <NavItem>
+                          <LanguageSwitcher
+                            dropdown={dropdown}
+                            setDropdown={setDropdown}
+                          />
+                        </NavItem>
+                      </MediaQuery>
                       <MediaQuery md up>
                         <Flexbar>
                           <NavItem seperator>

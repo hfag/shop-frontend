@@ -348,13 +348,13 @@ const mapDispatchToProps = dispatch => ({
   },
   /**
    * Updates the user's address
-   * @param {string} language The language string
    * @param {Object} address The address values
    * @param {string} type The address type (billing, shipping)
+   * @param {string} language The language string
    * @param {boolean} [visualize=false] Whether to visualize the progress
    * @returns {Promise} The fetch promise
    */
-  updateAddress(language, address, type, visualize = false) {
+  updateAddress(address, type, language, visualize = false) {
     return dispatch(updateAddress(address, type, language, visualize));
   }
 });

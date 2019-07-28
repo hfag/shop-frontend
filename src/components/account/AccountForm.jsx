@@ -139,6 +139,10 @@ const AccountForm = withFormik({
     setStatus("loading");
     updateAccount(firstName, lastName, email, password, newPassword)
       .then(() => {
+        if (password && newPassword) {
+          window.location = "/logout";
+          return;
+        }
         setStatus("success");
         setTimeout(() => {
           setStatus("");

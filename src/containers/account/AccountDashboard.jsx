@@ -13,16 +13,6 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import order from "../../i18n/order";
 
 const messages = defineMessages({
-  provideName: {
-    id: "AccountDashboard.provideName",
-    defaultMessage:
-      "Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen angesprochen werden möchten, können Sie {here} Ihren Namen hinterlegen."
-  },
-  provideAddress: {
-    id: "AccountDashboard.provideAddress",
-    defaultMessage:
-      "Sie haben noch keine Rechnungsaddresse hinterlegt. Falls sie möchten dass diese bei jeder Bestellung von selbst ausgefüllt wird, fügen Sie {here} eine hinzu."
-  },
   here: {
     id: "AccountDashboard.here",
     defaultMessage: "hier"
@@ -49,15 +39,13 @@ const AccountDashboard = React.memo(
       orders,
       intl
     }) => {
-      const billingEmpty = Object.keys(billingAddress).reduce(
-        (empty, key) => empty && billingAddress[key] !== "",
-        true
-      );
+      const billingEmpty = Object.keys(billingAddress)
+        .filter(key => key !== "email")
+        .reduce((empty, key) => empty && billingAddress[key] == "", true);
 
-      const shippingEmpty = Object.keys(shippingAddress).reduce(
-        (empty, key) => empty && shippingAddress[key] !== "",
-        true
-      );
+      const shippingEmpty = Object.keys(shippingAddress)
+        .filter(key => key !== "email")
+        .reduce((empty, key) => empty && shippingAddress[key] == "", true);
 
       return (
         <DashboardWrapper>
@@ -74,6 +62,7 @@ const AccountDashboard = React.memo(
                 <div>
                   <FormattedMessage
                     id="AccountDashboard.provideName"
+                    defaultMessage="Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen angesprochen werden möchten, können Sie {here} Ihren Namen hinterlegen."
                     values={{
                       here: (
                         <Link
@@ -88,7 +77,6 @@ const AccountDashboard = React.memo(
                   />
                 </div>
               )}
-
               <br />
               <Flex flexWrap="wrap">
                 <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
@@ -99,6 +87,7 @@ const AccountDashboard = React.memo(
                     <div>
                       <FormattedMessage
                         id="AccountDashboard.provideAddress"
+                        defaultMessage="Sie haben noch keine Rechnungsaddresse hinterlegt. Falls sie möchten dass diese bei jeder Bestellung von selbst ausgefüllt wird, fügen Sie {here} eine hinzu."
                         values={{
                           here: (
                             <Link

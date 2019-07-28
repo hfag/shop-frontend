@@ -10,5 +10,13 @@
   {
     "id": "Footer.about",
     "defaultMessage": "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung und Feuerschutz."
+  },
+  {
+    "id": "Footer.moreAbout",
+    "defaultMessage": "Weitere Informationen"
+  },
+  {
+    "id": "Footer.companyAbout",
+    "defaultMessage": "Über das Unternehmen"
   }
 ]

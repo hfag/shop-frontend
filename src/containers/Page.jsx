@@ -3,7 +3,11 @@ import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 
 import Card from "../components/Card";
-import { getPageBySlug, getLanguage } from "../reducers";
+import {
+  getPageBySlug,
+  getLanguage,
+  getLanguageFetchString
+} from "../reducers";
 import { fetchPageIfNeeded } from "../actions/pages";
 import { stripTags } from "../utilities";
 import { pathnamesByLanguage } from "../utilities/urls";

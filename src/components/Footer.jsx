@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
 import { defineMessages, injectIntl } from "react-intl";
+import { connect } from "react-redux";
 
 import { colors, media } from "../utilities/style";
 import Link from "./Link";
@@ -16,6 +17,8 @@ import LogoNegative from "../../img/logo/logo_negative.svg";
 import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
 import MediaQuery from "./MediaQuery";
 import Placeholder from "./Placeholder";
+import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
+import { getLanguage } from "../reducers";
 
 const messages = defineMessages({
   toHomepage: {
@@ -30,6 +33,14 @@ const messages = defineMessages({
     id: "Footer.about",
     defaultMessage:
       "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung und Feuerschutz."
+  },
+  moreAbout: {
+    id: "Footer.moreAbout",
+    defaultMessage: "Weitere Informationen"
+  },
+  companyAbout: {
+    id: "Footer.companyAbout",
+    defaultMessage: "Über das Unternehmen"
   }
 });
 
@@ -99,7 +110,7 @@ const Icon = styled.span`
 `;
 
 const Footer = React.memo(
-  injectIntl(({ intl }) => {
+  injectIntl(({ intl, language }) => {
     return (
       <StyledFooter>
         <Flex>
@@ -121,10 +132,19 @@ const Footer = React.memo(
                     )}
                   />
                   <br />
-                  Hauser Feuerschutz AG
-                  <br />
-                  Safety Signs and Security Products
-                  <br />
+                  <Link
+                    to={`/${pathnamesByLanguage[language].page}/${
+                      pageSlugsByLanguage[language].companyAbout
+                    }`}
+                    negative
+                  >
+                    Hauser Feuerschutz AG
+                    <br />
+                    Safety Signs and Security Products
+                    <br />
+                    <br />
+                    {intl.formatMessage(messages.companyAbout)}
+                  </Link>
                   <br />
                   <Link
                     target="_blank"
@@ -185,7 +205,15 @@ const Footer = React.memo(
                 </BorderBox>
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
                   <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
-                  {intl.formatMessage(messages.about)}
+                  {intl.formatMessage(messages.about)}{" "}
+                  <Link
+                    to={`/${pathnamesByLanguage[language].page}/${
+                      pageSlugsByLanguage[language].companyAbout
+                    }`}
+                    negative
+                  >
+                    {intl.formatMessage(messages.moreAbout)}
+                  </Link>
                 </BorderBox>
               </Flex>
             </Container>
@@ -196,4 +224,8 @@ const Footer = React.memo(
   })
 );
 
-export default Footer;
+const mapStateToProps = state => ({
+  language: getLanguage(state)
+});
+
+export default connect(mapStateToProps)(Footer);

@@ -35,6 +35,15 @@ export const pathnamesByLanguage = {
   }
 };
 
+export const pageSlugsByLanguage = {
+  de: {
+    companyAbout: "unser-unternehmen"
+  },
+  fr: {
+    companyAbout: "unser-unternehmen"
+  }
+};
+
 /**
  * Gets the url part by a key and the given location language
  * @param {string} urlKey The url key to retrieve

@@ -5,8 +5,22 @@ import {
 } from "utilities/action";
 
 import { fetchApi } from "../utilities/api";
-import { fetchAttachmentAction } from "./attachments";
-import { getPostBySlug } from "../reducers";
+import {
+  fetchAttachmentAction,
+  mapItem as mapAttachment,
+  fetchAttachmentsAction
+} from "./attachments";
+import {
+  getPostBySlug,
+  getStickyPosts,
+  isFetchingPosts,
+  getPosts,
+  getPostsLastFetched
+} from "../reducers";
+import {
+  createFetchAllItemsThunk,
+  createFetchItemPageAction
+} from "../utilities/action";
 
 const itemName = "post";
 
@@ -20,13 +34,14 @@ export const mapItem = ({
   slug,
   title: { rendered: title },
   content: { rendered: content },
+  description,
   featured_media: thumbnailId
 }) => ({
   id,
   slug,
   title,
+  description,
   content,
-  description: "",
   thumbnailId
 });
 
@@ -62,7 +77,7 @@ const fetchPost = (postSlug, language, visualize = true) => dispatch => {
             null,
             false,
             items[0]._embedded["wp:featuredmedia"][0].id,
-            items[0]._embedded["wp:featuredmedia"][0]
+            mapAttachment(items[0]._embedded["wp:featuredmedia"][0])
           )
         );
         dispatch(
@@ -151,3 +166,64 @@ export const fetchPosts = createFetchItemPageThunk(
     }`,
   mapItem
 );
+
+const fetchPostPageAction = createFetchItemPageAction(itemName);
+
+/**
+ * Fetches all items
+ * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @returns {function} The redux thunk
+ */
+const fetchAllPosts = createFetchAllItemsThunk(
+  fetchPostPageAction,
+  (page, perPage, language) =>
+    `${language}/wp-json/wp/v2/posts?page=${page}&per_page=${perPage}&_embed`,
+  mapItem,
+  (dispatch, response, items) => {
+    dispatch(
+      fetchAttachmentsAction(
+        false,
+        null,
+        false,
+        items
+          .filter(
+            post =>
+              post._embedded &&
+              post._embedded["wp:featuredmedia"] &&
+              post._embedded["wp:featuredmedia"].length > 0
+          )
+          .map(post => post._embedded["wp:featuredmedia"][0])
+          .filter(t => t)
+          .map(mapAttachment)
+      )
+    );
+  }
+);
+
+/**
+ * Checks whether all product categories should be fetched
+ * @returns {boolean} Whether to fetch all product categories
+ */
+const shouldFetchAllPosts = () => (dispatch, state) =>
+  (getPosts(state).length - getStickyPosts(state).length < 0 ||
+    Date.now() - getPostsLastFetched(state) > 1000 * 60 * 60 * 4) &&
+  !isFetchingPosts(state);
+
+/**
+ * Fetches all items if needed
+ * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @returns {function} The redux thunk
+ */
+export const fetchAllPostsIfNeeded = (perPage, language, visualize) => (
+  dispatch,
+  getState
+) => {
+  const state = getState();
+  return shouldFetchAllPosts()(dispatch, state)
+    ? fetchAllPosts(perPage, language, visualize)(dispatch, state)
+    : Promise.resolve();
+};

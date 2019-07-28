@@ -256,6 +256,23 @@ export const getPosts = wrap(fromPost.getPosts, state => state.post);
 export const getPostBySlug = wrap(fromPost.getPostBySlug, state => state.post);
 
 /**
+ * Gets the timestamp when the last time posts were fetched
+ * @returns {number} The timestamp
+ */
+export const getPostsLastFetched = wrap(
+  fromPost.getPostsLastFetched,
+  state => state.post
+);
+/**
+ * Checks whether posts are currently being fetched
+ * @returns {boolean} Whether they're being fetched
+ */
+export const isFetchingPosts = wrap(
+  fromPost.isFetchingPosts,
+  state => state.post
+);
+
+/**
  * Returns all pages
  * @param {object} state This state
  * @return {array} All pages

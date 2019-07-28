@@ -34,7 +34,8 @@ export const mapSale = ({
  * @param {Object} post The post to map
  * @returns {Object} The mapped post
  */
-const mapStickyPost = ({ slug, title, thumbnail, description }) => ({
+const mapStickyPost = ({ id, slug, title, thumbnail, description }) => ({
+  id,
   slug,
   title,
   description,

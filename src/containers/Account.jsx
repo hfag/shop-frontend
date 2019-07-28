@@ -118,23 +118,19 @@ const Account = React.memo(
 
       return (
         <AccountContainer>
-          <Helmet
-            title={intl.formatMessage(messages.siteTitle)}
-            meta={[
-              {
-                name: "description",
-                content: intl.formatMessage(messages.siteDescription)
-              }
-            ]}
-            link={[
-              {
-                rel: "canonical",
-                href: `${ABSOLUTE_URL}/${language}/${
-                  pathnamesByLanguage[language].account
-                }`
-              }
-            ]}
-          />
+          <Helmet>
+            <title>{intl.formatMessage(messages.siteTitle)}</title>
+            <meta
+              name="description"
+              content={intl.formatMessage(messages.siteDescription)}
+            />
+            <link
+              rel="canonical"
+              href={`${ABSOLUTE_URL}/${language}/${
+                pathnamesByLanguage[language].account
+              }`}
+            />
+          </Helmet>
           <Flex flexWrap="wrap">
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
               <Card>

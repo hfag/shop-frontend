@@ -37,29 +37,27 @@ const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 const Head = React.memo(
   injectIntl(({ language, category, intl }) => {
     return (
-      <Helmet
-        title={
-          category
+      <Helmet>
+        <title>
+          {category
             ? stripTags(category.name) + " - Hauser Feuerschutz AG"
-            : intl.formatMessage(shop.siteTitle)
-        }
-        meta={[
-          {
-            name: "description",
-            content: category && category.shortDescription
-          }
-        ]}
-        link={[
-          {
-            rel: "canonical",
-            href:
-              category &&
-              `${ABSOLUTE_URL}/${language}/${
-                pathnamesByLanguage[language].productCategories
-              }/${category.slug}`
-          }
-        ]}
-      />
+            : intl.formatMessage(shop.siteTitle)}
+        </title>
+        {category && (
+          <React.Fragment>
+            <meta name="description" content={category.shortDescription} />
+            <link
+              rel="canonical"
+              href={
+                category &&
+                `${ABSOLUTE_URL}/${language}/${
+                  pathnamesByLanguage[language].productCategories
+                }/${category.slug}`
+              }
+            />
+          </React.Fragment>
+        )}
+      </Helmet>
     );
   })
 );

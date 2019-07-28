@@ -72,23 +72,18 @@ const LogoLeft = styled.div`
 const Head = React.memo(
   injectIntl(({ intl }) => {
     return (
-      <Helmet
-        title={intl.formatMessage(shop.siteTitle)}
-        meta={[
-          { charset: "utf-8" },
-          {
-            name: "viewport",
-            content: "width=device-width, initial-scale=1.0"
-          },
-          { name: "author", content: "Nico Hauser" },
-          { name: "format-detection", content: "telephone=no" },
-          {
-            name: "description",
-            content: intl.formatMessage(messages.siteDescription)
-          }
-        ]}
-        link={[{ rel: "canonical", href: ABSOLUTE_URL }]}
-      />
+      <Helmet>
+        <title>{intl.formatMessage(shop.siteTitle)}</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="Nico Hauser" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta
+          name="description"
+          content={intl.formatMessage(messages.siteDescription)}
+        />
+        <link rel="canonical" href={ABSOLUTE_URL} />
+      </Helmet>
     );
   })
 );

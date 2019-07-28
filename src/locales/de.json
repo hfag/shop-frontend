@@ -1,4 +1,4 @@
-{
+{ "de": {
   "AccountForm.password": "Aktuelles Passwort (leer lassen um nichts zu ändern)",
   "AccountForm.newPassword": "Neues Passwort (leer lassen um nichts zu ändern)",
   "AccountForm.passwordConfirmation": "Bestätige das neue Passwort",
@@ -22,6 +22,7 @@
   "NavCart.emptyCart": "Es befinden sich bisher noch keine Produkte im Warenkorb.",
   "NavCart.toCart": "Zum Warenkorb",
   "NavUser.toAccount": "Zum Konto",
+  "SaleProducts.newsAndDiscounts": "News und Aktionen",
   "404.siteTitle": "Seite nicht gefunden! Fehler 404 - Hauser Feuerschutz AG",
   "404.siteDescription": "Diese Seite konnte leider nicht gefunden werden. Verwenden Sie die Suche oder wenden Sie sich an unseren Kundensupport.",
   "404.title": "Fehler 404",
@@ -44,7 +45,7 @@
   "Confirmation.message": "Vielen Dank für Ihre Bestellung bei der Hauser Feuerschutz AG. Sie werden in Kürze eine Bestätigungsemail erhalten.",
   "Confirmation.support": "Bei Fragen können sie uns per E-Mail unter {mail} oder per Telefon unter {phone} erreichen.",
   "Frontpage.categories": "Kategorien",
-  "Header.siteDescription": "Bei der Hauser Feuerschutz AG finden Sie Produkte in den Bereichen langnachleuchtende Produkte, Sicherheitskennzeichnung und Brandschutz, sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet",
+  "Header.siteDescription": "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet.",
   "Login.siteTitle": "Anmelden bei der Hauser Feuerschutz AG",
   "Login.siteDescription": "Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten.",
   "Login.passwordConfirmation": "Passwort bestätigen",
@@ -69,7 +70,6 @@
   "Product.nextImage": "Nächstes Bild (rechte Pfeiltaste)",
   "Product.closeLightBox": "Schliessen (Esc)",
   "ProductItem.discountForResellers": "Rabatt für Wiederverkäufer",
-  "SaleProducts.newsAndDiscounts": "News und Aktionen",
   "Search.siteTitle": "Suchen Sie im Shop der Hauser Feuerschutz AG",
   "Search.siteDescription": "Suchen Sie im Shop der Hauser Feuerschutz AG nach Produkten wie dem Rettungswegschild oder nach Kategorien wie den Brandschutzzeichen.",
   "Searchbar.placeholder": "Suche nach einem Produkt",
@@ -136,4 +136,4 @@
   "validation.isRequired": "Dieses Feld darf nicht leer sein",
   "validation.passwordsMustMatch": "Die beiden Passwörter müssen übereinstimmen!",
   "validation.passwordConfirmation": "Passwort bestätigen"
-}
+} }

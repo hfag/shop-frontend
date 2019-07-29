@@ -45,3 +45,13 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+
+  font-weight: normal;
+  display: inline;
+
+  color: #000;
+}

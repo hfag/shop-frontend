@@ -186,8 +186,6 @@ const ProductCategories = React.memo(
                 pageCount={Math.ceil(totalProductCount / ITEMS_PER_PAGE)}
                 pageRangeDisplayed={5}
                 marginPagesDisplayed={1}
-                previousLabel={"<"}
-                nextLabel={">"}
                 forcePage={parseInt(page) - 1}
                 onPageChange={onPageChange}
               />

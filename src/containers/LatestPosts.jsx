@@ -39,6 +39,7 @@ const PostWrapper = styled.div`
 
   h3 {
     margin-top: 0;
+    margin-bottom: 0.25rem;
   }
 
   p {
@@ -54,10 +55,10 @@ const Post = React.memo(({ language, post }) => {
           to={`/${language}/${pathnamesByLanguage[language].post}/${post.slug}`}
         >
           <Flex>
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={2}>
+            <Box width={[1, 1, 1 / 2, 1 / 3]} pr={2}>
               <Thumbnail id={post.thumbnailId} />
             </Box>
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
+            <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
               <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
               <div
                 dangerouslySetInnerHTML={{
@@ -100,8 +101,6 @@ const LatestPosts = React.memo(
           pageCount={Math.ceil(posts.length / ITEMS_PER_PAGE)}
           pageRangeDisplayed={5}
           marginPagesDisplayed={1}
-          previousLabel={"<"}
-          nextLabel={">"}
           forcePage={parseInt(page)}
           onPageChange={onPageChange}
         />

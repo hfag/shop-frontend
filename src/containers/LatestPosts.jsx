@@ -27,7 +27,7 @@ const messages = defineMessages({
   }
 });
 
-const SaleWrapper = styled.div`
+const PostWrapper = styled.div`
   position: relative;
   padding: 0.5rem;
   background-color: #fff;
@@ -35,6 +35,7 @@ const SaleWrapper = styled.div`
   border-radius: ${borders.radius};
   word-break: break-word;
   hyphens: auto;
+  height: 100%;
 
   h3 {
     margin-top: 0;
@@ -48,7 +49,7 @@ const SaleWrapper = styled.div`
 const Post = React.memo(({ language, post }) => {
   return (
     <Box width={[1, 1, 1 / 2, 1 / 3]} px={2} mt={3}>
-      <SaleWrapper>
+      <PostWrapper>
         <Link
           to={`/${language}/${pathnamesByLanguage[language].post}/${post.slug}`}
         >
@@ -66,7 +67,7 @@ const Post = React.memo(({ language, post }) => {
             </Box>
           </Flex>
         </Link>
-      </SaleWrapper>
+      </PostWrapper>
     </Box>
   );
 });

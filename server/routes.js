@@ -12,7 +12,7 @@ import Page404 from "../src/containers/404";
 import Post from "../src/containers/Post";
 import Page from "../src/containers/Page";
 import { fetchSalesIfNeeded } from "../src/actions/sales";
-import { fetchPostIfNeeded } from "../src/actions/posts";
+import { fetchPostIfNeeded, fetchAllPostsIfNeeded } from "../src/actions/posts";
 import { fetchPageIfNeeded } from "../src/actions/pages";
 import { pathnamesByLanguage } from "../src/utilities/urls";
 import { supportedLanguages } from "../src/utilities/i18n";
@@ -36,7 +36,8 @@ const i18nRoutes = [
         store.dispatch(
           fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
         ),
-        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false)),
+        store.dispatch(fetchAllPostsIfNeeded(100, languageFetchString, false))
       ]);
     }
   },

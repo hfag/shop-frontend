@@ -29,6 +29,7 @@ const SaleWrapper = styled.div`
   border-radius: ${borders.radius};
   word-break: break-word;
   hyphens: auto;
+  height: 100%;
 
   h3 {
     margin-top: 0;

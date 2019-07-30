@@ -37,10 +37,6 @@ const messages = defineMessages({
   moreAbout: {
     id: "Footer.moreAbout",
     defaultMessage: "Weitere Informationen"
-  },
-  companyAbout: {
-    id: "Footer.companyAbout",
-    defaultMessage: "Über das Unternehmen"
   }
 });
 
@@ -132,19 +128,10 @@ const Footer = React.memo(
                     )}
                   />
                   <br />
-                  <Link
-                    to={`/${pathnamesByLanguage[language].page}/${
-                      pageSlugsByLanguage[language].companyAbout
-                    }`}
-                    negative
-                  >
-                    Hauser Feuerschutz AG
-                    <br />
-                    Safety Signs and Security Products
-                    <br />
-                    <br />
-                    {intl.formatMessage(messages.companyAbout)}
-                  </Link>
+                  Hauser Feuerschutz AG
+                  <br />
+                  Safety Signs and Security Products
+                  <br />
                   <br />
                   <Link
                     target="_blank"

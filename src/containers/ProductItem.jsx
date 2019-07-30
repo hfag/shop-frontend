@@ -106,79 +106,85 @@ const Discount = styled.div`
 `;
 
 const ProductItem = React.memo(
-  injectIntl(({ product, categories, resellerDiscount, language, intl }) => {
-    const url = useMemo(() => {
-      if (product && product.slug) {
-        const base = pathnamesByLanguage[language].product;
+  injectIntl(
+    ({ product, categories, large, resellerDiscount, language, intl }) => {
+      const url = useMemo(() => {
+        if (product && product.slug) {
+          const base = pathnamesByLanguage[language].product;
 
-        return `/${language}/${base}/${product.slug}/`;
-      }
+          return `/${language}/${base}/${product.slug}/`;
+        }
 
-      return "";
-    }, [product, language]);
+        return "";
+      }, [product, language]);
 
-    return (
-      <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
-        {resellerDiscount && (
-          <Discount
-            data-balloon={
-              resellerDiscount +
-              "% " +
-              intl.formatMessage(messages.discountForResellers)
-            }
-            data-balloon-pos="up"
-          >
-            <FaPercent />
-          </Discount>
-        )}
-        <Link to={url}>
-          <StyledProduct>
-            <Thumbnail id={product ? product.thumbnailId : -1} />
-            <div>
-              {product ? (
-                <Title dangerouslySetInnerHTML={{ __html: product.title }} />
-              ) : (
-                <Placeholder text />
-              )}
-              {product.minPrice && (
-                <div>
-                  <Subtitle>
-                    Ab{" "}
-                    <u>
-                      <Price>{parseInt(product.minPrice)}</Price>
-                    </u>
-                  </Subtitle>
-                </div>
-              )}
-              {product ? (
-                categories ? (
-                  categories
-                    .map(category => (
-                      <Subtitle
-                        key={category.id}
-                        dangerouslySetInnerHTML={{ __html: category.name }}
-                      />
-                    ))
-                    .slice(0, 2)
-                    .reduce(
-                      (all, item) => (all ? [...all, ", ", item] : [item]),
-                      false
-                    )
+      const boxWidths = large
+        ? [1 / 2, 1 / 3, 1 / 4, 1 / 6]
+        : [1, 1 / 2, 1 / 3, 1 / 3];
+
+      return (
+        <RelativeBox width={boxWidths} px={2} pb={3}>
+          {resellerDiscount && (
+            <Discount
+              data-balloon={
+                resellerDiscount +
+                "% " +
+                intl.formatMessage(messages.discountForResellers)
+              }
+              data-balloon-pos="up"
+            >
+              <FaPercent />
+            </Discount>
+          )}
+          <Link to={url}>
+            <StyledProduct>
+              <Thumbnail id={product ? product.thumbnailId : -1} />
+              <div>
+                {product ? (
+                  <Title dangerouslySetInnerHTML={{ __html: product.title }} />
                 ) : (
-                  ""
-                )
-              ) : (
-                <Placeholder text />
-              )}
-              {product && categories && categories.length > 2 && (
-                <span>, ...</span>
-              )}
-            </div>
-          </StyledProduct>
-        </Link>
-      </RelativeBox>
-    );
-  })
+                  <Placeholder text />
+                )}
+                {product.minPrice && (
+                  <div>
+                    <Subtitle>
+                      Ab{" "}
+                      <u>
+                        <Price>{parseInt(product.minPrice)}</Price>
+                      </u>
+                    </Subtitle>
+                  </div>
+                )}
+                {product ? (
+                  categories ? (
+                    categories
+                      .map(category => (
+                        <Subtitle
+                          key={category.id}
+                          dangerouslySetInnerHTML={{ __html: category.name }}
+                        />
+                      ))
+                      .slice(0, 2)
+                      .reduce(
+                        (all, item) => (all ? [...all, ", ", item] : [item]),
+                        false
+                      )
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  <Placeholder text />
+                )}
+                {product && categories && categories.length > 2 && (
+                  <span>, ...</span>
+                )}
+              </div>
+            </StyledProduct>
+          </Link>
+        </RelativeBox>
+      );
+    }
+  )
 );
 
 ProductItem.propTypes = {

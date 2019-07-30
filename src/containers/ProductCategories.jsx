@@ -1,7 +1,14 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef
+} from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
+import { Box } from "grid-styled";
 import { push } from "connected-react-router";
 import {
   getProducts,
@@ -9,7 +16,9 @@ import {
   getProductCategoryBySlug
 } from "reducers";
 import { Helmet } from "react-helmet";
-import { defineMessages, injectIntl } from "react-intl";
+import { injectIntl } from "react-intl";
+import styled from "styled-components";
+import { FaInfoCircle } from "react-icons/fa";
 
 import Flex from "../components/Flex";
 import Pagination from "../components/Pagination";
@@ -30,9 +39,31 @@ import OverflowCard from "../components/OverflowCard";
 import { pathnamesByLanguage } from "../utilities/urls";
 import shop from "../i18n/shop";
 import { setProductCategoryView, trackPageView } from "../utilities/analytics";
+import Placeholder from "../components/Placeholder";
+import MediaQuery from "../components/MediaQuery";
+import Flexbar from "../components/Flexbar";
 
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
+
+const CategoryDescription = styled(Box)`
+  & > div {
+    margin: 0;
+  }
+  h2 {
+    margin-top: 0;
+  }
+`;
+
+const H1 = styled.h1`
+  margin: 0;
+`;
+
+const InfoIcon = styled(FaInfoCircle)`
+  margin-top: 0.4rem;
+  margin-left: 0.25rem;
+  cursor: pointer;
+`;
 
 const Head = React.memo(
   injectIntl(({ language, category, intl }) => {
@@ -118,6 +149,15 @@ const ProductCategories = React.memo(
       [categorySlug, urlWithoutPage]
     );
 
+    const descriptionRef = useRef(null);
+    const scrollToDescription = useCallback(() =>
+      window.scrollTo({
+        left: 0,
+        top: descriptionRef.current.offsetTop,
+        behavior: "smooth"
+      })
+    );
+
     useEffect(() => {
       //load data
       fetchAllProductCategoriesIfNeeded();
@@ -144,41 +184,80 @@ const ProductCategories = React.memo(
       }
     }, []); //only run this once on the initial render
 
+    const isLoading = categoryIds.length === 0 && productIds.length === 0;
+
+    const hasCategoryDescription =
+      category && category.description ? true : false;
+
+    const categoryBoxWidths =
+      hasCategoryDescription || isLoading ? [1, 1, 1, 1 / 2] : [1, 1, 1, 1];
+    const categoryDescriptionBoxWidths =
+      hasCategoryDescription || isLoading ? [1, 1, 1, 1 / 2] : [0, 0, 0, 0];
+
     return (
       <div>
         {active && (
           <div>
             <Head language={language} category={category} />
             <RichSnippet productsJsonLd={productsJsonLd} />
-            {category && category.description && (
-              <OverflowCard>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: category.description
-                  }}
-                />
-              </OverflowCard>
+            {(isLoading || (category && category.name)) && (
+              <Card>
+                {category && category.name ? (
+                  <Flexbar>
+                    <H1>{category.name}</H1>
+                    <MediaQuery sm down>
+                      <InfoIcon size={24} onClick={scrollToDescription} />
+                    </MediaQuery>
+                  </Flexbar>
+                ) : (
+                  <Placeholder text />
+                )}
+              </Card>
             )}
             <Flex flexWrap="wrap">
-              {categoryIds.map(categoryId => (
-                <CategoryItem
-                  key={categoryId}
-                  id={categoryId}
-                  parents={newParents}
-                />
-              ))}
-              {productIds.map(productId => (
-                <ProductItem
-                  key={productId}
-                  id={productId}
-                  parents={newParents}
-                />
-              ))}
-              {categoryIds.length === 0 &&
-                productIds.length === 0 &&
-                new Array(12)
-                  .fill()
-                  .map((el, index) => <CategoryItem key={index} id={-1} />)}
+              <Box width={categoryBoxWidths} px={2} pb={3}>
+                <Flex flexWrap="wrap">
+                  {categoryIds.map(categoryId => (
+                    <CategoryItem
+                      key={categoryId}
+                      id={categoryId}
+                      parents={newParents}
+                      large={!hasCategoryDescription}
+                    />
+                  ))}
+                  {productIds.map(productId => (
+                    <ProductItem
+                      key={productId}
+                      id={productId}
+                      parents={newParents}
+                      large={!hasCategoryDescription}
+                    />
+                  ))}
+                  {isLoading &&
+                    new Array(12)
+                      .fill()
+                      .map((el, index) => <CategoryItem key={index} id={-1} />)}
+                </Flex>
+              </Box>
+              {(hasCategoryDescription || isLoading) && (
+                <CategoryDescription
+                  width={categoryDescriptionBoxWidths}
+                  px={2}
+                  pb={3}
+                  innerRef={descriptionRef}
+                >
+                  <Card>
+                    {hasCategoryDescription && (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: category.description
+                        }}
+                      />
+                    )}
+                    {isLoading && <Placeholder block height={2} />}
+                  </Card>
+                </CategoryDescription>
+              )}
             </Flex>
 
             {totalProductCount !== 0 && (

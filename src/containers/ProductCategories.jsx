@@ -43,7 +43,7 @@ import Placeholder from "../components/Placeholder";
 import MediaQuery from "../components/MediaQuery";
 import Flexbar from "../components/Flexbar";
 
-const ITEMS_PER_PAGE = 60;
+const ITEMS_PER_PAGE = 12;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const CategoryDescription = styled(Box)`

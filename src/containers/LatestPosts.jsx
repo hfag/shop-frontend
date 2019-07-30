@@ -27,6 +27,10 @@ const messages = defineMessages({
   }
 });
 
+const LatesPostFlex = styled(Flex)`
+  margin: 0 -0.5rem;
+`;
+
 const PostWrapper = styled.div`
   position: relative;
   padding: 0.5rem;
@@ -90,13 +94,13 @@ const LatestPosts = React.memo(
         <h2 style={{ marginBottom: 0 }}>
           {intl.formatMessage(messages.title)}
         </h2>
-        <Flex flexWrap="wrap">
+        <LatesPostFlex flexWrap="wrap">
           {posts
             .slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE)
             .map(post => (
               <Post language={language} post={post} key={post.slug} />
             ))}
-        </Flex>
+        </LatesPostFlex>
         <Pagination
           pageCount={Math.ceil(posts.length / ITEMS_PER_PAGE)}
           pageRangeDisplayed={5}

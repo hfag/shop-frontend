@@ -280,7 +280,9 @@ const Login = React.memo(
       return (
         <Card>
           <Helmet>
-            <title>{intl.formatMessage(messages.siteTitle)}</title>
+            <title>
+              {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
+            </title>
             <meta
               name="description"
               content={intl.formatMessage(messages.siteDescription)}

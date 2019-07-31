@@ -27,7 +27,7 @@ const Post = React.memo(({ language, post = {}, fetchPostIfNeeded }) => {
   return (
     <Card>
       <Helmet>
-        <title>{stripTags(post.title)}</title>
+        <title>{stripTags(post.title)} - Hauser Feuerschutz AG</title>
         <meta name="description" content={stripTags(post.description)} />
         <link
           rel="canonical"

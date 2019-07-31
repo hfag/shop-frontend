@@ -24,7 +24,7 @@ const Page = React.memo(({ language, page = {}, fetchPageIfNeeded }) => {
   return (
     <Card>
       <Helmet>
-        <title>{stripTags(page.title)}</title>
+        <title>{stripTags(page.title)} - Hauser Feuerschutz AG</title>
         <meta name="description" content={stripTags(page.description)} />
         <link
           rel="canonical"

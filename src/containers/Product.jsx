@@ -527,7 +527,7 @@ class Product extends React.PureComponent {
                         price: flashSale ? parseFloat(flashSale.price) : price,
                         quantity,
                         discountPrice: resellerDiscount
-                          ? (1.0(resellerDiscount / 100)) * price
+                          ? (1.0 - (resellerDiscount / 100)) * price
                           : flashSale
                           ? parseFloat(flashSale.salePrice)
                           : discountRow.qty > 1

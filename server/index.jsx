@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import url from "url";
 
+import rp from "request-promise";
 import sizeOf from "object-sizeof";
 import express from "express";
 import compression from "compression";
@@ -13,7 +14,6 @@ import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { routerMiddleware } from "connected-react-router";
-import { push } from "connected-react-router";
 import { Helmet as ReactHelmet } from "react-helmet";
 import { createMemoryHistory } from "history";
 
@@ -35,6 +35,7 @@ import {
   DEFAULT_LANGUAGE,
   languageToFetchString
 } from "../src/utilities/i18n";
+import { API_URL } from "../src/utilities/api";
 
 //polyfills
 require("isomorphic-fetch");
@@ -165,6 +166,14 @@ const renderApplication = (request, response) => {
       console.log(store.getState());
     });
 };
+
+app.get("/robots.txt", (request, response) =>
+  rp(API_URL + "/robots.txt").then(text => response.end(text))
+);
+
+app.get("/sitemap.xml", (request, response) =>
+  rp(API_URL + "/sitemap.xml").then(text => response.end(text))
+);
 
 app.get("/", (request, response) =>
   response.redirect(

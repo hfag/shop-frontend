@@ -122,6 +122,7 @@
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.2.0",
+    "request-promise": "^4.2.4",
     "resolve-url-loader": "^2.2.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",

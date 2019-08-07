@@ -1,7 +1,7 @@
 import { getLanguageFromCurrentWindow } from "./i18n";
 import { pathnamesByLanguage } from "./urls";
 
-const API_URL = process.env.API_URL;
+export const API_URL = process.env.API_URL;
 
 /**
  * Custom Error which can include more data than the standard JS error.

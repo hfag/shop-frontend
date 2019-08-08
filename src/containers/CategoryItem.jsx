@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import { withRouter } from "react-router";
 
 import Thumbnail from "../containers/Thumbnail";

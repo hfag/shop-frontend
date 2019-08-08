@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";

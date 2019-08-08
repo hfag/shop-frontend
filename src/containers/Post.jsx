@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 
 import Card from "../components/Card";
 import {

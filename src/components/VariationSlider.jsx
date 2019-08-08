@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import isEqual from "lodash/isEqual";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import Thumbnail from "containers/Thumbnail";
 
 const Slider = styled.div`

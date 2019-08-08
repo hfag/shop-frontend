@@ -8,7 +8,7 @@ import React, {
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
-import { Box } from "grid-styled";
+import { Box } from "reflexbox";
 import { push } from "connected-react-router";
 import {
   getProducts,

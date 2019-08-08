@@ -4,7 +4,7 @@ import { push } from "connected-react-router";
 import styled from "styled-components";
 import { MdMenu } from "react-icons/md";
 import LoadingBar from "react-redux-loading-bar";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import { Helmet } from "react-helmet";
 import { defineMessages, injectIntl } from "react-intl";
 

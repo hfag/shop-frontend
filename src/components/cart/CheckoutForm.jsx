@@ -1,8 +1,7 @@
 import React from "react";
 import { withFormik, Form, Field } from "formik";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import * as yup from "yup";
-import MaskedInput from "react-text-mask";
 import PropTypes from "prop-types";
 import { push } from "connected-react-router";
 import { defineMessages, injectIntl } from "react-intl";

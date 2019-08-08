@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import isEqual from "lodash/isEqual";
 import Lightbox from "react-images";
 import { Helmet } from "react-helmet";
@@ -41,6 +41,7 @@ import { attachmentsToJsonLd, productToJsonLd } from "../utilities/json-ld";
 import { pathnamesByLanguage } from "../utilities/urls";
 import productMessages from "../i18n/product";
 import { setProductView, trackPageView } from "../utilities/analytics";
+import CrossSellFlex from "../components/Flex";
 
 const messages = defineMessages({
   chooseAVariation: {
@@ -817,11 +818,11 @@ class Product extends React.PureComponent {
           </Card>
         )}
 
-        <Flex flexWrap="wrap" style={{ margin: "0 -0.5rem" }}>
+        <CrossSellFlex flexWrap="wrap">
           {crossSellIds.map(productId => (
             <ProductItem key={productId} id={productId} />
           ))}
-        </Flex>
+        </CrossSellFlex>
       </div>
     );
   };

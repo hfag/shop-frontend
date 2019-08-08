@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, injectIntl } from "react-intl";
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, injectIntl } from "react-intl";
 import { connect } from "react-redux";
@@ -17,6 +17,7 @@ import {
   getStickyPosts,
   getLanguage
 } from "../reducers";
+import LatesPostFlex from "../components/Flex";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -26,10 +27,6 @@ const messages = defineMessages({
     defaultMessage: "Aktuelle Beiträge"
   }
 });
-
-const LatesPostFlex = styled(Flex)`
-  margin: 0 -0.5rem;
-`;
 
 const PostWrapper = styled.div`
   position: relative;

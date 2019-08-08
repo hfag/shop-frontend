@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import styled from "styled-components";
 import { defineMessages, injectIntl, FormattedMessage } from "react-intl";
 

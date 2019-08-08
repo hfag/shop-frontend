@@ -3,7 +3,7 @@ import { withFormik, Form } from "formik";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import * as yup from "yup";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import queryString from "query-string";
 import { Helmet } from "react-helmet";
 import { defineMessages, injectIntl } from "react-intl";

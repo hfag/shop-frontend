@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled, { ThemeProvider } from "styled-components";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, injectIntl } from "react-intl";
 
@@ -9,6 +9,7 @@ import Price from "./Price";
 import Thumbnail from "../containers/Thumbnail";
 import { colors, shadows, borders } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
+import SalesFlex from "./Flex";
 
 const messages = defineMessages({
   newsAndDiscounts: {
@@ -16,10 +17,6 @@ const messages = defineMessages({
     defaultMessage: "News und Aktionen"
   }
 });
-
-const SalesFlex = styled(Flex)`
-  margin: 0 -0.5rem;
-`;
 
 const SaleWrapper = styled.div`
   position: relative;

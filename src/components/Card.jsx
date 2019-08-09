@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { colors, borders, shadows } from "../utilities/style";
 
 const CardWrapper = styled.div`
-  margin: 1rem 0;
+  margin: ${({ noMargin }) => (noMargin ? "" : "1rem 0")};
   padding: 1rem;
   background-color: ${colors.backgroundOverlay};
   box-shadow: ${shadows.y};

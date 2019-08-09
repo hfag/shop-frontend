@@ -37,7 +37,7 @@ module.exports = {
   context,
 
   entry: {
-    index: ["@babel/polyfill", path.join(context, "src/index.jsx")]
+    index: [path.join(context, "src/index.jsx")]
   },
 
   devtool: "nosources-source-map",

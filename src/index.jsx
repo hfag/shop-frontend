@@ -1,5 +1,5 @@
 /* polyfills */
-import "@babel/polyfill";
+import "core-js/stable";
 import "intersection-observer";
 import "isomorphic-fetch";
 

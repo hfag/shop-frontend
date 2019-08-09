@@ -16,7 +16,7 @@ import {
   getProductCategoryBySlug
 } from "reducers";
 import { Helmet } from "react-helmet";
-import { injectIntl } from "react-intl";
+import { injectIntl, defineMessages } from "react-intl";
 import styled from "styled-components";
 import { FaInfoCircle } from "react-icons/fa";
 
@@ -35,16 +35,23 @@ import {
 } from "../reducers";
 import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 import Card from "../components/Card";
-import OverflowCard from "../components/OverflowCard";
 import { pathnamesByLanguage } from "../utilities/urls";
 import shop from "../i18n/shop";
 import { setProductCategoryView, trackPageView } from "../utilities/analytics";
 import Placeholder from "../components/Placeholder";
 import MediaQuery from "../components/MediaQuery";
 import Flexbar from "../components/Flexbar";
+import Button from "../components/Button";
 
 const ITEMS_PER_PAGE = 12;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
+
+const messages = defineMessages({
+  backToTop: {
+    id: "ProductCategories.backToTop",
+    defaultMessage: "Zurück nach oben zu den Produkten"
+  }
+});
 
 const CategoryDescription = styled(Box)`
   & > div {
@@ -82,9 +89,7 @@ const Head = React.memo(
             rel="canonical"
             href={
               category &&
-              `${ABSOLUTE_URL}/${language}/${
-                pathnamesByLanguage[language].productCategories
-              }/${category.slug}`
+              `${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].productCategories}/${category.slug}`
             }
           />
         )}
@@ -100,184 +105,205 @@ const RichSnippet = React.memo(({ productsJsonLd }) => (
 ));
 
 const ProductCategories = React.memo(
-  ({
-    location: { pathname, search },
-    match: {
-      url,
-      params: { categorySlug, page }
-    },
-    category,
-    fetchAllProductCategoriesIfNeeded,
-    fetchProducts,
-    dispatch,
-    /* render props*/
-    language,
-    totalProductCount,
-    categoryIds,
-    productIds,
-    parents = [],
-    productsJsonLd
-  }) => {
-    const categoryId = (category && category.id) || 0;
-
-    //check if endings match
-    const active = useMemo(
-      () => pathname.substring(pathname.length - url.length) === url,
-      [pathname, url]
-    );
-
-    const urlWithoutPage = useMemo(
-      () =>
-        page
-          ? url
-              .split("/")
-              .slice(0, -1)
-              .join("/")
-          : url,
-      [page, url]
-    );
-
-    const newParents = useMemo(
-      () => (categorySlug ? [...parents, categorySlug] : []),
-      [categorySlug, parents]
-    );
-
-    const onPageChange = useCallback(
-      ({ selected }) => {
-        dispatch(push(`${urlWithoutPage}/${selected + 1}`));
+  injectIntl(
+    ({
+      location: { pathname, search },
+      match: {
+        url,
+        params: { categorySlug, page }
       },
-      [categorySlug, urlWithoutPage]
-    );
+      category,
+      fetchAllProductCategoriesIfNeeded,
+      fetchProducts,
+      dispatch,
+      /* render props*/
+      language,
+      totalProductCount,
+      categoryIds,
+      productIds,
+      parents = [],
+      productsJsonLd,
+      intl
+    }) => {
+      const categoryId = (category && category.id) || 0;
 
-    const descriptionRef = useRef(null);
-    const scrollToDescription = useCallback(() =>
-      window.scrollTo({
-        left: 0,
-        top: descriptionRef.current.offsetTop,
-        behavior: "smooth"
-      })
-    );
+      //check if endings match
+      const active = useMemo(
+        () => pathname.substring(pathname.length - url.length) === url,
+        [pathname, url]
+      );
 
-    useEffect(() => {
-      //load data
-      fetchAllProductCategoriesIfNeeded();
+      const urlWithoutPage = useMemo(
+        () =>
+          page
+            ? url
+                .split("/")
+                .slice(0, -1)
+                .join("/")
+            : url,
+        [page, url]
+      );
 
-      if (!active || !category || !categoryId) {
+      const newParents = useMemo(
+        () => (categorySlug ? [...parents, categorySlug] : []),
+        [categorySlug, parents]
+      );
+
+      const onPageChange = useCallback(
+        ({ selected }) => {
+          dispatch(push(`${urlWithoutPage}/${selected + 1}`));
+        },
+        [categorySlug, urlWithoutPage]
+      );
+
+      const descriptionRef = useRef(null);
+      const scrollToDescription = useCallback(() =>
+        window.scrollTo({
+          left: 0,
+          top: descriptionRef.current.offsetTop,
+          behavior: "smooth"
+        })
+      );
+      const topRef = useRef(null);
+      const scrollToTop = useCallback(
+        () =>
+          window.scrollTo({
+            left: 0,
+            top: topRef.current.offsetTop,
+            behavior: "smooth"
+          }) || Promise.resolve()
+      );
+
+      useEffect(() => {
+        //load data
+        fetchAllProductCategoriesIfNeeded();
+
+        if (!active || !category || !categoryId) {
+          trackPageView();
+          return;
+        }
+
+        fetchProducts(categoryId);
+
+        setProductCategoryView(stripTags(category.name));
         trackPageView();
-        return;
-      }
+      }, [categoryId]);
 
-      fetchProducts(categoryId);
+      useEffect(() => {
+        if (active && (!page || isNaN(page)) && categorySlug) {
+          //exclude frontpage
+          dispatch(
+            push(
+              pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1" + search
+            )
+          );
+        }
+      }, []); //only run this once on the initial render
 
-      setProductCategoryView(stripTags(category.name));
-      trackPageView();
-    }, [categoryId]);
+      const isLoading = categoryIds.length === 0 && productIds.length === 0;
 
-    useEffect(() => {
-      if (active && (!page || isNaN(page)) && categorySlug) {
-        //exclude frontpage
-        dispatch(
-          push(
-            pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1" + search
-          )
-        );
-      }
-    }, []); //only run this once on the initial render
+      const hasCategoryDescription =
+        category && category.description ? true : false;
 
-    const isLoading = categoryIds.length === 0 && productIds.length === 0;
+      const categoryBoxWidths =
+        hasCategoryDescription || isLoading ? [1, 1, 1, 1 / 2] : [1, 1, 1, 1];
+      const categoryDescriptionBoxWidths =
+        hasCategoryDescription || isLoading ? [1, 1, 1, 1 / 2] : [0, 0, 0, 0];
 
-    const hasCategoryDescription =
-      category && category.description ? true : false;
-
-    const categoryBoxWidths =
-      hasCategoryDescription || isLoading ? [1, 1, 1, 1 / 2] : [1, 1, 1, 1];
-    const categoryDescriptionBoxWidths =
-      hasCategoryDescription || isLoading ? [1, 1, 1, 1 / 2] : [0, 0, 0, 0];
-
-    return (
-      <div>
-        {active && (
-          <div>
-            <Head language={language} category={category} />
-            <RichSnippet productsJsonLd={productsJsonLd} />
-            {(isLoading || (category && category.name)) && (
-              <Card>
-                {category && category.name ? (
-                  <Flexbar>
-                    <H1>{category.name}</H1>
-                    <MediaQuery sm down>
-                      <InfoIcon size={24} onClick={scrollToDescription} />
-                    </MediaQuery>
-                  </Flexbar>
-                ) : (
-                  <Placeholder text />
-                )}
-              </Card>
-            )}
-            <Flex flexWrap="wrap">
-              <Box width={categoryBoxWidths} px={2} pb={3}>
-                <Flex flexWrap="wrap">
-                  {categoryIds.map(categoryId => (
-                    <CategoryItem
-                      key={categoryId}
-                      id={categoryId}
-                      parents={newParents}
-                      large={!hasCategoryDescription}
-                    />
-                  ))}
-                  {productIds.map(productId => (
-                    <ProductItem
-                      key={productId}
-                      id={productId}
-                      parents={newParents}
-                      large={!hasCategoryDescription}
-                    />
-                  ))}
-                  {isLoading &&
-                    new Array(12)
-                      .fill()
-                      .map((el, index) => <CategoryItem key={index} id={-1} />)}
-                </Flex>
-              </Box>
-              {(hasCategoryDescription || isLoading) && (
-                <CategoryDescription
-                  width={categoryDescriptionBoxWidths}
-                  px={2}
-                  pb={3}
-                  innerRef={descriptionRef}
-                >
-                  <Card>
-                    {hasCategoryDescription && (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: category.description
-                        }}
-                      />
-                    )}
-                    {isLoading && <Placeholder block height={2} />}
-                  </Card>
-                </CategoryDescription>
+      return (
+        <div>
+          {active && (
+            <div>
+              <Head language={language} category={category} />
+              <RichSnippet productsJsonLd={productsJsonLd} />
+              {(isLoading || (category && category.name)) && (
+                <Card>
+                  {category && category.name ? (
+                    <Flexbar>
+                      <H1>{category.name}</H1>
+                      <MediaQuery sm down>
+                        <InfoIcon size={24} onClick={scrollToDescription} />
+                      </MediaQuery>
+                    </Flexbar>
+                  ) : (
+                    <Placeholder text />
+                  )}
+                </Card>
               )}
-            </Flex>
+              <Flex flexWrap="wrap" ref={topRef}>
+                <Box width={categoryBoxWidths} px={2} pb={3}>
+                  <Flex flexWrap="wrap">
+                    {categoryIds.map(categoryId => (
+                      <CategoryItem
+                        key={categoryId}
+                        id={categoryId}
+                        parents={newParents}
+                        large={!hasCategoryDescription}
+                      />
+                    ))}
+                    {productIds.map(productId => (
+                      <ProductItem
+                        key={productId}
+                        id={productId}
+                        parents={newParents}
+                        large={!hasCategoryDescription}
+                      />
+                    ))}
+                    {isLoading &&
+                      new Array(12)
+                        .fill()
+                        .map((el, index) => (
+                          <CategoryItem key={index} id={-1} />
+                        ))}
+                  </Flex>
+                </Box>
+                {(hasCategoryDescription || isLoading) && (
+                  <CategoryDescription
+                    width={categoryDescriptionBoxWidths}
+                    px={2}
+                    pb={3}
+                    ref={descriptionRef}
+                  >
+                    <Card>
+                      {hasCategoryDescription && (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: category.description
+                          }}
+                        />
+                      )}
+                      {isLoading && <Placeholder block height={2} />}
+                      <MediaQuery sm down>
+                        <Button onClick={scrollToTop}>
+                          {intl.formatMessage(messages.backToTop)}
+                        </Button>
+                      </MediaQuery>
+                    </Card>
+                  </CategoryDescription>
+                )}
+              </Flex>
 
-            {totalProductCount !== 0 && (
-              <Pagination
-                pageCount={Math.ceil(totalProductCount / ITEMS_PER_PAGE)}
-                pageRangeDisplayed={5}
-                marginPagesDisplayed={1}
-                forcePage={parseInt(page) - 1}
-                onPageChange={onPageChange}
-              />
+              {totalProductCount !== 0 && (
+                <Pagination
+                  pageCount={Math.ceil(totalProductCount / ITEMS_PER_PAGE)}
+                  pageRangeDisplayed={5}
+                  marginPagesDisplayed={1}
+                  forcePage={parseInt(page) - 1}
+                  onPageChange={onPageChange}
+                />
+              )}
+            </div>
+          )}
+          <Route
+            path={`${urlWithoutPage}/:categorySlug/:page`}
+            render={props => (
+              <RoutedCategories {...props} parents={newParents} />
             )}
-          </div>
-        )}
-        <Route
-          path={`${urlWithoutPage}/:categorySlug/:page`}
-          render={props => <RoutedCategories {...props} parents={newParents} />}
-        />
-      </div>
-    );
-  }
+          />
+        </div>
+      );
+    }
+  )
 );
 
 const mapStateToProps = (

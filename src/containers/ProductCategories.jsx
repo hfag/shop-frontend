@@ -43,7 +43,7 @@ import MediaQuery from "../components/MediaQuery";
 import Flexbar from "../components/Flexbar";
 import Button from "../components/Button";
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const messages = defineMessages({
@@ -53,8 +53,11 @@ const messages = defineMessages({
   }
 });
 
-const CategoryDescription = styled(Box)`
+const CategoryDescription = styled.div`
+  padding-bottom: 1rem;
+
   & > div {
+    height: 100%;
     margin: 0;
   }
   h2 {
@@ -119,13 +122,15 @@ const ProductCategories = React.memo(
       /* render props*/
       language,
       totalProductCount,
-      categoryIds,
-      productIds,
+      items,
       parents = [],
       productsJsonLd,
       intl
     }) => {
       const categoryId = (category && category.id) || 0;
+      const [itemsNextToDescription, setItemsNextToDescription] = useState(
+        ITEMS_PER_PAGE
+      );
 
       //check if endings match
       const active = useMemo(
@@ -164,6 +169,16 @@ const ProductCategories = React.memo(
           behavior: "smooth"
         })
       );
+
+      const descriptionReferenceCallback = useCallback(element => {
+        descriptionRef.current = element;
+        if (element !== null) {
+          setItemsNextToDescription(
+            Math.ceil(descriptionRef.current.clientHeight / (22 * 16)) * 3
+          );
+        }
+      });
+
       const topRef = useRef(null);
       const scrollToTop = useCallback(
         () =>
@@ -200,15 +215,17 @@ const ProductCategories = React.memo(
         }
       }, []); //only run this once on the initial render
 
-      const isLoading = categoryIds.length === 0 && productIds.length === 0;
+      const isLoading = items.length === 0;
 
       const hasCategoryDescription =
         category && category.description ? true : false;
 
-      const categoryBoxWidths =
-        hasCategoryDescription || isLoading ? [1, 1, 1, 1 / 2] : [1, 1, 1, 1];
-      const categoryDescriptionBoxWidths =
-        hasCategoryDescription || isLoading ? [1, 1, 1, 1 / 2] : [0, 0, 0, 0];
+      const categoryBoxWidths = hasCategoryDescription
+        ? [1, 1, 1, 1 / 2]
+        : [1, 1, 1, 1];
+      const categoryDescriptionBoxWidths = hasCategoryDescription
+        ? [1, 1, 1, 1 / 2]
+        : [0, 0, 0, 0];
 
       return (
         <div>
@@ -233,54 +250,78 @@ const ProductCategories = React.memo(
               <Flex flexWrap="wrap" ref={topRef}>
                 <Box width={categoryBoxWidths} px={2} pb={3}>
                   <Flex flexWrap="wrap">
-                    {categoryIds.map(categoryId => (
-                      <CategoryItem
-                        key={categoryId}
-                        id={categoryId}
-                        parents={newParents}
-                        large={!hasCategoryDescription}
-                      />
-                    ))}
-                    {productIds.map(productId => (
-                      <ProductItem
-                        key={productId}
-                        id={productId}
-                        parents={newParents}
-                        large={!hasCategoryDescription}
-                      />
-                    ))}
+                    {items
+                      .slice(0, itemsNextToDescription)
+                      .map(({ type, id }) =>
+                        type === "category" ? (
+                          <CategoryItem
+                            key={"category-" + id}
+                            id={id}
+                            parents={newParents}
+                            large={!hasCategoryDescription}
+                          />
+                        ) : (
+                          <ProductItem
+                            key={"product-" + id}
+                            id={id}
+                            parents={newParents}
+                            large={!hasCategoryDescription}
+                          />
+                        )
+                      )}
                     {isLoading &&
                       new Array(12)
                         .fill()
                         .map((el, index) => (
-                          <CategoryItem key={index} id={-1} />
+                          <CategoryItem
+                            key={index}
+                            id={-1}
+                            large={!hasCategoryDescription}
+                          />
                         ))}
                   </Flex>
                 </Box>
-                {(hasCategoryDescription || isLoading) && (
-                  <CategoryDescription
-                    width={categoryDescriptionBoxWidths}
-                    px={2}
-                    pb={3}
-                    ref={descriptionRef}
-                  >
-                    <Card>
-                      {hasCategoryDescription && (
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: category.description
-                          }}
-                        />
-                      )}
-                      {isLoading && <Placeholder block height={2} />}
-                      <MediaQuery sm down>
-                        <Button onClick={scrollToTop}>
-                          {intl.formatMessage(messages.backToTop)}
-                        </Button>
-                      </MediaQuery>
-                    </Card>
-                  </CategoryDescription>
+                {hasCategoryDescription && (
+                  <Box width={categoryDescriptionBoxWidths} px={2} pb={3}>
+                    <CategoryDescription ref={descriptionReferenceCallback}>
+                      <Card>
+                        {hasCategoryDescription && (
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: category.description
+                            }}
+                          />
+                        )}
+                        <MediaQuery sm down>
+                          <Button onClick={scrollToTop}>
+                            {intl.formatMessage(messages.backToTop)}
+                          </Button>
+                        </MediaQuery>
+                      </Card>
+                    </CategoryDescription>
+                  </Box>
                 )}
+              </Flex>
+              <Flex flexWrap="wrap">
+                {items
+                  .slice(itemsNextToDescription)
+                  .map(({ type, id }) =>
+                    type === "category" ? (
+                      <CategoryItem
+                        key={"category-" + id}
+                        id={id}
+                        parents={newParents}
+                        large
+                      />
+                    ) : (
+                      <ProductItem
+                        key={"product-" + id}
+                        id={id}
+                        parents={newParents}
+                        large
+                      />
+                    )
+                  )}
               </Flex>
 
               {totalProductCount !== 0 && (
@@ -321,21 +362,32 @@ const mapStateToProps = (
         .sort((a, b) => a.order - b.order)
     : [];
 
+  const categoryIds =
+    getProductCategoryChildrenIdsById(
+      state,
+      categorySlug && category ? category.id : 0
+    ) || [];
+
+  const productItems = category
+    ? products
+        .map(product => ({ type: "product", id: product.id }))
+        .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
+    : [];
+
+  const items = [
+    ...categoryIds.map(id => ({
+      type: "category",
+      id
+    })),
+    ...productItems
+  ];
+
   return {
     language: getLanguage(state),
     languageFetchString: getLanguageFetchString(state),
     categorySlug,
     category,
-    categoryIds:
-      getProductCategoryChildrenIdsById(
-        state,
-        categorySlug && category ? category.id : 0
-      ) || [],
-    productIds: category
-      ? products
-          .map(product => product.id)
-          .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
-      : [],
+    items,
     totalProductCount: category ? products.length : 0,
     page,
     productsJsonLd: products.map(product =>

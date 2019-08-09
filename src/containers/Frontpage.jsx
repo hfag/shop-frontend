@@ -69,9 +69,7 @@ const Frontpage = React.memo(
             nulla facilisi.
           </p>
           <Link
-            to={`/${pathnamesByLanguage[language].page}/${
-              pageSlugsByLanguage[language].companyAbout
-            }`}
+            to={`/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
           >
             {intl.formatMessage(messages.moreAboutCompany)}
           </Link>

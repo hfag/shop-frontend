@@ -92,9 +92,7 @@ const Product = React.memo(({ language, product }) => {
     <Box width={[1, 1, 1 / 3, 1 / 3]} px={2} mt={3}>
       <SaleWrapper>
         <Link
-          to={`/${language}/${pathnamesByLanguage[language].product}/${
-            product.slug
-          }?variationId=${product.variationId}`}
+          to={`/${language}/${pathnamesByLanguage[language].product}/${product.slug}?variationId=${product.variationId}`}
         >
           <DiscountLogo>
             <FaPercent />

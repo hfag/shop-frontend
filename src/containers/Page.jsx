@@ -28,9 +28,7 @@ const Page = React.memo(({ language, page = {}, fetchPageIfNeeded }) => {
         <meta name="description" content={stripTags(page.description)} />
         <link
           rel="canonical"
-          href={`${ABSOLUTE_URL}/${language}/${
-            pathnamesByLanguage[language].page
-          }/${page.slug}`}
+          href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].page}/${page.slug}`}
         />
       </Helmet>
       <h1 dangerouslySetInnerHTML={{ __html: page.title }} />

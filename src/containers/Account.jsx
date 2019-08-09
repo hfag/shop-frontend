@@ -128,9 +128,7 @@ const Account = React.memo(
             />
             <link
               rel="canonical"
-              href={`${ABSOLUTE_URL}/${language}/${
-                pathnamesByLanguage[language].account
-              }`}
+              href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].account}`}
             />
           </Helmet>
           <Flex flexWrap="wrap">
@@ -152,18 +150,14 @@ const Account = React.memo(
                   </li>
                   <li>
                     <Link
-                      to={`${url}/${
-                        pathnamesByLanguage[language].billingAddress
-                      }`}
+                      to={`${url}/${pathnamesByLanguage[language].billingAddress}`}
                     >
                       {intl.formatMessage(address.billingAddress)}
                     </Link>
                   </li>
                   <li>
                     <Link
-                      to={`${url}/${
-                        pathnamesByLanguage[language].shippingAddress
-                      }`}
+                      to={`${url}/${pathnamesByLanguage[language].shippingAddress}`}
                     >
                       {intl.formatMessage(address.shippingAddress)}
                     </Link>
@@ -175,9 +169,7 @@ const Account = React.memo(
                   </li>
                   <li>
                     <Link
-                      to={`/${language}/${
-                        pathnamesByLanguage[language].logout
-                      }`}
+                      to={`/${language}/${pathnamesByLanguage[language].logout}`}
                     >
                       {intl.formatMessage(user.logout)}
                     </Link>
@@ -213,9 +205,7 @@ const Account = React.memo(
                   />
                   <Route
                     exact
-                    path={`${url}/${
-                      pathnamesByLanguage[language].billingAddress
-                    }`}
+                    path={`${url}/${pathnamesByLanguage[language].billingAddress}`}
                     render={props => (
                       <AddressForm
                         {...props}
@@ -228,9 +218,7 @@ const Account = React.memo(
                   />
                   <Route
                     exact
-                    path={`${url}/${
-                      pathnamesByLanguage[language].shippingAddress
-                    }`}
+                    path={`${url}/${pathnamesByLanguage[language].shippingAddress}`}
                     render={props => (
                       <AddressForm
                         {...props}
@@ -246,9 +234,7 @@ const Account = React.memo(
                     component={AccountOrders}
                   />
                   <Route
-                    path={`${url}/${
-                      pathnamesByLanguage[language].orders
-                    }/:orderId`}
+                    path={`${url}/${pathnamesByLanguage[language].orders}/:orderId`}
                     component={AccountOrder}
                   />
                 </Switch>

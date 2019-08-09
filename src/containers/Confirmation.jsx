@@ -52,9 +52,7 @@ const Confirmation = React.memo(
           />
           <link
             rel="canonical"
-            href={`${ABSOLUTE_URL}/${language}/${
-              pathnamesByLanguage[language].confirmation
-            }`}
+            href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].confirmation}`}
           />
         </Helmet>
         <h1>{intl.formatMessage(messages.title)}</h1>

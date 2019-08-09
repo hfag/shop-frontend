@@ -138,9 +138,7 @@ const NameCell = React.memo(
     return (
       <div>
         <Link
-          to={`/${language}/${pathnamesByLanguage[language].product}/${
-            product.slug
-          }/?variationId=${product.variationId}`}
+          to={`/${language}/${pathnamesByLanguage[language].product}/${product.slug}/?variationId=${product.variationId}`}
         >
           <strong dangerouslySetInnerHTML={{ __html: product.name }} />
         </Link>

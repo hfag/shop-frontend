@@ -132,9 +132,7 @@ const Sidebar = React.memo(
                 <BurgerItem seperator>
                   {isAuthenticated ? (
                     <Link
-                      to={`/${language}/${
-                        pathnamesByLanguage[language].account
-                      }`}
+                      to={`/${language}/${pathnamesByLanguage[language].account}`}
                       flex
                     >
                       <span>

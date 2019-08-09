@@ -105,9 +105,7 @@ const Cart = React.memo(
             />
             <link
               rel="canonical"
-              href={`${ABSOLUTE_URL}/${language}/${
-                pathnamesByLanguage[language].language
-              }`}
+              href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].language}`}
             />
           </Helmet>
 

@@ -31,9 +31,7 @@ const Post = React.memo(({ language, post = {}, fetchPostIfNeeded }) => {
         <meta name="description" content={stripTags(post.description)} />
         <link
           rel="canonical"
-          href={`${ABSOLUTE_URL}/${language}/${
-            pathnamesByLanguage[language].post
-          }/${post.slug}`}
+          href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].post}/${post.slug}`}
         />
       </Helmet>
       <h1 dangerouslySetInnerHTML={{ __html: post.title }} />

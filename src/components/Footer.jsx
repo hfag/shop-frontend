@@ -194,9 +194,7 @@ const Footer = React.memo(
                   <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
                   {intl.formatMessage(messages.about)}{" "}
                   <Link
-                    to={`/${pathnamesByLanguage[language].page}/${
-                      pageSlugsByLanguage[language].companyAbout
-                    }`}
+                    to={`/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
                     negative
                   >
                     {intl.formatMessage(messages.moreAbout)}

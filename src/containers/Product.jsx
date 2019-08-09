@@ -437,9 +437,7 @@ class Product extends React.PureComponent {
           <meta name="description" content={description} />
           <link
             rel="canonical"
-            href={`${ABSOLUTE_URL}/${language}/${
-              pathnamesByLanguage[language].product
-            }/${slug}`}
+            href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].product}/${slug}`}
           />
         </Helmet>
         <JsonLd>
@@ -776,9 +774,7 @@ class Product extends React.PureComponent {
                               <Link
                                 key={id}
                                 styled
-                                to={`/${language}/${
-                                  pathnamesByLanguage[language].productCategory
-                                }/${slug}/1`}
+                                to={`/${language}/${pathnamesByLanguage[language].productCategory}/${slug}/1`}
                               >
                                 {name}
                               </Link>

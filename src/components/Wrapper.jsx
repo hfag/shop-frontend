@@ -34,15 +34,11 @@ const Wrapper = React.memo(({ language, children }) => {
               <Sidebar>
                 <Switch>
                   <Route
-                    path={`/${language}/${
-                      pathnamesByLanguage[language].productCategory
-                    }`}
+                    path={`/${language}/${pathnamesByLanguage[language].productCategory}`}
                     component={CategoriesSidebar}
                   />
                   <Route
-                    path={`/${language}/${
-                      pathnamesByLanguage[language].product
-                    }/:productSlug`}
+                    path={`/${language}/${pathnamesByLanguage[language].product}/:productSlug`}
                     component={ProductSidebar}
                   />
                   <Route path="*" component={CategoriesSidebar} />

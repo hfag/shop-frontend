@@ -85,9 +85,7 @@ class Order extends React.PureComponent {
     return (
       <OrderWrapper>
         <Link
-          to={`/${language}/${pathnamesByLanguage[language].account}/${
-            pathnamesByLanguage[language].orders
-          }/${id}`}
+          to={`/${language}/${pathnamesByLanguage[language].account}/${pathnamesByLanguage[language].orders}/${id}`}
           styled
         >
           <h4>

@@ -201,33 +201,25 @@ class Searchbar extends React.PureComponent {
       case "product":
         return this.props.dispatch(
           push(
-            `/${language}/${pathnamesByLanguage[language].product}/${
-              suggestion.slug
-            }`
+            `/${language}/${pathnamesByLanguage[language].product}/${suggestion.slug}`
           )
         );
       case "product_variation":
         return this.props.dispatch(
           push(
-            `/${language}/${pathnamesByLanguage[language].product}/${
-              suggestion.parent_slug
-            }?variationId=${suggestion.id}`
+            `/${language}/${pathnamesByLanguage[language].product}/${suggestion.parent_slug}?variationId=${suggestion.id}`
           )
         );
       case "taxonomy":
         return this.props.dispatch(
           push(
-            `/${language}/${pathnamesByLanguage[language].productCategory}/${
-              suggestion.slug
-            }/1`
+            `/${language}/${pathnamesByLanguage[language].productCategory}/${suggestion.slug}/1`
           )
         );
       case "show-more":
         this.props.dispatch(
           push(
-            `/${language}/${pathnamesByLanguage[language].search}?query=${
-              this.state.value
-            }`
+            `/${language}/${pathnamesByLanguage[language].search}?query=${this.state.value}`
           )
         );
         return this.setState({ value: "" });

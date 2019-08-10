@@ -1,6 +1,10 @@
 [
   {
     "id": "Frontpage.categories",
-    "defaultMessage": "Produktkategorien"
+    "defaultMessage": "Kategorien"
+  },
+  {
+    "id": "Frontpage.moreAboutCompany",
+    "defaultMessage": "Mehr über das Unternehmen"
   }
 ]

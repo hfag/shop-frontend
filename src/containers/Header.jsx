@@ -20,7 +20,9 @@ import {
 } from "../reducers";
 import Container from "../components/Container";
 import Flexbar from "../components/Flexbar";
+import Triangle from "../components/Triangle";
 import Push from "../components/Push";
+import Dropdown from "../components/Dropdown";
 import Link from "../components/Link";
 import MediaQuery from "../components/MediaQuery";
 import NavItem from "../components/NavItem";
@@ -28,6 +30,7 @@ import Navbar from "../components/Navbar";
 import Searchbar from "../containers/Searchbar";
 import LogoNegative from "../../img/logo/logo_negative.svg";
 import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
+import Thumbnail from "./Thumbnail";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import JsonLd from "../components/JsonLd";
 import { fetchSalesIfNeeded } from "../actions/sales";

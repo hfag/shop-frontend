@@ -35,24 +35,23 @@ import {
 } from "../reducers";
 import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 import Card from "../components/Card";
-import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
+import { pathnamesByLanguage } from "../utilities/urls";
 import shop from "../i18n/shop";
 import { setProductCategoryView, trackPageView } from "../utilities/analytics";
 import Placeholder from "../components/Placeholder";
 import MediaQuery from "../components/MediaQuery";
 import Flexbar from "../components/Flexbar";
-import CompassBackground from "../../img/compass.jpg";
-import Link from "../components/Link";
-
-const messages = defineMessages({
-  moreAboutCompany: {
-    id: "Frontpage.moreAboutCompany",
-    defaultMessage: "Mehr über das Unternehmen"
-  }
-});
+import Button from "../components/Button";
 
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
+
+const messages = defineMessages({
+  backToTop: {
+    id: "ProductCategories.backToTop",
+    defaultMessage: "Zurück nach oben zu den Produkten"
+  }
+});
 
 const CategoryDescription = styled.div`
   padding-bottom: 1rem;
@@ -68,14 +67,6 @@ const CategoryDescription = styled.div`
 
 const H1 = styled.h1`
   margin: 0;
-`;
-
-const Compass = styled.img`
-  width: 75%;
-  height: auto;
-
-  display: block;
-  margin: 0 auto;
 `;
 
 const InfoIcon = styled(FaInfoCircle)`
@@ -179,26 +170,14 @@ const ProductCategories = React.memo(
         })
       );
 
-      const updateDescriptionItems = useCallback(() => {
-        requestAnimationFrame(() => {
-          setItemsNextToDescription(
-            Math.ceil(descriptionRef.current.clientHeight / (22 * 16)) * 3
-          );
-        });
-      }, []);
-
       const descriptionReferenceCallback = useCallback(element => {
         descriptionRef.current = element;
         if (element !== null) {
-          updateDescriptionItems();
+          setItemsNextToDescription(
+            Math.ceil(descriptionRef.current.clientHeight / (22 * 16)) * 3
+          );
         }
-      }, []);
-
-      useEffect(() => {
-        window.addEventListener("resize", updateDescriptionItems);
-        return () =>
-          window.removeEventListener("resize", updateDescriptionItems);
-      }, []);
+      });
 
       const topRef = useRef(null);
       const scrollToTop = useCallback(
@@ -238,6 +217,16 @@ const ProductCategories = React.memo(
 
       const isLoading = items.length === 0;
 
+      const hasCategoryDescription =
+        category && category.description ? true : false;
+
+      const categoryBoxWidths = hasCategoryDescription
+        ? [1, 1, 1, 1 / 2]
+        : [1, 1, 1, 1];
+      const categoryDescriptionBoxWidths = hasCategoryDescription
+        ? [1, 1, 1, 1 / 2]
+        : [0, 0, 0, 0];
+
       return (
         <div>
           {active && (
@@ -259,7 +248,7 @@ const ProductCategories = React.memo(
                 </Card>
               )}
               <Flex flexWrap="wrap" ref={topRef}>
-                <Box width={[1, 1, 1, 1 / 2]} px={2} pb={3}>
+                <Box width={categoryBoxWidths} px={2} pb={3}>
                   <Flex flexWrap="wrap">
                     {items
                       .slice(0, itemsNextToDescription)
@@ -269,14 +258,14 @@ const ProductCategories = React.memo(
                             key={"category-" + id}
                             id={id}
                             parents={newParents}
-                            large={false}
+                            large={!hasCategoryDescription}
                           />
                         ) : (
                           <ProductItem
                             key={"product-" + id}
                             id={id}
                             parents={newParents}
-                            large={false}
+                            large={!hasCategoryDescription}
                           />
                         )
                       )}
@@ -284,55 +273,34 @@ const ProductCategories = React.memo(
                       new Array(12)
                         .fill()
                         .map((el, index) => (
-                          <CategoryItem key={index} id={-1} large={false} />
+                          <CategoryItem
+                            key={index}
+                            id={-1}
+                            large={!hasCategoryDescription}
+                          />
                         ))}
                   </Flex>
                 </Box>
-                <Box width={[1, 1, 1, 1 / 2]} px={2} pb={3}>
-                  <CategoryDescription ref={descriptionReferenceCallback}>
-                    {category && category.description ? (
+                {hasCategoryDescription && (
+                  <Box width={categoryDescriptionBoxWidths} px={2} pb={3}>
+                    <CategoryDescription ref={descriptionReferenceCallback}>
                       <Card>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: category.description
-                          }}
-                        />
+                        {hasCategoryDescription && (
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: category.description
+                            }}
+                          />
+                        )}
+                        <MediaQuery sm down>
+                          <Button onClick={scrollToTop}>
+                            {intl.formatMessage(messages.backToTop)}
+                          </Button>
+                        </MediaQuery>
                       </Card>
-                    ) : (
-                      <MediaQuery md up>
-                        <Card noMargin>
-                          <H1>Shop der Hauser Feuerschutz AG</H1>
-                        </Card>
-                        <Card>
-                          <Compass src={CompassBackground} />
-                          <p>
-                            Lorem ipsum dolor sit amet, consetetur sadipscing
-                            elitr, sed diam nonumy eirmod tempor invidunt ut
-                            labore et dolore magna aliquyam erat, sed diam
-                            voluptua. At vero eos et accusam et justo duo
-                            dolores et ea rebum. Stet clita kasd gubergren, no
-                            sea takimata sanctus est Lorem ipsum dolor sit amet.
-                            Lorem ipsum dolor sit amet, consetetur sadipscing
-                            elitr, sed diam nonumy eirmod tempor invidunt ut
-                            labore et dolore magna aliquyam erat, sed diam
-                            voluptua. At vero eos et accusam et justo duo
-                            dolores et ea rebum. Stet clita kasd gubergren, no
-                            sea takimata sanctus est Lorem ipsum dolor sit amet.
-                            Lorem ipsum dolor sit amet, consetetur sadipscing
-                            elitr, sed diam nonumy eirmod tempor invidunt ut
-                            labore et dolore magna aliquyam erat, sed diam
-                            voluptua.
-                          </p>
-                          <Link
-                            to={`/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
-                          >
-                            {intl.formatMessage(messages.moreAboutCompany)}
-                          </Link>
-                        </Card>
-                      </MediaQuery>
-                    )}
-                  </CategoryDescription>
-                </Box>
+                    </CategoryDescription>
+                  </Box>
+                )}
               </Flex>
               <Flex flexWrap="wrap">
                 {items

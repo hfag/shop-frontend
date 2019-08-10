@@ -716,9 +716,9 @@ class Product extends React.PureComponent {
                     .map(attachment => ({
                       src: attachment.url || "",
                       /*caption: attachment.caption,*/
-                      srcSet: Object.values(attachment.sizes)
+                      /*srcSet: Object.values(attachment.sizes)
                         .sort((a, b) => a.width - b.width)
-                        .map(size => `${size.source_url} ${size.width}w`),
+                        .map(size => `${size.source_url} ${size.width}w`),*/
                       thumbnail:
                         attachment.sizes &&
                         attachment.sizes.thumbnail &&

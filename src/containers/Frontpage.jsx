@@ -101,9 +101,7 @@ class Frontpage extends React.PureComponent {
                 >
                   <SaleWrapper>
                     <Link
-                      to={`/produkt/${product.slug}?variationId=${
-                        product.variationId
-                      }`}
+                      to={`/produkt/${product.slug}?variationId=${product.variationId}`}
                     >
                       <DiscountLogo>
                         <FaPercent />

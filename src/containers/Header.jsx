@@ -366,9 +366,7 @@ class Header extends React.PureComponent {
                                   <Login>
                                     {account.firstName.length > 0 ||
                                     account.lastName.length > 0
-                                      ? `${account.firstName} ${
-                                          account.lastName
-                                        }`
+                                      ? `${account.firstName} ${account.lastName}`
                                       : account.email}
                                   </Login>
                                   <Triangle color="#fff" size="0.5rem" />

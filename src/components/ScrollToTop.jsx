@@ -21,7 +21,7 @@ class ScrollToTop extends React.Component {
       ) {
         this.props.dispatch(toggleBurgerMenu());
       }
-      window.scrollTo(0, 0);
+      window.scrollTo({ left: 0, top: 0 });
     }
   }
 

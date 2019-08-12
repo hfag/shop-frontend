@@ -84,7 +84,6 @@ const CategoryItem = React.memo(
   ({
     id: categoryId,
     category,
-    large,
     parent,
     parents = [],
     dispatch,
@@ -113,12 +112,8 @@ const CategoryItem = React.memo(
       return null;
     }
 
-    const boxWidths = large
-      ? [1 / 2, 1 / 3, 1 / 4, 1 / 6]
-      : [1, 1 / 2, 1 / 3, 1 / 3];
-
     return (
-      <Box width={boxWidths} px={2} pb={3}>
+      <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
         <Link to={url}>
           <StyledCategory>
             <Thumbnail id={category ? category.thumbnailId : -1} />

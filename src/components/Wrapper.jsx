@@ -18,6 +18,7 @@ import Sidebar from "../containers/Sidebar";
 import ScrollToTop from "./ScrollToTop";
 import { getLanguage } from "../reducers";
 import { pathnamesByLanguage } from "../utilities/urls";
+import ScrollToTopButton from "./ScrollToTopButton";
 
 const Wrapper = React.memo(({ language, children }) => {
   return (
@@ -54,6 +55,7 @@ const Wrapper = React.memo(({ language, children }) => {
           </Flex>
         </main>
         <Footer />
+        <ScrollToTopButton />
       </ScrollToTop>
     </ThemeProvider>
   );

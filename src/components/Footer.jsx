@@ -134,6 +134,7 @@ const Footer = React.memo(
                   <br />
                   <br />
                   <Link
+                    styled
                     target="_blank"
                     href="https://feuerschutz.ch"
                     rel="noopener"
@@ -153,6 +154,7 @@ const Footer = React.memo(
                         </td>
                         <td>
                           <Link
+                            styled
                             target="_blank"
                             href="https://www.google.ch/maps/place/Sonnmattweg+6,+5000+Aarau/@47.3971534,8.0412625,17z/data=!3m1!4b1!4m5!3m4!1s0x47903be72641ef39:0x35e802ea186c4a2d!8m2!3d47.3971534!4d8.0434512"
                             rel="noopener"
@@ -170,7 +172,7 @@ const Footer = React.memo(
                           </Icon>
                         </td>
                         <td>
-                          <Link href="tel:+41628340540" negative>
+                          <Link styled href="tel:+41628340540" negative>
                             062 834 05 40
                           </Link>
                         </td>
@@ -182,7 +184,11 @@ const Footer = React.memo(
                           </Icon>
                         </td>
                         <td>
-                          <Link href="mailto:info@feuerschutz.ch" negative>
+                          <Link
+                            styled
+                            href="mailto:info@feuerschutz.ch"
+                            negative
+                          >
                             info@feuerschutz.ch
                           </Link>
                         </td>
@@ -194,6 +200,7 @@ const Footer = React.memo(
                   <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
                   {intl.formatMessage(messages.about)}{" "}
                   <Link
+                    styled
                     to={`/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
                     negative
                   >

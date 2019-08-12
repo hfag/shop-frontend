@@ -18,7 +18,7 @@ import {
 import { Helmet } from "react-helmet";
 import { injectIntl, defineMessages } from "react-intl";
 import styled from "styled-components";
-import { FaInfoCircle } from "react-icons/fa";
+import { FaInfoCircle, FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
 import Flex from "../components/Flex";
 import Pagination from "../components/Pagination";
@@ -42,16 +42,17 @@ import Placeholder from "../components/Placeholder";
 import MediaQuery from "../components/MediaQuery";
 import Flexbar from "../components/Flexbar";
 import Button from "../components/Button";
+import Link from "../components/Link";
+
+const messages = defineMessages({
+  learnMoreAboutCategory: {
+    id: "ProductCategories.learnMoreAboutCategory",
+    defaultMessage: "Lerne mehr über diese Produkte"
+  }
+});
 
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
-
-const messages = defineMessages({
-  backToTop: {
-    id: "ProductCategories.backToTop",
-    defaultMessage: "Zurück nach oben zu den Produkten"
-  }
-});
 
 const CategoryDescription = styled.div`
   padding-bottom: 1rem;
@@ -68,11 +69,28 @@ const CategoryDescription = styled.div`
 const H1 = styled.h1`
   margin: 0;
 `;
+const H2 = styled.h2`
+  margin-top: 0;
+`;
 
-const InfoIcon = styled(FaInfoCircle)`
-  margin-top: 0.4rem;
-  margin-left: 0.25rem;
-  cursor: pointer;
+const InfoWrapper = styled.div`
+  margin: 2rem 1rem;
+`;
+
+const DownloadList = styled.ul`
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  li svg {
+    display: block;
+    margin-right: 0.5rem;
+  }
 `;
 
 const Head = React.memo(
@@ -128,9 +146,6 @@ const ProductCategories = React.memo(
       intl
     }) => {
       const categoryId = (category && category.id) || 0;
-      const [itemsNextToDescription, setItemsNextToDescription] = useState(
-        ITEMS_PER_PAGE
-      );
 
       //check if endings match
       const active = useMemo(
@@ -170,25 +185,6 @@ const ProductCategories = React.memo(
         })
       );
 
-      const descriptionReferenceCallback = useCallback(element => {
-        descriptionRef.current = element;
-        if (element !== null) {
-          setItemsNextToDescription(
-            Math.ceil(descriptionRef.current.clientHeight / (22 * 16)) * 3
-          );
-        }
-      });
-
-      const topRef = useRef(null);
-      const scrollToTop = useCallback(
-        () =>
-          window.scrollTo({
-            left: 0,
-            top: topRef.current.offsetTop,
-            behavior: "smooth"
-          }) || Promise.resolve()
-      );
-
       useEffect(() => {
         //load data
         fetchAllProductCategoriesIfNeeded();
@@ -220,109 +216,110 @@ const ProductCategories = React.memo(
       const hasCategoryDescription =
         category && category.description ? true : false;
 
-      const categoryBoxWidths = hasCategoryDescription
-        ? [1, 1, 1, 1 / 2]
-        : [1, 1, 1, 1];
-      const categoryDescriptionBoxWidths = hasCategoryDescription
-        ? [1, 1, 1, 1 / 2]
-        : [0, 0, 0, 0];
-
       return (
         <div>
           {active && (
             <div>
               <Head language={language} category={category} />
               <RichSnippet productsJsonLd={productsJsonLd} />
-              {(isLoading || (category && category.name)) && (
-                <Card>
-                  {category && category.name ? (
-                    <Flexbar>
-                      <H1>{category.name}</H1>
-                      <MediaQuery sm down>
-                        <InfoIcon size={24} onClick={scrollToDescription} />
-                      </MediaQuery>
-                    </Flexbar>
-                  ) : (
-                    <Placeholder text />
-                  )}
-                </Card>
-              )}
-              <Flex flexWrap="wrap" ref={topRef}>
-                <Box width={categoryBoxWidths} px={2} pb={3}>
+              {category && (
+                <InfoWrapper>
                   <Flex flexWrap="wrap">
-                    {items
-                      .slice(0, itemsNextToDescription)
-                      .map(({ type, id }) =>
-                        type === "category" ? (
-                          <CategoryItem
-                            key={"category-" + id}
-                            id={id}
-                            parents={newParents}
-                            large={!hasCategoryDescription}
-                          />
-                        ) : (
-                          <ProductItem
-                            key={"product-" + id}
-                            id={id}
-                            parents={newParents}
-                            large={!hasCategoryDescription}
-                          />
-                        )
-                      )}
-                    {isLoading &&
-                      new Array(12)
-                        .fill()
-                        .map((el, index) => (
-                          <CategoryItem
-                            key={index}
-                            id={-1}
-                            large={!hasCategoryDescription}
-                          />
-                        ))}
+                    <Box width={[1, 1, 1 / 2, 1 / 2]} pr={[0, 0, 4, 4]}>
+                      <H1>{category.name}</H1>
+                      <p
+                        dangerouslySetInnerHTML={{ __html: category.excerpt }}
+                      ></p>
+                      <p>
+                        <Link styled onClick={scrollToDescription}>
+                          {intl.formatMessage(messages.learnMoreAboutCategory)}
+                        </Link>
+                      </p>
+                    </Box>
+                    {category.links && category.links.length > 0 && (
+                      <Box width={[1, 1, 1 / 2, 1 / 2]}>
+                        <H2>Downloads and Links</H2>
+                        <DownloadList>
+                          {category.links.map((link, index) => {
+                            let Icon;
+                            let url;
+                            let target;
+
+                            switch (link.type) {
+                              case "pdf":
+                                Icon = FaRegFilePdf;
+                                url = link.file;
+                                target = "";
+                                break;
+
+                              case "video":
+                                Icon = FaFilm;
+                                url = link.url;
+                                target = "_blank";
+
+                                break;
+                              case "link":
+                              default:
+                                Icon = FaLink;
+                                url = link.url;
+                                target = "_blank";
+                            }
+
+                            return (
+                              <li key={index}>
+                                <Link href={url} target={target} styled>
+                                  <Flexbar>
+                                    <Icon size={24} /> {link.title}
+                                  </Flexbar>
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </DownloadList>
+                      </Box>
+                    )}
                   </Flex>
-                </Box>
-                {hasCategoryDescription && (
-                  <Box width={categoryDescriptionBoxWidths} px={2} pb={3}>
-                    <CategoryDescription ref={descriptionReferenceCallback}>
-                      <Card>
-                        {hasCategoryDescription && (
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: category.description
-                            }}
-                          />
-                        )}
-                        <MediaQuery sm down>
-                          <Button onClick={scrollToTop}>
-                            {intl.formatMessage(messages.backToTop)}
-                          </Button>
-                        </MediaQuery>
-                      </Card>
-                    </CategoryDescription>
-                  </Box>
-                )}
-              </Flex>
+                </InfoWrapper>
+              )}
+              <hr />
               <Flex flexWrap="wrap">
-                {items
-                  .slice(itemsNextToDescription)
-                  .map(({ type, id }) =>
-                    type === "category" ? (
+                {items.map(({ type, id }) =>
+                  type === "category" ? (
+                    <CategoryItem
+                      key={"category-" + id}
+                      id={id}
+                      parents={newParents}
+                    />
+                  ) : (
+                    <ProductItem
+                      key={"product-" + id}
+                      id={id}
+                      parents={newParents}
+                    />
+                  )
+                )}
+                {isLoading &&
+                  new Array(12)
+                    .fill()
+                    .map((el, index) => (
                       <CategoryItem
-                        key={"category-" + id}
-                        id={id}
-                        parents={newParents}
-                        large
+                        key={index}
+                        id={-1}
+                        large={!hasCategoryDescription}
                       />
-                    ) : (
-                      <ProductItem
-                        key={"product-" + id}
-                        id={id}
-                        parents={newParents}
-                        large
-                      />
-                    )
-                  )}
+                    ))}
               </Flex>
+              {hasCategoryDescription && (
+                <CategoryDescription ref={descriptionRef}>
+                  <Card>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: category.description
+                      }}
+                    />
+                  </Card>
+                </CategoryDescription>
+              )}
 
               {totalProductCount !== 0 && (
                 <Pagination

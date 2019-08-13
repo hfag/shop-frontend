@@ -19,8 +19,6 @@ import {
 } from "../reducers";
 import LatesPostFlex from "../components/Flex";
 
-const ITEMS_PER_PAGE = 6;
-
 const messages = defineMessages({
   title: {
     id: "LatestPosts.title",
@@ -76,12 +74,6 @@ const Post = React.memo(({ language, post }) => {
 
 const LatestPosts = React.memo(
   injectIntl(({ language, fetchAllPostsIfNeeded, posts = [], intl }) => {
-    const [page, setPage] = useState(0);
-
-    const onPageChange = useCallback(({ selected }) => setPage(selected), [
-      setPage
-    ]);
-
     useEffect(() => {
       fetchAllPostsIfNeeded();
     }, []);
@@ -92,19 +84,10 @@ const LatestPosts = React.memo(
           {intl.formatMessage(messages.title)}
         </h2>
         <LatesPostFlex flexWrap="wrap">
-          {posts
-            .slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE)
-            .map(post => (
-              <Post language={language} post={post} key={post.slug} />
-            ))}
+          {posts.map(post => (
+            <Post language={language} post={post} key={post.slug} />
+          ))}
         </LatesPostFlex>
-        <Pagination
-          pageCount={Math.ceil(posts.length / ITEMS_PER_PAGE)}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={1}
-          forcePage={parseInt(page)}
-          onPageChange={onPageChange}
-        />
       </div>
     );
   })

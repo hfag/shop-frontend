@@ -230,11 +230,15 @@ const ProductCategories = React.memo(
                       <p
                         dangerouslySetInnerHTML={{ __html: category.excerpt }}
                       ></p>
-                      <p>
-                        <Link styled onClick={scrollToDescription}>
-                          {intl.formatMessage(messages.learnMoreAboutCategory)}
-                        </Link>
-                      </p>
+                      {hasCategoryDescription && (
+                        <p>
+                          <Link styled onClick={scrollToDescription}>
+                            {intl.formatMessage(
+                              messages.learnMoreAboutCategory
+                            )}
+                          </Link>
+                        </p>
+                      )}
                     </Box>
                     {category.links && category.links.length > 0 && (
                       <Box width={[1, 1, 1 / 2, 1 / 2]}>

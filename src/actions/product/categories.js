@@ -111,7 +111,7 @@ const fetchItemsAction = createFetchItemsAction(itemName);
 const fetchAllProductCategories = createFetchAllItemsThunk(
   fetchItemsAction,
   (page, perPage, language) =>
-    `${language}/wp-json/wp/v2/product_cat?page=${page}&per_page=${perPage}`,
+    `${language}/wp-json/wp/v2/product_cat?orderby=menu_order&page=${page}&per_page=${perPage}`,
   mapItem,
   afterCategoryFetch
 );

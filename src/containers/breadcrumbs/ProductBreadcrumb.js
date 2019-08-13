@@ -32,7 +32,7 @@ export const generateProductBreadcrumbs = (
   let current = category;
 
   while (current.parent) {
-    parents.push(getProductCategoryById(state, current.parent));
+    parents.push(getProductCategoryById(state, current.parent) || {});
     current = parents[parents.length - 1];
   }
 
@@ -52,9 +52,7 @@ export const generateProductBreadcrumbs = (
       name: category.name
     })),
     {
-      url: `/${language}/${
-        pathnamesByLanguage[language].product
-      }/${productSlug}`,
+      url: `/${language}/${pathnamesByLanguage[language].product}/${productSlug}`,
       name: product.title
     }
   ];

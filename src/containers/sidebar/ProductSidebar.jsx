@@ -110,7 +110,9 @@ const mapStateToProps = (
               let current = category;
 
               while (current.parent) {
-                parents.push(getProductCategoryById(state, current.parent));
+                parents.push(
+                  getProductCategoryById(state, current.parent) || {}
+                );
                 current = parents[parents.length - 1];
               }
 

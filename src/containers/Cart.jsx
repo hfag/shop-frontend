@@ -127,13 +127,10 @@ const Cart = React.memo(
             total={total}
             updateShoppingCart={updateShoppingCart}
             enabled={step === "cart"}
-            onProceed={() => this.setState({ step: "checkout" })}
+            onProceed={() => setStep("checkout")}
             lastRow={
               !showSkuSelection && (
-                <Button
-                  onClick={() => this.setState({ showSkuSelection: true })}
-                  state=""
-                >
+                <Button onClick={() => showSkuSelection(true)} state="">
                   {intl.formatMessage(messages.searchProduct)}
                 </Button>
               )
@@ -144,7 +141,7 @@ const Cart = React.memo(
             <CheckoutForm
               language={language}
               values={checkoutValues}
-              setShowShipping={this.setShowShipping}
+              setShowShipping={setShowShipping}
               showShipping={showShipping}
               submitOrder={submitOrder}
               countries={countries}

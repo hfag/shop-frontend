@@ -368,12 +368,12 @@ const CheckoutForm = withFormik({
         is: true,
         then: yup
           .string()
-          /*.oneOf(states)*/
-          .notRequired(),
+          .oneOf(states)
+          .required(),
         otherwise: yup
           .string()
-          /*.oneOf(states)*/
-          .notRequired()
+          .oneOf(states)
+          .required()
       }),
 
       billing_phone: yup.string().required(),

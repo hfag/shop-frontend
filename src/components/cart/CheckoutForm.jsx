@@ -362,8 +362,8 @@ const CheckoutForm = withFormik({
 
       billing_state: yup
         .string()
-        /*.oneOf(states)*/
-        .notRequired(),
+        .oneOf(states)
+        .required(),
       shipping_state: yup.string().when("ship_to_different_address", {
         is: true,
         then: yup
@@ -373,7 +373,7 @@ const CheckoutForm = withFormik({
         otherwise: yup
           .string()
           .oneOf(states)
-          .required()
+          .notRequired()
       }),
 
       billing_phone: yup.string().required(),

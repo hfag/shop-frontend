@@ -16,6 +16,8 @@ import Card from "../components/Card";
 import LatestPosts from "./LatestPosts";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
 import Link from "../components/Link";
+import MediaQuery from "../components/MediaQuery";
+import Searchbar from "./Searchbar";
 
 const messages = defineMessages({
   categories: {
@@ -32,10 +34,22 @@ const H1 = styled.h1`
   margin-top: 0;
 `;
 
+const SearchWrapper = styled.div`
+  margin-top: 1.5rem;
+  input {
+    background-color: #fff;
+  }
+`;
+
 const Frontpage = React.memo(
   injectIntl(({ language, saleProducts, posts, intl }) => {
     return (
       <div>
+        <SearchWrapper>
+          <MediaQuery lg down>
+            <Searchbar />
+          </MediaQuery>
+        </SearchWrapper>
         {(saleProducts.length > 0 || posts.length > 0) && (
           <SaleProducts
             language={language}

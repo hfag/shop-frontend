@@ -23,11 +23,11 @@ const ButtonWrapper = styled.div`
   color: ${colors.primaryContrast};
   box-shadow: ${shadows.y};
 
-  padding: 0.6rem;
+  padding: 0.45rem;
   border-radius: 50%;
 
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
 `;
 
 const SupportButton = React.memo(
@@ -42,7 +42,7 @@ const SupportButton = React.memo(
           data-balloon={intl.formatMessage(messages.backToTop)}
           data-balloon-pos="right"
         >
-          <FaPhone size={20} />
+          <FaPhone size={18} />
         </div>
       </ButtonWrapper>
     );

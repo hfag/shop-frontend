@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaChevronCircleUp } from "react-icons/fa";
+import { FaChevronUp } from "react-icons/fa";
 import { injectIntl, defineMessages } from "react-intl";
 import throttle from "lodash/throttle";
 
-import { shadows } from "../utilities/style";
+import { shadows, colors } from "../utilities/style";
 
 const messages = defineMessages({
   backToTop: {
@@ -23,6 +23,15 @@ const ButtonWrapper = styled.div`
   pointer-events: ${({ visible }) => (visible ? "all" : "none")};
 
   transition: all ease-in-out 0.3s;
+
+  background-color: ${colors.font};
+  color: ${colors.primaryContrast};
+
+  padding: 0.3rem;
+  border-radius: 50%;
+
+  width: 2rem;
+  height: 2rem;
 `;
 
 const ScrollToTopButton = React.memo(
@@ -56,7 +65,7 @@ const ScrollToTopButton = React.memo(
           data-balloon={intl.formatMessage(messages.backToTop)}
           data-balloon-pos="left"
         >
-          <FaChevronCircleUp size={32} />
+          <FaChevronUp size={22} />
         </div>
       </ButtonWrapper>
     );

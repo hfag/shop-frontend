@@ -19,6 +19,7 @@ import ScrollToTop from "./ScrollToTop";
 import { getLanguage } from "../reducers";
 import { pathnamesByLanguage } from "../utilities/urls";
 import ScrollToTopButton from "./ScrollToTopButton";
+import SupportButton from "./SupportButton";
 
 const Wrapper = React.memo(({ language, children }) => {
   return (
@@ -55,6 +56,7 @@ const Wrapper = React.memo(({ language, children }) => {
           </Flex>
         </main>
         <Footer />
+        <SupportButton />
         <ScrollToTopButton />
       </ScrollToTop>
     </ThemeProvider>

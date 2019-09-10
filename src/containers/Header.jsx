@@ -69,6 +69,13 @@ const LogoLeft = styled.div`
   height: 100%;
 `;
 
+const MobileSearchWrapper = styled.div`
+  margin-top: 1.5rem;
+  input {
+    background-color: #fff;
+  }
+`;
+
 const Head = React.memo(
   injectIntl(({ intl }) => {
     return (
@@ -262,6 +269,13 @@ const Header = React.memo(
             </Flex>
           </Navbar>
         </header>
+        <MobileSearchWrapper>
+          <MediaQuery lg down>
+            <Container>
+              <Searchbar />
+            </Container>
+          </MediaQuery>
+        </MobileSearchWrapper>
       </HeaderWrapper>
     );
   }

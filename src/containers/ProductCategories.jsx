@@ -45,7 +45,7 @@ const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const CategoryDescription = styled.div`
-  padding-bottom: 1rem;
+  margin: 1rem 0;
 
   & > div {
     height: 100%;

@@ -66,7 +66,7 @@ const StyledFooter = styled.footer`
 `;
 
 const BorderBox = styled(Box)`
-  padding-bottom: 1rem;
+  padding: 1rem 0;
   margin-bottom: 1rem;
 
   ${media.maxMedium`

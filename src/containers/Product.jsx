@@ -42,6 +42,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 import productMessages from "../i18n/product";
 import { setProductView, trackPageView } from "../utilities/analytics";
 import CrossSellFlex from "../components/Flex";
+import Flexbar from "../components/Flexbar";
 
 const messages = defineMessages({
   chooseAVariation: {
@@ -68,6 +69,18 @@ const messages = defineMessages({
   mustSelectVariation: {
     id: "Product.mustSelectVariation",
     defaultMessage: "Wählen Sie zuerst eine Variante aus!"
+  },
+  contactUs: {
+    id: "Product.contactUs",
+    defaultMessage: "Kontaktieren Sie uns für dieses Produkt"
+  },
+  contactEmail: {
+    id: "Product.contactEmail",
+    defaultMessage: "Senden Sie uns eine E-Mail"
+  },
+  contactCall: {
+    id: "Product.contactCall",
+    defaultMessage: "Rufen Sie uns an"
   },
   imageGallery: {
     id: "Product.imageGallery",
@@ -359,19 +372,33 @@ class Product extends React.PureComponent {
       discount = {},
       fields = [],
       galleryImageIds = [],
-      crossSellIds = []
+      crossSellIds = [],
+      type = "variable"
     } = product;
 
-    const selectedVariation = variations.find(variation =>
+    const selectedVariation =
+      variations.length === 0 ||
+      variations.find(variation =>
         isEqual(variation.attributes, selectedAttributes)
-      ),
-      { sku, price } = selectedVariation || {},
+      );
+
+    let sku, price, flashSale;
+    if (type === "simple") {
+      sku = product.sku;
+      price = product.price;
+
+      flashSale = sales.find(sale => sale.productId === id);
+    } else if (type === "variable") {
+      sku = selectedVariation ? selectedVariation.sku : undefined;
+      price = selectedVariation ? selectedVariation.price : undefined;
+
       flashSale = selectedVariation
         ? sales.find(
             sale =>
               sale.productId === id && sale.variationId === selectedVariation.id
           )
         : null;
+    }
 
     const discountRow = (discount.bulk &&
       selectedVariation &&
@@ -598,7 +625,7 @@ class Product extends React.PureComponent {
               </Box>
             )}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-              {selectedVariation ? (
+              {price && selectedVariation ? (
                 <div>
                   <h4>{intl.formatMessage(productMessages.price)}</h4>
                   <Bill
@@ -663,13 +690,36 @@ class Product extends React.PureComponent {
                     {intl.formatMessage(productMessages.addToCart)}
                   </Button>
                 </div>
-              ) : (
+              ) : price ? (
                 <div>
                   <h4>{intl.formatMessage(productMessages.price)}</h4>
                   <p>{intl.formatMessage(messages.mustSelectVariation)}</p>
                   <Button state="disabled">
                     {intl.formatMessage(productMessages.addToCart)}
                   </Button>
+                </div>
+              ) : (
+                <div>
+                  <p>{intl.formatMessage(messages.contactUs)}</p>
+                  <Flexbar>
+                    <Button
+                      onClick={() => {
+                        window.location = "mailto:info@feuerschutz.ch";
+                        return Promise.resolve();
+                      }}
+                    >
+                      {intl.formatMessage(messages.contactEmail)}
+                    </Button>
+                    <span style={{ width: 16 }}></span>
+                    <Button
+                      onClick={() => {
+                        window.location = "tel:+41628340540";
+                        return Promise.resolve();
+                      }}
+                    >
+                      {intl.formatMessage(messages.contactCall)}
+                    </Button>
+                  </Flexbar>
                 </div>
               )}
             </Box>
@@ -807,14 +857,14 @@ class Product extends React.PureComponent {
         </Card>
 
         {crossSellIds.length > 0 && (
-          <Card>
+          <Card style={{ marginBottom: 0 }}>
             <h2 ref={this.crossSelling} style={{ margin: 0 }}>
               {intl.formatMessage(messages.additionalProducts)}
             </h2>
           </Card>
         )}
 
-        <CrossSellFlex flexWrap="wrap">
+        <CrossSellFlex flexWrap="wrap" style={{ paddingBottom: 16 }}>
           {crossSellIds.map(productId => (
             <ProductItem key={productId} id={productId} />
           ))}

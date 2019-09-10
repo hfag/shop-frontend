@@ -24,6 +24,18 @@
     "defaultMessage": "Wählen Sie zuerst eine Variante aus!"
   },
   {
+    "id": "Product.contactUs",
+    "defaultMessage": "Kontaktieren Sie uns für dieses Produkt"
+  },
+  {
+    "id": "Product.contactEmail",
+    "defaultMessage": "Senden Sie uns eine E-Mail"
+  },
+  {
+    "id": "Product.contactCall",
+    "defaultMessage": "Rufen Sie uns an"
+  },
+  {
     "id": "Product.imageGallery",
     "defaultMessage": "Bildergalerie"
   },

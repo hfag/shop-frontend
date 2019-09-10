@@ -140,7 +140,7 @@ const ProductItem = React.memo(
               ) : (
                 <Placeholder text />
               )}
-              {product.minPrice && (
+              {!isNaN(product.minPrice) && product.minPrice && (
                 <div>
                   <Subtitle>
                     Ab{" "}

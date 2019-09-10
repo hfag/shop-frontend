@@ -7,6 +7,7 @@ import fuzzy from "fuzzy";
 import get from "lodash/get";
 import { defineMessages, injectIntl } from "react-intl";
 import debounce from "lodash/debounce";
+import { FaCartPlus, FaTimesCircle } from "react-icons/fa";
 
 import Button from "../components/Button";
 import { addShoppingCartItem } from "../actions/shopping-cart";
@@ -21,7 +22,7 @@ import {
   getLanguageFetchString,
   getLanguage
 } from "../reducers";
-import { colors } from "../utilities/style";
+import { colors, media } from "../utilities/style";
 import Price from "../components/Price";
 import Link from "../components/Link";
 import { pathnamesByLanguage } from "../utilities/urls";
@@ -77,9 +78,16 @@ const StyledTable = styled(ReactTable)`
       flex: 1 0 20% !important;
     }
     &:last-child {
-      flex: 0 0 25px !important;
+      flex: 0 0 36px !important;
     }
   }
+
+  ${media.maxSmall`
+  div.rt-td:first-child, div.rt-th:first-child, div.rt-td:nth-child(3), div.rt-th:nth-child(3), div.rt-td:last-child, div.rt-th:last-child {
+      flex: 0 0 0 !important;
+      display: none;
+    }
+  `}
 `;
 
 const BulkDiscountTable = styled.table`
@@ -154,6 +162,13 @@ const NameCell = React.memo(
                 .reduce((prev, curr) => [prev, ", ", curr])}
             </small>
           )}
+          <br />
+          <small>
+            <span>
+              <strong>{intl.formatMessage(productMessages.sku)}</strong>:{" "}
+              {product.sku}
+            </span>
+          </small>
           {isExpanded && (
             <AddToCart>
               <input
@@ -244,7 +259,9 @@ class SkuSelection extends React.PureComponent {
                     Object.keys(e.meta)
                       .map(key => `${key}: ${e.meta[key]}`)
                       .join(" ")
-                  : ""),
+                  : "") +
+                " " +
+                e.sku,
               minWidth: 150,
               filterAll: true,
               filterMethod: fuzzyFilter,
@@ -337,11 +354,19 @@ class SkuSelection extends React.PureComponent {
             },
             {
               Header: "",
-              width: 25,
+              width: 36,
               expander: true,
               Expander: ({ isExpanded, ...rest }) => (
                 <div>
-                  {isExpanded ? <span>&#x2299;</span> : <span>&#x2295;</span>}
+                  {isExpanded ? (
+                    <span>
+                      <FaTimesCircle size={24} />
+                    </span>
+                  ) : (
+                    <span>
+                      <FaCartPlus size={24} />
+                    </span>
+                  )}
                 </div>
               )
             }

@@ -34,6 +34,10 @@ const H1 = styled.h1`
   margin-top: 0;
 `;
 
+const H2 = styled.h2`
+  margin-bottom: 0;
+`;
+
 const Frontpage = React.memo(
   injectIntl(({ language, saleProducts, posts, intl }) => {
     return (
@@ -45,7 +49,7 @@ const Frontpage = React.memo(
             posts={posts}
           />
         )}
-        <h2>{intl.formatMessage(messages.categories)}</h2>
+        <H2>{intl.formatMessage(messages.categories)}</H2>
         <ProductCategories />
         <LatestPosts />
         <Card>

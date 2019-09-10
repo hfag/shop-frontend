@@ -118,7 +118,7 @@ const ProductItem = React.memo(
     }, [product, language]);
 
     return (
-      <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
+      <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
         {resellerDiscount && (
           <Discount
             data-balloon={

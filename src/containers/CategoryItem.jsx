@@ -113,7 +113,7 @@ const CategoryItem = React.memo(
     }
 
     return (
-      <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
+      <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
         <Link to={url}>
           <StyledCategory>
             <Thumbnail id={category ? category.thumbnailId : -1} />

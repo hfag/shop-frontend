@@ -8,7 +8,7 @@ import { borders, colors, shadows } from "../utilities/style";
 const StyledPagination = styled.div`
   ul {
     list-style: none;
-    margin: 1rem auto;
+    margin: 0 auto 1rem 0;
 
     background-color: #fff;
     padding: 0.25rem;

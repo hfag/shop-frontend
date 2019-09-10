@@ -38,18 +38,8 @@ import Card from "../components/Card";
 import { pathnamesByLanguage } from "../utilities/urls";
 import shop from "../i18n/shop";
 import { setProductCategoryView, trackPageView } from "../utilities/analytics";
-import Placeholder from "../components/Placeholder";
-import MediaQuery from "../components/MediaQuery";
 import Flexbar from "../components/Flexbar";
-import Button from "../components/Button";
 import Link from "../components/Link";
-
-const messages = defineMessages({
-  learnMoreAboutCategory: {
-    id: "ProductCategories.learnMoreAboutCategory",
-    defaultMessage: "Lerne mehr über diese Produkte"
-  }
-});
 
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
@@ -230,15 +220,6 @@ const ProductCategories = React.memo(
                       <p
                         dangerouslySetInnerHTML={{ __html: category.excerpt }}
                       ></p>
-                      {hasCategoryDescription && (
-                        <p>
-                          <Link styled onClick={scrollToDescription}>
-                            {intl.formatMessage(
-                              messages.learnMoreAboutCategory
-                            )}
-                          </Link>
-                        </p>
-                      )}
                     </Box>
                     {category.links && category.links.length > 0 && (
                       <Box width={[1, 1, 1 / 2, 1 / 2]}>
@@ -285,7 +266,6 @@ const ProductCategories = React.memo(
                   </Flex>
                 </InfoWrapper>
               )}
-              <hr />
               <Flex flexWrap="wrap">
                 {items.map(({ type, id }) =>
                   type === "category" ? (

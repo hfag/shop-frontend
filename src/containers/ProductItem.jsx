@@ -145,7 +145,7 @@ const ProductItem = React.memo(
                   <Subtitle>
                     Ab{" "}
                     <u>
-                      <Price>{parseInt(product.minPrice)}</Price>
+                      <Price>{product.minPrice}</Price>
                     </u>
                   </Subtitle>
                 </div>

@@ -47,7 +47,7 @@ export const mapItem = (data, index) => {
     sku,
     title,
     content,
-    minPrice,
+    minPrice: parseFloat(minPrice),
     description,
     thumbnailId,
     categoryIds,

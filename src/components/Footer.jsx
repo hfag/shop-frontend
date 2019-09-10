@@ -21,10 +21,6 @@ import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
 import { getLanguage } from "../reducers";
 
 const messages = defineMessages({
-  toHomepage: {
-    id: "Footer.toHomepage",
-    defaultMessage: "Zu unserer Firmen-Homepage"
-  },
   aboutTitle: {
     id: "Footer.aboutTitle",
     defaultMessage: "Über die Hauser Feuerschutz AG"
@@ -131,17 +127,6 @@ const Footer = React.memo(
                   Hauser Feuerschutz AG
                   <br />
                   Safety Signs and Security Products
-                  <br />
-                  <br />
-                  <Link
-                    styled
-                    target="_blank"
-                    href="https://feuerschutz.ch"
-                    rel="noopener"
-                    negative
-                  >
-                    {intl.formatMessage(messages.toHomepage)}
-                  </Link>
                 </BorderBox>
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
                   <IconList>

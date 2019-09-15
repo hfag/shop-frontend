@@ -41,6 +41,13 @@ import { setProductCategoryView, trackPageView } from "../utilities/analytics";
 import Flexbar from "../components/Flexbar";
 import Link from "../components/Link";
 
+const messages = defineMessages({
+  downloadsAndLinks: {
+    id: "ProductCategories.downloadsAndLinks",
+    defaultMessage: "Downloads und Links"
+  }
+});
+
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -223,7 +230,9 @@ const ProductCategories = React.memo(
                     </Box>
                     {category.links && category.links.length > 0 && (
                       <Box width={[1, 1, 1 / 2, 1 / 2]}>
-                        <H2>Downloads and Links</H2>
+                        <H2>
+                          {intl.formatMessage(messages.downloadsAndLinks)}
+                        </H2>
                         <DownloadList>
                           {category.links.map((link, index) => {
                             let Icon;
@@ -233,8 +242,8 @@ const ProductCategories = React.memo(
                             switch (link.type) {
                               case "pdf":
                                 Icon = FaRegFilePdf;
-                                url = link.file;
-                                target = "";
+                                url = link.url;
+                                target = "_blank";
                                 break;
 
                               case "video":

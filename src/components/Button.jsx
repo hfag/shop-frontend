@@ -29,6 +29,11 @@ const ButtonWrapper = styled.div`
     display: inline-block;
     width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
   }
+  .pb-container.success .pb-button,
+  .pb-container.error .pb-button,
+  .pb-container.loading .pb-button {
+    height: 2rem;
+  }
   .pb-container .pb-button {
     position: relative;
     border: none;
@@ -65,8 +70,8 @@ const ButtonWrapper = styled.div`
     transition: opacity 0.3s 0.1s;
   }
   .pb-container .pb-button svg {
-    height: ${({ height }) => height};
-    width: ${({ height }) => height};
+    height: 2rem;
+    width: 2rem;
     position: absolute;
     transform: translate(-50%, -50%);
     pointer-events: none;
@@ -155,7 +160,7 @@ class Button extends React.PureComponent {
     return (
       <div>
         <ButtonWrapper
-          height={this.props.height || "2rem"}
+          height={this.props.height || "auto"}
           fullWidth={this.props.fullWidth}
           float={this.props.float}
           state={state}

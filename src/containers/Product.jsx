@@ -701,16 +701,17 @@ class Product extends React.PureComponent {
               ) : (
                 <div>
                   <p>{intl.formatMessage(messages.contactUs)}</p>
-                  <Flexbar>
-                    <Button
-                      onClick={() => {
-                        window.location = "mailto:info@feuerschutz.ch";
-                        return Promise.resolve();
-                      }}
-                    >
-                      {intl.formatMessage(messages.contactEmail)}
-                    </Button>
-                    <span style={{ width: 16 }}></span>
+                  <Flex flexWrap="wrap">
+                    <div style={{ marginRight: 16, marginBottom: 16 }}>
+                      <Button
+                        onClick={() => {
+                          window.location = "mailto:info@feuerschutz.ch";
+                          return Promise.resolve();
+                        }}
+                      >
+                        {intl.formatMessage(messages.contactEmail)}
+                      </Button>
+                    </div>
                     <Button
                       onClick={() => {
                         window.location = "tel:+41628340540";
@@ -719,7 +720,7 @@ class Product extends React.PureComponent {
                     >
                       {intl.formatMessage(messages.contactCall)}
                     </Button>
-                  </Flexbar>
+                  </Flex>
                 </div>
               )}
             </Box>
@@ -835,19 +836,25 @@ class Product extends React.PureComponent {
                   </tr>
                   <tr>
                     <td>{intl.formatMessage(productMessages.product)}</td>
-                    <td>{title}</td>
+                    <td dangerouslySetInnerHTML={{ __html: title }}></td>
                   </tr>
                   {Object.keys(selectedAttributes).map(attributeKey => (
                     <tr key={attributeKey}>
-                      <td>{this.getAttributeLabel(attributeKey)}</td>
-                      <td>
-                        {selectedAttributes[attributeKey]
-                          ? this.getOptionLabel(
-                              attributeKey,
-                              selectedAttributes[attributeKey]
-                            )
-                          : "-"}
-                      </td>
+                      <td
+                        dangerouslySetInnerHTML={{
+                          __html: this.getAttributeLabel(attributeKey)
+                        }}
+                      ></td>
+                      <td
+                        dangerouslySetInnerHTML={{
+                          __html: selectedAttributes[attributeKey]
+                            ? this.getOptionLabel(
+                                attributeKey,
+                                selectedAttributes[attributeKey]
+                              )
+                            : "-"
+                        }}
+                      ></td>
                     </tr>
                   ))}
                 </tbody>

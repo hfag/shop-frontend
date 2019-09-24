@@ -45,6 +45,7 @@ const StyledFooter = styled.footer`
   padding: 1rem;
   background-color: ${colors.primary};
   color: #fff;
+  z-index: 1;
 
   img {
     width: 100%;

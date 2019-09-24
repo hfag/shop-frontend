@@ -27,7 +27,7 @@ paq.push(["enableHeartBeatTimer"]);
 paq.push(["setDomains", ["*.shop.feuerschutz.ch"]]);
 
 //tracks content impressions
-paq.push(["trackVisibleContentImpressions", true]);
+//paq.push(["trackVisibleContentImpressions", true]);
 
 /**
  * Tracks search results

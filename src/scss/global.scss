@@ -20,6 +20,16 @@ textarea {
   line-height: 1.4;
 }
 
+@media all and (min-width: 992px) {
+  .compass {
+    background-image: url("../../img/compass-gray.jpg");
+    background-repeat: no-repeat;
+    background-position: right 110%;
+    background-size: 30% auto;
+    background-attachment: fixed;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

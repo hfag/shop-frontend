@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
+import { Flex, Box } from "reflexbox";
 
 import Card from "../components/Card";
 import {
@@ -12,6 +13,7 @@ import { fetchPageIfNeeded } from "../actions/pages";
 import { stripTags } from "../utilities";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
+import { useCompass } from "../utilities/effects";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -21,8 +23,10 @@ const Page = React.memo(({ language, page = {}, fetchPageIfNeeded }) => {
     trackPageView();
   }, [page]);
 
+  useCompass();
+
   return (
-    <Card>
+    <React.Fragment>
       <Helmet>
         <title>{stripTags(page.title)} - Hauser Feuerschutz AG</title>
         <meta name="description" content={stripTags(page.description)} />
@@ -31,9 +35,16 @@ const Page = React.memo(({ language, page = {}, fetchPageIfNeeded }) => {
           href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].page}/${page.slug}`}
         />
       </Helmet>
-      <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
-      <div dangerouslySetInnerHTML={{ __html: page.content }} />
-    </Card>
+      <Flex flexWrap="wrap">
+        <Box width={[1, 1, 3 / 5, 3 / 5]} pr={3}>
+          <Card>
+            <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
+            <div dangerouslySetInnerHTML={{ __html: page.content }} />
+          </Card>
+        </Box>
+        <Box width={[0, 0, 1 / 2, 1 / 2]}></Box>
+      </Flex>
+    </React.Fragment>
   );
 });
 

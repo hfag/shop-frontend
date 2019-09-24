@@ -15,6 +15,7 @@ import Thumbnail from "./Thumbnail";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
 import Link from "../components/Link";
+import { useCompass } from "../utilities/effects";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -24,8 +25,10 @@ const Post = React.memo(({ language, post = {}, fetchPostIfNeeded }) => {
     trackPageView();
   }, [post]);
 
+  useCompass();
+
   return (
-    <Card>
+    <React.Fragment>
       <Helmet>
         <title>{stripTags(post.title)} - Hauser Feuerschutz AG</title>
         <meta name="description" content={stripTags(post.description)} />
@@ -34,9 +37,16 @@ const Post = React.memo(({ language, post = {}, fetchPostIfNeeded }) => {
           href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].post}/${post.slug}`}
         />
       </Helmet>
-      <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
-      <div dangerouslySetInnerHTML={{ __html: post.content }} />
-    </Card>
+      <Flex flexWrap="wrap">
+        <Box width={[1, 1, 3 / 5, 3 / 5]} pr={3}>
+          <Card>
+            <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
+            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          </Card>
+        </Box>
+        <Box width={[0, 0, 1 / 2, 1 / 2]}></Box>
+      </Flex>
+    </React.Fragment>
   );
 });
 

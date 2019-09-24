@@ -37,10 +37,12 @@ export const pathnamesByLanguage = {
 
 export const pageSlugsByLanguage = {
   de: {
-    companyAbout: "unser-unternehmen"
+    companyAbout: "unser-unternehmen",
+    downloads: "downloads"
   },
   fr: {
-    companyAbout: "unser-unternehmen"
+    companyAbout: "notre-entreprise",
+    downloads: "telechargements"
   }
 };
 

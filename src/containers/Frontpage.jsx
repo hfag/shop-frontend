@@ -61,7 +61,7 @@ const Frontpage = React.memo(
           <H1>Hauser Feuerschutz AG</H1>
           <p>{intl.formatMessage(messages.aboutCompany)}</p>
           <Link
-            to={`/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
+            to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
           >
             {intl.formatMessage(messages.moreAboutCompany)}
           </Link>

@@ -5,7 +5,8 @@ import Container from "components/Container";
 import {
   FaMapMarker as MapMarker,
   FaPhone as Phone,
-  FaEnvelope as Envelope
+  FaEnvelope as Envelope,
+  FaDownload
 } from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
 import { defineMessages, injectIntl } from "react-intl";
@@ -28,11 +29,15 @@ const messages = defineMessages({
   about: {
     id: "Footer.about",
     defaultMessage:
-      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung und Feuerschutz."
+      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte an in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz."
   },
   moreAbout: {
     id: "Footer.moreAbout",
     defaultMessage: "Weitere Informationen"
+  },
+  downloads: {
+    id: "Footer.downloads",
+    defaultMessage: "Downloads"
   }
 });
 
@@ -178,6 +183,22 @@ const Footer = React.memo(
                           </Link>
                         </td>
                       </tr>
+                      <tr>
+                        <td>
+                          <Icon>
+                            <FaDownload />
+                          </Icon>
+                        </td>
+                        <td>
+                          <Link
+                            styled
+                            to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].downloads}`}
+                            negative
+                          >
+                            {intl.formatMessage(messages.downloads)}
+                          </Link>
+                        </td>
+                      </tr>
                     </tbody>
                   </IconList>
                 </BorderBox>
@@ -186,7 +207,7 @@ const Footer = React.memo(
                   {intl.formatMessage(messages.about)}{" "}
                   <Link
                     styled
-                    to={`/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
+                    to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
                     negative
                   >
                     {intl.formatMessage(messages.moreAbout)}

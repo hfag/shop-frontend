@@ -36,13 +36,13 @@ const ButtonWrapper = styled.div`
 
 const ScrollToTopButton = React.memo(
   injectIntl(({ intl }) => {
-    const [visible, setVisible] = useState(false);
+    //const [visible, setVisible] = useState(false);
 
     const scrollToTop = useCallback(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }, []);
 
-    const onScroll = useCallback(
+    /*const onScroll = useCallback(
       throttle(() => {
         const top = window.pageYOffset || document.documentElement.scrollTop;
         if (!visible && top > 100) {
@@ -52,15 +52,15 @@ const ScrollToTopButton = React.memo(
         }
       }, 100),
       [visible, setVisible]
-    );
+    );*/
 
-    useEffect(() => {
+    /*useEffect(() => {
       window.addEventListener("scroll", onScroll);
       return () => window.removeEventListener("scroll", onScroll);
-    });
+    });*/
 
     return (
-      <ButtonWrapper visible={visible} onClick={scrollToTop}>
+      <ButtonWrapper visible onClick={scrollToTop}>
         <div
           data-balloon={intl.formatMessage(messages.backToTop)}
           data-balloon-pos="left"

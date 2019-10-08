@@ -284,12 +284,7 @@ const CheckoutForm = withFormik({
     ...values
   }),
   validationSchema: ({ countries }) => {
-    const states = [].concat.apply(
-      [],
-      Object.values(countries).map(country =>
-        country.states ? Object.keys(country.states) : []
-      )
-    );
+    const countryKeys = Object.keys(countries);
 
     return yup.object().shape({
       ship_to_different_address: yup.bool().default(false),
@@ -319,20 +314,20 @@ const CheckoutForm = withFormik({
 
       billing_country: yup
         .string()
-        .oneOf(Object.keys(countries))
+        .oneOf(countryKeys)
         .required(),
       shipping_country: yup
         .string()
-        .oneOf(Object.keys(countries))
+        .oneOf(countryKeys)
         .when("ship_to_different_address", {
           is: true,
           then: yup
             .string()
-            .oneOf(Object.keys(countries))
+            .oneOf(countryKeys)
             .required(),
           otherwise: yup
             .string()
-            .oneOf(Object.keys(countries))
+            .oneOf(countryKeys)
             .notRequired()
         }),
 
@@ -361,20 +356,34 @@ const CheckoutForm = withFormik({
       }),
 
       billing_state: yup
-        .string()
-        .oneOf(states)
-        .required(),
-      shipping_state: yup.string().when("ship_to_different_address", {
-        is: true,
-        then: yup
           .string()
-          .oneOf(states)
-          .required(),
-        otherwise: yup
+          .when("billing_country", (countryKey, schema) => {
+            if (!countryKey) {
+              return schema.notRequired();
+            }
+
+            const states = Object.keys(countries[countryKey].states);
+
+            return states.length > 0
+              ? schema.oneOf(states).required()
+              : schema.notRequired();
+          }),
+        shipping_state: yup
           .string()
-          .oneOf(states)
-          .notRequired()
-      }),
+          .when(
+            ["ship_to_different_address", "shipping_country"],
+            (shipToDifferentAddress, countryKey, schema) => {
+              if (!shipToDifferentAddress || !countryKey) {
+                return schema.notRequired();
+              }
+
+              const states = Object.keys(countries[countryKey].states);
+
+              return states.length > 0
+                ? schema.oneOf(states).required()
+                : schema.notRequired();
+            }
+          ),
 
       billing_phone: yup.string().required(),
       billing_email: yup

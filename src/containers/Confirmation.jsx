@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 import { defineMessages, injectIntl, FormattedMessage } from "react-intl";
@@ -26,11 +26,6 @@ const messages = defineMessages({
     id: "Confirmation.message",
     defaultMessage:
       "Vielen Dank für Ihre Bestellung bei der Hauser Feuerschutz AG. Sie werden in Kürze eine Bestätigungsemail erhalten."
-  },
-  support: {
-    id: "Confirmation.support",
-    defaultMessage:
-      "Bei Fragen können sie uns per E-Mail unter {mail} oder per Telefon unter {phone} erreichen."
   }
 });
 
@@ -60,6 +55,7 @@ const Confirmation = React.memo(
         <p>
           <FormattedMessage
             id="Confirmation.support"
+            defaultMessage="Bei Fragen können sie uns per E-Mail unter {mail} oder per Telefon unter {phone} erreichen."
             values={{
               mail: (
                 <Link href="mailto:info@feuerschutz.ch">

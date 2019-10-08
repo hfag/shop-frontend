@@ -66,9 +66,7 @@ const AccountDashboard = React.memo(
                     values={{
                       here: (
                         <Link
-                          to={`/${language}/${
-                            pathnamesByLanguage[language].account
-                          }/${pathnamesByLanguage[language].details}`}
+                          to={`/${language}/${pathnamesByLanguage[language].account}/${pathnamesByLanguage[language].details}`}
                         >
                           {intl.formatMessage(messages.here)}
                         </Link>
@@ -91,11 +89,7 @@ const AccountDashboard = React.memo(
                         values={{
                           here: (
                             <Link
-                              to={`/${language}/${
-                                pathnamesByLanguage[language].account
-                              }/${
-                                pathnamesByLanguage[language].billingAddress
-                              }`}
+                              to={`/${language}/${pathnamesByLanguage[language].account}/${pathnamesByLanguage[language].billingAddress}`}
                             >
                               {intl.formatMessage(messages.here)}
                             </Link>

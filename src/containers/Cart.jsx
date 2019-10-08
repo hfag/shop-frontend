@@ -208,14 +208,14 @@ const mapDispatchToProps = dispatch => ({
   },
   /**
    * Submits an order
-   * @param {string} language The language string
    * @param {Object} shippingAddress The shipping address
    * @param {Object} billingAddress All billing address
    * @param {string} [comments] Optional order comments
+   * @param {string} language The language string
    * @param {boolean} visualize Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  submitOrder(language, shippingAddress, billingAddress, comments, visualize) {
+  submitOrder(shippingAddress, billingAddress, comments, language, visualize) {
     return dispatch(
       submitOrder(
         shippingAddress,

@@ -42,6 +42,7 @@ export const createAllIds = (
           ? [
               ...state,
               ...action.items
+                .filter(item => item)
                 .map(item => item[uniqueProperty])
                 .filter(
                   (id, index, ids) =>
@@ -105,6 +106,11 @@ export const createById = (name, uniqueProperty = "id", customCases = null) => (
         : {
             ...state,
             ...action.items.reduce((object, item) => {
+              //skip invalid items
+              if (!item) {
+                return object;
+              }
+
               object[item[uniqueProperty]] = {
                 ...state[item[uniqueProperty]],
                 ...item,

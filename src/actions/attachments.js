@@ -12,24 +12,36 @@ const itemName = "attachment";
  * @param {Object} item The item to map
  * @returns {Object} The mapped item
  */
-export const mapItem = ({
-  id,
-  date,
-  caption,
-  mime_type: mimeType,
-  media_details: { width, height, sizes },
-  source_url: url,
-  caption: { rendered: renderedCaption }
-}) => ({
-  id,
-  date,
-  caption: renderedCaption,
-  mimeType,
-  width,
-  height,
-  url,
-  sizes
-});
+export const mapItem = item => {
+  try {
+    const {
+      id,
+      date,
+      caption,
+      mime_type: mimeType,
+      media_details,
+      source_url: url,
+      caption: { rendered: renderedCaption }
+    } = item;
+
+    const { width, height, sizes } = media_details;
+
+    return {
+      id,
+      date,
+      caption: renderedCaption,
+      mimeType,
+      width,
+      height,
+      url,
+      sizes
+    };
+  } catch (e) {
+    console.error(e);
+    console.error("Loading invalid image", item);
+    return null;
+  }
+};
 
 /**
  * Action called before and after fetching an item

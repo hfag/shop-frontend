@@ -13,7 +13,6 @@ import { fetchPageIfNeeded } from "../actions/pages";
 import { stripTags } from "../utilities";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
-import { useCompass } from "../utilities/effects";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -22,8 +21,6 @@ const Page = React.memo(({ language, page = {}, fetchPageIfNeeded }) => {
     fetchPageIfNeeded();
     trackPageView();
   }, [page]);
-
-  useCompass();
 
   return (
     <React.Fragment>
@@ -35,15 +32,10 @@ const Page = React.memo(({ language, page = {}, fetchPageIfNeeded }) => {
           href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].page}/${page.slug}`}
         />
       </Helmet>
-      <Flex flexWrap="wrap">
-        <Box width={[1, 1, 3 / 5, 3 / 5]} pr={3}>
-          <Card>
-            <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
-            <div dangerouslySetInnerHTML={{ __html: page.content }} />
-          </Card>
-        </Box>
-        <Box width={[0, 0, 1 / 2, 1 / 2]}></Box>
-      </Flex>
+      <Card>
+        <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
+        <div dangerouslySetInnerHTML={{ __html: page.content }} />
+      </Card>
     </React.Fragment>
   );
 });

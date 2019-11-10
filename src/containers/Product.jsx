@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
 import isEqual from "lodash/isEqual";
-import Lightbox from "react-images";
 import { Helmet } from "react-helmet";
 import queryString from "query-string";
 import { defineMessages, injectIntl, FormattedMessage } from "react-intl";
@@ -43,6 +42,7 @@ import productMessages from "../i18n/product";
 import { setProductView, trackPageView } from "../utilities/analytics";
 import CrossSellFlex from "../components/Flex";
 import Flexbar from "../components/Flexbar";
+import LightboxGallery from "../components/LightboxGallery";
 
 const messages = defineMessages({
   chooseAVariation: {
@@ -345,6 +345,7 @@ class Product extends React.PureComponent {
       categories,
       addToShoppingCart,
       resellerDiscount,
+      galleryImageIds = [],
       galleryAttachments = [],
       sales,
       intl
@@ -371,7 +372,6 @@ class Product extends React.PureComponent {
       variations = [],
       discount = {},
       fields = [],
-      galleryImageIds = [],
       crossSellIds = [],
       type = "variable"
     } = product;
@@ -730,82 +730,7 @@ class Product extends React.PureComponent {
               <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
                 <div dangerouslySetInnerHTML={{ __html: content }} />
                 <h2>{intl.formatMessage(messages.imageGallery)}</h2>
-                <Flex flexWrap="wrap">
-                  <LightboxBox
-                    width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
-                    px={2}
-                    mb={2}
-                    onClick={() =>
-                      this.setState({
-                        currentLightboxImage: 0,
-                        isLightboxOpen: true
-                      })
-                    }
-                  >
-                    <Thumbnail id={thumbnailId} />
-                  </LightboxBox>
-                  {galleryImageIds.map((imageId, index) => (
-                    <LightboxBox
-                      key={imageId}
-                      width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
-                      px={2}
-                      mb={2}
-                      onClick={() =>
-                        this.setState({
-                          currentLightboxImage: index + 1,
-                          isLightboxOpen: true
-                        })
-                      }
-                    >
-                      <Thumbnail id={imageId} size="thumbnail" />
-                    </LightboxBox>
-                  ))}
-                </Flex>
-                <Lightbox
-                  images={galleryAttachments
-                    .filter(e => e)
-                    .map(attachment => ({
-                      src: attachment.url || "",
-                      /*caption: attachment.caption,*/
-                      /*srcSet: Object.values(attachment.sizes)
-                        .sort((a, b) => a.width - b.width)
-                        .map(size => `${size.source_url} ${size.width}w`),*/
-                      thumbnail:
-                        attachment.sizes &&
-                        attachment.sizes.thumbnail &&
-                        attachment.sizes.thumbnail.source_url
-                    }))}
-                  isOpen={isLightboxOpen}
-                  currentImage={currentLightboxImage}
-                  onClickPrev={() =>
-                    this.setState({
-                      currentLightboxImage: Math.max(
-                        currentLightboxImage - 1,
-                        0
-                      )
-                    })
-                  }
-                  onClickNext={() =>
-                    this.setState({
-                      currentLightboxImage: Math.min(
-                        currentLightboxImage + 1,
-                        galleryAttachments.length - 1
-                      )
-                    })
-                  }
-                  onClose={() => this.setState({ isLightboxOpen: false })}
-                  imageCountSeparator={" von "}
-                  leftArrowTitle={intl.formatMessage(messages.previousImage)}
-                  rightArrowTitle={intl.formatMessage(messages.nextImage)}
-                  closeButtonTitle={intl.formatMessage(messages.closeLightbox)}
-                  backdropClosesModal={true}
-                  preventScroll={false}
-                  showThumbnails={true}
-                  onClickThumbnail={index =>
-                    this.setState({ currentLightboxImage: index })
-                  }
-                  theme={{}}
-                />
+                <LightboxGallery galleryImageIds={galleryImageIds} />
               </Box>
             )}
             <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
@@ -911,12 +836,10 @@ const mapStateToProps = (
       state,
       product && product.id
     ),
-    galleryAttachments:
-      galleryImageIds.length > 0
-        ? galleryImageIds.map(attachmentId =>
-            getAttachmentById(state, attachmentId)
-          )
-        : [],
+    galleryImageIds,
+    galleryAttachments: galleryImageIds.map(attachmentId =>
+      getAttachmentById(state, attachmentId)
+    ),
     sales: getSales(state)
   };
 };

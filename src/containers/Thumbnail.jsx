@@ -24,17 +24,17 @@ const StyledThumbail = styled.div`
  */
 class Thumbnail extends React.PureComponent {
   componentWillMount = () => {
-    const { id, fetchThumbnail, thumbnail } = this.props;
+    const { id, fetchThumbnail, thumbnail, passive = false } = this.props;
 
-    if (id > 0 && !thumbnail) {
+    if (id > 0 && !thumbnail && !passive) {
       fetchThumbnail();
     }
   };
 
   componentDidUpdate() {
-    const { id, fetchThumbnail, thumbnail } = this.props;
+    const { id, fetchThumbnail, thumbnail, passive = false } = this.props;
 
-    if (id > 0 && !thumbnail) {
+    if (id > 0 && !thumbnail && !passive) {
       fetchThumbnail();
     }
   }

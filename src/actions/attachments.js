@@ -2,7 +2,8 @@ import {
   createFetchSingleItemAction,
   createFetchSingleItemThunk,
   createFetchItemsAction,
-  createFetchItemPageThunk
+  createFetchItemPageThunk,
+  createFetchAllItemsThunk
 } from "utilities/action";
 
 const itemName = "attachment";
@@ -103,7 +104,31 @@ export const fetchAttachments = createFetchItemPageThunk(
     order = "desc",
     orderby = "date"
   ) =>
-    `${language}/wp-json/wp/v2/media?page=${page}&per_page=${perPage}${
+    `/${language}/wp-json/wp/v2/media?page=${page}&per_page=${perPage}${
+      itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
+    }`,
+  mapItem
+);
+
+/**
+ * Fetches all items
+ * @param {number} perPage How many items should be fetched per page
+ * @param {string} language The language string
+ * @param {boolean} visualize Whether the progress of this action should be visualized
+ * @returns {function} The redux thunk
+ */
+export const fetchAllAttachments = createFetchAllItemsThunk(
+  fetchAttachmentsAction,
+  (
+    page,
+    perPage,
+    language,
+    itemIds = [],
+    categoryIds = [],
+    order = "desc",
+    orderby = "date"
+  ) =>
+    `/${language}/wp-json/wp/v2/media?page=${page}&per_page=${perPage}${
       itemIds.length > 0 ? "&include[]=" + itemIds.join("&include[]=") : ""
     }`,
   mapItem

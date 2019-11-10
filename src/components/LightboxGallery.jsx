@@ -65,68 +65,71 @@ const reducer = (state, action) => {
 };
 
 const LightboxGallery = React.memo(
-  injectIntl(({ intl, galleryImageIds, galleryAttachments }) => {
-    const [{ isOpen, currentImage }, dispatch] = useReducer(reducer, {
-      currentImage: 0,
-      isOpen: false
-    });
+  injectIntl(
+    ({ intl, galleryImageIds, galleryAttachments, passive = false }) => {
+      const [{ isOpen, currentImage }, dispatch] = useReducer(reducer, {
+        currentImage: 0,
+        isOpen: false
+      });
 
-    return (
-      <React.Fragment>
-        <Flex flexWrap="wrap">
-          {galleryImageIds.map((imageId, index) => (
-            <LightboxBox
-              key={imageId}
-              width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
-              px={2}
-              mb={2}
-              onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}
-            >
-              <Thumbnail id={imageId} size="thumbnail" />
-            </LightboxBox>
-          ))}
-        </Flex>
-        <Lightbox
-          images={galleryAttachments
-            .filter(e => e)
-            .map(attachment => ({
-              src: attachment.url || "",
-              /*caption: attachment.caption,*/
-              /*srcSet: Object.values(attachment.sizes)
+      return (
+        <React.Fragment>
+          <Flex flexWrap="wrap">
+            {galleryImageIds.map((imageId, index) => (
+              <LightboxBox
+                key={imageId}
+                width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
+                px={2}
+                mb={2}
+                onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}
+              >
+                <Thumbnail id={imageId} size="thumbnail" passive={passive} />
+              </LightboxBox>
+            ))}
+          </Flex>
+          <Lightbox
+            images={galleryAttachments
+              .filter(e => e)
+              .map(attachment => ({
+                src: attachment.url || "",
+                /*caption: attachment.caption,*/
+                /*srcSet: Object.values(attachment.sizes)
           .sort((a, b) => a.width - b.width)
           .map(size => `${size.source_url} ${size.width}w`),*/
-              thumbnail:
-                attachment.sizes &&
-                attachment.sizes.thumbnail &&
-                attachment.sizes.thumbnail.source_url
-            }))}
-          isOpen={isOpen}
-          currentImage={currentImage}
-          onClickPrev={() => dispatch({ type: "PREVIOUS_IMAGE" })}
-          onClickNext={() =>
-            dispatch({
-              type: "NEXT_IMAGE",
-              maxIndex: galleryImageIds.length - 1
-            })
-          }
-          onClose={() => dispatch({ type: "CLOSE_LIGHTBOX" })}
-          imageCountSeparator={` ${intl.formatMessage(messages.imageXOfY)} `}
-          leftArrowTitle={intl.formatMessage(messages.previousImage)}
-          rightArrowTitle={intl.formatMessage(messages.nextImage)}
-          closeButtonTitle={intl.formatMessage(messages.closeLightbox)}
-          backdropClosesModal={true}
-          preventScroll={false}
-          showThumbnails={true}
-          onClickThumbnail={index => dispatch({ type: "GOTO_IMAGE", index })}
-          theme={{}}
-        />
-      </React.Fragment>
-    );
-  })
+                thumbnail:
+                  attachment.sizes &&
+                  attachment.sizes.thumbnail &&
+                  attachment.sizes.thumbnail.source_url
+              }))}
+            isOpen={isOpen}
+            currentImage={currentImage}
+            onClickPrev={() => dispatch({ type: "PREVIOUS_IMAGE" })}
+            onClickNext={() =>
+              dispatch({
+                type: "NEXT_IMAGE",
+                maxIndex: galleryImageIds.length - 1
+              })
+            }
+            onClose={() => dispatch({ type: "CLOSE_LIGHTBOX" })}
+            imageCountSeparator={` ${intl.formatMessage(messages.imageXOfY)} `}
+            leftArrowTitle={intl.formatMessage(messages.previousImage)}
+            rightArrowTitle={intl.formatMessage(messages.nextImage)}
+            closeButtonTitle={intl.formatMessage(messages.closeLightbox)}
+            backdropClosesModal={true}
+            preventScroll={false}
+            showThumbnails={true}
+            onClickThumbnail={index => dispatch({ type: "GOTO_IMAGE", index })}
+            theme={{}}
+          />
+        </React.Fragment>
+      );
+    }
+  )
 );
 
 LightboxGallery.propTypes = {
-  galleryImageIds: PropTypes.arrayOf(PropTypes.number)
+  galleryImageIds: PropTypes.arrayOf(PropTypes.number),
+  passive: PropTypes.bool
 };
 
 const mapStateToProps = (state, { galleryImageIds }) => ({

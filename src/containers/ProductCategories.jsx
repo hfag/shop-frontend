@@ -40,6 +40,7 @@ import shop from "../i18n/shop";
 import { setProductCategoryView, trackPageView } from "../utilities/analytics";
 import Flexbar from "../components/Flexbar";
 import Link from "../components/Link";
+import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 
 const messages = defineMessages({
   downloadsAndLinks: {
@@ -305,11 +306,7 @@ const ProductCategories = React.memo(
               {hasCategoryDescription && (
                 <CategoryDescription ref={descriptionRef}>
                   <Card>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: category.description
-                      }}
-                    />
+                    <UnsafeHTMLContent content={category.description} />
                   </Card>
                 </CategoryDescription>
               )}

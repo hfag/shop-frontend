@@ -10,6 +10,7 @@ import Thumbnail from "../containers/Thumbnail";
 import { colors, shadows, borders } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
 import SalesFlex from "./Flex";
+import UnsafeHTMLContent from "./UnsafeHTMLContent";
 
 const messages = defineMessages({
   newsAndDiscounts: {
@@ -74,11 +75,7 @@ const Post = React.memo(({ language, post }) => {
             </Box>
             <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
               <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: post.description
-                }}
-              />
+              <UnsafeHTMLContent content={post.description} />
             </Box>
           </Flex>
         </Link>

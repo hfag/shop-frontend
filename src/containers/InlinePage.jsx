@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { getPageBySlug, getLanguageFetchString } from "../reducers";
 import { fetchPageIfNeeded } from "../actions/pages";
 import { borders, colors } from "../utilities/style";
+import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 
 const InlinePageContainer = styled.div`
   max-height: 200px;
@@ -32,7 +33,7 @@ class InlinePage extends React.PureComponent {
     return (
       <InlinePageContainer>
         <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
-        <div dangerouslySetInnerHTML={{ __html: page.content }} />
+        <UnsafeHTMLContent content={page.content} />
       </InlinePageContainer>
     );
   };

@@ -18,6 +18,7 @@ import {
   getLanguage
 } from "../reducers";
 import LatesPostFlex from "../components/Flex";
+import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 
 const messages = defineMessages({
   title: {
@@ -59,10 +60,7 @@ const Post = React.memo(({ language, post }) => {
             </Box>
             <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
               <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: post.description
-                }}
+              <UnsafeHTMLContent content={post.description} />
               />
             </Box>
           </Flex>

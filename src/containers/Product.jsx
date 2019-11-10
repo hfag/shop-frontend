@@ -43,6 +43,7 @@ import { setProductView, trackPageView } from "../utilities/analytics";
 import CrossSellFlex from "../components/Flex";
 import Flexbar from "../components/Flexbar";
 import LightboxGallery from "../components/LightboxGallery";
+import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 
 const messages = defineMessages({
   chooseAVariation: {
@@ -728,7 +729,7 @@ class Product extends React.PureComponent {
           <Flex flexWrap="wrap">
             {content && (
               <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
-                <div dangerouslySetInnerHTML={{ __html: content }} />
+                <UnsafeHTMLContent content={content} />
                 <h2>{intl.formatMessage(messages.imageGallery)}</h2>
                 <LightboxGallery galleryImageIds={galleryImageIds} />
               </Box>

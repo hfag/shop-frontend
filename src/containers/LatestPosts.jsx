@@ -61,7 +61,6 @@ const Post = React.memo(({ language, post }) => {
             <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
               <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
               <UnsafeHTMLContent content={post.description} />
-              />
             </Box>
           </Flex>
         </Link>

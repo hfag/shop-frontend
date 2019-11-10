@@ -137,6 +137,7 @@
     "webpack-flush-chunks": "^2.0.1",
     "webpack-hot-middleware": "^2.19.1",
     "webpack-node-externals": "^1.7.2",
+    "xmldom": "^0.1.27",
     "yup": "^0.26.6"
   }
 }

@@ -66,7 +66,7 @@
   "Product.reset": "Remise à l'état initial",
   "Product.resetSelection": "Remise à l'état initial",
   "Product.resellerDiscountMessage": "En tant que revendeur, vous bénéficiez d'un rabais de {resellerDiscount}% sur ce produit.",
-  "Product.mustSelectVariation": "Sélectionnez d'abord une variante!",
+  "Product.mustSelectVariation": "D'abord sélectionnez une variante!",
   "Product.contactUs": "Contactez-nous pour ce produit",
   "Product.contactEmail": "Envoyez-nous un e-mail",
   "Product.contactCall": "Téléphonez nous",

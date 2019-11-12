@@ -62,11 +62,6 @@ const messages = defineMessages({
     id: "Product.resetSelection",
     defaultMessage: "Auswahl zurücksetzen"
   },
-  resellerDiscountMessage: {
-    id: "Product.resellerDiscountMessage",
-    defaultMessage:
-      "Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
-  },
   mustSelectVariation: {
     id: "Product.mustSelectVariation",
     defaultMessage: "Wählen Sie zuerst eine Variante aus!"
@@ -390,8 +385,8 @@ class Product extends React.PureComponent {
 
       flashSale = sales.find(sale => sale.productId === id);
     } else if (type === "variable") {
-      sku = selectedVariation ? selectedVariation.sku : undefined;
-      price = selectedVariation ? selectedVariation.price : undefined;
+      sku = selectedVariation ? selectedVariation.sku : product.sku;
+      price = selectedVariation ? selectedVariation.price : null;
 
       flashSale = selectedVariation
         ? sales.find(
@@ -619,6 +614,7 @@ class Product extends React.PureComponent {
                 <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
                 <FormattedMessage
                   id="Product.resellerDiscountMessage"
+                  defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
                   values={{
                     resellerDiscount
                   }}
@@ -691,7 +687,7 @@ class Product extends React.PureComponent {
                     {intl.formatMessage(productMessages.addToCart)}
                   </Button>
                 </div>
-              ) : price ? (
+              ) : price == null ? (
                 <div>
                   <h4>{intl.formatMessage(productMessages.price)}</h4>
                   <p>{intl.formatMessage(messages.mustSelectVariation)}</p>

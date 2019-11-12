@@ -15,7 +15,8 @@ export const pathnamesByLanguage = {
     billingAddress: "rechnungsadresse",
     shippingAddress: "lieferadresse",
     cart: "warenkorb",
-    confirmation: "bestaetigung"
+    confirmation: "bestaetigung",
+    tos: "agbs"
   },
   fr: {
     productCategory: "produit-categorie",
@@ -31,7 +32,8 @@ export const pathnamesByLanguage = {
     billingAddress: "adresse-de-facturation",
     shippingAddress: "adresse-de-livraison",
     cart: "panier-d-achat",
-    confirmation: "confirmation"
+    confirmation: "confirmation",
+    tos: "conditions-generales"
   }
 };
 

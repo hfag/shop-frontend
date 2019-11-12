@@ -16,10 +16,6 @@
     "defaultMessage": "Auswahl zurücksetzen"
   },
   {
-    "id": "Product.resellerDiscountMessage",
-    "defaultMessage": "Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
-  },
-  {
     "id": "Product.mustSelectVariation",
     "defaultMessage": "Wählen Sie zuerst eine Variante aus!"
   },
@@ -58,5 +54,9 @@
   {
     "id": "Product.closeLightBox",
     "defaultMessage": "Schliessen (Esc)"
+  },
+  {
+    "id": "Product.resellerDiscountMessage",
+    "defaultMessage": "Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
   }
 ]

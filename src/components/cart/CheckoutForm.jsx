@@ -300,7 +300,7 @@ const InnerCheckoutForm = React.memo(
           </Box>
         </Flex>
         <br />
-        <InlinePage slug="agbs" />
+        <InlinePage slug={pathnamesByLanguage[intl.locale].tos} />
         <InputField id="terms" name="terms" type="checkbox" value="1">
           <label htmlFor="terms">
             {intl.formatMessage(messages.acceptTos)}

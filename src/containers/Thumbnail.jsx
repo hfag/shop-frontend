@@ -47,7 +47,7 @@ const Thumbnail = React.memo(
     if (!thumbnail || !thumbnailUrl) {
       return (
         <StyledThumbail>
-          <Placeholder text />
+          <Placeholder />
         </StyledThumbail>
       );
     }

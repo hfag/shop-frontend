@@ -21,7 +21,7 @@ const Orders = React.memo(
         {orders.length === 0 && <div>{intl.formatMessage(order.noOrders)}</div>}
         <div>
           {orders.map(order => (
-            <Order key={order.id} order={order} />
+            <Order key={order.id} order={order} language={intl.locale} />
           ))}
         </div>
       </OrdersWrapper>

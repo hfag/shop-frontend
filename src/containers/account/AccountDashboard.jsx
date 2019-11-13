@@ -122,7 +122,12 @@ const AccountDashboard = React.memo(
                 .sort((a, b) => a.created - b.created)
                 .slice(0, 3)
                 .map(order => (
-                  <Order key={order.id} order={order} compact />
+                  <Order
+                    key={order.id}
+                    order={order}
+                    compact
+                    language={language}
+                  />
                 ))}
             </Box>
           </Flex>

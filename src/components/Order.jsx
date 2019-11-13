@@ -76,7 +76,8 @@ class Order extends React.PureComponent {
         status,
         created
       },
-      compact = false
+      compact = false,
+      language
     } = this.props;
 
     const date = new Date(created * 1000);
@@ -106,7 +107,15 @@ class Order extends React.PureComponent {
                 <OrderMeta>
                   {Object.keys(item.attributes).map((key, index) => (
                     <span key={index}>
-                      <strong>{key}</strong>: {item.attributes[key]}
+                      <strong
+                        dangerouslySetInnerHTML={{ __html: key }}
+                      ></strong>
+                      :{" "}
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: item.attributes[key]
+                        }}
+                      ></span>
                     </span>
                   ))}
                 </OrderMeta>

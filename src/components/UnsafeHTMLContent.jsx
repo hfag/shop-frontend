@@ -29,9 +29,12 @@ const UnsafeHTMLContent = React.memo(
           .filter(s => s)
           .map((s, index) => {
             if (s.startsWith("[gallery")) {
-              const regex = /ids=.([0-9,]*)./g;
+              const regex = /ids=\s*.([0-9,]*)./g;
               const matches = regex.exec(s);
-              const ids = matches[1].split(",").map(id => parseInt(id));
+              const ids = matches[1]
+                .split(",")
+                .map(id => parseInt(id))
+                .filter(i => !imagesToFetch.current.includes(i));
               imagesToFetch.current.push(...ids);
 
               return (
@@ -51,7 +54,14 @@ const UnsafeHTMLContent = React.memo(
         setFetchedImages(true);
       } else {
         //we got more, yikes
-        dispatch(fetchAllAttachments(50, locale, true, imagesToFetch.current));
+        const toFetch = imagesToFetch.current;
+        dispatch(fetchAllAttachments(50, locale, true, toFetch)).then(() => {
+          imagesToFetch.current = imagesToFetch.current.filter(
+            e => !toFetch.includes(e)
+          );
+
+          setFetchedImages(imagesToFetch.current.length === 0);
+        });
       }
     }, [imagesToFetch.current.length]);
 

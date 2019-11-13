@@ -14,8 +14,8 @@ export default defineMessages({
     defaultMessage: "Kategorie"
   },
   categories: {
-    id: "product.categories",
-    defaultMessage: "Kategorien"
+    id: "product.ourProducts",
+    defaultMessage: "Unsere Produkte"
   },
   variation: {
     id: "product.variation",

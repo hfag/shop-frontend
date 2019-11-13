@@ -16,12 +16,11 @@ const UnstyledLink = styled.a`
   font-weight: ${({ active }) => (active ? "bold" : "normal")};
   display: ${({ block }) => (block ? "inline-block" : "inline")};
 
-  color: ${({ negative }) =>
-    negative ? colors.primaryContrast : colors.primary};
+  color: ${({ negative }) => (negative ? colors.primaryContrast : colors.font)};
 `;
 
 const StyledLink = styled(UnstyledLink)`
-  text-decoration: underline;
+  border-bottom: ${colors.font} 1px solid;
 `;
 
 /**

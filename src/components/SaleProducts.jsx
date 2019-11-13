@@ -23,7 +23,8 @@ const SaleWrapper = styled.div`
   position: relative;
   padding: 0.5rem;
   background-color: #fff;
-  box-shadow: ${shadows.y};
+
+  border: ${colors.primaryContrast} 1px solid;
   border-radius: ${borders.radius};
   word-break: break-word;
   hyphens: auto;
@@ -31,7 +32,7 @@ const SaleWrapper = styled.div`
 
   h3 {
     margin-top: 0;
-    margin-bottom: 0.25rem;
+    margin-bottom: 1rem;
   }
 
   p {

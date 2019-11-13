@@ -31,7 +31,7 @@ const messages = defineMessages({
 
 const StyledProduct = styled.div`
   background-color: #fff;
-  box-shadow: ${shadows.y};
+  border: ${colors.primaryContrast} 1px solid;
   border-radius: ${borders.radius};
 
   /*display: flex; See https://bugzilla.mozilla.org/show_bug.cgi?id=958714*/
@@ -96,10 +96,10 @@ const Discount = styled.div`
 
   padding: 0.25rem;
   text-align: center;
-  line-height: 1.25rem;
+  line-height: 1.6rem;
 
   background-color: #fff;
-  box-shadow: ${shadows.y};
+  border: ${colors.primaryContrast} 1px solid;
   border-radius: ${borders.radius};
 
   z-index: 2;

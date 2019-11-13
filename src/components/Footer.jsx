@@ -14,8 +14,7 @@ import { connect } from "react-redux";
 
 import { colors, media } from "../utilities/style";
 import Link from "./Link";
-import LogoNegative from "../../img/logo/logo_negative.svg";
-import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
+import LogoNegative from "../../img/logo/logo.svg";
 import MediaQuery from "./MediaQuery";
 import Placeholder from "./Placeholder";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
@@ -43,8 +42,9 @@ const messages = defineMessages({
 
 const StyledFooter = styled.footer`
   padding: 1rem;
+  border-top: ${colors.primaryContrast} 1px solid;
   background-color: ${colors.primary};
-  color: #fff;
+  color: ${colors.primaryContrast};
   z-index: 1;
 
   img {
@@ -97,7 +97,7 @@ const IconList = styled.table`
 
 const Icon = styled.span`
   padding: 0.5rem;
-  border: #fff 1px solid;
+  border: ${colors.primaryContrast} 1px solid;
   border-radius: 50%;
   display: inline-block;
 

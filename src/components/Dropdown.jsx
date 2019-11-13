@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { borders, shadows } from "../utilities/style";
+import { borders, shadows, colors } from "../utilities/style";
 
 const Dropdown = styled.div`
   position: absolute;
@@ -18,7 +18,7 @@ const Dropdown = styled.div`
   background-color: #fff;
   color: #000;
   border-radius: ${borders.radius};
-  box-shadow: ${shadows.y};
+  border: ${colors.primaryContrast} 1px solid;
 `;
 
 export default Dropdown;

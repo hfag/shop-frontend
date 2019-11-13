@@ -24,7 +24,7 @@ import product from "../i18n/product";
 const messages = defineMessages({
   placeholder: {
     id: "Searchbar.placeholder",
-    defaultMessage: "Suche nach einem Produkt"
+    defaultMessage: "Suchen Sie nach einem Produkt"
   },
   showMore: {
     id: "Searchbar.showMore",
@@ -61,9 +61,11 @@ const SuggestionContainer = styled.div`
   max-height: 80vh;
   overflow-y: scroll;
 
-  color: ${colors.primary};
+  color: ${colors.primaryContrast};
   background-color: ${colors.backgroundOverlay};
-  box-shadow: ${shadows.y};
+  border-left: ${colors.primaryContrast} 1px solid;
+  border-right: ${colors.primaryContrast} 1px solid;
+  border-bottom: ${colors.primaryContrast} 1px solid;
 
   border-bottom-left-radius: 0.2rem;
   border-bottom-right-radius: 0.2rem;
@@ -102,6 +104,7 @@ const SearchInput = styled.input`
   font-size: 1rem;
 
   border: none;
+  border: ${colors.primaryContrast} 1px solid;
   border-radius: 0.2rem;
   height: 100%;
   width: 100%;

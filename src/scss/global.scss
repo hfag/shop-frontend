@@ -15,8 +15,8 @@ select,
 textarea {
   font-family: "Helvetica Neue Condensed", "Helvetica", "Arial", sans-serif;
   font-weight: 300;
-  background-color: #f5f5f5;
-  color: #464646;
+  background-color: #fff;
+  color: #343434;
   line-height: 1.4;
 }
 
@@ -41,14 +41,14 @@ textarea {
   right: 0;
 
   height: 3px;
-  background-color: #fff;
+  background-color: #343434;
 
   z-index: 99999;
 }
 
 hr {
   border: none;
-  border-top: #ddd 1px solid;
+  border-top: #343434 1px solid;
 }
 
 img {
@@ -63,4 +63,42 @@ a {
   display: inline;
 
   color: #000;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+h1,
+h2,
+h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.25rem;
+}
+h4 {
+  font-size: 1rem;
+}
+h5 {
+  font-size: 0.875rem;
+}
+h6 {
+  font-size: 0.75rem;
 }

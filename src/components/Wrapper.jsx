@@ -21,7 +21,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 import ScrollToTopButton from "./ScrollToTopButton";
 import SupportButton from "./SupportButton";
 
-const Wrapper = React.memo(({ language, children }) => {
+const Wrapper = React.memo(({ language, location: { pathname }, children }) => {
   return (
     <ThemeProvider
       theme={{
@@ -49,7 +49,7 @@ const Wrapper = React.memo(({ language, children }) => {
             </Box>
             <Box width={[1, 1, 1, 5 / 6]}>
               <Container>
-                <Breadcrumbs />
+                {pathname !== "/de" && pathname !== "/fr" && <Breadcrumbs />}
                 {children}
               </Container>
             </Box>

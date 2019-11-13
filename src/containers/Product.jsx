@@ -106,6 +106,10 @@ const messages = defineMessages({
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
+const ProductCard = styled(Card)`
+  margin-bottom: 0;
+`;
+
 const StyledTable = styled.table`
   word-wrap: break-word;
 `;
@@ -470,7 +474,7 @@ class Product extends React.PureComponent {
           }}
           }
         </JsonLd>
-        <Card>
+        <ProductCard>
           <h1 dangerouslySetInnerHTML={{ __html: title }} />
           {uniqueImageIds.length <= 1 && (
             <Flex>
@@ -783,7 +787,7 @@ class Product extends React.PureComponent {
               </StyledTable>
             </Box>
           </Flex>
-        </Card>
+        </ProductCard>
 
         {crossSellIds.length > 0 && (
           <Card style={{ marginBottom: 0 }}>

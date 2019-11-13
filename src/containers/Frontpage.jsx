@@ -20,9 +20,9 @@ import MediaQuery from "../components/MediaQuery";
 import Searchbar from "./Searchbar";
 
 const messages = defineMessages({
-  categories: {
-    id: "Frontpage.categories",
-    defaultMessage: "Kategorien"
+  ourProducts: {
+    id: "Frontpage.ourProducts",
+    defaultMessage: "Unsere Produkte"
   },
   moreAboutCompany: {
     id: "Frontpage.moreAboutCompany",
@@ -54,7 +54,7 @@ const Frontpage = React.memo(
             posts={posts}
           />
         )}
-        <H2>{intl.formatMessage(messages.categories)}</H2>
+        <H2>{intl.formatMessage(messages.ourProducts)}</H2>
         <ProductCategories />
         <LatestPosts />
         <Card>
@@ -62,6 +62,7 @@ const Frontpage = React.memo(
           <p>{intl.formatMessage(messages.aboutCompany)}</p>
           <Link
             to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
+            styled
           >
             {intl.formatMessage(messages.moreAboutCompany)}
           </Link>

@@ -10,6 +10,7 @@ import Button from "../Button";
 import Triangle from "../Triangle";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Thumbnail from "../../containers/Thumbnail";
+import { colors } from "../../utilities/style";
 
 const messages = defineMessages({
   emptyCart: {
@@ -85,7 +86,7 @@ const NavCart = React.memo(
                 </small>
               </Circle>
             </Counter>
-            <Triangle color="#fff" size="0.5rem" />
+            <Triangle color={colors.primaryContrast} size="0.5rem" />
           </Link>
           {dropdown === "cart" && (
             <Dropdown>

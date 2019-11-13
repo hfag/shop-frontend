@@ -30,6 +30,9 @@ import page from "../i18n/page";
 const BurgerContainer = styled(Card)`
   height: 100%;
   z-index: 100;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: none;
 
   transition: all 0.3s ease-in;
   -webkit-overflow-scrolling: touch;

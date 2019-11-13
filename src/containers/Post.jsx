@@ -16,6 +16,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
 import Link from "../components/Link";
 import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
+import H1 from "../components/H1";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -36,7 +37,7 @@ const Post = React.memo(({ language, post = {}, fetchPostIfNeeded }) => {
         />
       </Helmet>
       <Card>
-        <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
+        <H1 dangerouslySetInnerHTML={{ __html: post.title }} />
         <UnsafeHTMLContent content={post.content} />
       </Card>
     </React.Fragment>

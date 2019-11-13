@@ -31,7 +31,7 @@ const PostWrapper = styled.div`
   position: relative;
   padding: 0.5rem;
   background-color: #fff;
-  box-shadow: ${shadows.y};
+  border: ${colors.primaryContrast} 1px solid;
   border-radius: ${borders.radius};
   word-break: break-word;
   hyphens: auto;

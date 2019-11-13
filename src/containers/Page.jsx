@@ -14,6 +14,7 @@ import { stripTags } from "../utilities";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
 import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
+import H1 from "../components/H1";
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
@@ -34,7 +35,7 @@ const Page = React.memo(({ language, page = {}, fetchPageIfNeeded }) => {
         />
       </Helmet>
       <Card>
-        <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
+        <H1 dangerouslySetInnerHTML={{ __html: page.title }} />
         <UnsafeHTMLContent content={page.content} />
       </Card>
     </React.Fragment>

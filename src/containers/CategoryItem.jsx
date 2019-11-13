@@ -19,7 +19,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 
 const StyledCategory = styled.div`
   background-color: #fff;
-  box-shadow: ${shadows.y};
+  border: ${colors.primaryContrast} 1px solid;
   border-radius: ${borders.radius};
 
   /*display: flex; See https://bugzilla.mozilla.org/show_bug.cgi?id=958714*/
@@ -28,7 +28,7 @@ const StyledCategory = styled.div`
 
   & > div:first-child {
     position: relative;
-    border-bottom: ${colors.background} 1px solid;
+    border-bottom: ${colors.primaryContrast} 1px solid;
     padding-top: 100%;
 
     & > * {

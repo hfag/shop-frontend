@@ -32,6 +32,10 @@ const LightboxBox = styled(Box)`
   cursor: zoom-in;
 `;
 
+const GalleryFlex = styled(Flex)`
+  margin: 0 -0.5rem !important;
+`;
+
 /**
  * State reducer for the lightbox component
  * @param {Object} state The current state
@@ -74,11 +78,11 @@ const LightboxGallery = React.memo(
 
       return (
         <React.Fragment>
-          <Flex flexWrap="wrap">
+          <GalleryFlex flexWrap="wrap">
             {galleryImageIds.map((imageId, index) => (
               <LightboxBox
                 key={imageId}
-                width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
+                width={[1 / 2, 1 / 2, 1 / 4, 1 / 6]}
                 px={2}
                 mb={2}
                 onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}
@@ -86,7 +90,7 @@ const LightboxGallery = React.memo(
                 <Thumbnail id={imageId} size="thumbnail" passive={passive} />
               </LightboxBox>
             ))}
-          </Flex>
+          </GalleryFlex>
           <Lightbox
             images={galleryAttachments
               .filter(e => e)

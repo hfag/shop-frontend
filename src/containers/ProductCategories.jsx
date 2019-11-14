@@ -211,9 +211,6 @@ const ProductCategories = React.memo(
 
       const isLoading = items.length === 0;
 
-      const hasCategoryDescription =
-        category && category.description ? true : false;
-
       return (
         <div>
           {active && (
@@ -305,13 +302,6 @@ const ProductCategories = React.memo(
                       />
                     ))}
               </Flex>
-              {hasCategoryDescription && (
-                <CategoryDescription ref={descriptionRef}>
-                  <Card>
-                    <UnsafeHTMLContent content={category.description} />
-                  </Card>
-                </CategoryDescription>
-              )}
 
               {totalProductCount !== 0 && (
                 <Pagination

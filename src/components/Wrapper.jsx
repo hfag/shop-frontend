@@ -22,8 +22,9 @@ import ScrollToTopButton from "./ScrollToTopButton";
 import SupportButton from "./SupportButton";
 
 const Wrapper = React.memo(({ language, location: { pathname }, children }) => {
-  const showBreadcrums = useMemo(() =>
-    ["/de/", "/de", "/fr", "/fr/"].includes(pathname)
+  const showBreadcrums = useMemo(
+    () => !["/de/", "/de", "/fr", "/fr/"].includes(pathname),
+    [pathname]
   );
 
   return (

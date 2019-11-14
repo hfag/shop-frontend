@@ -48,7 +48,7 @@ import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 const messages = defineMessages({
   chooseAVariation: {
     id: "Product.chooseAVariation",
-    defaultMessage: "Wähle eine Variante"
+    defaultMessage: "Wählen Sie eine Variante"
   },
   chooseAnAttribute: {
     id: "Product.chooseAnAttribute",

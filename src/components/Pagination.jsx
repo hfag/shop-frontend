@@ -6,6 +6,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { borders, colors, shadows } from "../utilities/style";
 
 const StyledPagination = styled.div`
+margin-top: 1rem;
+
   ul {
     list-style: none;
     margin: 0 auto 1rem 0;

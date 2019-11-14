@@ -18,7 +18,7 @@ const Breadcrumb = styled.div`
 
     content: "/";
     display: inline-block;
-    color: ${colors.primaryContrast};
+    color: ${colors.primary};
   }
 
   &:last-child {

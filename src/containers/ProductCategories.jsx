@@ -100,9 +100,14 @@ const Head = React.memo(
             ? stripTags(category.name) + " - Hauser Feuerschutz AG"
             : intl.formatMessage(shop.siteTitle)}
         </title>
-        {category && (
-          <meta name="description" content={category.shortDescription} />
-        )}
+        <meta
+          name="description"
+          content={
+            category
+              ? category.shortDescription
+              : intl.formatMessage(shop.siteMessage)
+          }
+        />
         {category && (
           <link
             rel="canonical"
@@ -295,11 +300,7 @@ const ProductCategories = React.memo(
                   new Array(12)
                     .fill()
                     .map((el, index) => (
-                      <CategoryItem
-                        key={index}
-                        id={-1}
-                        large={!hasCategoryDescription}
-                      />
+                      <CategoryItem key={index} id={-1} large={false} />
                     ))}
               </Flex>
 

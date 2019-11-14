@@ -224,7 +224,9 @@ const ProductCategories = React.memo(
                 <InfoWrapper>
                   <Flex flexWrap="wrap">
                     <Box width={[1, 1, 1 / 2, 1 / 2]} pr={[0, 0, 4, 4]}>
-                      <H1>{category.name}</H1>
+                      <H1
+                        dangerouslySetInnerHTML={{ __html: category.name }}
+                      ></H1>
                       <p
                         dangerouslySetInnerHTML={{ __html: category.excerpt }}
                       ></p>

@@ -17,10 +17,20 @@ const UnstyledLink = styled.a`
   display: ${({ block }) => (block ? "inline-block" : "inline")};
 
   color: ${({ negative }) => (negative ? colors.primaryContrast : colors.font)};
+
+  text-decoration: none;
+
+  &:hover {
+    border-bottom: ${({ negative }) =>
+        negative ? colors.primaryContrast : colors.font}
+      1px solid;
+  }
 `;
 
 const StyledLink = styled(UnstyledLink)`
-  border-bottom: ${colors.font} 1px solid;
+  border-bottom: ${({ negative }) =>
+      negative ? colors.primaryContrast : colors.font}
+    1px solid;
 `;
 
 /**

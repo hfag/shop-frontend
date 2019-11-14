@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 
 import { colors, media } from "../utilities/style";
 import Link from "./Link";
-import LogoNegative from "../../img/logo/logo.svg";
+import LogoNegative from "../../img/logo/logo_negative.svg";
 import MediaQuery from "./MediaQuery";
 import Placeholder from "./Placeholder";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
@@ -88,10 +88,6 @@ const IconList = styled.table`
   }
   td:last-child {
     padding-left: 1rem;
-  }
-
-  a:hover {
-    text-decoration: underline;
   }
 `;
 

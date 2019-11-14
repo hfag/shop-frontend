@@ -19,7 +19,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 
 const StyledCategory = styled.div`
   background-color: #fff;
-  border: ${colors.primaryContrast} 1px solid;
+  box-shadow: ${shadows.y};
   border-radius: ${borders.radius};
 
   /*display: flex; See https://bugzilla.mozilla.org/show_bug.cgi?id=958714*/

@@ -24,7 +24,7 @@ const SaleWrapper = styled.div`
   padding: 0.5rem;
   background-color: #fff;
 
-  border: ${colors.primaryContrast} 1px solid;
+  box-shadow: ${shadows.y};
   border-radius: ${borders.radius};
   word-break: break-word;
   hyphens: auto;
@@ -32,11 +32,12 @@ const SaleWrapper = styled.div`
 
   h3 {
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.25rem;
   }
 
   p {
     margin: 0;
+    font-weight: 300;
   }
 `;
 
@@ -76,7 +77,7 @@ const Post = React.memo(({ language, post }) => {
             </Box>
             <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
               <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
-              <UnsafeHTMLContent content={post.description} />
+              <p dangerouslySetInnerHTML={{ __html: post.description }}></p>
             </Box>
           </Flex>
         </Link>

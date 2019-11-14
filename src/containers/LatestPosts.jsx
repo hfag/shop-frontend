@@ -31,7 +31,7 @@ const PostWrapper = styled.div`
   position: relative;
   padding: 0.5rem;
   background-color: #fff;
-  border: ${colors.primaryContrast} 1px solid;
+  box-shadow: ${shadows.y};
   border-radius: ${borders.radius};
   word-break: break-word;
   hyphens: auto;
@@ -44,6 +44,7 @@ const PostWrapper = styled.div`
 
   p {
     margin: 0;
+    font-weight: 300;
   }
 `;
 
@@ -60,7 +61,7 @@ const Post = React.memo(({ language, post }) => {
             </Box>
             <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
               <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
-              <UnsafeHTMLContent content={post.description} />
+              <p dangerouslySetInnerHTML={{ __html: post.description }} />
             </Box>
           </Flex>
         </Link>

@@ -18,7 +18,7 @@ const Dropdown = styled.div`
   background-color: #fff;
   color: #000;
   border-radius: ${borders.radius};
-  border: ${colors.primaryContrast} 1px solid;
+  box-shadow: ${shadows.y};
 `;
 
 export default Dropdown;

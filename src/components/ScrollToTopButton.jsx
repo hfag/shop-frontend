@@ -24,8 +24,8 @@ const ButtonWrapper = styled.div`
 
   transition: all ease-in-out 0.3s;
 
-  background-color: ${colors.font};
-  color: ${colors.primary};
+  background-color: ${colors.primary};
+  color: ${colors.primaryContrast};
 
   padding: 0.3rem;
   border-radius: 50%;

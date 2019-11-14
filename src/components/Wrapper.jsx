@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import styled, { ThemeProvider } from "styled-components";
 import { Flex, Box } from "reflexbox";
@@ -22,6 +22,10 @@ import ScrollToTopButton from "./ScrollToTopButton";
 import SupportButton from "./SupportButton";
 
 const Wrapper = React.memo(({ language, location: { pathname }, children }) => {
+  const showBreadcrums = useMemo(() =>
+    ["/de/", "/de", "/fr", "/fr/"].includes(pathname)
+  );
+
   return (
     <ThemeProvider
       theme={{
@@ -49,7 +53,7 @@ const Wrapper = React.memo(({ language, location: { pathname }, children }) => {
             </Box>
             <Box width={[1, 1, 1, 5 / 6]}>
               <Container>
-                {pathname !== "/de" && pathname !== "/fr" && <Breadcrumbs />}
+                {showBreadcrums && <Breadcrumbs />}
                 {children}
               </Container>
             </Box>

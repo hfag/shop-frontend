@@ -19,8 +19,8 @@ const ButtonWrapper = styled.div`
   cursor: pointer;
 
   transition: all ease-in-out 0.3s;
-  background-color: ${colors.font};
-  color: ${colors.primary};
+  background-color: ${colors.primary};
+  color: ${colors.primaryContrast};
   box-shadow: ${shadows.y};
 
   padding: 0.45rem;

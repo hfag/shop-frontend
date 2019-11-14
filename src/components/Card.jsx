@@ -7,7 +7,8 @@ const CardWrapper = styled.div`
   margin: 1rem 0;
   padding: 1rem;
   background-color: ${colors.backgroundOverlay};
-  border: ${colors.primaryContrast} 1px solid;
+
+  box-shadow: ${shadows.y};
   border-radius: ${borders.radius};
 `;
 

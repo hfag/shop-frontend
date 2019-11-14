@@ -104,7 +104,6 @@ const SearchInput = styled.input`
   font-size: 1rem;
 
   border: none;
-  border: ${colors.primaryContrast} 1px solid;
   border-radius: 0.2rem;
   height: 100%;
   width: 100%;

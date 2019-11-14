@@ -1,12 +1,12 @@
 import { css } from "styled-components";
 
 export const colors = {
-  primary: "#FFFFFF",
-  primaryContrast: "#343434",
-  secondary: "#343434",
+  primary: "#000000",
+  primaryContrast: "#ffffff",
+  secondary: "#464646",
   background: "#f5f5f5",
   backgroundOverlay: "#ffffff",
-  font: "#343434",
+  font: "#464646",
   fontLight: "#888888",
   success: "#2ecc71",
   info: "#3498db",

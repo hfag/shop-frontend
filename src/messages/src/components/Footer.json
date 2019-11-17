@@ -1,0 +1,18 @@
+[
+  {
+    "id": "Footer.aboutTitle",
+    "defaultMessage": "Über die Hauser Feuerschutz AG"
+  },
+  {
+    "id": "Footer.about",
+    "defaultMessage": "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte an in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz."
+  },
+  {
+    "id": "Footer.moreAbout",
+    "defaultMessage": "Weitere Informationen"
+  },
+  {
+    "id": "Footer.downloads",
+    "defaultMessage": "Downloads"
+  }
+]

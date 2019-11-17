@@ -16,8 +16,18 @@ textarea {
   font-family: "Helvetica Neue Condensed", "Helvetica", "Arial", sans-serif;
   font-weight: 300;
   background-color: #f5f5f5;
-  color: #464646;
+  color: #343434;
   line-height: 1.4;
+}
+
+@media all and (min-width: 992px) {
+  .compass {
+    background-image: url("../../img/compass-gray.jpg");
+    background-repeat: no-repeat;
+    background-position: right 110%;
+    background-size: 30% auto;
+    background-attachment: fixed;
+  }
 }
 
 * {
@@ -38,10 +48,61 @@ textarea {
 
 hr {
   border: none;
-  border-top: #ddd 1px solid;
+  border-top: #343434 1px solid;
+}
+
+p {
+  margin: 0 0 0.625rem 0;
 }
 
 img {
   max-width: 100%;
   height: auto;
+}
+
+a {
+  cursor: pointer;
+
+  font-weight: normal;
+  display: inline;
+
+  color: #000;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+h1,
+h2,
+h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.25rem;
+}
+h4 {
+  font-size: 1rem;
+}
+h5 {
+  font-size: 0.875rem;
+}
+h6 {
+  font-size: 0.75rem;
 }

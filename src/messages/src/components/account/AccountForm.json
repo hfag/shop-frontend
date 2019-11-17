@@ -1,0 +1,14 @@
+[
+  {
+    "id": "AccountForm.password",
+    "defaultMessage": "Aktuelles Passwort (leer lassen um nichts zu ändern)"
+  },
+  {
+    "id": "AccountForm.newPassword",
+    "defaultMessage": "Neues Passwort (leer lassen um nichts zu ändern)"
+  },
+  {
+    "id": "AccountForm.passwordConfirmation",
+    "defaultMessage": "Bestätige das neue Passwort"
+  }
+]

@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import styled from "styled-components";
-import MenuIcon from "react-icons/lib/md/menu";
-import CartIcon from "react-icons/lib/fa/shopping-cart";
+import { MdMenu } from "react-icons/md";
 import LoadingBar from "react-redux-loading-bar";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import { Helmet } from "react-helmet";
+import { defineMessages, injectIntl } from "react-intl";
 
 import { fetchShoppingCartIfNeeded } from "../actions/shopping-cart";
 import {
@@ -14,16 +14,15 @@ import {
   getShoppingCartItems,
   getShoppingCartTotal,
   getIsAuthenticated,
-  getAccount
+  getAccount,
+  getLanguageFetchString,
+  getLanguage
 } from "../reducers";
-import { borders, shadows } from "../utilities/style";
 import Container from "../components/Container";
 import Flexbar from "../components/Flexbar";
-import Button from "../components/Button";
-import Price from "../components/Price";
 import Triangle from "../components/Triangle";
 import Push from "../components/Push";
-import Circle from "../components/Circle";
+import Dropdown from "../components/Dropdown";
 import Link from "../components/Link";
 import MediaQuery from "../components/MediaQuery";
 import NavItem from "../components/NavItem";
@@ -35,15 +34,24 @@ import Thumbnail from "./Thumbnail";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import JsonLd from "../components/JsonLd";
 import { fetchSalesIfNeeded } from "../actions/sales";
-import RestrictedView from "./RestrictedView";
+import LanguageSwitcher from "../components/header/LanguageSwitcher";
+import NavCart from "../components/header/NavCart";
+import NavUser from "../components/header/NavUser";
+import shop from "../i18n/shop";
+import Card from "../components/Card";
+import { colors } from "../utilities/style";
+import page from "../i18n/page";
+
+const messages = defineMessages({
+  siteDescription: {
+    id: "Header.siteDescription",
+    defaultMessage:
+      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
+  }
+});
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 const PUBLIC_PATH = process.env.PUBLIC_PATH;
-
-const Counter = styled.div`
-  margin-left: 0.5rem;
-  font-size: 1.25rem;
-`;
 
 const SearchWrapper = styled.div`
   width: 100%;
@@ -52,48 +60,6 @@ const SearchWrapper = styled.div`
 
 const HeaderWrapper = styled.div`
   margin-top: 5rem;
-`;
-
-const Dropdown = styled.div`
-  position: absolute;
-  top: 100%;
-  left: -4.5rem;
-  right: -5rem;
-
-  max-height: 15rem;
-  overflow-y: auto;
-
-  margin-top: 1rem;
-  padding: 0.5rem;
-
-  background-color: #fff;
-  color: #000;
-  border-radius: ${borders.radius};
-  box-shadow: ${shadows.y};
-`;
-
-const UserDropdown = styled(Dropdown)`
-  left: 0;
-  right: 0;
-`;
-
-const ShoppingCartList = styled.div`
-  width: 100%;
-  margin: 0 0 1rem 0;
-  padding: 0;
-  font-size: 0.8rem;
-
-  display: flex;
-  align-items: center;
-
-  & > div:first-child {
-    flex: 0 0 10%;
-    margin-right: 0.5rem;
-  }
-
-  img {
-    width: 100%;
-  }
 `;
 
 const FullHeightBox = styled(Box)`
@@ -106,319 +72,229 @@ const LogoLeft = styled.div`
   height: 100%;
 `;
 
-const Login = styled.span`
-  font-weight: normal;
-  white-space: nowrap;
-`;
-/**
- * The page header
- * @returns {Component} The component
- */
-class Header extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = { dropdown: false };
+const MobileSearchWrapper = styled.div`
+  margin-top: 1.5rem;
+  h3 {
+    margin-top: 0;
   }
-  componentDidMount = () => {
-    const { fetchShoppingCartIfNeeded, fetchSalesIfNeeded } = this.props;
-    fetchShoppingCartIfNeeded();
-    fetchSalesIfNeeded();
-  };
-  render = () => {
-    const {
+  input {
+    background-color: #fff;
+    border: ${colors.primary} 1px solid;
+  }
+`;
+
+const Head = React.memo(({ intl }) => {
+  return (
+    <Helmet>
+      <title>{intl.formatMessage(shop.siteTitle)}</title>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="author" content="Nico Hauser" />
+      <meta name="format-detection" content="telephone=no" />
+      <meta
+        name="description"
+        content={intl.formatMessage(messages.siteDescription)}
+      />
+      <link rel="canonical" href={ABSOLUTE_URL} />
+    </Helmet>
+  );
+});
+
+const RichSnippet = React.memo(() => {
+  return (
+    <JsonLd>
+      {{
+        "@context": "http://schema.org",
+        "@type": "LocalBusiness ",
+        image: [
+          ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-1x1.png",
+          ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-4x3.png",
+          ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-16x9.png"
+        ],
+        logo: ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo.png",
+        "@id": ABSOLUTE_URL + "/#organization",
+        branchCode: "ch.feuerschutz.1",
+        name: "Hauser Feuerschutz AG",
+        priceRange: "$$",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Sonnmattweg 6",
+          addressLocality: "Aarau",
+          addressRegion: "AG",
+          postalCode: "5000",
+          addressCountry: "CH"
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 47.3971281,
+          longitude: 8.0434878
+        },
+        url: ABSOLUTE_URL,
+        telephone: "+41628340540",
+        contactPoint: [
+          {
+            "@type": "ContactPoint",
+            telephone: "+41628340540",
+            contactType: "customer service",
+            availableLanguage: ["German", "French", "Italian", "English"],
+            contactOption: "TollFree",
+            areaServed: ["CH"]
+          }
+        ],
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            opens: "09:00",
+            closes: "12:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            opens: "13:30",
+            closes: "17:00"
+          }
+        ]
+      }}
+    </JsonLd>
+  );
+});
+
+const Header = React.memo(
+  injectIntl(
+    ({
+      intl,
       account,
       isAuthenticated,
       toggleBurgerMenu,
       shoppingCartFetching,
       shoppingCartItems,
       shoppingCartTotal,
-      redirect
-    } = this.props;
+      redirect,
+      fetchShoppingCartIfNeeded,
+      fetchSalesIfNeeded,
+      language
+    }) => {
+      const [dropdown, setDropdown] = useState(false);
 
-    return (
-      <HeaderWrapper>
-        <Helmet>
-          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-          <meta charSet="utf-8" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          />
-          <meta name="author" content="Nico Hauser" />
-          <meta name="format-detection" content="telephone=no" />
+      useEffect(() => {
+        fetchShoppingCartIfNeeded();
+        fetchSalesIfNeeded();
+      }, []); //run on initial render
 
-          <title>Shop der Hauser Feuerschutz AG</title>
-          <meta
-            name="description"
-            content="Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
-          />
-          <link rel="canonical" href={ABSOLUTE_URL} />
-        </Helmet>
-        <JsonLd>
-          {{
-            "@context": "http://schema.org",
-            "@type": "LocalBusiness ",
-            image: [
-              ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-1x1.png",
-              ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-4x3.png",
-              ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-16x9.png"
-            ],
-            logo: ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo.png",
-            "@id": ABSOLUTE_URL + "/#organization",
-            branchCode: "ch.feuerschutz.1",
-            name: "Hauser Feuerschutz AG",
-            priceRange: "$$",
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: "Sonnmattweg 6",
-              addressLocality: "Aarau",
-              addressRegion: "AG",
-              postalCode: "5000",
-              addressCountry: "CH"
-            },
-            geo: {
-              "@type": "GeoCoordinates",
-              latitude: 47.3971281,
-              longitude: 8.0434878
-            },
-            url: ABSOLUTE_URL,
-            telephone: "+41628340540",
-            contactPoint: [
-              {
-                "@type": "ContactPoint",
-                telephone: "+41628340540",
-                contactType: "customer service",
-                availableLanguage: ["German", "French", "Italian", "English"],
-                contactOption: "TollFree",
-                areaServed: ["CH"]
-              }
-            ],
-            openingHoursSpecification: [
-              {
-                "@type": "OpeningHoursSpecification",
-                dayOfWeek: [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday"
-                ],
-                opens: "09:00",
-                closes: "12:00"
-              },
-              {
-                "@type": "OpeningHoursSpecification",
-                dayOfWeek: [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday"
-                ],
-                opens: "13:30",
-                closes: "17:00"
-              }
-            ]
-          }}
-        </JsonLd>
-        <LoadingBar className="redux-loading-bar" />
-        <header>
-          <Navbar>
-            <Flex>
-              <FullHeightBox width={[0, 0, 0, 1 / 6]}>
-                <MediaQuery lg up>
-                  <LogoLeft>
-                    <NavItem>
-                      <Link to="/" title="Homepage">
-                        <img src={LogoNegative} alt="Logo" />
-                      </Link>
-                    </NavItem>
-                  </LogoLeft>
-                </MediaQuery>
-              </FullHeightBox>
-              <FullHeightBox width={[1, 1, 1, 5 / 6]} pl={2}>
-                <Container>
-                  <Flexbar>
-                    <MediaQuery lg up>
+      return (
+        <HeaderWrapper>
+          <Head intl={intl} />
+          <RichSnippet />
+          <LoadingBar className="redux-loading-bar" />
+          <header>
+            <Navbar>
+              <Flex>
+                <FullHeightBox width={[0, 0, 0, 1 / 6]}>
+                  <MediaQuery lg up>
+                    <LogoLeft>
                       <NavItem>
-                        <Link to="/" title="Homepage">
-                          <img src={NameSloganNegative} alt="Slogan" />
+                        <Link to={`/${language}`} title="Homepage">
+                          <img src={LogoNegative} alt="Logo" />
                         </Link>
                       </NavItem>
-                    </MediaQuery>
-
-                    <MediaQuery lg down>
-                      <Flexbar>
+                    </LogoLeft>
+                  </MediaQuery>
+                </FullHeightBox>
+                <FullHeightBox width={[1, 1, 1, 5 / 6]} pl={2}>
+                  <Container>
+                    <Flexbar>
+                      <MediaQuery lg up>
                         <NavItem>
-                          <Link onClick={toggleBurgerMenu} negative>
-                            <MenuIcon size="40" />
+                          <Link to={`/${language}`} title="Homepage">
+                            <img src={NameSloganNegative} alt="Slogan" />
                           </Link>
                         </NavItem>
-
-                        <NavItem>
-                          <Link to="/" title="Homepage">
-                            <img src={LogoNegative} alt="Logo" />
-                          </Link>
-                        </NavItem>
-                      </Flexbar>
-                    </MediaQuery>
-
-                    <SearchWrapper>
-                      <MediaQuery md up>
-                        <Searchbar />
                       </MediaQuery>
-                    </SearchWrapper>
-                    <Push left>
-                      <MediaQuery md up>
+                      <MediaQuery lg down>
                         <Flexbar>
-                          <NavItem seperator>
-                            <Link
-                              onClick={() => {
-                                this.setState({
-                                  dropdown:
-                                    this.state.dropdown === "cart"
-                                      ? false
-                                      : "cart"
-                                });
-                              }}
-                              negative
-                              flex
-                            >
-                              <CartIcon size="35" />
-                              <Counter>
-                                <Circle
-                                  negative
-                                  filled
-                                  width="1.75rem"
-                                  height="1.75rem"
-                                  padding="0"
-                                  centerChildren
-                                >
-                                  <small>
-                                    {shoppingCartFetching
-                                      ? ""
-                                      : shoppingCartItems.reduce(
-                                          (sum, item) => sum + item.quantity,
-                                          0
-                                        )}
-                                  </small>
-                                </Circle>
-                              </Counter>
-                              <Triangle color="#fff" size="0.5rem" />
+                          <NavItem>
+                            <Link onClick={toggleBurgerMenu} negative>
+                              <MdMenu size="40" />
                             </Link>
-                            {this.state.dropdown === "cart" && (
-                              <Dropdown>
-                                {shoppingCartItems.length > 0 ? (
-                                  shoppingCartItems.map((item, index) => (
-                                    <ShoppingCartList key={index}>
-                                      <div>
-                                        <Thumbnail
-                                          id={item.thumbnailId}
-                                          size="thumbnail"
-                                        />
-                                      </div>
-                                      <div>
-                                        <strong>{item.quantity}x</strong>{" "}
-                                        {item.title}
-                                      </div>
-                                    </ShoppingCartList>
-                                  ))
-                                ) : (
-                                  <div>
-                                    Es befinden sich bisher noch keine Produkte
-                                    im Warenkorb.
-                                    <br />
-                                    <br />
-                                  </div>
-                                )}
-                                <Button
-                                  fullWidth
-                                  onClick={() =>
-                                    new Promise((resolve, reject) => {
-                                      redirect("/warenkorb");
-                                      this.setState(
-                                        { showShoppingCartDropdown: false },
-                                        resolve
-                                      );
-                                    })
-                                  }
-                                >
-                                  Zum Warenkorb
-                                </Button>
-                              </Dropdown>
-                            )}
                           </NavItem>
                           <NavItem>
-                            {isAuthenticated ? (
-                              <div>
-                                <Link
-                                  onClick={() => {
-                                    this.setState({
-                                      dropdown:
-                                        this.state.dropdown === "user"
-                                          ? false
-                                          : "user"
-                                    });
-                                  }}
-                                  negative
-                                  flex
-                                >
-                                  <Login>
-                                    {account.firstName.length > 0 ||
-                                    account.lastName.length > 0
-                                      ? `${account.firstName} ${account.lastName}`
-                                      : account.email}
-                                  </Login>
-                                  <Triangle color="#fff" size="0.5rem" />
-                                </Link>
-                                {this.state.dropdown === "user" && (
-                                  <UserDropdown>
-                                    <div>
-                                      <Link to="/konto" active={false}>
-                                        Zum Konto
-                                      </Link>
-                                    </div>
-                                    <RestrictedView>
-                                      <div>
-                                        <Link href="https://api.feuerschutz.ch/wp-admin">
-                                          Shop-Admin
-                                        </Link>
-                                      </div>
-                                      <div>
-                                        <Link href="https://feuerschutz.ch/wp-login.php?action=login">
-                                          Netzwerk-Admin
-                                        </Link>
-                                      </div>
-                                    </RestrictedView>
-                                    <div>
-                                      <Link to="/logout" active={false}>
-                                        Abmelden
-                                      </Link>
-                                    </div>
-                                  </UserDropdown>
-                                )}
-                              </div>
-                            ) : (
-                              <Link to="/login" negative flex>
-                                <Login>Login</Login>
-                              </Link>
-                            )}
+                            <Link to={`/${language}`} title="Homepage">
+                              <img src={LogoNegative} alt="Logo" />
+                            </Link>
                           </NavItem>
                         </Flexbar>
                       </MediaQuery>
-                    </Push>
-                  </Flexbar>
-                </Container>
-              </FullHeightBox>
-            </Flex>
-          </Navbar>
-        </header>
-      </HeaderWrapper>
-    );
-  };
-}
+                      <SearchWrapper>
+                        <MediaQuery lg up>
+                          <Searchbar />
+                        </MediaQuery>
+                      </SearchWrapper>
+                      <Push left>
+                        <MediaQuery md down>
+                          <NavItem>
+                            <LanguageSwitcher
+                              dropdown={dropdown}
+                              setDropdown={setDropdown}
+                            />
+                          </NavItem>
+                        </MediaQuery>
+                        <MediaQuery md up>
+                          <Flexbar>
+                            <NavItem seperator>
+                              <LanguageSwitcher
+                                dropdown={dropdown}
+                                setDropdown={setDropdown}
+                              />
+                            </NavItem>
+                            <NavItem seperator>
+                              <NavCart
+                                language={language}
+                                shoppingCartFetching={shoppingCartFetching}
+                                shoppingCartItems={shoppingCartItems}
+                                shoppingCartTotal={shoppingCartTotal}
+                                redirect={redirect}
+                                dropdown={dropdown}
+                                setDropdown={setDropdown}
+                              />
+                            </NavItem>
+                            <NavItem>
+                              <NavUser
+                                language={language}
+                                isAuthenticated={isAuthenticated}
+                                account={account}
+                                dropdown={dropdown}
+                                setDropdown={setDropdown}
+                              />
+                            </NavItem>
+                          </Flexbar>
+                        </MediaQuery>
+                      </Push>
+                    </Flexbar>
+                  </Container>
+                </FullHeightBox>
+              </Flex>
+            </Navbar>
+          </header>
+          <MobileSearchWrapper>
+            <MediaQuery lg down>
+              <Container>
+                <Card>
+                  <h3>{intl.formatMessage(page.search)}</h3>
+                  <Searchbar />
+                </Card>
+              </Container>
+            </MediaQuery>
+          </MobileSearchWrapper>
+        </HeaderWrapper>
+      );
+    }
+  )
+);
 
 const mapStateToProps = state => ({
+  languageFetchString: getLanguageFetchString(state),
+  language: getLanguage(state),
   shoppingCartFetching: isFetchingShoppingCart(state),
   shoppingCartItems: getShoppingCartItems(state),
   shoppingCartTotal: getShoppingCartTotal(state),
@@ -436,11 +312,12 @@ const mapDispatchToProps = dispatch => ({
   },
   /**
    * Fetches the shopping cart
+   * @param {string} language The language string
    * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchShoppingCartIfNeeded(visualize = false) {
-    return dispatch(fetchShoppingCartIfNeeded());
+  fetchShoppingCartIfNeeded(language, visualize = false) {
+    return dispatch(fetchShoppingCartIfNeeded(language, visualize));
   },
   /**
    * Redirects the client to a url
@@ -452,15 +329,45 @@ const mapDispatchToProps = dispatch => ({
   },
   /**
    * Fetches all sales if needed
+   * @param {string} language The language string
+   * @param {boolean} visualize Whether to visualize the progress
+   * @returns {Promise} The fetch promise
+   */
+  fetchSalesIfNeeded(language, visualize = false) {
+    return dispatch(fetchSalesIfNeeded(language, visualize));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the shopping cart
+   * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchShoppingCartIfNeeded(visualize = false) {
+    return mapDispatchToProps.fetchShoppingCartIfNeeded(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
+  },
+  /**
+   * Fetches all sales if needed
    * @param {boolean} visualize Whether to visualize the progress
    * @returns {Promise} The fetch promise
    */
   fetchSalesIfNeeded(visualize = false) {
-    return dispatch(fetchSalesIfNeeded(visualize));
+    return mapDispatchToProps.fetchSalesIfNeeded(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Header);

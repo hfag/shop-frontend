@@ -34,12 +34,16 @@ const fetchSimpleProductAction = createFetchItemsAction("simple_product");
 
 /**
  * Fetches all product variations for one product
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} A redux thunk
  */
-export const fetchSimpleProducts = (visualize = false) => dispatch => {
+export const fetchSimpleProducts = (
+  language,
+  visualize = false
+) => dispatch => {
   dispatch(fetchSimpleProductAction(true, null, visualize));
-  return fetchApi(`/wp-json/hfag/products-simple`, {
+  return fetchApi(`${language}/wp-json/hfag/products-simple`, {
     method: "GET",
     credentials: "include"
   })

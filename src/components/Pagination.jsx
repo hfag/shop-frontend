@@ -1,35 +1,48 @@
 import React from "react";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
-import { colors, shadows } from "utilities/style";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import { borders } from "../utilities/style";
+import { borders, colors, shadows } from "../utilities/style";
 
 const StyledPagination = styled.div`
+margin-top: 1rem;
+
   ul {
     list-style: none;
-    margin: 1rem auto;
-    text-align: center;
+    margin: 0 auto 1rem 0;
 
     background-color: #fff;
     padding: 0.25rem;
     box-shadow: ${shadows.y};
     border-radius: ${borders.radius};
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   li {
-    display: inline-block;
+    display: block;
     margin-right: 0.5rem;
     cursor: pointer;
   }
 
-  .disabled {
+  .disabled a {
     color: ${colors.disabled};
     cursor: not-allowed;
   }
 
-  .selected {
-    border-bottom: ${colors.primary} 1px solid;
+  .selected a {
+    text-decoration: underline;
+    color: ${colors.disabled};
+    /* border-bottom: ${colors.primary} 2px solid; */
     cursor: not-allowed;
+  }
+
+  .next a,
+  .previous a {
+    display: block;
+    margin-top: 0.25rem;
   }
 `;
 
@@ -41,7 +54,11 @@ class Pagination extends React.PureComponent {
   render = () => {
     return (
       <StyledPagination>
-        <ReactPaginate {...this.props} />
+        <ReactPaginate
+          previousLabel={<FaChevronLeft />}
+          nextLabel={<FaChevronRight />}
+          {...this.props}
+        />
       </StyledPagination>
     );
   };

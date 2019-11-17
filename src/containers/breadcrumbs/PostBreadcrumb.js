@@ -1,4 +1,5 @@
-import { getPostBySlug } from "../../reducers";
+import { getPostBySlug, getLanguage } from "../../reducers";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 /**
  * Generates the breadcrumb array for a category
@@ -13,8 +14,10 @@ export const generatePostBreadcrumbs = (
   state
 ) => {
   const post = getPostBySlug(state, postSlug) || {};
+  const language = getLanguage(state);
+
   return {
-    url: `/beitrag/${post.slug}`,
+    url: `/${language}/${pathnamesByLanguage[language].post}/${post.slug}`,
     name: post.title
   };
 };

@@ -4,8 +4,9 @@ import { colors, borders } from "../../utilities/style";
 
 const SidebarBreadcrumb = styled.div`
   padding: 0.25rem;
-  color: ${({ active }) => (active ? "#fff" : colors.primary)};
-  background-color: ${({ active }) => (active ? colors.primary : "#fff")};
+  color: ${({ active }) => (active ? colors.primaryContrast : colors.primary)};
+  background-color: ${({ active }) =>
+    active ? colors.primary : colors.primaryContrast};
   border-radius: ${borders.radius};
 
   display: flex;

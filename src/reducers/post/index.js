@@ -6,5 +6,7 @@ const itemName = "post";
 export default createReducer(itemName, "slug");
 export {
   getAllItems as getPosts,
-  getItemById as getPostBySlug
-} from "utilities/reducer";
+  getItemById as getPostBySlug,
+  getLastFetched as getPostsLastFetched,
+  isFetching as isFetchingPosts
+} from "../../utilities/reducer";

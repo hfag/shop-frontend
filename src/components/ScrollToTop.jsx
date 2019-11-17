@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
 import { toggleBurgerMenu } from "../actions/burger-menu";
-import { getBurgerMenuOpen } from "../reducers";
+import { getBurgerMenuOpen, getLanguage } from "../reducers";
+import { pathnamesByLanguage } from "../utilities/urls";
 
 /**
  * Scrolls to top on route change
@@ -14,11 +15,13 @@ class ScrollToTop extends React.Component {
     if (this.props.location !== prevProps.location) {
       if (
         this.props.burgerMenuOpen &&
-        !this.props.location.pathname.includes("/produkt-kategorie/")
+        !this.props.location.pathname.includes(
+          pathnamesByLanguage[this.props.language].productCategory
+        )
       ) {
         this.props.dispatch(toggleBurgerMenu());
       }
-      window.scrollTo(0, 0);
+      window.scrollTo({ left: 0, top: 0 });
     }
   }
 
@@ -27,7 +30,10 @@ class ScrollToTop extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ burgerMenuOpen: getBurgerMenuOpen(state) });
+const mapStateToProps = state => ({
+  language: getLanguage(state),
+  burgerMenuOpen: getBurgerMenuOpen(state)
+});
 const ConnectedScrollToTop = connect(mapStateToProps)(ScrollToTop);
 
 export default withRouter(ConnectedScrollToTop);

@@ -29,6 +29,11 @@ const ButtonWrapper = styled.div`
     display: inline-block;
     width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
   }
+  .pb-container.success .pb-button,
+  .pb-container.error .pb-button,
+  .pb-container.loading .pb-button {
+    height: 2rem;
+  }
   .pb-container .pb-button {
     position: relative;
     border: none;
@@ -41,17 +46,18 @@ const ButtonWrapper = styled.div`
     border-radius: ${borders.radius};
 
     color: #fff;
-    background-color: ${({ disabled }) =>
-      disabled ? DISABLED : colors.secondary};
+    background-color: ${({ state }) =>
+      state === "disabled" ? DISABLED : colors.secondary};
 
-    cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+    cursor: ${({ state }) =>
+      state === "disabled" ? "not-allowed" : "pointer"};
 
     transition: all 0.3s ease-in-out;
     transition: background-color 0.15s ease-in-out;
 
     &:hover {
-      background-color: ${({ disabled }) =>
-        disabled
+      background-color: ${({ state }) =>
+        state === "disabled"
           ? DISABLED
           : Color(colors.secondary)
               .darken(0.25)
@@ -64,8 +70,8 @@ const ButtonWrapper = styled.div`
     transition: opacity 0.3s 0.1s;
   }
   .pb-container .pb-button svg {
-    height: ${({ height }) => height};
-    width: ${({ height }) => height};
+    height: 2rem;
+    width: 2rem;
     position: absolute;
     transform: translate(-50%, -50%);
     pointer-events: none;
@@ -75,7 +81,10 @@ const ButtonWrapper = styled.div`
     fill: none;
   }
   .pb-container .pb-button svg.pb-progress-circle {
-    animation: spin 0.9s infinite cubic-bezier(0.085, 0.26, 0.935, 0.71);
+    animation: ${({ state }) =>
+      state === "loading"
+        ? "spin 0.9s infinite cubic-bezier(0.085, 0.26, 0.935, 0.71)"
+        : "none"};
   }
   .pb-container .pb-button svg.pb-progress-circle path {
     stroke: ${colors.secondary};
@@ -151,10 +160,10 @@ class Button extends React.PureComponent {
     return (
       <div>
         <ButtonWrapper
-          height={this.props.height || "2rem"}
+          height={this.props.height || "auto"}
           fullWidth={this.props.fullWidth}
           float={this.props.float}
-          disabled={state === "disabled"}
+          state={state}
         >
           <ProgressButton
             controlled={this.props.controlled}

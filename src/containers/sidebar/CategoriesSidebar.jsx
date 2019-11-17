@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
@@ -7,13 +7,16 @@ import {
   getProductCategoryChildrenIdsById,
   getProductCategoryBySlug
 } from "reducers";
-import ChevronDown from "react-icons/lib/fa/chevron-down";
+import { FaChevronDown as ChevronDown } from "react-icons/fa";
+import { defineMessages, injectIntl } from "react-intl";
 
 import CategoryItem from "../../containers/sidebar/CategoryItem";
 import Link from "../../components/Link";
-import { fetchAllProductCategoriesIfNeeded } from "../../actions/product/categories";
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
+import { getLanguage } from "../../reducers";
+import pageMessages from "../../i18n/page";
+import product from "../../i18n/product";
 
 const ITEMS_PER_PAGE = 60;
 
@@ -21,131 +24,99 @@ const ITEMS_PER_PAGE = 60;
  * Renders all product categories
  * @returns {Component} The component
  */
-class CategoriesSidebar extends React.PureComponent {
-  constructor(props) {
-    super(props);
 
-    this.state = { active: props.location.pathname === props.match.url };
-  }
-
-  componentDidMount = () => {
-    this.loadData();
-  };
-
-  /**
-   * Lifecycle method
-   * @param {Object} prevProps The previous props
-   * @returns {void}
-   */
-  componentDidUpdate = prevProps => {
-    const {
-      match: {
-        params: { categorySlug, page },
-        url
-      },
-      location: { pathname },
-      category
-    } = this.props;
-
-    if (
-      (categorySlug !== prevProps.categorySlug ||
-        page !== prevProps.page ||
-        (!prevProps.category && category)) &&
-      categorySlug &&
-      page
-    ) {
-      this.loadData();
-    }
-
-    this.setState({
-      active: !pathname.startsWith("/produkt-kategorie/") || pathname === url
-    });
-  };
-
-  loadData = () => {
-    const { fetchAllProductCategoriesIfNeeded, fetchProducts } = this.props;
-
-    if (
-      this.props.match.path !== "/" &&
-      this.props.match.path !== "/produkt-kategorie"
-    ) {
-      return;
-    }
-
-    //FIXME replace window.loading with something else
-    fetchAllProductCategoriesIfNeeded();
-    fetchProducts();
-  };
-
-  render = () => {
-    const {
+const CategoriesSidebar = React.memo(
+  injectIntl(
+    ({
+      language,
       category,
       categoryIds,
       productIds,
       parents = [],
+      location: { pathname },
       match: {
         params: { categorySlug, page },
         url
-      }
-    } = this.props;
-    const { active } = this.state;
+      },
+      intl
+    }) => {
+      const categoryId = (category && category.id) || 0;
 
-    const pathSegments = url.split("/");
-    pathSegments.pop();
-    const urlWithoutPage = page ? pathSegments.join("/") : url;
+      //check if endings match
+      const active = useMemo(
+        () => pathname.substring(pathname.length - url.length) === url,
+        [pathname, url]
+      );
 
-    const newParents = categorySlug ? [...parents, categorySlug] : [];
+      const urlWithoutPage = useMemo(
+        () =>
+          page
+            ? url
+                .split("/")
+                .slice(0, -1)
+                .join("/")
+            : url,
+        [page, url]
+      );
 
-    return (
-      <SidebarListWrapper>
-        {categorySlug ? (
-          <Link to={urlWithoutPage + "/1"}>
-            <SidebarBreadcrumb active={active}>
-              <div>
-                <ChevronDown />
-              </div>
-              <div
-                dangerouslySetInnerHTML={{ __html: category && category.name }}
-              />
-            </SidebarBreadcrumb>
-          </Link>
-        ) : (
-          <Link to="/">
-            <SidebarBreadcrumb active={active}>
-              <div>
-                <ChevronDown />
-              </div>
-              <div>Startseite</div>
-            </SidebarBreadcrumb>
-          </Link>
-        )}
+      const newParents = useMemo(
+        () => (categorySlug ? [...parents, categorySlug] : []),
+        [categorySlug, parents]
+      );
 
-        {active && (
-          <div>
-            {categoryIds.length > 0 ? (
-              <ul>
-                <li className="header">
-                  <h4>Kategorien</h4>
-                </li>
-                {categoryIds.map(categoryId => (
-                  <CategoryItem
-                    key={categoryId}
-                    id={categoryId}
-                    parents={newParents}
-                  />
-                ))}
-              </ul>
-            ) : null /*<p>Keine weiteren Unterkategorien gefunden</p>*/}
-          </div>
-        )}
-        <Route
-          path={`${urlWithoutPage}/:categorySlug/:page`}
-          render={props => <RoutedSidebar {...props} parents={newParents} />}
-        />
-      </SidebarListWrapper>
-    );
-  };
-}
+      return (
+        <SidebarListWrapper>
+          {categorySlug ? (
+            <Link to={urlWithoutPage + "/1"}>
+              <SidebarBreadcrumb active={active}>
+                <div>
+                  <ChevronDown />
+                </div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: category && category.name
+                  }}
+                />
+              </SidebarBreadcrumb>
+            </Link>
+          ) : (
+            <Link to={`/${language}/`}>
+              <SidebarBreadcrumb active={active}>
+                <div>
+                  <ChevronDown />
+                </div>
+                <div>{intl.formatMessage(pageMessages.home)}</div>
+              </SidebarBreadcrumb>
+            </Link>
+          )}
+
+          {active && (
+            <div>
+              {categoryIds.length > 0 ? (
+                <ul>
+                  <li className="header">
+                    <h4>{intl.formatMessage(product.categories)}</h4>
+                  </li>
+                  {categoryIds.map(categoryId => (
+                    <CategoryItem
+                      key={categoryId}
+                      id={categoryId}
+                      parents={newParents}
+                    />
+                  ))}
+                </ul>
+              ) : null /*<p>Keine weiteren Unterkategorien gefunden</p>*/}
+            </div>
+          )}
+          <Route
+            path={`${urlWithoutPage}/:categorySlug/:page`}
+            render={props => <RoutedSidebar {...props} parents={newParents} />}
+          />
+        </SidebarListWrapper>
+      );
+    }
+  )
+);
 
 const mapStateToProps = (
   state,
@@ -158,6 +129,7 @@ const mapStateToProps = (
   const category = getProductCategoryBySlug(state, categorySlug);
 
   return {
+    language: getLanguage(state),
     categorySlug,
     category,
     categoryIds:
@@ -179,74 +151,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
-  dispatch,
-  {
-    match: {
-      params: { categorySlug, page = 1 }
-    }
-  }
-) => ({
-  dispatch,
-  /**
-   * Fetches all product catrgories
-   * @param {number} perPage The amount of items per page
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchAllProductCategoriesIfNeeded(
-    perPage = ITEMS_PER_PAGE,
-    visualize = true
-  ) {
-    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
-  },
-  /**
-   * Fetches the matching products
-   * @param {number} [categoryId=null] The category id
-   * @param {number} perPage The amount of products per page
-   * @param {visualize} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProducts(categoryId = null, perPage = ITEMS_PER_PAGE, visualize = true) {
-    return categoryId && !isNaN(page)
-      ? dispatch(
-          fetchProducts(
-            page,
-            page,
-            perPage,
-            visualize,
-            [],
-            [parseInt(categoryId)]
-          )
-        )
-      : Promise.resolve();
-  }
-});
-
-const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
-  ...ownProps,
-  ...mapStateToProps,
-  ...mapDispatchToProps,
-  /**
-   * Fetches the matching products
-   * @param {number} perPage The amount of products per page
-   * @param {visualize} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProducts(perPage = ITEMS_PER_PAGE, visualize = true) {
-    const page = parseInt(ownProps.match.params.page);
-    const categoryId = mapStateToProps.category
-      ? mapStateToProps.category.id
-      : null;
-    return mapDispatchToProps.fetchProducts(categoryId, perPage, visualize);
-  }
-});
-
-const ConnectedSidebar = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(CategoriesSidebar);
+const ConnectedSidebar = connect(mapStateToProps)(CategoriesSidebar);
 
 const RoutedSidebar = withRouter(ConnectedSidebar);
 

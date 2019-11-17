@@ -1,0 +1,22 @@
+[
+  {
+    "id": "pagination.previous",
+    "defaultMessage": "Vorherige"
+  },
+  {
+    "id": "pagination.next",
+    "defaultMessage": "Nächste"
+  },
+  {
+    "id": "pagination.page",
+    "defaultMessage": "Seite"
+  },
+  {
+    "id": "pagination.of",
+    "defaultMessage": "von"
+  },
+  {
+    "id": "pagination.rows",
+    "defaultMessage": "Zeilen"
+  }
+]

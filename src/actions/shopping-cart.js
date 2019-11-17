@@ -1,6 +1,13 @@
 import { fetchApi } from "../utilities/api";
 import { createFetchAction } from "../utilities/action";
 import { getShoppingCartLastFetched } from "../reducers";
+import {
+  trackAddingCartItem,
+  trackClearingCart,
+  addCartItem,
+  trackCartUpdate,
+  clearCart
+} from "../utilities/analytics";
 
 /**
  * Fetches the shopping cart
@@ -17,23 +24,31 @@ const fetchShoppingCartAction = createFetchAction(
 
 /**
  * Fetches the shopping cart
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-const fetchShoppingCart = (visualize = false) => dispatch => {
+export const fetchShoppingCart = (language, visualize = false) => dispatch => {
   dispatch(fetchShoppingCartAction(true, null, visualize));
-  return fetchApi(`/wp-json/hfag/shopping-cart`, {
+  return fetchApi(`${language}/wp-json/hfag/shopping-cart`, {
     method: "GET",
     credentials: "include"
   })
     .then(({ json: cart }) => {
       dispatch(fetchShoppingCartAction(false, null, visualize, cart));
 
+      clearCart();
+
+      for (const item of cart.items) {
+        addCartItem(item.sku, item.title, undefined, item.price, item.quantity);
+      }
+
+      trackCartUpdate(cart.total);
+
       return Promise.resolve(cart);
     })
     .catch(e => {
       dispatch(fetchShoppingCartAction(false, e, visualize));
-
       return Promise.reject(e);
     });
 };
@@ -47,16 +62,17 @@ const shouldFetchShoppingCart = state => {
 };
 /**
  * Fetches the shopping cart if needed
+ * @param {string} language The language string
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const fetchShoppingCartIfNeeded = (visualize = false) => (
+export const fetchShoppingCartIfNeeded = (language, visualize = false) => (
   dispatch,
   getState
 ) => {
   const state = getState();
   return shouldFetchShoppingCart(state)
-    ? fetchShoppingCart(visualize)(dispatch)
+    ? fetchShoppingCart(language, visualize)(dispatch)
     : Promise.resolve();
 };
 
@@ -79,7 +95,10 @@ const addShoppingCartItemAction = createFetchAction(
  * @param {number|string} [variationId] The variation id
  * @param {Object} [variation] The variation attributes
  * @param {number} [quantity=1] The quantity
+ * @param {Object} analytics The analytics data
+ * @param {string} language The language string
  * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
+ *
  * @returns {function} The redux thunk
  */
 export const addShoppingCartItem = (
@@ -87,11 +106,13 @@ export const addShoppingCartItem = (
   variationId,
   variation,
   quantity = 1,
+  { sku, productName, minPrice },
+  language,
   visualize = false
 ) => dispatch => {
   dispatch(addShoppingCartItemAction(true, null, visualize));
 
-  return fetchApi("/wp-json/hfag/shopping-cart", {
+  return fetchApi(`${language}/wp-json/hfag/shopping-cart`, {
     method: "POST",
     credentials: "include",
     body: JSON.stringify({
@@ -106,26 +127,34 @@ export const addShoppingCartItem = (
         return Promise.reject(new Error("Unknown error while adding"));
       }
 
+      trackAddingCartItem(
+        sku,
+        productName,
+        undefined,
+        minPrice,
+        quantity,
+        cart.total
+      );
+
       dispatch(addShoppingCartItemAction(false, null, visualize, cart));
 
       return Promise.resolve(cart);
     })
     .catch(e => {
       dispatch(addShoppingCartItemAction(false, e, visualize));
-
       return Promise.reject(e);
     });
 };
 
 /**
- * Adds an item to the shopping cart
+ * Updates the shopping cart
  * @param {boolean} isFetching Whether the cart is currently being updated
  * @param {string} error If there was an error during the request, this field should contain it
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @param {object} cart The received shopping cart
  * @returns {object} The redux action
  */
-const updateShoppingCartItemAction = createFetchAction(
+const updateShoppingCartAction = createFetchAction(
   "UPDATE_SHOPPING_CART",
   "cart"
 );
@@ -133,16 +162,20 @@ const updateShoppingCartItemAction = createFetchAction(
 /**
  * Updates the shopping cart
  * @param {Array<Object>} items All items that should be in the shopping cart
+ * @param {Array<Object>} oldItems The previous shopping cart items
+ * @param {string} language The language string
  * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-export const updateShoppingCartItem = (
+export const updateShoppingCart = (
   items,
+  oldItems,
+  language,
   visualize = false
 ) => dispatch => {
-  dispatch(updateShoppingCartItemAction(true, null, visualize));
+  dispatch(updateShoppingCartAction(true, null, visualize));
 
-  return fetchApi("/wp-json/hfag/shopping-cart", {
+  return fetchApi(`${language}/wp-json/hfag/shopping-cart`, {
     method: "PUT",
     credentials: "include",
     body: JSON.stringify({
@@ -151,15 +184,23 @@ export const updateShoppingCartItem = (
   })
     .then(({ json: cart }) => {
       if (cart.error) {
-        return Promise.reject(new Error("Unknown error while adding"));
+        return Promise.reject(new Error("Unknown error while updating cart"));
       }
 
-      dispatch(updateShoppingCartItemAction(false, null, visualize, cart));
+      clearCart();
+
+      for (const item of cart.items) {
+        addCartItem(item.sku, item.title, undefined, item.price, item.quantity);
+      }
+
+      trackCartUpdate(cart.total);
+
+      dispatch(updateShoppingCartAction(false, null, visualize, cart));
 
       return Promise.resolve(cart);
     })
     .catch(e => {
-      dispatch(updateShoppingCartItemAction(false, e, visualize));
+      dispatch(updateShoppingCartAction(false, e, visualize));
 
       return Promise.reject(e);
     });
@@ -189,6 +230,7 @@ const submitOrderAction = createFetchAction(
  * @param {Object} shippingAddress The shipping address
  * @param {Object} billingAddress All billing address
  * @param {string} comments Optional order comment
+ * @param {string} language The language string
  * @param {boolean} [visualize=false] Whether the progress of this action should be visualized
  * @returns {Promise} The redux thunk
  */
@@ -196,6 +238,7 @@ export const submitOrder = (
   shippingAddress,
   billingAddress,
   comments = "",
+  language,
   visualize = false
 ) => dispatch => {
   dispatch(
@@ -210,7 +253,7 @@ export const submitOrder = (
     )
   );
 
-  return fetchApi("/wp-json/hfag/submit-order", {
+  return fetchApi(`${language}/wp-json/hfag/submit-order`, {
     method: "POST",
     credentials: "include",
     body: JSON.stringify({
@@ -256,7 +299,16 @@ export const submitOrder = (
 };
 
 /**
- * Clears a shopping cart
+ * The shopping cart clearing action
  * @returns {Object} The redux action
  */
-export const clearShoppingCart = () => ({ type: "CLEAR_SHOPPING_CART" });
+const clearShoppingCartAction = () => ({ type: "CLEAR_SHOPPING_CART" });
+
+/**
+ * Clears the shopping cart
+ * @returns {function} The redux thunk
+ */
+export const clearShoppingCart = () => dispatch => {
+  trackClearingCart();
+  dispatch(clearShoppingCartAction());
+};

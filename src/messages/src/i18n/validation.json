@@ -1,0 +1,14 @@
+[
+  {
+    "id": "validation.isRequired",
+    "defaultMessage": "Dieses Feld darf nicht leer sein"
+  },
+  {
+    "id": "validation.passwordsMustMatch",
+    "defaultMessage": "Die beiden Passwörter müssen übereinstimmen!"
+  },
+  {
+    "id": "validation.passwordConfirmation",
+    "defaultMessage": "Passwort bestätigen"
+  }
+]

@@ -29,59 +29,107 @@ const generateStringBreadcrumb = text => ({ url }, location, state) => [
 
 const routes = [
   {
-    path: "/",
+    path: "/de",
     breadcrumb: generateStringBreadcrumb("Startseite")
   },
   {
-    path: "/login",
+    path: "/de/login",
     breadcrumb: generateStringBreadcrumb("Anmelden")
   },
   {
-    path: "/warenkorb",
+    path: "/de/warenkorb",
     breadcrumb: generateStringBreadcrumb("Warenkorb")
   },
   {
-    path: "/kasse",
-    breadcrumb: generateStringBreadcrumb("Kasse")
-  },
-  {
-    path: "/konto",
+    path: "/de/konto",
     breadcrumb: generateStringBreadcrumb("Konto")
   },
   {
-    path: "/konto/details",
+    path: "/de/konto/details",
     breadcrumb: generateStringBreadcrumb("Details")
   },
   {
-    path: "/konto/rechnungsadresse",
+    path: "/de/konto/rechnungsadresse",
     breadcrumb: generateStringBreadcrumb("Rechnungsadresse")
   },
   {
-    path: "/konto/lieferadresse",
+    path: "/de/konto/lieferadresse",
     breadcrumb: generateStringBreadcrumb("Lieferadresse")
   },
   {
-    path: "/konto/bestellungen",
+    path: "/de/konto/bestellungen",
     breadcrumb: generateStringBreadcrumb("Bestellungen")
   },
   {
-    path: "/suche",
+    path: "/de/suche",
     breadcrumb: generateStringBreadcrumb("Suche")
   },
   {
-    path: "/produkt-kategorie/",
+    path: "/de/produkt-kategorie/",
     breadcrumb: generateCategoryBreadcrumbs
   },
   {
-    path: "/produkt/:productSlug",
+    path: "/de/produkt/:productSlug",
     breadcrumb: generateProductBreadcrumbs
   },
   {
-    path: "/beitrag/:postSlug",
+    path: "/de/beitrag/:postSlug",
     breadcrumb: generatePostBreadcrumbs
   },
   {
-    path: "/seite/:pageSlug",
+    path: "/de/seite/:pageSlug",
+    breadcrumb: generatePageBreadcrumbs
+  },
+  {
+    path: "/fr",
+    breadcrumb: generateStringBreadcrumb("Page d'accueil")
+  },
+  {
+    path: "/fr/login",
+    breadcrumb: generateStringBreadcrumb("Connexion")
+  },
+  {
+    path: "/fr/panier-d-achat",
+    breadcrumb: generateStringBreadcrumb("Panier d'achat")
+  },
+  {
+    path: "/fr/compte",
+    breadcrumb: generateStringBreadcrumb("Compte")
+  },
+  {
+    path: "/fr/compte/details",
+    breadcrumb: generateStringBreadcrumb("Détails")
+  },
+  {
+    path: "/fr/compte/adresse-de-facturation",
+    breadcrumb: generateStringBreadcrumb("Adresse de facturation")
+  },
+  {
+    path: "/fr/compte/adresse-de-livraison",
+    breadcrumb: generateStringBreadcrumb("Adresse de livraison")
+  },
+  {
+    path: "/fr/compte/commandes",
+    breadcrumb: generateStringBreadcrumb("Commandes")
+  },
+  {
+    path: "/fr/recherche",
+    breadcrumb: generateStringBreadcrumb("Recherche")
+  },
+  {
+    path: "/fr/produit-categorie/",
+    breadcrumb: generateCategoryBreadcrumbs
+  },
+  {
+    path: "/fr/produit/:productSlug",
+    breadcrumb: generateProductBreadcrumbs
+  },
+  {
+    path: "/fr/article/:postSlug",
+    breadcrumb: generatePostBreadcrumbs
+  },
+  {
+    path: "/fr/page/:pageSlug",
     breadcrumb: generatePageBreadcrumbs
   }
 ];
@@ -151,5 +199,5 @@ const mapStateToProps = state => ({
   state
 });
 
-const ConnectedRouter = connect(mapStateToProps)(Breadcrumbs);
-export default withRouter(ConnectedRouter);
+const ConnectedBreadcrumbs = connect(mapStateToProps)(Breadcrumbs);
+export default withRouter(ConnectedBreadcrumbs);

@@ -1,4 +1,9 @@
-import { getProductCategoryById, getProductBySlug } from "reducers";
+import {
+  getProductCategoryById,
+  getProductBySlug,
+  getLanguage
+} from "../../reducers";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 /**
  * Generates the breadcrumb array for a product
@@ -27,26 +32,28 @@ export const generateProductBreadcrumbs = (
   let current = category;
 
   while (current.parent) {
-    parents.push(getProductCategoryById(state, current.parent));
+    parents.push(getProductCategoryById(state, current.parent) || {});
     current = parents[parents.length - 1];
   }
 
   const reversedParents = parents.reverse();
+  const language = getLanguage(state);
 
   return [
     ...reversedParents.map((category, index) => ({
-      url:
-        "/produkt-kategorie/" +
-        (index > 0
+      url: `/${language}/${pathnamesByLanguage[language].productCategory}/${
+        index > 0
           ? reversedParents
               .slice(0, index)
               .map(category => category.slug)
               .join("/") + "/"
-          : "") +
-        category.slug +
-        "/1",
+          : ""
+      }${category.slug}/1`,
       name: category.name
     })),
-    { url: "/produkt/" + productSlug, name: product.title }
+    {
+      url: `/${language}/${pathnamesByLanguage[language].product}/${productSlug}`,
+      name: product.title
+    }
   ];
 };

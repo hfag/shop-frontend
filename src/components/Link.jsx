@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -16,12 +16,21 @@ const UnstyledLink = styled.a`
   font-weight: ${({ active }) => (active ? "bold" : "normal")};
   display: ${({ block }) => (block ? "inline-block" : "inline")};
 
-  color: ${({ negative }) =>
-    negative ? colors.primaryContrast : colors.primary};
+  color: ${({ negative }) => (negative ? colors.primaryContrast : colors.font)};
+
+  text-decoration: none;
+
+  &:hover {
+    border-bottom: ${({ negative }) =>
+        negative ? colors.primaryContrast : colors.font}
+      1px solid;
+  }
 `;
 
 const StyledLink = styled(UnstyledLink)`
-  text-decoration: underline;
+  border-bottom: ${({ negative }) =>
+      negative ? colors.primaryContrast : colors.font}
+    1px solid;
 `;
 
 /**

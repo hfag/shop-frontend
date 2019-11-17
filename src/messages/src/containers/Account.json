@@ -1,0 +1,22 @@
+[
+  {
+    "id": "Account.siteTitle",
+    "defaultMessage": "Mein Kundenkonto bei der Hauser Feuerschutz AG"
+  },
+  {
+    "id": "Account.siteDescription",
+    "defaultMessage": "Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
+  },
+  {
+    "id": "Account.myAccount",
+    "defaultMessage": "Mein Kundenkonto"
+  },
+  {
+    "id": "Account.overview",
+    "defaultMessage": "Übersicht"
+  },
+  {
+    "id": "Account.details",
+    "defaultMessage": "Details"
+  }
+]

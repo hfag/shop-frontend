@@ -9,7 +9,9 @@ const Navbar = styled.div`
 
   background-color: ${colors.primary};
   color: ${colors.primaryContrast};
+  border-bottom: ${colors.primaryContrast} 1px solid;
   box-shadow: ${shadows.y};
+
   padding: 1rem 0;
   height: 5rem;
 

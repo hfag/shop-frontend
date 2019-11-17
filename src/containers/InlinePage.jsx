@@ -2,9 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-import { getPageBySlug } from "../reducers";
+import { getPageBySlug, getLanguageFetchString } from "../reducers";
 import { fetchPageIfNeeded } from "../actions/pages";
 import { borders, colors } from "../utilities/style";
+import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 
 const InlinePageContainer = styled.div`
   max-height: 200px;
@@ -32,26 +33,44 @@ class InlinePage extends React.PureComponent {
     return (
       <InlinePageContainer>
         <h1 dangerouslySetInnerHTML={{ __html: page.title }} />
-        <div dangerouslySetInnerHTML={{ __html: page.content }} />
+        <UnsafeHTMLContent content={page.content} />
       </InlinePageContainer>
     );
   };
 }
 
 const mapStateToProps = (state, { slug: pageSlug }) => ({
+  languageFetchString: getLanguageFetchString(state),
   page: getPageBySlug(state, pageSlug)
 });
 const mapDispatchToProps = (dispatch, { slug: pageSlug }) => ({
   /**
    * Fetches the current post
+   * @param {string} language The language string
+   * @returns {Promise} The fetch promise
+   */
+  fetchPageIfNeeded(language) {
+    return dispatch(fetchPageIfNeeded(pageSlug, language));
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
+  /**
+   * Fetches the current post
    * @returns {Promise} The fetch promise
    */
   fetchPageIfNeeded() {
-    return dispatch(fetchPageIfNeeded(pageSlug));
+    return mapDispatchToProps.fetchPageIfNeeded(
+      mapStateToProps.languageFetchString
+    );
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(InlinePage);

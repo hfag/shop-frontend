@@ -1,0 +1,30 @@
+[
+  {
+    "id": "CheckoutForm.shipToDifferentAddress",
+    "defaultMessage": "Lieferung an eine andere Adresse"
+  },
+  {
+    "id": "CheckoutForm.orderComments",
+    "defaultMessage": "Bestellnotiz"
+  },
+  {
+    "id": "CheckoutForm.orderCommentsPlaceholder",
+    "defaultMessage": "Anmerkungen zu Ihrer Bestellung, z.B. besondere Hinweise für die Lieferung."
+  },
+  {
+    "id": "CheckoutForm.paymentMethods",
+    "defaultMessage": "Zahlungsmethoden"
+  },
+  {
+    "id": "CheckoutForm.acceptTos",
+    "defaultMessage": "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und akzeptiere diese *"
+  },
+  {
+    "id": "CheckoutForm.submitOrder",
+    "defaultMessage": "Bestellung abschicken"
+  },
+  {
+    "id": "CheckoutForm.tosMustBeAccepted",
+    "defaultMessage": "Die AGBs müssen akzeptiert werden!"
+  }
+]

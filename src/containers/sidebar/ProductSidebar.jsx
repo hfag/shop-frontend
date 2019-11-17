@@ -2,32 +2,31 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import ChevronDown from "react-icons/lib/fa/chevron-down";
+import { defineMessages, injectIntl } from "react-intl";
+import { FaChevronDown as ChevronDown } from "react-icons/fa";
 
 import Link from "../../components/Link";
 import {
   getProductCategories,
   getProductBySlug,
-  getProductCategoryById
+  getProductCategoryById,
+  getLanguage
 } from "../../reducers";
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
-/**
- * Renders a single product item
- * @returns {Component} The component
- */
-class ProductSidebar extends React.PureComponent {
-  render = () => {
-    const { id: productId, product, categories } = this.props;
+import { pathnamesByLanguage } from "../../utilities/urls";
+import page from "../../i18n/page";
 
+const ProductSidebar = React.memo(
+  injectIntl(({ language, id: productId, product, categories, intl }) => {
     return (
       <SidebarListWrapper>
-        <Link to="/">
+        <Link to={`/${language}/`}>
           <SidebarBreadcrumb active={false}>
             <div>
               <ChevronDown />
             </div>
-            <div>Startseite</div>
+            <div>{intl.formatMessage(page.home)}</div>
           </SidebarBreadcrumb>
         </Link>
         <hr />
@@ -35,17 +34,16 @@ class ProductSidebar extends React.PureComponent {
           ...category.parents.map((category, index) => (
             <Link
               key={category.id}
-              to={
-                "/produkt-kategorie/" +
-                (index > 0
+              to={`/${language}/${
+                pathnamesByLanguage[language].productCategory
+              }/${
+                index > 0
                   ? category.parents
                       .slice(0, index)
                       .map(category => category.slug)
                       .join("/") + "/"
-                  : "") +
-                category.slug +
-                "/1"
-              }
+                  : ""
+              }${category.slug}/1`}
             >
               <SidebarBreadcrumb active={false}>
                 <div>
@@ -57,15 +55,14 @@ class ProductSidebar extends React.PureComponent {
           )),
           <Link
             key={category.id}
-            to={
-              "/produkt-kategorie/" +
-              (category.parents.length > 0
+            to={`/${language}/${
+              pathnamesByLanguage[language].productCategory
+            }/${
+              category.parents.length > 0
                 ? category.parents.map(category => category.slug).join("/") +
                   "/"
-                : "") +
-              category.slug +
-              "/1"
-            }
+                : ""
+            }${category.slug}/1`}
           >
             <SidebarBreadcrumb active={false}>
               <div>
@@ -85,8 +82,8 @@ class ProductSidebar extends React.PureComponent {
         <hr />
       </SidebarListWrapper>
     );
-  };
-}
+  })
+);
 
 ProductSidebar.propTypes = {};
 
@@ -100,6 +97,7 @@ const mapStateToProps = (
 ) => {
   const product = getProductBySlug(state, productSlug);
   return {
+    language: getLanguage(state),
     productSlug,
     product: product && !product._isFetching ? product : {},
     categories:
@@ -112,7 +110,9 @@ const mapStateToProps = (
               let current = category;
 
               while (current.parent) {
-                parents.push(getProductCategoryById(state, current.parent));
+                parents.push(
+                  getProductCategoryById(state, current.parent) || {}
+                );
                 current = parents[parents.length - 1];
               }
 

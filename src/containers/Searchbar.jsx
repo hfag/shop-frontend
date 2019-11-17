@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 import styled from "styled-components";
 import Autosuggest from "react-autosuggest";
 import debounce from "lodash/debounce";
 import { withRouter } from "react-router";
+import { defineMessages, injectIntl } from "react-intl";
 
 import Flexbar from "../components/Flexbar";
 import Link from "../components/Link";
@@ -12,9 +13,24 @@ import { colors, shadows } from "../utilities/style";
 import { search, reset } from "../actions/product-search";
 import {
   getProductSearchSections,
-  getLastProductSearchQuery
+  getLastProductSearchQuery,
+  getLanguageFetchString,
+  getLanguage
 } from "../reducers";
 import Price from "../components/Price";
+import { pathnamesByLanguage } from "../utilities/urls";
+import product from "../i18n/product";
+
+const messages = defineMessages({
+  placeholder: {
+    id: "Searchbar.placeholder",
+    defaultMessage: "Suchen Sie nach einem Produkt"
+  },
+  showMore: {
+    id: "Searchbar.showMore",
+    defaultMessage: "Zeige mehr..."
+  }
+});
 
 const StyledSearch = styled.div`
   position: relative;
@@ -104,61 +120,6 @@ const SearchInput = styled.input`
 const getSuggestionValue = suggestion => suggestion.title;
 
 /**
- * Renders a suggestion
- * @param {Object} suggestion The suggestion
- * @returns {Component} The component
- */
-const renderSuggestion = suggestion => {
-  switch (suggestion.type) {
-    case "product":
-      return (
-        <Suggestion>
-          <Flexbar>
-            <div className="name">{`${suggestion.title} (${
-              suggestion.variations
-            } Variante${suggestion.variations > 1 ? "n" : ""})`}</div>
-            <div className="price">
-              ab <Price>{parseFloat(suggestion.price)}</Price>
-            </div>
-          </Flexbar>
-          <Detail>{suggestion.sku}</Detail>
-        </Suggestion>
-      );
-    case "product_variation":
-      return (
-        <Suggestion>
-          <Flexbar>
-            <div className="name">{suggestion.title}</div>
-            <div className="price">
-              <Price>{parseFloat(suggestion.price)}</Price>
-            </div>
-          </Flexbar>
-          <Detail>{suggestion.sku}</Detail>
-        </Suggestion>
-      );
-    case "taxonomy":
-      return (
-        <Suggestion>
-          <Flexbar>
-            <div className="name">{`${suggestion.title} (${
-              suggestion.count
-            } Produkt${suggestion.count > 1 ? "e" : ""})`}</div>
-            <div className="price" />
-          </Flexbar>
-        </Suggestion>
-      );
-    case "show-more":
-      return (
-        <Suggestion>
-          <div className="name">{suggestion.title}</div>
-        </Suggestion>
-      );
-    default:
-      return null;
-  }
-};
-
-/**
  * Renders the suggstion wrapper
  * @param {Object} props react-autosuggest props
  * @returns {Component} The component
@@ -186,16 +147,6 @@ const renderInputComponent = inputProps => {
 const renderSectionTitle = section => {
   return <SuggestionTitle>{section.title}</SuggestionTitle>;
 };
-
-/**
- * Retrieves the suggestions per section
- * @param {Object} section The section
- * @returns {Array<Object>} An array of suggestions
- */
-const getSectionSuggestions = section => [
-  ...section.suggestions,
-  { title: "Zeige mehr..", type: "show-more" }
-];
 
 /**
  * The searchbar component
@@ -227,7 +178,7 @@ class Searchbar extends React.PureComponent {
     ({ value }) =>
       value.trim() !== "" &&
       value.trim() !== this.props.lastQuery.trim() &&
-      this.props.dispatch(search(true, value)),
+      this.props.dispatch(search(this.props.languageFetchString, true, value)),
     300
   );
   /**
@@ -243,26 +194,34 @@ class Searchbar extends React.PureComponent {
    * @returns {void}
    */
   onSuggestionSelected = (event, { suggestion }) => {
+    const { language } = this.props;
     this.setState({ value: "" });
 
     switch (suggestion.type) {
       case "product":
-        return this.props.dispatch(push("/produkt/" + suggestion.slug));
+        return this.props.dispatch(
+          push(
+            `/${language}/${pathnamesByLanguage[language].product}/${suggestion.slug}`
+          )
+        );
       case "product_variation":
         return this.props.dispatch(
           push(
-            "/produkt/" +
-              suggestion.parent_slug +
-              "?variationId=" +
-              suggestion.id
+            `/${language}/${pathnamesByLanguage[language].product}/${suggestion.parent_slug}?variationId=${suggestion.id}`
           )
         );
       case "taxonomy":
         return this.props.dispatch(
-          push("/produkt-kategorie/" + suggestion.slug + "/1")
+          push(
+            `/${language}/${pathnamesByLanguage[language].productCategory}/${suggestion.slug}/1`
+          )
         );
       case "show-more":
-        this.props.dispatch(push(`/suche?query=${this.state.value}`));
+        this.props.dispatch(
+          push(
+            `/${language}/${pathnamesByLanguage[language].search}?query=${this.state.value}`
+          )
+        );
         return this.setState({ value: "" });
       default:
         return;
@@ -274,13 +233,88 @@ class Searchbar extends React.PureComponent {
    */
   shouldRenderSuggestions = () => this.state.value.length > 2;
 
+  /**
+   * Retrieves the suggestions per section
+   * @param {Object} section The section object
+   * @returns {Array<Object>} The callback function
+   */
+  getSectionSuggestions = section => [
+    ...section.suggestions,
+    {
+      title: this.props.intl.formatMessage(messages.showMore),
+      type: "show-more"
+    }
+  ];
+
+  /**
+   * Renders a suggestion
+   * @param {Object} suggestion The suggestion
+   * @returns {Component} The component
+   */
+  renderSuggestion = suggestion => {
+    const { intl } = this.props;
+
+    switch (suggestion.type) {
+      case "product":
+        return (
+          <Suggestion>
+            <Flexbar>
+              <div className="name">{`${suggestion.title} (${
+                suggestion.variations
+              } ${intl.formatMessage(product.variation)}${
+                suggestion.variations > 1 ? "n" : ""
+              })`}</div>
+              <div className="price">
+                {intl.formatMessage(product.from)}{" "}
+                <Price>{parseFloat(suggestion.price)}</Price>
+              </div>
+            </Flexbar>
+            <Detail>{suggestion.sku}</Detail>
+          </Suggestion>
+        );
+      case "product_variation":
+        return (
+          <Suggestion>
+            <Flexbar>
+              <div className="name">{suggestion.title}</div>
+              <div className="price">
+                <Price>{parseFloat(suggestion.price)}</Price>
+              </div>
+            </Flexbar>
+            <Detail>{suggestion.sku}</Detail>
+          </Suggestion>
+        );
+      case "taxonomy":
+        return (
+          <Suggestion>
+            <Flexbar>
+              <div className="name">{`${suggestion.title} (${
+                suggestion.count
+              } ${intl.formatMessage(product.product)}${
+                suggestion.count > 1 ? "e" : ""
+              })`}</div>
+              <div className="price" />
+            </Flexbar>
+          </Suggestion>
+        );
+      case "show-more":
+        return (
+          <Suggestion>
+            <div className="name">{suggestion.title}</div>
+          </Suggestion>
+        );
+      default:
+        return null;
+    }
+  };
+
   render = () => {
     const { value } = this.state;
-    const { dispatch, sections, lastQuery } = this.props;
+    const { dispatch, sections, lastQuery, intl } = this.props;
 
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: "Suche nach einem Produkt",
+      placeholder: intl.formatMessage(messages.placeholder),
       value,
       onChange: this.onChange,
       onKeyDown: e => {
@@ -303,14 +337,14 @@ class Searchbar extends React.PureComponent {
           onSuggestionSelected={this.onSuggestionSelected}
           shouldRenderSuggestions={this.shouldRenderSuggestions}
           getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
+          renderSuggestion={this.renderSuggestion}
           renderSuggestionsContainer={renderSuggestionContainer}
           renderInputComponent={renderInputComponent}
           focusInputOnSuggestionClick={false}
           inputProps={inputProps}
           multiSection={true}
           renderSectionTitle={renderSectionTitle}
-          getSectionSuggestions={getSectionSuggestions}
+          getSectionSuggestions={this.getSectionSuggestions}
         />
       </StyledSearch>
     );
@@ -318,9 +352,12 @@ class Searchbar extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
+  language: getLanguage(state),
+  languageFetchString: getLanguageFetchString(state),
   sections: getProductSearchSections(state),
   lastQuery: getLastProductSearchQuery(state)
 });
 
-const ConnectedSearchbar = connect(mapStateToProps)(Searchbar);
+const TranslatedSearchbar = injectIntl(Searchbar);
+const ConnectedSearchbar = connect(mapStateToProps)(TranslatedSearchbar);
 export default withRouter(ConnectedSearchbar);

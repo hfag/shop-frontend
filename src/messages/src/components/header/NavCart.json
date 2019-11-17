@@ -1,0 +1,10 @@
+[
+  {
+    "id": "NavCart.emptyCart",
+    "defaultMessage": "Es befinden sich bisher noch keine Produkte im Warenkorb."
+  },
+  {
+    "id": "NavCart.toCart",
+    "defaultMessage": "Zum Warenkorb"
+  }
+]

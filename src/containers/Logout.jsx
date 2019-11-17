@@ -1,38 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
+import { defineMessages, injectIntl } from "react-intl";
 
 import { logout } from "../actions/authentication";
 import Card from "../components/Card";
-/**
- * The login page
- * @returns {Component} The component
- */
-class Logout extends React.PureComponent {
-  componentDidMount = () => {
-    this.props.logout();
-  };
+import { getLanguage } from "../reducers";
+import user from "../i18n/user";
 
-  render = () => {
-    return <Card>Abmelden...</Card>;
-  };
-}
+const Logout = React.memo(
+  injectIntl(({ logout, intl }) => {
+    useEffect(() => {
+      logout();
+    }, []);
 
-const mapStateToProps = state => ({});
+    return <Card>{intl.formatMessage(user.logout)}...</Card>;
+  })
+);
+
+const mapStateToProps = state => ({ language: getLanguage(state) });
 const mapDispatchToProps = dispatch => ({
   dispatch,
+  /**
+   * Logs a user out
+   * @param {string} language The language
+   * @returns {Promise} The fetch promise
+   */
+  logout(language) {
+    const promise = dispatch(logout());
+    dispatch(push(`/${language}/`));
+    return promise;
+  }
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
   /**
    * Logs a user out
    * @returns {Promise} The fetch promise
    */
   logout() {
-    const promise = dispatch(logout());
-    dispatch(push("/"));
-    return promise;
+    return mapDispatchToProps.logout(mapStateToProps.language);
   }
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Logout);

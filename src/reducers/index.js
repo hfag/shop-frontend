@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import { loadingBarReducer as loadingBar } from "react-redux-loading-bar";
-import { routerReducer as router } from "react-router-redux";
 
 import { wrap } from "../utilities/reducer";
 import productSearch, * as fromProductSearch from "./product-search";
@@ -15,6 +14,11 @@ import sales, * as fromSales from "./sales";
 import account, * as fromAccount from "./account";
 import orders, * as fromOrders from "./orders";
 import burgerMenu, * as fromBurgerMenu from "./burger-menu";
+import { createRouterReducer } from "./router";
+import {
+  getLanguageFromPathname,
+  languageToFetchString
+} from "../utilities/i18n";
 
 /**
  * Checks whether the burger menu is open
@@ -252,6 +256,23 @@ export const getPosts = wrap(fromPost.getPosts, state => state.post);
 export const getPostBySlug = wrap(fromPost.getPostBySlug, state => state.post);
 
 /**
+ * Gets the timestamp when the last time posts were fetched
+ * @returns {number} The timestamp
+ */
+export const getPostsLastFetched = wrap(
+  fromPost.getPostsLastFetched,
+  state => state.post
+);
+/**
+ * Checks whether posts are currently being fetched
+ * @returns {boolean} Whether they're being fetched
+ */
+export const isFetchingPosts = wrap(
+  fromPost.isFetchingPosts,
+  state => state.post
+);
+
+/**
  * Returns all pages
  * @param {object} state This state
  * @return {array} All pages
@@ -458,38 +479,62 @@ export const getOrdersLastFetched = wrap(
   state => state.orders
 );
 
-const appReducer = combineReducers({
-  router,
-  loadingBar,
-  burgerMenu,
-  productSearch,
-  shoppingCart,
-  product,
-  simpleProduct,
-  attachment,
-  post,
-  page,
-  countries,
-  sales,
-  account,
-  orders,
-  isAuthenticated: (state = false, action) => {
-    switch (action.type) {
-      case "LOGIN_USER":
-        return !action.isFetching && !action.error ? action.success : state;
-      default:
-        return state;
-    }
-  }
-});
+/**
+ * Gets the current language based on the router location
+ * @param {Object} state The redux state
+ * @returns {string} The language key
+ */
+export const getLanguage = state => {
+  return getLanguageFromPathname(state.router.location.pathname);
+};
 
 /**
- * Make sure that the state is removed if the user signed out of the application
- * @param {Object} state The previous state
- * @param {Object} action The action to process
- * @returns {Object} The new state
+ * Gets the current language based on the router location
+ * @param {Object} state The redux state
+ * @returns {string} The language key
  */
-const rootReducer = (state, action) => {
+export const getLanguageFetchString = state => {
+  return languageToFetchString(getLanguage(state));
+};
+
+/**
+ * Creates the app reducer
+ * @param {Object} history The history object
+ * @returns {function} The app reducer
+ */
+const createAppReducer = history =>
+  combineReducers({
+    router: createRouterReducer(history),
+    loadingBar,
+    burgerMenu,
+    productSearch,
+    shoppingCart,
+    product,
+    simpleProduct,
+    attachment,
+    post,
+    page,
+    countries,
+    sales,
+    account,
+    orders,
+    isAuthenticated: (state = false, action) => {
+      switch (action.type) {
+        case "LOGIN_USER":
+          return !action.isFetching && !action.error ? action.success : state;
+        default:
+          return state;
+      }
+    }
+  });
+
+/**
+ * Creates the root reducer based on the app reducer
+ * Make sure that the state is removed if the user signed out of the application.
+ * @param {function} appReducer The app reducer
+ * @returns {function} The root reducer
+ */
+const rootReducer = appReducer => (state, action) => {
   if (action.type === "LOGOUT_USER") {
     state = undefined;
   }
@@ -505,4 +550,10 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
-export default rootReducer;
+/**
+ * Creates the root reducer
+ * @param {Object} history The history object
+ * @returns {function} The root reducer
+ */
+export const createRootReducer = history =>
+  rootReducer(createAppReducer(history));

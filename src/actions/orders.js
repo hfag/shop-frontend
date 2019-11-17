@@ -50,12 +50,13 @@ const fetchOrdersAction = createFetchAction("FETCH_ORDERS", "orders");
 
 /**
  * Fetches a user's orders
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress of this action
  * @returns {Promise} The fetch promise
  */
-export const fetchOrders = (visualize = false) => dispatch => {
+export const fetchOrders = (language, visualize = false) => dispatch => {
   dispatch(fetchOrdersAction(true, null, visualize));
-  return fetchApi(`/wp-json/hfag/user-orders`, {
+  return fetchApi(`${language}/wp-json/hfag/user-orders`, {
     method: "GET",
     credentials: "include"
   })
@@ -70,19 +71,3 @@ export const fetchOrders = (visualize = false) => dispatch => {
       return Promise.reject(e);
     });
 };
-
-/**
- * Tracks a conversion event
- * @param {number} total The total order amount
- * @param {string} currency The currency abbreviation
- * @param {number} transactionId The transaction id / order id
- * @returns {Object} The redux action
- */
-export const trackConversion = (total, currency, transactionId) => ({
-  type: "TRACK_CONVERSION",
-  payload: {
-    total,
-    currency,
-    transactionId
-  }
-});

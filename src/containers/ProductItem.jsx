@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
-import FaPercent from "react-icons/lib/fa/percent";
+import { Flex, Box } from "reflexbox";
+import { FaPercent } from "react-icons/fa";
+import { defineMessages, injectIntl } from "react-intl";
 
 import Thumbnail from "../containers/Thumbnail";
 import Placeholder from "../components/Placeholder";
@@ -14,10 +15,19 @@ import {
   getProductCategories,
   getProductBySlug,
   getProductById,
-  getResellerDiscountByProductId
+  getResellerDiscountByProductId,
+  getLanguage
 } from "../reducers";
 import RelativeBox from "../components/RelativeBox";
 import Price from "../components/Price";
+import { pathnamesByLanguage } from "../utilities/urls";
+
+const messages = defineMessages({
+  discountForResellers: {
+    id: "ProductItem.discountForResellers",
+    defaultMessage: "Rabatt für Wiederverkäufer"
+  }
+});
 
 const StyledProduct = styled.div`
   background-color: #fff;
@@ -75,6 +85,11 @@ const Subtitle = styled.span`
   font-size: 0.8rem;
   word-break: break-word;
   hyphens: auto;
+
+  u {
+    text-decoration: none;
+    border-bottom: ${colors.fontLight} 1px solid;
+  }
 `;
 
 const Discount = styled.div`
@@ -86,7 +101,7 @@ const Discount = styled.div`
 
   padding: 0.25rem;
   text-align: center;
-  line-height: 1.25rem;
+  line-height: 1.6rem;
 
   background-color: #fff;
   box-shadow: ${shadows.y};
@@ -95,31 +110,33 @@ const Discount = styled.div`
   z-index: 2;
 `;
 
-/**
- * Renders a single product item
- * @returns {Component} The component
- */
-class ProductItem extends React.PureComponent {
-  componentWillMount = () => {
-    const { fetchProductIfNeeded } = this.props;
+const ProductItem = React.memo(
+  injectIntl(({ product, categories, resellerDiscount, language, intl }) => {
+    const url = useMemo(() => {
+      if (product && product.slug) {
+        const base = pathnamesByLanguage[language].product;
 
-    //fetchProductIfNeeded();
-  };
+        return `/${language}/${base}/${product.slug}/`;
+      }
 
-  render = () => {
-    const { product, categories, resellerDiscount } = this.props;
+      return "";
+    }, [product, language]);
 
     return (
-      <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} pb={3}>
+      <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
         {resellerDiscount && (
           <Discount
-            data-balloon={`${resellerDiscount}% Rabatt für Wiederverkäufer`}
+            data-balloon={
+              resellerDiscount +
+              "% " +
+              intl.formatMessage(messages.discountForResellers)
+            }
             data-balloon-pos="up"
           >
             <FaPercent />
           </Discount>
         )}
-        <Link to={"/produkt/" + ((product && product.slug) || "")}>
+        <Link to={url}>
           <StyledProduct>
             <Thumbnail id={product ? product.thumbnailId : -1} />
             <div>
@@ -128,12 +145,12 @@ class ProductItem extends React.PureComponent {
               ) : (
                 <Placeholder text />
               )}
-              {product.minPrice && (
+              {!isNaN(product.minPrice) && product.minPrice && (
                 <div>
                   <Subtitle>
                     Ab{" "}
                     <u>
-                      <Price>{parseInt(product.minPrice)}</Price>
+                      <Price>{product.minPrice}</Price>
                     </u>
                   </Subtitle>
                 </div>
@@ -166,8 +183,8 @@ class ProductItem extends React.PureComponent {
         </Link>
       </RelativeBox>
     );
-  };
-}
+  })
+);
 
 ProductItem.propTypes = {
   id: PropTypes.number.isRequired,
@@ -179,46 +196,14 @@ const mapStateToProps = (state, { id }) => {
 
   return product && product.categoryIds
     ? {
+        language: getLanguage(state),
         product,
         categories: getProductCategories(state).filter(category =>
           product.categoryIds.includes(category.id)
         ),
         resellerDiscount: getResellerDiscountByProductId(state, id)
       }
-    : {};
+    : { language: getLanguage(state) };
 };
 
-const mapDispatchToProps = dispatch => ({
-  /**
-   * Fetches a product
-   * @param {string} slug The product's slug
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProductIfNeeded(slug, visualize = true) {
-    return dispatch(fetchProductIfNeeded(slug, visualize));
-  }
-});
-
-const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
-  ...ownProps,
-  ...mapStateToProps,
-  ...mapDispatchToProps,
-  /**
-   * Fetches a product
-   * @param {boolean} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProductIfNeeded(visualize = true) {
-    return mapDispatchToProps.fetchProductIfNeeded(
-      mapStateToProps.product.slug,
-      visualize
-    );
-  }
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(ProductItem);
+export default connect(mapStateToProps)(ProductItem);

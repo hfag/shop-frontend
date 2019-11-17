@@ -1,14 +1,24 @@
-import React from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef
+} from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Route } from "react-router-dom";
-import { push } from "react-router-redux";
+import { Box } from "reflexbox";
+import { push } from "connected-react-router";
 import {
   getProducts,
   getProductCategoryChildrenIdsById,
   getProductCategoryBySlug
 } from "reducers";
 import { Helmet } from "react-helmet";
+import { injectIntl, defineMessages } from "react-intl";
+import styled from "styled-components";
+import { FaInfoCircle, FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
 import Flex from "../components/Flex";
 import Pagination from "../components/Pagination";
@@ -18,190 +28,294 @@ import { fetchAllProductCategoriesIfNeeded } from "../actions/product/categories
 import { fetchProducts } from "../actions/product";
 import JsonLd from "../components/JsonLd";
 import { stripTags } from "../utilities";
-import { getAttachmentById } from "../reducers";
+import {
+  getAttachmentById,
+  getLanguageFetchString,
+  getLanguage
+} from "../reducers";
 import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 import Card from "../components/Card";
-import OverflowCard from "../components/OverflowCard";
+import { pathnamesByLanguage } from "../utilities/urls";
+import shop from "../i18n/shop";
+import { setProductCategoryView, trackPageView } from "../utilities/analytics";
+import Flexbar from "../components/Flexbar";
+import Link from "../components/Link";
+import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
+
+const messages = defineMessages({
+  downloadsAndLinks: {
+    id: "ProductCategories.downloadsAndLinks",
+    defaultMessage: "Downloads und Links"
+  }
+});
 
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
-/**
- * Renders all product categories
- * @returns {Component} The component
- */
-class ProductCategories extends React.PureComponent {
-  constructor(props) {
-    super(props);
+const H1 = styled.h1`
+  margin: 0 0 0.5rem 0;
+`;
+const H2 = styled.h2`
+  margin-top: 0;
+`;
 
-    this.state = { active: props.location.pathname === props.match.url };
+const InfoWrapper = styled.div`
+  margin: 2rem 1rem;
+`;
+
+const DownloadList = styled.ul`
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+
+  li {
+    margin-bottom: 0.5rem;
   }
-  componentDidMount = () => {
-    this.loadData();
-  };
 
-  /**
-   * Lifecycle method
-   * @param {Object} prevProps The previous props
-   * @returns {void}
-   */
-  componentDidUpdate = prevProps => {
-    const {
-      match: {
-        params: { categorySlug, page },
-        url
-      },
-      location: { pathname },
-      category
-    } = this.props;
+  li svg {
+    display: block;
+    margin-right: 0.5rem;
+  }
+`;
 
-    this.setState({ active: pathname === url }, () => {
-      if (
-        (categorySlug !== prevProps.categorySlug ||
-          /*page !== prevProps.page ||*/
-          (!prevProps.category && category)) &&
-        categorySlug &&
-        page
-      ) {
-        this.loadData();
-      }
-
-      if (
-        (this.state.active ||
-          window.location.pathname.split("/").length === 3) &&
-        (!page || isNaN(page)) &&
-        pathname !== "/"
-      ) {
-        this.props.dispatch(
-          push(pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1")
-        );
-      }
-    });
-  };
-  loadData = () => {
-    const {
-      categoryIds,
-      fetchAllProductCategoriesIfNeeded,
-      fetchProducts
-    } = this.props;
-
-    if (!this.state.active) {
-      return;
-    }
-
-    fetchAllProductCategoriesIfNeeded();
-    fetchProducts();
-  };
-  onPageChange = ({ selected }) => {
-    const {
-      match: {
-        params: { categorySlug, page }
-      }
-    } = this.props;
-    this.props.dispatch(
-      push("/produkt-kategorie/" + categorySlug + "/" + (selected + 1))
-    );
-  };
-  render = () => {
-    const {
-      totalProductCount,
-      category,
-      categoryIds,
-      productIds,
-      parents = [],
-      match: {
-        params: { categorySlug, page },
-        url
-      },
-      productsJsonLd
-    } = this.props;
-    const { active } = this.state;
-
-    const pathSegments = url.split("/");
-    pathSegments.pop();
-    const urlWithoutPage = page ? pathSegments.join("/") : url;
-
-    const newParents = categorySlug ? [...parents, categorySlug] : [];
-
+const Head = React.memo(
+  injectIntl(({ language, category, intl }) => {
     return (
-      <div>
-        <Helmet>
-          <title>
-            {category
-              ? stripTags(category.name) + " - Hauser Feuerschutz AG"
-              : "Shop der Hauser Feuerschutz AG"}
-          </title>
-          <meta
-            name="description"
-            content={category && category.shortDescription}
-          />
+      <Helmet>
+        <title>
+          {category
+            ? stripTags(category.name) + " - Hauser Feuerschutz AG"
+            : intl.formatMessage(shop.siteTitle)}
+        </title>
+        <meta
+          name="description"
+          content={
+            category
+              ? category.shortDescription
+              : intl.formatMessage(shop.siteMessage)
+          }
+        />
+        {category && (
           <link
             rel="canonical"
             href={
-              category && ABSOLUTE_URL + "/produkt-kategorie/" + category.slug
+              category &&
+              `${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].productCategories}/${category.slug}`
             }
           />
-        </Helmet>
-        {active && (
-          <div>
-            <JsonLd>
-              {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
-            </JsonLd>
-            {category && category.description && (
-              <OverflowCard>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: category.description
-                  }}
-                />
-              </OverflowCard>
-            )}
-            <Flex flexWrap="wrap">
-              {categoryIds.map(categoryId => (
-                <CategoryItem
-                  key={categoryId}
-                  id={categoryId}
-                  parents={newParents}
-                />
-              ))}
-            </Flex>
-            {categoryIds.length > 0 && productIds.length > 0 && <hr />}
-            <Flex flexWrap="wrap">
-              {productIds.map(productId => (
-                <ProductItem
-                  key={productId}
-                  id={productId}
-                  parents={newParents}
-                />
-              ))}
+        )}
+      </Helmet>
+    );
+  })
+);
 
-              {categoryIds.length === 0 &&
-                productIds.length === 0 &&
-                new Array(12)
-                  .fill()
-                  .map((el, index) => <CategoryItem key={index} id={-1} />)}
-            </Flex>
-            {totalProductCount !== 0 && (
+const RichSnippet = React.memo(({ productsJsonLd }) => (
+  <JsonLd>
+    {{ "@context": "http://schema.org", "@graph": productsJsonLd }}
+  </JsonLd>
+));
+
+const ProductCategories = React.memo(
+  injectIntl(
+    ({
+      location: { pathname, search },
+      match: {
+        url,
+        params: { categorySlug, page }
+      },
+      category,
+      fetchAllProductCategoriesIfNeeded,
+      fetchProducts,
+      dispatch,
+      /* render props*/
+      language,
+      totalProductCount,
+      items,
+      parents = [],
+      productsJsonLd,
+      intl
+    }) => {
+      const categoryId = (category && category.id) || 0;
+
+      //check if endings match
+      const active = useMemo(
+        () => pathname.substring(pathname.length - url.length) === url,
+        [pathname, url]
+      );
+
+      const urlWithoutPage = useMemo(
+        () =>
+          page
+            ? url
+                .split("/")
+                .slice(0, -1)
+                .join("/")
+            : url,
+        [page, url]
+      );
+
+      const newParents = useMemo(
+        () => (categorySlug ? [...parents, categorySlug] : []),
+        [categorySlug, parents]
+      );
+
+      const onPageChange = useCallback(
+        ({ selected }) => {
+          dispatch(push(`${urlWithoutPage}/${selected + 1}`));
+        },
+        [categorySlug, urlWithoutPage]
+      );
+
+      const descriptionRef = useRef(null);
+      const scrollToDescription = useCallback(() =>
+        window.scrollTo({
+          left: 0,
+          top: descriptionRef.current.offsetTop,
+          behavior: "smooth"
+        })
+      );
+
+      useEffect(() => {
+        //load data
+        fetchAllProductCategoriesIfNeeded();
+
+        if (!active || !category || !categoryId) {
+          trackPageView();
+          return;
+        }
+
+        fetchProducts(categoryId);
+
+        setProductCategoryView(stripTags(category.name));
+        trackPageView();
+      }, [categoryId]);
+
+      useEffect(() => {
+        if (active && (!page || isNaN(page)) && categorySlug) {
+          //exclude frontpage
+          dispatch(
+            push(
+              pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1" + search
+            )
+          );
+        }
+      }, []); //only run this once on the initial render
+
+      const isLoading = items.length === 0;
+
+      return (
+        <div>
+          {active && (
+            <div>
+              <Head language={language} category={category} />
+              <RichSnippet productsJsonLd={productsJsonLd} />
+              {category && (
+                <InfoWrapper>
+                  <Flex flexWrap="wrap">
+                    <Box width={[1, 1, 1 / 2, 1 / 2]} pr={[0, 0, 4, 4]}>
+                      <H1
+                        dangerouslySetInnerHTML={{ __html: category.name }}
+                      ></H1>
+                      <p
+                        dangerouslySetInnerHTML={{ __html: category.excerpt }}
+                      ></p>
+                    </Box>
+                    {category.links && category.links.length > 0 && (
+                      <Box width={[1, 1, 1 / 2, 1 / 2]}>
+                        <H2>
+                          {intl.formatMessage(messages.downloadsAndLinks)}
+                        </H2>
+                        <DownloadList>
+                          {category.links.map((link, index) => {
+                            let Icon;
+                            let url;
+                            let target;
+
+                            switch (link.type) {
+                              case "pdf":
+                                Icon = FaRegFilePdf;
+                                url = link.url;
+                                target = "_blank";
+                                break;
+
+                              case "video":
+                                Icon = FaFilm;
+                                url = link.url;
+                                target = "_blank";
+
+                                break;
+                              case "link":
+                              default:
+                                Icon = FaLink;
+                                url = link.url;
+                                target = "_blank";
+                            }
+
+                            return (
+                              <li key={index}>
+                                <Flexbar>
+                                  <Icon size={24} />{" "}
+                                  <Link href={url} target={target} styled>
+                                    {link.title}
+                                  </Link>
+                                </Flexbar>
+                              </li>
+                            );
+                          })}
+                        </DownloadList>
+                      </Box>
+                    )}
+                  </Flex>
+                </InfoWrapper>
+              )}
+              <Flex flexWrap="wrap">
+                {items.map(({ type, id }) =>
+                  type === "category" ? (
+                    <CategoryItem
+                      key={"category-" + id}
+                      id={id}
+                      parents={newParents}
+                    />
+                  ) : (
+                    <ProductItem
+                      key={"product-" + id}
+                      id={id}
+                      parents={newParents}
+                    />
+                  )
+                )}
+                {isLoading &&
+                  new Array(12)
+                    .fill()
+                    .map((el, index) => (
+                      <CategoryItem key={index} id={-1} large={false} />
+                    ))}
+              </Flex>
+
               <Pagination
-                pageCount={Math.ceil(totalProductCount / ITEMS_PER_PAGE)}
+                pageCount={Math.max(
+                  1,
+                  Math.ceil(totalProductCount / ITEMS_PER_PAGE)
+                )}
                 pageRangeDisplayed={5}
                 marginPagesDisplayed={1}
-                previousLabel={"<"}
-                nextLabel={">"}
                 forcePage={parseInt(page) - 1}
-                onPageChange={this.onPageChange}
+                onPageChange={onPageChange}
               />
+            </div>
+          )}
+          <Route
+            path={`${urlWithoutPage}/:categorySlug/:page`}
+            render={props => (
+              <RoutedCategories {...props} parents={newParents} />
             )}
-          </div>
-        )}
-        <Route
-          path={`${urlWithoutPage}/:categorySlug/:page`}
-          render={props => <RoutedCategories {...props} parents={newParents} />}
-        />
-      </div>
-    );
-  };
-}
+          />
+        </div>
+      );
+    }
+  )
+);
 
 const mapStateToProps = (
   state,
@@ -218,19 +332,32 @@ const mapStateToProps = (
         .sort((a, b) => a.order - b.order)
     : [];
 
+  const categoryIds =
+    getProductCategoryChildrenIdsById(
+      state,
+      categorySlug && category ? category.id : 0
+    ) || [];
+
+  const productItems = category
+    ? products
+        .map(product => ({ type: "product", id: product.id }))
+        .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
+    : [];
+
+  const items = [
+    ...categoryIds.map(id => ({
+      type: "category",
+      id
+    })),
+    ...productItems
+  ];
+
   return {
+    language: getLanguage(state),
+    languageFetchString: getLanguageFetchString(state),
     categorySlug,
     category,
-    categoryIds:
-      getProductCategoryChildrenIdsById(
-        state,
-        categorySlug && category ? category.id : 0
-      ) || [],
-    productIds: category
-      ? products
-          .map(product => product.id)
-          .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
-      : [],
+    items,
     totalProductCount: category ? products.length : 0,
     page,
     productsJsonLd: products.map(product =>
@@ -242,15 +369,58 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (
+const mapDispatchToProps = dispatch => ({
   dispatch,
-  {
-    match: {
-      params: { categorySlug, page = 1 }
-    }
+  /**
+   * Fetches all product catrgories
+   * @param {number} perPage The amount of items per page
+   * @param {string} language The language string
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchAllProductCategoriesIfNeeded(
+    perPage = ITEMS_PER_PAGE,
+    language,
+    visualize = true
+  ) {
+    return dispatch(
+      fetchAllProductCategoriesIfNeeded(perPage, language, visualize)
+    );
+  },
+  /**
+   * Fetches the matching products
+   * @param {number} [categoryId=null] The category id
+   * @param {number} perPage The amount of products per page
+   * @param {string} language The language string
+   * @param {visualize} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchProducts(
+    categoryId,
+    perPage = ITEMS_PER_PAGE,
+    language,
+    visualize = true
+  ) {
+    return categoryId /*&& !isNaN(page)*/
+      ? dispatch(
+          fetchProducts(
+            1,
+            -1,
+            perPage,
+            language,
+            visualize,
+            [],
+            [parseInt(categoryId)]
+          )
+        )
+      : Promise.reject("Called fetchProducts without valid categoryId");
   }
-) => ({
-  dispatch,
+});
+
+const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
+  ...ownProps,
+  ...mapStateToProps,
+  ...mapDispatchToProps,
   /**
    * Fetches all product catrgories
    * @param {number} perPage The amount of items per page
@@ -261,7 +431,11 @@ const mapDispatchToProps = (
     perPage = ITEMS_PER_PAGE,
     visualize = true
   ) {
-    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
+    return mapDispatchToProps.fetchAllProductCategoriesIfNeeded(
+      perPage,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
   },
   /**
    * Fetches the matching products
@@ -270,31 +444,15 @@ const mapDispatchToProps = (
    * @param {visualize} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchProducts(categoryId = null, perPage = ITEMS_PER_PAGE, visualize = true) {
-    return categoryId && !isNaN(page)
-      ? dispatch(
-          fetchProducts(1, -1, perPage, visualize, [], [parseInt(categoryId)])
+  fetchProducts(categoryId, perPage = ITEMS_PER_PAGE, visualize = true) {
+    return categoryId /*&& !isNaN(page)*/
+      ? mapDispatchToProps.fetchProducts(
+          categoryId,
+          perPage,
+          mapStateToProps.languageFetchString,
+          visualize
         )
-      : Promise.resolve();
-  }
-});
-
-const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
-  ...ownProps,
-  ...mapStateToProps,
-  ...mapDispatchToProps,
-  /**
-   * Fetches the matching products
-   * @param {number} perPage The amount of products per page
-   * @param {visualize} visualize Whether the progress should be visualized
-   * @returns {Promise} The fetch promise
-   */
-  fetchProducts(perPage = ITEMS_PER_PAGE, visualize = true) {
-    const page = parseInt(ownProps.match.params.page);
-    const categoryId = mapStateToProps.category
-      ? mapStateToProps.category.id
-      : null;
-    return mapDispatchToProps.fetchProducts(categoryId, perPage, visualize);
+      : Promise.reject("Called fetchProducts without valid categoryId");
   }
 });
 

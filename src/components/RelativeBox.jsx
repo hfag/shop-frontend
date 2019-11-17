@@ -1,4 +1,4 @@
-import { Box } from "grid-styled";
+import { Box } from "reflexbox";
 import styled from "styled-components";
 
 export default styled(Box)`

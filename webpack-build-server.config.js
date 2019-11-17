@@ -74,6 +74,7 @@ module.exports = {
         test: /\.jsx?$/,
         include: [
           path.resolve(context, "src"),
+          path.resolve(context, "node_modules"),
           path.resolve(context, "server")
         ],
 
@@ -98,7 +99,13 @@ module.exports = {
                 ["@babel/plugin-proposal-class-properties", { loose: false }],
                 "@babel/plugin-proposal-object-rest-spread",
                 "syntax-dynamic-import",
-                "universal-import"
+                "universal-import",
+                [
+                  "react-intl",
+                  {
+                    messagesDir: "./dist/messages/"
+                  }
+                ]
               ]
             }
           }
@@ -141,7 +148,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(woff2?|eot|ttf|svg)$/,
+        test: /\.(png|jpe?g|gif|woff2?|eot|ttf|svg)$/,
         loader: "file-loader"
       }
     ]

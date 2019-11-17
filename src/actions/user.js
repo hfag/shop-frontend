@@ -45,6 +45,7 @@ const updateAccountAction = createFetchAction("UPDATE_ACCOUNT", "account");
  * @param {string} email The user's email
  * @param {string} password The user's password
  * @param {string} newPassword The user's new password
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress of this action
  * @returns {Promise} The fetch promise
  */
@@ -54,6 +55,7 @@ export const updateAccount = (
   email,
   password,
   newPassword,
+  language,
   visualize = false
 ) => dispatch => {
   dispatch(
@@ -65,7 +67,7 @@ export const updateAccount = (
       newPassword
     })
   );
-  return fetchApi(`/wp-json/hfag/user-account`, {
+  return fetchApi(`${language}/wp-json/hfag/user-account`, {
     method: "PUT",
     credentials: "include",
     body: JSON.stringify({ firstName, lastName, email, password, newPassword })
@@ -96,12 +98,13 @@ const fetchAccountAction = createFetchAction("FETCH_USER_ACCOUNT", "account");
 
 /**
  * Fetches the user's account
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress of this action
  * @returns {Promise} The fetch promise
  */
-export const fetchAccount = (visualize = false) => dispatch => {
+export const fetchAccount = (language, visualize = false) => dispatch => {
   dispatch(fetchAccountAction(true, null, visualize));
-  return fetchApi(`/wp-json/hfag/user-account`, {
+  return fetchApi(`${language}/wp-json/hfag/user-account`, {
     method: "GET",
     credentials: "include"
   })
@@ -128,15 +131,21 @@ export const fetchAccount = (visualize = false) => dispatch => {
 const updateAddressAction = createFetchAction("UPDATE_USER_ADDRESS", "account");
 
 /**
- * Logs a user in
+ * Updates the user's address
  * @param {string} address The user's address
  * @param {string} type The adress type
+ * @param {string} language The language string
  * @param {boolean} visualize Whether to visualize the progress of this action
  * @returns {Promise} The fetch promise
  */
-export const updateAddress = (address, type, visualize = false) => dispatch => {
+export const updateAddress = (
+  address,
+  type,
+  language,
+  visualize = false
+) => dispatch => {
   dispatch(updateAddressAction(true, null, visualize));
-  return fetchApi(`/wp-json/hfag/user-address`, {
+  return fetchApi(`${language}/wp-json/hfag/user-address`, {
     method: "PUT",
     credentials: "include",
     body: JSON.stringify({ address, type })

@@ -1,23 +1,52 @@
 import React from "react";
 import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import Container from "components/Container";
-import MapMarker from "react-icons/lib/fa/map-marker";
-import Phone from "react-icons/lib/fa/phone";
-import Envelope from "react-icons/lib/fa/envelope";
+import {
+  FaMapMarker as MapMarker,
+  FaPhone as Phone,
+  FaEnvelope as Envelope,
+  FaDownload
+} from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
+import { defineMessages, injectIntl } from "react-intl";
+import { connect } from "react-redux";
 
 import { colors, media } from "../utilities/style";
 import Link from "./Link";
-import LogoNegative from "../../img/logo/logo_negative.svg";
-import NameSloganNegative from "../../img/logo/name_slogan_negative.svg";
+import Logo from "../../img/logo/logo_negative.svg";
+import NameSlogan from "../../img/logo/name_slogan_negative.svg";
 import MediaQuery from "./MediaQuery";
 import Placeholder from "./Placeholder";
+import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
+import { getLanguage } from "../reducers";
+
+const messages = defineMessages({
+  aboutTitle: {
+    id: "Footer.aboutTitle",
+    defaultMessage: "Über die Hauser Feuerschutz AG"
+  },
+  about: {
+    id: "Footer.about",
+    defaultMessage:
+      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte an in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz."
+  },
+  moreAbout: {
+    id: "Footer.moreAbout",
+    defaultMessage: "Weitere Informationen"
+  },
+  downloads: {
+    id: "Footer.downloads",
+    defaultMessage: "Downloads"
+  }
+});
 
 const StyledFooter = styled.footer`
   padding: 1rem;
+  border-top: ${colors.primaryContrast} 1px solid;
   background-color: ${colors.primary};
-  color: #fff;
+  color: ${colors.primaryContrast};
+  z-index: 1;
 
   img {
     width: 100%;
@@ -30,8 +59,8 @@ const StyledFooter = styled.footer`
     width: 50%;
   }
 
-  .title {
-    font-variant: small-caps;
+  .slogan {
+    width: 75%;
   }
 
   h4 {
@@ -40,7 +69,7 @@ const StyledFooter = styled.footer`
 `;
 
 const BorderBox = styled(Box)`
-  padding-bottom: 1rem;
+  padding: 1rem 0;
   margin-bottom: 1rem;
 
   ${media.maxMedium`
@@ -61,15 +90,11 @@ const IconList = styled.table`
   td:last-child {
     padding-left: 1rem;
   }
-
-  a:hover {
-    text-decoration: underline;
-  }
 `;
 
 const Icon = styled.span`
   padding: 0.5rem;
-  border: #fff 1px solid;
+  border: ${colors.primaryContrast} 1px solid;
   border-radius: 50%;
   display: inline-block;
 
@@ -79,12 +104,8 @@ const Icon = styled.span`
   }
 `;
 
-/**
- * The page footer
- * @returns {Component} The component
- */
-class Footer extends React.PureComponent {
-  render = () => {
+const Footer = React.memo(
+  injectIntl(({ intl, language }) => {
     return (
       <StyledFooter>
         <Flex>
@@ -94,7 +115,7 @@ class Footer extends React.PureComponent {
               <Flex flexWrap="wrap">
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
                   <LazyImage
-                    src={LogoNegative}
+                    src={Logo}
                     alt="Logo"
                     placeholder={({ imageProps, ref }) => (
                       <div ref={ref}>
@@ -106,19 +127,18 @@ class Footer extends React.PureComponent {
                     )}
                   />
                   <br />
-                  Hauser Feuerschutz AG
-                  <br />
-                  Safety Signs and Security Products
-                  <br />
-                  <br />
-                  <Link
-                    target="_blank"
-                    href="https://feuerschutz.ch"
-                    rel="noopener"
-                    negative
-                  >
-                    Zu unserer Firmen-Homepage
-                  </Link>
+                  <LazyImage
+                    src={NameSlogan}
+                    alt="Slogan"
+                    placeholder={({ imageProps, ref }) => (
+                      <div ref={ref}>
+                        <Placeholder block />
+                      </div>
+                    )}
+                    actual={({ imageProps }) => (
+                      <img {...imageProps} className="slogan" />
+                    )}
+                  />
                 </BorderBox>
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
                   <IconList>
@@ -131,6 +151,7 @@ class Footer extends React.PureComponent {
                         </td>
                         <td>
                           <Link
+                            styled
                             target="_blank"
                             href="https://www.google.ch/maps/place/Sonnmattweg+6,+5000+Aarau/@47.3971534,8.0412625,17z/data=!3m1!4b1!4m5!3m4!1s0x47903be72641ef39:0x35e802ea186c4a2d!8m2!3d47.3971534!4d8.0434512"
                             rel="noopener"
@@ -148,7 +169,7 @@ class Footer extends React.PureComponent {
                           </Icon>
                         </td>
                         <td>
-                          <Link href="tel:+41628340540" negative>
+                          <Link styled href="tel:+41628340540" negative>
                             062 834 05 40
                           </Link>
                         </td>
@@ -160,8 +181,28 @@ class Footer extends React.PureComponent {
                           </Icon>
                         </td>
                         <td>
-                          <Link href="mailto:info@feuerschutz.ch" negative>
+                          <Link
+                            styled
+                            href="mailto:info@feuerschutz.ch"
+                            negative
+                          >
                             info@feuerschutz.ch
+                          </Link>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Icon>
+                            <FaDownload />
+                          </Icon>
+                        </td>
+                        <td>
+                          <Link
+                            styled
+                            to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].downloads}`}
+                            negative
+                          >
+                            {intl.formatMessage(messages.downloads)}
                           </Link>
                         </td>
                       </tr>
@@ -169,10 +210,15 @@ class Footer extends React.PureComponent {
                   </IconList>
                 </BorderBox>
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
-                  <h4>Über die Hauser Feuerschutz AG</h4>
-                  Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und
-                  Produkte in den Bereichen Sicherheitskennzeichnung und
-                  Feuerschutz.
+                  <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
+                  {intl.formatMessage(messages.about)}{" "}
+                  <Link
+                    styled
+                    to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
+                    negative
+                  >
+                    {intl.formatMessage(messages.moreAbout)}
+                  </Link>
                 </BorderBox>
               </Flex>
             </Container>
@@ -180,7 +226,11 @@ class Footer extends React.PureComponent {
         </Flex>
       </StyledFooter>
     );
-  };
-}
+  })
+);
 
-export default Footer;
+const mapStateToProps = state => ({
+  language: getLanguage(state)
+});
+
+export default connect(mapStateToProps)(Footer);

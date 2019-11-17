@@ -1,159 +1,76 @@
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
 import ProductCategories from "containers/ProductCategories";
-import FaPercent from "react-icons/lib/fa/percent";
+import { defineMessages, injectIntl } from "react-intl";
+import styled from "styled-components";
 
+import {
+  getSales,
+  getProducts,
+  getStickyPosts,
+  getLanguage
+} from "../reducers";
+import SaleProducts from "../components/SaleProducts";
+import shop from "../i18n/shop";
+import Card from "../components/Card";
+import LatestPosts from "./LatestPosts";
+import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
 import Link from "../components/Link";
-import { getSales, getProducts, getStickyPosts } from "../reducers";
-import Thumbnail from "./Thumbnail";
-import Price from "../components/Price";
-import { colors, shadows, borders } from "../utilities/style";
+import MediaQuery from "../components/MediaQuery";
+import Searchbar from "./Searchbar";
 
-const SalesFlex = styled(Flex)`
-  margin: 0 -0.5rem;
+const messages = defineMessages({
+  ourProducts: {
+    id: "Frontpage.ourProducts",
+    defaultMessage: "Unsere Produkte"
+  },
+  moreAboutCompany: {
+    id: "Frontpage.moreAboutCompany",
+    defaultMessage: "Mehr über das Unternehmen"
+  },
+  aboutCompany: {
+    id: "Frontpage.aboutCompany",
+    defaultMessage:
+      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz an. Die Faszination der Lumineszenz bewegte uns hin zu einem führenden Schweizer Fachunternehmen für langnachleuchtende Produkte. Als kleines Familienunternehmen sind wir auf Ihre Zufriedenheit angewiesen. Teilen Sie uns Ihre Anliegen mit!"
+  }
+});
+
+const H1 = styled.h1`
+  margin-top: 0;
 `;
 
-const SaleWrapper = styled.div`
-  position: relative;
-  padding: 0.5rem;
-  background-color: #fff;
-  box-shadow: ${shadows.y};
-  border-radius: ${borders.radius};
-  word-break: break-word;
-  hyphens: auto;
-
-  h3 {
-    margin-top: 0;
-  }
-
-  p {
-    margin: 0;
-  }
+const H2 = styled.h2`
+  margin-bottom: 0;
 `;
 
-const DiscountLogo = styled.span`
-  position: absolute;
-  top: -1rem;
-  right: -1rem;
-
-  padding: 0.25rem;
-  color: #fff;
-  width: 2rem;
-  height: 2rem;
-  font-size: 1.15rem;
-  display: inline-block;
-
-  background-color: ${colors.danger};
-  border-radius: 50%;
-
-  svg {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-`;
-
-/**
- * The front page
- * @returns {Component} The component
- */
-class Frontpage extends React.PureComponent {
-  render = () => {
-    const { saleProducts, posts } = this.props;
+const Frontpage = React.memo(
+  injectIntl(({ language, saleProducts, posts, intl }) => {
     return (
       <div>
         {(saleProducts.length > 0 || posts.length > 0) && (
-          <div>
-            <h2 style={{ marginBottom: 0 }}>News und Aktionen</h2>
-            <SalesFlex flexWrap="wrap">
-              {posts.map(post => (
-                <Box width={[1, 1, 1 / 3, 1 / 3]} px={2} mt={3} key={post.slug}>
-                  <SaleWrapper>
-                    <Link to={`/beitrag/${post.slug}`}>
-                      <Flex>
-                        <Box width={[1, 1, 1 / 2, 1 / 2]} pr={2}>
-                          <Thumbnail id={post.thumbnailId} />
-                        </Box>
-                        <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
-                          <h3
-                            dangerouslySetInnerHTML={{ __html: post.title }}
-                          />
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: post.description
-                            }}
-                          />
-                        </Box>
-                      </Flex>
-                    </Link>
-                  </SaleWrapper>
-                </Box>
-              ))}
-              {saleProducts.map(product => (
-                <Box
-                  width={[1, 1, 1 / 3, 1 / 3]}
-                  px={2}
-                  mt={3}
-                  key={product.id}
-                >
-                  <SaleWrapper>
-                    <Link
-                      to={`/produkt/${product.slug}?variationId=${product.variationId}`}
-                    >
-                      <DiscountLogo>
-                        <FaPercent />
-                      </DiscountLogo>
-
-                      <Flex>
-                        <Box width={[1, 1, 1 / 2, 1 / 2]} pr={2}>
-                          <Thumbnail id={product.thumbnailId} />
-                        </Box>
-                        <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
-                          <h3
-                            dangerouslySetInnerHTML={{
-                              __html: product.title
-                            }}
-                          />
-                          <p>
-                            Statt <s>{product.price}</s>{" "}
-                            <strong>
-                              <Price>{parseFloat(product.salePrice)}</Price>
-                            </strong>
-                          </p>
-                          <p>
-                            Nur{" "}
-                            {product.saleEnd ? (
-                              <span>
-                                bis am{" "}
-                                <strong>
-                                  {new Date(
-                                    product.saleEnd * 1000
-                                  ).toLocaleDateString()}
-                                </strong>
-                                !
-                              </span>
-                            ) : (
-                              "für kurze Zeit!"
-                            )}
-                          </p>
-                        </Box>
-                      </Flex>
-                    </Link>
-                  </SaleWrapper>
-                </Box>
-              ))}
-            </SalesFlex>
-          </div>
+          <SaleProducts
+            language={language}
+            saleProducts={saleProducts}
+            posts={posts}
+          />
         )}
-        <h2>Kategorien</h2>
+        <H2>{intl.formatMessage(messages.ourProducts)}</H2>
         <ProductCategories />
+        <LatestPosts />
+        <Card>
+          <H1>Hauser Feuerschutz AG</H1>
+          <p>{intl.formatMessage(messages.aboutCompany)}</p>
+          <Link
+            to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
+            styled
+          >
+            {intl.formatMessage(messages.moreAboutCompany)}
+          </Link>
+        </Card>
       </div>
     );
-  };
-}
+  })
+);
 
 const mapStateToProps = state => {
   const sales = getSales(state),
@@ -161,6 +78,7 @@ const mapStateToProps = state => {
   const products = getProducts(state);
 
   return {
+    language: getLanguage(state),
     saleProducts: products
       .filter(product => saleProductIds.includes(product.id))
       .map(product => ({

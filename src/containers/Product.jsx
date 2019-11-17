@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Flex, Box } from "grid-styled";
+import { Flex, Box } from "reflexbox";
 import isEqual from "lodash/isEqual";
-import Lightbox from "react-images";
 import { Helmet } from "react-helmet";
 import queryString from "query-string";
+import { defineMessages, injectIntl, FormattedMessage } from "react-intl";
 
 import Thumbnail from "../containers/Thumbnail";
 import Card from "../components/Card";
@@ -28,15 +28,87 @@ import {
   getResellerDiscountByProductId,
   getAttachments,
   getAttachmentById,
-  getSales
+  getSales,
+  getLanguageFetchString,
+  getLanguage
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
 import { InputFieldWrapper } from "../components/InputFieldWrapper";
 import JsonLd from "../components/JsonLd";
 import { attachmentsToJsonLd, productToJsonLd } from "../utilities/json-ld";
+import { pathnamesByLanguage } from "../utilities/urls";
+import productMessages from "../i18n/product";
+import { setProductView, trackPageView } from "../utilities/analytics";
+import CrossSellFlex from "../components/Flex";
+import Flexbar from "../components/Flexbar";
+import LightboxGallery from "../components/LightboxGallery";
+import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
+
+const messages = defineMessages({
+  chooseAVariation: {
+    id: "Product.chooseAVariation",
+    defaultMessage: "Wählen Sie eine Variante"
+  },
+  chooseAnAttribute: {
+    id: "Product.chooseAnAttribute",
+    defaultMessage: "Wählen Sie eine Eigenschaft"
+  },
+  reset: {
+    id: "Product.reset",
+    defaultMessage: "Zurücksetzen"
+  },
+  resetSelection: {
+    id: "Product.resetSelection",
+    defaultMessage: "Auswahl zurücksetzen"
+  },
+  mustSelectVariation: {
+    id: "Product.mustSelectVariation",
+    defaultMessage: "Wählen Sie zuerst eine Variante aus!"
+  },
+  contactUs: {
+    id: "Product.contactUs",
+    defaultMessage: "Kontaktieren Sie uns für dieses Produkt"
+  },
+  contactEmail: {
+    id: "Product.contactEmail",
+    defaultMessage: "Senden Sie uns eine E-Mail"
+  },
+  contactCall: {
+    id: "Product.contactCall",
+    defaultMessage: "Rufen Sie uns an"
+  },
+  imageGallery: {
+    id: "Product.imageGallery",
+    defaultMessage: "Bildergalerie"
+  },
+  specifications: {
+    id: "Product.specifications",
+    defaultMessage: "Spezifikationen"
+  },
+  additionalProducts: {
+    id: "Product.additionalProducts",
+    defaultMessage: "Ergänzende Produkte"
+  },
+  previousImage: {
+    id: "Product.previousImage",
+    defaultMessage: "Vorheriges Bild (linke Pfeiltaste)"
+  },
+  nextImage: {
+    id: "Product.nextImage",
+    defaultMessage: "Nächstes Bild (rechte Pfeiltaste)"
+  },
+  closeLightbox: {
+    id: "Product.closeLightBox",
+    defaultMessage: "Schliessen (Esc)"
+  }
+});
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
+
+const ProductCard = styled(Card)`
+  margin-bottom: 0;
+`;
 
 const StyledTable = styled.table`
   word-wrap: break-word;
@@ -185,6 +257,13 @@ class Product extends React.PureComponent {
     ]).then(() => {
       const { variationId } = queryString.parse(location.search);
 
+      setProductView(
+        this.props.product.sku,
+        this.props.product.title,
+        this.props.product.minPrice
+      );
+      trackPageView();
+
       if (variationId && this.props.product && this.props.product.variations) {
         this.setState({
           selectedAttributes: (
@@ -260,13 +339,16 @@ class Product extends React.PureComponent {
 
   render = () => {
     const {
+      language,
       product = {},
       attributes = {},
       categories,
       addToShoppingCart,
       resellerDiscount,
+      galleryImageIds = [],
       galleryAttachments = [],
-      sales
+      sales,
+      intl
     } = this.props;
 
     const {
@@ -290,20 +372,33 @@ class Product extends React.PureComponent {
       variations = [],
       discount = {},
       fields = [],
-      galleryImageIds = [],
-      crossSellIds = []
+      crossSellIds = [],
+      type = "variable"
     } = product;
 
-    const selectedVariation = variations.find(variation =>
+    const selectedVariation =
+      variations.length === 0 ||
+      variations.find(variation =>
         isEqual(variation.attributes, selectedAttributes)
-      ),
-      { sku, price } = selectedVariation || {},
+      );
+
+    let sku, price, flashSale;
+    if (type === "simple") {
+      sku = product.sku;
+      price = product.price;
+
+      flashSale = sales.find(sale => sale.productId === id);
+    } else if (type === "variable") {
+      sku = selectedVariation ? selectedVariation.sku : product.sku;
+      price = selectedVariation ? selectedVariation.price : null;
+
       flashSale = selectedVariation
         ? sales.find(
             sale =>
               sale.productId === id && sale.variationId === selectedVariation.id
           )
         : null;
+    }
 
     const discountRow = (discount.bulk &&
       selectedVariation &&
@@ -367,7 +462,10 @@ class Product extends React.PureComponent {
         <Helmet>
           <title>{stripTags(title)} - Hauser Feuerschutz AG</title>
           <meta name="description" content={description} />
-          <link rel="canonical" href={ABSOLUTE_URL + "/produkt/" + slug} />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].product}/${slug}`}
+          />
         </Helmet>
         <JsonLd>
           {{
@@ -376,7 +474,7 @@ class Product extends React.PureComponent {
           }}
           }
         </JsonLd>
-        <Card>
+        <ProductCard>
           <h1 dangerouslySetInnerHTML={{ __html: title }} />
           {uniqueImageIds.length <= 1 && (
             <Flex>
@@ -389,7 +487,7 @@ class Product extends React.PureComponent {
           {uniqueImageIds.length > 1 && (
             <div>
               <hr />
-              <h4>Wähle eine Variante</h4>
+              <h4>{intl.formatMessage(messages.chooseAVariation)}</h4>
               <VariationSlider
                 variations={variations}
                 selectedAttributes={selectedAttributes}
@@ -406,7 +504,7 @@ class Product extends React.PureComponent {
                 <Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
                   <h4>{this.getAttributeLabel(attributeKey)}</h4>
                   <Select
-                    placeholder="Wählen Sie eine Eigenschaft"
+                    placeholder={intl.formatMessage(messages.chooseAnAttribute)}
                     onChange={this.onChangeDropdown(attributeKey)}
                     value={selectedAttributes[attributeKey]}
                     options={possibleAttributes[attributeKey].map(value => ({
@@ -417,7 +515,7 @@ class Product extends React.PureComponent {
                 </Box>
               ))}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-              <h4>Anzahl</h4>
+              <h4>{intl.formatMessage(productMessages.quantity)}</h4>
               <Counter
                 type="number"
                 value={quantity}
@@ -455,7 +553,7 @@ class Product extends React.PureComponent {
               </Box>
             ))}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-              <h4>Zurücksetzen</h4>
+              <h4>{intl.formatMessage(messages.reset)}</h4>
               <Button
                 onClick={() =>
                   new Promise((resolve, reject) => {
@@ -471,7 +569,7 @@ class Product extends React.PureComponent {
                   })
                 }
               >
-                Auswahl zurücksetzen
+                {intl.formatMessage(messages.resetSelection)}
               </Button>
             </Box>
           </Flex>
@@ -483,12 +581,17 @@ class Product extends React.PureComponent {
               discount.bulk[selectedVariation.id] &&
               discount.bulk[selectedVariation.id].length > 0 && (
                 <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-                  <h4>Mengenrabatt</h4>
+                  <h4>{intl.formatMessage(productMessages.bulkDiscount)}</h4>
                   <DiscountTable>
                     <thead>
                       <tr>
-                        <th>Anzahl (ab)</th>
-                        <th>Stückpreis</th>
+                        <th>
+                          {intl.formatMessage(productMessages.quantity)} (
+                          {intl.formatMessage(productMessages.from)})
+                        </th>
+                        <th>
+                          {intl.formatMessage(productMessages.pricePerUnit)}
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -512,15 +615,20 @@ class Product extends React.PureComponent {
               )
             ) : (
               <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-                <h4>Wiederverkäuferrabatt</h4>
-                Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf
-                dieses Produkt.
+                <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
+                <FormattedMessage
+                  id="Product.resellerDiscountMessage"
+                  defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
+                  values={{
+                    resellerDiscount
+                  }}
+                />
               </Box>
             )}
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
-              {selectedVariation ? (
+              {price && selectedVariation ? (
                 <div>
-                  <h4>Preis</h4>
+                  <h4>{intl.formatMessage(productMessages.price)}</h4>
                   <Bill
                     items={[
                       {
@@ -580,14 +688,40 @@ class Product extends React.PureComponent {
                       )
                     }
                   >
-                    Zum Warenkorb hinzufügen
+                    {intl.formatMessage(productMessages.addToCart)}
+                  </Button>
+                </div>
+              ) : price == null ? (
+                <div>
+                  <h4>{intl.formatMessage(productMessages.price)}</h4>
+                  <p>{intl.formatMessage(messages.mustSelectVariation)}</p>
+                  <Button state="disabled">
+                    {intl.formatMessage(productMessages.addToCart)}
                   </Button>
                 </div>
               ) : (
                 <div>
-                  <h4>Preis</h4>
-                  <p>Wählen Sie zuerst eine Variante aus!</p>
-                  <Button state="disabled">Zum Warenkorb hinzufügen</Button>
+                  <p>{intl.formatMessage(messages.contactUs)}</p>
+                  <Flex flexWrap="wrap">
+                    <div style={{ marginRight: 16, marginBottom: 16 }}>
+                      <Button
+                        onClick={() => {
+                          window.location = "mailto:info@feuerschutz.ch";
+                          return Promise.resolve();
+                        }}
+                      >
+                        {intl.formatMessage(messages.contactEmail)}
+                      </Button>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        window.location = "tel:+41628340540";
+                        return Promise.resolve();
+                      }}
+                    >
+                      {intl.formatMessage(messages.contactCall)}
+                    </Button>
+                  </Flex>
                 </div>
               )}
             </Box>
@@ -595,96 +729,21 @@ class Product extends React.PureComponent {
           <Flex flexWrap="wrap">
             {content && (
               <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
-                <div dangerouslySetInnerHTML={{ __html: content }} />
-                <h2>Bildergalerie</h2>
-                <Flex flexWrap="wrap">
-                  <LightboxBox
-                    width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
-                    px={2}
-                    mb={2}
-                    onClick={() =>
-                      this.setState({
-                        currentLightboxImage: 0,
-                        isLightboxOpen: true
-                      })
-                    }
-                  >
-                    <Thumbnail id={thumbnailId} />
-                  </LightboxBox>
-                  {galleryImageIds.map((imageId, index) => (
-                    <LightboxBox
-                      key={imageId}
-                      width={[1 / 3, 1 / 3, 1 / 4, 1 / 6]}
-                      px={2}
-                      mb={2}
-                      onClick={() =>
-                        this.setState({
-                          currentLightboxImage: index + 1,
-                          isLightboxOpen: true
-                        })
-                      }
-                    >
-                      <Thumbnail id={imageId} size="thumbnail" />
-                    </LightboxBox>
-                  ))}
-                </Flex>
-                <Lightbox
-                  images={galleryAttachments
-                    .filter(e => e)
-                    .map(attachment => ({
-                      src: attachment.url || "",
-                      /*caption: attachment.caption,*/
-                      /*srcSet: Object.values(attachment.sizes)
-                        .sort((a, b) => a.width - b.width)
-                        .map(size => `${size.source_url} ${size.width}w`),*/
-                      thumbnail:
-                        attachment.sizes &&
-                        attachment.sizes.thumbnail &&
-                        attachment.sizes.thumbnail.source_url
-                    }))}
-                  isOpen={isLightboxOpen}
-                  currentImage={currentLightboxImage}
-                  onClickPrev={() =>
-                    this.setState({
-                      currentLightboxImage: Math.max(
-                        currentLightboxImage - 1,
-                        0
-                      )
-                    })
-                  }
-                  onClickNext={() =>
-                    this.setState({
-                      currentLightboxImage: Math.min(
-                        currentLightboxImage + 1,
-                        galleryAttachments.length - 1
-                      )
-                    })
-                  }
-                  onClose={() => this.setState({ isLightboxOpen: false })}
-                  imageCountSeparator={" von "}
-                  leftArrowTitle={"Vorheriges Bild (linke Pfeiltaste)"}
-                  rightArrowTitle={"Nächstes Bild (rechte Pfeiltaste)"}
-                  closeButtonTitle={"Schliessen (Esc)"}
-                  backdropClosesModal={true}
-                  preventScroll={false}
-                  showThumbnails={true}
-                  onClickThumbnail={index =>
-                    this.setState({ currentLightboxImage: index })
-                  }
-                  theme={{}}
-                />
+                <UnsafeHTMLContent content={content} />
+                <h2>{intl.formatMessage(messages.imageGallery)}</h2>
+                <LightboxGallery galleryImageIds={galleryImageIds} />
               </Box>
             )}
             <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
-              <h4>Spezifikationen</h4>
+              <h4>{intl.formatMessage(messages.specifications)}</h4>
               <StyledTable>
                 <tbody>
                   <tr>
-                    <td>Artikelnummer</td>
+                    <td>{intl.formatMessage(productMessages.sku)}</td>
                     <td>{sku}</td>
                   </tr>
                   <tr>
-                    <td>Kategorien</td>
+                    <td>{intl.formatMessage(productMessages.categories)}</td>
                     <td>
                       {categories.length > 0
                         ? categories
@@ -692,7 +751,7 @@ class Product extends React.PureComponent {
                               <Link
                                 key={id}
                                 styled
-                                to={`/produkt-kategorie/${slug}/1`}
+                                to={`/${language}/${pathnamesByLanguage[language].productCategory}/${slug}/1`}
                               >
                                 {name}
                               </Link>
@@ -702,41 +761,47 @@ class Product extends React.PureComponent {
                     </td>
                   </tr>
                   <tr>
-                    <td>Produkt</td>
-                    <td>{title}</td>
+                    <td>{intl.formatMessage(productMessages.product)}</td>
+                    <td dangerouslySetInnerHTML={{ __html: title }}></td>
                   </tr>
                   {Object.keys(selectedAttributes).map(attributeKey => (
                     <tr key={attributeKey}>
-                      <td>{this.getAttributeLabel(attributeKey)}</td>
-                      <td>
-                        {selectedAttributes[attributeKey]
-                          ? this.getOptionLabel(
-                              attributeKey,
-                              selectedAttributes[attributeKey]
-                            )
-                          : "-"}
-                      </td>
+                      <td
+                        dangerouslySetInnerHTML={{
+                          __html: this.getAttributeLabel(attributeKey)
+                        }}
+                      ></td>
+                      <td
+                        dangerouslySetInnerHTML={{
+                          __html: selectedAttributes[attributeKey]
+                            ? this.getOptionLabel(
+                                attributeKey,
+                                selectedAttributes[attributeKey]
+                              )
+                            : "-"
+                        }}
+                      ></td>
                     </tr>
                   ))}
                 </tbody>
               </StyledTable>
             </Box>
           </Flex>
-        </Card>
+        </ProductCard>
 
         {crossSellIds.length > 0 && (
-          <Card>
+          <Card style={{ marginBottom: 0 }}>
             <h2 ref={this.crossSelling} style={{ margin: 0 }}>
-              Ergänzende Produkte
+              {intl.formatMessage(messages.additionalProducts)}
             </h2>
           </Card>
         )}
 
-        <Flex flexWrap="wrap" style={{ margin: "0 -0.5rem" }}>
+        <CrossSellFlex flexWrap="wrap" style={{ paddingBottom: 16 }}>
           {crossSellIds.map(productId => (
             <ProductItem key={productId} id={productId} />
           ))}
-        </Flex>
+        </CrossSellFlex>
       </div>
     );
   };
@@ -753,10 +818,12 @@ const mapStateToProps = (
   const product = getProductBySlug(state, productSlug);
   const galleryImageIds =
     product && !product._isFetching
-      ? [product.thumbnailId, ...product.galleryImageIds]
+      ? [product.thumbnailId, ...(product.galleryImageIds || [])]
       : [];
 
   return {
+    language: getLanguage(state),
+    languageFetchString: getLanguageFetchString(state),
     productSlug,
     product: product && !product._isFetching ? product : {},
     categories:
@@ -770,12 +837,10 @@ const mapStateToProps = (
       state,
       product && product.id
     ),
-    galleryAttachments:
-      galleryImageIds.length > 0
-        ? galleryImageIds.map(attachmentId =>
-            getAttachmentById(state, attachmentId)
-          )
-        : [],
+    galleryImageIds,
+    galleryAttachments: galleryImageIds.map(attachmentId =>
+      getAttachmentById(state, attachmentId)
+    ),
     sales: getSales(state)
   };
 };
@@ -791,19 +856,23 @@ const mapDispatchToProps = (
   /**
    * Fetches all product categories
    * @param {number} perPage How many items per page
+   * @param {string} language The language string
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchAllProductCategoriesIfNeeded(perPage = 30, visualize = true) {
-    return dispatch(fetchAllProductCategoriesIfNeeded(perPage, visualize));
+  fetchAllProductCategoriesIfNeeded(perPage = 30, language, visualize = true) {
+    return dispatch(
+      fetchAllProductCategoriesIfNeeded(perPage, language, visualize)
+    );
   },
   /**
    * Fetches the product
+   * @param {string} language The language string
    * @param {boolean} visualize Whether the progress should be visualized
    * @returns {Promise} The fetch promise
    */
-  fetchProductIfNeeded(visualize = true) {
-    return dispatch(fetchProductIfNeeded(productSlug, visualize));
+  fetchProductIfNeeded(language, visualize = true) {
+    return dispatch(fetchProductIfNeeded(productSlug, language, visualize));
   },
   /**
    * Updates the shopping cart
@@ -811,6 +880,10 @@ const mapDispatchToProps = (
    * @param {number|string} [variationId] The variation id
    * @param {Object} [variation] The variation attributes
    * @param {number} [quantity=1] The quantity
+   * @param {string} sku The sku
+   * @param {string} productName The product name
+   * @param {number} minPrice The minimum price
+   * @param {string} language The language string
    * @param {boolean} [visualize=true] Whether the progress of this action should be visualized
    * @returns {function} The redux thunk
    */
@@ -819,6 +892,10 @@ const mapDispatchToProps = (
     variationId,
     variation,
     quantity = 1,
+    sku,
+    productName,
+    minPrice,
+    language,
     visualize = true
   ) {
     return dispatch(
@@ -827,6 +904,8 @@ const mapDispatchToProps = (
         variationId,
         variation,
         quantity,
+        { sku, productName, minPrice },
+        language,
         visualize
       )
     );
@@ -838,6 +917,30 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   ...mapStateToProps,
   ...mapDispatchToProps,
   /**
+   * Fetches all product categories
+   * @param {number} perPage How many items per page
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchAllProductCategoriesIfNeeded(perPage = 30, visualize = true) {
+    return mapDispatchToProps.fetchAllProductCategoriesIfNeeded(
+      perPage,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
+  },
+  /**
+   * Fetches the product
+   * @param {boolean} visualize Whether the progress should be visualized
+   * @returns {Promise} The fetch promise
+   */
+  fetchProductIfNeeded(visualize = true) {
+    return mapDispatchToProps.fetchProductIfNeeded(
+      mapStateToProps.languageFetchString,
+      visualize
+    );
+  },
+  /**
    * Updates the shopping cart
    * @param {number|string} [variationId] The variation id
    * @param {Object} [variation] The variation attributes
@@ -846,20 +949,29 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    * @returns {function} The redux thunk
    */
   addToShoppingCart(variationId, variation, quantity = 1, visualize = true) {
+    const { id: productId, sku, title, minPrice } =
+      mapStateToProps.product || {};
+
     return mapStateToProps.product
       ? mapDispatchToProps.addToShoppingCart(
-          mapStateToProps.product.id,
+          productId,
           variationId,
           variation,
           quantity,
+          sku,
+          title,
+          minPrice,
+          mapStateToProps.languageFetchString,
           visualize
         )
       : Promise.resolve();
   }
 });
 
+const TranslatedProduct = injectIntl(Product);
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps
-)(Product);
+)(TranslatedProduct);

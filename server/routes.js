@@ -12,12 +12,14 @@ import Page404 from "../src/containers/404";
 import Post from "../src/containers/Post";
 import Page from "../src/containers/Page";
 import { fetchSalesIfNeeded } from "../src/actions/sales";
-import { fetchPostIfNeeded } from "../src/actions/posts";
+import { fetchPostIfNeeded, fetchAllPostsIfNeeded } from "../src/actions/posts";
 import { fetchPageIfNeeded } from "../src/actions/pages";
+import { pathnamesByLanguage } from "../src/utilities/urls";
+import { supportedLanguages } from "../src/utilities/i18n";
 
-const routes = [
+const i18nRoutes = [
   {
-    path: "/",
+    path: language => `/${language}/`,
     component: Frontpage,
     exact: true,
     /**
@@ -25,36 +27,45 @@ const routes = [
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(store, route, match) {
+    fetchData(store, route, match, languageFetchString) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false)),
+        store.dispatch(fetchAllPostsIfNeeded(100, languageFetchString, false))
       ]);
     }
   },
   {
-    path: "/produkt-kategorie",
+    path: language =>
+      `/${language}/${pathnamesByLanguage[language].productCategory}`,
     component: ProductCategories,
     /**
      * Fetches the required data for this route
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(store, route, match) {
+    fetchData(store, route, match, languageFetchString) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   },
   {
-    path: "/produkt/:productSlug",
+    path: language =>
+      `/${language}/${pathnamesByLanguage[language].product}/:productSlug`,
     component: Product,
     exact: true,
     /**
@@ -62,6 +73,7 @@ const routes = [
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
     fetchData(
@@ -69,18 +81,24 @@ const routes = [
       route,
       {
         params: { productSlug }
-      }
+      },
+      languageFetchString
     ) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchProductIfNeeded(productSlug, false)),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(
+          fetchProductIfNeeded(productSlug, languageFetchString, false)
+        ),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   },
   {
-    path: "/beitrag/:postSlug",
+    path: language =>
+      `/${language}/${pathnamesByLanguage[language].post}/:postSlug`,
     component: Post,
     exact: true,
     /**
@@ -88,6 +106,7 @@ const routes = [
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
     fetchData(
@@ -95,18 +114,22 @@ const routes = [
       route,
       {
         params: { postSlug }
-      }
+      },
+      languageFetchString
     ) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchPostIfNeeded(postSlug)),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(fetchPostIfNeeded(postSlug, languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   },
   {
-    path: "/seite/:pageSlug",
+    path: language =>
+      `/${language}/${pathnamesByLanguage[language].page}/:pageSlug`,
     component: Page,
     exact: true,
     /**
@@ -114,6 +137,7 @@ const routes = [
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
     fetchData(
@@ -121,18 +145,21 @@ const routes = [
       route,
       {
         params: { pageSlug }
-      }
+      },
+      languageFetchString
     ) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchPageIfNeeded(pageSlug)),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(fetchPageIfNeeded(pageSlug, languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   },
   {
-    path: "/login",
+    path: language => `/${language}/${pathnamesByLanguage[language].login}`,
     component: Login,
     exact: true,
     /**
@@ -140,18 +167,21 @@ const routes = [
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(store, route, match) {
+    fetchData(store, route, match, languageFetchString) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   },
   {
-    path: "/logout",
+    path: language => `/${language}/${pathnamesByLanguage[language].Logout}`,
     component: Logout,
     exact: true,
     /**
@@ -159,36 +189,42 @@ const routes = [
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(store, route, match) {
+    fetchData(store, route, match, languageFetchString) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   },
   {
-    path: "/konto",
+    path: language => `/${language}/${pathnamesByLanguage[language].account}`,
     component: Account,
     /**
      * Fetches the required data for this route
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(store, route, match) {
+    fetchData(store, route, match, languageFetchString) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   },
   {
-    path: "/warenkorb",
+    path: language => `/${language}/${pathnamesByLanguage[language].cart}`,
     component: Cart,
     exact: true,
     /**
@@ -196,34 +232,51 @@ const routes = [
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(store, route, match) {
+    fetchData(store, route, match, languageFetchString) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   },
   {
     component: Page404,
-    exact: true,
     /**
      * Fetches the required data for this route
      * @param {Object} store The redux store
      * @param {Object} route The react-router route object
      * @param {Object} match The react-router match object
+     * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(store, route, match) {
+    fetchData(store, route, match, languageFetchString) {
       return Promise.all([
-        store.dispatch(fetchSalesIfNeeded()),
-        store.dispatch(fetchAllProductCategoriesIfNeeded(100, false)),
-        store.dispatch(fetchCountriesIfNeeded())
+        store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
+        store.dispatch(
+          fetchAllProductCategoriesIfNeeded(100, languageFetchString, false)
+        ),
+        store.dispatch(fetchCountriesIfNeeded(languageFetchString, false))
       ]);
     }
   }
 ];
+
+const routes = [];
+i18nRoutes.forEach(({ path, component, exact, fetchData }) => {
+  supportedLanguages.forEach(language => {
+    routes.push({
+      path: path ? path(language) : undefined,
+      component,
+      exact,
+      fetchData
+    });
+  });
+});
 
 export default routes;

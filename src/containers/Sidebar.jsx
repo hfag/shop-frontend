@@ -1,26 +1,38 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import HomeIcon from "react-icons/lib/fa/home";
-import SearchIcon from "react-icons/lib/fa/search";
-import CartIcon from "react-icons/lib/fa/shopping-cart";
-import AccountIcon from "react-icons/lib/fa/user";
-import SignInIcon from "react-icons/lib/fa/sign-in";
-import GearsIcon from "react-icons/lib/fa/cogs";
+import {
+  FaHome as HomeIcon,
+  FaSearch as SearchIcon,
+  FaShoppingCart as CartIcon,
+  FaUser as AccountIcon,
+  FaSignInAlt as SignInIcon,
+  FaCogs as GearsIcon
+} from "react-icons/fa";
 import { withRouter } from "react-router";
+import { defineMessages, injectIntl } from "react-intl";
 
 import Link from "../components/Link";
 import { media, colors } from "../utilities/style";
 import NameSlogan from "../../img/logo/name_slogan.svg";
-import { getIsAuthenticated, getBurgerMenuOpen } from "../reducers";
+import {
+  getIsAuthenticated,
+  getBurgerMenuOpen,
+  getLanguage
+} from "../reducers";
 import { toggleBurgerMenu } from "../actions/burger-menu";
 import MediaQuery from "../components/MediaQuery";
 import Card from "../components/Card";
 import RestrictedView from "./RestrictedView";
+import { pathnamesByLanguage } from "../utilities/urls";
+import page from "../i18n/page";
 
 const BurgerContainer = styled(Card)`
   height: 100%;
   z-index: 100;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: none;
 
   transition: all 0.3s ease-in;
   -webkit-overflow-scrolling: touch;
@@ -79,88 +91,99 @@ const BurgerBackground = styled.div`
   z-index: ${({ isOpen }) => (isOpen ? 99 : -1)};
 `;
 
-/**
- * The sidebar
- * @returns {Component} The component
- */
-class Sidebar extends React.PureComponent {
-  render = () => {
-    const {
+const Sidebar = React.memo(
+  injectIntl(
+    ({
+      language,
       isOpen = false,
       isAuthenticated,
       toggleBurgerMenu,
-      children
-    } = this.props;
-
-    return (
-      <div style={{ height: "100%", paddingBottom: "2rem" }}>
-        <BurgerBackground onClick={toggleBurgerMenu} isOpen={isOpen} />
-        <BurgerContainer isOpen={isOpen}>
-          <MediaQuery lg down style={{ height: "auto" }}>
-            <BurgerLogo src={NameSlogan} alt="Slogan" />
-            <BurgerList>
-              <BurgerItem seperator>
-                <Link to="/" flex>
-                  <HomeIcon />
-                  Home
-                </Link>
-              </BurgerItem>
-              <BurgerItem seperator>
-                <Link to="/suche" flex>
-                  <SearchIcon />
-                  Suche
-                </Link>
-              </BurgerItem>
-              <BurgerItem seperator>
-                <Link to="/warenkorb" flex>
-                  <CartIcon />
-                  Warenkorb
-                </Link>
-              </BurgerItem>
-              <BurgerItem seperator>
-                {isAuthenticated ? (
-                  <Link to="/konto" flex>
-                    <span>
-                      <AccountIcon />
-                      Mein Konto
-                    </span>
+      children,
+      intl
+    }) => {
+      return (
+        <div style={{ height: "100%", paddingBottom: "2rem" }}>
+          <BurgerBackground onClick={toggleBurgerMenu} isOpen={isOpen} />
+          <BurgerContainer isOpen={isOpen}>
+            <MediaQuery lg down style={{ height: "auto" }}>
+              <BurgerLogo src={NameSlogan} alt="Slogan" />
+              <BurgerList>
+                <BurgerItem seperator>
+                  <Link to={`/${language}/`} flex>
+                    <HomeIcon />
+                    {intl.formatMessage(page.home)}
                   </Link>
-                ) : (
-                  <Link to="/login" flex>
-                    <span>
-                      <SignInIcon />
-                      Login
-                    </span>
-                  </Link>
-                )}
-                <RestrictedView>
-                  <Link href="https://api.feuerschutz.ch/wp-admin" flex>
-                    <span>
-                      <GearsIcon />
-                      Shop-Admin
-                    </span>
-                  </Link>
+                </BurgerItem>
+                <BurgerItem seperator>
                   <Link
-                    href="https://feuerschutz.ch/wp-login.php?action=login"
+                    to={`/${language}/${pathnamesByLanguage[language].search}`}
                     flex
                   >
-                    <span>
-                      <GearsIcon />
-                      Netzwerk-Admin
-                    </span>
+                    <SearchIcon />
+                    {intl.formatMessage(page.search)}
                   </Link>
-                </RestrictedView>
-              </BurgerItem>
-            </BurgerList>
-          </MediaQuery>
-          {children}
-        </BurgerContainer>
-      </div>
-    );
-  };
-}
+                </BurgerItem>
+                <BurgerItem seperator>
+                  <Link
+                    to={`/${language}/${pathnamesByLanguage[language].cart}`}
+                    flex
+                  >
+                    <CartIcon />
+                    {intl.formatMessage(page.cart)}
+                  </Link>
+                </BurgerItem>
+                <BurgerItem seperator>
+                  {isAuthenticated ? (
+                    <Link
+                      to={`/${language}/${pathnamesByLanguage[language].account}`}
+                      flex
+                    >
+                      <span>
+                        <AccountIcon />
+                        {intl.formatMessage(page.myAccount)}
+                      </span>
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/${language}/${pathnamesByLanguage[language].login}`}
+                      flex
+                    >
+                      <span>
+                        <SignInIcon />
+                        {intl.formatMessage(page.login)}
+                      </span>
+                    </Link>
+                  )}
+                  <RestrictedView>
+                    <Link href="https://api.feuerschutz.ch/wp-admin" flex>
+                      <span>
+                        <GearsIcon />
+                        {intl.formatMessage(page.shopAdmin)}
+                      </span>
+                    </Link>
+                    <Link
+                      href="https://feuerschutz.ch/wp-login.php?action=login"
+                      flex
+                    >
+                      <span>
+                        <GearsIcon />
+                        {intl.formatMessage(page.networkAdmin)}
+                      </span>
+                    </Link>
+                  </RestrictedView>
+                </BurgerItem>
+              </BurgerList>
+            </MediaQuery>
+            {children}
+          </BurgerContainer>
+        </div>
+      );
+    }
+  )
+);
 
 const mapStateToProps = state => ({
+  language: getLanguage(state),
   isAuthenticated: getIsAuthenticated(state),
   isOpen: getBurgerMenuOpen(state)
 });

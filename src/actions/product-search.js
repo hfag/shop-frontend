@@ -1,5 +1,5 @@
-import { fetchApi } from "utilities/api";
-import { createFetchAction, createFetchItemsThunk } from "utilities/action";
+import { createFetchAction, createFetchItemsThunk } from "../utilities/action";
+import { trackSiteSearch } from "../utilities/analytics";
 
 /**
  * Maps the received object properties to the ones that should be stored in the state
@@ -33,12 +33,23 @@ export const reset = () => ({
 
 /**
  * Searches for products
- * @param {boolean} isFetching Whether to visualize the progress of the request
+ * @param {string} language The language string
+ * @param {boolean} visualize Whether to visualize the progress of the request
  * @param {string} query The search query
  * @returns {function} A redux thunk
  */
 export const search = createFetchItemsThunk(
   searchProducts,
-  query => `/wp-json/hfag/suggestions?query=${query}`,
-  mapItem
+  (language, query) => `${language}/wp-json/hfag/suggestions?query=${query}`,
+  mapItem,
+  (dispatch, sections, language, visualize, query) => {
+    trackSiteSearch(
+      query,
+      false,
+      sections.reduce(
+        (counter, section) => counter + section.suggestions.length,
+        0
+      )
+    );
+  }
 );

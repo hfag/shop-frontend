@@ -73,6 +73,7 @@ const storeByLanguage = supportedLanguages.reduce((object, languageKey) => {
   const history = createMemoryHistory({
     initialEntries: [`/${languageKey}/`]
   });
+
   object[languageKey] = createNewStore(history);
 
   return object;
@@ -246,9 +247,9 @@ setInterval(() => {
       .filter(
         attachment =>
           attachment &&
-          (now - attachment._lastFetched >
+          now - attachment._lastFetched >
             1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
-            !productCategoryThumbnailIds.includes(attachment.id))
+          !productCategoryThumbnailIds.includes(attachment.id)
       )
       .map(attachment => attachment.id);
 

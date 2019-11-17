@@ -40,6 +40,7 @@ import NavUser from "../components/header/NavUser";
 import shop from "../i18n/shop";
 import Card from "../components/Card";
 import { colors } from "../utilities/style";
+import page from "../i18n/page";
 
 const messages = defineMessages({
   siteDescription: {
@@ -82,24 +83,22 @@ const MobileSearchWrapper = styled.div`
   }
 `;
 
-const Head = React.memo(
-  injectIntl(({ intl }) => {
-    return (
-      <Helmet>
-        <title>{intl.formatMessage(shop.siteTitle)}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="author" content="Nico Hauser" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta
-          name="description"
-          content={intl.formatMessage(messages.siteDescription)}
-        />
-        <link rel="canonical" href={ABSOLUTE_URL} />
-      </Helmet>
-    );
-  })
-);
+const Head = React.memo(({ intl }) => {
+  return (
+    <Helmet>
+      <title>{intl.formatMessage(shop.siteTitle)}</title>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="author" content="Nico Hauser" />
+      <meta name="format-detection" content="telephone=no" />
+      <meta
+        name="description"
+        content={intl.formatMessage(messages.siteDescription)}
+      />
+      <link rel="canonical" href={ABSOLUTE_URL} />
+    </Helmet>
+  );
+});
 
 const RichSnippet = React.memo(() => {
   return (
@@ -162,132 +161,135 @@ const RichSnippet = React.memo(() => {
 });
 
 const Header = React.memo(
-  ({
-    account,
-    isAuthenticated,
-    toggleBurgerMenu,
-    shoppingCartFetching,
-    shoppingCartItems,
-    shoppingCartTotal,
-    redirect,
-    fetchShoppingCartIfNeeded,
-    fetchSalesIfNeeded,
-    language
-  }) => {
-    const [dropdown, setDropdown] = useState(false);
+  injectIntl(
+    ({
+      intl,
+      account,
+      isAuthenticated,
+      toggleBurgerMenu,
+      shoppingCartFetching,
+      shoppingCartItems,
+      shoppingCartTotal,
+      redirect,
+      fetchShoppingCartIfNeeded,
+      fetchSalesIfNeeded,
+      language
+    }) => {
+      const [dropdown, setDropdown] = useState(false);
 
-    useEffect(() => {
-      fetchShoppingCartIfNeeded();
-      fetchSalesIfNeeded();
-    }, []); //run on initial render
+      useEffect(() => {
+        fetchShoppingCartIfNeeded();
+        fetchSalesIfNeeded();
+      }, []); //run on initial render
 
-    return (
-      <HeaderWrapper>
-        <Head />
-        <RichSnippet />
-        <LoadingBar className="redux-loading-bar" />
-        <header>
-          <Navbar>
-            <Flex>
-              <FullHeightBox width={[0, 0, 0, 1 / 6]}>
-                <MediaQuery lg up>
-                  <LogoLeft>
-                    <NavItem>
-                      <Link to={`/${language}`} title="Homepage">
-                        <img src={LogoNegative} alt="Logo" />
-                      </Link>
-                    </NavItem>
-                  </LogoLeft>
-                </MediaQuery>
-              </FullHeightBox>
-              <FullHeightBox width={[1, 1, 1, 5 / 6]} pl={2}>
-                <Container>
-                  <Flexbar>
-                    <MediaQuery lg up>
+      return (
+        <HeaderWrapper>
+          <Head intl={intl} />
+          <RichSnippet />
+          <LoadingBar className="redux-loading-bar" />
+          <header>
+            <Navbar>
+              <Flex>
+                <FullHeightBox width={[0, 0, 0, 1 / 6]}>
+                  <MediaQuery lg up>
+                    <LogoLeft>
                       <NavItem>
                         <Link to={`/${language}`} title="Homepage">
-                          <img src={NameSloganNegative} alt="Slogan" />
+                          <img src={LogoNegative} alt="Logo" />
                         </Link>
                       </NavItem>
-                    </MediaQuery>
-                    <MediaQuery lg down>
-                      <Flexbar>
-                        <NavItem>
-                          <Link onClick={toggleBurgerMenu} negative>
-                            <MdMenu size="40" />
-                          </Link>
-                        </NavItem>
+                    </LogoLeft>
+                  </MediaQuery>
+                </FullHeightBox>
+                <FullHeightBox width={[1, 1, 1, 5 / 6]} pl={2}>
+                  <Container>
+                    <Flexbar>
+                      <MediaQuery lg up>
                         <NavItem>
                           <Link to={`/${language}`} title="Homepage">
-                            <img src={LogoNegative} alt="Logo" />
+                            <img src={NameSloganNegative} alt="Slogan" />
                           </Link>
                         </NavItem>
-                      </Flexbar>
-                    </MediaQuery>
-                    <SearchWrapper>
-                      <MediaQuery lg up>
-                        <Searchbar />
                       </MediaQuery>
-                    </SearchWrapper>
-                    <Push left>
-                      <MediaQuery md down>
-                        <NavItem>
-                          <LanguageSwitcher
-                            dropdown={dropdown}
-                            setDropdown={setDropdown}
-                          />
-                        </NavItem>
-                      </MediaQuery>
-                      <MediaQuery md up>
+                      <MediaQuery lg down>
                         <Flexbar>
-                          <NavItem seperator>
+                          <NavItem>
+                            <Link onClick={toggleBurgerMenu} negative>
+                              <MdMenu size="40" />
+                            </Link>
+                          </NavItem>
+                          <NavItem>
+                            <Link to={`/${language}`} title="Homepage">
+                              <img src={LogoNegative} alt="Logo" />
+                            </Link>
+                          </NavItem>
+                        </Flexbar>
+                      </MediaQuery>
+                      <SearchWrapper>
+                        <MediaQuery lg up>
+                          <Searchbar />
+                        </MediaQuery>
+                      </SearchWrapper>
+                      <Push left>
+                        <MediaQuery md down>
+                          <NavItem>
                             <LanguageSwitcher
                               dropdown={dropdown}
                               setDropdown={setDropdown}
                             />
                           </NavItem>
-                          <NavItem seperator>
-                            <NavCart
-                              language={language}
-                              shoppingCartFetching={shoppingCartFetching}
-                              shoppingCartItems={shoppingCartItems}
-                              shoppingCartTotal={shoppingCartTotal}
-                              redirect={redirect}
-                              dropdown={dropdown}
-                              setDropdown={setDropdown}
-                            />
-                          </NavItem>
-                          <NavItem>
-                            <NavUser
-                              language={language}
-                              isAuthenticated={isAuthenticated}
-                              account={account}
-                              dropdown={dropdown}
-                              setDropdown={setDropdown}
-                            />
-                          </NavItem>
-                        </Flexbar>
-                      </MediaQuery>
-                    </Push>
-                  </Flexbar>
-                </Container>
-              </FullHeightBox>
-            </Flex>
-          </Navbar>
-        </header>
-        <MobileSearchWrapper>
-          <MediaQuery lg down>
-            <Container>
-              <Card>
-                <h3>Suche</h3>
-                <Searchbar />
-              </Card>
-            </Container>
-          </MediaQuery>
-        </MobileSearchWrapper>
-      </HeaderWrapper>
-    );
-  }
+                        </MediaQuery>
+                        <MediaQuery md up>
+                          <Flexbar>
+                            <NavItem seperator>
+                              <LanguageSwitcher
+                                dropdown={dropdown}
+                                setDropdown={setDropdown}
+                              />
+                            </NavItem>
+                            <NavItem seperator>
+                              <NavCart
+                                language={language}
+                                shoppingCartFetching={shoppingCartFetching}
+                                shoppingCartItems={shoppingCartItems}
+                                shoppingCartTotal={shoppingCartTotal}
+                                redirect={redirect}
+                                dropdown={dropdown}
+                                setDropdown={setDropdown}
+                              />
+                            </NavItem>
+                            <NavItem>
+                              <NavUser
+                                language={language}
+                                isAuthenticated={isAuthenticated}
+                                account={account}
+                                dropdown={dropdown}
+                                setDropdown={setDropdown}
+                              />
+                            </NavItem>
+                          </Flexbar>
+                        </MediaQuery>
+                      </Push>
+                    </Flexbar>
+                  </Container>
+                </FullHeightBox>
+              </Flex>
+            </Navbar>
+          </header>
+          <MobileSearchWrapper>
+            <MediaQuery lg down>
+              <Container>
+                <Card>
+                  <h3>{intl.formatMessage(page.search)}</h3>
+                  <Searchbar />
+                </Card>
+              </Container>
+            </MediaQuery>
+          </MobileSearchWrapper>
+        </HeaderWrapper>
+      );
+    }
+  )
 );
 
 const mapStateToProps = state => ({

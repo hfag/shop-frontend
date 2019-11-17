@@ -3,7 +3,7 @@ import { withFormik, Form } from "formik";
 import PropTypes from "prop-types";
 import * as yup from "yup";
 import styled from "styled-components";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 
 import Button from "../Button";
 import InputField from "../InputField";
@@ -36,8 +36,10 @@ const getStateOptionsByCountry = (countries, country) => {
  * @returns {Component} The component
  */
 const InnerAddressForm = React.memo(
-  injectIntl(
-    ({ values, isValid, status = "", countries, type = "billing", intl }) => (
+  ({ values, isValid, status = "", countries, type = "billing" }) => {
+    const intl = useIntl();
+
+    return (
       <FormWrapper>
         <h2>
           {type === "billing"
@@ -118,7 +120,12 @@ const InnerAddressForm = React.memo(
             countries[values.country] &&
             countries[values.country].states
               ? getStateOptionsByCountry(countries, values["country"])
-              : [{ value: "AG", label: intl.formatMessage(form.noInformation) }]
+              : [
+                  {
+                    value: "AG",
+                    label: intl.formatMessage(form.noInformation)
+                  }
+                ]
           }
         />
         {type === "billing" && (
@@ -142,8 +149,8 @@ const InnerAddressForm = React.memo(
           {intl.formatMessage(form.saveChanges)}
         </Button>
       </FormWrapper>
-    )
-  )
+    );
+  }
 );
 
 const AddressForm = withFormik({

@@ -1,22 +1,22 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import { defineMessages, injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 
 import { logout } from "../actions/authentication";
 import Card from "../components/Card";
 import { getLanguage } from "../reducers";
 import user from "../i18n/user";
 
-const Logout = React.memo(
-  injectIntl(({ logout, intl }) => {
-    useEffect(() => {
-      logout();
-    }, []);
+const Logout = React.memo(({ logout }) => {
+  const intl = useIntl();
 
-    return <Card>{intl.formatMessage(user.logout)}...</Card>;
-  })
-);
+  useEffect(() => {
+    logout();
+  }, []);
+
+  return <Card>{intl.formatMessage(user.logout)}...</Card>;
+});
 
 const mapStateToProps = state => ({ language: getLanguage(state) });
 const mapDispatchToProps = dispatch => ({

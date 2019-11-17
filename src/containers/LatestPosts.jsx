@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 import { connect } from "react-redux";
 
 import Link from "../components/Link";
@@ -71,7 +71,9 @@ const Post = React.memo(({ language, post }) => {
 });
 
 const LatestPosts = React.memo(
-  injectIntl(({ language, fetchAllPostsIfNeeded, posts = [], intl }) => {
+  ({ language, fetchAllPostsIfNeeded, posts = [] }) => {
+    const intl = useIntl();
+
     useEffect(() => {
       fetchAllPostsIfNeeded();
     }, []);
@@ -88,7 +90,7 @@ const LatestPosts = React.memo(
         </LatesPostFlex>
       </div>
     );
-  })
+  }
 );
 
 const mapStateToProps = state => {

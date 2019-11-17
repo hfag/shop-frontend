@@ -5,7 +5,7 @@ import { Flex, Box } from "reflexbox";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 
 import { getCountries, getLanguageFetchString, getLanguage } from "../reducers";
 import { fetchCountriesIfNeeded } from "../actions/countries";
@@ -83,168 +83,163 @@ const AccountContainer = styled.div`
  */
 
 const Account = React.memo(
-  injectIntl(
-    ({
-      language,
-      countries,
-      accountDetails,
-      billingAddress,
-      shippingAddress,
-      updateAccount,
-      updateAddress,
-      location,
-      match: { url },
-      isAuthenticated,
-      redirectToLogin,
-      fetchCountriesIfNeeded,
-      fetchAccount,
-      fetchOrders,
-      intl
-    }) => {
-      useEffect(() => {
-        if (!isAuthenticated) {
-          return redirectToLogin();
-        }
+  ({
+    language,
+    countries,
+    accountDetails,
+    billingAddress,
+    shippingAddress,
+    updateAccount,
+    updateAddress,
+    location,
+    match: { url },
+    isAuthenticated,
+    redirectToLogin,
+    fetchCountriesIfNeeded,
+    fetchAccount,
+    fetchOrders
+  }) => {
+    const intl = useIntl();
 
-        fetchCountriesIfNeeded();
-        fetchAccount();
-        fetchOrders();
-      }, []);
+    useEffect(() => {
+      if (!isAuthenticated) {
+        return redirectToLogin();
+      }
 
-      useEffect(() => {
-        //route change
-        trackPageView();
-      }, [location]);
+      fetchCountriesIfNeeded();
+      fetchAccount();
+      fetchOrders();
+    }, []);
 
-      return (
-        <AccountContainer>
-          <Helmet>
-            <title>
-              {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
-            </title>
-            <meta
-              name="description"
-              content={intl.formatMessage(messages.siteDescription)}
-            />
-            <link
-              rel="canonical"
-              href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].account}`}
-            />
-          </Helmet>
-          <Flex flexWrap="wrap">
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
-              <Card>
-                <h1>{intl.formatMessage(messages.myAccount)}</h1>
-                <ProfileNavigation>
-                  <li>
-                    <Link to={url}>
-                      {intl.formatMessage(messages.overview)}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`${url}/${pathnamesByLanguage[language].details}`}
-                    >
-                      {intl.formatMessage(messages.details)}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`${url}/${pathnamesByLanguage[language].billingAddress}`}
-                    >
-                      {intl.formatMessage(address.billingAddress)}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`${url}/${pathnamesByLanguage[language].shippingAddress}`}
-                    >
-                      {intl.formatMessage(address.shippingAddress)}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={`${url}/${pathnamesByLanguage[language].orders}`}>
-                      {intl.formatMessage(order.orders)}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={`/${language}/${pathnamesByLanguage[language].logout}`}
-                    >
-                      {intl.formatMessage(user.logout)}
-                    </Link>
-                  </li>
-                </ProfileNavigation>
-              </Card>
-            </Box>
-            <Box width={[1, 1 / 2, 2 / 3, 2 / 3]}>
-              <Card>
-                <Switch>
-                  <Route
-                    exact
-                    path={url}
-                    render={props => (
-                      <AccountDashboard
-                        {...props}
-                        accountDetails={accountDetails}
-                        billingAddress={billingAddress}
-                        shippingAddress={shippingAddress}
-                      />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path={`${url}/${pathnamesByLanguage[language].details}`}
-                    render={props => (
-                      <AccountForm
-                        {...props}
-                        updateAccount={updateAccount}
-                        values={accountDetails}
-                      />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path={`${url}/${pathnamesByLanguage[language].billingAddress}`}
-                    render={props => (
-                      <AddressForm
-                        {...props}
-                        updateAddress={updateAddress}
-                        type="billing"
-                        countries={countries}
-                        values={billingAddress}
-                      />
-                    )}
-                  />
-                  <Route
-                    exact
-                    path={`${url}/${pathnamesByLanguage[language].shippingAddress}`}
-                    render={props => (
-                      <AddressForm
-                        {...props}
-                        updateAddress={updateAddress}
-                        type="shipping"
-                        countries={countries}
-                        values={shippingAddress}
-                      />
-                    )}
-                  />
-                  <Route
-                    path={`${url}/${pathnamesByLanguage[language].orders}`}
-                    component={AccountOrders}
-                  />
-                  <Route
-                    path={`${url}/${pathnamesByLanguage[language].orders}/:orderId`}
-                    component={AccountOrder}
-                  />
-                </Switch>
-              </Card>
-            </Box>
-          </Flex>
-        </AccountContainer>
-      );
-    }
-  )
+    useEffect(() => {
+      //route change
+      trackPageView();
+    }, [location]);
+
+    return (
+      <AccountContainer>
+        <Helmet>
+          <title>
+            {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
+          </title>
+          <meta
+            name="description"
+            content={intl.formatMessage(messages.siteDescription)}
+          />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].account}`}
+          />
+        </Helmet>
+        <Flex flexWrap="wrap">
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
+            <Card>
+              <h1>{intl.formatMessage(messages.myAccount)}</h1>
+              <ProfileNavigation>
+                <li>
+                  <Link to={url}>{intl.formatMessage(messages.overview)}</Link>
+                </li>
+                <li>
+                  <Link to={`${url}/${pathnamesByLanguage[language].details}`}>
+                    {intl.formatMessage(messages.details)}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={`${url}/${pathnamesByLanguage[language].billingAddress}`}
+                  >
+                    {intl.formatMessage(address.billingAddress)}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={`${url}/${pathnamesByLanguage[language].shippingAddress}`}
+                  >
+                    {intl.formatMessage(address.shippingAddress)}
+                  </Link>
+                </li>
+                <li>
+                  <Link to={`${url}/${pathnamesByLanguage[language].orders}`}>
+                    {intl.formatMessage(order.orders)}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={`/${language}/${pathnamesByLanguage[language].logout}`}
+                  >
+                    {intl.formatMessage(user.logout)}
+                  </Link>
+                </li>
+              </ProfileNavigation>
+            </Card>
+          </Box>
+          <Box width={[1, 1 / 2, 2 / 3, 2 / 3]}>
+            <Card>
+              <Switch>
+                <Route
+                  exact
+                  path={url}
+                  render={props => (
+                    <AccountDashboard
+                      {...props}
+                      accountDetails={accountDetails}
+                      billingAddress={billingAddress}
+                      shippingAddress={shippingAddress}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path={`${url}/${pathnamesByLanguage[language].details}`}
+                  render={props => (
+                    <AccountForm
+                      {...props}
+                      updateAccount={updateAccount}
+                      values={accountDetails}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path={`${url}/${pathnamesByLanguage[language].billingAddress}`}
+                  render={props => (
+                    <AddressForm
+                      {...props}
+                      updateAddress={updateAddress}
+                      type="billing"
+                      countries={countries}
+                      values={billingAddress}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path={`${url}/${pathnamesByLanguage[language].shippingAddress}`}
+                  render={props => (
+                    <AddressForm
+                      {...props}
+                      updateAddress={updateAddress}
+                      type="shipping"
+                      countries={countries}
+                      values={shippingAddress}
+                    />
+                  )}
+                />
+                <Route
+                  path={`${url}/${pathnamesByLanguage[language].orders}`}
+                  component={AccountOrders}
+                />
+                <Route
+                  path={`${url}/${pathnamesByLanguage[language].orders}/:orderId`}
+                  component={AccountOrder}
+                />
+              </Switch>
+            </Card>
+          </Box>
+        </Flex>
+      </AccountContainer>
+    );
+  }
 );
 
 const mapStateToProps = state => {

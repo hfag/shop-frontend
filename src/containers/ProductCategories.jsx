@@ -16,7 +16,7 @@ import {
   getProductCategoryBySlug
 } from "reducers";
 import { Helmet } from "react-helmet";
-import { injectIntl, defineMessages } from "react-intl";
+import { useIntl, defineMessages } from "react-intl";
 import styled from "styled-components";
 import { FaInfoCircle, FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
@@ -79,36 +79,36 @@ const DownloadList = styled.ul`
   }
 `;
 
-const Head = React.memo(
-  injectIntl(({ language, category, intl }) => {
-    return (
-      <Helmet>
-        <title>
-          {category
-            ? stripTags(category.name) + " - Hauser Feuerschutz AG"
-            : intl.formatMessage(shop.siteTitle)}
-        </title>
-        <meta
-          name="description"
-          content={
-            category
-              ? category.shortDescription
-              : intl.formatMessage(shop.siteMessage)
+const Head = React.memo(({ language, category }) => {
+  const intl = useIntl();
+
+  return (
+    <Helmet>
+      <title>
+        {category
+          ? stripTags(category.name) + " - Hauser Feuerschutz AG"
+          : intl.formatMessage(shop.siteTitle)}
+      </title>
+      <meta
+        name="description"
+        content={
+          category
+            ? category.shortDescription
+            : intl.formatMessage(shop.siteMessage)
+        }
+      />
+      {category && (
+        <link
+          rel="canonical"
+          href={
+            category &&
+            `${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].productCategories}/${category.slug}`
           }
         />
-        {category && (
-          <link
-            rel="canonical"
-            href={
-              category &&
-              `${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].productCategories}/${category.slug}`
-            }
-          />
-        )}
-      </Helmet>
-    );
-  })
-);
+      )}
+    </Helmet>
+  );
+});
 
 const RichSnippet = React.memo(({ productsJsonLd }) => (
   <JsonLd>
@@ -117,204 +117,198 @@ const RichSnippet = React.memo(({ productsJsonLd }) => (
 ));
 
 const ProductCategories = React.memo(
-  injectIntl(
-    ({
-      location: { pathname, search },
-      match: {
-        url,
-        params: { categorySlug, page }
+  ({
+    location: { pathname, search },
+    match: {
+      url,
+      params: { categorySlug, page }
+    },
+    category,
+    fetchAllProductCategoriesIfNeeded,
+    fetchProducts,
+    dispatch,
+    /* render props*/
+    language,
+    totalProductCount,
+    items,
+    parents = [],
+    productsJsonLd
+  }) => {
+    const intl = useIntl();
+    const categoryId = (category && category.id) || 0;
+
+    //check if endings match
+    const active = useMemo(
+      () => pathname.substring(pathname.length - url.length) === url,
+      [pathname, url]
+    );
+
+    const urlWithoutPage = useMemo(
+      () =>
+        page
+          ? url
+              .split("/")
+              .slice(0, -1)
+              .join("/")
+          : url,
+      [page, url]
+    );
+
+    const newParents = useMemo(
+      () => (categorySlug ? [...parents, categorySlug] : []),
+      [categorySlug, parents]
+    );
+
+    const onPageChange = useCallback(
+      ({ selected }) => {
+        dispatch(push(`${urlWithoutPage}/${selected + 1}`));
       },
-      category,
-      fetchAllProductCategoriesIfNeeded,
-      fetchProducts,
-      dispatch,
-      /* render props*/
-      language,
-      totalProductCount,
-      items,
-      parents = [],
-      productsJsonLd,
-      intl
-    }) => {
-      const categoryId = (category && category.id) || 0;
+      [categorySlug, urlWithoutPage]
+    );
 
-      //check if endings match
-      const active = useMemo(
-        () => pathname.substring(pathname.length - url.length) === url,
-        [pathname, url]
-      );
+    const descriptionRef = useRef(null);
+    const scrollToDescription = useCallback(() =>
+      window.scrollTo({
+        left: 0,
+        top: descriptionRef.current.offsetTop,
+        behavior: "smooth"
+      })
+    );
 
-      const urlWithoutPage = useMemo(
-        () =>
-          page
-            ? url
-                .split("/")
-                .slice(0, -1)
-                .join("/")
-            : url,
-        [page, url]
-      );
+    useEffect(() => {
+      //load data
+      fetchAllProductCategoriesIfNeeded();
 
-      const newParents = useMemo(
-        () => (categorySlug ? [...parents, categorySlug] : []),
-        [categorySlug, parents]
-      );
-
-      const onPageChange = useCallback(
-        ({ selected }) => {
-          dispatch(push(`${urlWithoutPage}/${selected + 1}`));
-        },
-        [categorySlug, urlWithoutPage]
-      );
-
-      const descriptionRef = useRef(null);
-      const scrollToDescription = useCallback(() =>
-        window.scrollTo({
-          left: 0,
-          top: descriptionRef.current.offsetTop,
-          behavior: "smooth"
-        })
-      );
-
-      useEffect(() => {
-        //load data
-        fetchAllProductCategoriesIfNeeded();
-
-        if (!active || !category || !categoryId) {
-          trackPageView();
-          return;
-        }
-
-        fetchProducts(categoryId);
-
-        setProductCategoryView(stripTags(category.name));
+      if (!active || !category || !categoryId) {
         trackPageView();
-      }, [categoryId]);
+        return;
+      }
 
-      useEffect(() => {
-        if (active && (!page || isNaN(page)) && categorySlug) {
-          //exclude frontpage
-          dispatch(
-            push(
-              pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1" + search
-            )
-          );
-        }
-      }, []); //only run this once on the initial render
+      fetchProducts(categoryId);
 
-      const isLoading = items.length === 0;
+      setProductCategoryView(stripTags(category.name));
+      trackPageView();
+    }, [categoryId]);
 
-      return (
-        <div>
-          {active && (
-            <div>
-              <Head language={language} category={category} />
-              <RichSnippet productsJsonLd={productsJsonLd} />
-              {category && (
-                <InfoWrapper>
-                  <Flex flexWrap="wrap">
-                    <Box width={[1, 1, 1 / 2, 1 / 2]} pr={[0, 0, 4, 4]}>
-                      <H1
-                        dangerouslySetInnerHTML={{ __html: category.name }}
-                      ></H1>
-                      <p
-                        dangerouslySetInnerHTML={{ __html: category.excerpt }}
-                      ></p>
+    useEffect(() => {
+      if (active && (!page || isNaN(page)) && categorySlug) {
+        //exclude frontpage
+        dispatch(
+          push(
+            pathname + (pathname.slice(-1) === "/" ? "" : "/") + "1" + search
+          )
+        );
+      }
+    }, []); //only run this once on the initial render
+
+    const isLoading = items.length === 0;
+
+    return (
+      <div>
+        {active && (
+          <div>
+            <Head language={language} category={category} />
+            <RichSnippet productsJsonLd={productsJsonLd} />
+            {category && (
+              <InfoWrapper>
+                <Flex flexWrap="wrap">
+                  <Box width={[1, 1, 1 / 2, 1 / 2]} pr={[0, 0, 4, 4]}>
+                    <H1
+                      dangerouslySetInnerHTML={{ __html: category.name }}
+                    ></H1>
+                    <p
+                      dangerouslySetInnerHTML={{ __html: category.excerpt }}
+                    ></p>
+                  </Box>
+                  {category.links && category.links.length > 0 && (
+                    <Box width={[1, 1, 1 / 2, 1 / 2]}>
+                      <H2>{intl.formatMessage(messages.downloadsAndLinks)}</H2>
+                      <DownloadList>
+                        {category.links.map((link, index) => {
+                          let Icon;
+                          let url;
+                          let target;
+
+                          switch (link.type) {
+                            case "pdf":
+                              Icon = FaRegFilePdf;
+                              url = link.url;
+                              target = "_blank";
+                              break;
+
+                            case "video":
+                              Icon = FaFilm;
+                              url = link.url;
+                              target = "_blank";
+
+                              break;
+                            case "link":
+                            default:
+                              Icon = FaLink;
+                              url = link.url;
+                              target = "_blank";
+                          }
+
+                          return (
+                            <li key={index}>
+                              <Flexbar>
+                                <Icon size={24} />{" "}
+                                <Link href={url} target={target} styled>
+                                  {link.title}
+                                </Link>
+                              </Flexbar>
+                            </li>
+                          );
+                        })}
+                      </DownloadList>
                     </Box>
-                    {category.links && category.links.length > 0 && (
-                      <Box width={[1, 1, 1 / 2, 1 / 2]}>
-                        <H2>
-                          {intl.formatMessage(messages.downloadsAndLinks)}
-                        </H2>
-                        <DownloadList>
-                          {category.links.map((link, index) => {
-                            let Icon;
-                            let url;
-                            let target;
-
-                            switch (link.type) {
-                              case "pdf":
-                                Icon = FaRegFilePdf;
-                                url = link.url;
-                                target = "_blank";
-                                break;
-
-                              case "video":
-                                Icon = FaFilm;
-                                url = link.url;
-                                target = "_blank";
-
-                                break;
-                              case "link":
-                              default:
-                                Icon = FaLink;
-                                url = link.url;
-                                target = "_blank";
-                            }
-
-                            return (
-                              <li key={index}>
-                                <Flexbar>
-                                  <Icon size={24} />{" "}
-                                  <Link href={url} target={target} styled>
-                                    {link.title}
-                                  </Link>
-                                </Flexbar>
-                              </li>
-                            );
-                          })}
-                        </DownloadList>
-                      </Box>
-                    )}
-                  </Flex>
-                </InfoWrapper>
-              )}
-              <Flex flexWrap="wrap">
-                {items.map(({ type, id }) =>
-                  type === "category" ? (
-                    <CategoryItem
-                      key={"category-" + id}
-                      id={id}
-                      parents={newParents}
-                    />
-                  ) : (
-                    <ProductItem
-                      key={"product-" + id}
-                      id={id}
-                      parents={newParents}
-                    />
-                  )
-                )}
-                {isLoading &&
-                  new Array(12)
-                    .fill()
-                    .map((el, index) => (
-                      <CategoryItem key={index} id={-1} large={false} />
-                    ))}
-              </Flex>
-
-              <Pagination
-                pageCount={Math.max(
-                  1,
-                  Math.ceil(totalProductCount / ITEMS_PER_PAGE)
-                )}
-                pageRangeDisplayed={5}
-                marginPagesDisplayed={1}
-                forcePage={parseInt(page) - 1}
-                onPageChange={onPageChange}
-              />
-            </div>
-          )}
-          <Route
-            path={`${urlWithoutPage}/:categorySlug/:page`}
-            render={props => (
-              <RoutedCategories {...props} parents={newParents} />
+                  )}
+                </Flex>
+              </InfoWrapper>
             )}
-          />
-        </div>
-      );
-    }
-  )
+            <Flex flexWrap="wrap">
+              {items.map(({ type, id }) =>
+                type === "category" ? (
+                  <CategoryItem
+                    key={"category-" + id}
+                    id={id}
+                    parents={newParents}
+                  />
+                ) : (
+                  <ProductItem
+                    key={"product-" + id}
+                    id={id}
+                    parents={newParents}
+                  />
+                )
+              )}
+              {isLoading &&
+                new Array(12)
+                  .fill()
+                  .map((el, index) => (
+                    <CategoryItem key={index} id={-1} large={false} />
+                  ))}
+            </Flex>
+
+            <Pagination
+              pageCount={Math.max(
+                1,
+                Math.ceil(totalProductCount / ITEMS_PER_PAGE)
+              )}
+              pageRangeDisplayed={5}
+              marginPagesDisplayed={1}
+              forcePage={parseInt(page) - 1}
+              onPageChange={onPageChange}
+            />
+          </div>
+        )}
+        <Route
+          path={`${urlWithoutPage}/:categorySlug/:page`}
+          render={props => <RoutedCategories {...props} parents={newParents} />}
+        />
+      </div>
+    );
+  }
 );
 
 const mapStateToProps = (

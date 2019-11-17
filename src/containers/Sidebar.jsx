@@ -10,7 +10,7 @@ import {
   FaCogs as GearsIcon
 } from "react-icons/fa";
 import { withRouter } from "react-router";
-import { defineMessages, injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 
 import Link from "../components/Link";
 import { media, colors } from "../utilities/style";
@@ -92,94 +92,93 @@ const BurgerBackground = styled.div`
 `;
 
 const Sidebar = React.memo(
-  injectIntl(
-    ({
-      language,
-      isOpen = false,
-      isAuthenticated,
-      toggleBurgerMenu,
-      children,
-      intl
-    }) => {
-      return (
-        <div style={{ height: "100%", paddingBottom: "2rem" }}>
-          <BurgerBackground onClick={toggleBurgerMenu} isOpen={isOpen} />
-          <BurgerContainer isOpen={isOpen}>
-            <MediaQuery lg down style={{ height: "auto" }}>
-              <BurgerLogo src={NameSlogan} alt="Slogan" />
-              <BurgerList>
-                <BurgerItem seperator>
-                  <Link to={`/${language}/`} flex>
-                    <HomeIcon />
-                    {intl.formatMessage(page.home)}
-                  </Link>
-                </BurgerItem>
-                <BurgerItem seperator>
+  ({
+    language,
+    isOpen = false,
+    isAuthenticated,
+    toggleBurgerMenu,
+    children
+  }) => {
+    const intl = useIntl();
+
+    return (
+      <div style={{ height: "100%", paddingBottom: "2rem" }}>
+        <BurgerBackground onClick={toggleBurgerMenu} isOpen={isOpen} />
+        <BurgerContainer isOpen={isOpen}>
+          <MediaQuery lg down style={{ height: "auto" }}>
+            <BurgerLogo src={NameSlogan} alt="Slogan" />
+            <BurgerList>
+              <BurgerItem seperator>
+                <Link to={`/${language}/`} flex>
+                  <HomeIcon />
+                  {intl.formatMessage(page.home)}
+                </Link>
+              </BurgerItem>
+              <BurgerItem seperator>
+                <Link
+                  to={`/${language}/${pathnamesByLanguage[language].search}`}
+                  flex
+                >
+                  <SearchIcon />
+                  {intl.formatMessage(page.search)}
+                </Link>
+              </BurgerItem>
+              <BurgerItem seperator>
+                <Link
+                  to={`/${language}/${pathnamesByLanguage[language].cart}`}
+                  flex
+                >
+                  <CartIcon />
+                  {intl.formatMessage(page.cart)}
+                </Link>
+              </BurgerItem>
+              <BurgerItem seperator>
+                {isAuthenticated ? (
                   <Link
-                    to={`/${language}/${pathnamesByLanguage[language].search}`}
+                    to={`/${language}/${pathnamesByLanguage[language].account}`}
                     flex
                   >
-                    <SearchIcon />
-                    {intl.formatMessage(page.search)}
+                    <span>
+                      <AccountIcon />
+                      {intl.formatMessage(page.myAccount)}
+                    </span>
                   </Link>
-                </BurgerItem>
-                <BurgerItem seperator>
+                ) : (
                   <Link
-                    to={`/${language}/${pathnamesByLanguage[language].cart}`}
+                    to={`/${language}/${pathnamesByLanguage[language].login}`}
                     flex
                   >
-                    <CartIcon />
-                    {intl.formatMessage(page.cart)}
+                    <span>
+                      <SignInIcon />
+                      {intl.formatMessage(page.login)}
+                    </span>
                   </Link>
-                </BurgerItem>
-                <BurgerItem seperator>
-                  {isAuthenticated ? (
-                    <Link
-                      to={`/${language}/${pathnamesByLanguage[language].account}`}
-                      flex
-                    >
-                      <span>
-                        <AccountIcon />
-                        {intl.formatMessage(page.myAccount)}
-                      </span>
-                    </Link>
-                  ) : (
-                    <Link
-                      to={`/${language}/${pathnamesByLanguage[language].login}`}
-                      flex
-                    >
-                      <span>
-                        <SignInIcon />
-                        {intl.formatMessage(page.login)}
-                      </span>
-                    </Link>
-                  )}
-                  <RestrictedView>
-                    <Link href="https://api.feuerschutz.ch/wp-admin" flex>
-                      <span>
-                        <GearsIcon />
-                        {intl.formatMessage(page.shopAdmin)}
-                      </span>
-                    </Link>
-                    <Link
-                      href="https://feuerschutz.ch/wp-login.php?action=login"
-                      flex
-                    >
-                      <span>
-                        <GearsIcon />
-                        {intl.formatMessage(page.networkAdmin)}
-                      </span>
-                    </Link>
-                  </RestrictedView>
-                </BurgerItem>
-              </BurgerList>
-            </MediaQuery>
-            {children}
-          </BurgerContainer>
-        </div>
-      );
-    }
-  )
+                )}
+                <RestrictedView>
+                  <Link href="https://api.feuerschutz.ch/wp-admin" flex>
+                    <span>
+                      <GearsIcon />
+                      {intl.formatMessage(page.shopAdmin)}
+                    </span>
+                  </Link>
+                  <Link
+                    href="https://feuerschutz.ch/wp-login.php?action=login"
+                    flex
+                  >
+                    <span>
+                      <GearsIcon />
+                      {intl.formatMessage(page.networkAdmin)}
+                    </span>
+                  </Link>
+                </RestrictedView>
+              </BurgerItem>
+            </BurgerList>
+          </MediaQuery>
+          {children}
+        </BurgerContainer>
+      </div>
+    );
+  }
 );
 
 const mapStateToProps = state => ({

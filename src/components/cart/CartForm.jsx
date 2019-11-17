@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { withFormik, Form, FieldArray, Field } from "formik";
 import { MdDelete } from "react-icons/md";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 
 import Button from "../../components/Button";
 import Price from "../../components/Price";
@@ -109,27 +109,28 @@ const LastRow = styled.div`
  * @returns {Component} The inner cart form
  */
 const InnerCartForm = React.memo(
-  injectIntl(
-    ({
-      status,
-      values,
-      errors,
-      touched,
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      isSubmitting,
-      dirty,
-      shipping,
-      fees,
-      taxes,
-      subtotalSum,
-      total,
-      enabled,
-      onProceed,
-      lastRow,
-      intl
-    }) => (
+  ({
+    status,
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    isSubmitting,
+    dirty,
+    shipping,
+    fees,
+    taxes,
+    subtotalSum,
+    total,
+    enabled,
+    onProceed,
+    lastRow
+  }) => {
+    const intl = useIntl();
+
+    return (
       <Form>
         <TableScroll>
           <CartTable>
@@ -301,8 +302,8 @@ const InnerCartForm = React.memo(
           </Button>
         )}
       </Form>
-    )
-  )
+    );
+  }
 );
 
 const CartForm = withFormik({

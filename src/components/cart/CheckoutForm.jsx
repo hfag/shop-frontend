@@ -4,7 +4,7 @@ import { Flex, Box } from "reflexbox";
 import * as yup from "yup";
 import PropTypes from "prop-types";
 import { push } from "connected-react-router";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, injectIntl, useIntl } from "react-intl";
 
 import { clearShoppingCart } from "../../actions/shopping-cart";
 import Button from "../../components/Button";
@@ -69,22 +69,22 @@ const getStateOptionsByCountry = (countries, country) => {
  * @returns {Component} The inner checkout form
  */
 const InnerCheckoutForm = React.memo(
-  injectIntl(
-    ({
-      status,
-      values,
-      isValid,
-      errors,
-      touched,
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      isSubmitting,
-      showShipping,
-      setShowShipping,
-      countries,
-      intl
-    }) => (
+  ({
+    status,
+    values,
+    isValid,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    isSubmitting,
+    showShipping,
+    setShowShipping,
+    countries
+  }) => {
+    const intl = useIntl();
+    return (
       <Form>
         <Flex flexWrap="wrap">
           <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
@@ -315,8 +315,8 @@ const InnerCheckoutForm = React.memo(
           {intl.formatMessage(messages.submitOrder)}
         </Button>
       </Form>
-    )
-  )
+    );
+  }
 );
 
 const CheckoutForm = injectIntl(

@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { Flex, Box } from "reflexbox";
 import queryString from "query-string";
 import { Helmet } from "react-helmet";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, injectIntl, useIntl } from "react-intl";
 
 import {
   login,
@@ -85,15 +85,16 @@ const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
  * @param {Object} params The formik params
  * @returns {Component} The component
  */
-const InnerLoginRegisterForm = injectIntl(
-  ({
-    isValid,
-    status = "",
-    submitText = "Abschicken",
-    message = "",
-    confirmation = false,
-    intl
-  }) => (
+const InnerLoginRegisterForm = ({
+  isValid,
+  status = "",
+  submitText = "Abschicken",
+  message = "",
+  confirmation = false
+}) => {
+  const intl = useIntl();
+
+  return (
     <Form>
       <InputField
         type="text"
@@ -121,16 +122,17 @@ const InnerLoginRegisterForm = injectIntl(
         {submitText}
       </Button>
     </Form>
-  )
-);
+  );
+};
 
 /**
  * The inner login form
  * @param {Object} params The formik params
  * @returns {Component} The component
  */
-const InnerPasswordResetForm = injectIntl(
-  ({ isValid, status = "", message = "", intl }) => (
+const InnerPasswordResetForm = ({ isValid, status = "", message = "" }) => {
+  const intl = useIntl();
+  return (
     <Form>
       <InputField
         type="text"
@@ -144,8 +146,8 @@ const InnerPasswordResetForm = injectIntl(
         {intl.formatMessage(messages.reset)}
       </Button>
     </Form>
-  )
-);
+  );
+};
 
 const LoginRegisterForm = injectIntl(
   withFormik({
@@ -253,100 +255,97 @@ const PasswordResetForm = withFormik({
 })(InnerPasswordResetForm);
 
 const Login = React.memo(
-  injectIntl(
-    ({
-      resetAuthentication,
-      isAuthenticated,
-      language,
-      languageFetchString,
-      dispatch,
-      login,
-      register,
-      resetPassword,
-      intl
-    }) => {
-      const [didRegister, setDidRegister] = useState(false);
-      const [didResetPassword, setDidResetPassword] = useState(false);
-      const [redirect, setRedirect] = useState(undefined);
+  ({
+    resetAuthentication,
+    isAuthenticated,
+    language,
+    languageFetchString,
+    dispatch,
+    login,
+    register,
+    resetPassword
+  }) => {
+    const intl = useIntl();
 
-      useEffect(() => {
-        const { redirect } = queryString.parse(location.search);
+    const [didRegister, setDidRegister] = useState(false);
+    const [didResetPassword, setDidResetPassword] = useState(false);
+    const [redirect, setRedirect] = useState(undefined);
 
-        if (redirect) {
-          setRedirect(redirect);
-        }
+    useEffect(() => {
+      const { redirect } = queryString.parse(location.search);
 
-        if (redirect && isAuthenticated) {
-          resetAuthentication();
-        }
+      if (redirect) {
+        setRedirect(redirect);
+      }
 
-        trackPageView();
-      }, []);
+      if (redirect && isAuthenticated) {
+        resetAuthentication();
+      }
 
-      return (
-        <Card>
-          <Helmet>
-            <title>
-              {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
-            </title>
-            <meta
-              name="description"
-              content={intl.formatMessage(messages.siteDescription)}
+      trackPageView();
+    }, []);
+
+    return (
+      <Card>
+        <Helmet>
+          <title>
+            {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
+          </title>
+          <meta
+            name="description"
+            content={intl.formatMessage(messages.siteDescription)}
+          />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${pathnamesByLanguage[language].login}`}
+          />
+        </Helmet>
+        <Flex flexWrap="wrap">
+          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
+            <h1>{intl.formatMessage(user.login)}</h1>
+            <LoginRegisterForm
+              action={login}
+              callback={() => {
+                dispatch(fetchShoppingCart(languageFetchString, true));
+                dispatch(
+                  push(`/${language}/${pathnamesByLanguage[language].account}`)
+                );
+              }}
+              submitText={intl.formatMessage(user.login)}
             />
-            <link
-              rel="canonical"
-              href={`${ABSOLUTE_URL}/${pathnamesByLanguage[language].login}`}
+            <h1>{intl.formatMessage(messages.passwordForgotten)}</h1>
+            <PasswordResetForm
+              resetPassword={resetPassword}
+              message={
+                didResetPassword && (
+                  <Message>
+                    {intl.formatMessage(messages.confirmationEmail)}
+                  </Message>
+                )
+              }
+              callback={() => setDidResetPassword(true)}
             />
-          </Helmet>
-          <Flex flexWrap="wrap">
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
-              <h1>{intl.formatMessage(user.login)}</h1>
-              <LoginRegisterForm
-                action={login}
-                callback={() => {
-                  dispatch(fetchShoppingCart(languageFetchString, true));
-                  dispatch(
-                    push(
-                      `/${language}/${pathnamesByLanguage[language].account}`
-                    )
-                  );
-                }}
-                submitText={intl.formatMessage(user.login)}
-              />
-              <h1>{intl.formatMessage(messages.passwordForgotten)}</h1>
-              <PasswordResetForm
-                resetPassword={resetPassword}
-                message={
-                  didResetPassword && (
-                    <Message>
-                      {intl.formatMessage(messages.confirmationEmail)}
-                    </Message>
-                  )
-                }
-                callback={() => setDidResetPassword(true)}
-              />
-            </Box>
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
-              <h1>{intl.formatMessage(messages.newAccount)}</h1>
-              <LoginRegisterForm
-                action={register}
-                confirmation
-                message={
-                  didRegister && (
-                    <Message>
-                      {intl.formatMessage(messages.confirmationEmail)}
-                    </Message>
-                  )
-                }
-                callback={() => setDidRegister(true)}
-                submitText={intl.formatMessage(messages.createAccount)}
-              />
-            </Box>
-          </Flex>
-        </Card>
-      );
-    }
-  )
+          </Box>
+          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
+            <h1>{intl.formatMessage(messages.newAccount)}</h1>
+            <LoginRegisterForm
+              action={register}
+              confirmation
+              message={
+                didRegister && (
+                  <Message>
+                    {intl.formatMessage(messages.confirmationEmail)}
+                  </Message>
+                )
+              }
+              callback={() => setDidRegister(true)}
+              submitText={intl.formatMessage(messages.createAccount)}
+            />
+          </Box>
+        </Flex>
+      </Card>
+    );
+  }
 );
 
 const mapStateToProps = state => ({

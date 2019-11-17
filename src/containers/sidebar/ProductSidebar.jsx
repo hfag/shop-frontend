@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { defineMessages, injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import { FaChevronDown as ChevronDown } from "react-icons/fa";
 
 import Link from "../../components/Link";
@@ -18,7 +18,9 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import page from "../../i18n/page";
 
 const ProductSidebar = React.memo(
-  injectIntl(({ language, id: productId, product, categories, intl }) => {
+  ({ language, id: productId, product, categories }) => {
+    const intl = useIntl();
+
     return (
       <SidebarListWrapper>
         <Link to={`/${language}/`}>
@@ -82,7 +84,7 @@ const ProductSidebar = React.memo(
         <hr />
       </SidebarListWrapper>
     );
-  })
+  }
 );
 
 ProductSidebar.propTypes = {};

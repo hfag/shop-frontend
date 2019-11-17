@@ -5,7 +5,7 @@ import ReactTable from "react-table";
 import PropTypes from "prop-types";
 import fuzzy from "fuzzy";
 import get from "lodash/get";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, injectIntl, useIntl } from "react-intl";
 import debounce from "lodash/debounce";
 import { FaCartPlus, FaTimesCircle } from "react-icons/fa";
 
@@ -140,7 +140,8 @@ const fuzzyFilter = (filter, rows, column) => {
  */
 
 const NameCell = React.memo(
-  injectIntl(({ language, product, isExpanded, addToShoppingCart, intl }) => {
+  ({ language, product, isExpanded, addToShoppingCart }) => {
+    const intl = useIntl();
     const [counter, setCounter] = useState(1);
 
     return (
@@ -200,7 +201,7 @@ const NameCell = React.memo(
         </div>
       </div>
     );
-  })
+  }
 );
 
 /**

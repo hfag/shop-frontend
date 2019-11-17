@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaPhone } from "react-icons/fa";
-import { injectIntl, defineMessages } from "react-intl";
+import { useIntl, defineMessages } from "react-intl";
 
 import { colors, shadows } from "../utilities/style";
 
@@ -30,23 +30,23 @@ const ButtonWrapper = styled.div`
   height: 2rem;
 `;
 
-const SupportButton = React.memo(
-  injectIntl(({ intl }) => {
-    const call = useCallback(() => {
-      window.location = "tel:41628340540";
-    }, []);
+const SupportButton = React.memo(() => {
+  const intl = useIntl();
 
-    return (
-      <ButtonWrapper onClick={call}>
-        <div
-          data-balloon={intl.formatMessage(messages.backToTop)}
-          data-balloon-pos="right"
-        >
-          <FaPhone size={18} />
-        </div>
-      </ButtonWrapper>
-    );
-  })
-);
+  const call = useCallback(() => {
+    window.location = "tel:41628340540";
+  }, []);
+
+  return (
+    <ButtonWrapper onClick={call}>
+      <div
+        data-balloon={intl.formatMessage(messages.backToTop)}
+        data-balloon-pos="right"
+      >
+        <FaPhone size={18} />
+      </div>
+    </ButtonWrapper>
+  );
+});
 
 export default SupportButton;

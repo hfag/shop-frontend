@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 
 import Thumbnail from "../containers/Thumbnail";
 import Placeholder from "../components/Placeholder";
@@ -111,7 +111,9 @@ const Discount = styled.div`
 `;
 
 const ProductItem = React.memo(
-  injectIntl(({ product, categories, resellerDiscount, language, intl }) => {
+  ({ product, categories, resellerDiscount, language }) => {
+    const intl = useIntl();
+
     const url = useMemo(() => {
       if (product && product.slug) {
         const base = pathnamesByLanguage[language].product;
@@ -183,7 +185,7 @@ const ProductItem = React.memo(
         </Link>
       </RelativeBox>
     );
-  })
+  }
 );
 
 ProductItem.propTypes = {

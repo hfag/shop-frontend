@@ -13,9 +13,6 @@ import { routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 import throttle from "lodash/throttle";
-import { addLocaleData } from "react-intl";
-import localeDe from "react-intl/locale-data/de";
-import localeFr from "react-intl/locale-data/fr";
 
 import "./set-yup-locale";
 import App from "./App";
@@ -23,10 +20,19 @@ import { createRootReducer } from "./reducers";
 import { loadState, saveState } from "./local-storage";
 import "./scss/global.scss";
 import "./utilities/analytics";
-import { trackPageView } from "./utilities/analytics";
 
-//Set languages
-addLocaleData([...localeDe, ...localeFr]);
+//more polyfills
+if (!Intl.PluralRules) {
+  require("@formatjs/intl-pluralrules/polyfill");
+  require("@formatjs/intl-pluralrules/dist/locale-data/de");
+  require("@formatjs/intl-pluralrules/dist/locale-data/fr");
+}
+
+if (!Intl.RelativeTimeFormat) {
+  require("@formatjs/intl-relativetimeformat/polyfill");
+  require("@formatjs/intl-relativetimeformat/dist/locale-data/de");
+  require("@formatjs/intl-relativetimeformat/dist/locale-data/fr");
+}
 
 //Load state from local storage and create history object
 const presistedState = { ...window.__INITIAL_DATA__, ...loadState() };

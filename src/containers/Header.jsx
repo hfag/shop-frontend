@@ -6,7 +6,7 @@ import { MdMenu } from "react-icons/md";
 import LoadingBar from "react-redux-loading-bar";
 import { Flex, Box } from "reflexbox";
 import { Helmet } from "react-helmet";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 
 import { fetchShoppingCartIfNeeded } from "../actions/shopping-cart";
 import {
@@ -161,135 +161,133 @@ const RichSnippet = React.memo(() => {
 });
 
 const Header = React.memo(
-  injectIntl(
-    ({
-      intl,
-      account,
-      isAuthenticated,
-      toggleBurgerMenu,
-      shoppingCartFetching,
-      shoppingCartItems,
-      shoppingCartTotal,
-      redirect,
-      fetchShoppingCartIfNeeded,
-      fetchSalesIfNeeded,
-      language
-    }) => {
-      const [dropdown, setDropdown] = useState(false);
+  ({
+    account,
+    isAuthenticated,
+    toggleBurgerMenu,
+    shoppingCartFetching,
+    shoppingCartItems,
+    shoppingCartTotal,
+    redirect,
+    fetchShoppingCartIfNeeded,
+    fetchSalesIfNeeded,
+    language
+  }) => {
+    const intl = useIntl();
+    const [dropdown, setDropdown] = useState(false);
 
-      useEffect(() => {
-        fetchShoppingCartIfNeeded();
-        fetchSalesIfNeeded();
-      }, []); //run on initial render
+    useEffect(() => {
+      fetchShoppingCartIfNeeded();
+      fetchSalesIfNeeded();
+    }, []); //run on initial render
 
-      return (
-        <HeaderWrapper>
-          <Head intl={intl} />
-          <RichSnippet />
-          <LoadingBar className="redux-loading-bar" />
-          <header>
-            <Navbar>
-              <Flex>
-                <FullHeightBox width={[0, 0, 0, 1 / 6]}>
-                  <MediaQuery lg up>
-                    <LogoLeft>
+    return (
+      <HeaderWrapper>
+        <Head intl={intl} />
+        <RichSnippet />
+        <LoadingBar className="redux-loading-bar" />
+        <header>
+          <Navbar>
+            <Flex>
+              <FullHeightBox width={[0, 0, 0, 1 / 6]}>
+                <MediaQuery lg up>
+                  <LogoLeft>
+                    <NavItem>
+                      <Link to={`/${language}`} title="Homepage">
+                        <img src={LogoNegative} alt="Logo" />
+                      </Link>
+                    </NavItem>
+                  </LogoLeft>
+                </MediaQuery>
+              </FullHeightBox>
+              <FullHeightBox width={[1, 1, 1, 5 / 6]} pl={2}>
+                <Container>
+                  <Flexbar>
+                    <MediaQuery lg up>
                       <NavItem>
                         <Link to={`/${language}`} title="Homepage">
-                          <img src={LogoNegative} alt="Logo" />
+                          <img src={NameSloganNegative} alt="Slogan" />
                         </Link>
                       </NavItem>
-                    </LogoLeft>
-                  </MediaQuery>
-                </FullHeightBox>
-                <FullHeightBox width={[1, 1, 1, 5 / 6]} pl={2}>
-                  <Container>
-                    <Flexbar>
-                      <MediaQuery lg up>
+                    </MediaQuery>
+                    <MediaQuery lg down>
+                      <Flexbar>
                         <NavItem>
-                          <Link to={`/${language}`} title="Homepage">
-                            <img src={NameSloganNegative} alt="Slogan" />
+                          <Link onClick={toggleBurgerMenu} negative>
+                            <MdMenu size="40" />
                           </Link>
                         </NavItem>
+                        <NavItem>
+                          <Link to={`/${language}`} title="Homepage">
+                            <img src={LogoNegative} alt="Logo" />
+                          </Link>
+                        </NavItem>
+                      </Flexbar>
+                    </MediaQuery>
+                    <SearchWrapper>
+                      <MediaQuery lg up>
+                        <Searchbar />
                       </MediaQuery>
-                      <MediaQuery lg down>
+                    </SearchWrapper>
+                    <Push left>
+                      <MediaQuery md down>
+                        <NavItem>
+                          <LanguageSwitcher
+                            dropdown={dropdown}
+                            setDropdown={setDropdown}
+                          />
+                        </NavItem>
+                      </MediaQuery>
+                      <MediaQuery md up>
                         <Flexbar>
-                          <NavItem>
-                            <Link onClick={toggleBurgerMenu} negative>
-                              <MdMenu size="40" />
-                            </Link>
-                          </NavItem>
-                          <NavItem>
-                            <Link to={`/${language}`} title="Homepage">
-                              <img src={LogoNegative} alt="Logo" />
-                            </Link>
-                          </NavItem>
-                        </Flexbar>
-                      </MediaQuery>
-                      <SearchWrapper>
-                        <MediaQuery lg up>
-                          <Searchbar />
-                        </MediaQuery>
-                      </SearchWrapper>
-                      <Push left>
-                        <MediaQuery md down>
-                          <NavItem>
+                          <NavItem seperator>
                             <LanguageSwitcher
                               dropdown={dropdown}
                               setDropdown={setDropdown}
                             />
                           </NavItem>
-                        </MediaQuery>
-                        <MediaQuery md up>
-                          <Flexbar>
-                            <NavItem seperator>
-                              <LanguageSwitcher
-                                dropdown={dropdown}
-                                setDropdown={setDropdown}
-                              />
-                            </NavItem>
-                            <NavItem seperator>
-                              <NavCart
-                                language={language}
-                                shoppingCartFetching={shoppingCartFetching}
-                                shoppingCartItems={shoppingCartItems}
-                                shoppingCartTotal={shoppingCartTotal}
-                                redirect={redirect}
-                                dropdown={dropdown}
-                                setDropdown={setDropdown}
-                              />
-                            </NavItem>
-                            <NavItem>
-                              <NavUser
-                                language={language}
-                                isAuthenticated={isAuthenticated}
-                                account={account}
-                                dropdown={dropdown}
-                                setDropdown={setDropdown}
-                              />
-                            </NavItem>
-                          </Flexbar>
-                        </MediaQuery>
-                      </Push>
-                    </Flexbar>
-                  </Container>
-                </FullHeightBox>
-              </Flex>
-            </Navbar>
-          </header>
-          <MobileSearchWrapper>
-            <MediaQuery lg down>
-              <Container>
-                <Card>
-                  <h3>{intl.formatMessage(page.search)}</h3>
-                  <Searchbar />
-                </Card>
-              </Container>
-            </MediaQuery>
-          </MobileSearchWrapper>
-        </HeaderWrapper>
-      );
-    }
-  )
+                          <NavItem seperator>
+                            <NavCart
+                              language={language}
+                              shoppingCartFetching={shoppingCartFetching}
+                              shoppingCartItems={shoppingCartItems}
+                              shoppingCartTotal={shoppingCartTotal}
+                              redirect={redirect}
+                              dropdown={dropdown}
+                              setDropdown={setDropdown}
+                            />
+                          </NavItem>
+                          <NavItem>
+                            <NavUser
+                              language={language}
+                              isAuthenticated={isAuthenticated}
+                              account={account}
+                              dropdown={dropdown}
+                              setDropdown={setDropdown}
+                            />
+                          </NavItem>
+                        </Flexbar>
+                      </MediaQuery>
+                    </Push>
+                  </Flexbar>
+                </Container>
+              </FullHeightBox>
+            </Flex>
+          </Navbar>
+        </header>
+        <MobileSearchWrapper>
+          <MediaQuery lg down>
+            <Container>
+              <Card>
+                <h3>{intl.formatMessage(page.search)}</h3>
+                <Searchbar />
+              </Card>
+            </Container>
+          </MediaQuery>
+        </MobileSearchWrapper>
+      </HeaderWrapper>
+    );
+  }
 );
 
 const mapStateToProps = state => ({

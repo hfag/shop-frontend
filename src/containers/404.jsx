@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 
 import Card from "../components/Card";
 import Searchbar from "./Searchbar";
@@ -32,34 +32,34 @@ const messages = defineMessages({
   }
 });
 
-const Page404 = React.memo(
-  injectIntl(({ language, intl }) => {
-    useEffect(() => {
-      trackPageView();
-    });
+const Page404 = React.memo(({ language }) => {
+  const intl = useIntl();
 
-    return (
-      <Card>
-        <Helmet>
-          <title>
-            {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
-          </title>
-          <meta
-            name="description"
-            content={intl.formatMessage(messages.siteDescription)}
-          />
-          <link rel="canonical" href={`${ABSOLUTE_URL}/${language}/404`} />
-        </Helmet>
-        <h1>{intl.formatMessage(messages.title)}</h1>
-        <p>
-          {intl.formatMessage(messages.siteNotFound)}{" "}
-          <Link href="mailto:info@feuerschutz.ch">info@feuerschutz.ch</Link>.
-        </p>
-        <Searchbar />
-      </Card>
-    );
-  })
-);
+  useEffect(() => {
+    trackPageView();
+  });
+
+  return (
+    <Card>
+      <Helmet>
+        <title>
+          {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
+        </title>
+        <meta
+          name="description"
+          content={intl.formatMessage(messages.siteDescription)}
+        />
+        <link rel="canonical" href={`${ABSOLUTE_URL}/${language}/404`} />
+      </Helmet>
+      <h1>{intl.formatMessage(messages.title)}</h1>
+      <p>
+        {intl.formatMessage(messages.siteNotFound)}{" "}
+        <Link href="mailto:info@feuerschutz.ch">info@feuerschutz.ch</Link>.
+      </p>
+      <Searchbar />
+    </Card>
+  );
+});
 const mapStateToProps = state => ({ language: getLanguage(state) });
 
 export default connect(mapStateToProps)(Page404);

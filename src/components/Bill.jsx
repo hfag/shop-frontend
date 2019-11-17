@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 
 import { colors } from "../utilities/style";
 import Price from "./Price";
@@ -36,63 +36,62 @@ const Sum = styled.li`
 `;
 const Taxes = styled.li``;
 
-const Bill = React.memo(
-  injectIntl(({ items, intl }) => {
-    const taxes = intl.formatMessage(messages.taxes);
+const Bill = React.memo(({ items }) => {
+  const taxes = intl.formatMessage(messages.taxes);
 
-    const normalSum = items.reduce(
-      (sum, { quantity, price }) => sum + quantity * price,
-      0
-    );
-    const discountSum = items.reduce(
-      (sum, { quantity, price, discountPrice }) =>
-        sum + quantity * (discountPrice ? discountPrice : price),
-      0
-    );
+  const normalSum = items.reduce(
+    (sum, { quantity, price }) => sum + quantity * price,
+    0
+  );
+  const discountSum = items.reduce(
+    (sum, { quantity, price, discountPrice }) =>
+      sum + quantity * (discountPrice ? discountPrice : price),
+    0
+  );
 
-    return (
-      <StyledBill>
-        {items.map(
-          ({ quantity = 0, price, discountPrice, unit = false }, index) => {
-            return quantity > 0 ? (
-              <li key={index}>
-                <Quantity>{quantity + (unit ? " " + unit : "")}</Quantity>
-                {price ? (
-                  discountPrice ? (
-                    <DiscountPrice>
-                      <Price strike>{price}</Price>{" "}
-                      <Price>{discountPrice}</Price>
-                    </DiscountPrice>
-                  ) : (
-                    <Price>{price}</Price>
-                  )
+  const intl = useIntl();
+
+  return (
+    <StyledBill>
+      {items.map(
+        ({ quantity = 0, price, discountPrice, unit = false }, index) => {
+          return quantity > 0 ? (
+            <li key={index}>
+              <Quantity>{quantity + (unit ? " " + unit : "")}</Quantity>
+              {price ? (
+                discountPrice ? (
+                  <DiscountPrice>
+                    <Price strike>{price}</Price> <Price>{discountPrice}</Price>
+                  </DiscountPrice>
                 ) : (
-                  ""
-                )}
-              </li>
-            ) : (
-              <li key={index} />
-            );
-          }
-        )}
-        <Sum>
-          {items.length > 0 ? (
-            normalSum === discountSum ? (
-              <Price>{normalSum}</Price>
-            ) : (
-              <DiscountPrice>
-                <Price strike>{normalSum}</Price> <Price>{discountSum}</Price>
-              </DiscountPrice>
-            )
+                  <Price>{price}</Price>
+                )
+              ) : (
+                ""
+              )}
+            </li>
           ) : (
-            "-"
-          )}
-        </Sum>
-        <Taxes>{taxes}</Taxes>
-      </StyledBill>
-    );
-  })
-);
+            <li key={index} />
+          );
+        }
+      )}
+      <Sum>
+        {items.length > 0 ? (
+          normalSum === discountSum ? (
+            <Price>{normalSum}</Price>
+          ) : (
+            <DiscountPrice>
+              <Price strike>{normalSum}</Price> <Price>{discountSum}</Price>
+            </DiscountPrice>
+          )
+        ) : (
+          "-"
+        )}
+      </Sum>
+      <Taxes>{taxes}</Taxes>
+    </StyledBill>
+  );
+});
 
 Bill.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired

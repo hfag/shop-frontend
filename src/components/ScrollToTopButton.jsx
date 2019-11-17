@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaChevronUp } from "react-icons/fa";
-import { injectIntl, defineMessages } from "react-intl";
+import { useIntl, defineMessages } from "react-intl";
 import throttle from "lodash/throttle";
 
 import { shadows, colors } from "../utilities/style";
@@ -34,15 +34,16 @@ const ButtonWrapper = styled.div`
   height: 2rem;
 `;
 
-const ScrollToTopButton = React.memo(
-  injectIntl(({ intl }) => {
-    //const [visible, setVisible] = useState(false);
+const ScrollToTopButton = React.memo(() => {
+  //const [visible, setVisible] = useState(false);
 
-    const scrollToTop = useCallback(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    }, []);
+  const intl = useIntl();
 
-    /*const onScroll = useCallback(
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
+  /*const onScroll = useCallback(
       throttle(() => {
         const top = window.pageYOffset || document.documentElement.scrollTop;
         if (!visible && top > 100) {
@@ -54,22 +55,21 @@ const ScrollToTopButton = React.memo(
       [visible, setVisible]
     );*/
 
-    /*useEffect(() => {
+  /*useEffect(() => {
       window.addEventListener("scroll", onScroll);
       return () => window.removeEventListener("scroll", onScroll);
     });*/
 
-    return (
-      <ButtonWrapper visible onClick={scrollToTop}>
-        <div
-          data-balloon={intl.formatMessage(messages.backToTop)}
-          data-balloon-pos="left"
-        >
-          <FaChevronUp size={22} />
-        </div>
-      </ButtonWrapper>
-    );
-  })
-);
+  return (
+    <ButtonWrapper visible onClick={scrollToTop}>
+      <div
+        data-balloon={intl.formatMessage(messages.backToTop)}
+        data-balloon-pos="left"
+      >
+        <FaChevronUp size={22} />
+      </div>
+    </ButtonWrapper>
+  );
+});
 
 export default ScrollToTopButton;

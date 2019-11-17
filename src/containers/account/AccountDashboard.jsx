@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Flex, Box } from "reflexbox";
 import styled from "styled-components";
-import { defineMessages, injectIntl, FormattedMessage } from "react-intl";
+import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 
 import Address from "../../components/Address";
 import Button from "../../components/Button";
@@ -29,112 +29,111 @@ const DashboardWrapper = styled.div`
 `;
 
 const AccountDashboard = React.memo(
-  injectIntl(
-    ({
-      language,
-      dispatch,
-      accountDetails: { firstName, lastName, email },
-      billingAddress,
-      shippingAddress,
-      orders,
-      intl
-    }) => {
-      const billingEmpty = Object.keys(billingAddress)
-        .filter(key => key !== "email")
-        .reduce((empty, key) => empty && billingAddress[key] == "", true);
+  ({
+    language,
+    dispatch,
+    accountDetails: { firstName, lastName, email },
+    billingAddress,
+    shippingAddress,
+    orders
+  }) => {
+    const intl = useIntl();
 
-      const shippingEmpty = Object.keys(shippingAddress)
-        .filter(key => key !== "email")
-        .reduce((empty, key) => empty && shippingAddress[key] == "", true);
+    const billingEmpty = Object.keys(billingAddress)
+      .filter(key => key !== "email")
+      .reduce((empty, key) => empty && billingAddress[key] == "", true);
 
-      return (
-        <DashboardWrapper>
-          <Flex flexWrap="wrap">
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
-              {firstName && lastName && email ? (
-                <div>
-                  <h2 className="no-margin">
-                    {firstName} {lastName}
-                  </h2>
-                  <div>{email}</div>
-                </div>
-              ) : (
-                <div>
-                  <FormattedMessage
-                    id="AccountDashboard.provideName"
-                    defaultMessage="Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen angesprochen werden möchten, können Sie {here} Ihren Namen hinterlegen."
-                    values={{
-                      here: (
-                        <Link
-                          to={`/${language}/${pathnamesByLanguage[language].account}/${pathnamesByLanguage[language].details}`}
-                        >
-                          {intl.formatMessage(messages.here)}
-                        </Link>
-                      )
-                    }}
-                  />
-                </div>
-              )}
-              <br />
-              <Flex flexWrap="wrap">
+    const shippingEmpty = Object.keys(shippingAddress)
+      .filter(key => key !== "email")
+      .reduce((empty, key) => empty && shippingAddress[key] == "", true);
+
+    return (
+      <DashboardWrapper>
+        <Flex flexWrap="wrap">
+          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+            {firstName && lastName && email ? (
+              <div>
+                <h2 className="no-margin">
+                  {firstName} {lastName}
+                </h2>
+                <div>{email}</div>
+              </div>
+            ) : (
+              <div>
+                <FormattedMessage
+                  id="AccountDashboard.provideName"
+                  defaultMessage="Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen angesprochen werden möchten, können Sie {here} Ihren Namen hinterlegen."
+                  values={{
+                    here: (
+                      <Link
+                        to={`/${language}/${pathnamesByLanguage[language].account}/${pathnamesByLanguage[language].details}`}
+                      >
+                        {intl.formatMessage(messages.here)}
+                      </Link>
+                    )
+                  }}
+                />
+              </div>
+            )}
+            <br />
+            <Flex flexWrap="wrap">
+              <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+                <h4 className="no-margin">
+                  {intl.formatMessage(order.invoice)}
+                </h4>
+                {billingEmpty ? (
+                  <div>
+                    <FormattedMessage
+                      id="AccountDashboard.provideAddress"
+                      defaultMessage="Sie haben noch keine Rechnungsaddresse hinterlegt. Falls sie möchten dass diese bei jeder Bestellung von selbst ausgefüllt wird, fügen Sie {here} eine hinzu."
+                      values={{
+                        here: (
+                          <Link
+                            to={`/${language}/${pathnamesByLanguage[language].account}/${pathnamesByLanguage[language].billingAddress}`}
+                          >
+                            {intl.formatMessage(messages.here)}
+                          </Link>
+                        )
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <Address address={billingAddress} />
+                )}
+              </Box>
+              {!shippingEmpty && (
                 <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
                   <h4 className="no-margin">
-                    {intl.formatMessage(order.invoice)}
+                    {intl.formatMessage(order.shipping)}
                   </h4>
-                  {billingEmpty ? (
-                    <div>
-                      <FormattedMessage
-                        id="AccountDashboard.provideAddress"
-                        defaultMessage="Sie haben noch keine Rechnungsaddresse hinterlegt. Falls sie möchten dass diese bei jeder Bestellung von selbst ausgefüllt wird, fügen Sie {here} eine hinzu."
-                        values={{
-                          here: (
-                            <Link
-                              to={`/${language}/${pathnamesByLanguage[language].account}/${pathnamesByLanguage[language].billingAddress}`}
-                            >
-                              {intl.formatMessage(messages.here)}
-                            </Link>
-                          )
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <Address address={billingAddress} />
-                  )}
+                  <Address address={shippingAddress} />
                 </Box>
-                {!shippingEmpty && (
-                  <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
-                    <h4 className="no-margin">
-                      {intl.formatMessage(order.shipping)}
-                    </h4>
-                    <Address address={shippingAddress} />
-                  </Box>
-                )}
-              </Flex>
-            </Box>
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
-              <h2 className="no-margin-top">
-                {intl.formatMessage(order.lastThreeOrders)}
-              </h2>
-              {orders.length === 0 && (
-                <div>{intl.formatMessage(order.noOrders)}</div>
               )}
-              {orders
-                .sort((a, b) => a.created - b.created)
-                .slice(0, 3)
-                .map(order => (
-                  <Order
-                    key={order.id}
-                    order={order}
-                    compact
-                    language={language}
-                  />
-                ))}
-            </Box>
-          </Flex>
-        </DashboardWrapper>
-      );
-    }
-  )
+            </Flex>
+          </Box>
+          <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+            <h2 className="no-margin-top">
+              {intl.formatMessage(order.lastThreeOrders)}
+            </h2>
+            {orders.length === 0 && (
+              <div>{intl.formatMessage(order.noOrders)}</div>
+            )}
+            {orders
+              .sort((a, b) => a.created - b.created)
+              .slice(0, 3)
+              .map(order => (
+                <Order
+                  key={order.id}
+                  order={order}
+                  compact
+                  language={language}
+                />
+              ))}
+          </Box>
+        </Flex>
+      </DashboardWrapper>
+    );
+  }
 );
 
 const mapStateToProps = state => ({
@@ -145,7 +144,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AccountDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(AccountDashboard);

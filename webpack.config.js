@@ -112,7 +112,7 @@ module.exports = {
           { loader: "style-loader" },
           {
             loader: "css-loader",
-            options: { import: false, sourceMap: true, minimize: false }
+            options: { import: false, sourceMap: true }
           },
           { loader: "postcss-loader", options: { sourceMap: true } }
         ]
@@ -128,7 +128,7 @@ module.exports = {
           { loader: "style-loader" },
           {
             loader: "css-loader",
-            options: { import: false, sourceMap: true, minimize: false }
+            options: { import: false, sourceMap: true }
           },
           { loader: "postcss-loader", options: { sourceMap: true } },
           { loader: "resolve-url-loader" },

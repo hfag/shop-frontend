@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 
 import Link from "./Link";
 import Price from "./Price";
@@ -136,7 +136,9 @@ const Product = React.memo(({ language, product }) => {
 });
 
 const SaleProducts = React.memo(
-  injectIntl(({ language, posts = [], saleProducts = [], intl }) => {
+  ({ language, posts = [], saleProducts = [] }) => {
+    const intl = useIntl();
+
     return (
       <div>
         <h2 style={{ marginBottom: 0 }}>
@@ -152,7 +154,7 @@ const SaleProducts = React.memo(
         </SalesFlex>
       </div>
     );
-  })
+  }
 );
 
 export default SaleProducts;

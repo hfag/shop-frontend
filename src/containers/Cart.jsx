@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import universal from "react-universal-component";
 import { Helmet } from "react-helmet";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 
 import {
   fetchShoppingCartIfNeeded,
@@ -61,97 +61,95 @@ const SkuSelection = universal(props =>
  */
 
 const Cart = React.memo(
-  injectIntl(
-    ({
-      fetchCountriesIfNeeded,
-      fetchShoppingCartIfNeeded,
-      language,
-      dispatch,
-      isFetching,
-      items,
-      shipping,
-      fees,
-      taxes,
-      total,
-      updateShoppingCart,
-      submitOrder,
-      countries,
-      account,
-      checkoutValues,
-      intl
-    }) => {
-      const [step, setStep] = useState("cart");
-      const [showShipping, setShowShipping] = useState(false);
-      const [showSkuSelection, setShowSkuSelection] = useState(false);
+  ({
+    fetchCountriesIfNeeded,
+    fetchShoppingCartIfNeeded,
+    language,
+    dispatch,
+    isFetching,
+    items,
+    shipping,
+    fees,
+    taxes,
+    total,
+    updateShoppingCart,
+    submitOrder,
+    countries,
+    account,
+    checkoutValues
+  }) => {
+    const intl = useIntl();
+    const [step, setStep] = useState("cart");
+    const [showShipping, setShowShipping] = useState(false);
+    const [showSkuSelection, setShowSkuSelection] = useState(false);
 
-      useEffect(() => {
-        fetchCountriesIfNeeded();
-        fetchShoppingCartIfNeeded();
+    useEffect(() => {
+      fetchCountriesIfNeeded();
+      fetchShoppingCartIfNeeded();
 
-        trackPageView();
-      }, []);
+      trackPageView();
+    }, []);
 
-      const subtotalSum = items.reduce((sum, item) => sum + item.subtotal, 0);
+    const subtotalSum = items.reduce((sum, item) => sum + item.subtotal, 0);
 
-      return (
-        <Card>
-          <Helmet>
-            <title>
-              {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
-            </title>
-            <meta
-              name="description"
-              content={intl.formatMessage(messages.siteDescription)}
-            />
-            <link
-              rel="canonical"
-              href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].language}`}
-            />
-          </Helmet>
-
-          <h1>{intl.formatMessage(messages.cart)}</h1>
-
-          {showSkuSelection && (
-            <div>
-              <SkuSelection />
-              <hr />
-            </div>
-          )}
-
-          <CartForm
-            items={items}
-            shipping={shipping}
-            fees={fees}
-            taxes={taxes}
-            subtotalSum={subtotalSum}
-            total={total}
-            updateShoppingCart={updateShoppingCart}
-            enabled={step === "cart"}
-            onProceed={() => setStep("checkout")}
-            lastRow={
-              !showSkuSelection && (
-                <Button onClick={() => showSkuSelection(true)} state="">
-                  {intl.formatMessage(messages.searchProduct)}
-                </Button>
-              )
-            }
+    return (
+      <Card>
+        <Helmet>
+          <title>
+            {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
+          </title>
+          <meta
+            name="description"
+            content={intl.formatMessage(messages.siteDescription)}
           />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].language}`}
+          />
+        </Helmet>
 
-          {step === "checkout" && (
-            <CheckoutForm
-              language={language}
-              values={checkoutValues}
-              setShowShipping={setShowShipping}
-              showShipping={showShipping}
-              submitOrder={submitOrder}
-              countries={countries}
-              dispatch={dispatch}
-            />
-          )}
-        </Card>
-      );
-    }
-  )
+        <h1>{intl.formatMessage(messages.cart)}</h1>
+
+        {showSkuSelection && (
+          <div>
+            <SkuSelection />
+            <hr />
+          </div>
+        )}
+
+        <CartForm
+          items={items}
+          shipping={shipping}
+          fees={fees}
+          taxes={taxes}
+          subtotalSum={subtotalSum}
+          total={total}
+          updateShoppingCart={updateShoppingCart}
+          enabled={step === "cart"}
+          onProceed={() => setStep("checkout")}
+          lastRow={
+            !showSkuSelection && (
+              <Button onClick={() => showSkuSelection(true)} state="">
+                {intl.formatMessage(messages.searchProduct)}
+              </Button>
+            )
+          }
+        />
+
+        {step === "checkout" && (
+          <CheckoutForm
+            language={language}
+            values={checkoutValues}
+            setShowShipping={setShowShipping}
+            showShipping={showShipping}
+            submitOrder={submitOrder}
+            countries={countries}
+            dispatch={dispatch}
+          />
+        )}
+      </Card>
+    );
+  }
 );
 
 const mapStateToProps = state => {

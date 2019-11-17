@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import ProductCategories from "containers/ProductCategories";
-import { defineMessages, injectIntl } from "react-intl";
+import { defineMessages, useIntl } from "react-intl";
 import styled from "styled-components";
 
 import {
@@ -43,34 +43,34 @@ const H2 = styled.h2`
   margin-bottom: 0;
 `;
 
-const Frontpage = React.memo(
-  injectIntl(({ language, saleProducts, posts, intl }) => {
-    return (
-      <div>
-        {(saleProducts.length > 0 || posts.length > 0) && (
-          <SaleProducts
-            language={language}
-            saleProducts={saleProducts}
-            posts={posts}
-          />
-        )}
-        <H2>{intl.formatMessage(messages.ourProducts)}</H2>
-        <ProductCategories />
-        <LatestPosts />
-        <Card>
-          <H1>Hauser Feuerschutz AG</H1>
-          <p>{intl.formatMessage(messages.aboutCompany)}</p>
-          <Link
-            to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
-            styled
-          >
-            {intl.formatMessage(messages.moreAboutCompany)}
-          </Link>
-        </Card>
-      </div>
-    );
-  })
-);
+const Frontpage = React.memo(({ language, saleProducts, posts }) => {
+  const intl = useIntl();
+
+  return (
+    <div>
+      {(saleProducts.length > 0 || posts.length > 0) && (
+        <SaleProducts
+          language={language}
+          saleProducts={saleProducts}
+          posts={posts}
+        />
+      )}
+      <H2>{intl.formatMessage(messages.ourProducts)}</H2>
+      <ProductCategories />
+      <LatestPosts />
+      <Card>
+        <H1>Hauser Feuerschutz AG</H1>
+        <p>{intl.formatMessage(messages.aboutCompany)}</p>
+        <Link
+          to={`/${language}/${pathnamesByLanguage[language].page}/${pageSlugsByLanguage[language].companyAbout}`}
+          styled
+        >
+          {intl.formatMessage(messages.moreAboutCompany)}
+        </Link>
+      </Card>
+    </div>
+  );
+});
 
 const mapStateToProps = state => {
   const sales = getSales(state),

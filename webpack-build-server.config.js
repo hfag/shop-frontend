@@ -123,7 +123,7 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
-            options: { import: false, sourceMap: true, minimize: true }
+            options: { import: false, sourceMap: true }
           },
           { loader: "postcss-loader", options: { sourceMap: true } }
         ]
@@ -140,7 +140,7 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
-            options: { import: false, sourceMap: true, minimize: true }
+            options: { import: false, sourceMap: true }
           },
           { loader: "postcss-loader", options: { sourceMap: true } },
           "resolve-url-loader",

@@ -3,7 +3,7 @@ import { withFormik, Form } from "formik";
 import * as yup from "yup";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { defineMessages, injectIntl, intlShape } from "react-intl";
+import { defineMessages, injectIntl, useIntl } from "react-intl";
 
 import Button from "../Button";
 import InputField from "../InputField";
@@ -37,8 +37,10 @@ const messages = defineMessages({
  * @param {Object} params The formik params
  * @returns {Component} The component
  */
-const InnerAccountForm = React.memo(
-  injectIntl(({ dirty, isValid, status = "", intl }) => (
+const InnerAccountForm = React.memo(({ dirty, isValid, status = "" }) => {
+  const intl = useIntl();
+
+  return (
     <FormWrapper>
       <h2>Konto-Details</h2>
       <InputField
@@ -79,8 +81,8 @@ const InnerAccountForm = React.memo(
         {intl.formatMessage(form.saveChanges)}
       </Button>
     </FormWrapper>
-  ))
-);
+  );
+});
 
 const AccountForm = withFormik({
   enableReinitialize: true,
@@ -156,7 +158,7 @@ const AccountForm = withFormik({
 })(InnerAccountForm);
 
 AccountForm.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   updateAccount: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired
 };

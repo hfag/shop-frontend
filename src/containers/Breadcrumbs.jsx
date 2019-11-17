@@ -181,8 +181,7 @@ const Breadcrumbs = ({ location, state }) => {
               itemListElement: breadcrumbs.map(({ name, url }, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
-                name: stripTags(name),
-                item: ABSOLUTE_URL + url
+                item: { "@id": ABSOLUTE_URL + url, name: stripTags(name) }
               }))
             }}
           </JsonLd>

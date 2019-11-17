@@ -39,6 +39,7 @@ import { API_URL } from "../src/utilities/api";
 
 //polyfills
 require("isomorphic-fetch");
+require("full-icu");
 
 const PORT = process.env.SERVER_PORT;
 const DELETE_INTERVAL_IN_MINUTES = 17;

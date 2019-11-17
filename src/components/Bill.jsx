@@ -37,6 +37,7 @@ const Sum = styled.li`
 const Taxes = styled.li``;
 
 const Bill = React.memo(({ items }) => {
+  const intl = useIntl();
   const taxes = intl.formatMessage(messages.taxes);
 
   const normalSum = items.reduce(
@@ -48,8 +49,6 @@ const Bill = React.memo(({ items }) => {
       sum + quantity * (discountPrice ? discountPrice : price),
     0
   );
-
-  const intl = useIntl();
 
   return (
     <StyledBill>

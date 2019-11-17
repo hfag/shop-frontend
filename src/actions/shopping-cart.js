@@ -28,7 +28,7 @@ const fetchShoppingCartAction = createFetchAction(
  * @param {boolean} visualize Whether the progress of this action should be visualized
  * @returns {function} The redux thunk
  */
-const fetchShoppingCart = (language, visualize = false) => dispatch => {
+export const fetchShoppingCart = (language, visualize = false) => dispatch => {
   dispatch(fetchShoppingCartAction(true, null, visualize));
   return fetchApi(`${language}/wp-json/hfag/shopping-cart`, {
     method: "GET",

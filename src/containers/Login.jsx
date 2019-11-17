@@ -17,13 +17,18 @@ import {
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 import Card from "../components/Card";
-import { getIsAuthenticated, getLanguage } from "../reducers";
+import {
+  getIsAuthenticated,
+  getLanguage,
+  getLanguageFetchString
+} from "../reducers";
 import Message from "../components/Message";
 import { pathnamesByLanguage } from "../utilities/urls";
 import address from "../i18n/address";
 import user from "../i18n/user";
 import validation from "../i18n/validation";
 import { trackPageView } from "../utilities/analytics";
+import { fetchShoppingCart } from "../actions/shopping-cart";
 
 const messages = defineMessages({
   siteTitle: {
@@ -253,6 +258,7 @@ const Login = React.memo(
       resetAuthentication,
       isAuthenticated,
       language,
+      languageFetchString,
       dispatch,
       login,
       register,
@@ -297,13 +303,14 @@ const Login = React.memo(
               <h1>{intl.formatMessage(user.login)}</h1>
               <LoginRegisterForm
                 action={login}
-                callback={() =>
+                callback={() => {
+                  dispatch(fetchShoppingCart(languageFetchString, true));
                   dispatch(
                     push(
                       `/${language}/${pathnamesByLanguage[language].account}`
                     )
-                  )
-                }
+                  );
+                }}
                 submitText={intl.formatMessage(user.login)}
               />
               <h1>{intl.formatMessage(messages.passwordForgotten)}</h1>
@@ -344,6 +351,7 @@ const Login = React.memo(
 
 const mapStateToProps = state => ({
   language: getLanguage(state),
+  languageFetchString: getLanguageFetchString(state),
   isAuthenticated: getIsAuthenticated(state)
 });
 const mapDispatchToProps = dispatch => ({

@@ -89,8 +89,4 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(Post);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Post);

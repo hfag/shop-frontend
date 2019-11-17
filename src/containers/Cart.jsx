@@ -296,8 +296,4 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Cart);

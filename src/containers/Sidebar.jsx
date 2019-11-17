@@ -198,9 +198,6 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const ConnectedSidebar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Sidebar);
+const ConnectedSidebar = connect(mapStateToProps, mapDispatchToProps)(Sidebar);
 
 export default withRouter(ConnectedSidebar);

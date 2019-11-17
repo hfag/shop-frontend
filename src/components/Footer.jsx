@@ -14,7 +14,8 @@ import { connect } from "react-redux";
 
 import { colors, media } from "../utilities/style";
 import Link from "./Link";
-import LogoNegative from "../../img/logo/logo_negative.svg";
+import Logo from "../../img/logo/logo_negative.svg";
+import NameSlogan from "../../img/logo/name_slogan_negative.svg";
 import MediaQuery from "./MediaQuery";
 import Placeholder from "./Placeholder";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
@@ -58,8 +59,8 @@ const StyledFooter = styled.footer`
     width: 50%;
   }
 
-  .title {
-    font-variant: small-caps;
+  .slogan {
+    width: 75%;
   }
 
   h4 {
@@ -114,7 +115,7 @@ const Footer = React.memo(
               <Flex flexWrap="wrap">
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
                   <LazyImage
-                    src={LogoNegative}
+                    src={Logo}
                     alt="Logo"
                     placeholder={({ imageProps, ref }) => (
                       <div ref={ref}>
@@ -126,9 +127,18 @@ const Footer = React.memo(
                     )}
                   />
                   <br />
-                  Hauser Feuerschutz AG
-                  <br />
-                  Safety Signs and Security Products
+                  <LazyImage
+                    src={NameSlogan}
+                    alt="Slogan"
+                    placeholder={({ imageProps, ref }) => (
+                      <div ref={ref}>
+                        <Placeholder block />
+                      </div>
+                    )}
+                    actual={({ imageProps }) => (
+                      <img {...imageProps} className="slogan" />
+                    )}
+                  />
                 </BorderBox>
                 <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
                   <IconList>

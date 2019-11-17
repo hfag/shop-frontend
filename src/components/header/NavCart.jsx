@@ -90,6 +90,20 @@ const NavCart = React.memo(
         </Link>
         {dropdown === "cart" && (
           <Dropdown>
+            <Button
+              fullWidth
+              onClick={() =>
+                new Promise((resolve, reject) => {
+                  redirect(
+                    `/${language}/${pathnamesByLanguage[language].cart}`
+                  );
+                  setDropdown(false);
+                })
+              }
+            >
+              {intl.formatMessage(messages.toCart)}
+            </Button>
+            <hr />
             {shoppingCartItems.length > 0 ? (
               shoppingCartItems.map((item, index) => (
                 <ShoppingCartList key={index}>
@@ -109,19 +123,6 @@ const NavCart = React.memo(
                 <br />
               </div>
             )}
-            <Button
-              fullWidth
-              onClick={() =>
-                new Promise((resolve, reject) => {
-                  redirect(
-                    `/${language}/${pathnamesByLanguage[language].cart}`
-                  );
-                  setDropdown(false);
-                })
-              }
-            >
-              {intl.formatMessage(messages.toCart)}
-            </Button>
           </Dropdown>
         )}
       </React.Fragment>

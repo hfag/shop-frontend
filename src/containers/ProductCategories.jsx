@@ -304,15 +304,16 @@ const ProductCategories = React.memo(
                     ))}
               </Flex>
 
-              {totalProductCount !== 0 && (
-                <Pagination
-                  pageCount={Math.ceil(totalProductCount / ITEMS_PER_PAGE)}
-                  pageRangeDisplayed={5}
-                  marginPagesDisplayed={1}
-                  forcePage={parseInt(page) - 1}
-                  onPageChange={onPageChange}
-                />
-              )}
+              <Pagination
+                pageCount={Math.max(
+                  1,
+                  Math.ceil(totalProductCount / ITEMS_PER_PAGE)
+                )}
+                pageRangeDisplayed={5}
+                marginPagesDisplayed={1}
+                forcePage={parseInt(page) - 1}
+                onPageChange={onPageChange}
+              />
             </div>
           )}
           <Route

@@ -166,15 +166,6 @@ const ProductCategories = React.memo(
       [categorySlug, urlWithoutPage]
     );
 
-    const descriptionRef = useRef(null);
-    const scrollToDescription = useCallback(() =>
-      window.scrollTo({
-        left: 0,
-        top: descriptionRef.current.offsetTop,
-        behavior: "smooth"
-      })
-    );
-
     useEffect(() => {
       //load data
       fetchAllProductCategoriesIfNeeded();
@@ -216,9 +207,11 @@ const ProductCategories = React.memo(
                     <H1
                       dangerouslySetInnerHTML={{ __html: category.name }}
                     ></H1>
-                    <p
-                      dangerouslySetInnerHTML={{ __html: category.excerpt }}
-                    ></p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: category.excerpt
+                      }}
+                    ></div>
                   </Box>
                   {category.links && category.links.length > 0 && (
                     <Box width={[1, 1, 1 / 2, 1 / 2]}>

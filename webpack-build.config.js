@@ -11,7 +11,6 @@ const ScriptExtHtmlWebpackPlugin = require("script-ext-html-webpack-plugin");
 const PreloadWebpackPlugin = require("preload-webpack-plugin");
 const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 

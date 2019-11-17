@@ -61,11 +61,9 @@ const SuggestionContainer = styled.div`
   max-height: 80vh;
   overflow-y: scroll;
 
-  color: ${colors.primaryContrast};
+  color: ${colors.primary};
   background-color: ${colors.backgroundOverlay};
-  border-left: ${colors.primaryContrast} 1px solid;
-  border-right: ${colors.primaryContrast} 1px solid;
-  border-bottom: ${colors.primaryContrast} 1px solid;
+  box-shadow: ${shadows.y};
 
   border-bottom-left-radius: 0.2rem;
   border-bottom-right-radius: 0.2rem;

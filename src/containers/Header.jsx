@@ -38,6 +38,8 @@ import LanguageSwitcher from "../components/header/LanguageSwitcher";
 import NavCart from "../components/header/NavCart";
 import NavUser from "../components/header/NavUser";
 import shop from "../i18n/shop";
+import Card from "../components/Card";
+import { colors } from "../utilities/style";
 
 const messages = defineMessages({
   siteDescription: {
@@ -71,8 +73,12 @@ const LogoLeft = styled.div`
 
 const MobileSearchWrapper = styled.div`
   margin-top: 1.5rem;
+  h3 {
+    margin-top: 0;
+  }
   input {
     background-color: #fff;
+    border: ${colors.primary} 1px solid;
   }
 `;
 
@@ -272,7 +278,10 @@ const Header = React.memo(
         <MobileSearchWrapper>
           <MediaQuery lg down>
             <Container>
-              <Searchbar />
+              <Card>
+                <h3>Suche</h3>
+                <Searchbar />
+              </Card>
             </Container>
           </MediaQuery>
         </MobileSearchWrapper>

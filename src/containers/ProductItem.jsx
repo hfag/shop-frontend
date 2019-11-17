@@ -85,6 +85,11 @@ const Subtitle = styled.span`
   font-size: 0.8rem;
   word-break: break-word;
   hyphens: auto;
+
+  u {
+    text-decoration: none;
+    border-bottom: ${colors.fontLight} 1px solid;
+  }
 `;
 
 const Discount = styled.div`

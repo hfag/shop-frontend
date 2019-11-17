@@ -52,20 +52,8 @@ const messages = defineMessages({
 const ITEMS_PER_PAGE = 60;
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
-const CategoryDescription = styled.div`
-  margin: 1rem 0;
-
-  & > div {
-    height: 100%;
-    margin: 0;
-  }
-  h2 {
-    margin-top: 0;
-  }
-`;
-
 const H1 = styled.h1`
-  margin: 0;
+  margin: 0 0 0.5rem 0;
 `;
 const H2 = styled.h2`
   margin-top: 0;
@@ -266,11 +254,12 @@ const ProductCategories = React.memo(
 
                             return (
                               <li key={index}>
-                                <Link href={url} target={target} styled>
-                                  <Flexbar>
-                                    <Icon size={24} /> {link.title}
-                                  </Flexbar>
-                                </Link>
+                                <Flexbar>
+                                  <Icon size={24} />{" "}
+                                  <Link href={url} target={target} styled>
+                                    {link.title}
+                                  </Link>
+                                </Flexbar>
                               </li>
                             );
                           })}

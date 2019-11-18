@@ -71,10 +71,7 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        include: [
-          path.resolve(context, "src"),
-          path.resolve(context, "node_modules")
-        ],
+        include: [path.resolve(context, "src")],
         exclude: /@babel(?:\/|\\{1,2})runtime|core-js/,
 
         use: [

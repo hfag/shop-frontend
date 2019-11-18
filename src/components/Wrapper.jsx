@@ -35,7 +35,7 @@ const Wrapper = React.memo(({ language, location: { pathname }, children }) => {
     >
       <ScrollToTop>
         <Header />
-        <main>
+        <div>
           <Flex>
             <Box width={[0, 0, 0, 1 / 6]}>
               <Sidebar>
@@ -59,7 +59,7 @@ const Wrapper = React.memo(({ language, location: { pathname }, children }) => {
               </Container>
             </Box>
           </Flex>
-        </main>
+        </div>
         <Footer />
         <SupportButton />
         <ScrollToTopButton />

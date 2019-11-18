@@ -165,6 +165,7 @@ module.exports = {
           path.resolve(context, "src"),
           path.resolve(context, "node_modules")
         ],
+        exclude: /@babel(?:\/|\\{1,2})runtime|core-js/,
 
         use: [
           {

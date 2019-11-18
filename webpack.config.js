@@ -71,7 +71,11 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        include: [path.resolve(context, "src")],
+        include: [
+          path.resolve(context, "src"),
+          path.resolve(context, "node_modules")
+        ],
+        exclude: /@babel(?:\/|\\{1,2})runtime|core-js/,
 
         use: [
           {
@@ -83,7 +87,7 @@ module.exports = {
                   {
                     modules: false,
                     targets: {
-                      browsers: ["> 1%", "last 2 major versions", "IE 10"]
+                      browsers: ["> 1%", "last 2 major versions", "IE 11"]
                     }
                   }
                 ],

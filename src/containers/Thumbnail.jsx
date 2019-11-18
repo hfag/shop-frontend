@@ -22,64 +22,74 @@ const StyledThumbail = styled.div`
  * Renders a thumbnail
  * @returns {Component} The component
  */
-const Thumbnail = React.memo(
-  ({ id, fetchThumbnail, thumbnail, size = "thumbnail", passive = false }) => {
-    useEffect(() => {
-      if (id > 0 && !thumbnail && !passive) {
-        fetchThumbnail();
-      }
-    }, [id, thumbnail, passive]);
+class Thumbnail extends React.PureComponent {
+  componentWillMount = () => {
+    const { id, fetchThumbnail, thumbnail, passive = false } = this.props;
 
-    const thumbnailUrl = useMemo(
-      () =>
-        thumbnail &&
-        thumbnail.mimeType &&
-        thumbnail.mimeType.startsWith("image/")
-          ? thumbnail.sizes
-            ? thumbnail.sizes[size]
-              ? thumbnail.sizes[size].source_url
-              : thumbnail.url
-            : thumbnail.url
-          : "",
-      [thumbnail, size]
-    );
-
-    if (!thumbnail || !thumbnailUrl) {
-      return (
-        <StyledThumbail>
-          <Placeholder />
-        </StyledThumbail>
-      );
+    if (id > 0 && !thumbnail && !passive) {
+      fetchThumbnail();
     }
+  };
+
+  componentDidUpdate() {
+    const { id, fetchThumbnail, thumbnail, passive = false } = this.props;
+
+    if (id > 0 && !thumbnail && !passive) {
+      fetchThumbnail();
+    }
+  }
+
+  render = () => {
+    const { id, thumbnail, size = "thumbnail" } = this.props;
+
+    const thumbnailUrl =
+      thumbnail && thumbnail.mimeType && thumbnail.mimeType.startsWith("image/")
+        ? thumbnail.sizes
+          ? thumbnail.sizes[size]
+            ? thumbnail.sizes[size].source_url
+            : thumbnail.url
+          : thumbnail.url
+        : "";
 
     return (
       <StyledThumbail>
-        <LazyImage
-          src={thumbnailUrl}
-          alt={thumbnail.caption}
-          placeholder={({ imageProps, ref }) => (
-            <div ref={ref}>
-              <Placeholder block />
-            </div>
-          )}
-          actual={({ imageProps }) => (
-            <img
-              {...imageProps}
-              className={
-                thumbnail.width < thumbnail.height ? "b-height" : "b-width"
-              }
-              width={thumbnail.width}
-              height={thumbnail.height}
-              /*srcSet={Object.values(thumbnail.sizes)
-                    .sort((a, b) => a.width - b.width)
-                    .map(size => `${size.source_url} ${size.width}w`)}*/
-            />
-          )}
-        />
+        {thumbnail && thumbnailUrl ? (
+          <LazyImage
+            src={thumbnailUrl}
+            alt={thumbnail.caption}
+            placeholder={({ imageProps, ref }) => (
+              <div ref={ref}>
+                <Placeholder block />
+              </div>
+            )}
+            actual={({ imageProps }) => (
+              <img
+                {...imageProps}
+                className={
+                  thumbnail.width < thumbnail.height ? "b-height" : "b-width"
+                }
+                width={thumbnail.width}
+                height={thumbnail.height}
+                /*srcSet={Object.values(thumbnail.sizes)
+                  .sort((a, b) => a.width - b.width)
+                  .map(size => `${size.source_url} ${size.width}w`)}*/
+              />
+            )}
+          />
+        ) : (
+          <Placeholder block />
+        )}
       </StyledThumbail>
     );
-  }
-);
+  };
+}
+
+Thumbnail.propTypes = {
+  id: PropTypes.number,
+  size: PropTypes.string,
+  passive: PropTypes.bool
+};
+
 const mapStateToProps = (state, { id }) => ({
   thumbnail: getAttachmentById(state, id),
   languageFetchString: getLanguageFetchString(state)

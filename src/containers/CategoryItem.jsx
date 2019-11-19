@@ -107,11 +107,6 @@ const CategoryItem = React.memo(
       }
     }, [categoryId, languageFetchKey]);
 
-    //don't show empty categories
-    if (category && !category.count) {
-      return null;
-    }
-
     return (
       <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
         <Link to={url}>

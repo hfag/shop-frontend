@@ -102,7 +102,7 @@ const Head = React.memo(({ language, category }) => {
           rel="canonical"
           href={
             category &&
-            `${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].productCategories}/${category.slug}`
+            `${ABSOLUTE_URL}/${language}/${pathnamesByLanguage[language].productCategories}/${category.slug}/1`
           }
         />
       )}

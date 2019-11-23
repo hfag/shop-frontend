@@ -163,9 +163,13 @@ const renderApplication = (request, response) => {
       );
     })
     .catch(e => {
-      response.end("Es ist ein Fehler aufgetreten!");
+      response.redirect(
+        url.format({
+          pathname: `/${language}/404`,
+          query: request.query
+        })
+      );
       console.log(e);
-      console.log(store.getState());
     });
 };
 

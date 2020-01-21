@@ -194,6 +194,7 @@ const LoginRegisterForm = injectIntl(
         .catch(e => {
           switch (e) {
             case "existing_user_email":
+            case "existing_user_login":
               setErrors({
                 username: intl.formatMessage(messages.emailAlreadyExists)
               });

@@ -40,10 +40,6 @@ const messages = defineMessages({
     defaultMessage:
       "Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
   },
-  passwordConfirmation: {
-    id: "Login.passwordConfirmation",
-    defaultMessage: "Passwort bestätigen"
-  },
   reset: {
     id: "Login.reset",
     defaultMessage: "Zurücksetzen"
@@ -167,7 +163,7 @@ const LoginRegisterForm = injectIntl(
                   .min(7)
                   .oneOf(
                     [yup.ref("passwordConfirmation")],
-                    intl.formatMessage(messages.passwordsMustMatch)
+                    intl.formatMessage(validation.passwordsMustMatch)
                   )
               : schema
           )

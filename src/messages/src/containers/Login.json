@@ -8,10 +8,6 @@
     "defaultMessage": "Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
   },
   {
-    "id": "Login.passwordConfirmation",
-    "defaultMessage": "Passwort bestätigen"
-  },
-  {
     "id": "Login.reset",
     "defaultMessage": "Zurücksetzen"
   },

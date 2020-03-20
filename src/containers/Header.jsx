@@ -193,7 +193,7 @@ const Header = React.memo(
                 <MediaQuery lg up>
                   <LogoLeft>
                     <NavItem>
-                      <Link to={`/${language}`} title="Homepage">
+                      <Link noHover to={`/${language}`} title="Homepage">
                         <img src={LogoNegative} alt="Logo" />
                       </Link>
                     </NavItem>
@@ -205,7 +205,7 @@ const Header = React.memo(
                   <Flexbar>
                     <MediaQuery lg up>
                       <NavItem>
-                        <Link to={`/${language}`} title="Homepage">
+                        <Link noHover to={`/${language}`} title="Homepage">
                           <img src={NameSloganNegative} alt="Slogan" />
                         </Link>
                       </NavItem>
@@ -218,7 +218,7 @@ const Header = React.memo(
                           </Link>
                         </NavItem>
                         <NavItem>
-                          <Link to={`/${language}`} title="Homepage">
+                          <Link noHover to={`/${language}`} title="Homepage">
                             <img src={LogoNegative} alt="Logo" />
                           </Link>
                         </NavItem>
@@ -232,19 +232,13 @@ const Header = React.memo(
                     <Push left>
                       <MediaQuery md down>
                         <NavItem>
-                          <LanguageSwitcher
-                            dropdown={dropdown}
-                            setDropdown={setDropdown}
-                          />
+                          <LanguageSwitcher />
                         </NavItem>
                       </MediaQuery>
                       <MediaQuery md up>
                         <Flexbar>
                           <NavItem seperator>
-                            <LanguageSwitcher
-                              dropdown={dropdown}
-                              setDropdown={setDropdown}
-                            />
+                            <LanguageSwitcher />
                           </NavItem>
                           <NavItem seperator>
                             <NavCart

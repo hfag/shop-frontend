@@ -18,7 +18,7 @@ export const mapItem = item => {
     const {
       id,
       date,
-      caption,
+      alt_text: altText,
       mime_type: mimeType,
       media_details,
       source_url: url,
@@ -30,6 +30,7 @@ export const mapItem = item => {
     return {
       id,
       date,
+      altText,
       caption: renderedCaption,
       mimeType,
       width,

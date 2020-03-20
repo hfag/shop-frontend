@@ -21,9 +21,10 @@ const UnstyledLink = styled.a`
   text-decoration: none;
 
   &:hover {
-    border-bottom: ${({ negative }) =>
-        negative ? colors.primaryContrast : colors.font}
-      1px solid;
+    border-bottom: ${({ noHover, negative }) =>
+      noHover
+        ? ""
+        : (negative ? colors.primaryContrast : colors.font) + " 1px solid"};
   }
 `;
 
@@ -45,6 +46,7 @@ class Link extends React.PureComponent {
       to,
       onClick,
       styled,
+      noHover,
       children,
       negative,
       flex,
@@ -68,6 +70,10 @@ class Link extends React.PureComponent {
       props.href = to;
     } else if (onClick) {
       props.onClick = onClick;
+    }
+
+    if (noHover) {
+      props.noHover = true;
     }
 
     if (href) {

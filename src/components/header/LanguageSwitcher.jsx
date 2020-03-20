@@ -19,7 +19,7 @@ const Language = styled.div`
   margin-right: 0.5rem;
 `;
 
-const LanguageSwitcher = React.memo(({ dropdown, setDropdown, location }) => {
+const LanguageSwitcher = React.memo(({ location }) => {
   const language = useMemo(() => getLanguageFromLocation(location), [location]);
 
   return (

@@ -71,7 +71,7 @@ class Thumbnail extends React.PureComponent {
                 width={thumbnail.width}
                 height={thumbnail.height}
                 alt={thumbnail.altText}
-                data-size={
+                srcSet={
                   thumbnail.sizes &&
                   Object.values(thumbnail.sizes)
                     .sort((a, b) => a.width - b.width)

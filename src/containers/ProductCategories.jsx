@@ -259,7 +259,7 @@ const ProductCategories = React.memo(
                 </Flex>
               </InfoWrapper>
             )}
-            <Flex flexWrap="wrap" style="overflow-x:hidden;">
+            <Flex flexWrap="wrap" style={{ overflowX: "hidden" }}>
               {items.map(({ type, id }) =>
                 type === "category" ? (
                   <CategoryItem

@@ -125,7 +125,8 @@ export const withApollo = ({ ssr = false } = {}) => (
 
   //@ts-ignore
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async (ctx) => {
+    WithApollo.getInitialProps = async (ctx: NextPageContext | AppContext) => {
+      //@ts-ignore
       const inAppContext = Boolean(ctx.ctx);
       //@ts-ignore
       const { apolloClient } = initOnContext(ctx);
@@ -137,6 +138,7 @@ export const withApollo = ({ ssr = false } = {}) => (
         //@ts-ignore
         pageProps = await PageComponent.getInitialProps(ctx);
       } else if (inAppContext) {
+        //@ts-ignore
         pageProps = await App.getInitialProps(ctx);
       }
 
@@ -145,6 +147,7 @@ export const withApollo = ({ ssr = false } = {}) => (
         const { AppTree } = ctx;
         // When redirecting, the response is finished.
         // No point in continuing to render
+        //@ts-ignore
         if (ctx.res && ctx.res.finished) {
           return pageProps;
         }
@@ -154,7 +157,11 @@ export const withApollo = ({ ssr = false } = {}) => (
           try {
             // Import `@apollo/react-ssr` dynamically.
             // We don't want to have this in our client bundle.
-            const { getDataFromTree } = await import("@apollo/react-ssr");
+
+            //yes, somehow this weird .then x => x is required?
+            const { getDataFromTree } = await import("@apollo/react-ssr").then(
+              (apolloSsr) => apolloSsr
+            );
 
             // Since AppComponents and PageComponents have different context types
             // we need to modify their props a little.
@@ -170,6 +177,7 @@ export const withApollo = ({ ssr = false } = {}) => (
             // your entire AppTree once for every query. Check out apollo fragments
             // if you want to reduce the number of rerenders.
             // https://www.apollographql.com/docs/react/data/fragments/
+
             await getDataFromTree(<AppTree {...props} />);
           } catch (error) {
             // Prevent Apollo Client GraphQL errors from crashing SSR.
@@ -190,6 +198,7 @@ export const withApollo = ({ ssr = false } = {}) => (
         apolloState: apolloClient.cache.extract(),
         // Provide the client for ssr. As soon as this payload
         // gets JSON.stringified it will remove itself.
+        //@ts-ignore
         apolloClient: ctx.apolloClient,
       };
     };

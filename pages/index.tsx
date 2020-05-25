@@ -2,8 +2,9 @@ import Head from "next/head";
 import Link from "next/link";
 
 import TestPage from "../containers/Test";
+import { withApollo } from "../libs/apollo";
 
-export default function Home() {
+const Home = function Home() {
   return (
     <div className="container">
       <Head>
@@ -27,4 +28,6 @@ export default function Home() {
       </main>
     </div>
   );
-}
+};
+
+export default withApollo({ ssr: true })(Home);

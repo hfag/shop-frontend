@@ -1,27 +1,23 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "modules": false,
-        "targets": {
-          "node": "current"
-        }
-      }
-    ],
-    "@babel/preset-react"
-  ],
-  "plugins": [
-    "babel-plugin-styled-components",
-    ["@babel/plugin-proposal-class-properties", { "loose": false }],
-    "@babel/plugin-proposal-object-rest-spread",
-    "syntax-dynamic-import",
-    "universal-import",
-    [
-      "react-intl",
-      {
-        "messagesDir": "./src/messages/"
-      }
-    ]
-  ]
+	"presets": [
+		"next/babel"
+	],
+	"plugins": [
+		[
+			"styled-components",
+			{
+				"ssr": true,
+				"displayName": true,
+				"preprocess": false
+			}
+		],
+		"syntax-dynamic-import",
+		"universal-import",
+		[
+			"react-intl",
+			{
+				"messagesDir": "./src/messages/"
+			}
+		]
+	]
 }

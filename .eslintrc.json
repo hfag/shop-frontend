@@ -15,7 +15,7 @@
     "commonjs": true,
     "worker": true
   },
-  "plugins": ["react", "import", "require-jsdoc-except"],
+  "plugins": ["react", "import"],
   "rules": {
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
@@ -30,65 +30,13 @@
           "external",
           ["parent", "sibling"],
           "index"
-        ],
-        "newlines-between": "always"
+        ]
       }
     ],
     "import/named": "error",
     "import/no-absolute-path": "error",
     "import/no-self-import": "error",
     "import/no-useless-path-segments": "error",
-
-    "require-jsdoc-except/require-jsdoc": [
-      "error",
-      {
-        "require": {
-          "FunctionDeclaration": true,
-          "MethodDefinition": true,
-          "ClassDeclaration": true,
-          "ArrowFunctionExpression": true,
-          "FunctionExpression": true
-        },
-        "ignore": [
-          "constructor",
-          "render",
-          "componentWillMount",
-          "componentDidUpdate",
-          "mapStateToProps",
-          "mapDispatchToProps",
-          "mergeProps",
-          "componentWillUnmount"
-        ]
-      }
-    ],
-    "valid-jsdoc": [
-      "error",
-      {
-        "prefer": { "return": "returns" },
-        "preferType": {
-          "object": "Object",
-          "array": "Array",
-          "Function": "function",
-          "Boolean": "boolean",
-          "Number": "number",
-          "int": "number",
-          "Int": "number",
-          "Integer": "number",
-          "integer": "number",
-          "float": "number",
-          "Float": "number",
-          "Void": "void",
-          "String": "string",
-          "error": "Error",
-          "node": "Node"
-        },
-        "requireReturn": true,
-        "requireReturnType": true,
-        "matchDescription": ".+",
-        "requireParamDescription": true,
-        "requireReturnDescription": true
-      }
-    ],
     "for-direction": "error",
     "getter-return": "error",
 

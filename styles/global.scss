@@ -1,10 +1,10 @@
 //include partials
 @import "fonts";
 
-@import "../../node_modules/normalize.css/normalize";
-@import "../../node_modules/react-select/dist/react-select";
-@import "../../node_modules/react-table/react-table";
-@import "../../node_modules/balloon-css/balloon";
+@import "../node_modules/normalize.css/normalize";
+@import "../node_modules/react-select/dist/react-select";
+@import "../node_modules/react-table/react-table";
+@import "../node_modules/balloon-css/balloon";
 
 html,
 body,
@@ -22,7 +22,7 @@ textarea {
 
 @media all and (min-width: 992px) {
   .compass {
-    background-image: url("../../img/compass-gray.jpg");
+    background-image: url("../public/images/compass-gray.jpg");
     background-repeat: no-repeat;
     background-position: right 110%;
     background-size: 30% auto;

@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-  useRef,
+  useRef
 } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
@@ -13,7 +13,7 @@ import { push } from "connected-react-router";
 import {
   getProducts,
   getProductCategoryChildrenIdsById,
-  getProductCategoryBySlug,
+  getProductCategoryBySlug
 } from "reducers";
 import { Helmet } from "react-helmet";
 import { useIntl, defineMessages } from "react-intl";
@@ -31,7 +31,7 @@ import { stripTags } from "../utilities";
 import {
   getAttachmentById,
   getLanguageFetchString,
-  getLanguage,
+  getLanguage
 } from "../reducers";
 import { productToJsonLd, attachmentToJsonLd } from "../utilities/json-ld";
 import Card from "../components/Card";
@@ -45,8 +45,8 @@ import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 const messages = defineMessages({
   downloadsAndLinks: {
     id: "ProductCategories.downloadsAndLinks",
-    defaultMessage: "Downloads und Links",
-  },
+    defaultMessage: "Downloads und Links"
+  }
 });
 
 const ITEMS_PER_PAGE = 60;
@@ -121,7 +121,7 @@ const ProductCategories = React.memo(
     location: { pathname, search },
     match: {
       url,
-      params: { categorySlug, page },
+      params: { categorySlug, page }
     },
     category,
     fetchAllProductCategoriesIfNeeded,
@@ -132,7 +132,7 @@ const ProductCategories = React.memo(
     totalProductCount,
     items,
     parents = [],
-    productsJsonLd,
+    productsJsonLd
   }) => {
     const intl = useIntl();
     const categoryId = (category && category.id) || 0;
@@ -209,7 +209,7 @@ const ProductCategories = React.memo(
                     ></H1>
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: category.excerpt,
+                        __html: category.excerpt
                       }}
                     ></div>
                   </Box>
@@ -308,8 +308,8 @@ const mapStateToProps = (
   state,
   {
     match: {
-      params: { categorySlug, page },
-    },
+      params: { categorySlug, page }
+    }
   }
 ) => {
   const category = getProductCategoryBySlug(state, categorySlug);
@@ -334,9 +334,9 @@ const mapStateToProps = (
   const items = [
     ...categoryIds.map(id => ({
       type: "category",
-      id,
+      id
     })),
-    ...productItems,
+    ...productItems
   ];
 
   return {
@@ -352,7 +352,7 @@ const mapStateToProps = (
         product,
         attachmentToJsonLd(getAttachmentById(state, product.thumbnailId))
       )
-    ),
+    )
   };
 };
 
@@ -401,7 +401,7 @@ const mapDispatchToProps = dispatch => ({
           )
         )
       : Promise.reject("Called fetchProducts without valid categoryId");
-  },
+  }
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -440,7 +440,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
           visualize
         )
       : Promise.reject("Called fetchProducts without valid categoryId");
-  },
+  }
 });
 
 const ConnectedCategories = connect(

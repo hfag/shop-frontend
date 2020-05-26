@@ -76,14 +76,7 @@ const i18nRoutes = [
      * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(
-      store,
-      route,
-      {
-        params: { productSlug }
-      },
-      languageFetchString
-    ) {
+    fetchData(store, route, { params: { productSlug } }, languageFetchString) {
       return Promise.all([
         store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
         store.dispatch(
@@ -109,14 +102,7 @@ const i18nRoutes = [
      * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(
-      store,
-      route,
-      {
-        params: { postSlug }
-      },
-      languageFetchString
-    ) {
+    fetchData(store, route, { params: { postSlug } }, languageFetchString) {
       return Promise.all([
         store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
         store.dispatch(fetchPostIfNeeded(postSlug, languageFetchString, false)),
@@ -140,14 +126,7 @@ const i18nRoutes = [
      * @param {string} languageFetchString The language fetch string
      * @returns {Promise} The fetch promise
      */
-    fetchData(
-      store,
-      route,
-      {
-        params: { pageSlug }
-      },
-      languageFetchString
-    ) {
+    fetchData(store, route, { params: { pageSlug } }, languageFetchString) {
       return Promise.all([
         store.dispatch(fetchSalesIfNeeded(languageFetchString, false)),
         store.dispatch(fetchPageIfNeeded(pageSlug, languageFetchString, false)),

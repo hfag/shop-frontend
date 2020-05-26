@@ -222,10 +222,7 @@ const PasswordResetForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: props => ({}),
   validationSchema: yup.object().shape({
-    username: yup
-      .string()
-      .email()
-      .required()
+    username: yup.string().email().required()
   }),
   handleSubmit: (
     { username },

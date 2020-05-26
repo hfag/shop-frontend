@@ -9,11 +9,8 @@ const StyledTable = styled.table`
   border-collapse: collapse;
 
   thead {
-    border-bottom: ${Color(colors.background)
-        .darken(0.2)
-        .rgb()
-        .string()}
-      2px solid;
+    border-bottom: ${Color(colors.background).darken(0.2).rgb().string()} 2px
+      solid;
     text-align: left;
   }
   tbody {

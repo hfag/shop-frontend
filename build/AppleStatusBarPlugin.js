@@ -44,9 +44,7 @@ class AppleStatusBarStyleWebpackPlugin {
   changeAppleStatusBarStyleMeta(data, callback) {
     const html = data.html.replace(
       '<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">',
-      `<meta name="apple-mobile-web-app-status-bar-style" content="${
-        this.style
-      }">`
+      `<meta name="apple-mobile-web-app-status-bar-style" content="${this.style}">`
     );
     callback(null, Object.assign({}, data, { html }));
   }

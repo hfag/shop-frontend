@@ -5,11 +5,11 @@ const withTM = require("next-transpile-modules")([
   "react-intl",
   "intl-format-cache",
   "intl-messageformat-parser",
-  "intl-messageformat",
+  "intl-messageformat"
 ]);
 
 module.exports = withPlugins([withTM], {
   env: {
-    API_URL: "http://localhost:3000/shop-api",
-  },
+    API_URL: "http://localhost:3000/shop-api"
+  }
 });

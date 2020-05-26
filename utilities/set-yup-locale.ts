@@ -1,4 +1,4 @@
-import { setLocale } from 'yup';
+import { setLocale } from "yup";
 
 const TYPES = {
   undefined: "Undefiniert",

@@ -40,18 +40,18 @@ export const productToJsonLd = (product, imageSchema) => ({
     availableAtOrFrom: "ch.feuerschutz.1",
     availableDeliveryMethod: [
       "OnSitePickup",
-      "http://purl.org/goodrelations/v1#DeliveryModeMail",
+      "http://purl.org/goodrelations/v1#DeliveryModeMail"
     ],
     deliveryLeadTime: 1,
     potentialAction: {
       "@type": "ViewAction",
       target: "https://shop.feuerschutz.ch/produkt/" + product.slug,
-      name: "Kaufe Produkt",
+      name: "Kaufe Produkt"
     },
     seller: {
-      "@id": ABSOLUTE_URL + "/#organization",
-    },
-  },
+      "@id": ABSOLUTE_URL + "/#organization"
+    }
+  }
 });
 
 /**
@@ -59,7 +59,7 @@ export const productToJsonLd = (product, imageSchema) => ({
  * @param {Object} attachment The attachment to map
  * @returns {Object} The mapped schema
  */
-export const attachmentToJsonLd = (attachment) => attachment && attachment.url;
+export const attachmentToJsonLd = attachment => attachment && attachment.url;
 
 /**
  * Maps multiple attachment to a json-ld schema

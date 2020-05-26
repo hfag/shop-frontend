@@ -3,7 +3,7 @@ import Document, {
   NextScript,
   Html,
   Head,
-  DocumentContext,
+  DocumentContext
 } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
@@ -19,14 +19,13 @@ export default class MyDocument extends Document<IProps> {
     const initialProps = await super.getInitialProps(ctx);
     const {
       //@ts-ignore
-      req: { locale, localeDataScript },
+      req: { locale, localeDataScript }
     } = ctx;
 
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />),
+          enhanceApp: App => props => sheet.collectStyles(<App {...props} />)
         });
 
       return {
@@ -38,7 +37,7 @@ export default class MyDocument extends Document<IProps> {
             {initialProps.styles}
             {sheet.getStyleElement()}
           </>
-        ),
+        )
       };
     } finally {
       sheet.seal();
@@ -57,7 +56,7 @@ export default class MyDocument extends Document<IProps> {
           <script src={polyfill} />
           <script
             dangerouslySetInnerHTML={{
-              __html: this.props.localeDataScript,
+              __html: this.props.localeDataScript
             }}
           />
           <NextScript />

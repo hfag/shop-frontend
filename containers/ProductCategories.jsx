@@ -144,13 +144,7 @@ const ProductCategories = React.memo(
     );
 
     const urlWithoutPage = useMemo(
-      () =>
-        page
-          ? url
-              .split("/")
-              .slice(0, -1)
-              .join("/")
-          : url,
+      () => (page ? url.split("/").slice(0, -1).join("/") : url),
       [page, url]
     );
 

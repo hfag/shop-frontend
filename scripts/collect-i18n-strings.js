@@ -11,8 +11,8 @@ const outputDir = "./locales/";
 // there are messages in different components that use the same `id`. The result
 // is a flat collection of `id: message` pairs for the app's default locale.
 let defaultMessages = globSync(filePattern)
-  .map((filename) => fs.readFileSync(filename, "utf8"))
-  .map((file) => JSON.parse(file))
+  .map(filename => fs.readFileSync(filename, "utf8"))
+  .map(file => JSON.parse(file))
   .reduce((collection, descriptors) => {
     descriptors.forEach(({ id, defaultMessage }) => {
       if (collection.hasOwnProperty(id)) {

@@ -5,10 +5,7 @@ import Color from "color";
 import ProgressButton from "react-progress-button";
 
 import { colors, borders } from "../utilities/style";
-const DISABLED = Color(colors.secondary)
-  .lighten(0.75)
-  .rgb()
-  .string();
+const DISABLED = Color(colors.secondary).lighten(0.75).rgb().string();
 
 const Clearfix = styled.div`
   &:before,
@@ -59,10 +56,7 @@ const ButtonWrapper = styled.div`
       background-color: ${({ state }) =>
         state === "disabled"
           ? DISABLED
-          : Color(colors.secondary)
-              .darken(0.25)
-              .rgb()
-              .string()};
+          : Color(colors.secondary).darken(0.25).rgb().string()};
     }
   }
   .pb-container .pb-button span {

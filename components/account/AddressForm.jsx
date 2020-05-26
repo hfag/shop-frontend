@@ -203,10 +203,7 @@ const AddressForm = withFormik({
 
       company: yup.string(),
 
-      country: yup
-        .string()
-        .oneOf(Object.keys(countries))
-        .required(),
+      country: yup.string().oneOf(Object.keys(countries)).required(),
 
       address_1: yup.string().required(),
 
@@ -216,10 +213,7 @@ const AddressForm = withFormik({
 
       city: yup.string().required(),
 
-      state: yup
-        .string()
-        .oneOf(states)
-        .required(),
+      state: yup.string().oneOf(states).required(),
 
       phone:
         type === "billing"
@@ -227,10 +221,7 @@ const AddressForm = withFormik({
           : yup.string().notRequired(),
       email:
         type === "billing"
-          ? yup
-              .string()
-              .email()
-              .required()
+          ? yup.string().email().required()
           : yup.string().notRequired()
     });
   },

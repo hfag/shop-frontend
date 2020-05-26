@@ -56,7 +56,7 @@ declare global {
 
 const MESSAGES = {
   ...messagesDe,
-  ...messagesFr,
+  ...messagesFr
 };
 
 const cache = createIntlCache();
@@ -86,7 +86,7 @@ export default class MyApp extends App<{
     const intl = createIntl(
       {
         locale: locale || "de",
-        messages,
+        messages
       },
       cache
     );
@@ -98,7 +98,7 @@ export default class MyApp extends App<{
             fetcher: (
               [query, token]: [string, string],
               variables: { [key: string]: any }
-            ) => request(API_URL, query, variables),
+            ) => request(API_URL, query, variables)
           }}
         >
           <Component {...pageProps} />

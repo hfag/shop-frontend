@@ -355,23 +355,14 @@ const CheckoutForm = injectIntl(
         billing_company: yup.string(),
         shipping_company: yup.string(),
 
-        billing_country: yup
-          .string()
-          .oneOf(countryKeys)
-          .required(),
+        billing_country: yup.string().oneOf(countryKeys).required(),
         shipping_country: yup
           .string()
           .oneOf(countryKeys)
           .when("ship_to_different_address", {
             is: true,
-            then: yup
-              .string()
-              .oneOf(countryKeys)
-              .required(),
-            otherwise: yup
-              .string()
-              .oneOf(countryKeys)
-              .notRequired()
+            then: yup.string().oneOf(countryKeys).required(),
+            otherwise: yup.string().oneOf(countryKeys).notRequired()
           }),
 
         billing_address_1: yup.string().required(),
@@ -429,10 +420,7 @@ const CheckoutForm = injectIntl(
           ),
 
         billing_phone: yup.string().required(),
-        billing_email: yup
-          .string()
-          .email()
-          .required(),
+        billing_email: yup.string().email().required(),
 
         terms: yup
           .mixed()

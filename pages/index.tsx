@@ -35,8 +35,8 @@ const Home = (props: { collections: any }) => {
 
 export default Home;
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async context => {
   return {
-    props: { collections: await request(API_URL, GET_ALL_COLLECTIONS) },
+    props: { collections: await request(API_URL, GET_ALL_COLLECTIONS) }
   };
 };

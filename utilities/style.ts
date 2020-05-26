@@ -12,17 +12,17 @@ export const colors = {
   info: "#3498db",
   warning: "#FCBF37",
   danger: "#e74c3c",
-  disabled: "#cccccc",
+  disabled: "#cccccc"
 };
 
 export const borders = {
   radius: "5px",
-  inputRadius: "3px",
+  inputRadius: "3px"
 };
 
 export const shadows = {
   y: "0px 2px 2px 0px rgba(0, 0, 0, 0.05)",
-  highlight: "0px 0px 4px 1px rgba(44, 62, 80, 0.2)",
+  highlight: "0px 0px 4px 1px rgba(44, 62, 80, 0.2)"
 };
 
 export const media = {
@@ -89,5 +89,5 @@ export const media = {
     @media (max-width: 1199px) {
       ${css(first, ...interpolations)};
     }
-  `,
+  `
 };

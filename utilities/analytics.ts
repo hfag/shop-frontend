@@ -21,7 +21,7 @@ if (isClient) {
     //track page view after cart has been loaded
     paq.push([
       "setCustomUrl",
-      window.location.pathname + window.location.search,
+      window.location.pathname + window.location.search
     ]);
     paq.push(["trackPageView"]);
   };
@@ -139,7 +139,7 @@ export const addCartItem = (
  * @param {number} total The total after the update
  * @returns {void}
  */
-export const trackCartUpdate = (total) =>
+export const trackCartUpdate = total =>
   paq.push(["trackEcommerceCartUpdate", total]);
 
 /**
@@ -205,7 +205,7 @@ export const trackOrder = (
     subtotal,
     taxes,
     shipping,
-    discount,
+    discount
   ]);
 
 /**

@@ -97,20 +97,17 @@ const AccountForm = withFormik({
     return yup.object().shape({
       firstName: yup.string().required(),
       lastName: yup.string().required(),
-      email: yup
-        .string()
-        .email()
-        .required(),
+      email: yup.string().email().required(),
       password: yup
         .string()
-        .test("is-required", isRequiredString, function(value) {
+        .test("is-required", isRequiredString, function (value) {
           const { newPassword, passwordConfirmation } = this.parent;
           return newPassword || passwordConfirmation ? value : true;
         }),
       newPassword: yup
         .string()
         .min(7)
-        .test("is-required", isRequiredString, function(value) {
+        .test("is-required", isRequiredString, function (value) {
           const { password, passwordConfirmation } = this.parent;
           return password || passwordConfirmation ? value : true;
         })
@@ -124,7 +121,7 @@ const AccountForm = withFormik({
         .when(["password", "newPassword"], (password, newPassword, schema) =>
           password || newPassword ? schema.required() : schema
         )
-        .test("is-required", isRequiredString, function(value) {
+        .test("is-required", isRequiredString, function (value) {
           const { password, newPassword } = this.parent;
           return password || newPassword ? value : true;
         })

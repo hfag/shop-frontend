@@ -16,7 +16,7 @@ export const pathnamesByLanguage = {
     shippingAddress: "lieferadresse",
     cart: "warenkorb",
     confirmation: "bestaetigung",
-    tos: "agbs",
+    tos: "agbs"
   },
   fr: {
     productCategory: "produit-categorie",
@@ -33,19 +33,19 @@ export const pathnamesByLanguage = {
     shippingAddress: "adresse-de-livraison",
     cart: "panier-d-achat",
     confirmation: "confirmation",
-    tos: "conditions-generales",
-  },
+    tos: "conditions-generales"
+  }
 };
 
 export const pageSlugsByLanguage = {
   de: {
     companyAbout: "unser-unternehmen",
-    downloads: "downloads",
+    downloads: "downloads"
   },
   fr: {
     companyAbout: "notre-entreprise",
-    downloads: "telechargements",
-  },
+    downloads: "telechargements"
+  }
 };
 
 /**

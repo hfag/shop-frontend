@@ -1,11 +1,15 @@
 import React from "react";
-import { withApollo } from "../libs/apollo";
-import { useQuery } from "@apollo/react-hooks";
+import useSWR from "swr";
 import { GET_ALL_COLLECTIONS } from "../gql/products";
+import { API_URL } from "../utilities/api";
 
-const TestPage = (props) => {
-  const { loading, error, data } = useQuery(GET_ALL_COLLECTIONS);
-  if (error) return <h1>Error</h1>;
+const TestPage = (props: { initialData: any }) => {
+  const { data, error } = useSWR(GET_ALL_COLLECTIONS, {
+    initialData: props.initialData,
+  });
+  const loading = !data;
+
+  if (error) return <h1>Error {JSON.stringify(error)}</h1>;
   if (loading) return <h1>Loading...</h1>;
 
   return (

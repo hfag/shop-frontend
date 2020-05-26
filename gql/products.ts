@@ -1,6 +1,4 @@
-import gql from "graphql-tag";
-
-export const GET_ALL_COLLECTIONS = gql`
+export const GET_ALL_COLLECTIONS = /* GraphQL */ `
   query {
     collections {
       items {

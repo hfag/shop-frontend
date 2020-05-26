@@ -1,3 +1,4 @@
+const withPlugins = require("next-compose-plugins");
 const withTM = require("next-transpile-modules")([
   "@formatjs/intl-relativetimeformat",
   "@formatjs/intl-utils",
@@ -7,4 +8,8 @@ const withTM = require("next-transpile-modules")([
   "intl-messageformat",
 ]);
 
-module.exports = withTM();
+module.exports = withPlugins([withTM], {
+  env: {
+    API_URL: "http://localhost:3000/shop-api",
+  },
+});

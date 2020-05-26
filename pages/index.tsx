@@ -1,11 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
-
+import { request } from "graphql-request";
+import useSWR from "swr";
+import { GET_ALL_COLLECTIONS } from "../gql/products";
 import TestPage from "../containers/Test";
-import { withApollo, initOnContext } from "../libs/apollo";
-import { NextPageContext, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
+import { API_URL } from "../utilities/api";
 
-const Home = function Home() {
+const Home = (props: { collections: any }) => {
   return (
     <div className="container">
       <Head>
@@ -21,7 +23,7 @@ const Home = function Home() {
           </Link>
         </h1>
 
-        <TestPage />
+        <TestPage initialData={props.collections} />
 
         <p className="description">
           Get started by editing <code>pages/index.js</code>
@@ -31,10 +33,10 @@ const Home = function Home() {
   );
 };
 
-export default withApollo({ ssr: false })(Home);
+export default Home;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  initOnContext(context);
-  console.log(context.apolloClient);
-  return { props: {} };
+  return {
+    props: { collections: await request(API_URL, GET_ALL_COLLECTIONS) },
+  };
 };

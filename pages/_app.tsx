@@ -8,10 +8,13 @@ import "../utilities/set-yup-locale";
 import App, { AppProps } from "next/app";
 import { createIntl, createIntlCache, RawIntlProvider } from "react-intl";
 import { MessageFormatElement } from "intl-messageformat-parser";
+import { SWRConfig } from "swr";
+import { request } from "graphql-request";
 import React from "react";
 
 import messagesDe from "../locales/de.json";
 import messagesFr from "../locales/fr.json";
+import { API_URL } from "../utilities/api";
 
 // const presistedState: AppState = {
 //   ...(window["__INITIAL_DATA__"] || {}),
@@ -90,7 +93,16 @@ export default class MyApp extends App<{
 
     return (
       <RawIntlProvider value={intl}>
-        <Component {...pageProps} />
+        <SWRConfig
+          value={{
+            fetcher: (
+              [query, token]: [string, string],
+              variables: { [key: string]: any }
+            ) => request(API_URL, query, variables),
+          }}
+        >
+          <Component {...pageProps} />
+        </SWRConfig>
       </RawIntlProvider>
     );
   }

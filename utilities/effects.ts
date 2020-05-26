@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 /**
  * Display the compass
- * @returns {void}
  */
 export const useCompass = () => {
   useEffect(() => {

@@ -1,7 +1,17 @@
 import { isClient } from "./ssr";
 
+interface Paq {
+  push: (args: any[]) => void;
+}
+
+declare global {
+  interface Window {
+    _paq: Paq;
+  }
+}
+
 //prevents memory leak while ssr
-let paq = { push: () => {} };
+let paq: Paq = { push: () => {} };
 
 if (isClient) {
   window._paq = window._paq || [];
@@ -11,7 +21,7 @@ if (isClient) {
     //track page view after cart has been loaded
     paq.push([
       "setCustomUrl",
-      window.location.pathname + window.location.search
+      window.location.pathname + window.location.search,
     ]);
     paq.push(["trackPageView"]);
   };
@@ -37,9 +47,9 @@ paq.push(["setDomains", ["*.shop.feuerschutz.ch"]]);
  * @returns {void}
  */
 export const trackSiteSearch = (
-  keyword,
-  category = false,
-  resultCount = false
+  keyword: string,
+  category: string | boolean = false,
+  resultCount: number | boolean = false
 ) => paq.push(["trackSiteSearch", keyword, category, resultCount]);
 
 /**
@@ -50,9 +60,9 @@ export const trackSiteSearch = (
  * @returns {void}
  */
 export const trackPageView = (
-  url = location.pathname + location.search,
-  previousUrl = undefined,
-  generationTime = 0
+  url: string = location.pathname + location.search,
+  previousUrl: string = undefined,
+  generationTime: number = 0
 ) => {
   paq.push(["setCustomUrl", url]);
   if (previousUrl) {
@@ -75,16 +85,19 @@ export const trackPageView = (
  * @param {number} value An optional numeric value
  * @returns {void}
  */
-export const trackEvent = (category, action, name, value) =>
-  paq.push(["trackEvent", category, action, name, value]);
+export const trackEvent = (
+  category: string,
+  action: string,
+  name?: string,
+  value?: string
+) => paq.push(["trackEvent", category, action, name, value]);
 
 /**
  * Tracks a goal
  * @param {number} goalId The goal id
  * @param {*} [value] An optional numeric value
- * @returns {void}
  */
-export const trackGoal = (goalId, value) =>
+export const trackGoal = (goalId: number, value: number) =>
   paq.push(["trackGoal", goalId, value]);
 
 /**
@@ -92,17 +105,15 @@ export const trackGoal = (goalId, value) =>
  * @param {string} sku The sku
  * @param {string} name The product name
  * @param {number} price The product price
- * @returns {void}
  */
-export const setProductView = (sku, name, price) =>
+export const setProductView = (sku: string, name: string, price: number) =>
   paq.push(["setEcommerceView", sku, name, false, price]);
 
 /**
  * Sets the current view to be a product view
  * @param {string} name The product category name
- * @returns {void}
  */
-export const setProductCategoryView = name =>
+export const setProductCategoryView = (name: string) =>
   paq.push(["setEcommerceView", false, false, name]);
 
 /**
@@ -112,14 +123,13 @@ export const setProductCategoryView = name =>
  * @param {string} category The product category name
  * @param {number} price The product's price
  * @param {number} quantity The quantity
- * @returns {void}
  */
 export const addCartItem = (
-  sku,
-  name,
-  category = ["Uncategorized"],
-  price,
-  quantity
+  sku: string,
+  name: string,
+  category: string | string[] = ["Uncategorized"],
+  price: number,
+  quantity: number
 ) => {
   paq.push(["addEcommerceItem", sku, name, category, price, quantity]);
 };
@@ -129,7 +139,7 @@ export const addCartItem = (
  * @param {number} total The total after the update
  * @returns {void}
  */
-export const trackCartUpdate = total =>
+export const trackCartUpdate = (total) =>
   paq.push(["trackEcommerceCartUpdate", total]);
 
 /**
@@ -143,12 +153,12 @@ export const trackCartUpdate = total =>
  * @returns {void}
  */
 export const trackAddingCartItem = (
-  sku,
-  name,
-  category,
-  price,
-  quantity,
-  total
+  sku: string,
+  name: string,
+  category: string,
+  price: number,
+  quantity: number,
+  total: number
 ) => {
   addCartItem(sku, name, category, price, quantity);
   trackCartUpdate(total);
@@ -158,22 +168,19 @@ export const trackAddingCartItem = (
  * Removes a item from the cart
  * @param {string} sku The product's sku
  * @param {number} total The total after removing the item
- * @returns {void}
  */
-export const trackRemovingCartItem = (sku, total) => {
+export const trackRemovingCartItem = (sku: string, total: number) => {
   paq.push(["removeEcommerceItem", sku]);
   trackCartUpdate(total);
 };
 
 /**
  * Clears the cart
- * @returns {void}
  */
 export const clearCart = () => paq.push(["clearEcommerceCart"]);
 
 /**
  * Clears the cart
- * @returns {void}
  */
 export const trackClearingCart = () => {
   clearCart();
@@ -182,21 +189,14 @@ export const trackClearingCart = () => {
 
 /**
  * Tracks an order
- * @param {number} orderId The order id
- * @param {number} total The total amount of money
- * @param {number} [subtotal] The subtotal
- * @param {number} [taxes] The amount of taxes
- * @param {number} [shipping] The amount of shipping
- * @param {number} [discount] The amount of discount
- * @returns {void}
  */
 export const trackOrder = (
-  orderId,
-  total,
-  subtotal,
-  taxes,
-  shipping,
-  discount
+  orderId: number,
+  total: number,
+  subtotal: number,
+  taxes: number,
+  shipping: number,
+  discount: number
 ) =>
   paq.push([
     "trackEcommerceOrder",
@@ -205,31 +205,26 @@ export const trackOrder = (
     subtotal,
     taxes,
     shipping,
-    discount
+    discount,
   ]);
 
 /**
  * Tracks the user's id
- * @param {string} userId The user's id
- * @returns {void}
  */
-export const trackUserId = userId => paq.push(["setUserId", userId]);
+export const trackUserId = (userId: string) => paq.push(["setUserId", userId]);
 
 /**
  * Removes the user id
  * @param {string} userId The user id
- * @returns {void}
  */
 export const untrackUserId = () => paq.push(["resetUserId"]);
 
 /**
  * Enables analytics
- * @returns {void}
  */
 export const giveConsent = () => paq.push(["setConsentGiven"]);
 
 /**
  * Disables analytics
- * @returns {void}
  */
 export const removeConsent = () => paq.push(["forgetConsentGiven"]);

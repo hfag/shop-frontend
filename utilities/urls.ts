@@ -16,7 +16,7 @@ export const pathnamesByLanguage = {
     shippingAddress: "lieferadresse",
     cart: "warenkorb",
     confirmation: "bestaetigung",
-    tos: "agbs"
+    tos: "agbs",
   },
   fr: {
     productCategory: "produit-categorie",
@@ -33,36 +33,34 @@ export const pathnamesByLanguage = {
     shippingAddress: "adresse-de-livraison",
     cart: "panier-d-achat",
     confirmation: "confirmation",
-    tos: "conditions-generales"
-  }
+    tos: "conditions-generales",
+  },
 };
 
 export const pageSlugsByLanguage = {
   de: {
     companyAbout: "unser-unternehmen",
-    downloads: "downloads"
+    downloads: "downloads",
   },
   fr: {
     companyAbout: "notre-entreprise",
-    downloads: "telechargements"
-  }
+    downloads: "telechargements",
+  },
 };
 
 /**
  * Gets the url part by a key and the given location language
- * @param {string} urlKey The url key to retrieve
- * @param {string} location The current location
- * @param {string} fallback The fallback language key
- * @returns {string} The url part
  */
-export const getUrlPartByKeyAndLocation = (urlKey, location, fallback = "de") =>
-  pathnamesByLanguage[getLanguageFromLocation(location, fallback)][urlKey];
+export const getUrlPartByKeyAndLocation = (
+  urlKey: string,
+  location: Location,
+  fallback = "de"
+) => pathnamesByLanguage[getLanguageFromLocation(location, fallback)][urlKey];
 
 /**
  * Gets the url part by a key and the current window lanuage
- * @param {string} urlKey The url key to retrieve
- * @param {string} fallback The fallback language key
- * @returns {string} The url part
  */
-export const getUrlPartByKeyForCurrentLanguage = (urlKey, fallback) =>
-  pathnamesByLanguage[getLanguageFromCurrentWindow(fallback)][urlKey];
+export const getUrlPartByKeyForCurrentLanguage = (
+  urlKey: string,
+  fallback: string
+) => pathnamesByLanguage[getLanguageFromCurrentWindow(fallback)][urlKey];

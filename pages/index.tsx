@@ -2,7 +2,8 @@ import Head from "next/head";
 import Link from "next/link";
 
 import TestPage from "../containers/Test";
-import { withApollo } from "../libs/apollo";
+import { withApollo, initOnContext } from "../libs/apollo";
+import { NextPageContext, GetStaticProps } from "next";
 
 const Home = function Home() {
   return (
@@ -30,4 +31,10 @@ const Home = function Home() {
   );
 };
 
-export default withApollo({ ssr: true })(Home);
+export default withApollo({ ssr: false })(Home);
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  initOnContext(context);
+  console.log(context.apolloClient);
+  return { props: {} };
+};

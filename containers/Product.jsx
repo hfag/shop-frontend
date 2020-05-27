@@ -30,7 +30,7 @@ import {
   getAttachmentById,
   getSales,
   getLanguageFetchString,
-  getLanguage
+  getLanguage,
 } from "../reducers";
 import Bill from "../components/Bill";
 import ProductItem from "./ProductItem";
@@ -48,63 +48,61 @@ import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 const messages = defineMessages({
   chooseAVariation: {
     id: "Product.chooseAVariation",
-    defaultMessage: "Wählen Sie eine Variante"
+    defaultMessage: "Wählen Sie eine Variante",
   },
   chooseAnAttribute: {
     id: "Product.chooseAnAttribute",
-    defaultMessage: "Wählen Sie eine Eigenschaft"
+    defaultMessage: "Wählen Sie eine Eigenschaft",
   },
   reset: {
     id: "Product.reset",
-    defaultMessage: "Zurücksetzen"
+    defaultMessage: "Zurücksetzen",
   },
   resetSelection: {
     id: "Product.resetSelection",
-    defaultMessage: "Auswahl zurücksetzen"
+    defaultMessage: "Auswahl zurücksetzen",
   },
   mustSelectVariation: {
     id: "Product.mustSelectVariation",
-    defaultMessage: "Wählen Sie zuerst eine Variante aus!"
+    defaultMessage: "Wählen Sie zuerst eine Variante aus!",
   },
   contactUs: {
     id: "Product.contactUs",
-    defaultMessage: "Kontaktieren Sie uns für dieses Produkt"
+    defaultMessage: "Kontaktieren Sie uns für dieses Produkt",
   },
   contactEmail: {
     id: "Product.contactEmail",
-    defaultMessage: "Senden Sie uns eine E-Mail"
+    defaultMessage: "Senden Sie uns eine E-Mail",
   },
   contactCall: {
     id: "Product.contactCall",
-    defaultMessage: "Rufen Sie uns an"
+    defaultMessage: "Rufen Sie uns an",
   },
   imageGallery: {
     id: "Product.imageGallery",
-    defaultMessage: "Bildergalerie"
+    defaultMessage: "Bildergalerie",
   },
   specifications: {
     id: "Product.specifications",
-    defaultMessage: "Spezifikationen"
+    defaultMessage: "Spezifikationen",
   },
   additionalProducts: {
     id: "Product.additionalProducts",
-    defaultMessage: "Ergänzende Produkte"
+    defaultMessage: "Ergänzende Produkte",
   },
   previousImage: {
     id: "Product.previousImage",
-    defaultMessage: "Vorheriges Bild (linke Pfeiltaste)"
+    defaultMessage: "Vorheriges Bild (linke Pfeiltaste)",
   },
   nextImage: {
     id: "Product.nextImage",
-    defaultMessage: "Nächstes Bild (rechte Pfeiltaste)"
+    defaultMessage: "Nächstes Bild (rechte Pfeiltaste)",
   },
   closeLightbox: {
     id: "Product.closeLightBox",
-    defaultMessage: "Schliessen (Esc)"
-  }
+    defaultMessage: "Schliessen (Esc)",
+  },
 });
-
-const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;
@@ -157,7 +155,7 @@ class Product extends React.PureComponent {
       quantity: 1,
       fieldValues: {},
       isLightboxOpen: false,
-      currentLightboxImage: 1
+      currentLightboxImage: 1,
     };
 
     this.crossSelling = React.createRef();
@@ -172,7 +170,7 @@ class Product extends React.PureComponent {
     variations
       .map(({ attributes }) => attributes)
       .reduce((object, attributes) => {
-        Object.keys(attributes).forEach(attributeKey => {
+        Object.keys(attributes).forEach((attributeKey) => {
           if (attributeKey in object) {
             if (object[attributeKey].includes(attributes[attributeKey])) {
               return;
@@ -209,7 +207,7 @@ class Product extends React.PureComponent {
    * @param {Object} newProps The new props
    * @returns {void}
    */
-  componentWillReceiveProps = newProps => {
+  componentWillReceiveProps = (newProps) => {
     if (
       newProps.product &&
       (!this.props.product ||
@@ -221,7 +219,7 @@ class Product extends React.PureComponent {
         ),
         selectedAttributes: this.getDefaultAttributes(
           newProps.product.variations
-        )
+        ),
       });
     }
   };
@@ -248,12 +246,12 @@ class Product extends React.PureComponent {
   fetchData = () => {
     const {
       fetchProductIfNeeded,
-      fetchAllProductCategoriesIfNeeded
+      fetchAllProductCategoriesIfNeeded,
     } = this.props;
 
     Promise.all([
       fetchAllProductCategoriesIfNeeded(),
-      fetchProductIfNeeded()
+      fetchProductIfNeeded(),
     ]).then(() => {
       const { variationId } = queryString.parse(location.search);
 
@@ -268,9 +266,9 @@ class Product extends React.PureComponent {
         this.setState({
           selectedAttributes: (
             this.props.product.variations.find(
-              variation => variation.id == variationId
+              (variation) => variation.id == variationId
             ) || {}
-          ).attributes
+          ).attributes,
         });
       }
     });
@@ -281,12 +279,12 @@ class Product extends React.PureComponent {
    * @param {string} attributeKey What attribute selection has changed
    * @returns {function} The onChange callback
    */
-  onChangeDropdown = attributeKey => selectedItem =>
+  onChangeDropdown = (attributeKey) => (selectedItem) =>
     this.setState({
       selectedAttributes: {
         ...this.state.selectedAttributes,
-        [attributeKey]: selectedItem ? selectedItem.value : null
-      }
+        [attributeKey]: selectedItem ? selectedItem.value : null,
+      },
     });
   /**
    * Called when the slider selection changes
@@ -301,7 +299,7 @@ class Product extends React.PureComponent {
    * @param {string} attributeKey The attribute key
    * @returns {string} The label
    */
-  getAttributeLabel = attributeKey =>
+  getAttributeLabel = (attributeKey) =>
     this.props.attributes && this.props.attributes[attributeKey]
       ? this.props.attributes[attributeKey].name
       : attributeKey;
@@ -317,7 +315,7 @@ class Product extends React.PureComponent {
 
     if (attributes[attributeKey] && attributes[attributeKey].isTaxonomy) {
       const option = attributes[attributeKey].options.find(
-        option => option.slug === optionValue
+        (option) => option.slug === optionValue
       );
       return option ? option.name : optionValue;
     } else {
@@ -330,7 +328,7 @@ class Product extends React.PureComponent {
    * @param {string} fieldLabel The field label
    * @returns {void}
    */
-  onChangeField = fieldLabel => e => {
+  onChangeField = (fieldLabel) => (e) => {
     const fieldValues = { ...this.state.fieldValues };
 
     fieldValues[fieldLabel] = e.currentTarget.value;
@@ -348,7 +346,7 @@ class Product extends React.PureComponent {
       galleryImageIds = [],
       galleryAttachments = [],
       sales,
-      intl
+      intl,
     } = this.props;
 
     const {
@@ -357,7 +355,7 @@ class Product extends React.PureComponent {
       fieldValues,
       quantity,
       isLightboxOpen,
-      currentLightboxImage
+      currentLightboxImage,
     } = this.state;
 
     const {
@@ -373,12 +371,12 @@ class Product extends React.PureComponent {
       discount = {},
       fields = [],
       crossSellIds = [],
-      type = "variable"
+      type = "variable",
     } = product;
 
     const selectedVariation =
       variations.length === 0 ||
-      variations.find(variation =>
+      variations.find((variation) =>
         isEqual(variation.attributes, selectedAttributes)
       );
 
@@ -387,14 +385,14 @@ class Product extends React.PureComponent {
       sku = product.sku;
       price = product.price;
 
-      flashSale = sales.find(sale => sale.productId === id);
+      flashSale = sales.find((sale) => sale.productId === id);
     } else if (type === "variable") {
       sku = selectedVariation ? selectedVariation.sku : product.sku;
       price = selectedVariation ? selectedVariation.price : null;
 
       flashSale = selectedVariation
         ? sales.find(
-            sale =>
+            (sale) =>
               sale.productId === id && sale.variationId === selectedVariation.id
           )
         : null;
@@ -436,7 +434,7 @@ class Product extends React.PureComponent {
     );
 
     const uniqueImageIds = variations
-      .map(v => v.imageId)
+      .map((v) => v.imageId)
       .filter((v, i, a) => a.indexOf(v) === i);
 
     const validatedFields = fields.reduce(
@@ -470,7 +468,10 @@ class Product extends React.PureComponent {
         <JsonLd>
           {{
             "@context": "http://schema.org/",
-            ...productToJsonLd(product, attachmentsToJsonLd(galleryAttachments))
+            ...productToJsonLd(
+              product,
+              attachmentsToJsonLd(galleryAttachments)
+            ),
           }}
           }
         </JsonLd>
@@ -498,18 +499,19 @@ class Product extends React.PureComponent {
           <Flex flexWrap="wrap">
             {Object.keys(possibleAttributes)
               .filter(
-                attributeKey => possibleAttributeValues[attributeKey].length > 1
+                (attributeKey) =>
+                  possibleAttributeValues[attributeKey].length > 1
               )
-              .map(attributeKey => (
+              .map((attributeKey) => (
                 <Box key={attributeKey} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
                   <h4>{this.getAttributeLabel(attributeKey)}</h4>
                   <Select
                     placeholder={intl.formatMessage(messages.chooseAnAttribute)}
                     onChange={this.onChangeDropdown(attributeKey)}
                     value={selectedAttributes[attributeKey]}
-                    options={possibleAttributes[attributeKey].map(value => ({
+                    options={possibleAttributes[attributeKey].map((value) => ({
                       label: this.getOptionLabel(attributeKey, value),
-                      value
+                      value,
                     }))}
                   />
                 </Box>
@@ -519,9 +521,9 @@ class Product extends React.PureComponent {
               <Counter
                 type="number"
                 value={quantity}
-                onChange={e =>
+                onChange={(e) =>
                   this.setState({
-                    quantity: Math.max(parseInt(e.currentTarget.value), 1)
+                    quantity: Math.max(parseInt(e.currentTarget.value), 1),
                   })
                 }
               />
@@ -562,7 +564,7 @@ class Product extends React.PureComponent {
                         selectedAttributes: this.getDefaultAttributes(
                           product.variations
                         ),
-                        quantity: 1
+                        quantity: 1,
                       },
                       resolve
                     );
@@ -620,7 +622,7 @@ class Product extends React.PureComponent {
                   id="Product.resellerDiscountMessage"
                   defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
                   values={{
-                    resellerDiscount
+                    resellerDiscount,
                   }}
                 />
               </Box>
@@ -646,8 +648,8 @@ class Product extends React.PureComponent {
                           this.getOptionLabel(
                             "pa_unit",
                             selectedAttributes["pa_unit"]
-                          )
-                      }
+                          ),
+                      },
                     ]}
                   />
                   <Button
@@ -676,7 +678,7 @@ class Product extends React.PureComponent {
                             },
                             {}
                           ),
-                          ...fieldValues
+                          ...fieldValues,
                         },
                         quantity
                       ).then(
@@ -764,11 +766,11 @@ class Product extends React.PureComponent {
                     <td>{intl.formatMessage(productMessages.product)}</td>
                     <td dangerouslySetInnerHTML={{ __html: title }}></td>
                   </tr>
-                  {Object.keys(selectedAttributes).map(attributeKey => (
+                  {Object.keys(selectedAttributes).map((attributeKey) => (
                     <tr key={attributeKey}>
                       <td
                         dangerouslySetInnerHTML={{
-                          __html: this.getAttributeLabel(attributeKey)
+                          __html: this.getAttributeLabel(attributeKey),
                         }}
                       ></td>
                       <td
@@ -778,7 +780,7 @@ class Product extends React.PureComponent {
                                 attributeKey,
                                 selectedAttributes[attributeKey]
                               )
-                            : "-"
+                            : "-",
                         }}
                       ></td>
                     </tr>
@@ -798,7 +800,7 @@ class Product extends React.PureComponent {
         )}
 
         <CrossSellFlex flexWrap="wrap" style={{ paddingBottom: 16 }}>
-          {crossSellIds.map(productId => (
+          {crossSellIds.map((productId) => (
             <ProductItem key={productId} id={productId} />
           ))}
         </CrossSellFlex>
@@ -811,8 +813,8 @@ const mapStateToProps = (
   state,
   {
     match: {
-      params: { productSlug }
-    }
+      params: { productSlug },
+    },
   }
 ) => {
   const product = getProductBySlug(state, productSlug);
@@ -828,7 +830,7 @@ const mapStateToProps = (
     product: product && !product._isFetching ? product : {},
     categories:
       product && !product._isFetching && product.categoryIds
-        ? getProductCategories(state).filter(category =>
+        ? getProductCategories(state).filter((category) =>
             product.categoryIds.includes(category.id)
           )
         : [],
@@ -838,10 +840,10 @@ const mapStateToProps = (
       product && product.id
     ),
     galleryImageIds,
-    galleryAttachments: galleryImageIds.map(attachmentId =>
+    galleryAttachments: galleryImageIds.map((attachmentId) =>
       getAttachmentById(state, attachmentId)
     ),
-    sales: getSales(state)
+    sales: getSales(state),
   };
 };
 
@@ -849,8 +851,8 @@ const mapDispatchToProps = (
   dispatch,
   {
     match: {
-      params: { productSlug }
-    }
+      params: { productSlug },
+    },
   }
 ) => ({
   /**
@@ -909,7 +911,7 @@ const mapDispatchToProps = (
         visualize
       )
     );
-  }
+  },
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -965,7 +967,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
           visualize
         )
       : Promise.resolve();
-  }
+  },
 });
 
 const TranslatedProduct = injectIntl(Product);

@@ -7,7 +7,7 @@ import { defineMessages, useIntl } from "react-intl";
 import {
   fetchShoppingCartIfNeeded,
   updateShoppingCart,
-  submitOrder
+  submitOrder,
 } from "../actions/shopping-cart";
 import { fetchCountriesIfNeeded } from "../actions/countries";
 import {
@@ -20,7 +20,7 @@ import {
   getCountries,
   getAccount,
   getLanguageFetchString,
-  getLanguage
+  getLanguage,
 } from "../reducers";
 import CartForm from "../components/cart/CartForm";
 import CheckoutForm from "../components/cart/CheckoutForm";
@@ -32,26 +32,24 @@ import { trackPageView } from "../utilities/analytics";
 const messages = defineMessages({
   siteTitle: {
     id: "Cart.siteTitle",
-    defaultMessage: "Warenkorb im Shop der Hauser Feuerschutz AG"
+    defaultMessage: "Warenkorb im Shop der Hauser Feuerschutz AG",
   },
   siteDescription: {
     id: "Cart.siteDescription",
     defaultMessage:
-      "Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
+      "Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden.",
   },
   cart: {
     id: "Cart.cart",
-    defaultMessage: "Warenkorb"
+    defaultMessage: "Warenkorb",
   },
   searchProduct: {
     id: "Cart.searchProduct",
-    defaultMessage: "Suche Produkt"
-  }
+    defaultMessage: "Suche Produkt",
+  },
 });
 
-const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
-
-const SkuSelection = universal(props =>
+const SkuSelection = universal((props) =>
   import(/* webpackChunkName: "sku-selection" */ "./SkuSelection")
 );
 
@@ -76,7 +74,7 @@ const Cart = React.memo(
     submitOrder,
     countries,
     account,
-    checkoutValues
+    checkoutValues,
   }) => {
     const intl = useIntl();
     const [step, setStep] = useState("cart");
@@ -152,7 +150,7 @@ const Cart = React.memo(
   }
 );
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const account = getAccount(state);
 
   return {
@@ -176,13 +174,13 @@ const mapStateToProps = state => {
             ...Object.keys(account.shipping).reduce((object, key) => {
               object["shipping_" + key] = account.shipping[key];
               return object;
-            }, {})
+            }, {}),
           }
-        : {}
+        : {},
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
   /**
    * Fetches the shopping cart
@@ -232,7 +230,7 @@ const mapDispatchToProps = dispatch => ({
    */
   fetchCountriesIfNeeded(language, visualize = false) {
     return dispatch(fetchCountriesIfNeeded(language, visualize));
-  }
+  },
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -291,7 +289,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
       mapStateToProps.languageFetchString,
       visualize
     );
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Cart);

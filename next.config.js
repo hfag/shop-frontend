@@ -5,11 +5,16 @@ const withTM = require("next-transpile-modules")([
   "react-intl",
   "intl-format-cache",
   "intl-messageformat-parser",
-  "intl-messageformat"
+  "intl-messageformat",
 ]);
+const withImages = require("next-images");
 
-module.exports = withPlugins([withTM], {
-  env: {
-    API_URL: "http://localhost:3000/shop-api"
-  }
+const env = {
+  API_URL: "http://localhost:3000/shop-api",
+};
+
+module.exports = withPlugins([withTM, withImages], {
+  env,
 });
+
+module.exports.env = env;

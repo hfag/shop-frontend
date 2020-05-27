@@ -1,0 +1,53 @@
+{
+  "productCategory": {
+    "languages": {
+      "de": "produkt-kategorie",
+      "fr": "produit-categorie"
+    }
+  },
+  "search": {
+    "languages": { "de": "suche", "fr": "recherche" }
+  },
+  "product": {
+    "languages": { "de": "produkt", "fr": "produit" }
+  },
+  "post": {
+    "languages": { "de": "beitrag", "fr": "article" }
+  },
+  "page": {
+    "languages": { "de": "seite", "fr": "page" }
+  },
+  "login": {
+    "languages": { "de": "login", "fr": "login" }
+  },
+  "logout": {
+    "languages": { "de": "logout", "fr": "logout" }
+  },
+  "account": {
+    "languages": { "de": "konto", "fr": "compte" }
+  },
+  "orders": {
+    "languages": { "de": "bestellungen", "fr": "commandes" }
+  },
+  "details": {
+    "languages": { "de": "details", "fr": "details" }
+  },
+  "billingAddress": {
+    "languages": {
+      "de": "rechnungsadresse",
+      "fr": "adresse-de-facturation"
+    }
+  },
+  "shippingAddress": {
+    "languages": { "de": "lieferadresse", "fr": "adresse-de-livraison" }
+  },
+  "cart": {
+    "languages": { "de": "warenkorb", "fr": "panier-d-achat" }
+  },
+  "confirmation": {
+    "languages": { "de": "bestaetigung", "fr": "confirmation" }
+  },
+  "tos": {
+    "languages": { "de": "agbs", "fr": "conditions-generales" }
+  }
+}

@@ -12,82 +12,58 @@ export const colors = {
   info: "#3498db",
   warning: "#FCBF37",
   danger: "#e74c3c",
-  disabled: "#cccccc"
+  disabled: "#cccccc",
 };
 
 export const borders = {
   radius: "5px",
-  inputRadius: "3px"
+  inputRadius: "3px",
 };
 
 export const shadows = {
   y: "0px 2px 2px 0px rgba(0, 0, 0, 0.05)",
-  highlight: "0px 0px 4px 1px rgba(44, 62, 80, 0.2)"
+  highlight: "0px 0px 4px 1px rgba(44, 62, 80, 0.2)",
 };
 
 export const media = {
-  minSmall: (
-    first: CSSObject | TemplateStringsArray,
-    ...interpolations: SimpleInterpolation[]
-  ) => css`
+  minSmall: (first: any, ...interpolations: any) => css`
     @media (min-width: 576px) {
       ${css(first, ...interpolations)};
     }
   `,
-  maxSmall: (
-    first: CSSObject | TemplateStringsArray,
-    ...interpolations: SimpleInterpolation[]
-  ) => css`
+  maxSmall: (first: any, ...interpolations: any) => css`
     @media (max-width: 575px) {
       ${css(first, ...interpolations)};
     }
   `,
-  minMedium: (
-    first: CSSObject | TemplateStringsArray,
-    ...interpolations: SimpleInterpolation[]
-  ) => css`
+  minMedium: (first: any, ...interpolations: any) => css`
     @media (min-width: 768px) {
       ${css(first, ...interpolations)};
     }
   `,
-  maxMedium: (
-    first: CSSObject | TemplateStringsArray,
-    ...interpolations: SimpleInterpolation[]
-  ) => css`
+  maxMedium: (first: any, ...interpolations: any) => css`
     @media (max-width: 767px) {
       ${css(first, ...interpolations)};
     }
   `,
-  minLarge: (
-    first: CSSObject | TemplateStringsArray,
-    ...interpolations: SimpleInterpolation[]
-  ) => css`
+  minLarge: (first: any, ...interpolations: any) => css`
     @media (min-width: 992px) {
       ${css(first, ...interpolations)};
     }
   `,
-  maxLarge: (
-    first: CSSObject | TemplateStringsArray,
-    ...interpolations: SimpleInterpolation[]
-  ) => css`
+  maxLarge: (first: any, ...interpolations: any) => css`
     @media (max-width: 991px) {
       ${css(first, ...interpolations)};
     }
   `,
-  minXLarge: (
-    first: CSSObject | TemplateStringsArray,
-    ...interpolations: SimpleInterpolation[]
-  ) => css`
+  minXLarge: (first: any, ...interpolations: any) => css`
     @media (min-width: 1200px) {
       ${css(first, ...interpolations)};
     }
   `,
-  maxXLarge: (
-    first: CSSObject | TemplateStringsArray,
-    ...interpolations: SimpleInterpolation[]
-  ) => css`
+  maxXLarge: (first: any, ...interpolations: any) => css`
     @media (max-width: 1199px) {
       ${css(first, ...interpolations)};
     }
-  `
+  `,
 };

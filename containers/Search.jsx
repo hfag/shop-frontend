@@ -13,16 +13,14 @@ import { trackPageView } from "../utilities/analytics";
 const messages = defineMessages({
   siteTitle: {
     id: "Search.siteTitle",
-    defaultMessage: "Suchen Sie im Shop der Hauser Feuerschutz AG"
+    defaultMessage: "Suchen Sie im Shop der Hauser Feuerschutz AG",
   },
   siteDescription: {
     id: "Search.siteDescription",
     defaultMessage:
-      "Suchen Sie im Shop der Hauser Feuerschutz AG nach Produkten wie dem Rettungswegschild oder nach Kategorien wie den Brandschutzzeichen."
-  }
+      "Suchen Sie im Shop der Hauser Feuerschutz AG nach Produkten wie dem Rettungswegschild oder nach Kategorien wie den Brandschutzzeichen.",
+  },
 });
-
-const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const Search = React.memo(({ language }) => {
   const intl = useIntl();
@@ -53,8 +51,8 @@ const Search = React.memo(({ language }) => {
   );
 });
 
-const mapStateToProps = state => ({
-  language: getLanguage(state)
+const mapStateToProps = (state) => ({
+  language: getLanguage(state),
 });
 
 export default connect(mapStateToProps)(Search);

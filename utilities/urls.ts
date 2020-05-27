@@ -1,52 +1,14 @@
-import { getLanguageFromCurrentWindow, getLanguageFromLocation } from "./i18n";
+import {
+  getLanguageFromCurrentWindow,
+  getLanguageFromLocation,
+  Language,
+} from "./i18n";
 
-export const pathnamesByLanguage = {
-  de: {
-    productCategory: "produkt-kategorie",
-    search: "suche",
-    product: "produkt",
-    post: "beitrag",
-    page: "seite",
-    login: "login",
-    logout: "logout",
-    account: "konto",
-    orders: "bestellungen",
-    details: "details",
-    billingAddress: "rechnungsadresse",
-    shippingAddress: "lieferadresse",
-    cart: "warenkorb",
-    confirmation: "bestaetigung",
-    tos: "agbs"
-  },
-  fr: {
-    productCategory: "produit-categorie",
-    search: "recherche",
-    product: "produit",
-    post: "article",
-    page: "page",
-    login: "login",
-    logout: "logout",
-    account: "compte",
-    orders: "commandes",
-    details: "details",
-    billingAddress: "adresse-de-facturation",
-    shippingAddress: "adresse-de-livraison",
-    cart: "panier-d-achat",
-    confirmation: "confirmation",
-    tos: "conditions-generales"
-  }
-};
+import pathnames from "./pathnames.json";
+import pages from "./pages.json";
 
-export const pageSlugsByLanguage = {
-  de: {
-    companyAbout: "unser-unternehmen",
-    downloads: "downloads"
-  },
-  fr: {
-    companyAbout: "notre-entreprise",
-    downloads: "telechargements"
-  }
-};
+export const pathnamesByLanguage = pathnames;
+export const pageSlugsByLanguage = pages;
 
 /**
  * Gets the url part by a key and the given location language
@@ -62,5 +24,5 @@ export const getUrlPartByKeyAndLocation = (
  */
 export const getUrlPartByKeyForCurrentLanguage = (
   urlKey: string,
-  fallback: string
+  fallback: Language
 ) => pathnamesByLanguage[getLanguageFromCurrentWindow(fallback)][urlKey];

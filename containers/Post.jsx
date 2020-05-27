@@ -7,7 +7,7 @@ import Card from "../components/Card";
 import {
   getPostBySlug,
   getLanguageFetchString,
-  getLanguage
+  getLanguage,
 } from "../reducers";
 import { fetchPostIfNeeded } from "../actions/posts";
 import { stripTags } from "../utilities";
@@ -17,8 +17,6 @@ import { trackPageView } from "../utilities/analytics";
 import Link from "../components/Link";
 import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 import H1 from "../components/H1";
-
-const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
 const Post = React.memo(({ language, post = {}, fetchPostIfNeeded }) => {
   useEffect(() => {
@@ -48,20 +46,20 @@ const mapStateToProps = (
   state,
   {
     match: {
-      params: { postSlug }
-    }
+      params: { postSlug },
+    },
   }
 ) => ({
   language: getLanguage(state),
   languageFetchString: getLanguageFetchString(state),
-  post: getPostBySlug(state, postSlug)
+  post: getPostBySlug(state, postSlug),
 });
 const mapDispatchToProps = (
   dispatch,
   {
     match: {
-      params: { postSlug }
-    }
+      params: { postSlug },
+    },
   }
 ) => ({
   /**
@@ -71,7 +69,7 @@ const mapDispatchToProps = (
    */
   fetchPostIfNeeded(language) {
     return dispatch(fetchPostIfNeeded(postSlug, language));
-  }
+  },
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -86,7 +84,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
     return mapDispatchToProps.fetchPostIfNeeded(
       mapStateToProps.languageFetchString
     );
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Post);

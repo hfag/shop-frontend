@@ -1,15 +1,23 @@
 const { basename } = require("path");
 const { readFileSync } = require("fs");
-const { createServer } = require("http");
-const accepts = require("accepts");
+const express = require("express");
 const next = require("next");
 const glob = require("glob");
 const areIntlLocalesSupported = require("intl-locales-supported").default;
 
+const DEFAULT_LANGUAGE = "de";
+const SUPPORTED_LANGUAGES = ["de", "fr"];
+
+const getLanguageFromPathname = (pathname, fallback = DEFAULT_LANGUAGE) => {
+  const locale = pathname.split("/")[1];
+
+  return SUPPORTED_LANGUAGES.includes(locale) ? locale : fallback;
+};
+
 // Get the supported languages by looking for translations in the `lang/` dir.
 const supportedLanguages = glob
   .sync("./locales/*.json")
-  .map(f => basename(f, ".json"));
+  .map((f) => basename(f, ".json"));
 
 // Polyfill Node with `Intl` that has data for all locales.
 // See: https://formatjs.io/guides/runtime-environments/#server
@@ -51,7 +59,7 @@ const handle = app.getRequestHandler();
 // We need to expose React Intl's locale data on the request for the user's
 // locale. This function will also cache the scripts by lang in memory.
 const localeDataCache = new Map();
-const getLocaleDataScript = locale => {
+const getLocaleDataScript = (locale) => {
   const lang = locale.split("-")[0];
   if (!localeDataCache.has(lang)) {
     const localeDataFile = require.resolve(
@@ -63,24 +71,43 @@ const getLocaleDataScript = locale => {
   return localeDataCache.get(lang);
 };
 
-// We need to load and expose the translations on the request for the user's
-// locale. These will only be used in production, in dev the `defaultMessage` in
-// each message description in the source code will be used.
-const getMessages = locale => {
-  return require(`./lang/${locale}.json`);
+const getMessages = (locale) => {
+  return require(`./locales/${locale}.json`);
 };
 
 app.prepare().then(() => {
-  createServer((req, res) => {
-    const accept = accepts(req);
-    const locale = accept.language(supportedLanguages) || "de";
-    req.locale = locale;
-    req.localeDataScript = getLocaleDataScript(locale);
-    req.messages = dev ? {} : getMessages(locale);
-    handle(req, res);
-  }).listen(port, err => {
+  const server = express();
+  server.all("*", (request, response) => {
+    // const accept = accepts(request);
+    // const locale = accept.language(supportedLanguages) || "de";
+
+    //add locale for pages but no static assets
+    if (!request.url.startsWith("/_next/")) {
+      let locale = getLanguageFromPathname(request.url, "no-language");
+      if (locale === "no-language") {
+        //if the requested path doesn't contain a language, redirect
+        response.redirect(
+          `/${DEFAULT_LANGUAGE}${request.url === "/" ? "" : request.url}`
+        );
+        return;
+      } else if (request.url === `/${locale}/`) {
+        response.redirect(`/${locale}$`);
+        return;
+      }
+
+      // console.log("render with locale", request.url, locale);
+
+      request.locale = locale;
+      request.localeDataScript = getLocaleDataScript(locale);
+      request.messages = getMessages(locale);
+    }
+
+    handle(request, response);
+  });
+
+  server.listen(port, (err) => {
     if (err) throw err;
     //eslint-disable-next-line
-    console.log(`> Ready on http://localhost:${port}`);
+    console.log(`> Ready on localhost:${port} - env ${process.env.NODE_ENV}`);
   });
 });

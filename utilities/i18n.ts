@@ -1,5 +1,6 @@
 import { isClient } from "./ssr";
 
+export type Language = "de" | "fr";
 export const supportedLanguages = ["de", "fr"];
 
 export const DEFAULT_LANGUAGE = "de";

@@ -1,11 +1,11 @@
 import React from "react";
 import useSWR from "swr";
-import { GET_ALL_COLLECTIONS } from "../gql/products";
+import { GET_ALL_COLLECTIONS } from "../gql/collection";
 import { API_URL } from "../utilities/api";
 
 const TestPage = (props: { initialData: any }) => {
   const { data, error } = useSWR(GET_ALL_COLLECTIONS, {
-    initialData: props.initialData
+    initialData: props.initialData,
   });
   const loading = !data;
 

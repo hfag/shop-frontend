@@ -1,0 +1,8 @@
+{
+  "companyAbout": {
+    "languages": { "de": "unser-unternehmen", "fr": "notre-entreprise" }
+  },
+  "downloads": {
+    "languages": { "de": "downloads", "fr": "telechargements" }
+  }
+}

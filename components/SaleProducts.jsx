@@ -145,10 +145,10 @@ const SaleProducts = React.memo(
           {intl.formatMessage(messages.newsAndDiscounts)}
         </h2>
         <SalesFlex flexWrap="wrap">
-          {posts.map(post => (
+          {posts.map((post) => (
             <Post language={language} post={post} key={post.slug} />
           ))}
-          {saleProducts.map(product => (
+          {saleProducts.map((product) => (
             <Product language={language} product={product} key={product.id} />
           ))}
         </SalesFlex>

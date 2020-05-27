@@ -72,17 +72,17 @@ const Frontpage = React.memo(({ language, saleProducts, posts }) => {
   );
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const sales = getSales(state),
-    saleProductIds = sales.map(sale => sale.productId);
+    saleProductIds = sales.map((sale) => sale.productId);
   const products = getProducts(state);
 
   return {
     language: getLanguage(state),
     saleProducts: products
-      .filter(product => saleProductIds.includes(product.id))
-      .map(product => ({
-        ...sales.find(s => s.productId == product.id),
+      .filter((product) => saleProductIds.includes(product.id))
+      .map((product) => ({
+        ...sales.find((s) => s.productId == product.id),
         ...product
       })),
     posts: getStickyPosts(state)

@@ -1,7 +1,7 @@
 import {
   getLanguageFromCurrentWindow,
   getLanguageFromLocation,
-  Language,
+  Language
 } from "./i18n";
 
 import pathnames from "./pathnames.json";

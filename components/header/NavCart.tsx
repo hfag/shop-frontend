@@ -15,12 +15,12 @@ import { useRouter } from "next/router";
 const messages = defineMessages({
   emptyCart: {
     id: "NavCart.emptyCart",
-    defaultMessage: "Es befinden sich bisher noch keine Produkte im Warenkorb.",
+    defaultMessage: "Es befinden sich bisher noch keine Produkte im Warenkorb."
   },
   toCart: {
     id: "NavCart.toCart",
-    defaultMessage: "Zum Warenkorb",
-  },
+    defaultMessage: "Zum Warenkorb"
+  }
 });
 
 const Counter = styled.div`

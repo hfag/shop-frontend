@@ -7,7 +7,7 @@ import Card from "../components/Card";
 import {
   getPageBySlug,
   getLanguage,
-  getLanguageFetchString,
+  getLanguageFetchString
 } from "../reducers";
 import { fetchPageIfNeeded } from "../actions/pages";
 import { stripTags } from "../utilities";
@@ -44,20 +44,20 @@ const mapStateToProps = (
   state,
   {
     match: {
-      params: { pageSlug },
-    },
+      params: { pageSlug }
+    }
   }
 ) => ({
   language: getLanguage(state),
   languageFetchString: getLanguageFetchString(state),
-  page: getPageBySlug(state, pageSlug),
+  page: getPageBySlug(state, pageSlug)
 });
 const mapDispatchToProps = (
   dispatch,
   {
     match: {
-      params: { pageSlug },
-    },
+      params: { pageSlug }
+    }
   }
 ) => ({
   /**
@@ -67,7 +67,7 @@ const mapDispatchToProps = (
    */
   fetchPageIfNeeded(language) {
     return dispatch(fetchPageIfNeeded(pageSlug, language));
-  },
+  }
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -82,7 +82,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
     return mapDispatchToProps.fetchPageIfNeeded(
       mapStateToProps.languageFetchString
     );
-  },
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Page);

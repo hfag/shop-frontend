@@ -8,8 +8,8 @@ import { shadows, colors } from "../../utilities/style";
 const messages = defineMessages({
   backToTop: {
     id: "ScrollToTopButton.backToTop",
-    defaultMessage: "Zurück nach oben",
-  },
+    defaultMessage: "Zurück nach oben"
+  }
 });
 
 interface IProps {

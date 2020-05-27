@@ -18,8 +18,8 @@ const Logout = React.memo(({ logout }) => {
   return <Card>{intl.formatMessage(user.logout)}...</Card>;
 });
 
-const mapStateToProps = state => ({ language: getLanguage(state) });
-const mapDispatchToProps = dispatch => ({
+const mapStateToProps = (state) => ({ language: getLanguage(state) });
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
   /**
    * Logs a user out

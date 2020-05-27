@@ -20,19 +20,19 @@ import messagesFr from "./locales/fr.json";
 import { isLanguageSupported, getLanguageFromLocation } from "./utilities/i18n";
 import { pathnamesByLanguage } from "./utilities/urls";
 
-const Product = universalWithLoadingBar(props =>
+const Product = universalWithLoadingBar((props) =>
   import(/* webpackChunkName: "product" */ "./containers/Product")
 );
-const Login = universalWithLoadingBar(props =>
+const Login = universalWithLoadingBar((props) =>
   import(/* webpackChunkName: "login" */ "./containers/Login")
 );
-const Account = universalWithLoadingBar(props =>
+const Account = universalWithLoadingBar((props) =>
   import(/* webpackChunkName: "account" */ "./containers/Account")
 );
-const Cart = universalWithLoadingBar(props =>
+const Cart = universalWithLoadingBar((props) =>
   import(/* webpackChunkName: "cart" */ "./containers/Cart")
 );
-const Search = universalWithLoadingBar(props =>
+const Search = universalWithLoadingBar((props) =>
   import(/* webpackChunkName: "search" */ "./containers/Search")
 );
 

@@ -22,15 +22,15 @@ const UnsafeHTMLContent = React.memo(({ locale, content, dispatch }) => {
     () =>
       decodedContent
         .split(/(\[.*\])/g)
-        .filter(s => s)
+        .filter((s) => s)
         .map((s, index) => {
           if (s.startsWith("[gallery")) {
             const regex = /ids=\s*.([0-9,]*)./g;
             const matches = regex.exec(s);
             const ids = matches[1]
               .split(",")
-              .map(id => parseInt(id))
-              .filter(i => !imagesToFetch.current.includes(i));
+              .map((id) => parseInt(id))
+              .filter((i) => !imagesToFetch.current.includes(i));
             imagesToFetch.current.push(...ids);
 
             return (
@@ -53,7 +53,7 @@ const UnsafeHTMLContent = React.memo(({ locale, content, dispatch }) => {
       const toFetch = imagesToFetch.current;
       dispatch(fetchAllAttachments(50, locale, true, toFetch)).then(() => {
         imagesToFetch.current = imagesToFetch.current.filter(
-          e => !toFetch.includes(e)
+          (e) => !toFetch.includes(e)
         );
 
         setFetchedImages(imagesToFetch.current.length === 0);
@@ -68,7 +68,7 @@ UnsafeHTMLContent.propTypes = {
   content: PropTypes.string
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   locale: getLanguageFetchString(state)
 });
 

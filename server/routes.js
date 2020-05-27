@@ -19,7 +19,7 @@ import { supportedLanguages } from "../src/utilities/i18n";
 
 const i18nRoutes = [
   {
-    path: language => `/${language}/`,
+    path: (language) => `/${language}/`,
     component: Frontpage,
     exact: true,
     /**
@@ -42,7 +42,7 @@ const i18nRoutes = [
     }
   },
   {
-    path: language =>
+    path: (language) =>
       `/${language}/${pathnamesByLanguage[language].productCategory}`,
     component: ProductCategories,
     /**
@@ -64,7 +64,7 @@ const i18nRoutes = [
     }
   },
   {
-    path: language =>
+    path: (language) =>
       `/${language}/${pathnamesByLanguage[language].product}/:productSlug`,
     component: Product,
     exact: true,
@@ -90,7 +90,7 @@ const i18nRoutes = [
     }
   },
   {
-    path: language =>
+    path: (language) =>
       `/${language}/${pathnamesByLanguage[language].post}/:postSlug`,
     component: Post,
     exact: true,
@@ -114,7 +114,7 @@ const i18nRoutes = [
     }
   },
   {
-    path: language =>
+    path: (language) =>
       `/${language}/${pathnamesByLanguage[language].page}/:pageSlug`,
     component: Page,
     exact: true,
@@ -138,7 +138,7 @@ const i18nRoutes = [
     }
   },
   {
-    path: language => `/${language}/${pathnamesByLanguage[language].login}`,
+    path: (language) => `/${language}/${pathnamesByLanguage[language].login}`,
     component: Login,
     exact: true,
     /**
@@ -160,7 +160,7 @@ const i18nRoutes = [
     }
   },
   {
-    path: language => `/${language}/${pathnamesByLanguage[language].Logout}`,
+    path: (language) => `/${language}/${pathnamesByLanguage[language].Logout}`,
     component: Logout,
     exact: true,
     /**
@@ -182,7 +182,7 @@ const i18nRoutes = [
     }
   },
   {
-    path: language => `/${language}/${pathnamesByLanguage[language].account}`,
+    path: (language) => `/${language}/${pathnamesByLanguage[language].account}`,
     component: Account,
     /**
      * Fetches the required data for this route
@@ -203,7 +203,7 @@ const i18nRoutes = [
     }
   },
   {
-    path: language => `/${language}/${pathnamesByLanguage[language].cart}`,
+    path: (language) => `/${language}/${pathnamesByLanguage[language].cart}`,
     component: Cart,
     exact: true,
     /**
@@ -248,7 +248,7 @@ const i18nRoutes = [
 
 const routes = [];
 i18nRoutes.forEach(({ path, component, exact, fetchData }) => {
-  supportedLanguages.forEach(language => {
+  supportedLanguages.forEach((language) => {
     routes.push({
       path: path ? path(language) : undefined,
       component,

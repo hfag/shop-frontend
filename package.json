@@ -16,7 +16,7 @@
     "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
     "collect-messages": "node scripts/collect-i18n-strings.js",
     "analysis": "webpack-bundle-analyzer ./dist/stats.json",
-    "prettier": "prettier --print-width 80 --tab-width 2 --trailing-comma none --arrow-parens avoid --write .",
+    "prettier": "prettier --print-width 80 --tab-width 2 --trailing-comma none --write .",
     "lint": "eslint --ext .jsx --ext .js src/",
     "test": "echo 'not implemented'"
   },

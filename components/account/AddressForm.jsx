@@ -24,7 +24,7 @@ const FormWrapper = styled(Form)`
  * @returns {Array<Object>} The option list
  */
 const getStateOptionsByCountry = (countries, country) => {
-  return Object.keys(countries[country].states).map(value => ({
+  return Object.keys(countries[country].states).map((value) => ({
     value,
     label: countries[country].states[value]
   }));
@@ -75,7 +75,7 @@ const InnerAddressForm = React.memo(
           name="country"
           required={true}
           placeholder={intl.formatMessage(address.chooseCountry)}
-          options={Object.keys(countries).map(key => ({
+          options={Object.keys(countries).map((key) => ({
             value: key,
             label: countries[key].name
           }))}
@@ -189,7 +189,7 @@ const AddressForm = withFormik({
   validationSchema: ({ countries, type }) => {
     const states = [].concat.apply(
       [],
-      Object.values(countries).map(country => Object.keys(country.states))
+      Object.values(countries).map((country) => Object.keys(country.states))
     );
 
     return yup.object().shape({
@@ -234,7 +234,7 @@ const AddressForm = withFormik({
           setStatus("");
         }, 300);
       })
-      .catch(e => {
+      .catch((e) => {
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });

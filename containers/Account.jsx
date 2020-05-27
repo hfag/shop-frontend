@@ -29,25 +29,25 @@ import { trackPageView } from "../utilities/analytics";
 const messages = defineMessages({
   siteTitle: {
     id: "Account.siteTitle",
-    defaultMessage: "Mein Kundenkonto bei der Hauser Feuerschutz AG",
+    defaultMessage: "Mein Kundenkonto bei der Hauser Feuerschutz AG"
   },
   siteDescription: {
     id: "Account.siteDescription",
     defaultMessage:
-      "Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen.",
+      "Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
   },
   myAccount: {
     id: "Account.myAccount",
-    defaultMessage: "Mein Kundenkonto",
+    defaultMessage: "Mein Kundenkonto"
   },
   overview: {
     id: "Account.overview",
-    defaultMessage: "Übersicht",
+    defaultMessage: "Übersicht"
   },
   details: {
     id: "Account.details",
-    defaultMessage: "Details",
-  },
+    defaultMessage: "Details"
+  }
 });
 
 const ProfileNavigation = styled.ul`
@@ -95,7 +95,7 @@ const Account = React.memo(
     redirectToLogin,
     fetchCountriesIfNeeded,
     fetchAccount,
-    fetchOrders,
+    fetchOrders
   }) => {
     const intl = useIntl();
 
@@ -249,11 +249,11 @@ const mapStateToProps = (state) => {
     accountDetails: {
       firstName: account ? account.firstName : "",
       lastName: account ? account.lastName : "",
-      email: account ? account.email : "",
+      email: account ? account.email : ""
     },
     billingAddress: account.billing || {},
     shippingAddress: account.shipping || {},
-    countries: getCountries(state),
+    countries: getCountries(state)
   };
 };
 
@@ -337,7 +337,7 @@ const mapDispatchToProps = (dispatch) => ({
    */
   updateAddress(address, type, language, visualize = false) {
     return dispatch(updateAddress(address, type, language, visualize));
-  },
+  }
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -426,7 +426,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
       mapStateToProps.languageFetchString,
       visualize
     );
-  },
+  }
 });
 
 export default connect(

@@ -37,7 +37,7 @@ const CircleWrapper = styled.div<IProps>`
           negative ? colors.primaryContrast : colors.primary
         };`
       : ""} ${({ width }) => (width ? `width: ${width};` : "")} ${({
-  height,
+  height
 }) => (height ? `height: ${height};` : "")} ${({ inline }) =>
   inline ? `display: inline-block;` : ""};
 

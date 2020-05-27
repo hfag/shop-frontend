@@ -45,7 +45,7 @@ export const generateProductBreadcrumbs = (
         index > 0
           ? reversedParents
               .slice(0, index)
-              .map(category => category.slug)
+              .map((category) => category.slug)
               .join("/") + "/"
           : ""
       }${category.slug}/1`,

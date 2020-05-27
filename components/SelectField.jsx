@@ -36,7 +36,7 @@ class SelectField extends React.PureComponent {
           if (
             value &&
             options &&
-            !options.some(option => option.value === value)
+            !options.some((option) => option.value === value)
           ) {
             options.push({ value, label: value });
           }
@@ -53,7 +53,7 @@ class SelectField extends React.PureComponent {
               </label>
               <Select
                 value={value}
-                onChange={option => {
+                onChange={(option) => {
                   setFieldValue(name, option ? option.value : undefined);
                   setFieldTouched(name, true);
                 }}

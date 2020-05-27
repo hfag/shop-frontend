@@ -30,7 +30,7 @@ export default Home;
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      collectionResponse: await request(API_URL, GET_COLLECTION, { id: 1 }),
-    },
+      collectionResponse: await request(API_URL, GET_COLLECTION, { id: 1 })
+    }
   };
 };

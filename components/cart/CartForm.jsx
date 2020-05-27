@@ -308,7 +308,7 @@ const InnerCartForm = React.memo(
 
 const CartForm = withFormik({
   enableReinitialize: true,
-  mapPropsToValues: props => ({
+  mapPropsToValues: (props) => ({
     items: props.items
   }),
   validate: (values, props) => {
@@ -329,7 +329,7 @@ const CartForm = withFormik({
         setStatus("success");
         setTimeout(() => setStatus(""), 300);
       })
-      .catch(e => {
+      .catch((e) => {
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });

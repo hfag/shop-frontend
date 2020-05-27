@@ -21,7 +21,7 @@ const Orders = React.memo(({ orders }) => {
       <h2>{intl.formatMessage(order.orders)}</h2>
       {orders.length === 0 && <div>{intl.formatMessage(order.noOrders)}</div>}
       <div>
-        {orders.map(order => (
+        {orders.map((order) => (
           <Order key={order.id} order={order} language={intl.locale} />
         ))}
       </div>
@@ -29,7 +29,7 @@ const Orders = React.memo(({ orders }) => {
   );
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   orders: getOrders(state)
 });
 

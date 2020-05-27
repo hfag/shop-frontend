@@ -14,12 +14,12 @@ import product from "../i18n/product";
 const messages = defineMessages({
   placeholder: {
     id: "Searchbar.placeholder",
-    defaultMessage: "Suchen Sie nach einem Produkt",
+    defaultMessage: "Suchen Sie nach einem Produkt"
   },
   showMore: {
     id: "Searchbar.showMore",
-    defaultMessage: "Zeige mehr...",
-  },
+    defaultMessage: "Zeige mehr..."
+  }
 });
 
 const StyledSearch = styled.div`
@@ -168,7 +168,7 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
     (
       event: Event,
       {
-        suggestion,
+        suggestion
       }: {
         suggestion: {
           type: string;
@@ -221,8 +221,8 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
       ...section.suggestions,
       {
         title: intl.formatMessage(messages.showMore),
-        type: "show-more",
-      },
+        type: "show-more"
+      }
     ],
     []
   );
@@ -295,7 +295,7 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
           onSuggestionsFetchRequested({ value: this.state.value });
         }
       }
-    },
+    }
   };
 
   return (

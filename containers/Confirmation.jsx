@@ -12,21 +12,21 @@ import { trackPageView } from "../utilities/analytics";
 const messages = defineMessages({
   siteTitle: {
     id: "Confirmation.siteTitle",
-    defaultMessage: "Bestellbestätigung - Hauser Feuerschutz AG",
+    defaultMessage: "Bestellbestätigung - Hauser Feuerschutz AG"
   },
   siteDescription: {
     id: "Confirmation.siteDescription",
-    defaultMessage: "Bestätigungsseite nach einer Bestellung",
+    defaultMessage: "Bestätigungsseite nach einer Bestellung"
   },
   title: {
     id: "Confirmation.title",
-    defaultMessage: "Bestellbestätigung",
+    defaultMessage: "Bestellbestätigung"
   },
   message: {
     id: "Confirmation.message",
     defaultMessage:
-      "Vielen Dank für Ihre Bestellung bei der Hauser Feuerschutz AG. Sie werden in Kürze eine Bestätigungsemail erhalten.",
-  },
+      "Vielen Dank für Ihre Bestellung bei der Hauser Feuerschutz AG. Sie werden in Kürze eine Bestätigungsemail erhalten."
+  }
 });
 
 const Confirmation = React.memo(({ language }) => {
@@ -59,7 +59,7 @@ const Confirmation = React.memo(({ language }) => {
             mail: (
               <Link href="mailto:info@feuerschutz.ch">info@feuerschutz.ch</Link>
             ),
-            phone: <Link href="tel:+41628340540">062 834 05 40</Link>,
+            phone: <Link href="tel:+41628340540">062 834 05 40</Link>
           }}
         />
       </p>

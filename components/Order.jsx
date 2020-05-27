@@ -38,7 +38,7 @@ const OrderMeta = styled.div``;
  * @param {string} status The woocommerce status string
  * @returns {Object} The state object
  */
-const getState = status => {
+const getState = (status) => {
   switch (status) {
     case "wc-pending":
       return { color: colors.info, label: "Bezahlung ausstehend" };

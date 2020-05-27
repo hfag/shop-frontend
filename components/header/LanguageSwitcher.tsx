@@ -7,11 +7,11 @@ import { useIntl } from "react-intl";
 
 const LANGUAGES = {
   de: {
-    label: "DE",
+    label: "DE"
   },
   fr: {
-    label: "FR",
-  },
+    label: "FR"
+  }
 };
 
 const Language = styled.div`

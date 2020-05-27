@@ -84,7 +84,7 @@ const LatestPosts = React.memo(
           {intl.formatMessage(messages.title)}
         </h2>
         <LatesPostFlex flexWrap="wrap">
-          {posts.map(post => (
+          {posts.map((post) => (
             <Post language={language} post={post} key={post.slug} />
           ))}
         </LatesPostFlex>
@@ -93,16 +93,16 @@ const LatestPosts = React.memo(
   }
 );
 
-const mapStateToProps = state => {
-  const stickyPostIds = getStickyPosts(state).map(p => p.id);
+const mapStateToProps = (state) => {
+  const stickyPostIds = getStickyPosts(state).map((p) => p.id);
 
   return {
     language: getLanguage(state),
     languageKey: getLanguageFetchString(state),
-    posts: getPosts(state).filter(post => !stickyPostIds.includes(post.id))
+    posts: getPosts(state).filter((post) => !stickyPostIds.includes(post.id))
   };
 };
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   /**
    * Fetches all posts if needed
    * @param {number} perPage The items per page

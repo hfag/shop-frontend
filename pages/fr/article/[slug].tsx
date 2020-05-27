@@ -16,7 +16,7 @@ export default Page;
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [{ params: { slug: "test" } }],
-    fallback: false,
+    fallback: false
   };
 };
 

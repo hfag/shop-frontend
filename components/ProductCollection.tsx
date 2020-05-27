@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useMemo,
   useRef,
-  FunctionComponent,
+  FunctionComponent
 } from "react";
 import { Box } from "reflexbox";
 import { useIntl, defineMessages } from "react-intl";
@@ -36,8 +36,8 @@ import { API_URL, ABSOLUTE_URL } from "../utilities/api";
 const messages = defineMessages({
   downloadsAndLinks: {
     id: "ProductCategories.downloadsAndLinks",
-    defaultMessage: "Downloads und Links",
-  },
+    defaultMessage: "Downloads und Links"
+  }
 });
 
 const H1 = styled.h1`
@@ -117,12 +117,12 @@ const ProductCollection: FunctionComponent<{
 
   const {
     data: { collection },
-    error,
+    error
   } = useSWR(
     [GET_COLLECTION, collectionId],
     (query, collectionId) => request(API_URL, query, { id: collectionId }),
     {
-      initialData,
+      initialData
     }
   );
   const loading = !collection;
@@ -159,7 +159,7 @@ const ProductCollection: FunctionComponent<{
                   ></H1>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: collection.description,
+                      __html: collection.description
                     }}
                   ></div>
                 </Box>

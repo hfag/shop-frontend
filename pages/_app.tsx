@@ -75,7 +75,7 @@ export default class MyApp extends App<{
     const intl = createIntl(
       {
         locale,
-        messages,
+        messages
       },
       cache
     );

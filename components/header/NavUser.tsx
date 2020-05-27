@@ -13,8 +13,8 @@ import page from "../../i18n/page";
 const messages = defineMessages({
   toAccount: {
     id: "NavUser.toAccount",
-    defaultMessage: "Zum Konto",
-  },
+    defaultMessage: "Zum Konto"
+  }
 });
 
 const UserDropdown = styled(Dropdown)`

@@ -32,7 +32,7 @@ class Address extends React.PureComponent {
         <Line>
           {address.country ? address.country + "-" : ""}
           {[address.postcode, address.city, address.state]
-            .filter(x => x)
+            .filter((x) => x)
             .join(",")}
         </Line>
       </div>

@@ -40,11 +40,11 @@ const AccountDashboard = React.memo(
     const intl = useIntl();
 
     const billingEmpty = Object.keys(billingAddress)
-      .filter(key => key !== "email")
+      .filter((key) => key !== "email")
       .reduce((empty, key) => empty && billingAddress[key] == "", true);
 
     const shippingEmpty = Object.keys(shippingAddress)
-      .filter(key => key !== "email")
+      .filter((key) => key !== "email")
       .reduce((empty, key) => empty && shippingAddress[key] == "", true);
 
     return (
@@ -121,7 +121,7 @@ const AccountDashboard = React.memo(
             {orders
               .sort((a, b) => a.created - b.created)
               .slice(0, 3)
-              .map(order => (
+              .map((order) => (
                 <Order
                   key={order.id}
                   order={order}
@@ -136,11 +136,11 @@ const AccountDashboard = React.memo(
   }
 );
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   language: getLanguage(state),
   orders: getOrders(state)
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dispatch
 });
 

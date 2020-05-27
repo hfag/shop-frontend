@@ -139,7 +139,7 @@ export const addCartItem = (
  * @param {number} total The total after the update
  * @returns {void}
  */
-export const trackCartUpdate = total =>
+export const trackCartUpdate = (total) =>
   paq.push(["trackEcommerceCartUpdate", total]);
 
 /**

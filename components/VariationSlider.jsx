@@ -87,7 +87,7 @@ class VariationSlider extends React.PureComponent {
       imageMap[imageId] = previousAttributes
         ? Object.keys(imageMap[imageId])
             .filter(
-              attributeKey =>
+              (attributeKey) =>
                 attributeKey in attributes &&
                 attributes[attributeKey] === previousAttributes[attributeKey]
             )
@@ -100,8 +100,8 @@ class VariationSlider extends React.PureComponent {
       return imageMap;
     }, {});
     const activeImageIds = Object.keys(imageMap)
-      .map(imageId => parseInt(imageId))
-      .filter(imageId => {
+      .map((imageId) => parseInt(imageId))
+      .filter((imageId) => {
         for (let key in selectedAttributes) {
           if (
             !Object.prototype.hasOwnProperty.call(selectedAttributes, key) ||
@@ -266,12 +266,12 @@ class VariationSlider extends React.PureComponent {
     return (
       <Slider>
         <Flex
-          ref={ref => (this.slider = ref)}
+          ref={(ref) => (this.slider = ref)}
           flexWrap={showAll ? "wrap" : "nowrap"}
         >
           {Object.keys(imageMap)
-            .map(i => parseInt(i))
-            .map(imageId => (
+            .map((i) => parseInt(i))
+            .map((imageId) => (
               <Box
                 key={imageId}
                 width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
@@ -285,7 +285,7 @@ class VariationSlider extends React.PureComponent {
                       ? false
                       : activeImageIds.includes(imageId)
                   }
-                  ref={ref =>
+                  ref={(ref) =>
                     activeImageIds.includes(imageId) &&
                     activeImageIds.length === 1
                       ? (this.activeSlide = ref)

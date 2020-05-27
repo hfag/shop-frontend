@@ -29,26 +29,26 @@ class WebpackShellPlugin {
       // webpack 4 support
       compiler.hooks.entryOption.tap("WebpackShellPluginBeforeBuild", () => {
         console.log("Executing pre-build scripts");
-        options.onBuildStart.forEach(script => exec(script, puts));
+        options.onBuildStart.forEach((script) => exec(script, puts));
       });
       compiler.hooks.afterEmit.tapAsync("WebpackShellPluginAfterBuild", () => {
         console.log("Executing post-build scripts");
-        options.onBuildEnd.forEach(script => exec(script, puts));
+        options.onBuildEnd.forEach((script) => exec(script, puts));
       });
       return;
     }
 
-    compiler.plugin("compilation", compilation => {
+    compiler.plugin("compilation", (compilation) => {
       if (options.onBuildStart.length) {
         console.log("Executing pre-build scripts");
-        options.onBuildStart.forEach(script => exec(script, puts));
+        options.onBuildStart.forEach((script) => exec(script, puts));
       }
     });
 
     compiler.plugin("emit", (compilation, callback) => {
       if (options.onBuildEnd.length) {
         console.log("Executing post-build scripts");
-        options.onBuildEnd.forEach(script => exec(script, puts));
+        options.onBuildEnd.forEach((script) => exec(script, puts));
       }
       callback();
     });

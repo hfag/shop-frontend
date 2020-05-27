@@ -58,7 +58,7 @@ const messages = defineMessages({
  * @returns {Array<Object>} The option list
  */
 const getStateOptionsByCountry = (countries, country) => {
-  return Object.keys(countries[country].states).map(value => ({
+  return Object.keys(countries[country].states).map((value) => ({
     value,
     label: countries[country].states[value]
   }));
@@ -124,7 +124,7 @@ const InnerCheckoutForm = React.memo(
               name="billing_country"
               required={true}
               placeholder={intl.formatMessage(address.chooseCountry)}
-              options={Object.keys(countries).map(key => ({
+              options={Object.keys(countries).map((key) => ({
                 value: key,
                 label: countries[key].name
               }))}
@@ -185,7 +185,7 @@ const InnerCheckoutForm = React.memo(
               name="ship_to_different_address"
               type="checkbox"
               value="1"
-              onChange={e =>
+              onChange={(e) =>
                 setShowShipping(e.currentTarget.checked ? true : false)
               }
               checkbox={true}
@@ -232,7 +232,7 @@ const InnerCheckoutForm = React.memo(
                   name="shipping_country"
                   required={true}
                   placeholder={intl.formatMessage(address.chooseCountry)}
-                  options={Object.keys(countries).map(key => ({
+                  options={Object.keys(countries).map((key) => ({
                     value: key,
                     label: countries[key].name
                   }))}
@@ -427,7 +427,7 @@ const CheckoutForm = injectIntl(
           .test(
             "is-checked",
             intl.formatMessage(messages.tosMustBeAccepted),
-            value => value === true
+            (value) => value === true
           )
       });
     },
@@ -444,7 +444,7 @@ const CheckoutForm = injectIntl(
         comments = values["order_comments"],
         shipToDifferentAddress = values["ship_to_different_address"];
 
-      Object.keys(values).forEach(key => {
+      Object.keys(values).forEach((key) => {
         if (key.startsWith("shipping_") && shipToDifferentAddress) {
           shippingAddress[key.replace("shipping_", "")] = values[key];
         } else if (key.startsWith("billing_")) {
@@ -467,7 +467,7 @@ const CheckoutForm = injectIntl(
             );
           }, 300);
         })
-        .catch(e => {
+        .catch((e) => {
           setStatus("error");
           setTimeout(() => setStatus(""), 300);
         });

@@ -65,7 +65,7 @@ const createNewStore = (history, initialState = {}) =>
  * @param {Object} state The state to remove the location from
  * @returns {Object} The same state (by reference)
  */
-const removeLocation = state => {
+const removeLocation = (state) => {
   delete state.router;
   return state;
 };
@@ -148,7 +148,7 @@ const renderApplication = (request, response) => {
             "<head>",
             `<head>
             ${["meta", "base", "link", "script", "style", "title"]
-              .map(key => reactHelmet[key].toString())
+              .map((key) => reactHelmet[key].toString())
               .join(
                 ""
               )}${styleTags}<script>window.__INITIAL_DATA__ = ${JSON.stringify(
@@ -162,18 +162,18 @@ const renderApplication = (request, response) => {
           )
       );
     })
-    .catch(e => {
+    .catch((e) => {
       response.end("Es ist ein Fehler aufgetreten!");
       console.log(e);
     });
 };
 
 app.get("/robots.txt", (request, response) =>
-  rp(API_URL + "/robots.txt").then(text => response.end(text))
+  rp(API_URL + "/robots.txt").then((text) => response.end(text))
 );
 
 app.get("/sitemap.xml", (request, response) =>
-  rp(API_URL + "/sitemap.xml").then(text => response.end(text))
+  rp(API_URL + "/sitemap.xml").then((text) => response.end(text))
 );
 
 app.get("/", (request, response) =>
@@ -193,7 +193,7 @@ console.log("Server listening on http://localhost:" + PORT) + "!";
 setInterval(() => {
   console.log("Checking store cache...");
 
-  Object.keys(storeByLanguage).forEach(languageKey => {
+  Object.keys(storeByLanguage).forEach((languageKey) => {
     const store = storeByLanguage[languageKey];
     console.log("Start checking store for language key", languageKey);
 
@@ -202,15 +202,15 @@ setInterval(() => {
 
     const products = getProducts(state),
       now = Date.now();
-    const saleProductIds = getSales(state).map(sale => sale.productId);
+    const saleProductIds = getSales(state).map((sale) => sale.productId);
     const invalidProductSlugs = products
       .filter(
-        product =>
+        (product) =>
           product &&
           now - product._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
           !saleProductIds.includes(product.id)
       )
-      .map(product => product.slug);
+      .map((product) => product.slug);
 
     store.dispatch({
       type: "DELETE_PRODUCTS",
@@ -224,11 +224,11 @@ setInterval(() => {
     const attributes = getProductAttributes(state);
     const invalidAttributeIds = attributes
       .filter(
-        attribute =>
+        (attribute) =>
           attribute &&
           now - attribute._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES
       )
-      .map(attribute => attribute.id);
+      .map((attribute) => attribute.id);
 
     store.dispatch({
       type: "DELETE_ATTRIBUTES",
@@ -241,17 +241,17 @@ setInterval(() => {
 
     const attachments = getAttachments(state);
     const productCategoryThumbnailIds = getProductCategories(state).map(
-      category => category.thumbnailId
+      (category) => category.thumbnailId
     );
     const invalidAttachmentIds = attachments
       .filter(
-        attachment =>
+        (attachment) =>
           attachment &&
           now - attachment._lastFetched >
             1000 * 60 * DELETE_INTERVAL_IN_MINUTES &&
           !productCategoryThumbnailIds.includes(attachment.id)
       )
-      .map(attachment => attachment.id);
+      .map((attachment) => attachment.id);
 
     store.dispatch({
       type: "DELETE_ATTACHMENTS",
@@ -265,11 +265,11 @@ setInterval(() => {
     const posts = getProductAttributes(state);
     const invalidPostSlugs = posts
       .filter(
-        post =>
+        (post) =>
           post &&
           now - post._lastFetched > 1000 * 60 * DELETE_INTERVAL_IN_MINUTES
       )
-      .map(post => post.slug);
+      .map((post) => post.slug);
 
     store.dispatch({
       type: "DELETE_POSTS",

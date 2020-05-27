@@ -147,7 +147,7 @@ const AccountForm = withFormik({
           setStatus("");
         }, 300);
       })
-      .catch(e => {
+      .catch((e) => {
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });

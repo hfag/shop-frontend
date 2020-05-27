@@ -16,7 +16,7 @@ class AppleStatusBarStyleWebpackPlugin {
       // webpack 4 support
       compiler.hooks.compilation.tap(
         "AppleStatusBarStyleWebpackPlugin",
-        compilation => {
+        (compilation) => {
           compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync(
             "FaviconsWebpackPostProcessPlugin",
             this.changeAppleStatusBarStyleMeta.bind(this)
@@ -27,7 +27,7 @@ class AppleStatusBarStyleWebpackPlugin {
     }
 
     // Webpack 3 and below
-    compiler.plugin("compilation", compilation => {
+    compiler.plugin("compilation", (compilation) => {
       compilation.plugin(
         "html-webpack-plugin-after-html-processing",
         this.changeAppleStatusBarStyleMeta.bind(this)

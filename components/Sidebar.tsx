@@ -6,7 +6,7 @@ import {
   FaShoppingCart as CartIcon,
   FaUser as AccountIcon,
   FaSignInAlt as SignInIcon,
-  FaCogs as GearsIcon,
+  FaCogs as GearsIcon
 } from "react-icons/fa";
 import { useIntl } from "react-intl";
 

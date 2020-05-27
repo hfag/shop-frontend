@@ -15,8 +15,8 @@ export const generateCategoryBreadcrumbs = ({ url }, { pathname }, state) => {
     slugs.pop();
   }
   const categories = slugs
-    .map(slug => getProductCategoryBySlug(state, slug))
-    .filter(c => c);
+    .map((slug) => getProductCategoryBySlug(state, slug))
+    .filter((c) => c);
 
   const language = getLanguage(state);
 
@@ -25,7 +25,7 @@ export const generateCategoryBreadcrumbs = ({ url }, { pathname }, state) => {
       index > 0
         ? categories
             .slice(0, index)
-            .map(category => category.slug)
+            .map((category) => category.slug)
             .join("/") + "/"
         : ""
     }${slug}/1`,

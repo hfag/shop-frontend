@@ -31,8 +31,8 @@ const messages = defineMessages({
   siteDescription: {
     id: "Header.siteDescription",
     defaultMessage:
-      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet.",
-  },
+      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
+  }
 });
 
 const SearchWrapper = styled.div`

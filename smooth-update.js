@@ -11,13 +11,13 @@ const deleted = [];
 
 Promise.all(
   current.map(
-    file =>
+    (file) =>
       new Promise((resolve, reject) => {
         ncp(
           path.join(__dirname, "dist", "client-build", file),
           path.join(__dirname, "dist", "client", file),
           { mkdirp: true },
-          err => {
+          (err) => {
             if (err) {
               return reject(err);
             }
@@ -31,11 +31,11 @@ Promise.all(
   .then(() => {
     return Promise.all(
       previous.map(
-        file =>
+        (file) =>
           new Promise((resolve, reject) => {
             if (copied.indexOf(file) === -1) {
               deleted.push(file);
-              rimraf(path.join(__dirname, "dist", "client", file), err => {
+              rimraf(path.join(__dirname, "dist", "client", file), (err) => {
                 if (err) {
                   return reject(err);
                 }
@@ -58,6 +58,6 @@ Promise.all(
       "files/dirs"
     );
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err);
   });

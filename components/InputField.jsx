@@ -51,7 +51,7 @@ class InputField extends React.Component {
                 value={forceValue || value || ""}
                 onChange={
                   secondOnChange
-                    ? e => {
+                    ? (e) => {
                         secondOnChange(e);
                         return onChange(e);
                       }

@@ -53,7 +53,7 @@ const store = createStore(
       thunkMiddleware,
       routerMiddleware(history),
       /* show loading animation */
-      store => next => action => {
+      (store) => (next) => (action) => {
         if (action.visualize === true) {
           store.dispatch(action.isFetching ? showLoading() : hideLoading());
         }
@@ -74,7 +74,7 @@ store.subscribe(
   }, 1000)
 );
 
-const render = Component => {
+const render = (Component) => {
   ReactDOM.hydrate(
     <Component history={history} store={store} />,
     document.getElementById("root")

@@ -32,7 +32,7 @@ const ProductSidebar = React.memo(
           </SidebarBreadcrumb>
         </Link>
         <hr />
-        {categories.map(category => [
+        {categories.map((category) => [
           ...category.parents.map((category, index) => (
             <Link
               key={category.id}
@@ -42,7 +42,7 @@ const ProductSidebar = React.memo(
                 index > 0
                   ? category.parents
                       .slice(0, index)
-                      .map(category => category.slug)
+                      .map((category) => category.slug)
                       .join("/") + "/"
                   : ""
               }${category.slug}/1`}
@@ -61,7 +61,7 @@ const ProductSidebar = React.memo(
               pathnamesByLanguage[language].productCategory
             }/${
               category.parents.length > 0
-                ? category.parents.map(category => category.slug).join("/") +
+                ? category.parents.map((category) => category.slug).join("/") +
                   "/"
                 : ""
             }${category.slug}/1`}
@@ -105,8 +105,8 @@ const mapStateToProps = (
     categories:
       product && !product._isFetching && product.categoryIds
         ? getProductCategories(state)
-            .filter(category => product.categoryIds.includes(category.id))
-            .map(category => {
+            .filter((category) => product.categoryIds.includes(category.id))
+            .map((category) => {
               const parents = [];
 
               let current = category;

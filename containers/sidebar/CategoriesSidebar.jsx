@@ -91,7 +91,7 @@ const CategoriesSidebar = React.memo(
                   <li className="header">
                     <h4>{intl.formatMessage(product.categories)}</h4>
                   </li>
-                  {categoryIds.map(categoryId => (
+                  {categoryIds.map((categoryId) => (
                     <CategoryItem
                       key={categoryId}
                       id={categoryId}
@@ -105,7 +105,7 @@ const CategoriesSidebar = React.memo(
         )}
         <Route
           path={`${urlWithoutPage}/:categorySlug/:page`}
-          render={props => <RoutedSidebar {...props} parents={newParents} />}
+          render={(props) => <RoutedSidebar {...props} parents={newParents} />}
         />
       </SidebarListWrapper>
     );
@@ -134,11 +134,11 @@ const mapStateToProps = (
     productIds: category
       ? getProducts(state)
           .filter(
-            product =>
+            (product) =>
               product.categoryIds && product.categoryIds.includes(category.id)
           )
           .sort((a, b) => a.order - b.order)
-          .map(product => product.id)
+          .map((product) => product.id)
           .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
       : [],
     page

@@ -23,13 +23,13 @@ const Wrapper: FunctionComponent<{
 
   const showBreadcrums = useMemo(() => router.pathname !== `/${intl.locale}`, [
     router.pathname,
-    intl.locale,
+    intl.locale
   ]);
 
   return (
     <ThemeProvider
       theme={{
-        breakpoints: ["36rem", "48rem", "62rem", "75rem"],
+        breakpoints: ["36rem", "48rem", "62rem", "75rem"]
       }}
     >
       <ScrollToTop>

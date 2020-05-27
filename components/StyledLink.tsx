@@ -64,7 +64,7 @@ const StyledLink: FunctionComponent<{
   flex,
   target,
   rel,
-  title,
+  title
 }) => {
   const router = useRouter();
 

@@ -12,22 +12,22 @@ import { trackPageView } from "../utilities/analytics";
 const messages = defineMessages({
   siteTitle: {
     id: "404.siteTitle",
-    defaultMessage: "Seite nicht gefunden! Fehler 404 - Hauser Feuerschutz AG",
+    defaultMessage: "Seite nicht gefunden! Fehler 404 - Hauser Feuerschutz AG"
   },
   siteDescription: {
     id: "404.siteDescription",
     defaultMessage:
-      "Diese Seite konnte leider nicht gefunden werden. Verwenden Sie die Suche oder wenden Sie sich an unseren Kundensupport.",
+      "Diese Seite konnte leider nicht gefunden werden. Verwenden Sie die Suche oder wenden Sie sich an unseren Kundensupport."
   },
   title: {
     id: "404.title",
-    defaultMessage: "Fehler 404",
+    defaultMessage: "Fehler 404"
   },
   siteNotFound: {
     id: "404.siteNotFound",
     defaultMessage:
-      "Die Seite konnte nicht gefunden werden! Gehen Sie eine Seite zurück oder versuchen Sie es mit der Suche. Vermuten Sie, dies sei ein Fehler, dann kontaktieren Sie uns unter",
-  },
+      "Die Seite konnte nicht gefunden werden! Gehen Sie eine Seite zurück oder versuchen Sie es mit der Suche. Vermuten Sie, dies sei ein Fehler, dann kontaktieren Sie uns unter"
+  }
 });
 
 const Page404 = React.memo(({ language }) => {

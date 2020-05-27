@@ -11,7 +11,7 @@ import ProductCollection from "../../components/ProductCollection";
 import { FunctionComponent } from "react";
 
 const Home: FunctionComponent<{ collection: Collection }> = ({
-  collection,
+  collection
 }) => {
   return (
     <>
@@ -24,6 +24,6 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
-    props: { collection: await request(API_URL, GET_COLLECTION, { id: 1 }) },
+    props: { collection: await request(API_URL, GET_COLLECTION, { id: 1 }) }
   };
 };

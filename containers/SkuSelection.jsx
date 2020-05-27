@@ -120,12 +120,12 @@ const fuzzyFilter = (filter, rows, column) => {
     .filter(filter.value, rows, {
       pre: "<strong>",
       post: "</strong>",
-      extract: e =>
+      extract: (e) =>
         typeof column.accessor === "function"
           ? column.accessor(e)
           : get(e, column.accessor)
     })
-    .map(e => e.original);
+    .map((e) => e.original);
 
   if (filter.value.length > 0) {
     debouncedSearch(filter.value, results.length);
@@ -176,7 +176,7 @@ const NameCell = React.memo(
                 type="text"
                 value={counter}
                 size="2"
-                onChange={e => setCounter(e.currentTarget.value)}
+                onChange={(e) => setCounter(e.currentTarget.value)}
               />
               <Button
                 fullWidth
@@ -253,12 +253,12 @@ class SkuSelection extends React.PureComponent {
             {
               id: "name",
               Header: intl.formatMessage(productMessages.name),
-              accessor: e =>
+              accessor: (e) =>
                 e.name +
                 (e.meta
                   ? " " +
                     Object.keys(e.meta)
-                      .map(key => `${key}: ${e.meta[key]}`)
+                      .map((key) => `${key}: ${e.meta[key]}`)
                       .join(" ")
                   : "") +
                 " " +
@@ -278,7 +278,7 @@ class SkuSelection extends React.PureComponent {
             {
               id: "price",
               Header: intl.formatMessage(productMessages.price),
-              accessor: product =>
+              accessor: (product) =>
                 product.discount && product.discount.reseller
                   ? (product.price * product.discount.reseller) / 100
                   : product.price,
@@ -397,14 +397,14 @@ SkuSelection.propTypes = {
   query: PropTypes.string
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const products = getSimpleProducts(state),
     resellerDiscount = getResellerDiscount(state);
 
   return {
     language: getLanguage(state),
     languageFetchString: getLanguageFetchString(state),
-    products: products.map(product =>
+    products: products.map((product) =>
       resellerDiscount[product.id]
         ? {
             ...product,
@@ -418,7 +418,7 @@ const mapStateToProps = state => {
     isFetching: isFetchingSimpleProducts(state)
   };
 };
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
   /**
    * Clears all simple products

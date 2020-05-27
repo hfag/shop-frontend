@@ -2,13 +2,13 @@ import React, {
   FunctionComponent,
   useEffect,
   useState,
-  ReactNode,
+  ReactNode
 } from "react";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { useRouter } from "next/router";
 
 const ScrollToTop: FunctionComponent<{ children: ReactNode }> = ({
-  children,
+  children
 }) => {
   const router = useRouter();
 

@@ -2,7 +2,7 @@ import { stripTags } from "./decode";
 import {
   Product as JsonLdProduct,
   AggregateOffer,
-  LocalBusiness,
+  LocalBusiness
 } from "schema-dts";
 import { Product } from "../schema";
 import { PUBLIC_PATH } from "./api";
@@ -37,17 +37,17 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
       "OnSitePickup",
       {
         "@type": "DeliveryMethod",
-        identifier: "http://purl.org/goodrelations/v1#DeliveryModeMail",
-      },
+        identifier: "http://purl.org/goodrelations/v1#DeliveryModeMail"
+      }
     ],
     potentialAction: {
       "@type": "ViewAction",
       target: "https://shop.feuerschutz.ch/produkt/" + product.slug,
-      name: "Kaufe Produkt",
+      name: "Kaufe Produkt"
     },
     seller: {
-      "@id": ABSOLUTE_URL + "/#organization",
-    },
+      "@id": ABSOLUTE_URL + "/#organization"
+    }
   };
 
   const schema: JsonLdProduct = {
@@ -56,7 +56,7 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
     image: product.featuredAsset.source,
     description: product.description,
     sku: product.customFields.groupKey,
-    offers: offer,
+    offers: offer
   };
 
   return schema;
@@ -68,7 +68,7 @@ export const BUSINESS_JSON_LD: LocalBusiness = {
   image: [
     ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-1x1.png",
     ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-4x3.png",
-    ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-16x9.png",
+    ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-16x9.png"
   ],
   logo: ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo.png",
   "@id": ABSOLUTE_URL + "/#organization",
@@ -81,12 +81,12 @@ export const BUSINESS_JSON_LD: LocalBusiness = {
     addressLocality: "Aarau",
     addressRegion: "AG",
     postalCode: "5000",
-    addressCountry: "CH",
+    addressCountry: "CH"
   },
   geo: {
     "@type": "GeoCoordinates",
     latitude: 47.3971281,
-    longitude: 8.0434878,
+    longitude: 8.0434878
   },
   url: ABSOLUTE_URL,
   telephone: "+41628340540",
@@ -97,21 +97,21 @@ export const BUSINESS_JSON_LD: LocalBusiness = {
       contactType: "customer service",
       availableLanguage: ["German", "French", "Italian", "English"],
       contactOption: "TollFree",
-      areaServed: ["CH"],
-    },
+      areaServed: ["CH"]
+    }
   ],
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       opens: "09:00",
-      closes: "12:00",
+      closes: "12:00"
     },
     {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       opens: "13:30",
-      closes: "17:00",
-    },
-  ],
+      closes: "17:00"
+    }
+  ]
 };

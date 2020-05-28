@@ -5,42 +5,35 @@ import "../utilities/analytics";
 import "../utilities/set-yup-locale";
 
 //dependencies
-import App, { AppProps } from "next/app";
+import App from "next/app";
 import { createIntl, createIntlCache, RawIntlProvider } from "react-intl";
-import { MessageFormatElement } from "intl-messageformat-parser";
-import React from "react";
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useCallback,
+  useState,
+} from "react";
 
-// const presistedState: AppState = {
-//   ...(window["__INITIAL_DATA__"] || {}),
-// };
+export const AppContext = React.createContext<{
+  burgerMenuOpen: boolean;
+  toggleBurgerMenu: () => void;
+}>({ burgerMenuOpen: false, toggleBurgerMenu: () => {} });
 
-// const store = createStore(
-//   appReducer,
-//   presistedState,
-//   composeWithDevTools(
-//     applyMiddleware(
-//       thunkMiddleware,
-//       /* show loading animation */
-//       (store) => (next) => (action) => {
-//         if (action.visualize === true) {
-//           store.dispatch(action.isFetching ? showLoading() : hideLoading());
-//         }
-//         return next(action);
-//       }
-//     )
-//   )
-// );
+const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
+  const toggleBurgerMenu = useCallback(
+    () => setBurgerMenuOpen(!burgerMenuOpen),
+    [burgerMenuOpen]
+  );
 
-//storing *some* keys of the application state in the localstorage
-/*store.subscribe(
-  throttle(() => {
-    const { account, isAuthenticated } = store.getState();
-    saveState({
-      account,
-      isAuthenticated,
-    });
-  }, 1000)
-);*/
+  return (
+    <AppContext.Provider value={{ burgerMenuOpen, toggleBurgerMenu }}>
+      {children}
+    </AppContext.Provider>
+  );
+};
 
 declare global {
   interface Window {
@@ -75,15 +68,17 @@ export default class MyApp extends App<{
     const intl = createIntl(
       {
         locale: locale || "de",
-        messages
+        messages,
       },
       cache
     );
 
     return (
-      <RawIntlProvider value={intl}>
-        <Component {...pageProps} />
-      </RawIntlProvider>
+      <AppWrapper>
+        <RawIntlProvider value={intl}>
+          <Component {...pageProps} />
+        </RawIntlProvider>
+      </AppWrapper>
     );
   }
 }

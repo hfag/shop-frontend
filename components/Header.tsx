@@ -1,4 +1,9 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, {
+  useState,
+  useEffect,
+  FunctionComponent,
+  useContext,
+} from "react";
 import styled from "styled-components";
 import { MdMenu } from "react-icons/md";
 import { Flex, Box } from "reflexbox";
@@ -25,13 +30,14 @@ import page from "../i18n/page";
 import { ABSOLUTE_URL } from "../utilities/api";
 import Head from "next/head";
 import StyledLink from "./StyledLink";
+import { AppContext } from "../pages/_app";
 
 const messages = defineMessages({
   siteDescription: {
     id: "Header.siteDescription",
     defaultMessage:
-      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
-  }
+      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet.",
+  },
 });
 
 const SearchWrapper = styled.div`
@@ -83,6 +89,7 @@ const HtmlHead: FunctionComponent<{ intl: IntlShape }> = React.memo(
 
 const Header: FunctionComponent<{}> = React.memo(({}) => {
   const intl = useIntl();
+  const { toggleBurgerMenu } = useContext(AppContext);
   const [dropdown, setDropdown] = useState<string | boolean>(false);
 
   return (
@@ -120,7 +127,7 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
                   <MediaQuery lg down>
                     <Flexbar>
                       <NavItem>
-                        <StyledLink onClick={() => {}} negative>
+                        <StyledLink noHover onClick={toggleBurgerMenu} negative>
                           <MdMenu size="40" />
                         </StyledLink>
                       </NavItem>

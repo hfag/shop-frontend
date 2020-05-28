@@ -1,4 +1,9 @@
-import React, { FunctionComponent, ReactNode, useCallback } from "react";
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useCallback,
+  useContext,
+} from "react";
 import styled from "styled-components";
 import {
   FaHome as HomeIcon,
@@ -6,7 +11,7 @@ import {
   FaShoppingCart as CartIcon,
   FaUser as AccountIcon,
   FaSignInAlt as SignInIcon,
-  FaCogs as GearsIcon
+  FaCogs as GearsIcon,
 } from "react-icons/fa";
 import { useIntl } from "react-intl";
 
@@ -18,6 +23,7 @@ import Card from "./Card";
 import RestrictedView from "./RestrictedView";
 import { pathnamesByLanguage } from "../utilities/urls";
 import page from "../i18n/page";
+import { AppContext } from "../pages/_app";
 
 interface BurgerContainer {
   isOpen?: boolean;
@@ -99,14 +105,13 @@ const BurgerBackground = styled.div<BurgerBackgroundProps>`
 const Sidebar: FunctionComponent<{ children: ReactNode }> = React.memo(
   ({ children }) => {
     const intl = useIntl();
-    const toggleBurgerMenu = useCallback(() => {}, []);
-    const isOpen = false;
+    const { burgerMenuOpen, toggleBurgerMenu } = useContext(AppContext);
     const isAuthenticated = false;
 
     return (
       <div style={{ height: "100%", paddingBottom: "2rem" }}>
-        <BurgerBackground onClick={toggleBurgerMenu} isOpen={isOpen} />
-        <BurgerContainer isOpen={isOpen}>
+        <BurgerBackground onClick={toggleBurgerMenu} isOpen={burgerMenuOpen} />
+        <BurgerContainer isOpen={burgerMenuOpen}>
           <MediaQuery lg down style={{ height: "auto" }}>
             <BurgerLogo src={NameSlogan} alt="Slogan" />
             <BurgerList>

@@ -52,7 +52,7 @@ const cache = createIntlCache();
 
 export default class MyApp extends App<{
   locale: string;
-  messages: Record<string, string> | Record<string, MessageFormatElement[]>;
+  messages: Record<string, string>;
 }> {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
@@ -74,7 +74,7 @@ export default class MyApp extends App<{
 
     const intl = createIntl(
       {
-        locale,
+        locale: locale || "de",
         messages
       },
       cache

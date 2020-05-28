@@ -11,7 +11,7 @@ import RelativeBox from "./RelativeBox";
 import Price from "./Price";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { Product } from "../schema";
-import Link from "next/link";
+import StyledLink from "./StyledLink";
 
 const messages = defineMessages({
   discountForResellers: {
@@ -141,50 +141,46 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
             <FaPercent />
           </Discount>
         )}
-        <Link href={url}>
-          <a>
-            <StyledProduct>
-              <Thumbnail asset={product.featuredAsset} />
-              <div>
-                {product ? (
-                  <Title dangerouslySetInnerHTML={{ __html: product.name }} />
-                ) : (
-                  <Placeholder text />
-                )}
-                {minPrice && (
-                  <div>
-                    <Subtitle>
-                      Ab{" "}
-                      <u>
-                        <Price>{minPrice}</Price>
-                      </u>
-                    </Subtitle>
-                  </div>
-                )}
-                {product ? (
-                  product.collections
-                    .map((collection) => (
-                      <Subtitle
-                        key={collection.name}
-                        dangerouslySetInnerHTML={{ __html: collection.name }}
-                      />
-                    ))
-                    .slice(0, 2)
-                    .reduce(
-                      //@ts-ignore
-                      (all, item) => (all ? [...all, ", ", item] : [item]),
-                      false
-                    )
-                ) : (
-                  <Placeholder text />
-                )}
-                {product && product.collections.length > 2 && (
-                  <span>, ...</span>
-                )}
-              </div>
-            </StyledProduct>
-          </a>
-        </Link>
+        <StyledLink href={url}>
+          <StyledProduct>
+            <Thumbnail asset={product.featuredAsset} />
+            <div>
+              {product ? (
+                <Title dangerouslySetInnerHTML={{ __html: product.name }} />
+              ) : (
+                <Placeholder text />
+              )}
+              {minPrice && (
+                <div>
+                  <Subtitle>
+                    Ab{" "}
+                    <u>
+                      <Price>{minPrice}</Price>
+                    </u>
+                  </Subtitle>
+                </div>
+              )}
+              {product ? (
+                product.collections
+                  .map((collection) => (
+                    <Subtitle
+                      key={collection.name}
+                      dangerouslySetInnerHTML={{ __html: collection.name }}
+                    />
+                  ))
+                  .slice(0, 2)
+                  .reduce(
+                    //@ts-ignore
+                    (all, item) => (all ? [...all, ", ", item] : [item]),
+                    false
+                  )
+              ) : (
+                <Placeholder text />
+              )}
+              {product && product.collections.length > 2 && <span>, ...</span>}
+            </div>
+          </StyledProduct>
+        </StyledLink>
       </RelativeBox>
     );
   }

@@ -8,7 +8,7 @@ import { colors, borders, shadows } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { Collection } from "../schema";
 import { useIntl } from "react-intl";
-import Link from "next/link";
+import StyledLink from "./StyledLink";
 
 const StyledCategory = styled.div`
   background-color: #fff;
@@ -89,25 +89,23 @@ const CollectionItem: FunctionComponent<{
 
   return (
     <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
-      <Link href={url}>
-        <a>
-          <StyledCategory>
-            <Thumbnail asset={collection.featuredAsset} />
-            <div>
-              {collection ? (
-                <Title dangerouslySetInnerHTML={{ __html: collection.name }} />
-              ) : (
-                <Placeholder text height={2} />
+      <StyledLink href={url}>
+        <StyledCategory>
+          <Thumbnail asset={collection.featuredAsset} />
+          <div>
+            {collection ? (
+              <Title dangerouslySetInnerHTML={{ __html: collection.name }} />
+            ) : (
+              <Placeholder text height={2} />
+            )}
+            {collection &&
+              collection.parent &&
+              collection.parent.id !== "1" && (
+                <Subtitle>{collection.parent.name}</Subtitle>
               )}
-              {collection &&
-                collection.parent &&
-                collection.parent.id !== "1" && (
-                  <Subtitle>{collection.parent.name}</Subtitle>
-                )}
-            </div>
-          </StyledCategory>
-        </a>
-      </Link>
+          </div>
+        </StyledCategory>
+      </StyledLink>
     </Box>
   );
 });

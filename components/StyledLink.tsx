@@ -41,7 +41,7 @@ const BorderLink = styled(_StyledLink)`
 
 const StyledLink: FunctionComponent<{
   active?: boolean;
-  styled?: boolean;
+  underlined?: boolean;
   noHover?: boolean;
   negative?: boolean;
   external?: boolean;
@@ -57,7 +57,7 @@ const StyledLink: FunctionComponent<{
   href,
   external,
   onClick,
-  styled,
+  underlined,
   noHover,
   children,
   negative,
@@ -78,7 +78,7 @@ const StyledLink: FunctionComponent<{
       target?: string;
     },
     never
-  > = styled ? BorderLink : _StyledLink;
+  > = underlined ? BorderLink : _StyledLink;
 
   if (external || onClick) {
     return (

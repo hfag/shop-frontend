@@ -7,7 +7,6 @@ import { defineMessages, useIntl, IntlShape } from "react-intl";
 import Container from "./layout/Container";
 import Flexbar from "./layout/Flexbar";
 import Push from "./layout/Push";
-import Link from "next/link";
 import MediaQuery from "./layout/MediaQuery";
 import NavItem from "./header/NavItem";
 import Navbar from "./layout/Navbar";
@@ -97,11 +96,9 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
               <MediaQuery lg up>
                 <LogoLeft>
                   <NavItem>
-                    <Link href={`/${intl.locale}`}>
-                      <a title="Homepage">
-                        <img src={LogoNegative} alt="Logo" />
-                      </a>
-                    </Link>
+                    <StyledLink href={`/${intl.locale}`} title="Homepage">
+                      <img src={LogoNegative} alt="Logo" />
+                    </StyledLink>
                   </NavItem>
                 </LogoLeft>
               </MediaQuery>

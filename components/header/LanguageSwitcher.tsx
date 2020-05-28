@@ -28,7 +28,7 @@ const LanguageSwitcher: FunctionComponent<{}> = React.memo(() => {
           <Language key={languageKey}>
             <Link
               active={languageKey === intl.locale}
-              styled={languageKey === intl.locale}
+              underlined={languageKey === intl.locale}
               negative
               onClick={() => {
                 window.location.href = `/${languageKey}`; /*`/${languageKey}/${location.pathname

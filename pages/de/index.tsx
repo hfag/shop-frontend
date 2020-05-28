@@ -1,9 +1,5 @@
-import Head from "next/head";
-import Link from "next/link";
 import { request } from "graphql-request";
-import useSWR from "swr";
 import { GET_ALL_COLLECTIONS, GET_COLLECTION } from "../../gql/collection";
-import TestPage from "../../containers/Test";
 import { GetStaticProps } from "next";
 import { API_URL } from "../../utilities/api";
 import { Collection } from "../../schema";
@@ -15,7 +11,7 @@ const Home: FunctionComponent<{
   collectionResponse: { collection: Collection };
 }> = ({ collectionResponse }) => {
   return (
-    <Wrapper>
+    <Wrapper sidebar={<>hi</>} breadcrumbs={[]}>
       <ProductCollection
         collectionId={1}
         initialData={collectionResponse}

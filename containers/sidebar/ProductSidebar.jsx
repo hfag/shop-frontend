@@ -37,7 +37,7 @@ const ProductSidebar = React.memo(
             <Link
               key={category.id}
               to={`/${language}/${
-                pathnamesByLanguage[language].productCategory
+                pathnamesByLanguage.productCategory.languages[language]
               }/${
                 index > 0
                   ? category.parents
@@ -58,7 +58,7 @@ const ProductSidebar = React.memo(
           <Link
             key={category.id}
             to={`/${language}/${
-              pathnamesByLanguage[language].productCategory
+              pathnamesByLanguage.productCategory.languages[language]
             }/${
               category.parents.length > 0
                 ? category.parents.map((category) => category.slug).join("/") +

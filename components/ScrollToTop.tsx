@@ -3,15 +3,15 @@ import React, {
   useEffect,
   useState,
   ReactNode,
-  useContext,
+  useContext
 } from "react";
-import { pathnamesByLanguage } from "../utilities/urls";
 import { useRouter } from "next/router";
-import { AppContext } from "../pages/_app";
 import { useIntl } from "react-intl";
+import { pathnamesByLanguage } from "../utilities/urls";
+import { AppContext } from "../pages/_app";
 
 const ScrollToTop: FunctionComponent<{ children: ReactNode }> = ({
-  children,
+  children
 }) => {
   const router = useRouter();
   const intl = useIntl();

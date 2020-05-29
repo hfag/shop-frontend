@@ -90,8 +90,8 @@ app.prepare().then(() => {
           `/${DEFAULT_LANGUAGE}${request.url === "/" ? "" : request.url}`
         );
         return;
-      } else if (request.url === `/${locale}/`) {
-        response.redirect(`/${locale}$`);
+      } else if (request.url.endsWith("/")) {
+        response.redirect(request.url.substring(0, request.url.length - 1));
         return;
       }
 

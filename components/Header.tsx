@@ -2,13 +2,14 @@ import React, {
   useState,
   useEffect,
   FunctionComponent,
-  useContext,
+  useContext
 } from "react";
 import styled from "styled-components";
 import { MdMenu } from "react-icons/md";
 import { Flex, Box } from "reflexbox";
 import { defineMessages, useIntl, IntlShape } from "react-intl";
 
+import Head from "next/head";
 import Container from "./layout/Container";
 import Flexbar from "./layout/Flexbar";
 import Push from "./layout/Push";
@@ -18,17 +19,16 @@ import Navbar from "./layout/Navbar";
 import Searchbar from "./Searchbar";
 import LogoNegative from "../public/images/logo/logo_negative.svg";
 import NameSloganNegative from "../public/images/logo/name_slogan_negative.svg";
-import JsonLd from "./JsonLd";
+import JsonLd from "./seo/JsonLd";
 import { BUSINESS_JSON_LD } from "../utilities/json-ld";
 import LanguageSwitcher from "./header/LanguageSwitcher";
 import NavCart from "./header/NavCart";
 import NavUser from "./header/NavUser";
 import shop from "../i18n/shop";
-import Card from "./Card";
+import Card from "./layout/Card";
 import { colors } from "../utilities/style";
 import page from "../i18n/page";
 import { ABSOLUTE_URL } from "../utilities/api";
-import Head from "next/head";
 import StyledLink from "./StyledLink";
 import { AppContext } from "../pages/_app";
 
@@ -36,8 +36,8 @@ const messages = defineMessages({
   siteDescription: {
     id: "Header.siteDescription",
     defaultMessage:
-      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet.",
-  },
+      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
+  }
 });
 
 const SearchWrapper = styled.div`

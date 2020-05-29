@@ -144,7 +144,7 @@ const Account = React.memo(
                 </li>
                 <li>
                   <Link
-                    to={`${url}/${pathnamesByLanguage[language].billingAddress}`}
+                    to={`${url}/${pathnamesByLanguage.billingAddress.languages[language]}`}
                   >
                     {intl.formatMessage(address.billingAddress)}
                   </Link>
@@ -199,7 +199,7 @@ const Account = React.memo(
                 />
                 <Route
                   exact
-                  path={`${url}/${pathnamesByLanguage[language].billingAddress}`}
+                  path={`${url}/${pathnamesByLanguage.billingAddress.languages[language]}`}
                   render={(props) => (
                     <AddressForm
                       {...props}

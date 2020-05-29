@@ -1909,6 +1909,7 @@ type Product implements Node {
   facetValues: [FacetValue!]!
   translations: [ProductTranslation!]!
   collections: [Collection!]!
+  recommendations: [ProductRecommendation!]!
   customFields: ProductCustomFields
 }
 
@@ -2029,6 +2030,7 @@ type ProductVariant implements Node {
   options: [ProductOption!]!
   facetValues: [FacetValue!]!
   translations: [ProductVariantTranslation!]!
+  bulkDiscounts: [BulkDiscount!]!
   customFields: ProductVariantCustomFields
 }
 

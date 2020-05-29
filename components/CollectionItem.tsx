@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, FunctionComponent } from "react";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
 
+import { useIntl } from "react-intl";
 import Thumbnail from "./Thumbnail";
 import Placeholder from "./Placeholder";
 import { colors, borders, shadows } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { Collection } from "../schema";
-import { useIntl } from "react-intl";
 import StyledLink from "./StyledLink";
 
 const StyledCategory = styled.div`

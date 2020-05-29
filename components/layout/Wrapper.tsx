@@ -3,6 +3,7 @@ import styled, { ThemeProvider } from "styled-components";
 import { Flex, Box } from "reflexbox";
 import Router, { useRouter } from "next/router";
 
+import { useIntl } from "react-intl";
 import Header from "../Header";
 import Breadcrumbs, { Breadcrumb } from "../Breadcrumbs";
 import Footer from "../Footer";
@@ -11,7 +12,6 @@ import Sidebar from "../Sidebar";
 import ScrollToTop from "../ScrollToTop";
 import ScrollToTopButton from "../buttons/ScrollToTopButton";
 import SupportButton from "../buttons/SupportButton";
-import { useIntl } from "react-intl";
 
 const Wrapper: FunctionComponent<{
   sidebar: ReactNode;

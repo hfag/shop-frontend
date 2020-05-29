@@ -2,9 +2,9 @@ import React, { FunctionComponent, ReactNode, MouseEvent } from "react";
 import Router, { useRouter } from "next/router";
 import styled, { StyledComponent } from "styled-components";
 
+import Link from "next/link";
 import { colors } from "../utilities/style";
 import Flexbar from "./layout/Flexbar";
-import Link from "next/link";
 
 interface IProps {
   active?: boolean;

@@ -1,53 +1,115 @@
 {
   "productCategory": {
+    "path": "de/produkt-kategorie",
     "languages": {
       "de": "produkt-kategorie",
       "fr": "produit-categorie"
+    },
+    "pathnames": {
+      "[slug].tsx": {
+        "path": "de/produkt-kategorie/[slug].tsx",
+        "languages": {
+          "de": "[slug]",
+          "fr": "[slug]"
+        }
+      }
     }
   },
   "search": {
+    "path": "de/suche.tsx",
     "languages": { "de": "suche", "fr": "recherche" }
   },
   "product": {
-    "languages": { "de": "produkt", "fr": "produit" }
+    "path": "de/produkt",
+    "languages": { "de": "produkt", "fr": "produit" },
+    "pathnames": {
+      "[slug].tsx": {
+        "path": "de/produkt/[slug].tsx",
+        "languages": {
+          "de": "[slug]",
+          "fr": "[slug]"
+        }
+      }
+    }
   },
   "post": {
-    "languages": { "de": "beitrag", "fr": "article" }
+    "path": "de/beitrag",
+    "languages": { "de": "beitrag", "fr": "article" },
+    "pathnames": {
+      "[slug].tsx": {
+        "path": "de/beitrag/[slug].tsx",
+        "languages": {
+          "de": "[slug]",
+          "fr": "[slug]"
+        }
+      }
+    }
   },
   "page": {
-    "languages": { "de": "seite", "fr": "page" }
+    "path": "de/seite",
+    "languages": { "de": "seite", "fr": "page" },
+    "pathnames": {
+      "[slug].tsx": {
+        "path": "de/seite/[slug].tsx",
+        "languages": {
+          "de": "[slug]",
+          "fr": "[slug]"
+        }
+      }
+    }
   },
   "login": {
+    "path": "de/login.tsx",
     "languages": { "de": "login", "fr": "login" }
   },
   "logout": {
+    "path": "de/logout.tsx",
     "languages": { "de": "logout", "fr": "logout" }
   },
   "account": {
-    "languages": { "de": "konto", "fr": "compte" }
-  },
-  "orders": {
-    "languages": { "de": "bestellungen", "fr": "commandes" }
-  },
-  "details": {
-    "languages": { "de": "details", "fr": "details" }
-  },
-  "billingAddress": {
-    "languages": {
-      "de": "rechnungsadresse",
-      "fr": "adresse-de-facturation"
+    "path": "de/konto",
+    "languages": { "de": "konto", "fr": "compte" },
+    "pathnames": {
+      "orders": {
+        "path": "de/konto/bestellungen",
+        "languages": { "de": "bestellungen", "fr": "commandes" },
+        "pathnames": {
+          "[id].tsx": {
+            "path": "de/konto/bestellungen/[id].tsx",
+            "languages": {
+              "de": "[id]",
+              "fr": "[id]"
+            }
+          }
+        }
+      },
+      "details": {
+        "path": "de/konto/details.tsx",
+        "languages": { "de": "details", "fr": "details" }
+      },
+      "billingAddress": {
+        "path": "de/konto/rechnungsadresse.tsx",
+        "languages": {
+          "de": "rechnungsadresse",
+          "fr": "adresse-de-facturation"
+        }
+      },
+      "shippingAddress": {
+        "path": "de/konto/lieferadresse.tsx",
+        "languages": { "de": "lieferadresse", "fr": "adresse-de-livraison" }
+      }
     }
   },
-  "shippingAddress": {
-    "languages": { "de": "lieferadresse", "fr": "adresse-de-livraison" }
-  },
   "cart": {
+    "path": "de/warenkorb.tsx",
     "languages": { "de": "warenkorb", "fr": "panier-d-achat" }
   },
   "confirmation": {
+    "path": "de/bestaetigung.tsx",
     "languages": { "de": "bestaetigung", "fr": "confirmation" }
   },
   "tos": {
+    "path": "de/agbs.tsx",
     "languages": { "de": "agbs", "fr": "conditions-generales" }
   }
 }

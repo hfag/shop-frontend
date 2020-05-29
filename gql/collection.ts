@@ -41,6 +41,13 @@ export const GET_COLLECTION = /* GraphQL */ `
         id
         name
         slug
+        featuredAsset {
+          id
+          name
+          width
+          height
+          source
+        }
         variants {
           price
         }

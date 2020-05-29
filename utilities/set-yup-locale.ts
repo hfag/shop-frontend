@@ -1,5 +1,7 @@
 import { setLocale } from "yup";
 
+//eslint-disable-no-template-curly-in-string
+
 const TYPES = {
   undefined: "Undefiniert",
   object: "Objekt",
@@ -7,7 +9,7 @@ const TYPES = {
   number: "Nummer",
   string: "Text",
   symbol: "Symbol",
-  function: "Funktion"
+  function: "Funktion",
 };
 
 export default setLocale({
@@ -17,7 +19,7 @@ export default setLocale({
     notOneOf: "Darf keiner der folgenden Werte sein: ${values}",
     notType: ({ path, type, value, originalValue }) => {
       return `Muss vom Typ "${TYPES[type]}" sein`;
-    }
+    },
   },
   string: {
     email: "Es muss eine gültige E-Mail Adresse angegeben werden.",
@@ -28,7 +30,7 @@ export default setLocale({
     url: "Muss eine gültige URL sein",
     trim: "Darf keine Leerzeichen am Anfang oder am Ende haben",
     lowercase: "Darf nur aus Kleinbuchstaben bestehen",
-    uppercase: "Darf nur aus Grossbuchstaben bestehen"
+    uppercase: "Darf nur aus Grossbuchstaben bestehen",
   },
   number: {
     min: "Muss grösser oder gleich wie ${min} sein",
@@ -38,17 +40,17 @@ export default setLocale({
     notEqual: "Darf nicht ${notEqual} sein",
     positive: "Muss eine positive Nummer sein",
     negative: "Muss eine negative Nummer sein",
-    integer: "Muss eine ganzzahlige Nummer sein"
+    integer: "Muss eine ganzzahlige Nummer sein",
   },
   date: {
     min: "Muss später als ${min} sein",
-    max: "Muss früher als ${max} sein"
+    max: "Muss früher als ${max} sein",
   },
   object: {
-    noUnknown: "Darf keine ungültigen Werte enthalten"
+    noUnknown: "Darf keine ungültigen Werte enthalten",
   },
   array: {
     min: "Muss mindestens ${min} Einträge besitzen",
-    max: "Darf maximal ${max} Einträge besitzen"
-  }
+    max: "Darf maximal ${max} Einträge besitzen",
+  },
 });

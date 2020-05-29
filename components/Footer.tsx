@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
-import Container from "./layout/Container";
 import {
   FaMapMarker as MapMarker,
   FaPhone as Phone,
@@ -10,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
 import { defineMessages, useIntl } from "react-intl";
+import Container from "./layout/Container";
 
 import { colors, media } from "../utilities/style";
 import StyledLink from "./StyledLink";
@@ -203,7 +203,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                       </td>
                       <td>
                         <StyledLink
-                          styled
+                          underlined
                           href={`/${intl.locale}/${
                             pathnamesByLanguage.page.languages[intl.locale]
                           }/${
@@ -222,7 +222,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                 <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
                 {intl.formatMessage(messages.about)}{" "}
                 <StyledLink
-                  styled
+                  underlined
                   href={`/${intl.locale}/${
                     pathnamesByLanguage.page.languages[intl.locale]
                   }/${pageSlugsByLanguage.companyAbout.languages[intl.locale]}`}

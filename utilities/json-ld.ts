@@ -1,9 +1,9 @@
-import { stripTags } from "./decode";
 import {
   Product as JsonLdProduct,
   AggregateOffer,
   LocalBusiness
 } from "schema-dts";
+import { stripTags } from "./decode";
 import { Product } from "../schema";
 import { PUBLIC_PATH } from "./api";
 

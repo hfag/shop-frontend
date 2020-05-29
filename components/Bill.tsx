@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { defineMessages, useIntl } from "react-intl";
 
@@ -36,7 +35,14 @@ const Sum = styled.li`
 `;
 const Taxes = styled.li``;
 
-const Bill = React.memo(({ items }) => {
+const Bill: FunctionComponent<{
+  items: {
+    quantity: number;
+    price: number;
+    discountPrice: number;
+    unit?: string;
+  }[];
+}> = React.memo(({ items }) => {
   const intl = useIntl();
   const taxes = intl.formatMessage(messages.taxes);
 
@@ -91,9 +97,5 @@ const Bill = React.memo(({ items }) => {
     </StyledBill>
   );
 });
-
-Bill.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object).isRequired
-};
 
 export default Bill;

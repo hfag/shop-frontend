@@ -1316,6 +1316,7 @@ export type Product = Node & {
   facetValues: Array<FacetValue>;
   translations: Array<ProductTranslation>;
   collections: Array<Collection>;
+  recommendations: Array<ProductRecommendation>;
   customFields?: Maybe<ProductCustomFields>;
 };
 
@@ -1445,6 +1446,7 @@ export type ProductVariant = Node & {
   options: Array<ProductOption>;
   facetValues: Array<FacetValue>;
   translations: Array<ProductVariantTranslation>;
+  bulkDiscounts: Array<BulkDiscount>;
   customFields?: Maybe<ProductVariantCustomFields>;
 };
 

@@ -16,22 +16,22 @@ import { FaInfoCircle, FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 import Flex from "./Flex";
 import CollectionItem from "./CollectionItem";
 import ProductItem from "./ProductItem";
-import JsonLd from "./JsonLd";
+import JsonLd from "./seo/JsonLd";
 import { stripTags } from "../utilities/decode";
 import { productToJsonLd } from "../utilities/json-ld";
-import Card from "./Card";
+import Card from "./layout/Card";
 import { pathnamesByLanguage } from "../utilities/urls";
 import shop from "../i18n/shop";
 import { setProductCategoryView, trackPageView } from "../utilities/analytics";
 import Flexbar from "./layout/Flexbar";
-import UnsafeHTMLContent from "./UnsafeHTMLContent";
+import UnsafeHTMLContent from "./content/UnsafeHTMLContent";
 import Head from "next/head";
 import { Language } from "../utilities/i18n";
 import { Collection } from "../schema";
 import useSWR from "swr";
-import { GET_ALL_COLLECTIONS, GET_COLLECTION } from "../gql/collection";
-import request from "graphql-request";
+import { GET_COLLECTION } from "../gql/collection";
 import { API_URL, ABSOLUTE_URL } from "../utilities/api";
+import request from "../utilities/request";
 
 const messages = defineMessages({
   downloadsAndLinks: {
@@ -69,8 +69,8 @@ const DownloadList = styled.ul`
 
 const ProductCategoryHead: FunctionComponent<{
   collection: Collection;
-  language: string;
-}> = React.memo(({ collection, language }) => {
+}> = React.memo(({ collection }) => {
+  const intl = useIntl();
   //TODO change to slug!!
   return (
     <Head>
@@ -92,7 +92,9 @@ const ProductCategoryHead: FunctionComponent<{
           rel="canonical"
           href={
             collection &&
-            `${ABSOLUTE_URL}/${language}/${pathnamesByLanguage.productCategory.languages[language]}/${collection.id}/1`
+            `${ABSOLUTE_URL}/${intl.locale}/${
+              pathnamesByLanguage.productCategory.languages[intl.locale]
+            }/${collection.id}`
           }
         />
       )}
@@ -115,51 +117,45 @@ const ProductCollection: FunctionComponent<{
 }> = React.memo(({ collectionId, initialData, showDescription }) => {
   const intl = useIntl();
 
-  const {
-    data: { collection },
-    error
-  } = useSWR(
+  const { data, error } = useSWR(
     [GET_COLLECTION, collectionId],
     (query, collectionId) => request(API_URL, query, { id: collectionId }),
     {
       initialData
     }
   );
-  const loading = !collection;
+  const loading = !data;
 
   const productsJsonLd = useMemo<JsonLdProduct[]>(() => {
     //TODO JsonLd
     return [];
-  }, [collection]);
+  }, [data]);
 
   useEffect(() => {
-    if (!collection) {
+    if (!data.collection) {
       return;
     }
 
     trackPageView();
-    setProductCategoryView(stripTags(collection.name));
-  }, [collection]); //caching ensures the object stays the same?
+    setProductCategoryView(stripTags(data.collection.name));
+  }, [data]); //caching ensures the object stays the same?
 
   return (
     <div>
       <div>
-        {collection && showDescription && (
+        {data.collection && showDescription && (
           <>
-            <ProductCategoryHead
-              language={intl.locale}
-              collection={collection}
-            />
+            <ProductCategoryHead collection={data.collection} />
             <RichSnippet productsJsonLd={productsJsonLd} />
             <InfoWrapper>
               <Flex flexWrap="wrap">
                 <Box width={[1, 1, 1 / 2, 1 / 2]} pr={[0, 0, 4, 4]}>
                   <H1
-                    dangerouslySetInnerHTML={{ __html: collection.name }}
+                    dangerouslySetInnerHTML={{ __html: data.collection.name }}
                   ></H1>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: collection.description
+                      __html: data.collection.description
                     }}
                   ></div>
                 </Box>
@@ -211,15 +207,15 @@ const ProductCollection: FunctionComponent<{
           </>
         )}
         <Flex flexWrap="wrap" style={{ overflowX: "hidden" }}>
-          {collection &&
-            collection.children.map((collection) => (
+          {data.collection &&
+            data.collection.children.map((collection) => (
               <CollectionItem
-                key={"collection-" + collection.id}
-                collection={collection}
+                key={"collection-" + data.collection.id}
+                collection={data.collection}
               />
             ))}
-          {collection &&
-            collection.products.map((product) => (
+          {data.collection &&
+            data.collection.products.map((product) => (
               <ProductItem key={"product-" + product.id} product={product} />
             ))}
 

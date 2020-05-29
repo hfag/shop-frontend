@@ -2,7 +2,7 @@ import React, {
   FunctionComponent,
   ReactNode,
   useCallback,
-  useContext,
+  useContext
 } from "react";
 import styled from "styled-components";
 import {
@@ -11,7 +11,7 @@ import {
   FaShoppingCart as CartIcon,
   FaUser as AccountIcon,
   FaSignInAlt as SignInIcon,
-  FaCogs as GearsIcon,
+  FaCogs as GearsIcon
 } from "react-icons/fa";
 import { useIntl } from "react-intl";
 
@@ -19,7 +19,7 @@ import Link from "./StyledLink";
 import { media, colors } from "../utilities/style";
 import NameSlogan from "../public/images/logo/name_slogan.svg";
 import MediaQuery from "./layout/MediaQuery";
-import Card from "./Card";
+import Card from "./layout/Card";
 import RestrictedView from "./RestrictedView";
 import { pathnamesByLanguage } from "../utilities/urls";
 import page from "../i18n/page";

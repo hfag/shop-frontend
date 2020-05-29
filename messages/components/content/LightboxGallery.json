@@ -1,0 +1,18 @@
+[
+  {
+    "id": "LightboxGallery.imageXOfY",
+    "defaultMessage": "von"
+  },
+  {
+    "id": "LightboxGallery.previousImage",
+    "defaultMessage": "Vorheriges Bild (linke Pfeiltaste)"
+  },
+  {
+    "id": "LightboxGallery.nextImage",
+    "defaultMessage": "Nächstes Bild (rechte Pfeiltaste)"
+  },
+  {
+    "id": "LightboxGallery.closeLightBox",
+    "defaultMessage": "Schliessen (Esc)"
+  }
+]

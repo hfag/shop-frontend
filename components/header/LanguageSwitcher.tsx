@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 
+import { useIntl } from "react-intl";
 import Link from "../StyledLink";
 import Flexbar from "../layout/Flexbar";
-import { useIntl } from "react-intl";
 
 const LANGUAGES = {
   de: {

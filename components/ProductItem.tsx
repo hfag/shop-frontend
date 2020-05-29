@@ -111,7 +111,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
         product
           ? `/${intl.locale}/${
               pathnamesByLanguage.product.languages[intl.locale]
-            }/${product.slug}/`
+            }/${product.slug}`
           : "",
       [product, intl.locale]
     );
@@ -122,7 +122,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
           ? product.variants.reduce(
               (min, variant) => (min < variant.price ? min : variant.price),
               product.variants[0].price
-            )
+            ) / 100
           : null,
       [product]
     );
@@ -161,6 +161,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
                 </div>
               )}
               {product ? (
+                product.collections &&
                 product.collections
                   .map((collection) => (
                     <Subtitle

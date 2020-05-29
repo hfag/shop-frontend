@@ -11,16 +11,33 @@ import React, {
   FunctionComponent,
   ReactNode,
   useCallback,
-  useState,
+  useState
 } from "react";
+import { CurrentUser } from "../schema";
+import useSWR from "swr";
+import { useAuth, useLocalStorage } from "../utilities/hooks";
+import { GET_CURRENT_CUSTOMER } from "../gql/user";
+import request from "../utilities/request";
+import { API_URL } from "../utilities/api";
 
 export const AppContext = React.createContext<{
   burgerMenuOpen: boolean;
   toggleBurgerMenu: () => void;
-}>({ burgerMenuOpen: false, toggleBurgerMenu: () => {} });
+  user: CurrentUser | null;
+  token: string | null;
+  activeOrderId: string | null;
+  setActiveOrderId: (orderId: string | null) => void;
+}>({
+  burgerMenuOpen: false,
+  toggleBurgerMenu: () => {},
+  user: null,
+  token: null,
+  activeOrderId: null,
+  setActiveOrderId: (orderId: string | null) => {}
+});
 
 const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
-  children,
+  children
 }) => {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const toggleBurgerMenu = useCallback(
@@ -28,8 +45,26 @@ const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
     [burgerMenuOpen]
   );
 
+  const [activeOrderId, setActiveOrderId] = useLocalStorage("active-order-id");
+  const [token, setToken] = useLocalStorage("authorization-token");
+
+  const { data, error } = useSWR<{ me: CurrentUser }>(
+    token ? [GET_CURRENT_CUSTOMER, token] : null,
+    (query, token) =>
+      request(API_URL, query, {}, { Authorization: `Bearer ${token}` })
+  );
+
   return (
-    <AppContext.Provider value={{ burgerMenuOpen, toggleBurgerMenu }}>
+    <AppContext.Provider
+      value={{
+        burgerMenuOpen,
+        toggleBurgerMenu,
+        user: token && data ? data.me : null,
+        token,
+        activeOrderId,
+        setActiveOrderId
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
@@ -68,7 +103,7 @@ export default class MyApp extends App<{
     const intl = createIntl(
       {
         locale: locale || "de",
-        messages,
+        messages
       },
       cache
     );

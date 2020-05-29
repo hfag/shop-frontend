@@ -1,8 +1,10 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { FaShoppingCart } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
 
+import { useRouter } from "next/router";
+import useSWR from "swr";
 import Link from "../StyledLink";
 import Dropdown from "../Dropdown";
 import Circle from "../shapes/Circle";
@@ -10,7 +12,13 @@ import Button from "../Button";
 import Triangle from "../Triangle";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { colors } from "../../utilities/style";
-import { useRouter } from "next/router";
+import { AppContext } from "../../pages/_app";
+import request from "../../utilities/request";
+import { API_URL } from "../../utilities/api";
+import { GET_ACTIVE_ORDER } from "../../gql/order";
+import { Order } from "../../schema";
+import Placeholder from "../Placeholder";
+import Thumbnail from "../Thumbnail";
 
 const messages = defineMessages({
   emptyCart: {
@@ -53,6 +61,20 @@ const NavCart: FunctionComponent<{
 }> = React.memo(({ dropdown, setDropdown }) => {
   const intl = useIntl();
   const router = useRouter();
+  const { activeOrderId, setActiveOrderId, token } = useContext(AppContext);
+  const {
+    data
+  }: { data?: { activeOrder: Order | null }; error?: any } = useSWR(
+    [GET_ACTIVE_ORDER, token],
+    (query) =>
+      request(API_URL, query, undefined, { Authorization: `Bearer ${token}` })
+  );
+
+  useEffect(() => {
+    if (data && data.activeOrder) {
+      setActiveOrderId(data.activeOrder.id);
+    }
+  }, [data]);
 
   return (
     <>
@@ -72,12 +94,22 @@ const NavCart: FunctionComponent<{
             centerChildren
           >
             <small>
-              {/*shoppingCartFetching
-                ? ""
-                : shoppingCartItems.reduce(
-                    (sum, item) => sum + item.quantity,
-                    0
-                )*/}
+              {!data /* loading */ ? (
+                <Placeholder
+                  text
+                  inline
+                  height={1.25}
+                  minWidth={0.75}
+                  mb={-0.2}
+                ></Placeholder>
+              ) : data.activeOrder === null ? (
+                0 /* no active order */
+              ) : (
+                data.activeOrder.lines.reduce(
+                  (sum, line) => sum + line.quantity,
+                  0
+                )
+              )}
             </small>
           </Circle>
         </Counter>
@@ -99,21 +131,24 @@ const NavCart: FunctionComponent<{
             {intl.formatMessage(messages.toCart)}
           </Button>
           <hr />
-          {false ? (
-            <>
-
-            </> /*shoppingCartItems.length > 0 ? (
-            shoppingCartItems.map((item, index) => (
+          {!data ? (
+            <Placeholder />
+          ) : data.activeOrder && data.activeOrder.lines.length > 0 ? (
+            data.activeOrder.lines.map((line, index) => (
               <ShoppingCartList key={index}>
                 <div>
-                  <Thumbnail id={item.thumbnailId} size="thumbnail" />
+                  <Thumbnail asset={line.featuredAsset} />
                 </div>
                 <div>
-                  <strong>{item.quantity}x</strong>{" "}
-                  <span dangerouslySetInnerHTML={{ __html: item.title }} />
+                  <strong>{line.quantity}x</strong>{" "}
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: line.productVariant.name
+                    }}
+                  />
                 </div>
               </ShoppingCartList>
-            ))*/
+            ))
           ) : (
             <div>
               {intl.formatMessage(messages.emptyCart)}

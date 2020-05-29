@@ -1,13 +1,16 @@
-import React, { useState, useReducer } from "react";
+import React, {
+  useState,
+  useReducer,
+  FunctionComponent,
+  useCallback
+} from "react";
 import styled from "styled-components";
 import Lightbox from "react-images";
 import { Flex, Box } from "reflexbox";
 import { useIntl, defineMessages } from "react-intl";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
 
-import Thumbnail from "./Thumbnail";
-import { getAttachmentById } from "../reducers";
+import Thumbnail from "../Thumbnail";
+import { Asset } from "../../schema";
 
 const messages = defineMessages({
   imageXOfY: {
@@ -36,13 +39,43 @@ const GalleryFlex = styled(Flex)`
   margin: 0 -0.5rem !important;
 `;
 
+interface OPEN_LIGHTBOX_ACTION {
+  type: "OPEN_LIGHTBOX";
+  index: number;
+}
+
+interface NEXT_IMAGE_ACTION {
+  type: "NEXT_IMAGE";
+  maxIndex: number;
+}
+
+interface PREVIOUS_IMAGE_ACTION {
+  type: "PREVIOUS_IMAGE";
+}
+
+interface GOTO_IMAGE_ACTION {
+  type: "GOTO_IMAGE";
+  index: number;
+}
+
+interface CLOSE_LIGHTBOX_ACTION {
+  type: "CLOSE_LIGHTBOX";
+}
+
+type LIGHTBOX_ACTIONS =
+  | OPEN_LIGHTBOX_ACTION
+  | NEXT_IMAGE_ACTION
+  | PREVIOUS_IMAGE_ACTION
+  | GOTO_IMAGE_ACTION
+  | CLOSE_LIGHTBOX_ACTION;
+
 /**
  * State reducer for the lightbox component
- * @param {Object} state The current state
- * @param {Object} action The reducer action
- * @returns {Object} The new state
  */
-const reducer = (state, action) => {
+const reducer = (
+  state: { currentImage: number; isOpen: boolean },
+  action: LIGHTBOX_ACTIONS
+) => {
   switch (action.type) {
     case "OPEN_LIGHTBOX":
       return { currentImage: action.index, isOpen: true };
@@ -68,8 +101,8 @@ const reducer = (state, action) => {
   }
 };
 
-const LightboxGallery = React.memo(
-  ({ galleryImageIds, galleryAttachments, passive = false }) => {
+const LightboxGallery: FunctionComponent<{ assets: Asset[] }> = React.memo(
+  ({ assets }) => {
     const [{ isOpen, currentImage }, dispatch] = useReducer(reducer, {
       currentImage: 0,
       isOpen: false
@@ -77,45 +110,56 @@ const LightboxGallery = React.memo(
 
     const intl = useIntl();
 
+    const onClickNext = useCallback(
+      () =>
+        dispatch({
+          type: "NEXT_IMAGE",
+          maxIndex: assets.length - 1
+        }),
+      [dispatch, assets.length]
+    );
+    const onClickPrevious = useCallback(
+      () => dispatch({ type: "PREVIOUS_IMAGE" }),
+      [dispatch, assets.length]
+    );
+
+    const onClose = useCallback(() => dispatch({ type: "CLOSE_LIGHTBOX" }), [
+      dispatch
+    ]);
+
+    const onClickThumbnail = useCallback(
+      (index) => dispatch({ type: "GOTO_IMAGE", index }),
+      [dispatch]
+    );
+
     return (
       <React.Fragment>
         <GalleryFlex flexWrap="wrap">
-          {galleryImageIds.map((imageId, index) => (
+          {assets.map((asset, index) => (
             <LightboxBox
-              key={imageId}
+              key={asset.id}
               width={[1 / 2, 1 / 2, 1 / 4, 1 / 6]}
               px={2}
               mb={2}
               onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}
             >
-              <Thumbnail id={imageId} size="thumbnail" passive={passive} />
+              <Thumbnail asset={asset} />
             </LightboxBox>
           ))}
         </GalleryFlex>
         <Lightbox
-          images={galleryAttachments
-            .filter((e) => e)
-            .map((attachment) => ({
-              src: attachment.url || "",
-              /*caption: attachment.caption,*/
-              /*srcSet: Object.values(attachment.sizes)
-          .sort((a, b) => a.width - b.width)
-          .map(size => `${size.source_url} ${size.width}w`),*/
-              thumbnail:
+          images={assets.map((asset) => ({
+            src: asset.source
+            /*thumbnail:
                 attachment.sizes &&
                 attachment.sizes.thumbnail &&
-                attachment.sizes.thumbnail.source_url
-            }))}
+                attachment.sizes.thumbnail.source_url,*/
+          }))}
           isOpen={isOpen}
           currentImage={currentImage}
-          onClickPrev={() => dispatch({ type: "PREVIOUS_IMAGE" })}
-          onClickNext={() =>
-            dispatch({
-              type: "NEXT_IMAGE",
-              maxIndex: galleryImageIds.length - 1
-            })
-          }
-          onClose={() => dispatch({ type: "CLOSE_LIGHTBOX" })}
+          onClickPrev={onClickPrevious}
+          onClickNext={onClickNext}
+          onClose={onClose}
           imageCountSeparator={` ${intl.formatMessage(messages.imageXOfY)} `}
           leftArrowTitle={intl.formatMessage(messages.previousImage)}
           rightArrowTitle={intl.formatMessage(messages.nextImage)}
@@ -123,23 +167,11 @@ const LightboxGallery = React.memo(
           backdropClosesModal={true}
           preventScroll={false}
           showThumbnails={true}
-          onClickThumbnail={(index) => dispatch({ type: "GOTO_IMAGE", index })}
-          theme={{}}
+          onClickThumbnail={onClickThumbnail}
         />
       </React.Fragment>
     );
   }
 );
 
-LightboxGallery.propTypes = {
-  galleryImageIds: PropTypes.arrayOf(PropTypes.number),
-  passive: PropTypes.bool
-};
-
-const mapStateToProps = (state, { galleryImageIds }) => ({
-  galleryAttachments: galleryImageIds.map((imageId) =>
-    getAttachmentById(state, imageId)
-  )
-});
-
-export default connect(mapStateToProps)(LightboxGallery);
+export default LightboxGallery;

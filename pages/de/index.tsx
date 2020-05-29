@@ -6,12 +6,21 @@ import ProductCollection from "../../components/collection/ProductCollection";
 import { Collection } from "../../schema";
 import Wrapper from "../../components/layout/Wrapper";
 import request from "../../utilities/request";
+import breadcrumbs from "../../i18n/breadcrumbs";
+import { useIntl } from "react-intl";
 
 const Home: FunctionComponent<{
   collectionResponse: { collection: Collection };
 }> = ({ collectionResponse }) => {
+  const intl = useIntl();
+
   return (
-    <Wrapper sidebar={<>hi</>} breadcrumbs={[]}>
+    <Wrapper
+      sidebar={<>hi</>}
+      breadcrumbs={[
+        { name: intl.formatMessage(breadcrumbs.homepage), url: "/" },
+      ]}
+    >
       <ProductCollection
         collectionId={1}
         initialData={collectionResponse}

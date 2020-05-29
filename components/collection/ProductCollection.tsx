@@ -213,8 +213,8 @@ const ProductCollection: FunctionComponent<{
           {data.collection &&
             data.collection.children.map((collection) => (
               <CollectionItem
-                key={"collection-" + data.collection.id}
-                collection={data.collection}
+                key={"collection-" + collection.id}
+                collection={collection}
               />
             ))}
           {data.collection &&

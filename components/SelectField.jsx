@@ -29,7 +29,7 @@ class SelectField extends React.PureComponent {
         name={this.props.name}
         render={({
           field: { name, value },
-          form: { errors, touched, setFieldValue, setFieldTouched }
+          form: { errors, touched, setFieldValue, setFieldTouched },
         }) => {
           const { options } = this.props;
 

@@ -2,7 +2,7 @@ import React, {
   FunctionComponent,
   ReactNode,
   useCallback,
-  useContext
+  useContext,
 } from "react";
 import styled from "styled-components";
 import {
@@ -11,7 +11,7 @@ import {
   FaShoppingCart as CartIcon,
   FaUser as AccountIcon,
   FaSignInAlt as SignInIcon,
-  FaCogs as GearsIcon
+  FaCogs as GearsIcon,
 } from "react-icons/fa";
 import { useIntl } from "react-intl";
 

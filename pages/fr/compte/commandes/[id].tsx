@@ -9,7 +9,7 @@ export default Page;
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [{ params: { id: 1 } }],
-    fallback: false
+    fallback: false,
   };
 };
 

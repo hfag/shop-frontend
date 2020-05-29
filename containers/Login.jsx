@@ -12,7 +12,7 @@ import {
   login,
   register,
   logout,
-  resetPassword
+  resetPassword,
 } from "../actions/authentication";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
@@ -20,7 +20,7 @@ import Card from "../components/Card";
 import {
   getIsAuthenticated,
   getLanguage,
-  getLanguageFetchString
+  getLanguageFetchString,
 } from "../reducers";
 import Message from "../components/Message";
 import { pathnamesByLanguage } from "../utilities/urls";
@@ -33,45 +33,45 @@ import { fetchShoppingCart } from "../actions/shopping-cart";
 const messages = defineMessages({
   siteTitle: {
     id: "Login.siteTitle",
-    defaultMessage: "Anmelden bei der Hauser Feuerschutz AG"
+    defaultMessage: "Anmelden bei der Hauser Feuerschutz AG",
   },
   siteDescription: {
     id: "Login.siteDescription",
     defaultMessage:
-      "Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
+      "Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten.",
   },
   reset: {
     id: "Login.reset",
-    defaultMessage: "Zurücksetzen"
+    defaultMessage: "Zurücksetzen",
   },
   emailAlreadyExists: {
     id: "Login.emailAlreadyExists",
-    defaultMessage: "Diese E-Mail wurde bereits registriert!"
+    defaultMessage: "Diese E-Mail wurde bereits registriert!",
   },
   wrongPassword: {
     id: "Login.wrongPassword",
-    defaultMessage: "Das Passwort stimmt nicht!"
+    defaultMessage: "Das Passwort stimmt nicht!",
   },
   unknownError: {
     id: "Login.unknownError",
-    defaultMessage: "Es ist ein unbekannter Fehler aufgetreten!"
+    defaultMessage: "Es ist ein unbekannter Fehler aufgetreten!",
   },
   passwordForgotten: {
     id: "Login.passwordForgotten",
-    defaultMessage: "Passwort vergessen?"
+    defaultMessage: "Passwort vergessen?",
   },
   confirmationEmail: {
     id: "Login.confirmationEmail",
-    defaultMessage: "Sie sollten in Kürze eine E-Mail erhalten."
+    defaultMessage: "Sie sollten in Kürze eine E-Mail erhalten.",
   },
   newAccount: {
     id: "Login.newAccount",
-    defaultMessage: "Neues Kundenkonto anlegen"
+    defaultMessage: "Neues Kundenkonto anlegen",
   },
   createAccount: {
     id: "Login.createAccount",
-    defaultMessage: "Kundenkonto anlegen"
-  }
+    defaultMessage: "Kundenkonto anlegen",
+  },
 });
 
 /**
@@ -84,7 +84,7 @@ const InnerLoginRegisterForm = ({
   status = "",
   submitText = "Abschicken",
   message = "",
-  confirmation = false
+  confirmation = false,
 }) => {
   const intl = useIntl();
 
@@ -169,14 +169,14 @@ const LoginRegisterForm = injectIntl(
         passwordConfirmation: yup
           .string()
           .min(7)
-          .when([], (schema) => (confirmation ? schema.required() : schema))
+          .when([], (schema) => (confirmation ? schema.required() : schema)),
       }),
     handleSubmit: (
       { username, password },
       {
         props: { action, intl, callback },
         setStatus,
-        setErrors
+        setErrors,
         /* setErrors, setValues, setStatus, and other goodies */
       }
     ) => {
@@ -194,17 +194,17 @@ const LoginRegisterForm = injectIntl(
             case "existing_user_email":
             case "existing_user_login":
               setErrors({
-                username: intl.formatMessage(messages.emailAlreadyExists)
+                username: intl.formatMessage(messages.emailAlreadyExists),
               });
               break;
             case "incorrect_password":
               setErrors({
-                password: intl.formatMessage(messages.wrongPassword)
+                password: intl.formatMessage(messages.wrongPassword),
               });
               break;
             default:
               setErrors({
-                password: intl.formatMessage(messages.unknownError)
+                password: intl.formatMessage(messages.unknownError),
               });
               break;
           }
@@ -212,7 +212,7 @@ const LoginRegisterForm = injectIntl(
           setStatus("error");
           setTimeout(() => setStatus(""), 300);
         });
-    }
+    },
   })(InnerLoginRegisterForm)
 );
 
@@ -220,13 +220,13 @@ const PasswordResetForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: (props) => ({}),
   validationSchema: yup.object().shape({
-    username: yup.string().email().required()
+    username: yup.string().email().required(),
   }),
   handleSubmit: (
     { username },
     {
       props: { resetPassword, callback },
-      setStatus
+      setStatus,
       /* setErrors, setValues, setStatus, and other goodies */
     }
   ) => {
@@ -243,7 +243,7 @@ const PasswordResetForm = withFormik({
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });
-  }
+  },
 })(InnerPasswordResetForm);
 
 const Login = React.memo(
@@ -255,7 +255,7 @@ const Login = React.memo(
     dispatch,
     login,
     register,
-    resetPassword
+    resetPassword,
   }) => {
     const intl = useIntl();
 
@@ -343,7 +343,7 @@ const Login = React.memo(
 const mapStateToProps = (state) => ({
   language: getLanguage(state),
   languageFetchString: getLanguageFetchString(state),
-  isAuthenticated: getIsAuthenticated(state)
+  isAuthenticated: getIsAuthenticated(state),
 });
 const mapDispatchToProps = (dispatch) => ({
   dispatch,
@@ -381,7 +381,7 @@ const mapDispatchToProps = (dispatch) => ({
    */
   resetPassword(username) {
     return dispatch(resetPassword(username));
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

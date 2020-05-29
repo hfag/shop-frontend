@@ -16,8 +16,8 @@ import StyledLink from "./StyledLink";
 const messages = defineMessages({
   discountForResellers: {
     id: "ProductItem.discountForResellers",
-    defaultMessage: "Rabatt für Wiederverkäufer"
-  }
+    defaultMessage: "Rabatt für Wiederverkäufer",
+  },
 });
 
 const StyledProduct = styled.div`

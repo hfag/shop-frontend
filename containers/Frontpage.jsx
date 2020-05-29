@@ -8,7 +8,7 @@ import {
   getSales,
   getProducts,
   getStickyPosts,
-  getLanguage
+  getLanguage,
 } from "../reducers";
 import SaleProducts from "../components/SaleProducts";
 import shop from "../i18n/shop";
@@ -22,17 +22,17 @@ import Searchbar from "./Searchbar";
 const messages = defineMessages({
   ourProducts: {
     id: "Frontpage.ourProducts",
-    defaultMessage: "Unsere Produkte"
+    defaultMessage: "Unsere Produkte",
   },
   moreAboutCompany: {
     id: "Frontpage.moreAboutCompany",
-    defaultMessage: "Mehr über das Unternehmen"
+    defaultMessage: "Mehr über das Unternehmen",
   },
   aboutCompany: {
     id: "Frontpage.aboutCompany",
     defaultMessage:
-      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz an. Die Faszination der Lumineszenz bewegte uns hin zu einem führenden Schweizer Fachunternehmen für langnachleuchtende Produkte. Als kleines Familienunternehmen sind wir auf Ihre Zufriedenheit angewiesen. Teilen Sie uns Ihre Anliegen mit!"
-  }
+      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz an. Die Faszination der Lumineszenz bewegte uns hin zu einem führenden Schweizer Fachunternehmen für langnachleuchtende Produkte. Als kleines Familienunternehmen sind wir auf Ihre Zufriedenheit angewiesen. Teilen Sie uns Ihre Anliegen mit!",
+  },
 });
 
 const H1 = styled.h1`
@@ -83,9 +83,9 @@ const mapStateToProps = (state) => {
       .filter((product) => saleProductIds.includes(product.id))
       .map((product) => ({
         ...sales.find((s) => s.productId == product.id),
-        ...product
+        ...product,
       })),
-    posts: getStickyPosts(state)
+    posts: getStickyPosts(state),
   };
 };
 

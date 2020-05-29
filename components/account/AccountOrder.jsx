@@ -35,7 +35,7 @@ class AccountOrder extends React.PureComponent {
             checkOrigin: false,
             autoResize: false,
             resizedCallback: () => this.setState({ placeholder: false }),
-            scrolling: true
+            scrolling: true,
           }}
           src={`${API_URL}/wp-json/hfag/user-order?orderId=${orderId}&format=html`}
         />

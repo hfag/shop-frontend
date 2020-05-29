@@ -17,32 +17,32 @@ import product from "../../i18n/product";
 const messages = defineMessages({
   description: {
     id: "CartFrom.table.column.description",
-    defaultMessage: "Beschreibung"
+    defaultMessage: "Beschreibung",
   },
   showMoreDetails: {
     id: "CartFrom.showMoreDetails",
-    defaultMessage: "Zeige Details"
+    defaultMessage: "Zeige Details",
   },
   showLessDetails: {
     id: "CartFrom.showLessDetails",
-    defaultMessage: "Weniger Details"
+    defaultMessage: "Weniger Details",
   },
   refreshCart: {
     id: "CartFrom.refreshCart",
-    defaultMessage: "Warenkorb aktualisieren"
+    defaultMessage: "Warenkorb aktualisieren",
   },
   total: {
     id: "CartFrom.total",
-    defaultMessage: "Gesamtsumme"
+    defaultMessage: "Gesamtsumme",
   },
   checkout: {
     id: "CartForm.toCheckout",
-    defaultMessage: "Weiter zur Bestellung"
+    defaultMessage: "Weiter zur Bestellung",
   },
   toCheckout: {
     id: "CartForm.toCheckout",
-    defaultMessage: "Weiter zur Bestellung"
-  }
+    defaultMessage: "Weiter zur Bestellung",
+  },
 });
 
 const Action = styled.span`
@@ -126,7 +126,7 @@ const InnerCartForm = React.memo(
     total,
     enabled,
     onProceed,
-    lastRow
+    lastRow,
   }) => {
     const intl = useIntl();
 
@@ -164,7 +164,7 @@ const InnerCartForm = React.memo(
                   insert,
                   unshift,
                   pop,
-                  remove
+                  remove,
                 }) => {
                   return values.items.map((item, index) => (
                     <tr key={index}>
@@ -185,7 +185,7 @@ const InnerCartForm = React.memo(
                           >
                             <div
                               dangerouslySetInnerHTML={{
-                                __html: item.attributes
+                                __html: item.attributes,
                               }}
                             />
                           </UncontrolledCollapse>
@@ -309,7 +309,7 @@ const InnerCartForm = React.memo(
 const CartForm = withFormik({
   enableReinitialize: true,
   mapPropsToValues: (props) => ({
-    items: props.items
+    items: props.items,
   }),
   validate: (values, props) => {
     const errors = {};
@@ -320,7 +320,7 @@ const CartForm = withFormik({
     {
       props: { updateShoppingCart },
       setStatus,
-      setErrors /* setValues, setStatus, and other goodies */
+      setErrors /* setValues, setStatus, and other goodies */,
     }
   ) => {
     setStatus("loading");
@@ -333,7 +333,7 @@ const CartForm = withFormik({
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });
-  }
+  },
 })(InnerCartForm);
 
 export default CartForm;

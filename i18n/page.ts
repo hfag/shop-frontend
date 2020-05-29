@@ -3,30 +3,30 @@ import { defineMessages } from "react-intl";
 export default defineMessages({
   home: {
     id: "pages.home",
-    defaultMessage: "Startseite"
+    defaultMessage: "Startseite",
   },
   search: {
     id: "pages.search",
-    defaultMessage: "Suche"
+    defaultMessage: "Suche",
   },
   cart: {
     id: "pages.cart",
-    defaultMessage: "Warenkorb"
+    defaultMessage: "Warenkorb",
   },
   myAccount: {
     id: "pages.myAccount",
-    defaultMessage: "Mein Konto"
+    defaultMessage: "Mein Konto",
   },
   login: {
     id: "pages.login",
-    defaultMessage: "Login"
+    defaultMessage: "Login",
   },
   shopAdmin: {
     id: "page.shopAdmin",
-    defaultMessage: "Shop-Admin"
+    defaultMessage: "Shop-Admin",
   },
   networkAdmin: {
     id: "page.networkAdmin",
-    defaultMessage: "Netzwerk-Admin"
-  }
+    defaultMessage: "Netzwerk-Admin",
+  },
 });

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useMemo,
   useCallback,
-  useContext
+  useContext,
 } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
@@ -16,7 +16,7 @@ import {
   defineMessages,
   injectIntl,
   FormattedMessage,
-  useIntl
+  useIntl,
 } from "react-intl";
 
 import Card from "../layout/Card";
@@ -45,7 +45,7 @@ import {
   ProductOption,
   ProductVariant,
   BulkDiscount,
-  RecommendationType
+  RecommendationType,
 } from "../../schema";
 import useSWR from "swr";
 import request from "../../utilities/request";
@@ -95,7 +95,7 @@ const Product: FunctionComponent<{
     [GET_PRODUCT_BY_SLUG, productSlug],
     (query, id) => request(API_URL, query, { id }),
     {
-      initialData
+      initialData,
     }
   );
 
@@ -205,7 +205,7 @@ const Product: FunctionComponent<{
       <JsonLd>
         {{
           "@context": "http://schema.org/",
-          ...productToJsonLd(product)
+          ...productToJsonLd(product),
         }}
         }
       </JsonLd>
@@ -226,18 +226,36 @@ const Product: FunctionComponent<{
               <h4>{optionGroup.name}</h4>
               <Select
                 placeholder={intl.formatMessage(messages.chooseAnAttribute)}
-                onChange={(item: { label: string; value: ProductOption }) =>
-                  setSelectedOptions({
-                    ...selectedOptions,
-                    [optionGroup.id]: item.value
-                  })
-                }
+                onChange={(item: { label: string; value: string }) => {
+                  const group = product.optionGroups.find(
+                    (g) => g.id === optionGroup.id
+                  );
+                  if (!group) {
+                    console.error(
+                      "The select isn't paired to a group, this shouldn't happen"
+                    );
+                    return;
+                  }
+                  if (!item) {
+                    const o = { ...selectedOptions };
+                    delete o[optionGroup.id];
+                    setSelectedOptions(o);
+                  } else {
+                    setSelectedOptions({
+                      ...selectedOptions,
+                      [optionGroup.id]: group.options.find(
+                        (o) => o.code === item.value
+                      ),
+                    });
+                  }
+                }}
                 value={
-                  selectedOptions[optionGroup.id] || optionGroup.options[0].code
+                  selectedOptions[optionGroup.id] &&
+                  selectedOptions[optionGroup.id].code
                 }
                 options={optionGroup.options.map((option) => ({
                   label: option.name,
-                  value: option
+                  value: option.code,
                 }))}
               />
             </Box>
@@ -336,7 +354,7 @@ const Product: FunctionComponent<{
                 id="Product.resellerDiscountMessage"
                 defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
                 values={{
-                  resellerDiscount
+                  resellerDiscount,
                 }}
               />
             </Box>
@@ -348,13 +366,13 @@ const Product: FunctionComponent<{
                 <Bill
                   items={[
                     {
-                      price: selectedVariant.price,
+                      price: selectedVariant.price / 100,
                       quantity,
                       discountPrice: activeBulkDiscount
                         ? activeBulkDiscount.price
-                        : selectedVariant.price,
-                      unit
-                    }
+                        : undefined,
+                      unit,
+                    },
                   ]}
                 />
                 <Button
@@ -363,7 +381,7 @@ const Product: FunctionComponent<{
                     if (selectedVariant) {
                       return request(API_URL, "", {
                         productVariantId: selectedVariant.id,
-                        quantity
+                        quantity,
                       }).then((data) => {
                         setActiveOrderId(data.addItemToOrder.id);
 
@@ -466,7 +484,7 @@ const Product: FunctionComponent<{
                     dangerouslySetInnerHTML={{
                       __html: selectedVariant
                         ? selectedVariant.name
-                        : product.name
+                        : product.name,
                     }}
                   ></td>
                 </tr>
@@ -479,14 +497,14 @@ const Product: FunctionComponent<{
                     <tr key={optionGroupId}>
                       <td
                         dangerouslySetInnerHTML={{
-                          __html: optionGroup ? optionGroup.name : "-"
+                          __html: optionGroup ? optionGroup.name : "-",
                         }}
                       ></td>
                       <td
                         dangerouslySetInnerHTML={{
                           __html: selectedOptions[optionGroupId]
                             ? selectedOptions[optionGroupId].name
-                            : "-"
+                            : "-",
                         }}
                       ></td>
                     </tr>

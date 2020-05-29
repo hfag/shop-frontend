@@ -74,10 +74,10 @@ class Order extends React.PureComponent {
         comment,
         total,
         status,
-        created
+        created,
       },
       compact = false,
-      language
+      language,
     } = this.props;
 
     const date = new Date(created * 1000);
@@ -113,7 +113,7 @@ class Order extends React.PureComponent {
                       :{" "}
                       <span
                         dangerouslySetInnerHTML={{
-                          __html: item.attributes[key]
+                          __html: item.attributes[key],
                         }}
                       ></span>
                     </span>

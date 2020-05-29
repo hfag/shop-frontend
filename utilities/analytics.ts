@@ -21,7 +21,7 @@ if (isClient) {
     //track page view after cart has been loaded
     paq.push([
       "setCustomUrl",
-      window.location.pathname + window.location.search
+      window.location.pathname + window.location.search,
     ]);
     paq.push(["trackPageView"]);
   };
@@ -205,7 +205,7 @@ export const trackOrder = (
     subtotal,
     taxes,
     shipping,
-    discount
+    discount,
   ]);
 
 /**

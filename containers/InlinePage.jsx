@@ -41,7 +41,7 @@ class InlinePage extends React.PureComponent {
 
 const mapStateToProps = (state, { slug: pageSlug }) => ({
   languageFetchString: getLanguageFetchString(state),
-  page: getPageBySlug(state, pageSlug)
+  page: getPageBySlug(state, pageSlug),
 });
 const mapDispatchToProps = (dispatch, { slug: pageSlug }) => ({
   /**
@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch, { slug: pageSlug }) => ({
    */
   fetchPageIfNeeded(language) {
     return dispatch(fetchPageIfNeeded(pageSlug, language));
-  }
+  },
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -66,7 +66,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
     return mapDispatchToProps.fetchPageIfNeeded(
       mapStateToProps.languageFetchString
     );
-  }
+  },
 });
 
 export default connect(

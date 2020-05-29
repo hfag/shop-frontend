@@ -29,7 +29,7 @@ export class ClientError extends Error {
   constructor(response: GraphQLResponse, request: GraphQLRequestContext) {
     const message = `${ClientError.extractMessage(response)}: ${JSON.stringify({
       response,
-      request
+      request,
     })}`;
 
     super(message);
@@ -78,14 +78,14 @@ export class GraphQLClient {
 
     const body = JSON.stringify({
       query,
-      variables: variables ? variables : undefined
+      variables: variables ? variables : undefined,
     });
 
     const response = await fetch(this.url, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...headers },
       body,
-      ...others
+      ...others,
     });
 
     const result = await getResult(response);
@@ -108,14 +108,14 @@ export class GraphQLClient {
 
     const body = JSON.stringify({
       query,
-      variables: variables ? variables : undefined
+      variables: variables ? variables : undefined,
     });
 
     const response = await fetch(this.url, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...headers },
       body,
-      ...others
+      ...others,
     });
 
     const result = await getResult(response);

@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch) => ({
     const promise = dispatch(logout());
     dispatch(push(`/${language}/`));
     return promise;
-  }
+  },
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -43,7 +43,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
    */
   logout() {
     return mapDispatchToProps.logout(mapStateToProps.language);
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Logout);

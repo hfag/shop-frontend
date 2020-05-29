@@ -5,7 +5,7 @@ import request from "../../../utilities/request";
 import { API_URL } from "../../../utilities/api";
 import {
   GET_ALL_PRODUCT_SLUGS,
-  GET_PRODUCT_BY_SLUG
+  GET_PRODUCT_BY_SLUG,
 } from "../../../gql/product";
 import Wrapper from "../../../components/layout/Wrapper";
 import Product from "../../../components/product/Product";
@@ -31,9 +31,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: data.products.items.map((product) => ({
-      params: { slug: product.slug, id: product.id }
+      params: { slug: product.slug, id: product.id },
     })),
-    fallback: false
+    fallback: false,
   };
 };
 
@@ -41,9 +41,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       productResponse: await request(API_URL, GET_PRODUCT_BY_SLUG, {
-        slug: context.params.slug
+        slug: context.params.slug,
       }),
-      productSlug: context.params.slug
-    }
+      productSlug: context.params.slug,
+    },
   };
 };

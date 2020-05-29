@@ -30,7 +30,7 @@ const Orders = React.memo(({ orders }) => {
 });
 
 const mapStateToProps = (state) => ({
-  orders: getOrders(state)
+  orders: getOrders(state),
 });
 
 export default connect(mapStateToProps)(Orders);

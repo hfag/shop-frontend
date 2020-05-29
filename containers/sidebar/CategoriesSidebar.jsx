@@ -5,7 +5,7 @@ import { Route } from "react-router-dom";
 import {
   getProducts,
   getProductCategoryChildrenIdsById,
-  getProductCategoryBySlug
+  getProductCategoryBySlug,
 } from "reducers";
 import { FaChevronDown as ChevronDown } from "react-icons/fa";
 import { useIntl } from "react-intl";
@@ -35,8 +35,8 @@ const CategoriesSidebar = React.memo(
     location: { pathname },
     match: {
       params: { categorySlug, page },
-      url
-    }
+      url,
+    },
   }) => {
     const intl = useIntl();
     const categoryId = (category && category.id) || 0;
@@ -67,7 +67,7 @@ const CategoriesSidebar = React.memo(
               </div>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: category && category.name
+                  __html: category && category.name,
                 }}
               />
             </SidebarBreadcrumb>
@@ -116,8 +116,8 @@ const mapStateToProps = (
   state,
   {
     match: {
-      params: { categorySlug, page }
-    }
+      params: { categorySlug, page },
+    },
   }
 ) => {
   const category = getProductCategoryBySlug(state, categorySlug);
@@ -141,7 +141,7 @@ const mapStateToProps = (
           .map((product) => product.id)
           .slice(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * page)
       : [],
-    page
+    page,
   };
 };
 

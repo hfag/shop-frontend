@@ -45,7 +45,7 @@ export enum AdjustmentType {
   Refund = "REFUND",
   TaxRefund = "TAX_REFUND",
   PromotionRefund = "PROMOTION_REFUND",
-  ShippingRefund = "SHIPPING_REFUND"
+  ShippingRefund = "SHIPPING_REFUND",
 }
 
 export type Administrator = Node & {
@@ -90,7 +90,7 @@ export type AssetList = PaginatedList & {
 export enum AssetType {
   Image = "IMAGE",
   Video = "VIDEO",
-  Binary = "BINARY"
+  Binary = "BINARY",
 }
 
 export type BooleanCustomFieldConfig = CustomField & {
@@ -473,7 +473,7 @@ export enum CurrencyCode {
   Yer = "YER",
   Zar = "ZAR",
   Zmw = "ZMW",
-  Zwl = "ZWL"
+  Zwl = "ZWL",
 }
 
 export type CurrentUser = {
@@ -592,7 +592,7 @@ export type DeletionResponse = {
 
 export enum DeletionResult {
   Deleted = "DELETED",
-  NotDeleted = "NOT_DELETED"
+  NotDeleted = "NOT_DELETED",
 }
 
 export type Facet = Node & {
@@ -730,7 +730,7 @@ export enum HistoryEntryType {
   OrderRefundTransition = "ORDER_REFUND_TRANSITION",
   OrderNote = "ORDER_NOTE",
   OrderCouponApplied = "ORDER_COUPON_APPLIED",
-  OrderCouponRemoved = "ORDER_COUPON_REMOVED"
+  OrderCouponRemoved = "ORDER_COUPON_REMOVED",
 }
 
 export type ImportInfo = {
@@ -937,7 +937,7 @@ export enum LanguageCode {
   Yi = "yi",
   Yo = "yo",
   Za = "za",
-  Zu = "zu"
+  Zu = "zu",
 }
 
 export type LocaleStringCustomFieldConfig = CustomField & {
@@ -1291,7 +1291,7 @@ export enum Permission {
   CreateSettings = "CreateSettings",
   ReadSettings = "ReadSettings",
   UpdateSettings = "UpdateSettings",
-  DeleteSettings = "DeleteSettings"
+  DeleteSettings = "DeleteSettings",
 }
 
 export type PriceRange = {
@@ -1585,7 +1585,7 @@ export type QueryProductBulkDiscountsArgs = {
 
 export enum RecommendationType {
   Crosssell = "CROSSSELL",
-  Upsell = "UPSELL"
+  Upsell = "UPSELL",
 }
 
 export type Refund = Node & {
@@ -1753,7 +1753,7 @@ export type SinglePrice = {
 
 export enum SortOrder {
   Asc = "ASC",
-  Desc = "DESC"
+  Desc = "DESC",
 }
 
 export type StockAdjustment = Node &
@@ -1788,7 +1788,7 @@ export enum StockMovementType {
   Adjustment = "ADJUSTMENT",
   Sale = "SALE",
   Cancellation = "CANCELLATION",
-  Return = "RETURN"
+  Return = "RETURN",
 }
 
 export type StringCustomFieldConfig = CustomField & {

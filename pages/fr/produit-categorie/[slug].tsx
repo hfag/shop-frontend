@@ -18,9 +18,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: data.collections.map((collection) => ({
-      params: { slug: collection.id }
+      params: { slug: collection.id },
     })),
-    fallback: false
+    fallback: false,
   };
 };
 

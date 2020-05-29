@@ -15,8 +15,8 @@ import UnsafeHTMLContent from "./UnsafeHTMLContent";
 const messages = defineMessages({
   newsAndDiscounts: {
     id: "SaleProducts.newsAndDiscounts",
-    defaultMessage: "News und Aktionen"
-  }
+    defaultMessage: "News und Aktionen",
+  },
 });
 
 const SaleWrapper = styled.div`
@@ -104,7 +104,7 @@ const Product = React.memo(({ language, product }) => {
             <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
               <h3
                 dangerouslySetInnerHTML={{
-                  __html: product.title
+                  __html: product.title,
                 }}
               />
               <p>

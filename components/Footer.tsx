@@ -5,7 +5,7 @@ import {
   FaMapMarker as MapMarker,
   FaPhone as Phone,
   FaEnvelope as Envelope,
-  FaDownload
+  FaDownload,
 } from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
 import { defineMessages, useIntl } from "react-intl";
@@ -21,21 +21,21 @@ import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
 const messages = defineMessages({
   aboutTitle: {
     id: "Footer.aboutTitle",
-    defaultMessage: "Über die Hauser Feuerschutz AG"
+    defaultMessage: "Über die Hauser Feuerschutz AG",
   },
   about: {
     id: "Footer.about",
     defaultMessage:
-      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte an in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz."
+      "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte an in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz.",
   },
   moreAbout: {
     id: "Footer.moreAbout",
-    defaultMessage: "Weitere Informationen"
+    defaultMessage: "Weitere Informationen",
   },
   downloads: {
     id: "Footer.downloads",
-    defaultMessage: "Downloads"
-  }
+    defaultMessage: "Downloads",
+  },
 });
 
 const StyledFooter = styled.footer`

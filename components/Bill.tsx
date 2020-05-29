@@ -8,8 +8,8 @@ import Price from "./Price";
 const messages = defineMessages({
   taxes: {
     id: "Bill.taxes",
-    defaultMessage: "zzgl. MwSt., zzgl. Versandkosten"
-  }
+    defaultMessage: "zzgl. MwSt., zzgl. Versandkosten",
+  },
 });
 
 const StyledBill = styled.ul`
@@ -39,7 +39,7 @@ const Bill: FunctionComponent<{
   items: {
     quantity: number;
     price: number;
-    discountPrice: number;
+    discountPrice?: number;
     unit?: string;
   }[];
 }> = React.memo(({ items }) => {

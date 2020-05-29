@@ -19,7 +19,7 @@ const CardWrapper = styled.div<IProps>`
 
 const Card: FunctionComponent<{ mb?: number; children: ReactNode }> = ({
   mb,
-  children
+  children,
 }) => {
   return <CardWrapper mb={mb}>{children}</CardWrapper>;
 };

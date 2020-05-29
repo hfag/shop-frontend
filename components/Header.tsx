@@ -2,7 +2,7 @@ import React, {
   useState,
   useEffect,
   FunctionComponent,
-  useContext
+  useContext,
 } from "react";
 import styled from "styled-components";
 import { MdMenu } from "react-icons/md";
@@ -36,8 +36,8 @@ const messages = defineMessages({
   siteDescription: {
     id: "Header.siteDescription",
     defaultMessage:
-      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
-  }
+      "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet.",
+  },
 });
 
 const SearchWrapper = styled.div`

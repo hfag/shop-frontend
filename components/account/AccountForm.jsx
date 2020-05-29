@@ -20,16 +20,16 @@ const FormWrapper = styled(Form)`
 const messages = defineMessages({
   password: {
     id: "AccountForm.password",
-    defaultMessage: "Aktuelles Passwort (leer lassen um nichts zu ändern)"
+    defaultMessage: "Aktuelles Passwort (leer lassen um nichts zu ändern)",
   },
   newPassword: {
     id: "AccountForm.newPassword",
-    defaultMessage: "Neues Passwort (leer lassen um nichts zu ändern)"
+    defaultMessage: "Neues Passwort (leer lassen um nichts zu ändern)",
   },
   passwordConfirmation: {
     id: "AccountForm.passwordConfirmation",
-    defaultMessage: "Bestätige das neue Passwort"
-  }
+    defaultMessage: "Bestätige das neue Passwort",
+  },
 });
 
 /**
@@ -89,7 +89,7 @@ const AccountForm = withFormik({
   mapPropsToValues: ({ values: { firstName, lastName, email } }) => ({
     firstName,
     lastName,
-    email
+    email,
   }),
   validationSchema: ({ intl }) => {
     const isRequiredString = intl.formatMessage(validation.isRequired);
@@ -124,14 +124,14 @@ const AccountForm = withFormik({
         .test("is-required", isRequiredString, function (value) {
           const { password, newPassword } = this.parent;
           return password || newPassword ? value : true;
-        })
+        }),
     });
   },
   handleSubmit: (
     { firstName, lastName, email, password, newPassword },
     {
       props: { updateAccount },
-      setStatus
+      setStatus,
       /* setErrors, setValues, setStatus, and other goodies */
     }
   ) => {
@@ -151,13 +151,13 @@ const AccountForm = withFormik({
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });
-  }
+  },
 })(InnerAccountForm);
 
 AccountForm.propTypes = {
   intl: PropTypes.object.isRequired,
   updateAccount: PropTypes.func.isRequired,
-  values: PropTypes.object.isRequired
+  values: PropTypes.object.isRequired,
 };
 
 export default injectIntl(AccountForm);

@@ -26,7 +26,7 @@ const FormWrapper = styled(Form)`
 const getStateOptionsByCountry = (countries, country) => {
   return Object.keys(countries[country].states).map((value) => ({
     value,
-    label: countries[country].states[value]
+    label: countries[country].states[value],
   }));
 };
 
@@ -77,7 +77,7 @@ const InnerAddressForm = React.memo(
           placeholder={intl.formatMessage(address.chooseCountry)}
           options={Object.keys(countries).map((key) => ({
             value: key,
-            label: countries[key].name
+            label: countries[key].name,
           }))}
         />
         <InputField
@@ -123,8 +123,8 @@ const InnerAddressForm = React.memo(
               : [
                   {
                     value: "AG",
-                    label: intl.formatMessage(form.noInformation)
-                  }
+                    label: intl.formatMessage(form.noInformation),
+                  },
                 ]
           }
         />
@@ -169,8 +169,8 @@ const AddressForm = withFormik({
       city,
       state,
       phone,
-      email
-    }
+      email,
+    },
   }) => ({
     additional_line_above,
     first_name,
@@ -184,7 +184,7 @@ const AddressForm = withFormik({
     city,
     state,
     phone,
-    email
+    email,
   }),
   validationSchema: ({ countries, type }) => {
     const states = [].concat.apply(
@@ -222,7 +222,7 @@ const AddressForm = withFormik({
       email:
         type === "billing"
           ? yup.string().email().required()
-          : yup.string().notRequired()
+          : yup.string().notRequired(),
     });
   },
   handleSubmit: (values, { props: { updateAddress, type }, setStatus }) => {
@@ -238,14 +238,14 @@ const AddressForm = withFormik({
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });
-  }
+  },
 })(InnerAddressForm);
 
 AddressForm.propTypes = {
   updateAddress: PropTypes.func.isRequired,
   countries: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
-  values: PropTypes.object.isRequired
+  values: PropTypes.object.isRequired,
 };
 
 export default AddressForm;

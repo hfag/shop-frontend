@@ -15,8 +15,8 @@ import order from "../../i18n/order";
 const messages = defineMessages({
   here: {
     id: "AccountDashboard.here",
-    defaultMessage: "hier"
-  }
+    defaultMessage: "hier",
+  },
 });
 
 const DashboardWrapper = styled.div`
@@ -35,7 +35,7 @@ const AccountDashboard = React.memo(
     accountDetails: { firstName, lastName, email },
     billingAddress,
     shippingAddress,
-    orders
+    orders,
   }) => {
     const intl = useIntl();
 
@@ -70,7 +70,7 @@ const AccountDashboard = React.memo(
                       >
                         {intl.formatMessage(messages.here)}
                       </Link>
-                    )
+                    ),
                   }}
                 />
               </div>
@@ -93,7 +93,7 @@ const AccountDashboard = React.memo(
                           >
                             {intl.formatMessage(messages.here)}
                           </Link>
-                        )
+                        ),
                       }}
                     />
                   </div>
@@ -138,10 +138,10 @@ const AccountDashboard = React.memo(
 
 const mapStateToProps = (state) => ({
   language: getLanguage(state),
-  orders: getOrders(state)
+  orders: getOrders(state),
 });
 const mapDispatchToProps = (dispatch) => ({
-  dispatch
+  dispatch,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountDashboard);

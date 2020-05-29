@@ -6,7 +6,7 @@ export const useLocalStorage = (
   if (isClient) {
     return [
       localStorage.getItem(key),
-      (value: string) => localStorage.setItem(key, value)
+      (value: string) => localStorage.setItem(key, value),
     ];
   } else {
     return [null, () => {}];

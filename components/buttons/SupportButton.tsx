@@ -8,8 +8,8 @@ import { colors, shadows } from "../../utilities/style";
 const messages = defineMessages({
   backToTop: {
     id: "SupportButton.call",
-    defaultMessage: "Rufen Sie uns un"
-  }
+    defaultMessage: "Rufen Sie uns un",
+  },
 });
 
 const ButtonWrapper = styled.div`

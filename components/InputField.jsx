@@ -43,7 +43,7 @@ class InputField extends React.Component {
           name={name}
           render={({
             field: { value, onChange, onBlur },
-            form: { values, errors, touched, validateForm }
+            form: { values, errors, touched, validateForm },
           }) => (
             <div>
               <Component

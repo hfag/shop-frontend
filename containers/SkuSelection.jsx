@@ -13,14 +13,14 @@ import Button from "../components/Button";
 import { addShoppingCartItem } from "../actions/shopping-cart";
 import {
   fetchSimpleProducts,
-  clearSimpleProducts
+  clearSimpleProducts,
 } from "../actions/product/simple";
 import {
   getSimpleProducts,
   getResellerDiscount,
   isFetchingSimpleProducts,
   getLanguageFetchString,
-  getLanguage
+  getLanguage,
 } from "../reducers";
 import { colors, media } from "../utilities/style";
 import Price from "../components/Price";
@@ -33,12 +33,12 @@ import { trackSiteSearch } from "../utilities/analytics";
 const messages = defineMessages({
   loading: {
     id: "SkuSelection.loading",
-    defaultMessage: "Lade..."
+    defaultMessage: "Lade...",
   },
   noProductsFound: {
     id: "SkuSelection.noProductsFound",
-    defaultMessage: "Keine Produkte gefunden"
-  }
+    defaultMessage: "Keine Produkte gefunden",
+  },
 });
 
 const SkuSelectionWrapper = styled.div`
@@ -123,7 +123,7 @@ const fuzzyFilter = (filter, rows, column) => {
       extract: (e) =>
         typeof column.accessor === "function"
           ? column.accessor(e)
-          : get(e, column.accessor)
+          : get(e, column.accessor),
     })
     .map((e) => e.original);
 
@@ -229,7 +229,7 @@ class SkuSelection extends React.PureComponent {
       products,
       addToShoppingCart,
       isFetching,
-      intl
+      intl,
     } = this.props;
 
     return (
@@ -248,7 +248,7 @@ class SkuSelection extends React.PureComponent {
                       .toLocaleLowerCase()
                       .startsWith(filter.value.toLocaleLowerCase())
                   : true;
-              }
+              },
             },
             {
               id: "name",
@@ -273,7 +273,7 @@ class SkuSelection extends React.PureComponent {
                   isExpanded={isExpanded}
                   addToShoppingCart={addToShoppingCart}
                 />
-              )
+              ),
             },
             {
               id: "price",
@@ -351,7 +351,7 @@ class SkuSelection extends React.PureComponent {
                     </div>
                   )}
                 </div>
-              )
+              ),
             },
             {
               Header: "",
@@ -369,8 +369,8 @@ class SkuSelection extends React.PureComponent {
                     </span>
                   )}
                 </div>
-              )
-            }
+              ),
+            },
           ]}
           data={products}
           pageSizeOptions={[5, 10, 20, 25, 50, 100]}
@@ -394,7 +394,7 @@ class SkuSelection extends React.PureComponent {
 }
 
 SkuSelection.propTypes = {
-  query: PropTypes.string
+  query: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
@@ -410,12 +410,12 @@ const mapStateToProps = (state) => {
             ...product,
             discount: {
               ...product.discount,
-              reseller: resellerDiscount[product.id]
-            }
+              reseller: resellerDiscount[product.id],
+            },
           }
         : product
     ),
-    isFetching: isFetchingSimpleProducts(state)
+    isFetching: isFetchingSimpleProducts(state),
   };
 };
 const mapDispatchToProps = (dispatch) => ({
@@ -471,7 +471,7 @@ const mapDispatchToProps = (dispatch) => ({
         visualize
       )
     );
-  }
+  },
 });
 
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
@@ -519,7 +519,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
       mapStateToProps.languageFetchString,
       visualize
     );
-  }
+  },
 });
 
 const TranslatedSkuSelection = injectIntl(SkuSelection);

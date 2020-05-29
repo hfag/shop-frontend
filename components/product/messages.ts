@@ -3,58 +3,58 @@ import { defineMessages } from "react-intl";
 export default defineMessages({
   chooseAVariation: {
     id: "Product.chooseAVariation",
-    defaultMessage: "Wählen Sie eine Variante"
+    defaultMessage: "Wählen Sie eine Variante",
   },
   chooseAnAttribute: {
     id: "Product.chooseAnAttribute",
-    defaultMessage: "Wählen Sie eine Eigenschaft"
+    defaultMessage: "Wählen Sie eine Eigenschaft",
   },
   reset: {
     id: "Product.reset",
-    defaultMessage: "Zurücksetzen"
+    defaultMessage: "Zurücksetzen",
   },
   resetSelection: {
     id: "Product.resetSelection",
-    defaultMessage: "Auswahl zurücksetzen"
+    defaultMessage: "Auswahl zurücksetzen",
   },
   mustSelectVariation: {
     id: "Product.mustSelectVariation",
-    defaultMessage: "Wählen Sie zuerst eine Variante aus!"
+    defaultMessage: "Wählen Sie zuerst eine Variante aus!",
   },
   contactUs: {
     id: "Product.contactUs",
-    defaultMessage: "Kontaktieren Sie uns für dieses Produkt"
+    defaultMessage: "Kontaktieren Sie uns für dieses Produkt",
   },
   contactEmail: {
     id: "Product.contactEmail",
-    defaultMessage: "Senden Sie uns eine E-Mail"
+    defaultMessage: "Senden Sie uns eine E-Mail",
   },
   contactCall: {
     id: "Product.contactCall",
-    defaultMessage: "Rufen Sie uns an"
+    defaultMessage: "Rufen Sie uns an",
   },
   imageGallery: {
     id: "Product.imageGallery",
-    defaultMessage: "Bildergalerie"
+    defaultMessage: "Bildergalerie",
   },
   specifications: {
     id: "Product.specifications",
-    defaultMessage: "Spezifikationen"
+    defaultMessage: "Spezifikationen",
   },
   additionalProducts: {
     id: "Product.additionalProducts",
-    defaultMessage: "Ergänzende Produkte"
+    defaultMessage: "Ergänzende Produkte",
   },
   previousImage: {
     id: "Product.previousImage",
-    defaultMessage: "Vorheriges Bild (linke Pfeiltaste)"
+    defaultMessage: "Vorheriges Bild (linke Pfeiltaste)",
   },
   nextImage: {
     id: "Product.nextImage",
-    defaultMessage: "Nächstes Bild (rechte Pfeiltaste)"
+    defaultMessage: "Nächstes Bild (rechte Pfeiltaste)",
   },
   closeLightbox: {
     id: "Product.closeLightBox",
-    defaultMessage: "Schliessen (Esc)"
-  }
+    defaultMessage: "Schliessen (Esc)",
+  },
 });

@@ -197,7 +197,7 @@ Button.propTypes = {
   /* custom */
   height: PropTypes.string,
   fullWidth: PropTypes.bool,
-  float: PropTypes.string
+  float: PropTypes.string,
 };
 
 export default Button;

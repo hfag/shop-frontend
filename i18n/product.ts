@@ -3,66 +3,66 @@ import { defineMessages } from "react-intl";
 export default defineMessages({
   product: {
     id: "product.product",
-    defaultMessage: "Produkt"
+    defaultMessage: "Produkt",
   },
   name: {
     id: "product.name",
-    defaultMessage: "Name"
+    defaultMessage: "Name",
   },
   category: {
     id: "product.category",
-    defaultMessage: "Kategorie"
+    defaultMessage: "Kategorie",
   },
   categories: {
     id: "product.ourProducts",
-    defaultMessage: "Unsere Produkte"
+    defaultMessage: "Unsere Produkte",
   },
   variation: {
     id: "product.variation",
-    defaultMessage: "Variante"
+    defaultMessage: "Variante",
   },
   from: {
     id: "product.from",
-    defaultMessage: "ab"
+    defaultMessage: "ab",
   },
   sku: {
     id: "product.sku",
-    defaultMessage: "Artikelnummer"
+    defaultMessage: "Artikelnummer",
   },
   price: {
     id: "product.price",
-    defaultMessage: "Preis"
+    defaultMessage: "Preis",
   },
   quantity: {
     id: "product.quantity",
-    defaultMessage: "Anzahl"
+    defaultMessage: "Anzahl",
   },
   subtotal: {
     id: "product.subtotal",
-    defaultMessage: "Subtotal"
+    defaultMessage: "Subtotal",
   },
   pieces: {
     id: "product.pieces",
-    defaultMessage: "Stück"
+    defaultMessage: "Stück",
   },
   pricePerUnit: {
     id: "product.pricePerUnit",
-    defaultMessage: "Stückpreis"
+    defaultMessage: "Stückpreis",
   },
   resellerDiscount: {
     id: "product.resellerDiscount",
-    defaultMessage: "Wiederverkäuferrabatt"
+    defaultMessage: "Wiederverkäuferrabatt",
   },
   bulkDiscount: {
     id: "product.bulkDiscount",
-    defaultMessage: "Mengenrabatt"
+    defaultMessage: "Mengenrabatt",
   },
   withBulkDiscount: {
     id: "product.withBulkDiscount",
-    defaultMessage: "mit Mengenrabatt"
+    defaultMessage: "mit Mengenrabatt",
   },
   addToCart: {
     id: "product.addToCart",
-    defaultMessage: "Zum Warenkorb hinzufügen"
-  }
+    defaultMessage: "Zum Warenkorb hinzufügen",
+  },
 });

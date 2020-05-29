@@ -2,7 +2,7 @@ import React, {
   useState,
   useReducer,
   FunctionComponent,
-  useCallback
+  useCallback,
 } from "react";
 import styled from "styled-components";
 import Lightbox from "react-images";
@@ -15,20 +15,20 @@ import { Asset } from "../../schema";
 const messages = defineMessages({
   imageXOfY: {
     id: "LightboxGallery.imageXOfY",
-    defaultMessage: "von"
+    defaultMessage: "von",
   },
   previousImage: {
     id: "LightboxGallery.previousImage",
-    defaultMessage: "Vorheriges Bild (linke Pfeiltaste)"
+    defaultMessage: "Vorheriges Bild (linke Pfeiltaste)",
   },
   nextImage: {
     id: "LightboxGallery.nextImage",
-    defaultMessage: "Nächstes Bild (rechte Pfeiltaste)"
+    defaultMessage: "Nächstes Bild (rechte Pfeiltaste)",
   },
   closeLightbox: {
     id: "LightboxGallery.closeLightBox",
-    defaultMessage: "Schliessen (Esc)"
-  }
+    defaultMessage: "Schliessen (Esc)",
+  },
 });
 
 const LightboxBox = styled(Box)`
@@ -82,17 +82,17 @@ const reducer = (
     case "NEXT_IMAGE":
       return {
         currentImage: Math.min(state.currentImage + 1, action.maxIndex),
-        isOpen: true
+        isOpen: true,
       };
     case "PREVIOUS_IMAGE":
       return {
         currentImage: Math.max(state.currentImage - 1, 0),
-        isOpen: true
+        isOpen: true,
       };
     case "GOTO_IMAGE":
       return {
         currentImage: action.index,
-        isOpen: true
+        isOpen: true,
       };
     case "CLOSE_LIGHTBOX":
       return { currentImage: state.currentImage, isOpen: false };
@@ -105,7 +105,7 @@ const LightboxGallery: FunctionComponent<{ assets: Asset[] }> = React.memo(
   ({ assets }) => {
     const [{ isOpen, currentImage }, dispatch] = useReducer(reducer, {
       currentImage: 0,
-      isOpen: false
+      isOpen: false,
     });
 
     const intl = useIntl();
@@ -114,7 +114,7 @@ const LightboxGallery: FunctionComponent<{ assets: Asset[] }> = React.memo(
       () =>
         dispatch({
           type: "NEXT_IMAGE",
-          maxIndex: assets.length - 1
+          maxIndex: assets.length - 1,
         }),
       [dispatch, assets.length]
     );
@@ -124,7 +124,7 @@ const LightboxGallery: FunctionComponent<{ assets: Asset[] }> = React.memo(
     );
 
     const onClose = useCallback(() => dispatch({ type: "CLOSE_LIGHTBOX" }), [
-      dispatch
+      dispatch,
     ]);
 
     const onClickThumbnail = useCallback(
@@ -149,7 +149,7 @@ const LightboxGallery: FunctionComponent<{ assets: Asset[] }> = React.memo(
         </GalleryFlex>
         <Lightbox
           images={assets.map((asset) => ({
-            src: asset.source
+            src: asset.source,
             /*thumbnail:
                 attachment.sizes &&
                 attachment.sizes.thumbnail &&

@@ -11,7 +11,7 @@ import React, {
   FunctionComponent,
   ReactNode,
   useCallback,
-  useState
+  useState,
 } from "react";
 import { CurrentUser } from "../schema";
 import useSWR from "swr";
@@ -33,11 +33,11 @@ export const AppContext = React.createContext<{
   user: null,
   token: null,
   activeOrderId: null,
-  setActiveOrderId: (orderId: string | null) => {}
+  setActiveOrderId: (orderId: string | null) => {},
 });
 
 const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
-  children
+  children,
 }) => {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const toggleBurgerMenu = useCallback(
@@ -62,7 +62,7 @@ const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
         user: token && data ? data.me : null,
         token,
         activeOrderId,
-        setActiveOrderId
+        setActiveOrderId,
       }}
     >
       {children}
@@ -103,7 +103,7 @@ export default class MyApp extends App<{
     const intl = createIntl(
       {
         locale: locale || "de",
-        messages
+        messages,
       },
       cache
     );

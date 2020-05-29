@@ -15,7 +15,7 @@ import {
   getLanguageFetchString,
   getPosts,
   getStickyPosts,
-  getLanguage
+  getLanguage,
 } from "../reducers";
 import LatesPostFlex from "../components/Flex";
 import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
@@ -23,8 +23,8 @@ import UnsafeHTMLContent from "../components/UnsafeHTMLContent";
 const messages = defineMessages({
   title: {
     id: "LatestPosts.title",
-    defaultMessage: "Aktuelle Beiträge"
-  }
+    defaultMessage: "Aktuelle Beiträge",
+  },
 });
 
 const PostWrapper = styled.div`
@@ -99,7 +99,7 @@ const mapStateToProps = (state) => {
   return {
     language: getLanguage(state),
     languageKey: getLanguageFetchString(state),
-    posts: getPosts(state).filter((post) => !stickyPostIds.includes(post.id))
+    posts: getPosts(state).filter((post) => !stickyPostIds.includes(post.id)),
   };
 };
 const mapDispatchToProps = (dispatch) => ({
@@ -112,7 +112,7 @@ const mapDispatchToProps = (dispatch) => ({
    */
   fetchAllPostsIfNeeded(perPage = 20, language, visualize = true) {
     return dispatch(fetchAllPostsIfNeeded(20, language, visualize));
-  }
+  },
 });
 const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
   ...ownProps,
@@ -130,7 +130,7 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
       mapStateToProps.languageKey,
       visualize
     );
-  }
+  },
 });
 
 export default connect(

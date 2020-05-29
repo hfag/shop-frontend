@@ -3,7 +3,7 @@ import React, {
   useState,
   useRef,
   useEffect,
-  FunctionComponent
+  FunctionComponent,
 } from "react";
 
 import { decodeHTMLEntities } from "../../utilities/text";
@@ -11,7 +11,7 @@ import { decodeHTMLEntities } from "../../utilities/text";
 const UnsafeHTMLContent: FunctionComponent<{ content: string }> = React.memo(
   ({ content }) => {
     const decodedContent = useMemo(() => decodeHTMLEntities(content), [
-      content
+      content,
     ]);
 
     return <div dangerouslySetInnerHTML={{ __html: decodedContent }}></div>;

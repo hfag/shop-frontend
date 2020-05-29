@@ -19,7 +19,7 @@ class CategoryItem extends React.PureComponent {
       id: categoryId,
       category,
       parent,
-      parents = []
+      parents = [],
     } = this.props;
 
     if (category && !category.count) {
@@ -54,7 +54,7 @@ class CategoryItem extends React.PureComponent {
 
 CategoryItem.propTypes = {
   id: PropTypes.number.isRequired,
-  parents: PropTypes.arrayOf(PropTypes.string)
+  parents: PropTypes.arrayOf(PropTypes.string),
 };
 
 const mapStateToProps = (state, { id }) => {
@@ -66,13 +66,13 @@ const mapStateToProps = (state, { id }) => {
         category,
         parent: category.parent
           ? getProductCategoryById(state, category.parent)
-          : undefined
+          : undefined,
       }
     : { language: getLanguage(state) };
 };
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  dispatch
+  dispatch,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryItem);

@@ -15,115 +15,115 @@ import { ABSOLUTE_URL } from "../utilities/api";
 const generateStringBreadcrumb = (text) => ({ url }, location, state) => [
   {
     url,
-    name: text
-  }
+    name: text,
+  },
 ];
 
 const routes = [
   {
     path: "/de",
-    breadcrumb: generateStringBreadcrumb("Startseite")
+    breadcrumb: generateStringBreadcrumb("Startseite"),
   },
   {
     path: "/de/login",
-    breadcrumb: generateStringBreadcrumb("Anmelden")
+    breadcrumb: generateStringBreadcrumb("Anmelden"),
   },
   {
     path: "/de/warenkorb",
-    breadcrumb: generateStringBreadcrumb("Warenkorb")
+    breadcrumb: generateStringBreadcrumb("Warenkorb"),
   },
   {
     path: "/de/konto",
-    breadcrumb: generateStringBreadcrumb("Konto")
+    breadcrumb: generateStringBreadcrumb("Konto"),
   },
   {
     path: "/de/konto/details",
-    breadcrumb: generateStringBreadcrumb("Details")
+    breadcrumb: generateStringBreadcrumb("Details"),
   },
   {
     path: "/de/konto/rechnungsadresse",
-    breadcrumb: generateStringBreadcrumb("Rechnungsadresse")
+    breadcrumb: generateStringBreadcrumb("Rechnungsadresse"),
   },
   {
     path: "/de/konto/lieferadresse",
-    breadcrumb: generateStringBreadcrumb("Lieferadresse")
+    breadcrumb: generateStringBreadcrumb("Lieferadresse"),
   },
   {
     path: "/de/konto/bestellungen",
-    breadcrumb: generateStringBreadcrumb("Bestellungen")
+    breadcrumb: generateStringBreadcrumb("Bestellungen"),
   },
   {
     path: "/de/suche",
-    breadcrumb: generateStringBreadcrumb("Suche")
+    breadcrumb: generateStringBreadcrumb("Suche"),
   },
   {
-    path: "/de/produkt-kategorie/"
+    path: "/de/produkt-kategorie/",
     // breadcrumb: generateCategoryBreadcrumbs,
   },
   {
-    path: "/de/produkt/:productSlug"
+    path: "/de/produkt/:productSlug",
     // breadcrumb: generateProductBreadcrumbs,
   },
   {
-    path: "/de/beitrag/:postSlug"
+    path: "/de/beitrag/:postSlug",
     // breadcrumb: generatePostBreadcrumbs,
   },
   {
-    path: "/de/seite/:pageSlug"
+    path: "/de/seite/:pageSlug",
     // breadcrumb: generatePageBreadcrumbs,
   },
   {
     path: "/fr",
-    breadcrumb: generateStringBreadcrumb("Page d'accueil")
+    breadcrumb: generateStringBreadcrumb("Page d'accueil"),
   },
   {
     path: "/fr/login",
-    breadcrumb: generateStringBreadcrumb("Connexion")
+    breadcrumb: generateStringBreadcrumb("Connexion"),
   },
   {
     path: "/fr/panier-d-achat",
-    breadcrumb: generateStringBreadcrumb("Panier d'achat")
+    breadcrumb: generateStringBreadcrumb("Panier d'achat"),
   },
   {
     path: "/fr/compte",
-    breadcrumb: generateStringBreadcrumb("Compte")
+    breadcrumb: generateStringBreadcrumb("Compte"),
   },
   {
     path: "/fr/compte/details",
-    breadcrumb: generateStringBreadcrumb("Détails")
+    breadcrumb: generateStringBreadcrumb("Détails"),
   },
   {
     path: "/fr/compte/adresse-de-facturation",
-    breadcrumb: generateStringBreadcrumb("Adresse de facturation")
+    breadcrumb: generateStringBreadcrumb("Adresse de facturation"),
   },
   {
     path: "/fr/compte/adresse-de-livraison",
-    breadcrumb: generateStringBreadcrumb("Adresse de livraison")
+    breadcrumb: generateStringBreadcrumb("Adresse de livraison"),
   },
   {
     path: "/fr/compte/commandes",
-    breadcrumb: generateStringBreadcrumb("Commandes")
+    breadcrumb: generateStringBreadcrumb("Commandes"),
   },
   {
     path: "/fr/recherche",
-    breadcrumb: generateStringBreadcrumb("Recherche")
+    breadcrumb: generateStringBreadcrumb("Recherche"),
   },
   {
-    path: "/fr/produit-categorie/"
+    path: "/fr/produit-categorie/",
     // breadcrumb: generateCategoryBreadcrumbs,
   },
   {
-    path: "/fr/produit/:productSlug"
+    path: "/fr/produit/:productSlug",
     // breadcrumb: generateProductBreadcrumbs,
   },
   {
-    path: "/fr/article/:postSlug"
+    path: "/fr/article/:postSlug",
     // breadcrumb: generatePostBreadcrumbs,
   },
   {
-    path: "/fr/page/:pageSlug"
+    path: "/fr/page/:pageSlug",
     // breadcrumb: generatePageBreadcrumbs,
-  }
+  },
 ];
 
 export interface Breadcrumb {
@@ -163,8 +163,8 @@ const Breadcrumbs: FunctionComponent<{
               itemListElement: breadcrumbs.map(({ name, url }, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
-                item: { "@id": ABSOLUTE_URL + url, name: stripTags(name) }
-              }))
+                item: { "@id": ABSOLUTE_URL + url, name: stripTags(name) },
+              })),
             }}
           </JsonLd>
         </div>

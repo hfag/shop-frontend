@@ -23,12 +23,12 @@ import Thumbnail from "../Thumbnail";
 const messages = defineMessages({
   emptyCart: {
     id: "NavCart.emptyCart",
-    defaultMessage: "Es befinden sich bisher noch keine Produkte im Warenkorb."
+    defaultMessage: "Es befinden sich bisher noch keine Produkte im Warenkorb.",
   },
   toCart: {
     id: "NavCart.toCart",
-    defaultMessage: "Zum Warenkorb"
-  }
+    defaultMessage: "Zum Warenkorb",
+  },
 });
 
 const Counter = styled.div`
@@ -63,7 +63,7 @@ const NavCart: FunctionComponent<{
   const router = useRouter();
   const { activeOrderId, setActiveOrderId, token } = useContext(AppContext);
   const {
-    data
+    data,
   }: { data?: { activeOrder: Order | null }; error?: any } = useSWR(
     [GET_ACTIVE_ORDER, token],
     (query) =>
@@ -143,7 +143,7 @@ const NavCart: FunctionComponent<{
                   <strong>{line.quantity}x</strong>{" "}
                   <span
                     dangerouslySetInnerHTML={{
-                      __html: line.productVariant.name
+                      __html: line.productVariant.name,
                     }}
                   />
                 </div>

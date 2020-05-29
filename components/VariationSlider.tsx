@@ -27,7 +27,7 @@ const Slide = styled.div<IProps>`
 const VariationSlider: FunctionComponent<{
   variants: ProductVariant[];
   selectedOptions: { [optionGroupId: string]: ProductOption };
-  onSelect: (options: { [optionGroupId: string]: string }) => void;
+  onSelect: (options: { [optionGroupId: string]: ProductOption }) => void;
 }> = React.memo(({ variants, selectedOptions, onSelect }) => {
   const imageIdToAsset = useMemo<{ [id: string]: Asset }>(
     () =>
@@ -39,9 +39,11 @@ const VariationSlider: FunctionComponent<{
   );
 
   const imageMap: {
-    [id: string]: { [optionGroupId: string]: string };
+    [id: string]: { [optionGroupId: string]: ProductOption };
   } = useMemo(() => {
-    const imageMap: { [id: string]: { [optionGroupId: string]: string } } = {};
+    const imageMap: {
+      [id: string]: { [optionGroupId: string]: ProductOption };
+    } = {};
     variants.forEach((v) => {
       if (v.featuredAsset.id in imageMap) {
         //compare
@@ -49,7 +51,7 @@ const VariationSlider: FunctionComponent<{
           const option = v.options.find((o) => o.groupId === optionGroupId);
           if (
             !option ||
-            option.code !== imageMap[v.featuredAsset.id][optionGroupId]
+            option.code !== imageMap[v.featuredAsset.id][optionGroupId].code
           ) {
             //not the same value, this image maps to two different values for this group id
             delete imageMap[v.featuredAsset.id][optionGroupId];
@@ -57,11 +59,13 @@ const VariationSlider: FunctionComponent<{
         });
       } else {
         imageMap[v.featuredAsset.id] = v.options.reduce((object, option) => {
-          object[option.groupId] = option.code;
+          object[option.groupId] = option;
           return object;
         }, {});
       }
     });
+
+    console.log(imageMap);
 
     return imageMap;
   }, [variants]);
@@ -73,7 +77,7 @@ const VariationSlider: FunctionComponent<{
           (active, optionGroupId) =>
             active &&
             selectedOptions[optionGroupId].code ===
-              imageMap[imageId][optionGroupId],
+              imageMap[imageId][optionGroupId].code,
           true
         )
       ),

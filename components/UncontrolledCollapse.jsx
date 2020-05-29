@@ -13,7 +13,7 @@ class UncontrolledCollapse extends React.PureComponent {
     super(props);
 
     this.state = {
-      isOpen: props.isOpenDefault || false
+      isOpen: props.isOpenDefault || false,
     };
   }
   render = () => {
@@ -40,7 +40,7 @@ UncontrolledCollapse.propTypes = {
   openLink: PropTypes.node,
   closeLink: PropTypes.node,
   children: PropTypes.node,
-  isOpenDefault: PropTypes.bool
+  isOpenDefault: PropTypes.bool,
 };
 
 export default UncontrolledCollapse;

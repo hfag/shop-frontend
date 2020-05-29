@@ -10,7 +10,7 @@ import {
   getProductCategories,
   getProductBySlug,
   getProductCategoryById,
-  getLanguage
+  getLanguage,
 } from "../../reducers";
 import SidebarListWrapper from "../../components/sidebar/SidebarListWrapper";
 import SidebarBreadcrumb from "../../components/sidebar/SidebarBreadcrumb";
@@ -73,7 +73,7 @@ const ProductSidebar = React.memo(
               <div dangerouslySetInnerHTML={{ __html: category.name }} />
             </SidebarBreadcrumb>
           </Link>,
-          <hr key="0" />
+          <hr key="0" />,
         ])}
 
         <SidebarBreadcrumb active={true}>
@@ -93,8 +93,8 @@ const mapStateToProps = (
   state,
   {
     match: {
-      params: { productSlug }
-    }
+      params: { productSlug },
+    },
   }
 ) => {
   const product = getProductBySlug(state, productSlug);
@@ -120,7 +120,7 @@ const mapStateToProps = (
 
               return { ...category, parents };
             })
-        : []
+        : [],
   };
 };
 

@@ -40,9 +40,6 @@ import {
   BulkDiscount,
   RecommendationType,
 } from "../../schema";
-import useSWR from "swr";
-import request from "../../utilities/request";
-import { GET_PRODUCT_BY_SLUG } from "../../gql/product";
 import { API_URL, ABSOLUTE_URL } from "../../utilities/api";
 import Head from "next/head";
 import { AppContext } from "../../pages/_app";
@@ -78,25 +75,14 @@ const DiscountRow = styled.tr<{ selected?: boolean }>`
 `;
 
 const Product: FunctionComponent<{
-  initialData?: { productBySlug: ProductType };
-  productSlug: string;
-}> = React.memo(({ initialData, productSlug }) => {
+  product?: ProductType;
+}> = React.memo(({ product }) => {
   const intl = useIntl();
   const { setActiveOrderId } = useContext(AppContext);
 
-  const { data, error } = useSWR(
-    [GET_PRODUCT_BY_SLUG, productSlug],
-    (query, id) => request(API_URL, query, { id }),
-    {
-      initialData,
-    }
-  );
-
-  if (!data) {
+  if (!product) {
     return <>Loading</>;
   }
-
-  const product: ProductType = data.productBySlug;
 
   const [selectedOptions, setSelectedOptions] = useState<{
     [optionGroupId: string]: ProductOption;

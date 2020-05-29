@@ -5,6 +5,10 @@ export default defineMessages({
     id: "pages.home",
     defaultMessage: "Startseite",
   },
+  products: {
+    id: "pages.products",
+    defaultMessage: "Produkte",
+  },
   search: {
     id: "pages.search",
     defaultMessage: "Suche",

@@ -4,6 +4,10 @@
     "defaultMessage": "Startseite"
   },
   {
+    "id": "pages.products",
+    "defaultMessage": "Produkte"
+  },
+  {
     "id": "pages.search",
     "defaultMessage": "Suche"
   },

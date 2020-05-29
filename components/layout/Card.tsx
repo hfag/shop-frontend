@@ -17,11 +17,16 @@ const CardWrapper = styled.div<IProps>`
   ${({ mb }) => (mb ? `margin-bottom: ${mb}rem;` : "")}
 `;
 
-const Card: FunctionComponent<{ mb?: number; children: ReactNode }> = ({
-  mb,
-  children,
-}) => {
-  return <CardWrapper mb={mb}>{children}</CardWrapper>;
+const Card: FunctionComponent<{
+  mb?: number;
+  className: string;
+  children: ReactNode;
+}> = ({ mb, className, children }) => {
+  return (
+    <CardWrapper className={className} mb={mb}>
+      {children}
+    </CardWrapper>
+  );
 };
 
 export default Card;

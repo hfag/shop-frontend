@@ -65,8 +65,6 @@ const VariationSlider: FunctionComponent<{
       }
     });
 
-    console.log(imageMap);
-
     return imageMap;
   }, [variants]);
 

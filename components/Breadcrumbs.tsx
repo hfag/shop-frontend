@@ -6,6 +6,8 @@ import JsonLd from "./seo/JsonLd";
 import Breadcrumb from "./Breadcrumb";
 import { stripTags } from "../utilities/decode";
 import { ABSOLUTE_URL } from "../utilities/api";
+import { useIntl } from "react-intl";
+import page from "../i18n/page";
 
 /**
  * Generates the breadcrumb array for a string
@@ -128,7 +130,7 @@ const routes = [
 
 export interface Breadcrumb {
   name?: string;
-  url?: string;
+  url?: string | null;
 }
 
 /**
@@ -137,14 +139,27 @@ export interface Breadcrumb {
 const Breadcrumbs: FunctionComponent<{
   breadcrumbs: Breadcrumb[];
 }> = ({ breadcrumbs }) => {
+  const intl = useIntl();
+
   return (
     <Card>
       {breadcrumbs.length > 0 ? (
         <div>
           <div>
+            <Breadcrumb>
+              <StyledLink href="/">
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: intl.formatMessage(page.home),
+                  }}
+                />
+              </StyledLink>
+            </Breadcrumb>
             {breadcrumbs.map((breadcrumb, index) => (
               <Breadcrumb key={index}>
-                {breadcrumb.url && breadcrumb.name ? (
+                {breadcrumb.url === null ? (
+                  <span dangerouslySetInnerHTML={{ __html: breadcrumb.name }} />
+                ) : breadcrumb.url && breadcrumb.name ? (
                   <StyledLink href={breadcrumb.url}>
                     <span
                       dangerouslySetInnerHTML={{ __html: breadcrumb.name }}

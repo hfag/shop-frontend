@@ -8,7 +8,7 @@ import Header from "../header/Header";
 import Breadcrumbs, { Breadcrumb } from "../Breadcrumbs";
 import Footer from "../Footer";
 import Container from "./Container";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import ScrollToTop from "../helpers/ScrollToTop";
 import ScrollToTopButton from "../helpers/ScrollToTopButton";
 import SupportButton from "../helpers/SupportButton";

@@ -2,5 +2,9 @@
   {
     "id": "breadcrumbs.billingAddress",
     "defaultMessage": "Startseite"
+  },
+  {
+    "id": "breadcrumbs.products",
+    "defaultMessage": "Produkte"
   }
 ]

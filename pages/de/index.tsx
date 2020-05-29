@@ -15,12 +15,7 @@ const Home: FunctionComponent<{
   const intl = useIntl();
 
   return (
-    <Wrapper
-      sidebar={<>hi</>}
-      breadcrumbs={[
-        { name: intl.formatMessage(breadcrumbs.homepage), url: "/" },
-      ]}
-    >
+    <Wrapper sidebar={null} breadcrumbs={[]}>
       <ProductCollection
         collectionId={1}
         initialData={collectionResponse}

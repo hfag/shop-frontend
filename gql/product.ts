@@ -84,6 +84,10 @@ export const FULL_PRODUCT_FRAGMENT = `
   collections{
     id
     name
+    breadcrumbs{
+      id
+      name
+    }
   }
   recommendations{
     recommendation{

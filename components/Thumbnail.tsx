@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, FunctionComponent } from "react";
 import styled from "styled-components";
 import { LazyImage } from "react-lazy-images";
 
-import Placeholder from "./Placeholder";
+import Placeholder from "./elements/Placeholder";
 import { borders } from "../utilities/style";
 import { Asset } from "../schema";
 

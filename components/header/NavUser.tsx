@@ -2,11 +2,11 @@ import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { defineMessages, useIntl } from "react-intl";
 
-import StyledLink from "../StyledLink";
-import Dropdown from "../Dropdown";
-import RestrictedView from "../RestrictedView";
+import StyledLink from "../elements/StyledLink";
+import Dropdown from "../elements/Dropdown";
+import RestrictedView from "../elements/RestrictedView";
 import { pathnamesByLanguage } from "../../utilities/urls";
-import Triangle from "../Triangle";
+import Triangle from "../shapes/Triangle";
 import user from "../../i18n/user";
 import page from "../../i18n/page";
 

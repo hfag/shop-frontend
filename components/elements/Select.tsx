@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Select from "react-select";
 
-import { colors, borders } from "../utilities/style";
+import { colors, borders } from "../../utilities/style";
 
 export default styled(Select)`
   .Select-control {

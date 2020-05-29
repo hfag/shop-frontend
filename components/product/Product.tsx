@@ -10,32 +10,25 @@ import React, {
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
-import isEqual from "lodash/isEqual";
-import queryString from "query-string";
-import {
-  defineMessages,
-  injectIntl,
-  FormattedMessage,
-  useIntl,
-} from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import Card from "../layout/Card";
-import Table from "../Table";
-import Button from "../Button";
-import Price from "../Price";
-import Select from "../Select";
-import VariationSlider from "../VariationSlider";
+import Table from "../elements/Table";
+import Button from "../elements/Button";
+import Price from "../elements/Price";
+import Select from "../elements/Select";
+import VariationSlider from "./VariationSlider";
 import { colors, borders } from "../../utilities/style";
 import { stripTags } from "../../utilities/decode";
-import Bill from "../Bill";
-import ProductItem from "../ProductItem";
-import { InputFieldWrapper } from "../InputFieldWrapper";
+import Bill from "../elements/Bill";
+import ProductItem from "./ProductItem";
+import { InputFieldWrapper } from "../form/InputFieldWrapper";
 import JsonLd from "../seo/JsonLd";
 import { productToJsonLd } from "../../utilities/json-ld";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import productMessages from "../../i18n/product";
 import { setProductView, trackPageView } from "../../utilities/analytics";
-import CrossSellFlex from "../Flex";
+import CrossSellFlex from "../layout/Flex";
 import LightboxGallery from "../content/LightboxGallery";
 import UnsafeHTMLContent from "../content/UnsafeHTMLContent";
 import messages from "./messages";
@@ -53,7 +46,7 @@ import { GET_PRODUCT_BY_SLUG } from "../../gql/product";
 import { API_URL, ABSOLUTE_URL } from "../../utilities/api";
 import Head from "next/head";
 import { AppContext } from "../../pages/_app";
-import StyledLink from "../StyledLink";
+import StyledLink from "../elements/StyledLink";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;

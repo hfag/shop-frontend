@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
 
 import { useIntl } from "react-intl";
-import Thumbnail from "./Thumbnail";
-import Placeholder from "./Placeholder";
-import { colors, borders, shadows } from "../utilities/style";
-import { pathnamesByLanguage } from "../utilities/urls";
-import { Collection } from "../schema";
-import StyledLink from "./StyledLink";
+import Thumbnail from "../Thumbnail";
+import Placeholder from "../elements/Placeholder";
+import { colors, borders, shadows } from "../../utilities/style";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { Collection } from "../../schema";
+import StyledLink from "../elements/StyledLink";
 
 const StyledCategory = styled.div`
   background-color: #fff;

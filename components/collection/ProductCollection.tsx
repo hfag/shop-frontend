@@ -13,25 +13,28 @@ import { Product as JsonLdProduct } from "schema-dts";
 import Router from "next/router";
 import { FaInfoCircle, FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
-import Flex from "./Flex";
+import Flex from "../layout/Flex";
 import CollectionItem from "./CollectionItem";
-import ProductItem from "./ProductItem";
-import JsonLd from "./seo/JsonLd";
-import { stripTags } from "../utilities/decode";
-import { productToJsonLd } from "../utilities/json-ld";
-import Card from "./layout/Card";
-import { pathnamesByLanguage } from "../utilities/urls";
-import shop from "../i18n/shop";
-import { setProductCategoryView, trackPageView } from "../utilities/analytics";
-import Flexbar from "./layout/Flexbar";
-import UnsafeHTMLContent from "./content/UnsafeHTMLContent";
+import ProductItem from "../product/ProductItem";
+import JsonLd from "../seo/JsonLd";
+import { stripTags } from "../../utilities/decode";
+import { productToJsonLd } from "../../utilities/json-ld";
+import Card from "../layout/Card";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import shop from "../../i18n/shop";
+import {
+  setProductCategoryView,
+  trackPageView,
+} from "../../utilities/analytics";
+import Flexbar from "../layout/Flexbar";
+import UnsafeHTMLContent from "../content/UnsafeHTMLContent";
 import Head from "next/head";
-import { Language } from "../utilities/i18n";
-import { Collection } from "../schema";
+import { Language } from "../../utilities/i18n";
+import { Collection } from "../../schema";
 import useSWR from "swr";
-import { GET_COLLECTION } from "../gql/collection";
-import { API_URL, ABSOLUTE_URL } from "../utilities/api";
-import request from "../utilities/request";
+import { GET_COLLECTION } from "../../gql/collection";
+import { API_URL, ABSOLUTE_URL } from "../../utilities/api";
+import request from "../../utilities/request";
 
 const messages = defineMessages({
   downloadsAndLinks: {

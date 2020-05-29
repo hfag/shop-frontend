@@ -10,27 +10,27 @@ import { Flex, Box } from "reflexbox";
 import { defineMessages, useIntl, IntlShape } from "react-intl";
 
 import Head from "next/head";
-import Container from "./layout/Container";
-import Flexbar from "./layout/Flexbar";
-import Push from "./layout/Push";
-import MediaQuery from "./layout/MediaQuery";
-import NavItem from "./header/NavItem";
-import Navbar from "./layout/Navbar";
-import Searchbar from "./Searchbar";
-import LogoNegative from "../public/images/logo/logo_negative.svg";
-import NameSloganNegative from "../public/images/logo/name_slogan_negative.svg";
-import JsonLd from "./seo/JsonLd";
-import { BUSINESS_JSON_LD } from "../utilities/json-ld";
-import LanguageSwitcher from "./header/LanguageSwitcher";
-import NavCart from "./header/NavCart";
-import NavUser from "./header/NavUser";
-import shop from "../i18n/shop";
-import Card from "./layout/Card";
-import { colors } from "../utilities/style";
-import page from "../i18n/page";
-import { ABSOLUTE_URL } from "../utilities/api";
-import StyledLink from "./StyledLink";
-import { AppContext } from "../pages/_app";
+import Container from "../layout/Container";
+import Flexbar from "../layout/Flexbar";
+import Push from "../layout/Push";
+import MediaQuery from "../layout/MediaQuery";
+import NavItem from "./NavItem";
+import Navbar from "./Navbar";
+import Searchbar from "../Searchbar";
+import LogoNegative from "../../public/images/logo/logo_negative.svg";
+import NameSloganNegative from "../../public/images/logo/name_slogan_negative.svg";
+import JsonLd from "../seo/JsonLd";
+import { BUSINESS_JSON_LD } from "../../utilities/json-ld";
+import LanguageSwitcher from "./LanguageSwitcher";
+import NavCart from "./NavCart";
+import NavUser from "./NavUser";
+import shop from "../../i18n/shop";
+import Card from "../layout/Card";
+import { colors } from "../../utilities/style";
+import page from "../../i18n/page";
+import { ABSOLUTE_URL } from "../../utilities/api";
+import StyledLink from "../elements/StyledLink";
+import { AppContext } from "../../pages/_app";
 
 const messages = defineMessages({
   siteDescription: {

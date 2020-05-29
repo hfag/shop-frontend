@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-import { colors, borders } from "../utilities/style";
+import { colors, borders } from "../../utilities/style";
 
 const pulse = keyframes`
 	0%{

@@ -5,11 +5,11 @@ import { defineMessages, useIntl } from "react-intl";
 
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import Link from "../StyledLink";
-import Dropdown from "../Dropdown";
+import Link from "../elements/StyledLink";
+import Dropdown from "../elements/Dropdown";
 import Circle from "../shapes/Circle";
-import Button from "../Button";
-import Triangle from "../Triangle";
+import Button from "../elements/Button";
+import Triangle from "../shapes/Triangle";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { colors } from "../../utilities/style";
 import { AppContext } from "../../pages/_app";
@@ -17,7 +17,7 @@ import request from "../../utilities/request";
 import { API_URL } from "../../utilities/api";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
 import { Order } from "../../schema";
-import Placeholder from "../Placeholder";
+import Placeholder from "../elements/Placeholder";
 import Thumbnail from "../Thumbnail";
 
 const messages = defineMessages({

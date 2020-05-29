@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useState, FunctionComponent, ReactNode } from "react";
 import styled from "styled-components";
 import { FaChevronDown } from "react-icons/fa";
 
-import Card from "./Card";
+import Card from "../layout/Card";
 
-const StyledOverflowCard = styled(Card)`
+const StyledOverflowCard = styled(Card)<{ maxHeight?: number; open: boolean }>`
   position: relative;
   max-height: ${({ maxHeight, open }) => (open ? "none" : maxHeight || 20)}rem;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-const More = styled.div`
+const More = styled.div<{ maxHeight?: number }>`
   position: absolute;
   left: 0;
   right: 0;
@@ -38,26 +38,24 @@ const Icon = styled(FaChevronDown)`
 
 /**
  * Renders a card but only to a specific height
- * @returns {Component} The overflow card component
  */
-class OverflowCard extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = { open: false };
-  }
-  render = () => {
-    const { open } = this.state;
-    return (
-      <StyledOverflowCard {...this.props} open={open}>
-        {this.props.children}
-        {!open && (
-          <More onClick={() => this.setState({ open: true })}>
-            <Icon />
-          </More>
-        )}
-      </StyledOverflowCard>
-    );
-  };
-}
+
+const OverflowCard: FunctionComponent<{
+  maxHeight?: number;
+  children: ReactNode;
+}> = ({ maxHeight, children }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <StyledOverflowCard maxHeight={maxHeight} open={open}>
+      {children}
+      {!open && (
+        <More maxHeight={maxHeight} onClick={() => setOpen(true)}>
+          <Icon />
+        </More>
+      )}
+    </StyledOverflowCard>
+  );
+};
 
 export default OverflowCard;

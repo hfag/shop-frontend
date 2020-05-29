@@ -1,10 +1,10 @@
-import React from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Color from "color";
 import ProgressButton from "react-progress-button";
 
-import { colors, borders } from "../utilities/style";
+import { colors, borders } from "../../utilities/style";
 const DISABLED = Color(colors.secondary).lighten(0.75).rgb().string();
 
 const Clearfix = styled.div`
@@ -19,7 +19,14 @@ const Clearfix = styled.div`
   }
 `;
 
-const ButtonWrapper = styled.div`
+interface IProps {
+  float?: "left" | "right";
+  state?: string;
+  height?: string;
+  fullWidth?: boolean;
+}
+
+const ButtonWrapper = styled.div<IProps>`
   float: ${({ float }) => float || "none"};
 
   .pb-container {
@@ -146,58 +153,68 @@ const ButtonWrapper = styled.div`
 
 /**
  * A extended version of a progress button
- * @returns {Component} The button component
  */
-class Button extends React.PureComponent {
-  render = () => {
-    const { state = "" } = this.props;
-    return (
-      <div>
-        <ButtonWrapper
-          height={this.props.height || "auto"}
-          fullWidth={this.props.fullWidth}
-          float={this.props.float}
-          state={state}
-        >
-          <ProgressButton
-            controlled={this.props.controlled}
-            classNamespace={this.props.classNamespace}
-            durationError={this.props.durationError}
-            durationSuccess={this.props.durationSuccess}
-            onClick={this.props.onClick}
-            onError={this.props.onError}
-            onSuccess={this.props.onSuccess}
-            state={state}
-            type={this.props.type}
-            form={this.props.form}
-            shouldAllowClickOnLoading={this.props.shouldAllowClickOnLoading}
-          >
-            {this.props.children}
-          </ProgressButton>
-        </ButtonWrapper>
-        {this.props.float && <Clearfix />}
-      </div>
-    );
-  };
-}
 
-Button.propTypes = {
-  children: PropTypes.node,
-  controlled: PropTypes.bool,
-  classNamespace: PropTypes.string,
-  durationError: PropTypes.number,
-  durationSuccess: PropTypes.number,
-  onClick: PropTypes.func,
-  onError: PropTypes.func,
-  onSuccess: PropTypes.func,
-  state: PropTypes.string,
-  type: PropTypes.string,
-  form: PropTypes.string,
-  shouldAllowClickOnLoading: PropTypes.bool,
-  /* custom */
-  height: PropTypes.string,
-  fullWidth: PropTypes.bool,
-  float: PropTypes.string,
+const Button: FunctionComponent<{
+  state?: string;
+  controlled: boolean;
+  classNamespace?: string;
+  durationError?: number;
+  durationSuccess?: number;
+  onClick?: () => Promise<any>;
+  onError?: () => void;
+  onSuccess?: () => void;
+  type?: string;
+  form?: string;
+  shouldAllowClickOnLoading?: boolean;
+  height?: string;
+  fullWidth?: boolean;
+  float?: "left" | "right";
+  children: ReactNode;
+}> = ({
+  state = "",
+  controlled,
+  classNamespace,
+  durationError,
+  durationSuccess,
+  onClick,
+  onError,
+  onSuccess,
+  type,
+  form,
+  shouldAllowClickOnLoading,
+  height,
+  fullWidth,
+  float,
+  children,
+}) => {
+  return (
+    <div>
+      <ButtonWrapper
+        height={height || "auto"}
+        fullWidth={fullWidth}
+        float={float}
+        state={state}
+      >
+        <ProgressButton
+          controlled={controlled}
+          classNamespace={classNamespace}
+          durationError={durationError}
+          durationSuccess={durationSuccess}
+          onClick={onClick}
+          onError={onError}
+          onSuccess={onSuccess}
+          state={state}
+          type={type}
+          form={form}
+          shouldAllowClickOnLoading={shouldAllowClickOnLoading}
+        >
+          {children}
+        </ProgressButton>
+      </ButtonWrapper>
+      {float && <Clearfix />}
+    </div>
+  );
 };
 
 export default Button;

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
-import StyledLink from "./StyledLink";
+import StyledLink from "./elements/StyledLink";
 import Card from "./layout/Card";
-import Placeholder from "./Placeholder";
+import Placeholder from "./elements/Placeholder";
 import JsonLd from "./seo/JsonLd";
 import Breadcrumb from "./Breadcrumb";
 import { stripTags } from "../utilities/decode";

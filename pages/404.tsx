@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from "react-intl";
 import Head from "next/head";
 import Card from "../components/layout/Card";
 import { trackPageView } from "../utilities/analytics";
-import StyledLink from "../components/StyledLink";
+import StyledLink from "../components/elements/StyledLink";
 import Searchbar from "../components/Searchbar";
 import { ABSOLUTE_URL } from "../utilities/api";
 import Wrapper from "../components/layout/Wrapper";

@@ -7,7 +7,7 @@ import { Router, useRouter } from "next/router";
 
 import Flexbar from "./layout/Flexbar";
 import { colors, shadows } from "../utilities/style";
-import Price from "./Price";
+import Price from "./elements/Price";
 import { pathnamesByLanguage } from "../utilities/urls";
 import product from "../i18n/product";
 

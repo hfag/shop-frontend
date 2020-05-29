@@ -15,15 +15,15 @@ import {
 } from "react-icons/fa";
 import { useIntl } from "react-intl";
 
-import Link from "./StyledLink";
-import { media, colors } from "../utilities/style";
-import NameSlogan from "../public/images/logo/name_slogan.svg";
-import MediaQuery from "./layout/MediaQuery";
-import Card from "./layout/Card";
-import RestrictedView from "./RestrictedView";
-import { pathnamesByLanguage } from "../utilities/urls";
-import page from "../i18n/page";
-import { AppContext } from "../pages/_app";
+import Link from "../elements/StyledLink";
+import { media, colors } from "../../utilities/style";
+import NameSlogan from "../../public/images/logo/name_slogan.svg";
+import MediaQuery from "./MediaQuery";
+import Card from "./Card";
+import RestrictedView from "../elements/RestrictedView";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import page from "../../i18n/page";
+import { AppContext } from "../../pages/_app";
 
 interface BurgerContainer {
   isOpen?: boolean;

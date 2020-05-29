@@ -4,14 +4,14 @@ import { Flex, Box } from "reflexbox";
 import Router, { useRouter } from "next/router";
 
 import { useIntl } from "react-intl";
-import Header from "../Header";
+import Header from "../header/Header";
 import Breadcrumbs, { Breadcrumb } from "../Breadcrumbs";
 import Footer from "../Footer";
 import Container from "./Container";
-import Sidebar from "../Sidebar";
-import ScrollToTop from "../ScrollToTop";
-import ScrollToTopButton from "../buttons/ScrollToTopButton";
-import SupportButton from "../buttons/SupportButton";
+import Sidebar from "./Sidebar";
+import ScrollToTop from "../helpers/ScrollToTop";
+import ScrollToTopButton from "../helpers/ScrollToTopButton";
+import SupportButton from "../helpers/SupportButton";
 
 const Wrapper: FunctionComponent<{
   sidebar: ReactNode;

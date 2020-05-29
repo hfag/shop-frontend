@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-import { colors, borders } from "../utilities/style";
+import { colors, borders } from "../../utilities/style";
 
-export const InputFieldWrapper = styled.div`
+export const InputFieldWrapper = styled.div<{ checkbox?: boolean }>`
   margin-bottom: 0.25rem;
 
   ${({ checkbox }) =>

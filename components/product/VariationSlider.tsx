@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useMemo } from "react";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
-import { ProductVariant, Asset, ProductOption } from "../schema";
-import Thumbnail from "./Thumbnail";
+import { ProductVariant, Asset, ProductOption } from "../../schema";
+import Thumbnail from "../Thumbnail";
 
 const Slider = styled.div`
   & > div:first-child {

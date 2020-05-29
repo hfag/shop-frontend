@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Color from "color";
 
-import { colors } from "../utilities/style";
+import { colors } from "../../utilities/style";
 
 const StyledTable = styled.table`
   width: 100%;

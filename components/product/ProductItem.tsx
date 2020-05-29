@@ -4,14 +4,14 @@ import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
 
-import Thumbnail from "./Thumbnail";
-import Placeholder from "./Placeholder";
-import { colors, borders, shadows } from "../utilities/style";
-import RelativeBox from "./RelativeBox";
-import Price from "./Price";
-import { pathnamesByLanguage } from "../utilities/urls";
-import { Product } from "../schema";
-import StyledLink from "./StyledLink";
+import Thumbnail from "../Thumbnail";
+import Placeholder from "../elements/Placeholder";
+import { colors, borders, shadows } from "../../utilities/style";
+import RelativeBox from "../elements/RelativeBox";
+import Price from "../elements/Price";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { Product } from "../../schema";
+import StyledLink from "../elements/StyledLink";
 
 const messages = defineMessages({
   discountForResellers: {

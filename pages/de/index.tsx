@@ -2,8 +2,8 @@ import { GetStaticProps } from "next";
 import { FunctionComponent } from "react";
 import { GET_ALL_COLLECTIONS, GET_COLLECTION } from "../../gql/collection";
 import { API_URL } from "../../utilities/api";
+import ProductCollection from "../../components/collection/ProductCollection";
 import { Collection } from "../../schema";
-import ProductCollection from "../../components/ProductCollection";
 import Wrapper from "../../components/layout/Wrapper";
 import request from "../../utilities/request";
 

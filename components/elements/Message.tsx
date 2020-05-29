@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { MdInfoOutline } from "react-icons/md";
 
-import { colors, borders } from "../utilities/style";
-import Flexbar from "./Flexbar";
+import { colors, borders } from "../../utilities/style";
+import Flexbar from "../layout/Flexbar";
 
 const MessageWrapper = styled.div`
   border: ${colors.info} 1px solid;
@@ -19,7 +19,6 @@ const MessageWrapper = styled.div`
 
 /**
  * Renders a message
- * @returns {Component} The message
  */
 class Message extends React.PureComponent {
   render = () => {

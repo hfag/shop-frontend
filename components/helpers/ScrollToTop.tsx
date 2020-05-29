@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { useRouter } from "next/router";
 import { useIntl } from "react-intl";
-import { pathnamesByLanguage } from "../utilities/urls";
-import { AppContext } from "../pages/_app";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { AppContext } from "../../pages/_app";
 
 const ScrollToTop: FunctionComponent<{ children: ReactNode }> = ({
   children,

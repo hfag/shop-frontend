@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { defineMessages, useIntl } from "react-intl";
 
-import { colors } from "../utilities/style";
+import { colors } from "../../utilities/style";
 import Price from "./Price";
 
 const messages = defineMessages({

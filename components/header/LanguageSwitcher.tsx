@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 
 import { useIntl } from "react-intl";
-import Link from "../StyledLink";
+import Link from "../elements/StyledLink";
 import Flexbar from "../layout/Flexbar";
 
 const LANGUAGES = {

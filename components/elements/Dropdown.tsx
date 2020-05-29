@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { borders, shadows, colors } from "../utilities/style";
+import { borders, shadows, colors } from "../../utilities/style";
 
 const Dropdown = styled.div`
   position: absolute;

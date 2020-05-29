@@ -12,10 +12,10 @@ import { defineMessages, useIntl } from "react-intl";
 import Container from "./layout/Container";
 
 import { colors, media } from "../utilities/style";
-import StyledLink from "./StyledLink";
+import StyledLink from "./elements/StyledLink";
 import Logo from "../public/images/logo/logo_negative.svg";
 import NameSlogan from "../public/images/logo/name_slogan_negative.svg";
-import Placeholder from "./Placeholder";
+import Placeholder from "./elements/Placeholder";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
 
 const messages = defineMessages({

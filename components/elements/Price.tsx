@@ -16,7 +16,7 @@ const Price: FunctionComponent<{
 }> = React.memo(({ strike, children }) => {
   return (
     <StyledPrice strike={strike}>
-      CHF {(Math.round(children * 100) / 100).toFixed(2)}
+      CHF {(Math.round(children) / 100).toFixed(2)}
     </StyledPrice>
   );
 });

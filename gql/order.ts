@@ -27,15 +27,19 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     phoneNumber
   }
   lines {
+    id
     productVariant {
       sku
       name
-    }
-    featuredAsset {
-      name
-      width
-      height
-      source
+      featuredAsset {
+        name
+        width
+        height
+        source
+      }
+      options{
+        name
+      }
     }
     unitPrice
     quantity
@@ -81,9 +85,68 @@ export const GET_ACTIVE_ORDER = /* GraphQL */ `
 `;
 
 export const ADD_TO_ORDER = /* GraphQL */ `
-  mutation AddItemToOrder($productVariantId: ID!, quantity: Int!){
-    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity){
+  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {
+    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
       id
+    }
+  }
+`;
+
+export const REMOVE_ORDER_LINE = /* GraphQL */ `
+  mutation RemoveOrderLine($orderLineId: ID!) {
+    removeOrderLine(orderLineId: $orderLineId) {
+      id
+    }
+  }
+`;
+
+export const ADJUST_ORDER_LINE = /* GraphQL */ `
+  mutation AdjustOrderLine($orderLineId: ID!, $quantity: Int!) {
+    adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {
+      id
+    }
+  }
+`;
+
+export const ORDER_SET_CUSTOMER = /* GraphQL */ `
+  mutation SetCustomerForOrder($customer: CreateCustomerInput!) {
+    setCustomerForOrder(input: $customer) {
+      id
+    }
+  }
+`;
+
+export const ORDER_SET_SHIPPING_ADDRESS = /* GraphQL */ `
+  mutation SetOrderShippingAddress($shippingAddress: CreateAddressInput!) {
+    setOrderShippingAddress(input: $shippingAddress) {
+      ${FULL_ORDER_FRAGMENT}
+    }
+  }
+`;
+
+export const ORDER_GET_SHIPPING_METHODS = /* GraphQL */ `
+  query {
+    eligibleShippingMethods {
+      id
+      price
+      description
+      metadata
+    }
+  }
+`;
+
+export const ORDER_SET_SHIPPING_METHOD = /* GraphQL */ `
+  mutation SetOrderShippingAddress($shippingMethodId: ID!) {
+    setOrderShippingAddress(shippingMethodId: $shippingMethodId) {
+      id
+    }
+  }
+`;
+
+export const ORDER_ADD_PAYMENT = /* GraphQL */ `
+  mutation AddPaymentToOrder($input: PaymentInput!) {
+    addPaymentToOrder(input: $input) {
+      ${FULL_ORDER_FRAGMENT}
     }
   }
 `;

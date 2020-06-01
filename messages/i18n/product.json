@@ -12,8 +12,8 @@
     "defaultMessage": "Kategorie"
   },
   {
-    "id": "product.ourProducts",
-    "defaultMessage": "Unsere Produkte"
+    "id": "product.categories",
+    "defaultMessage": "Kategorien"
   },
   {
     "id": "product.variation",

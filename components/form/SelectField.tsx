@@ -21,13 +21,14 @@ const ValidationErrors = styled.div`
 /**
  * Select field
  */
-
+//TODO: translate optional, no results etc
 const SelectField: FunctionComponent<{
   name: string;
   label?: string;
+  placeholder?: string;
   options: { label: string; value: any }[];
   required?: boolean;
-}> = React.memo(({ name, label, options, required }) => (
+}> = React.memo(({ name, label, options, required, placeholder }) => (
   <Field
     name={name}
     render={({
@@ -41,6 +42,7 @@ const SelectField: FunctionComponent<{
         </label>
         <Select
           value={value}
+          placeholder={placeholder}
           onChange={(option) => {
             setFieldValue(name, option ? option.value : undefined);
             setFieldTouched(name, true);

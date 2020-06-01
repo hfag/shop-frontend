@@ -7,7 +7,7 @@ import { defineMessages, useIntl } from "react-intl";
 import Thumbnail from "../Thumbnail";
 import Placeholder from "../elements/Placeholder";
 import { colors, borders, shadows } from "../../utilities/style";
-import RelativeBox from "../elements/RelativeBox";
+import RelativeBox from "../layout/RelativeBox";
 import Price from "../elements/Price";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { Product } from "../../schema";

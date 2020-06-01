@@ -17,6 +17,10 @@ export default defineMessages({
     id: "order.shipping",
     defaultMessage: "Versand",
   },
+  taxes: {
+    id: "order.taxes",
+    defaultMessage: "Steuern",
+  },
   noOrders: {
     id: "order.noOrders",
     defaultMessage: "Sie haben noch keine Bestellung getätigt.",

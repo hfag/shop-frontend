@@ -17,12 +17,7 @@ const UncontrolledCollapse: FunctionComponent<{
   return (
     <div>
       <Collapse isOpened={isOpen}>{children}</Collapse>
-      <StyledLink
-        underlined
-        onClick={() => {
-          this.setState({ isOpen: !isOpen });
-        }}
-      >
+      <StyledLink underlined onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? closeLink : openLink}
       </StyledLink>
     </div>

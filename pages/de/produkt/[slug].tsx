@@ -2,7 +2,6 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { FunctionComponent, useMemo } from "react";
 import { Product as ProductType } from "../../../schema";
 import request from "../../../utilities/request";
-import { API_URL } from "../../../utilities/api";
 import {
   GET_ALL_PRODUCT_SLUGS,
   GET_PRODUCT_BY_SLUG,
@@ -13,10 +12,9 @@ import { useIntl } from "react-intl";
 import useSWR from "swr";
 import page from "../../../i18n/page";
 import { pathnamesByLanguage } from "../../../utilities/urls";
-import SidebarListWrapper from "../../../components/layout/sidebar/SidebarListWrapper";
 import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
-import StyledLink from "../../../components/elements/StyledLink";
 import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
+import { locale } from "../config.json";
 
 const ProductPage: FunctionComponent<{
   productSlug: string;
@@ -26,7 +24,7 @@ const ProductPage: FunctionComponent<{
 
   const { data, error } = useSWR(
     [GET_PRODUCT_BY_SLUG, productSlug],
-    (query, id) => request(API_URL, query, { id }),
+    (query, id) => request(intl.locale, query, { slug: productSlug }),
     {
       initialData: productResponse,
     }
@@ -45,7 +43,9 @@ const ProductPage: FunctionComponent<{
       : [
           {
             name: intl.formatMessage(page.products),
-            url: null,
+            url: `/${intl.locale}/${
+              pathnamesByLanguage.product.languages[intl.locale]
+            }/${productSlug}`,
           },
         ];
   }, [data]);
@@ -67,7 +67,9 @@ const ProductPage: FunctionComponent<{
               ...breadcrumbs,
               {
                 name: data.productBySlug.name,
-                url: null,
+                url: `/${intl.locale}/${
+                  pathnamesByLanguage.product.languages[intl.locale]
+                }/${productSlug}`,
               },
             ]
           : []
@@ -82,7 +84,7 @@ export default ProductPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: { products: { items: ProductType[] } } = await request(
-    API_URL,
+    locale,
     GET_ALL_PRODUCT_SLUGS
   );
 
@@ -97,7 +99,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      productResponse: await request(API_URL, GET_PRODUCT_BY_SLUG, {
+      productResponse: await request(locale, GET_PRODUCT_BY_SLUG, {
         slug: context.params.slug,
       }),
       productSlug: context.params.slug,

@@ -33,7 +33,7 @@ import { Language } from "../../utilities/i18n";
 import { Collection } from "../../schema";
 import useSWR from "swr";
 import { GET_COLLECTION } from "../../gql/collection";
-import { API_URL, ABSOLUTE_URL } from "../../utilities/api";
+import { ABSOLUTE_URL } from "../../utilities/api";
 import request from "../../utilities/request";
 
 const messages = defineMessages({
@@ -122,7 +122,7 @@ const ProductCollection: FunctionComponent<{
 
   const { data, error } = useSWR(
     [GET_COLLECTION, collectionId],
-    (query, collectionId) => request(API_URL, query, { id: collectionId }),
+    (query, collectionId) => request(intl.locale, query, { id: collectionId }),
     {
       initialData,
     }

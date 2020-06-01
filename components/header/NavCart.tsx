@@ -14,7 +14,6 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import { colors } from "../../utilities/style";
 import { AppContext } from "../../pages/_app";
 import request from "../../utilities/request";
-import { API_URL } from "../../utilities/api";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
 import { Order } from "../../schema";
 import Placeholder from "../elements/Placeholder";
@@ -58,23 +57,16 @@ const ShoppingCartList = styled.div`
 const NavCart: FunctionComponent<{
   dropdown: string | boolean;
   setDropdown: (dropdown: string | boolean) => void;
-}> = React.memo(({ dropdown, setDropdown }) => {
+}> = ({ dropdown, setDropdown }) => {
   const intl = useIntl();
   const router = useRouter();
-  const { activeOrderId, setActiveOrderId, token } = useContext(AppContext);
+  const { token } = useContext(AppContext);
   const {
     data,
   }: { data?: { activeOrder: Order | null }; error?: any } = useSWR(
     [GET_ACTIVE_ORDER, token],
-    (query) =>
-      request(API_URL, query, undefined, { Authorization: `Bearer ${token}` })
+    (query) => request(intl.locale, query)
   );
-
-  useEffect(() => {
-    if (data && data.activeOrder) {
-      setActiveOrderId(data.activeOrder.id);
-    }
-  }, [data]);
 
   return (
     <>
@@ -126,6 +118,7 @@ const NavCart: FunctionComponent<{
                 }`
               );
               setDropdown(false);
+              return Promise.resolve();
             }}
           >
             {intl.formatMessage(messages.toCart)}
@@ -137,7 +130,7 @@ const NavCart: FunctionComponent<{
             data.activeOrder.lines.map((line, index) => (
               <ShoppingCartList key={index}>
                 <div>
-                  <Thumbnail asset={line.featuredAsset} />
+                  <Thumbnail asset={line.productVariant.featuredAsset} />
                 </div>
                 <div>
                   <strong>{line.quantity}x</strong>{" "}
@@ -160,6 +153,6 @@ const NavCart: FunctionComponent<{
       )}
     </>
   );
-});
+};
 
 export default NavCart;

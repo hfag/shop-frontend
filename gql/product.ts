@@ -79,6 +79,7 @@ export const FULL_PRODUCT_FRAGMENT = `
     name
     facet{
       name
+      code
     }
   }
   collections{

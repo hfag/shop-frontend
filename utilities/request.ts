@@ -1,6 +1,10 @@
 // Apparently they're not able to maintain this anymore?
 // https://github.com/prisma-labs/graphql-request
 
+import { isClient } from "./ssr";
+import { API_URL } from "./api";
+import { getLanguageFromCurrentWindow } from "./i18n";
+
 export type Variables = { [key: string]: any };
 
 export interface GraphQLError {
@@ -166,14 +170,28 @@ export function rawRequest<T = any>(
   return client.rawRequest<T>(query, variables);
 }
 
-export function request<T = any>(
-  url: string,
+export async function request<T = any>(
+  languageCode: string,
   query: string,
-  variables?: Variables,
-  headers?: HeadersInit
+  variables?: Variables
 ): Promise<T> {
-  const client = new GraphQLClient(url, headers ? { headers } : undefined);
-  return client.request<T>(query, variables);
+  const token = isClient ? localStorage.getItem("vendure-auth-token") : null;
+
+  const client = new GraphQLClient(
+    `${API_URL}?languageCode=${languageCode}`,
+    token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+  );
+  const { data, headers: responseHeaders, status } = await client.rawRequest<T>(
+    query,
+    variables
+  );
+  if (responseHeaders.get("vendure-auth-token") && isClient) {
+    localStorage.setItem(
+      "vendure-auth-token",
+      responseHeaders.get("vendure-auth-token")
+    );
+  }
+  return data;
 }
 
 export default request;

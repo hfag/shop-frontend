@@ -6,7 +6,12 @@ import "../utilities/set-yup-locale";
 
 //dependencies
 import App from "next/app";
-import { createIntl, createIntlCache, RawIntlProvider } from "react-intl";
+import {
+  createIntl,
+  createIntlCache,
+  RawIntlProvider,
+  useIntl,
+} from "react-intl";
 import React, {
   FunctionComponent,
   ReactNode,
@@ -15,43 +20,37 @@ import React, {
 } from "react";
 import { CurrentUser } from "../schema";
 import useSWR from "swr";
-import { useAuth, useLocalStorage } from "../utilities/hooks";
+import { useLocalStorage } from "../utilities/hooks";
 import { GET_CURRENT_CUSTOMER } from "../gql/user";
 import request from "../utilities/request";
-import { API_URL } from "../utilities/api";
 
 export const AppContext = React.createContext<{
   burgerMenuOpen: boolean;
   toggleBurgerMenu: () => void;
   user: CurrentUser | null;
   token: string | null;
-  activeOrderId: string | null;
-  setActiveOrderId: (orderId: string | null) => void;
 }>({
   burgerMenuOpen: false,
   toggleBurgerMenu: () => {},
   user: null,
   token: null,
-  activeOrderId: null,
-  setActiveOrderId: (orderId: string | null) => {},
 });
 
 const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
   children,
 }) => {
+  const intl = useIntl();
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const toggleBurgerMenu = useCallback(
     () => setBurgerMenuOpen(!burgerMenuOpen),
     [burgerMenuOpen]
   );
 
-  const [activeOrderId, setActiveOrderId] = useLocalStorage("active-order-id");
-  const [token, setToken] = useLocalStorage("authorization-token");
+  const [token, setToken] = useLocalStorage("vendure-auth-token");
 
   const { data, error } = useSWR<{ me: CurrentUser }>(
     token ? [GET_CURRENT_CUSTOMER, token] : null,
-    (query, token) =>
-      request(API_URL, query, {}, { Authorization: `Bearer ${token}` })
+    (query, token) => request(intl.locale, query)
   );
 
   return (
@@ -61,8 +60,6 @@ const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
         toggleBurgerMenu,
         user: token && data ? data.me : null,
         token,
-        activeOrderId,
-        setActiveOrderId,
       }}
     >
       {children}
@@ -109,11 +106,11 @@ export default class MyApp extends App<{
     );
 
     return (
-      <AppWrapper>
-        <RawIntlProvider value={intl}>
+      <RawIntlProvider value={intl}>
+        <AppWrapper>
           <Component {...pageProps} />
-        </RawIntlProvider>
-      </AppWrapper>
+        </AppWrapper>
+      </RawIntlProvider>
     );
   }
 }

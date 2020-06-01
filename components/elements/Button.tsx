@@ -157,11 +157,11 @@ const ButtonWrapper = styled.div<IProps>`
 
 const Button: FunctionComponent<{
   state?: string;
-  controlled: boolean;
+  controlled?: boolean;
   classNamespace?: string;
   durationError?: number;
   durationSuccess?: number;
-  onClick?: () => Promise<any>;
+  onClick?: (e: any) => Promise<any> | any;
   onError?: () => void;
   onSuccess?: () => void;
   type?: string;

@@ -4,7 +4,7 @@ import Color from "color";
 
 import { colors } from "../../utilities/style";
 
-const StyledTable = styled.table`
+const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
 
@@ -23,4 +23,4 @@ const StyledTable = styled.table`
   }
 `;
 
-export default StyledTable;
+export default Table;

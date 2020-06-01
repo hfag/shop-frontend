@@ -40,10 +40,13 @@ import {
   BulkDiscount,
   RecommendationType,
 } from "../../schema";
-import { API_URL, ABSOLUTE_URL } from "../../utilities/api";
+import { ABSOLUTE_URL } from "../../utilities/api";
 import Head from "next/head";
 import { AppContext } from "../../pages/_app";
 import StyledLink from "../elements/StyledLink";
+import request from "../../utilities/request";
+import { ADD_TO_ORDER, GET_ACTIVE_ORDER } from "../../gql/order";
+import { mutate } from "swr";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;
@@ -78,7 +81,7 @@ const Product: FunctionComponent<{
   product?: ProductType;
 }> = React.memo(({ product }) => {
   const intl = useIntl();
-  const { setActiveOrderId } = useContext(AppContext);
+  const { token } = useContext(AppContext);
 
   if (!product) {
     return <>Loading</>;
@@ -345,10 +348,10 @@ const Product: FunctionComponent<{
                 <Bill
                   items={[
                     {
-                      price: selectedVariant.price / 100,
+                      price: selectedVariant.price,
                       quantity,
                       discountPrice: activeBulkDiscount
-                        ? activeBulkDiscount.price
+                        ? activeBulkDiscount.price * 100
                         : undefined,
                       unit,
                     },
@@ -356,25 +359,27 @@ const Product: FunctionComponent<{
                 />
                 <Button
                   state={!selectedVariant || quantity <= 0 ? "disabled" : ""}
-                  onClick={() => {
+                  onClick={async () => {
                     if (selectedVariant) {
-                      return request(API_URL, "", {
+                      const data = await request(intl.locale, ADD_TO_ORDER, {
                         productVariantId: selectedVariant.id,
                         quantity,
-                      }).then((data) => {
-                        setActiveOrderId(data.addItemToOrder.id);
-
-                        if (this.crosssellRef.current) {
-                          const el = ReactDOM.findDOMNode(
-                            this.crosssellRef.current
-                          );
-                          if ("scrollIntoView" in el) {
-                            el.scrollIntoView();
-                          }
-                        }
                       });
+                      //trigger refetching of the active order
+                      mutate([GET_ACTIVE_ORDER, token]);
+
+                      if (this.crosssellRef.current) {
+                        const el = ReactDOM.findDOMNode(
+                          this.crosssellRef.current
+                        );
+                        if ("scrollIntoView" in el) {
+                          el.scrollIntoView();
+                        }
+                      }
+
+                      return true;
                     } else {
-                      return Promise.resolve();
+                      return Promise.reject();
                     }
                   }}
                 >
@@ -489,6 +494,22 @@ const Product: FunctionComponent<{
                     </tr>
                   );
                 })}
+                {product.facetValues
+                  .filter((vf) => vf.facet.code !== "category")
+                  .map((facetValue, index) => (
+                    <tr key={index}>
+                      <td
+                        dangerouslySetInnerHTML={{
+                          __html: facetValue.facet.name,
+                        }}
+                      ></td>
+                      <td
+                        dangerouslySetInnerHTML={{
+                          __html: facetValue.name,
+                        }}
+                      ></td>
+                    </tr>
+                  ))}
               </tbody>
             </StyledTable>
           </Box>

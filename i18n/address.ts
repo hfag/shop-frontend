@@ -13,6 +13,10 @@ export default defineMessages({
     id: "address.additionalLineAbove",
     defaultMessage: "Zusatzzeile oben",
   },
+  fullName: {
+    id: "address.fullName",
+    defaultMessage: "Vollständiger Name",
+  },
   firstName: {
     id: "address.firstName",
     defaultMessage: "Vorname",
@@ -33,24 +37,28 @@ export default defineMessages({
     id: "address.country",
     defaultMessage: "Land",
   },
-  street: {
-    id: "address.street",
-    defaultMessage: "Strasse",
+  street1: {
+    id: "address.street1",
+    defaultMessage: "Strasse 1",
+  },
+  street2: {
+    id: "address.street2",
+    defaultMessage: "Strasse 2",
   },
   postOfficeBox: {
     id: "address.postOfficeBox",
     defaultMessage: "Postfach",
   },
-  postcode: {
-    id: "address.postcode",
+  postalCode: {
+    id: "address.postalCode",
     defaultMessage: "Postleitzahl",
   },
   city: {
     id: "address.city",
     defaultMessage: "Ort / Stadt",
   },
-  state: {
-    id: "address.state",
+  province: {
+    id: "address.province",
     defaultMessage: "Kanton",
   },
   phone: {

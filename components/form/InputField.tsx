@@ -15,18 +15,20 @@ const ValidationErrors = styled.div`
  */
 
 const InputField: FunctionComponent<{
+  id?: string;
   label?: string;
   name: string;
-  required: boolean;
-  placeholder: string;
-  type: string;
-  value: string;
-  onChange: () => void;
-  checkbox: boolean;
-  component: React.ComponentType;
-  children: ReactNode;
-  componentProps: { [key: string]: any };
+  required?: boolean;
+  placeholder?: string;
+  type?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<any>) => void;
+  checkbox?: boolean;
+  component?: React.ComponentType | "textarea";
+  children?: ReactNode;
+  componentProps?: { [key: string]: any };
 }> = ({
+  id,
   label,
   name,
   required,
@@ -37,7 +39,7 @@ const InputField: FunctionComponent<{
   checkbox,
   component,
   children,
-  componentProps,
+  componentProps = {},
 }) => {
   const Component = component ? component : "input";
 
@@ -57,6 +59,7 @@ const InputField: FunctionComponent<{
         }) => (
           <div>
             <Component
+              id={id}
               name={name}
               value={forceValue || value || ""}
               onChange={

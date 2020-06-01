@@ -130,7 +130,7 @@ const routes = [
 
 export interface Breadcrumb {
   name?: string;
-  url?: string | null;
+  url?: string;
 }
 
 /**
@@ -143,51 +143,45 @@ const Breadcrumbs: FunctionComponent<{
 
   return (
     <Card>
-      {breadcrumbs.length > 0 ? (
-        <div>
-          <div>
-            <Breadcrumb>
-              <StyledLink href="/">
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: intl.formatMessage(page.home),
-                  }}
-                />
-              </StyledLink>
-            </Breadcrumb>
-            {breadcrumbs.map((breadcrumb, index) => (
-              <Breadcrumb key={index}>
-                {breadcrumb.url === null ? (
-                  <span dangerouslySetInnerHTML={{ __html: breadcrumb.name }} />
-                ) : breadcrumb.url && breadcrumb.name ? (
-                  <StyledLink href={breadcrumb.url}>
-                    <span
-                      dangerouslySetInnerHTML={{ __html: breadcrumb.name }}
-                    />
-                  </StyledLink>
-                ) : (
-                  <Placeholder text inline minWidth={5} />
-                )}
-              </Breadcrumb>
-            ))}
-          </div>
-          <JsonLd>
-            {{
-              "@context": "http://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: breadcrumbs.map(({ name, url }, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                item: { "@id": ABSOLUTE_URL + url, name: stripTags(name) },
-              })),
-            }}
-          </JsonLd>
-        </div>
-      ) : (
+      <div>
         <Breadcrumb>
-          <Placeholder text inline minWidth={5} />
+          <StyledLink href="/">
+            <span
+              dangerouslySetInnerHTML={{
+                __html: intl.formatMessage(page.home),
+              }}
+            />
+          </StyledLink>
         </Breadcrumb>
-      )}
+        {breadcrumbs.length > 0 ? (
+          breadcrumbs.map((breadcrumb, index) => (
+            <Breadcrumb key={index}>
+              {index === breadcrumbs.length - 1 ? (
+                <span dangerouslySetInnerHTML={{ __html: breadcrumb.name }} />
+              ) : (
+                <StyledLink href={breadcrumb.url}>
+                  <span dangerouslySetInnerHTML={{ __html: breadcrumb.name }} />
+                </StyledLink>
+              )}
+            </Breadcrumb>
+          ))
+        ) : (
+          <Breadcrumb>
+            <Placeholder text inline minWidth={5} />
+          </Breadcrumb>
+        )}
+      </div>
+      <JsonLd>
+        {{
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: breadcrumbs.map(({ name, url }, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: { "@id": ABSOLUTE_URL + url, name: stripTags(name) },
+          })),
+        }}
+      </JsonLd>
     </Card>
   );
 };

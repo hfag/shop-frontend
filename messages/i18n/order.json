@@ -26,5 +26,9 @@
   {
     "id": "order.lastThreeOrders",
     "defaultMessage": "Letzte 3 Bestellungen"
+  },
+  {
+    "id": "order.total",
+    "defaultMessage": "Gesamtsumme"
   }
 ]

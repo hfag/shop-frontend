@@ -130,11 +130,15 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
               setBillingAddress={setBillingAddress}
               countries={countryData.availableCountries}
               onProceed={() => setStep("checkout")}
+              billingAddress={orderData.activeOrder.billingAddress}
+              shippingAddress={orderData.activeOrder.shippingAddress}
+              customer={orderData.activeOrder.customer}
             />
           )}
           {step === "checkout" && (
             <CheckoutForm
               intl={intl}
+              order={orderData.activeOrder}
               account={user}
               token={token}
               billingAddress={billingAddress}

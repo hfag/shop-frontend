@@ -2,6 +2,13 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
   id
   code
   state
+  customer {
+    title
+    firstName
+    lastName
+    phoneNumber
+    emailAddress
+  }
   shippingAddress {
     fullName
     company
@@ -129,6 +136,7 @@ export const ORDER_GET_SHIPPING_METHODS = /* GraphQL */ `
     eligibleShippingMethods {
       id
       price
+      priceWithTax
       description
       metadata
     }

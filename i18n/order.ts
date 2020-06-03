@@ -29,4 +29,8 @@ export default defineMessages({
     id: "order.lastThreeOrders",
     defaultMessage: "Letzte 3 Bestellungen",
   },
+  total: {
+    id: "order.total",
+    defaultMessage: "Gesamtsumme",
+  },
 });

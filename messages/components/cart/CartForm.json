@@ -16,10 +16,6 @@
     "defaultMessage": "Warenkorb aktualisieren"
   },
   {
-    "id": "CartFrom.total",
-    "defaultMessage": "Gesamtsumme"
-  },
-  {
     "id": "CartForm.toCheckout",
     "defaultMessage": "Weiter zur Bestellung"
   }

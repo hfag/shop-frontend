@@ -38,10 +38,6 @@ const messages = defineMessages({
     id: "CartFrom.refreshCart",
     defaultMessage: "Warenkorb aktualisieren",
   },
-  total: {
-    id: "CartFrom.total",
-    defaultMessage: "Gesamtsumme",
-  },
   checkout: {
     id: "CartForm.toCheckout",
     defaultMessage: "Weiter zur Bestellung",
@@ -278,7 +274,7 @@ const InnerCartForm = React.memo(
               <td />
             </tr>
             <tr className="total">
-              <td colSpan={5}>{intl.formatMessage(messages.total)}</td>
+              <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
               <td>
                 <Price>{order.total}</Price>
               </td>

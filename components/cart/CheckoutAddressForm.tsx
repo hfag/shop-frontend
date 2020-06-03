@@ -9,7 +9,14 @@ import RelativeBox from "../layout/RelativeBox";
 import SelectField from "../form/SelectField";
 import InputField from "../form/InputField";
 import address from "../../i18n/address";
-import { Country, CurrentUser, CreateAddressInput } from "../../schema";
+import {
+  Country,
+  CurrentUser,
+  CreateAddressInput,
+  Address,
+  Customer,
+  OrderAddress,
+} from "../../schema";
 import request from "../../utilities/request";
 import {
   GET_ACTIVE_ORDER,
@@ -62,7 +69,9 @@ interface IProps {
   setBillingAddress: (address: CreateAddressInput) => void;
   countries: Country[];
   token?: string;
-  values?: FormValues;
+  billingAddress: OrderAddress | null;
+  shippingAddress: OrderAddress | null;
+  customer: Customer | null;
   intl: IntlShape;
   account: CurrentUser | null;
   enabled?: boolean;
@@ -286,11 +295,12 @@ const InnerCheckoutAddressForm = React.memo(
           )}
         </RelativeBox>
       </Flex>
+      <br />
       <Button
         fullWidth
         onClick={handleSubmit}
         controlled
-        state={isValid ? status : "disabled"}
+        state={isValid && enabled ? status : "disabled"}
       >
         {intl.formatMessage(messages.continue)}
       </Button>
@@ -300,9 +310,55 @@ const InnerCheckoutAddressForm = React.memo(
 
 const CheckoutAddressForm = withFormik<IProps, FormValues>({
   enableReinitialize: true,
-  mapPropsToValues: ({ values = {} }) => ({
-    ...values,
-  }),
+  isInitialValid: true,
+  mapPropsToValues: ({
+    billingAddress = null,
+    shippingAddress = null,
+    customer = null,
+  }) => {
+    const isBillingAddress = !Object.values(billingAddress).reduce(
+      (b, v) => b && v === null,
+      true
+    );
+    const isShippingAddress = !Object.values(shippingAddress).reduce(
+      (b, v) => b && v === null,
+      true
+    );
+    //if only one is set, use for billing
+    const bAddress = isBillingAddress ? billingAddress : shippingAddress;
+    const sAddress = isBillingAddress ? shippingAddress : null;
+
+    const values: FormValues = {
+      billingFirstName: customer.firstName || "",
+      billingLastName: customer.lastName || "",
+      billingCompany: bAddress.company || "",
+      billingStreetLine1: bAddress.streetLine1 || "",
+      billingStreetLine2: bAddress.streetLine2 || "",
+      billingCity: bAddress.city || "",
+      billingProvince: bAddress.province || "",
+      billingPostalCode: bAddress.postalCode || "",
+      billingCountry: bAddress.countryCode || "", //country code
+      billingPhone: bAddress.phoneNumber || "",
+      billingEmail: customer.emailAddress || "",
+    };
+
+    if (isShippingAddress && sAddress) {
+      // values.shippingFirstName =
+      // values.shippingLastName =
+      values.shippingCompany = sAddress.company || "";
+      values.shippingStreetLine1 = sAddress.streetLine1 || "";
+      values.shippingStreetLine2 = sAddress.streetLine2 || "";
+      values.shippingCity = sAddress.city || "";
+      values.shippingProvince = sAddress.province || "";
+      values.shippingPostalCode = sAddress.postalCode || "";
+      values.shippingCountry = sAddress.countryCode || "";
+      values.shippingPhoneNumber = sAddress.postalCode || "";
+
+      values.shipToDifferentAddress = true;
+    }
+
+    return values;
+  },
 
   validationSchema: ({ countries }: IProps) => {
     const countryCodes = countries.map((country) => country.code);
@@ -391,7 +447,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       company: values.billingCompany,
       streetLine1: values.billingStreetLine1,
       streetLine2: values.billingStreetLine2,
-      city: values.billingCompany,
+      city: values.billingCity,
       province: values.billingProvince,
       postalCode: values.billingPostalCode,
       countryCode: values.billingCountry,
@@ -405,7 +461,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
           company: values.shippingCompany,
           streetLine1: values.shippingStreetLine1,
           streetLine2: values.shippingStreetLine2,
-          city: values.shippingCompany,
+          city: values.shippingCity,
           province: values.shippingProvince,
           postalCode: values.shippingPostalCode,
           countryCode: values.shippingCountry,
@@ -425,7 +481,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         customer: {
           firstName: values.billingFirstName,
           lastName: values.billingLastName,
-          phoneNumber: values.billingPhoneNumber,
+          phoneNumber: values.billingPhone,
           emailAddress: values.billingEmail,
         },
       });

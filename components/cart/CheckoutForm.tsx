@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import { withFormik, Form, Field, FormikProps } from "formik";
 import { Flex, Box } from "reflexbox";
 import * as yup from "yup";
@@ -6,11 +6,11 @@ import { defineMessages, useIntl, injectIntl, IntlShape } from "react-intl";
 
 import Button from "../elements/Button";
 import InputField from "../form/InputField";
-import order from "../../i18n/order";
 import {
   CurrentUser,
   ShippingMethodQuote,
   CreateAddressInput,
+  Order,
 } from "../../schema";
 import request from "../../utilities/request";
 import {
@@ -24,6 +24,9 @@ import {
 import useSWR, { mutate } from "swr";
 import Placeholder from "../elements/Placeholder";
 import Price from "../elements/Price";
+import Table from "../elements/Table";
+import product from "../../i18n/product";
+import orderMessages from "../../i18n/order";
 
 const messages = defineMessages({
   orderComments: {
@@ -71,6 +74,7 @@ interface IProps {
   account: CurrentUser | null;
   values?: FormValues;
   billingAddress: CreateAddressInput | null;
+  order: Order;
 }
 
 /**
@@ -88,6 +92,7 @@ const InnerCheckoutForm = React.memo(
     handleSubmit,
     isSubmitting,
     intl,
+    order,
   }: IProps & FormikProps<FormValues>) => {
     const {
       data,
@@ -98,8 +103,21 @@ const InnerCheckoutForm = React.memo(
       request(intl.locale, query)
     );
 
+    const shipping: number | null = useMemo(() => {
+      if (!data) {
+        return null;
+      }
+
+      const method = data.eligibleShippingMethods.find(
+        (m) => m.id === values.shippingMethod
+      );
+
+      return method ? method.priceWithTax : null;
+    }, [data, values]);
+
     return (
       <Form>
+        <br />
         <InputField
           label={intl.formatMessage(messages.orderComments)}
           name="orderComments"
@@ -112,14 +130,16 @@ const InnerCheckoutForm = React.memo(
           {data ? (
             data.eligibleShippingMethods.map((shippingMethod) => (
               <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} pr={3}>
-                <Field
-                  name="shippingMethod"
-                  type="radio"
-                  value={shippingMethod.id}
-                  checked={values.shippingMethod === shippingMethod.id}
-                />{" "}
-                {shippingMethod.description}{" "}
-                <Price>{shippingMethod.price}</Price>
+                <label>
+                  <Field
+                    name="shippingMethod"
+                    type="radio"
+                    value={shippingMethod.id}
+                    checked={values.shippingMethod === shippingMethod.id}
+                  />{" "}
+                  {shippingMethod.description}{" "}
+                  <Price>{shippingMethod.price}</Price>
+                </label>
               </Box>
             ))
           ) : (
@@ -128,15 +148,18 @@ const InnerCheckoutForm = React.memo(
             </Box>
           )}
         </Flex>
+        <h3>{intl.formatMessage(messages.paymentMethods)}</h3>
         <Flex flexWrap="wrap">
           <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} pr={3}>
-            <Field
-              name="paymentMethod"
-              type="radio"
-              value="invoice"
-              checked={values.paymentMethod === "invoice"}
-            />{" "}
-            {intl.formatMessage(order.invoice)}
+            <label>
+              <Field
+                name="paymentMethod"
+                type="radio"
+                value="invoice"
+                checked={values.paymentMethod === "invoice"}
+              />{" "}
+              {intl.formatMessage(orderMessages.invoice)}
+            </label>
           </Box>
         </Flex>
         <br />
@@ -146,6 +169,40 @@ const InnerCheckoutForm = React.memo(
             {intl.formatMessage(messages.acceptTos)}
           </label>
         </InputField>
+        <br />
+        <Table>
+          <thead>
+            <th></th>
+            <th>Subtotal</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{intl.formatMessage(product.subtotal)}</td>
+              <td>
+                <Price>{order.subTotalBeforeTax}</Price>
+              </td>
+            </tr>
+            <tr>
+              <td>{intl.formatMessage(orderMessages.taxes)}</td>
+              <td>
+                <Price>{order.total - order.subTotalBeforeTax}</Price>
+              </td>
+            </tr>
+            <tr>
+              <td>{intl.formatMessage(orderMessages.shipping)}</td>
+              <td>{shipping && <Price>{shipping}</Price>}</td>
+            </tr>
+            <tr>
+              <td>{intl.formatMessage(orderMessages.total)}</td>
+              <td>
+                <Price>
+                  {shipping ? order.total + shipping : order.totalBeforeTax}
+                </Price>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+        <br />
         <Button
           fullWidth
           onClick={handleSubmit}

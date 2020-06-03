@@ -77,9 +77,6 @@ const StyledTable = styled(ReactTable)`
     &:nth-child(3) {
       flex: 1 0 20% !important;
     }
-    &:last-child {
-      flex: 0 0 36px !important;
-    }
   }
 
   ${media.maxSmall`
@@ -94,15 +91,6 @@ const BulkDiscountTable = styled.table`
   width: 100%;
 `;
 
-const AddToCart = styled.div`
-  margin-top: 1rem;
-  display: flex;
-
-  & > div {
-    width: 100%;
-    margin-left: 0.5rem;
-  }
-`;
 
 const debouncedSearch = debounce((keyword, resultCount) => {
   trackSiteSearch(keyword, false, resultCount);
@@ -349,24 +337,6 @@ class SkuSelection extends React.PureComponent {
                     <div>
                       <Price>{product.price}</Price>
                     </div>
-                  )}
-                </div>
-              )
-            },
-            {
-              Header: "",
-              width: 36,
-              expander: true,
-              Expander: ({ isExpanded, ...rest }) => (
-                <div>
-                  {isExpanded ? (
-                    <span>
-                      <FaTimesCircle size={24} />
-                    </span>
-                  ) : (
-                    <span>
-                      <FaCartPlus size={24} />
-                    </span>
                   )}
                 </div>
               )

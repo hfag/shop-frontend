@@ -51,10 +51,6 @@ const messages = defineMessages({
 
 const ABSOLUTE_URL = process.env.ABSOLUTE_URL;
 
-const SkuSelection = universal(props =>
-  import(/* webpackChunkName: "sku-selection" */ "./SkuSelection")
-);
-
 /**
  * The cart page
  * @returns {Component} The component
@@ -81,7 +77,6 @@ const Cart = React.memo(
     const intl = useIntl();
     const [step, setStep] = useState("cart");
     const [showShipping, setShowShipping] = useState(false);
-    const [showSkuSelection, setShowSkuSelection] = useState(false);
 
     useEffect(() => {
       fetchCountriesIfNeeded();
@@ -110,13 +105,6 @@ const Cart = React.memo(
 
         <h1>{intl.formatMessage(messages.cart)}</h1>
 
-        {showSkuSelection && (
-          <div>
-            <SkuSelection />
-            <hr />
-          </div>
-        )}
-
         <CartForm
           items={items}
           shipping={shipping}
@@ -128,11 +116,7 @@ const Cart = React.memo(
           enabled={step === "cart"}
           onProceed={() => setStep("checkout")}
           lastRow={
-            !showSkuSelection && (
-              <Button onClick={() => showSkuSelection(true)} state="">
-                {intl.formatMessage(messages.searchProduct)}
-              </Button>
-            )
+            null
           }
         />
 

@@ -1,10 +1,18 @@
 [
   {
-    "id": "AccountOrders.orders",
+    "id": "order.orders",
     "defaultMessage": "Bestellungen"
   },
   {
-    "id": "AccountOrders.order",
+    "id": "order.orderNumber",
+    "defaultMessage": "Bestellnummer"
+  },
+  {
+    "id": "order.orderDate",
+    "defaultMessage": "Bestelldatum"
+  },
+  {
+    "id": "order.order",
     "defaultMessage": "Bestellung"
   },
   {

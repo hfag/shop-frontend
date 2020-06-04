@@ -5,6 +5,10 @@ export default defineMessages({
     id: "product.product",
     defaultMessage: "Produkt",
   },
+  products: {
+    id: "product.products",
+    defaultMessage: "Produkte",
+  },
   name: {
     id: "product.name",
     defaultMessage: "Name",

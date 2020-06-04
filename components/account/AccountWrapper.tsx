@@ -42,6 +42,10 @@ const messages = defineMessages({
     id: "Account.details",
     defaultMessage: "Details",
   },
+  addresses: {
+    id: "Account.addresses",
+    defaultMessage: "Adressen",
+  },
 });
 
 const ProfileNavigation = styled.ul`
@@ -79,15 +83,17 @@ const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
 
     const { user } = useContext(AppContext);
 
+    // useEffect(() => {
+    //   if (!user) {
+    //     console.log("user", user);
+    //     router.push(
+    //       `/${intl.locale}/${pathnamesByLanguage.login.languages[intl.locale]}`
+    //     );
+    //   }
+    // }, [user]);
     useEffect(() => {
-      if (!user) {
-        router.push(
-          `/${intl.locale}/${pathnamesByLanguage.login.languages[intl.locale]}`
-        );
-      }
-
       trackPageView();
-    }, [user]);
+    }, []);
 
     return (
       <AccountContainer>
@@ -138,23 +144,12 @@ const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
                     href={`/${intl.locale}/${
                       pathnamesByLanguage.account.languages[intl.locale]
                     }/${
-                      pathnamesByLanguage.account.pathnames.billingAddress
-                        .languages[intl.locale]
+                      pathnamesByLanguage.account.pathnames.address.languages[
+                        intl.locale
+                      ]
                     }`}
                   >
-                    {intl.formatMessage(address.billingAddress)}
-                  </StyledLink>
-                </li>
-                <li>
-                  <StyledLink
-                    href={`/${intl.locale}/${
-                      pathnamesByLanguage.account.languages[intl.locale]
-                    }/${
-                      pathnamesByLanguage.account.pathnames.shippingAddress
-                        .languages[intl.locale]
-                    }`}
-                  >
-                    {intl.formatMessage(address.shippingAddress)}
+                    {intl.formatMessage(messages.addresses)}
                   </StyledLink>
                 </li>
                 <li>

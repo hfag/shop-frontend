@@ -3,8 +3,9 @@ import { useIntl } from "react-intl";
 import page from "../../../i18n/page";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import AccountWrapper from "../../../components/account/AccountWrapper";
+import AccountDashboard from "../../../components/account/AccountDashboard";
 
-const Page = (props) => {
+const Page = () => {
   const intl = useIntl();
   return (
     <Wrapper
@@ -18,7 +19,9 @@ const Page = (props) => {
         },
       ]}
     >
-      <AccountWrapper>hi</AccountWrapper>
+      <AccountWrapper>
+        <AccountDashboard></AccountDashboard>
+      </AccountWrapper>
     </Wrapper>
   );
 };

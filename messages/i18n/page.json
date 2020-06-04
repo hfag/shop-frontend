@@ -24,8 +24,20 @@
     "defaultMessage": "E-Mail verifizieren"
   },
   {
+    "id": "page.verifyNewEmail",
+    "defaultMessage": "Neue E-Mail verifizieren"
+  },
+  {
     "id": "pages.myAccount",
     "defaultMessage": "Mein Konto"
+  },
+  {
+    "id": "pages.accountDetails",
+    "defaultMessage": "Details"
+  },
+  {
+    "id": "pages.accountOrders",
+    "defaultMessage": "Bestellungen"
   },
   {
     "id": "pages.login",

@@ -25,9 +25,21 @@ export default defineMessages({
     id: "page.verifyEmail",
     defaultMessage: "E-Mail verifizieren",
   },
+  verifyNewEmail: {
+    id: "page.verifyNewEmail",
+    defaultMessage: "Neue E-Mail verifizieren",
+  },
   myAccount: {
     id: "pages.myAccount",
     defaultMessage: "Mein Konto",
+  },
+  accountDetails: {
+    id: "pages.accountDetails",
+    defaultMessage: "Details",
+  },
+  accountOrders: {
+    id: "pages.accountOrders",
+    defaultMessage: "Bestellungen",
   },
   login: {
     id: "pages.login",

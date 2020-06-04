@@ -34,6 +34,7 @@ const _StyledLink = styled.a<IProps>`
 `;
 
 const BorderLink = styled(_StyledLink)`
+  display: inline-block;
   border-bottom: ${({ negative }) =>
       negative ? colors.primaryContrast : colors.font}
     1px solid;
@@ -41,6 +42,7 @@ const BorderLink = styled(_StyledLink)`
 
 const StyledLink: FunctionComponent<{
   active?: boolean;
+  block?: boolean;
   underlined?: boolean;
   noHover?: boolean;
   negative?: boolean;
@@ -54,6 +56,7 @@ const StyledLink: FunctionComponent<{
   children?: ReactNode;
 }> = ({
   active,
+  block,
   href,
   external,
   onClick,
@@ -84,6 +87,7 @@ const StyledLink: FunctionComponent<{
     return (
       <LinkComponent
         negative={negative}
+        block={block}
         noHover={noHover}
         rel={rel}
         title={title}

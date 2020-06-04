@@ -18,5 +18,9 @@
   {
     "id": "Account.details",
     "defaultMessage": "Details"
+  },
+  {
+    "id": "Account.addresses",
+    "defaultMessage": "Adressen"
   }
 ]

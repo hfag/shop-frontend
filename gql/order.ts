@@ -1,3 +1,31 @@
+export const FULL_ADDRESS_FRAGMENT = `
+  id
+  fullName
+  company
+  streetLine1
+  streetLine2
+  city
+  province
+  postalCode
+  country {
+    code
+    name
+  }
+  phoneNumber
+`;
+
+export const FULL_ORDER_ADDRESS_FRAGMENT = `
+  fullName
+  company
+  streetLine1
+  streetLine2
+  city
+  province
+  postalCode
+  countryCode
+  phoneNumber
+`;
+
 export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
   id
   code
@@ -10,28 +38,10 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     emailAddress
   }
   shippingAddress {
-    fullName
-    company
-    streetLine1
-    streetLine2
-    city
-    province
-    postalCode
-    country
-    countryCode
-    phoneNumber
+    ${FULL_ORDER_ADDRESS_FRAGMENT}
   }
   billingAddress {
-    fullName
-    company
-    streetLine1
-    streetLine2
-    city
-    province
-    postalCode
-    country
-    countryCode
-    phoneNumber
+    ${FULL_ORDER_ADDRESS_FRAGMENT}
   }
   lines {
     id
@@ -81,6 +91,8 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
   }
   totalBeforeTax
   total
+  createdAt
+  updatedAt
 `;
 
 export const GET_ACTIVE_ORDER = /* GraphQL */ `

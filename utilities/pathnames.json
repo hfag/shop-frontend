@@ -67,8 +67,15 @@
     "languages": { "de": "logout", "fr": "logout" }
   },
   "verifyEmail": {
-    "path": "de/verifizieren.tsx",
-    "languages": { "de": "verifizieren", "fr": "verifier" }
+    "path": "de/email-verifizieren.tsx",
+    "languages": { "de": "email-verifizieren", "fr": "verifier-e-mail" }
+  },
+  "verifyNewEmail": {
+    "path": "de/neue-email-verifizieren.tsx",
+    "languages": {
+      "de": "neue-email-verifizieren",
+      "fr": "verifier-nouveau-e-mail"
+    }
   },
   "account": {
     "path": "de/konto",
@@ -78,29 +85,45 @@
         "path": "de/konto/bestellungen",
         "languages": { "de": "bestellungen", "fr": "commandes" },
         "pathnames": {
+          "[code].tsx": {
+            "path": "de/konto/bestellungen/[code].tsx",
+            "languages": {
+              "de": "[code]",
+              "fr": "[code]"
+            }
+          }
+        }
+      },
+      "dashboard": {
+        "path": "de/konto/index.tsx",
+        "languages": { "de": "index", "fr": "index" }
+      },
+      "details": {
+        "path": "de/konto/details.tsx",
+        "languages": { "de": "details", "fr": "details" }
+      },
+      "address": {
+        "path": "de/konto/adresse",
+        "languages": {
+          "de": "adresse",
+          "fr": "adresse"
+        },
+        "pathnames": {
+          "index.tsx": {
+            "path": "de/konto/adresse/index.tsx",
+            "languages": {
+              "de": "index",
+              "fr": "index"
+            }
+          },
           "[id].tsx": {
-            "path": "de/konto/bestellungen/[id].tsx",
+            "path": "de/konto/adresse/[id].tsx",
             "languages": {
               "de": "[id]",
               "fr": "[id]"
             }
           }
         }
-      },
-      "details": {
-        "path": "de/konto/details.tsx",
-        "languages": { "de": "details", "fr": "details" }
-      },
-      "billingAddress": {
-        "path": "de/konto/rechnungsadresse.tsx",
-        "languages": {
-          "de": "rechnungsadresse",
-          "fr": "adresse-de-facturation"
-        }
-      },
-      "shippingAddress": {
-        "path": "de/konto/lieferadresse.tsx",
-        "languages": { "de": "lieferadresse", "fr": "adresse-de-livraison" }
       }
     }
   },

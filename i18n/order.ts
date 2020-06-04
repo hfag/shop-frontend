@@ -2,11 +2,19 @@ import { defineMessages } from "react-intl";
 
 export default defineMessages({
   orders: {
-    id: "AccountOrders.orders",
+    id: "order.orders",
     defaultMessage: "Bestellungen",
   },
+  orderNumber: {
+    id: "order.orderNumber",
+    defaultMessage: "Bestellnummer",
+  },
+  orderDate: {
+    id: "order.orderDate",
+    defaultMessage: "Bestelldatum",
+  },
   order: {
-    id: "AccountOrders.order",
+    id: "order.order",
     defaultMessage: "Bestellung",
   },
   invoice: {

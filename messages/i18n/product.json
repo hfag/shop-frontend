@@ -4,6 +4,10 @@
     "defaultMessage": "Produkt"
   },
   {
+    "id": "product.products",
+    "defaultMessage": "Produkte"
+  },
+  {
     "id": "product.name",
     "defaultMessage": "Name"
   },

@@ -7,6 +7,7 @@ import StyledLink from "../elements/StyledLink";
 import { Order as OrderType } from "../../schema";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { useIntl } from "react-intl";
+import Placeholder from "./Placeholder";
 
 const OrderWrapper = styled.div`
   margin-top: -1px; /*border*/
@@ -42,19 +43,20 @@ const OrderMeta = styled.div``;
  */
 const getState = (status) => {
   switch (status) {
-    case "wc-pending":
+    case "AddingItems":
+      return { color: colors.info, label: "Noch nicht versendet" };
+    case "ArrangingPayment":
       return { color: colors.info, label: "Bezahlung ausstehend" };
-    case "wc-on-hold":
-      return { color: colors.info, label: "In Warteschlange" };
-    case "wc-processing":
-      return { color: colors.info, label: "In Bearbeitung" };
-    case "wc-completed":
-      return { color: colors.success, label: "Abgeschlossen" };
-    case "wc-on-refunded":
-      return { color: colors.warning, label: "Zurückerstattet" };
-    case "wc-on-cancelled":
+    case "PaymentAuthorized":
+      return { color: colors.info, label: "Zahlung freigegeben" };
+    case "PaymentSettled":
+      return { color: colors.success, label: "Zahlung abgeschlossen" };
+    case "PartiallyFulfilled":
+      return { color: colors.warning, label: "Teilweise abgeschlossen" };
+    case "Cancelled":
       return { color: colors.danger, label: "Storniert" };
-    case "wc-on-failed":
+    case "Fulfilled":
+      return { color: colors.success, label: "Abgeschlossen" };
     default:
       return { color: colors.danger, label: "Fehlgeschlagen" };
   }
@@ -63,56 +65,72 @@ const getState = (status) => {
 /**
  * An order component
  */
-const Order: FunctionComponent<{ order: OrderType; compact?: boolean }> = ({
+const Order: FunctionComponent<{ order?: OrderType; compact?: boolean }> = ({
   order,
   compact,
 }) => {
   const intl = useIntl();
-  const date = new Date(order.createdAt);
-  const state = getState(status);
-  /* TODO: translate */
+  const date = new Date(order?.createdAt);
+  const state = getState(order?.state);
+  //TODO: translate
 
   return (
     <OrderWrapper>
-      <StyledLink
-        href={`/${language}/${pathnamesByLanguage.account[intl.locale]}/${
-          pathnamesByLanguage.orders[intl.locale]
-        }/${id}`}
-        underlined
-      >
-        <h4>
-          Bestellung #{id} vom {date.toLocaleDateString()}
-        </h4>
-      </StyledLink>
+      <div>
+        {order ? (
+          <StyledLink
+            href={`/${intl.locale}/${
+              pathnamesByLanguage.account.languages[intl.locale]
+            }/${
+              pathnamesByLanguage.account.pathnames.orders.languages[
+                intl.locale
+              ]
+            }/${order?.code}`}
+            underlined
+          >
+            <h4>
+              Bestellung #{order.code} vom {date.toLocaleDateString()}
+            </h4>
+          </StyledLink>
+        ) : (
+          <Placeholder height={1.5} mb={1} text />
+        )}
+      </div>
       {compact ? (
-        <div>
-          {order.lines.reduce((sum, l) => sum + l.quantity, 0)} Produkte für{" "}
-          <Price>{order.total}</Price>
-        </div>
+        order ? (
+          <>
+            {order.lines.length} verschiedene Produkte für{" "}
+            <Price>{order.total}</Price>
+          </>
+        ) : (
+          <Placeholder text />
+        )
       ) : (
         <div>
-          {order.lines.map((line, index) => (
-            <OrderItem key={index}>
-              <h5>
-                {line.productVariant.name} ({line.productVariant.sku})
-              </h5>
-              <OrderMeta>
-                {line.productVariant.options.map((option, index) => (
-                  <span key={index}>
-                    <span
-                      dangerouslySetInnerHTML={{ __html: option.name }}
-                    ></span>
-                  </span>
-                ))}
-              </OrderMeta>
-            </OrderItem>
-          ))}
-          <Price>{order.total}</Price>
+          {order
+            ? order.lines.map((line, index) => (
+                <OrderItem key={index}>
+                  <h5>
+                    {line.productVariant.name} ({line.productVariant.sku})
+                  </h5>
+                  <OrderMeta>
+                    {line.productVariant.options.map((o) => o.name).join(", ")}
+                  </OrderMeta>
+                </OrderItem>
+              ))
+            : new Array(2).fill(undefined).map((a, index) => (
+                <OrderItem key={index}>
+                  <Placeholder text height={3} />
+                </OrderItem>
+              ))}
+          {order && <Price>{order.total}</Price>}
         </div>
       )}
-      <div>
-        <Status color={state.color}>{state.label}</Status>
-      </div>
+      {order && (
+        <div>
+          <Status color={state.color}>{state.label}</Status>
+        </div>
+      )}
     </OrderWrapper>
   );
 };

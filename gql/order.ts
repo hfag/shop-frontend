@@ -12,6 +12,8 @@ export const FULL_ADDRESS_FRAGMENT = `
     name
   }
   phoneNumber
+  defaultShippingAddress
+  defaultBillingAddress
 `;
 
 export const FULL_ORDER_ADDRESS_FRAGMENT = `

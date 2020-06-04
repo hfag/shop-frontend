@@ -1,22 +1,13 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import { useIntl, defineMessages } from "react-intl";
+import { useIntl } from "react-intl";
 import { Order as OrderType } from "../../schema";
 import orderMessages from "../../i18n/order";
-import Order from "../elements/Order";
 import Table from "../elements/Table";
-import product from "../../i18n/product";
 import Price from "../elements/Price";
 import StyledLink from "../elements/StyledLink";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Placeholder from "../elements/Placeholder";
-
-const messages = defineMessages({
-  // siteTitle: {
-  //   id: "Account.siteTitle",
-  //   defaultMessage: "Mein Kundenkonto bei der Hauser Feuerschutz AG",
-  // },
-});
 
 const OrdersWrapper = styled.div`
   h2 {
@@ -24,7 +15,7 @@ const OrdersWrapper = styled.div`
   }
 `;
 
-const AccountOrders: FunctionComponent<{ orders: OrderType[] }> = React.memo(
+const AccountOrders: FunctionComponent<{ orders?: OrderType[] }> = React.memo(
   ({ orders }) => {
     const intl = useIntl();
 

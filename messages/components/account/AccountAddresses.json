@@ -1,0 +1,18 @@
+[
+  {
+    "id": "AccountAddresses.address",
+    "defaultMessage": "Adresse"
+  },
+  {
+    "id": "AccountAddresses.addresses",
+    "defaultMessage": "Adressen"
+  },
+  {
+    "id": "AccountAddresses.noAddresses",
+    "defaultMessage": "Es wurden bisher keine Adressen hinterlegt."
+  },
+  {
+    "id": "AccountAddresses.newAddress",
+    "defaultMessage": "Neue Adresse erstellen"
+  }
+]

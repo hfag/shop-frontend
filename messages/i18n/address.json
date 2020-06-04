@@ -74,5 +74,13 @@
   {
     "id": "address.chooseState",
     "defaultMessage": "Wählen Sie einen Kanton"
+  },
+  {
+    "id": "address.defaultShippingAddress",
+    "defaultMessage": "Standardliferadresse?"
+  },
+  {
+    "id": "address.defaultBillingAddress",
+    "defaultMessage": "Standardrechnungsadresse?"
   }
 ]

@@ -77,4 +77,12 @@ export default defineMessages({
     id: "address.chooseState",
     defaultMessage: "Wählen Sie einen Kanton",
   },
+  defaultShippingAddress: {
+    id: "address.defaultShippingAddress",
+    defaultMessage: "Standardliferadresse?",
+  },
+  defaultBillingAddress: {
+    id: "address.defaultBillingAddress",
+    defaultMessage: "Standardrechnungsadresse?",
+  },
 });

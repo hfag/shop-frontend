@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../utilities/style";
 
-const CartTableAction = styled.span`
+const TableAction = styled.span`
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   transform-origin: 50% 50%;
@@ -12,4 +12,4 @@ const CartTableAction = styled.span`
   }
 `;
 
-export default CartTableAction;
+export default TableAction;

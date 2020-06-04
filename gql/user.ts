@@ -100,7 +100,29 @@ export const REQUEST_UPDATE_CUSTOMER_EMAIL = /* GraphQL */ `
   }
 `;
 export const UPDATE_CUSTOMER_EMAIL = /* GraphQL */ `
-  mutation updateCustomerEmailAddress($token: String!) {
+  mutation UpdateCustomerEmailAddress($token: String!) {
     updateCustomerEmailAddress(token: $token)
+  }
+`;
+
+export const CREATE_CUSTOMER_ADDRESS = /* GraphQL */ `
+  mutation CreateCustomerAddress($input: CreateAddressInput!) {
+    createCustomerAddress(input: $input) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_CUSTOMER_ADDRESS = /* GraphQL */ `
+  mutation UpdateCustomerAddress($input: UpdateAddressInput!) {
+    updateCustomerAddress(input: $input) {
+      id
+    }
+  }
+`;
+
+export const DELETE_CUSTOMER_ADDRESS = /* GraphQL */ `
+  mutation DeleteCustomerAddress($id: ID!) {
+    deleteCustomerAddress(id: $id)
   }
 `;

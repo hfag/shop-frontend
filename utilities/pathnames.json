@@ -103,21 +103,21 @@
         "languages": { "de": "details", "fr": "details" }
       },
       "address": {
-        "path": "de/konto/adresse",
+        "path": "de/konto/adressen",
         "languages": {
-          "de": "adresse",
-          "fr": "adresse"
+          "de": "adressen",
+          "fr": "adressen"
         },
         "pathnames": {
           "index.tsx": {
-            "path": "de/konto/adresse/index.tsx",
+            "path": "de/konto/adressen/index.tsx",
             "languages": {
               "de": "index",
               "fr": "index"
             }
           },
           "[id].tsx": {
-            "path": "de/konto/adresse/[id].tsx",
+            "path": "de/konto/adressen/[id].tsx",
             "languages": {
               "de": "[id]",
               "fr": "[id]"

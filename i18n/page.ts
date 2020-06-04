@@ -37,6 +37,10 @@ export default defineMessages({
     id: "pages.accountDetails",
     defaultMessage: "Details",
   },
+  accountAddresses: {
+    id: "pages.accountAddresses",
+    defaultMessage: "Adressen",
+  },
   accountOrders: {
     id: "pages.accountOrders",
     defaultMessage: "Bestellungen",

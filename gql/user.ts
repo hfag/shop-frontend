@@ -126,3 +126,8 @@ export const DELETE_CUSTOMER_ADDRESS = /* GraphQL */ `
     deleteCustomerAddress(id: $id)
   }
 `;
+export const LOGOUT = /* GraphQL */ `
+  mutation logout {
+    logout
+  }
+`;

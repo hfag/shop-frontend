@@ -48,6 +48,10 @@
     "defaultMessage": "Login"
   },
   {
+    "id": "pages.logout",
+    "defaultMessage": "Logout"
+  },
+  {
     "id": "page.shopAdmin",
     "defaultMessage": "Shop-Admin"
   },

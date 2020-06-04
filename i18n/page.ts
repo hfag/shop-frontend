@@ -49,6 +49,10 @@ export default defineMessages({
     id: "pages.login",
     defaultMessage: "Login",
   },
+  logout: {
+    id: "pages.logout",
+    defaultMessage: "Logout",
+  },
   shopAdmin: {
     id: "page.shopAdmin",
     defaultMessage: "Shop-Admin",

@@ -22,10 +22,10 @@ const Address: FunctionComponent<{ address: AddressType }> = ({ address }) => {
       <Line>{address.streetLine2}</Line>
       {/*<Line>{address.post_office_box}</Line>*/}
       <Line>
-        {address.country ? address.country + "-" : ""}
+        {address.country ? address.country.code + "-" : ""}
         {[address.postalCode, address.city, address.province]
           .filter((x) => x)
-          .join(",")}
+          .join(", ")}
       </Line>
     </div>
   );

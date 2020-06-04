@@ -1,8 +1,8 @@
 import Wrapper from "../../components/layout/Wrapper";
-import Login from "../../components/Login";
 import { useIntl } from "react-intl";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
+import VerifyEmail from "../../components/VerifyEmail";
 
 const Page = () => {
   const intl = useIntl();
@@ -11,14 +11,14 @@ const Page = () => {
       sidebar={null}
       breadcrumbs={[
         {
-          name: intl.formatMessage(page.login),
+          name: intl.formatMessage(page.verifyEmail),
           url: `/${intl.locale}/${
-            pathnamesByLanguage.login.languages[intl.locale]
+            pathnamesByLanguage.verifyEmail.languages[intl.locale]
           }`,
         },
       ]}
     >
-      <Login />
+      <VerifyEmail />
     </Wrapper>
   );
 };

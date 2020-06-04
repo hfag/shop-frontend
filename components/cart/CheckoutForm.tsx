@@ -278,9 +278,9 @@ const CheckoutForm = withFormik<IProps, FormValues>({
       );
 
       router.push(
-        `/${pathnamesByLanguage.confirmation.languages[intl.locale]}?code=${
-          order.code
-        }`
+        `/${intl.locale}/${
+          pathnamesByLanguage.confirmation.languages[intl.locale]
+        }?code=${order.code}`
       );
     } else {
       alert(intl.formatMessage(messages.invalidPaymentMethod));

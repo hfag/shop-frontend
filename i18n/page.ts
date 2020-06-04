@@ -21,6 +21,10 @@ export default defineMessages({
     id: "page.confirmation",
     defaultMessage: "Bestellbestätigung",
   },
+  verifyEmail: {
+    id: "page.verifyEmail",
+    defaultMessage: "E-Mail verifizieren",
+  },
   myAccount: {
     id: "pages.myAccount",
     defaultMessage: "Mein Konto",

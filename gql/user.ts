@@ -1,12 +1,16 @@
+export const CURRENT_USER_FRAGMENT = `
+  identifier
+  channels {
+    id
+    code
+    permissions
+  }
+`;
+
 export const GET_CURRENT_USER = /* GraphQL */ `
   query {
     me {
-      identifier
-      channels {
-        id
-        code
-        permissions
-      }
+      ${CURRENT_USER_FRAGMENT}
     }
   }
 `;

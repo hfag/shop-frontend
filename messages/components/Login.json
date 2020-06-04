@@ -1,0 +1,42 @@
+[
+  {
+    "id": "Login.siteTitle",
+    "defaultMessage": "Anmelden bei der Hauser Feuerschutz AG"
+  },
+  {
+    "id": "Login.siteDescription",
+    "defaultMessage": "Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
+  },
+  {
+    "id": "Login.reset",
+    "defaultMessage": "Zurücksetzen"
+  },
+  {
+    "id": "Login.emailAlreadyExists",
+    "defaultMessage": "Diese E-Mail wurde bereits registriert!"
+  },
+  {
+    "id": "Login.wrongPassword",
+    "defaultMessage": "Das Passwort stimmt nicht!"
+  },
+  {
+    "id": "Login.unknownError",
+    "defaultMessage": "Es ist ein unbekannter Fehler aufgetreten!"
+  },
+  {
+    "id": "Login.passwordForgotten",
+    "defaultMessage": "Passwort vergessen?"
+  },
+  {
+    "id": "Login.confirmationEmail",
+    "defaultMessage": "Sie sollten in Kürze eine E-Mail erhalten."
+  },
+  {
+    "id": "Login.newAccount",
+    "defaultMessage": "Neues Kundenkonto anlegen"
+  },
+  {
+    "id": "Login.createAccount",
+    "defaultMessage": "Kundenkonto anlegen"
+  }
+]

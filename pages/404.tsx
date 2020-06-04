@@ -30,7 +30,7 @@ const messages = defineMessages({
   },
 });
 
-const Page404 = React.memo(({ language }) => {
+const Page404 = React.memo(({}) => {
   const intl = useIntl();
 
   useEffect(() => {
@@ -38,13 +38,7 @@ const Page404 = React.memo(({ language }) => {
   });
 
   return (
-    <Wrapper
-      sidebar={null}
-      breadcrumbs={[
-        { name: "Startseite", url: "/" },
-        { name: "Error 404", url: " " },
-      ]}
-    >
+    <Wrapper sidebar={null} breadcrumbs={[{ name: "Error 404", url: " " }]}>
       <Card>
         <Head>
           <title>

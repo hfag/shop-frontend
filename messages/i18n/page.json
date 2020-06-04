@@ -20,6 +20,10 @@
     "defaultMessage": "Bestellbestätigung"
   },
   {
+    "id": "page.verifyEmail",
+    "defaultMessage": "E-Mail verifizieren"
+  },
+  {
     "id": "pages.myAccount",
     "defaultMessage": "Mein Konto"
   },

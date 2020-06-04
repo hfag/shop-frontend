@@ -18,7 +18,7 @@ import React, {
   useCallback,
   useState,
 } from "react";
-import { CurrentUser } from "../schema";
+import { Customer } from "../schema";
 import useSWR from "swr";
 import { useLocalStorage } from "../utilities/hooks";
 import { GET_CURRENT_CUSTOMER } from "../gql/user";
@@ -27,7 +27,7 @@ import request from "../utilities/request";
 export const AppContext = React.createContext<{
   burgerMenuOpen: boolean;
   toggleBurgerMenu: () => void;
-  user: CurrentUser | null;
+  user: Customer | null;
   token: string | null;
 }>({
   burgerMenuOpen: false,
@@ -48,9 +48,9 @@ const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
 
   const [token, setToken] = useLocalStorage("vendure-auth-token");
 
-  const { data, error } = useSWR<{ me: CurrentUser }>(
+  const { data, error } = useSWR<{ activeCustomer: Customer }>(
     token ? [GET_CURRENT_CUSTOMER, token] : null,
-    (query, token) => request(intl.locale, query)
+    (query) => request(intl.locale, query)
   );
 
   return (
@@ -58,7 +58,7 @@ const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
       value={{
         burgerMenuOpen,
         toggleBurgerMenu,
-        user: token && data ? data.me : null,
+        user: token && data ? data.activeCustomer : null,
         token,
       }}
     >

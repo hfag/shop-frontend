@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext } from "react";
 import styled from "styled-components";
 import { defineMessages, useIntl } from "react-intl";
 
@@ -7,8 +7,9 @@ import Dropdown from "../elements/Dropdown";
 import RestrictedView from "../elements/RestrictedView";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Triangle from "../shapes/Triangle";
-import user from "../../i18n/user";
+import userMessages from "../../i18n/user";
 import page from "../../i18n/page";
+import { AppContext } from "../../pages/_app";
 
 const messages = defineMessages({
   toAccount: {
@@ -32,11 +33,9 @@ const NavUser: FunctionComponent<{
   setDropdown: (dropdown: string | boolean) => void;
 }> = React.memo(({ dropdown, setDropdown }) => {
   const intl = useIntl();
+  const { user } = useContext(AppContext);
 
-  const isAuthenticated = false;
-  const account: { [key: string]: any } = {};
-
-  return isAuthenticated ? (
+  return user ? (
     <div>
       <StyledLink
         onClick={() => setDropdown(dropdown === "user" ? false : "user")}
@@ -44,9 +43,9 @@ const NavUser: FunctionComponent<{
         flex
       >
         <Login>
-          {account.firstName.length > 0 || account.lastName.length > 0
-            ? `${account.firstName} ${account.lastName}`
-            : account.email}
+          {user.firstName.length > 0 || user.lastName.length > 0
+            ? `${user.firstName} ${user.lastName}`
+            : user.emailAddress}
         </Login>
         <Triangle color="#fff" size="0.5rem" />
       </StyledLink>
@@ -84,7 +83,7 @@ const NavUser: FunctionComponent<{
               }`}
               active={false}
             >
-              {intl.formatMessage(user.logout)}
+              {intl.formatMessage(userMessages.logout)}
             </StyledLink>
           </div>
         </UserDropdown>
@@ -98,7 +97,7 @@ const NavUser: FunctionComponent<{
       negative
       flex
     >
-      <Login>{intl.formatMessage(user.login)}</Login>
+      <Login>{intl.formatMessage(userMessages.login)}</Login>
     </StyledLink>
   );
 });

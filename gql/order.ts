@@ -91,6 +91,14 @@ export const GET_ACTIVE_ORDER = /* GraphQL */ `
   }
 `;
 
+export const GET_ORDER_BY_CODE = /* GraphQL */ `
+  query OrderByCode($code: String!){
+    orderByCode(code: $code) {
+      ${FULL_ORDER_FRAGMENT}
+    }
+  }
+`;
+
 export const ADD_TO_ORDER = /* GraphQL */ `
   mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {
     addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
@@ -144,8 +152,15 @@ export const ORDER_GET_SHIPPING_METHODS = /* GraphQL */ `
 `;
 
 export const ORDER_SET_SHIPPING_METHOD = /* GraphQL */ `
-  mutation SetOrderShippingAddress($shippingMethodId: ID!) {
-    setOrderShippingAddress(shippingMethodId: $shippingMethodId) {
+  mutation SetOrderShippingMethod($shippingMethodId: ID!) {
+    setOrderShippingMethod(shippingMethodId: $shippingMethodId) {
+      id
+    }
+  }
+`;
+export const TRANSITION_ORDER_TO_STATE = /* GraphQL */ `
+  mutation TransitionOrderToState($state: String!) {
+    transitionOrderToState(state: $state) {
       id
     }
   }
@@ -153,6 +168,17 @@ export const ORDER_SET_SHIPPING_METHOD = /* GraphQL */ `
 
 export const ORDER_ADD_PAYMENT = /* GraphQL */ `
   mutation AddPaymentToOrder($input: PaymentInput!) {
+    addPaymentToOrder(input: $input) {
+      ${FULL_ORDER_FRAGMENT}
+    }
+  }
+`;
+
+export const TRANSITION_ORDER_AND_ADD_PAYMENT = /* GraphQL */ `
+  mutation TransitionOrderToStateAndAddPayment($input: PaymentInput!) {
+    transitionOrderToState(state: "ArrangingPayment") {
+      id
+    }
     addPaymentToOrder(input: $input) {
       ${FULL_ORDER_FRAGMENT}
     }

@@ -16,6 +16,10 @@
     "defaultMessage": "Warenkorb"
   },
   {
+    "id": "page.confirmation",
+    "defaultMessage": "Bestellbestätigung"
+  },
+  {
     "id": "pages.myAccount",
     "defaultMessage": "Mein Konto"
   },

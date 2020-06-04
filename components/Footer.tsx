@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
 import {
-  FaMapMarker as MapMarker,
+  FaMapMarkerAlt as MapMarker,
   FaPhone as Phone,
   FaEnvelope as Envelope,
   FaDownload,

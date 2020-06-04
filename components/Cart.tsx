@@ -22,6 +22,7 @@ import request from "../utilities/request";
 import useSWR from "swr";
 import Placeholder from "./elements/Placeholder";
 import { AVAILABLE_COUNTRIES } from "../gql/country";
+import { useRouter } from "next/router";
 
 const messages = defineMessages({
   siteTitle: {
@@ -56,6 +57,7 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
     billingAddress,
     setBillingAddress,
   ] = useState<CreateAddressInput | null>(null);
+  const router = useRouter();
 
   const {
     data: orderData,
@@ -106,7 +108,7 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
         <>
           <CartForm
             intl={intl}
-            order={orderData.activeOrder}
+            order={orderData?.activeOrder}
             token={token}
             enabled={step === "cart"}
             onProceed={() => setStep("address")}
@@ -128,17 +130,18 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
               showShipping={showShipping}
               setShowShipping={setShowShipping}
               setBillingAddress={setBillingAddress}
-              countries={countryData.availableCountries}
+              countries={countryData?.availableCountries || []}
               onProceed={() => setStep("checkout")}
-              billingAddress={orderData.activeOrder.billingAddress}
-              shippingAddress={orderData.activeOrder.shippingAddress}
-              customer={orderData.activeOrder.customer}
+              billingAddress={orderData?.activeOrder.billingAddress}
+              shippingAddress={orderData?.activeOrder.shippingAddress}
+              customer={orderData?.activeOrder?.customer}
             />
           )}
           {step === "checkout" && (
             <CheckoutForm
               intl={intl}
-              order={orderData.activeOrder}
+              router={router}
+              order={orderData?.activeOrder}
               account={user}
               token={token}
               billingAddress={billingAddress}

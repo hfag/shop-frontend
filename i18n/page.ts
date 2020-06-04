@@ -17,6 +17,10 @@ export default defineMessages({
     id: "pages.cart",
     defaultMessage: "Warenkorb",
   },
+  confirmation: {
+    id: "page.confirmation",
+    defaultMessage: "Bestellbestätigung",
+  },
   myAccount: {
     id: "pages.myAccount",
     defaultMessage: "Mein Konto",

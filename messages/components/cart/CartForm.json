@@ -1,9 +1,5 @@
 [
   {
-    "id": "CartFrom.table.column.description",
-    "defaultMessage": "Beschreibung"
-  },
-  {
     "id": "CartFrom.showMoreDetails",
     "defaultMessage": "Zeige Details"
   },

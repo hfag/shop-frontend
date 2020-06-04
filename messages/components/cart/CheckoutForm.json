@@ -26,5 +26,9 @@
   {
     "id": "CheckoutForm.tosMustBeAccepted",
     "defaultMessage": "Die AGBs müssen akzeptiert werden!"
+  },
+  {
+    "id": "CheckoutForm.invalidPaymentMethod",
+    "defaultMessage": "Die ausgewählte Zahlungsmethode ist ungültig!"
   }
 ]

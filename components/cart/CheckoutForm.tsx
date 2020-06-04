@@ -19,6 +19,7 @@ import {
   ORDER_SET_SHIPPING_METHOD,
   ORDER_SET_SHIPPING_ADDRESS,
   ORDER_GET_SHIPPING_METHODS,
+  TRANSITION_ORDER_AND_ADD_PAYMENT,
   ORDER_ADD_PAYMENT,
 } from "../../gql/order";
 import useSWR, { mutate } from "swr";
@@ -27,6 +28,8 @@ import Price from "../elements/Price";
 import Table from "../elements/Table";
 import product from "../../i18n/product";
 import orderMessages from "../../i18n/order";
+import { NextRouter } from "next/router";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 const messages = defineMessages({
   orderComments: {
@@ -59,6 +62,10 @@ const messages = defineMessages({
     id: "CheckoutForm.tosMustBeAccepted",
     defaultMessage: "Die AGBs müssen akzeptiert werden!",
   },
+  invalidPaymentMethod: {
+    id: "CheckoutForm.invalidPaymentMethod",
+    defaultMessage: "Die ausgewählte Zahlungsmethode ist ungültig!",
+  },
 });
 
 interface FormValues {
@@ -70,11 +77,12 @@ interface FormValues {
 
 interface IProps {
   intl: IntlShape;
+  router: NextRouter;
   token?: string;
   account: CurrentUser | null;
   values?: FormValues;
   billingAddress: CreateAddressInput | null;
-  order: Order;
+  order: Order | null;
 }
 
 /**
@@ -225,6 +233,8 @@ const CheckoutForm = withFormik<IProps, FormValues>({
 
   validationSchema: ({ intl }: { intl: IntlShape }) => {
     return yup.object().shape({
+      shippingMethod: yup.string().required(),
+      paymentMethod: yup.string().required(),
       terms: yup
         .mixed()
         .test(
@@ -236,17 +246,46 @@ const CheckoutForm = withFormik<IProps, FormValues>({
   },
   handleSubmit: async (
     values,
-    { props: { intl, token, billingAddress }, setStatus }
+    { props: { intl, token, billingAddress, order, router }, setStatus }
   ) => {
-    await request(intl.locale, ORDER_SET_SHIPPING_METHOD, {
-      shippingMethodId: values.shippingMethod,
-    });
+    if (!order) {
+      return;
+    }
+    if (values.paymentMethod === "invoice") {
+      let data;
 
-    const data = await request(intl.locale, ORDER_ADD_PAYMENT, {
-      input: { method: values.paymentMethod, metadata: { billingAddress } },
-    });
+      if (order.state === "ArrangingPayment") {
+        data = await request(intl.locale, ORDER_ADD_PAYMENT, {
+          input: { method: values.paymentMethod, metadata: { billingAddress } },
+        });
+      } else {
+        await request(intl.locale, ORDER_SET_SHIPPING_METHOD, {
+          shippingMethodId: values.shippingMethod,
+        });
 
-    mutate([GET_ACTIVE_ORDER, token], data.addPaymentToOrder, false);
+        data = await request(intl.locale, TRANSITION_ORDER_AND_ADD_PAYMENT, {
+          input: {
+            method: values.paymentMethod,
+            metadata: { billingAddress },
+          },
+        });
+      }
+
+      mutate(
+        [GET_ACTIVE_ORDER, token],
+        { activeOrder: data.addPaymentToOrder },
+        false
+      );
+
+      router.push(
+        `/${pathnamesByLanguage.confirmation.languages[intl.locale]}?code=${
+          order.code
+        }`
+      );
+    } else {
+      alert(intl.formatMessage(messages.invalidPaymentMethod));
+      throw new Error(`Payment method ${values.paymentMethod} is invalid`);
+    }
   },
 })(InnerCheckoutForm);
 

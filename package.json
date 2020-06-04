@@ -88,7 +88,6 @@
     "postcss-loader": "^2.0.8",
     "prettier": "^2.0.5",
     "prop-types": "^15.7.2",
-    "query-string": "5",
     "react": "^16.13.1",
     "react-autosuggest": "^9.3.2",
     "react-collapse": "^4.0.3",

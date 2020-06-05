@@ -93,7 +93,6 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
   }
   totalBeforeTax
   total
-  createdAt
   updatedAt
 `;
 

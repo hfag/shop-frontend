@@ -4,7 +4,7 @@ import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
 
-import Thumbnail from "../Thumbnail";
+import Asset from "../elements/Asset";
 import Placeholder from "../elements/Placeholder";
 import { colors, borders, shadows } from "../../utilities/style";
 import RelativeBox from "../layout/RelativeBox";
@@ -143,7 +143,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
         )}
         <StyledLink href={url}>
           <StyledProduct>
-            <Thumbnail asset={product.featuredAsset} />
+            <Asset asset={product.featuredAsset} />
             <div>
               {product ? (
                 <Title dangerouslySetInnerHTML={{ __html: product.name }} />

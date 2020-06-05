@@ -13,7 +13,7 @@ import { Order, AdjustmentType, Adjustment } from "../../schema";
 import orderMessages from "../../i18n/order";
 import cart from "../../i18n/cart";
 import product from "../../i18n/product";
-import Thumbnail from "../Thumbnail";
+import Asset from "../elements/Asset";
 import Price from "../elements/Price";
 import Button from "../elements/Button";
 import request from "../../utilities/request";
@@ -140,7 +140,7 @@ const InnerCartForm = React.memo(
                 return (
                   <tr key={index}>
                     <td style={{ minWidth: "100px", maxWidth: "100px" }}>
-                      <Thumbnail asset={line.productVariant.featuredAsset} />
+                      <Asset asset={line.productVariant.featuredAsset} />
                     </td>
                     <td>
                       <h4

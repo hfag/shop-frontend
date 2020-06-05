@@ -30,6 +30,7 @@ import product from "../../i18n/product";
 import orderMessages from "../../i18n/order";
 import { NextRouter } from "next/router";
 import { pathnamesByLanguage } from "../../utilities/urls";
+import InlinePage from "../InlinePage";
 
 const messages = defineMessages({
   orderComments: {
@@ -171,7 +172,7 @@ const InnerCheckoutForm = React.memo(
           </Box>
         </Flex>
         <br />
-        {/*<InlinePage slug={pathnamesByLanguage.tos.languages[intl.locale]} />*/}
+        <InlinePage slug={pathnamesByLanguage.tos.languages[intl.locale]} />
         <InputField id="terms" name="terms" type="checkbox" value="1">
           <label htmlFor="terms">
             {intl.formatMessage(messages.acceptTos)}

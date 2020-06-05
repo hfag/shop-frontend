@@ -1,8 +1,12 @@
 import React, { FunctionComponent, useMemo } from "react";
 import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
-import { ProductVariant, Asset, ProductOption } from "../../schema";
-import Thumbnail from "../Thumbnail";
+import {
+  ProductVariant,
+  Asset as AssetType,
+  ProductOption,
+} from "../../schema";
+import Asset from "../elements/Asset";
 
 const Slider = styled.div`
   & > div:first-child {
@@ -29,7 +33,7 @@ const VariationSlider: FunctionComponent<{
   selectedOptions: { [optionGroupId: string]: ProductOption };
   onSelect: (options: { [optionGroupId: string]: ProductOption }) => void;
 }> = React.memo(({ variants, selectedOptions, onSelect }) => {
-  const imageIdToAsset = useMemo<{ [id: string]: Asset }>(
+  const imageIdToAsset = useMemo<{ [id: string]: AssetType }>(
     () =>
       variants.reduce((object, variant) => {
         object[variant.featuredAsset.id] = variant.featuredAsset;
@@ -96,7 +100,7 @@ const VariationSlider: FunctionComponent<{
               }
               onClick={() => onSelect(imageMap[imageId])}
             >
-              <Thumbnail asset={imageIdToAsset[imageId]} />
+              <Asset asset={imageIdToAsset[imageId]} />
             </Slide>
           </Box>
         ))}

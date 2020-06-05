@@ -44,11 +44,11 @@ export const GET_CURRENT_CUSTOMER = /* GraphQL */ `
 export const GET_CURRENT_CUSTOMER_ORDERS = /* GraphQL */ `
   query activeCustomerOrders($skip: Int!, $take: Int!) {
     activeCustomer {
-      orders(options: { skip: $skip, take: $take, sort: { createdAt: DESC } }) {
+      orders(options: { skip: $skip, take: $take, sort: { updatedAt: DESC } }) {
         items {
           id
           code
-          createdAt
+          updatedAt
           total
           state
           lines {
@@ -64,11 +64,11 @@ export const GET_CURRENT_CUSTOMER_ORDERS = /* GraphQL */ `
 export const GET_CURRENT_CUSTOMER_ALL_ORDERS = /* GraphQL */ `
   query activeCustomerOrders {
     activeCustomer {
-      orders(options: { sort: { createdAt: DESC } }) {
+      orders(options: { sort: { updatedAt: DESC } }) {
         items {
           id
           code
-          createdAt
+          updatedAt
           total
         }
         totalItems

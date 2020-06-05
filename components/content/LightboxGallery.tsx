@@ -9,8 +9,8 @@ import Lightbox from "react-images";
 import { Flex, Box } from "reflexbox";
 import { useIntl, defineMessages } from "react-intl";
 
-import Thumbnail from "../Thumbnail";
-import { Asset } from "../../schema";
+import Asset from "../elements/Asset";
+import { Asset as AssetType } from "../../schema";
 
 const messages = defineMessages({
   imageXOfY: {
@@ -101,7 +101,7 @@ const reducer = (
   }
 };
 
-const LightboxGallery: FunctionComponent<{ assets: Asset[] }> = React.memo(
+const LightboxGallery: FunctionComponent<{ assets: AssetType[] }> = React.memo(
   ({ assets }) => {
     const [{ isOpen, currentImage }, dispatch] = useReducer(reducer, {
       currentImage: 0,
@@ -143,7 +143,7 @@ const LightboxGallery: FunctionComponent<{ assets: Asset[] }> = React.memo(
               mb={2}
               onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}
             >
-              <Thumbnail asset={asset} />
+              <Asset asset={asset} />
             </LightboxBox>
           ))}
         </GalleryFlex>

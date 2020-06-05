@@ -51,7 +51,6 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
   const intl = useIntl();
   const [step, setStep] = useState("cart");
   const { user, token } = useContext(AppContext);
-  const [showShipping, setShowShipping] = useState(false);
   const [showSkuSelection, setShowSkuSelection] = useState(false);
   const [
     billingAddress,
@@ -125,15 +124,19 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
             <CheckoutAddressForm
               intl={intl}
               enabled={step === "address"}
-              account={user}
               token={token}
-              showShipping={showShipping}
-              setShowShipping={setShowShipping}
               setBillingAddress={setBillingAddress}
               countries={countryData?.availableCountries || []}
               onProceed={() => setStep("checkout")}
-              billingAddress={orderData?.activeOrder.billingAddress}
-              shippingAddress={orderData?.activeOrder.shippingAddress}
+              billingAddress={
+                (user && user.addresses.find((a) => a.defaultBillingAddress)) ||
+                orderData?.activeOrder.billingAddress
+              }
+              shippingAddress={
+                (user &&
+                  user.addresses.find((a) => a.defaultShippingAddress)) ||
+                orderData?.activeOrder.shippingAddress
+              }
               customer={orderData?.activeOrder?.customer}
             />
           )}

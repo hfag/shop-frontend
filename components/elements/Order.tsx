@@ -70,7 +70,7 @@ const Order: FunctionComponent<{ order?: OrderType; compact?: boolean }> = ({
   compact,
 }) => {
   const intl = useIntl();
-  const date = new Date(order?.createdAt);
+  const date = new Date(order?.updatedAt);
   const state = getState(order?.state);
   //TODO: translate
 

@@ -53,7 +53,7 @@ const AccountOrders: FunctionComponent<{ orders?: OrderType[] }> = React.memo(
                     <td>
                       <Price>{order.total}</Price>
                     </td>
-                    <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td>{new Date(order.updatedAt).toLocaleDateString()}</td>
                   </tr>
                 ))
               : new Array(3).fill(undefined).map((_) => (

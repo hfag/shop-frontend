@@ -17,7 +17,7 @@ import request from "../../utilities/request";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
 import { Order } from "../../schema";
 import Placeholder from "../elements/Placeholder";
-import Thumbnail from "../Thumbnail";
+import Asset from "../elements/Asset";
 
 const messages = defineMessages({
   emptyCart: {
@@ -130,7 +130,7 @@ const NavCart: FunctionComponent<{
             data.activeOrder.lines.map((line, index) => (
               <ShoppingCartList key={index}>
                 <div>
-                  <Thumbnail asset={line.productVariant.featuredAsset} />
+                  <Asset asset={line.productVariant.featuredAsset} />
                 </div>
                 <div>
                   <strong>{line.quantity}x</strong>{" "}

@@ -160,8 +160,8 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
             ? data.activeCustomer.orders.items
                 .sort(
                   (a, b) =>
-                    new Date(a.createdAt).getTime() -
-                    new Date(b.createdAt).getTime()
+                    new Date(b.updatedAt).getTime() -
+                    new Date(a.updatedAt).getTime()
                 )
                 .map((order) => <Order key={order.id} order={order} compact />)
             : new Array(3)

@@ -49,8 +49,7 @@ interface FormValues {
   billingPhone?: string;
   billingEmail?: string;
 
-  shippingFirstName?: string;
-  shippingLastName?: string;
+  shippingFullName?: string;
   shippingCompany?: string;
   shippingStreetLine1?: string;
   shippingStreetLine2?: string;
@@ -64,16 +63,13 @@ interface FormValues {
 }
 
 interface IProps {
-  showShipping?: boolean;
-  setShowShipping: (showShipping: boolean) => void;
   setBillingAddress: (address: CreateAddressInput) => void;
   countries: Country[];
   token?: string;
-  billingAddress: OrderAddress | null;
-  shippingAddress: OrderAddress | null;
+  billingAddress: Address | OrderAddress | null;
+  shippingAddress: Address | OrderAddress | null;
   customer: Customer | null;
   intl: IntlShape;
-  account: CurrentUser | null;
   enabled?: boolean;
   onProceed?: () => void;
 }
@@ -92,8 +88,6 @@ const InnerCheckoutAddressForm = React.memo(
     handleBlur,
     handleSubmit,
     isSubmitting,
-    showShipping,
-    setShowShipping,
     countries,
     intl,
     enabled,
@@ -197,17 +191,15 @@ const InnerCheckoutAddressForm = React.memo(
             name="shipToDifferentAddress"
             type="checkbox"
             value="1"
-            onChange={(e) =>
-              setShowShipping(e.currentTarget.checked ? true : false)
-            }
             checkbox={true}
+            componentProps={{ checked: values.shipToDifferentAddress }}
           />
           <h3>
             <label htmlFor="shipToDifferentAddress">
               {intl.formatMessage(messages.shipToDifferentAddress)}
             </label>
           </h3>
-          {showShipping && (
+          {values.shipToDifferentAddress && (
             <div>
               {/*<InputField
               type="text"
@@ -217,14 +209,8 @@ const InnerCheckoutAddressForm = React.memo(
             />*/}
               <InputField
                 type="text"
-                label={intl.formatMessage(address.firstName)}
-                name="shippingFirstName"
-                required={true}
-              />
-              <InputField
-                type="text"
-                label={intl.formatMessage(address.lastName)}
-                name="shippingLastName"
+                label={intl.formatMessage(address.fullName)}
+                name="shippingFullName"
                 required={true}
               />
               {/*<InputField
@@ -337,21 +323,30 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       billingCity: bAddress.city || "",
       billingProvince: bAddress.province || "",
       billingPostalCode: bAddress.postalCode || "",
-      billingCountry: bAddress.countryCode || "", //country code
+      billingCountry:
+        "countryCode" in bAddress
+          ? bAddress.countryCode
+          : typeof bAddress.country === "string"
+          ? ""
+          : bAddress.country.code,
       billingPhone: bAddress.phoneNumber || "",
       billingEmail: customer.emailAddress || "",
     };
 
     if (isShippingAddress && sAddress) {
-      // values.shippingFirstName =
-      // values.shippingLastName =
+      values.shippingFullName = sAddress.fullName || "";
       values.shippingCompany = sAddress.company || "";
       values.shippingStreetLine1 = sAddress.streetLine1 || "";
       values.shippingStreetLine2 = sAddress.streetLine2 || "";
       values.shippingCity = sAddress.city || "";
       values.shippingProvince = sAddress.province || "";
       values.shippingPostalCode = sAddress.postalCode || "";
-      values.shippingCountry = sAddress.countryCode || "";
+      values.shippingCountry =
+        "countryCode" in sAddress
+          ? sAddress.countryCode
+          : typeof sAddress.country === "string"
+          ? ""
+          : sAddress.country.code;
       values.shippingPhoneNumber = sAddress.postalCode || "";
 
       values.shipToDifferentAddress = true;
@@ -371,12 +366,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
 
       billingFirstName: yup.string().required(),
       billingLastName: yup.string().required(),
-      shippingFirstName: yup.string().when("shipToDifferentAddress", {
-        is: true,
-        then: yup.string().required(),
-        otherwise: yup.string().notRequired(),
-      }),
-      shippingLastName: yup.string().when("shipToDifferentAddress", {
+      shippingFullName: yup.string().when("shipToDifferentAddress", {
         is: true,
         then: yup.string().required(),
         otherwise: yup.string().notRequired(),
@@ -399,7 +389,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         }),
 
       billingStreetLine1: yup.string().required(),
-      shippingSteetLine1: yup.string().when("shipToDifferentAddress", {
+      shippingStreetLine1: yup.string().when("shipToDifferentAddress", {
         is: true,
         then: yup.string().required(),
         otherwise: yup.string().notRequired(),
@@ -440,7 +430,10 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
   },
   handleSubmit: async (
     values,
-    { props: { intl, account, token, setBillingAddress, onProceed }, setStatus }
+    {
+      props: { intl, customer, token, setBillingAddress, onProceed },
+      setStatus,
+    }
   ) => {
     const billingAddress: CreateAddressInput = {
       fullName: `${values.billingFirstName} ${values.billingLastName}`,
@@ -457,7 +450,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
 
     const shippingAddress: CreateAddressInput = values.shipToDifferentAddress
       ? {
-          fullName: `${values.shippingFirstName} ${values.shippingLastName}`,
+          fullName: values.shippingFullName,
           company: values.shippingCompany,
           streetLine1: values.shippingStreetLine1,
           streetLine2: values.shippingStreetLine2,
@@ -474,7 +467,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       billingAddress.defaultShippingAddress = true;
     }
 
-    if (account) {
+    if (customer) {
       //do something
     } else {
       await request(intl.locale, ORDER_SET_CUSTOMER, {

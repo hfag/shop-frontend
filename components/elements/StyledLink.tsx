@@ -25,9 +25,14 @@ const _StyledLink = styled.a<IProps>`
 
   text-decoration: none;
 
-  &:hover {
-    text-decoration: underline;
-  }
+  ${({ noHover }) =>
+    noHover
+      ? ""
+      : `
+    &:hover {
+      text-decoration: underline;
+    }
+  `}
 `;
 
 const BorderLink = styled(_StyledLink)`

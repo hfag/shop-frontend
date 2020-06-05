@@ -69,16 +69,6 @@
     "no-unsafe-finally": "error",
     "no-unsafe-negation": "error",
     "use-isnan": "error",
-    "valid-typeof": "error",
-    "comma-dangle": [
-      "error",
-      {
-        "arrays": "never",
-        "objects": "never",
-        "imports": "never",
-        "exports": "never",
-        "functions": "never"
-      }
-    ]
+    "valid-typeof": "error"
   }
 }

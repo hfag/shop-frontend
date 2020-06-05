@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Flex, Box } from "reflexbox";
 
 import { useIntl } from "react-intl";
-import Thumbnail from "../Thumbnail";
+import Asset from "../elements/Asset";
 import Placeholder from "../elements/Placeholder";
 import { colors, borders, shadows } from "../../utilities/style";
 import { pathnamesByLanguage } from "../../utilities/urls";
@@ -91,7 +91,7 @@ const CollectionItem: FunctionComponent<{
     <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
       <StyledLink href={url}>
         <StyledCategory>
-          <Thumbnail asset={collection.featuredAsset} />
+          <Asset asset={collection.featuredAsset} />
           <div>
             {collection ? (
               <Title dangerouslySetInnerHTML={{ __html: collection.name }} />

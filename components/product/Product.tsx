@@ -65,8 +65,10 @@ const Counter = styled.input`
 `;
 
 const DiscountTable = styled(Table)`
-  tr {
-    cursor: pointer;
+  tbody {
+    tr {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -81,7 +83,7 @@ const Product: FunctionComponent<{
   product?: ProductType;
 }> = React.memo(({ product }) => {
   const intl = useIntl();
-  const { token } = useContext(AppContext);
+  const { user, token } = useContext(AppContext);
 
   if (!product) {
     return <>Loading</>;
@@ -139,16 +141,34 @@ const Product: FunctionComponent<{
     [selectedOptions, setSelectedOptions]
   );
 
+  const activeResellerDiscounts = useMemo(
+    () =>
+      user
+        ? user.resellerDiscounts.filter((discount) =>
+            discount.facetValueIds.reduce(
+              (has, valueId) =>
+                has && product.facetValues.find((value) => value.id === valueId)
+                  ? true
+                  : false,
+              true
+            )
+          )
+        : [],
+    [user, product]
+  );
+
   const activeBulkDiscount: BulkDiscount | null = useMemo(() => {
-    if (selectedVariant) {
+    if (selectedVariant && activeResellerDiscounts.length === 0) {
       const row = selectedVariant.bulkDiscounts
-        .sort((a, b) => a.quantity - b.quantity)
-        .find((discount) => discount.quantity >= quantity);
+        .concat() //copy
+        .sort((a, b) => b.quantity - a.quantity)
+        .find((discount) => discount.quantity <= quantity);
+
       return row ? row : null;
     }
 
     return null;
-  }, [selectedVariant, quantity]);
+  }, [selectedVariant, quantity, activeResellerDiscounts.length]);
 
   const unit: string | null = useMemo(() => {
     if (selectedVariant) {
@@ -169,8 +189,6 @@ const Product: FunctionComponent<{
       ),
     [product]
   );
-
-  const resellerDiscount = false;
 
   return (
     <div>
@@ -293,7 +311,7 @@ const Product: FunctionComponent<{
           </Box>
         </Flex>
         <Flex flexWrap="wrap">
-          {resellerDiscount === false ? (
+          {activeResellerDiscounts.length === 0 ? (
             selectedVariant &&
             selectedVariant.bulkDiscounts.length > 0 && (
               <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
@@ -315,7 +333,10 @@ const Product: FunctionComponent<{
                       ({ quantity, price }, index) => (
                         <DiscountRow
                           onClick={() => setQuantity(quantity)}
-                          selected={quantity === activeBulkDiscount.quantity}
+                          selected={
+                            activeBulkDiscount &&
+                            quantity === activeBulkDiscount.quantity
+                          }
                           key={index}
                         >
                           <td>{quantity}</td>
@@ -332,13 +353,15 @@ const Product: FunctionComponent<{
           ) : (
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
               <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
-              <FormattedMessage
-                id="Product.resellerDiscountMessage"
-                defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
-                values={{
-                  resellerDiscount,
-                }}
-              />
+              {activeResellerDiscounts.map((d) => (
+                <FormattedMessage
+                  id="Product.resellerDiscountMessage"
+                  defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
+                  values={{
+                    resellerDiscount: d.discount,
+                  }}
+                />
+              ))}
             </Box>
           )}
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
@@ -350,9 +373,15 @@ const Product: FunctionComponent<{
                     {
                       price: selectedVariant.price,
                       quantity,
-                      discountPrice: activeBulkDiscount
-                        ? activeBulkDiscount.price * 100
-                        : undefined,
+                      discountPrice:
+                        activeResellerDiscounts.length === 0
+                          ? activeBulkDiscount
+                            ? activeBulkDiscount.price
+                            : undefined
+                          : activeResellerDiscounts.reduce(
+                              (price, d) => (1 - d.discount / 100) * price,
+                              selectedVariant.price
+                            ),
                       unit,
                     },
                   ]}
@@ -368,10 +397,8 @@ const Product: FunctionComponent<{
                       //trigger refetching of the active order
                       mutate([GET_ACTIVE_ORDER, token]);
 
-                      if (this.crosssellRef.current) {
-                        const el = ReactDOM.findDOMNode(
-                          this.crosssellRef.current
-                        );
+                      if (crosssellRef.current) {
+                        const el = ReactDOM.findDOMNode(crosssellRef.current);
                         if ("scrollIntoView" in el) {
                           el.scrollIntoView();
                         }
@@ -379,7 +406,7 @@ const Product: FunctionComponent<{
 
                       return true;
                     } else {
-                      return Promise.reject();
+                      throw new Error();
                     }
                   }}
                 >

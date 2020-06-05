@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { useIntl, defineMessages, FormattedMessage } from "react-intl";
 import queryString from "query-string";
 
-import { Order, AdjustmentType } from "../schema";
+import { Order, AdjustmentType, Adjustment } from "../schema";
 import { GET_ORDER_BY_CODE } from "../gql/order";
 import request from "../utilities/request";
 import { useRouter } from "next/router";
@@ -128,72 +128,87 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
           </tr>
         </thead>
         <tbody>
-          {data.orderByCode.lines.map((line, index) => (
-            <tr key={index}>
-              <td style={{ minWidth: "100px", maxWidth: "100px" }}>
-                <Thumbnail asset={line.productVariant.featuredAsset} />
-              </td>
-              <td>
-                <h4
-                  dangerouslySetInnerHTML={{
-                    __html: line.productVariant.name,
-                  }}
-                />
-                {line.productVariant.options.length > 0 &&
-                  line.productVariant.options
-                    .map((option) => option.name)
-                    .join(", ")}
-              </td>
-              <td>{line.productVariant.sku}</td>
-              <td>
-                {line.adjustments.filter(
-                  (a) => a.type === AdjustmentType.Promotion
-                ).length > 0 ? (
-                  <div>
-                    {line.adjustments.map((adjustment) => (
-                      <>
-                        <div>
-                          <Price>{adjustment.amount}</Price>
-                        </div>
-                        <div>{adjustment.description}</div>
-                      </>
-                    ))}
-                    <Price>{line.unitPrice}</Price>
-                  </div>
-                ) : (
-                  <Price>{line.unitPrice}</Price>
-                )}
-              </td>
-              <td>
-                <span>{line.quantity}</span>
-              </td>
-              <td>
-                <Price>{line.unitPrice * line.quantity}</Price>
-              </td>
-            </tr>
-          ))}
+          {data.orderByCode.lines.map((line, index) => {
+            const adjustmentSources = line.adjustments.reduce(
+              (array, adjustment) => {
+                if (array.includes(adjustment.adjustmentSource)) {
+                  return array;
+                } else {
+                  array.push(adjustment.adjustmentSource);
+                  return array;
+                }
+              },
+              []
+            );
+
+            const adjustmentsPerUnit: Adjustment[] = adjustmentSources.map(
+              (source) =>
+                line.adjustments.find((a) => a.adjustmentSource === source)
+            );
+
+            const price = adjustmentsPerUnit.reduce(
+              (price, adjustment) => price + adjustment.amount,
+              line.unitPriceWithTax
+            );
+
+            return (
+              <tr key={index}>
+                <td style={{ minWidth: "100px", maxWidth: "100px" }}>
+                  <Thumbnail asset={line.productVariant.featuredAsset} />
+                </td>
+                <td>
+                  <h4
+                    dangerouslySetInnerHTML={{
+                      __html: line.productVariant.name,
+                    }}
+                  />
+                  {line.productVariant.options.length > 0 &&
+                    line.productVariant.options
+                      .map((option) => option.name)
+                      .join(", ")}
+                </td>
+                <td>{line.productVariant.sku}</td>
+                <td>
+                  {price !== line.unitPriceWithTax ? (
+                    <div>
+                      <Price strike>{line.unitPriceWithTax}</Price>
+                      {adjustmentsPerUnit.map((adjustment) => (
+                        <>
+                          <div>
+                            <Price>{adjustment.amount}</Price> (
+                            {adjustment.description})
+                          </div>
+                        </>
+                      ))}
+                      <Price>{price}</Price>
+                    </div>
+                  ) : (
+                    <Price>{line.unitPriceWithTax}</Price>
+                  )}
+                </td>
+                <td>
+                  <span>{line.quantity}</span>
+                </td>
+                <td>
+                  <Price>{line.unitPrice * line.quantity}</Price>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
         <tfoot>
-          <tr>
-            <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
-            <td>
-              <Price>{data.orderByCode.shipping}</Price>
-            </td>
-          </tr>
           <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(product.subtotal)}</td>
-            <td>
-              <Price>
-                {data.orderByCode.subTotalBeforeTax + data.orderByCode.shipping}
-              </Price>
-            </td>
-          </tr>
-          <tr>
-            <td colSpan={5}>{intl.formatMessage(orderMessages.taxes)}</td>
+            <td colSpan={5}>{intl.formatMessage(orderMessages.taxesOfThat)}</td>
             <td>
               <Price>
                 {data.orderByCode.total - data.orderByCode.totalBeforeTax}
               </Price>
+            </td>
+          </tr>
+          <tr className="total">
+            <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
+            <td>
+              <Price>{data.orderByCode.shipping}</Price>
             </td>
           </tr>
           <tr className="total">

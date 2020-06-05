@@ -61,12 +61,12 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
       }
     }
     unitPrice
+    unitPriceWithTax
     quantity
     totalPrice
     adjustments {
       adjustmentSource
       type
-      description
       amount
     }
   }

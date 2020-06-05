@@ -27,6 +27,10 @@ export const ACTIVE_CUSTOMER_FRAGMENT = `
   addresses {
     ${FULL_ADDRESS_FRAGMENT}
   }
+  resellerDiscounts {
+    facetValueIds
+    discount
+  }
 `;
 
 export const GET_CURRENT_CUSTOMER = /* GraphQL */ `

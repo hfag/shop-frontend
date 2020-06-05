@@ -76,6 +76,7 @@ export const FULL_PRODUCT_FRAGMENT = `
     ${OPTION_GROUP_FRAGMENT}
   }
   facetValues{
+    id
     name
     facet{
       name

@@ -26,18 +26,12 @@ const _StyledLink = styled.a<IProps>`
   text-decoration: none;
 
   &:hover {
-    border-bottom: ${({ noHover, negative }) =>
-      noHover
-        ? ""
-        : (negative ? colors.primaryContrast : colors.font) + " 1px solid"};
+    text-decoration: underline;
   }
 `;
 
 const BorderLink = styled(_StyledLink)`
-  display: inline-block;
-  border-bottom: ${({ negative }) =>
-      negative ? colors.primaryContrast : colors.font}
-    1px solid;
+  text-decoration: underline;
 `;
 
 const StyledLink: FunctionComponent<{

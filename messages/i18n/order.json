@@ -28,6 +28,10 @@
     "defaultMessage": "Steuern"
   },
   {
+    "id": "CartForm.taxesOfThat",
+    "defaultMessage": "Davon MWST (7.7%)"
+  },
+  {
     "id": "order.noOrders",
     "defaultMessage": "Sie haben noch keine Bestellung getätigt."
   },

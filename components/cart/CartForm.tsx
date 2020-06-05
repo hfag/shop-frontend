@@ -9,7 +9,7 @@ import {
   REMOVE_ORDER_LINE,
   ADJUST_ORDER_LINE,
 } from "../../gql/order";
-import { Order, AdjustmentType } from "../../schema";
+import { Order, AdjustmentType, Adjustment } from "../../schema";
 import orderMessages from "../../i18n/order";
 import cart from "../../i18n/cart";
 import product from "../../i18n/product";
@@ -114,66 +114,85 @@ const InnerCartForm = React.memo(
               if (!order) {
                 return null;
               }
-              return order.lines.map((line, index) => (
-                <tr key={index}>
-                  <td style={{ minWidth: "100px", maxWidth: "100px" }}>
-                    <Thumbnail asset={line.productVariant.featuredAsset} />
-                  </td>
-                  <td>
-                    <h4
-                      dangerouslySetInnerHTML={{
-                        __html: line.productVariant.name,
-                      }}
-                    />
-                    {line.productVariant.options.length > 0 &&
-                      line.productVariant.options
-                        .map((option) => option.name)
-                        .join(", ")}
-                  </td>
-                  <td>{line.productVariant.sku}</td>
-                  <td>
-                    {line.adjustments.filter(
-                      (a) => a.type === AdjustmentType.Promotion
-                    ).length > 0 ? (
-                      <div>
-                        {line.adjustments.map((adjustment) => (
-                          <>
-                            <div>
-                              <Price>{adjustment.amount}</Price>
-                            </div>
-                            <div>{adjustment.description}</div>
-                          </>
-                        ))}
-                        <Price>{line.unitPrice}</Price>
-                      </div>
-                    ) : (
-                      <Price>{line.unitPrice}</Price>
-                    )}
-                  </td>
-                  <td>
-                    {enabled ? (
-                      <Field
-                        name={`lines.${index}.quantity`}
-                        min="1"
-                        type="number"
-                        size="3"
+              return order.lines.map((line, index) => {
+                const adjustmentSources = line.adjustments.reduce(
+                  (array, adjustment) => {
+                    if (array.includes(adjustment.adjustmentSource)) {
+                      return array;
+                    } else {
+                      array.push(adjustment.adjustmentSource);
+                      return array;
+                    }
+                  },
+                  []
+                );
+
+                const adjustmentsPerUnit: Adjustment[] = adjustmentSources.map(
+                  (source) =>
+                    line.adjustments.find((a) => a.adjustmentSource === source)
+                );
+
+                const price = adjustmentsPerUnit.reduce(
+                  (price, adjustment) => price + adjustment.amount,
+                  line.unitPriceWithTax
+                );
+
+                return (
+                  <tr key={index}>
+                    <td style={{ minWidth: "100px", maxWidth: "100px" }}>
+                      <Thumbnail asset={line.productVariant.featuredAsset} />
+                    </td>
+                    <td>
+                      <h4
+                        dangerouslySetInnerHTML={{
+                          __html: line.productVariant.name,
+                        }}
                       />
-                    ) : (
-                      <span>{line.quantity}</span>
-                    )}
-                  </td>
-                  <td>
-                    <Price>{line.unitPrice * line.quantity}</Price>
-                  </td>
-                  <td>
-                    {enabled && (
-                      <CartTableAction>
-                        <MdDelete onClick={() => remove(index)} />
-                      </CartTableAction>
-                    )}
-                  </td>
-                </tr>
-              ));
+                      {line.productVariant.options.length > 0 &&
+                        line.productVariant.options
+                          .map((option) => option.name)
+                          .join(", ")}
+                    </td>
+                    <td>{line.productVariant.sku}</td>
+                    <td>
+                      {price !== line.unitPriceWithTax ? (
+                        <>
+                          <div>
+                            <Price strike>{line.unitPriceWithTax}</Price>
+                          </div>
+                          <div>
+                            <Price>{price}</Price>
+                          </div>
+                        </>
+                      ) : (
+                        <Price>{line.unitPriceWithTax}</Price>
+                      )}
+                    </td>
+                    <td>
+                      {enabled ? (
+                        <Field
+                          name={`lines.${index}.quantity`}
+                          min="1"
+                          type="number"
+                          size="3"
+                        />
+                      ) : (
+                        <span>{line.quantity}</span>
+                      )}
+                    </td>
+                    <td>
+                      <Price>{price * line.quantity}</Price>
+                    </td>
+                    <td>
+                      {enabled && (
+                        <CartTableAction>
+                          <MdDelete onClick={() => remove(index)} />
+                        </CartTableAction>
+                      )}
+                    </td>
+                  </tr>
+                );
+              });
             }}
           />
           <tr>
@@ -194,8 +213,15 @@ const InnerCartForm = React.memo(
           </tr>
         </tbody>
         <tfoot>
+          <tr className="total">
+            <td colSpan={5}>{intl.formatMessage(orderMessages.taxesOfThat)}</td>
+            <td>
+              {order && <Price>{order.total - order.totalBeforeTax}</Price>}
+            </td>
+            <td />
+          </tr>
           {order && order.shippingMethod && (
-            <tr>
+            <tr className="total">
               <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
               <td>
                 <Price>{order.shipping}</Price>
@@ -203,22 +229,6 @@ const InnerCartForm = React.memo(
               <td />
             </tr>
           )}
-          <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(product.subtotal)}</td>
-            <td>
-              {order && (
-                <Price>{order.subTotalBeforeTax + order.shipping}</Price>
-              )}
-            </td>
-            <td />
-          </tr>
-          <tr>
-            <td colSpan={5}>{intl.formatMessage(orderMessages.taxes)}</td>
-            <td>
-              {order && <Price>{order.total - order.totalBeforeTax}</Price>}
-            </td>
-            <td />
-          </tr>
           <tr className="total">
             <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
             <td>{order && <Price>{order.total}</Price>}</td>

@@ -1,18 +1,19 @@
-import React, { useEffect, useMemo, FunctionComponent } from "react";
-import styled from "styled-components";
+import React, {
+  useEffect,
+  useMemo,
+  FunctionComponent,
+  CSSProperties,
+} from "react";
 import { LazyImage } from "react-lazy-images";
 
 import Placeholder from "./Placeholder";
 import { borders } from "../../utilities/style";
 
-const StyledImageWrapper = styled.div`
-  img {
-    width: 100%;
-    height: auto;
-
-    border-radius: ${borders.radius};
-  }
-`;
+const css: CSSProperties = {
+  width: "100%",
+  height: "auto",
+  borderRadius: borders.radius,
+};
 
 /**
  * Renders a thumbnail
@@ -25,31 +26,28 @@ const StyledImage: FunctionComponent<{
   src?: string;
   alt?: string;
 }> = React.memo(({ placeholder, width, height, src, alt }) => {
-  return (
-    <StyledImageWrapper>
-      {!placeholder ? (
-        <LazyImage
-          src={src}
-          alt={alt}
-          placeholder={({ imageProps, ref }) => (
-            <div ref={ref}>
-              <Placeholder block />
-            </div>
-          )}
-          actual={({ imageProps }) => (
-            <img
-              {...imageProps}
-              className={width < height ? "b-height" : "b-width"}
-              width={width}
-              height={height}
-              alt={alt}
-            />
-          )}
-        />
-      ) : (
-        <Placeholder block />
+  return !placeholder ? (
+    <LazyImage
+      src={src}
+      alt={alt}
+      placeholder={({ imageProps, ref }) => (
+        <div ref={ref}>
+          <Placeholder block />
+        </div>
       )}
-    </StyledImageWrapper>
+      actual={({ imageProps }) => (
+        <img
+          {...imageProps}
+          className={width < height ? "b-height" : "b-width"}
+          style={css}
+          width={width}
+          height={height}
+          alt={alt}
+        />
+      )}
+    />
+  ) : (
+    <Placeholder block />
   );
 });
 

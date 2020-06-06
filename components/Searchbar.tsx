@@ -1,20 +1,35 @@
-import React, { FunctionComponent, useState, useCallback } from "react";
+import React, {
+  FunctionComponent,
+  useState,
+  useCallback,
+  FormEvent,
+  useEffect,
+  KeyboardEvent,
+} from "react";
 import styled from "styled-components";
 import Autosuggest from "react-autosuggest";
 import debounce from "lodash/debounce";
-import { defineMessages, injectIntl, useIntl } from "react-intl";
-import { Router, useRouter } from "next/router";
+import { defineMessages, useIntl } from "react-intl";
+import { useRouter } from "next/router";
+import ClipLoader from "react-spinners/ClipLoader";
 
 import Flexbar from "./layout/Flexbar";
 import { colors, shadows } from "../utilities/style";
 import Price from "./elements/Price";
 import { pathnamesByLanguage } from "../utilities/urls";
-import product from "../i18n/product";
+import { SearchResult } from "../schema";
+import request from "../utilities/request";
+import { SEARCH } from "../gql/search";
+import SearchAsset from "./elements/SearchAsset";
 
 const messages = defineMessages({
   placeholder: {
     id: "Searchbar.placeholder",
-    defaultMessage: "Suchen Sie nach einem Produkt",
+    defaultMessage: "Suchen Sie nach einem Produkt (mindestens 2 Zeichen)",
+  },
+  from: {
+    id: "Searchbar.from",
+    defaultMessage: "Ab",
   },
   showMore: {
     id: "Searchbar.showMore",
@@ -36,8 +51,15 @@ const StyledSearch = styled.div`
   }
 `;
 
+const SpinWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-40%);
+`;
+
 const Detail = styled.small`
-  font-size: 0.6rem;
+  font-size: 0.75rem;
 `;
 
 const SuggestionContainer = styled.div`
@@ -67,8 +89,13 @@ const SuggestionContainer = styled.div`
 
 const Suggestion = styled.div`
   margin: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
+
+  img {
+    max-width: 75px;
+    margin-right: 0.5rem;
+  }
 
   &:hover .name {
     text-decoration: underline;
@@ -78,13 +105,6 @@ const Suggestion = styled.div`
     margin-left: auto;
     white-space: nowrap;
   }
-`;
-
-const SuggestionTitle = styled.div`
-  margin: 0 0.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-bottom: ${colors.primary} 1px solid;
 `;
 
 const SearchInput = styled.input`
@@ -104,15 +124,12 @@ const SearchInput = styled.input`
 
 /**
  * Gets the suggestions' value
- * @param {Object} suggestion The suggestion
- * @returns {any} The suggestion value
  */
-const getSuggestionValue = (suggestion) => suggestion.title;
+const getSuggestionValue = (suggestion: SearchResult) =>
+  suggestion.productVariantName;
 
 /**
  * Renders the suggstion wrapper
- * @param {Object} props react-autosuggest props
- * @returns {Component} The component
  */
 const renderSuggestionContainer = ({ containerProps, children, query }) => {
   return (
@@ -122,166 +139,100 @@ const renderSuggestionContainer = ({ containerProps, children, query }) => {
 
 /**
  * Renders the input field
- * @param {Object} inputProps The input props
- * @returns {Component} The component
  */
-const renderInputComponent = (inputProps) => {
+const renderInputComponent = (inputProps: { [key: string]: any }) => {
   return <SearchInput {...inputProps} />;
 };
 
-/**
- * Renders the section title
- * @param {Object} section The section object
- * @returns {Component} The component
- */
-const renderSectionTitle = (section) => {
-  return <SuggestionTitle>{section.title}</SuggestionTitle>;
-};
-
 const Searchbar: FunctionComponent<{}> = ({}) => {
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
-  const [sections, setSections] = useState([]);
+  const [lastQuery, setLastQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<SearchResult[]>([]);
   const intl = useIntl();
   const router = useRouter();
 
-  const onChange = useCallback((event, { newValue }) => {
-    setValue(newValue);
-  }, []);
+  const shouldFetchSuggestions =
+    value.trim() !== "" &&
+    value.trim() !== lastQuery.trim() &&
+    value.length > 2;
 
   const onSuggestionsFetchRequested = useCallback(
-    debounce(
-      ({ value }: { value: string }) =>
-        value.trim() !== "" &&
-        //value.trim() !== this.props.lastQuery.trim() &&
-        alert("searching for " + value),
-      /*this.props.dispatch(
-          search(this.props.languageFetchString, true, value)
-        ),*/
-      300
-    ),
-    []
+    debounce(() => {
+      if (shouldFetchSuggestions) {
+        setLastQuery(value);
+        setLoading(true);
+
+        request(intl.locale, SEARCH, {
+          input: { term: value },
+        }).then(
+          (data: { search: { items: SearchResult[]; totalItems: number } }) => {
+            setSuggestions(data.search.items);
+            setLoading(false);
+          }
+        );
+        return [];
+      }
+    }, 300),
+    [value, lastQuery, setLoading]
   );
 
-  const onSuggestionsClearRequested = useCallback(() => {}, []);
+  const onChange = useCallback((event, { newValue }) => setValue(newValue), []);
+
+  const onSuggestionsClearRequested = useCallback(() => {
+    setSuggestions([]);
+    setLastQuery("");
+  }, [setSuggestions]);
 
   const onSuggestionSelected = useCallback(
     (
-      event: Event,
+      event: FormEvent<any>,
       {
         suggestion,
       }: {
-        suggestion: {
-          type: string;
-          slug: string;
-          id: string;
-          parent_slug: string;
-        };
+        suggestion: SearchResult;
       }
     ) => {
       setValue("");
+      setLastQuery("");
 
-      switch (suggestion.type) {
-        case "product":
-          return router.push(
-            `/${intl.locale}/${
-              pathnamesByLanguage.product.languages[intl.locale]
-            }/${suggestion.slug}`
-          );
-        case "product_variation":
-          return router.push(
-            `/${intl.locale}/${
-              pathnamesByLanguage.product.languages[intl.locale]
-            }/${suggestion.parent_slug}?variationId=${suggestion.id}`
-          );
-        case "taxonomy":
-          return router.push(
-            `/${intl.locale}/${
-              pathnamesByLanguage.productCategory.languages[intl.locale]
-            }/${suggestion.slug}`
-          );
-        case "show-more":
-          router.push(
-            `/${intl.locale}/${
-              pathnamesByLanguage.search.languages[intl.locale]
-            }?query=${this.state.value}`
-          );
-          setValue("");
-          return;
-        default:
-          return;
-      }
+      router.push(
+        `/${intl.locale}/${
+          pathnamesByLanguage.product.languages[intl.locale]
+        }/${suggestion.slug}?variationId=${suggestion.productVariantId}`
+      );
     },
-    []
+    [router]
   );
 
-  const shouldRenderSuggestions = useCallback(() => value.length > 2, []);
-
-  const getSectionSuggestions = useCallback(
-    (section: { suggestions: { title: string; type: string }[] }) => [
-      ...section.suggestions,
-      {
-        title: intl.formatMessage(messages.showMore),
-        type: "show-more",
-      },
-    ],
-    []
-  );
-
-  const renderSuggestion = useCallback((suggestion) => {
-    const { intl } = this.props;
-
-    switch (suggestion.type) {
-      case "product":
-        return (
-          <Suggestion>
-            <Flexbar>
-              <div className="name">{`${suggestion.title} (${
-                suggestion.variations
-              } ${intl.formatMessage(product.variation)}${
-                suggestion.variations > 1 ? "n" : ""
-              })`}</div>
-              <div className="price">
-                {intl.formatMessage(product.from)}{" "}
-                <Price>{parseFloat(suggestion.price)}</Price>
-              </div>
-            </Flexbar>
-            <Detail>{suggestion.sku}</Detail>
-          </Suggestion>
-        );
-      case "product_variation":
-        return (
-          <Suggestion>
-            <Flexbar>
-              <div className="name">{suggestion.title}</div>
-              <div className="price">
-                <Price>{parseFloat(suggestion.price)}</Price>
-              </div>
-            </Flexbar>
-            <Detail>{suggestion.sku}</Detail>
-          </Suggestion>
-        );
-      case "taxonomy":
-        return (
-          <Suggestion>
-            <Flexbar>
-              <div className="name">{`${suggestion.title} (${
-                suggestion.count
-              } ${intl.formatMessage(product.product)}${
-                suggestion.count > 1 ? "e" : ""
-              })`}</div>
-              <div className="price" />
-            </Flexbar>
-          </Suggestion>
-        );
-      case "show-more":
-        return (
-          <Suggestion>
-            <div className="name">{suggestion.title}</div>
-          </Suggestion>
-        );
-      default:
-        return null;
+  useEffect(() => {
+    if (shouldFetchSuggestions) {
+      onSuggestionsFetchRequested();
     }
+  }, [shouldFetchSuggestions]);
+
+  const renderSuggestion = useCallback((result: SearchResult) => {
+    return (
+      <Suggestion>
+        <Flexbar>
+          <SearchAsset asset={result.productVariantAsset} />
+          <div className="name">
+            <div>{result.productVariantName}</div>
+            <Detail>{result.sku}</Detail>
+          </div>
+          <div className="price">
+            {"min" in result.priceWithTax ? (
+              <>
+                {intl.formatMessage(messages.from)}{" "}
+                <Price>{result.priceWithTax.min}</Price>
+              </>
+            ) : (
+              <Price>{result.priceWithTax.value}</Price>
+            )}
+          </div>
+        </Flexbar>
+      </Suggestion>
+    );
   }, []);
 
   // Autosuggest will pass through all these props to the input.
@@ -289,10 +240,10 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
     placeholder: intl.formatMessage(messages.placeholder),
     value,
     onChange,
-    onKeyDown: (e) => {
+    onKeyDown: (e: KeyboardEvent<any>) => {
       if (e.keyCode === 13) {
-        if (false /*this.state.value.trim() !== lastQuery.trim()*/) {
-          onSuggestionsFetchRequested({ value: this.state.value });
+        if (value.trim() !== lastQuery.trim() && shouldFetchSuggestions) {
+          onSuggestionsFetchRequested();
         }
       }
     },
@@ -301,23 +252,20 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
   return (
     <StyledSearch>
       <Autosuggest
-        suggestions={sections.filter(
-          (section) => section.suggestions.length > 0
-        )}
+        suggestions={suggestions}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
         onSuggestionsClearRequested={onSuggestionsClearRequested}
         onSuggestionSelected={onSuggestionSelected}
-        shouldRenderSuggestions={shouldRenderSuggestions}
         getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         renderSuggestionsContainer={renderSuggestionContainer}
         renderInputComponent={renderInputComponent}
         focusInputOnSuggestionClick={false}
         inputProps={inputProps}
-        multiSection={true}
-        renderSectionTitle={renderSectionTitle}
-        getSectionSuggestions={getSectionSuggestions}
       />
+      <SpinWrapper>
+        <ClipLoader loading={loading} size={20} color={colors.primary} />
+      </SpinWrapper>
     </StyledSearch>
   );
 };

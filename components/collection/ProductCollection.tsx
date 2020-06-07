@@ -1,25 +1,15 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef,
-  FunctionComponent,
-} from "react";
+import React, { useEffect, useMemo, FunctionComponent } from "react";
 import { Box } from "reflexbox";
 import { useIntl, defineMessages } from "react-intl";
 import styled from "styled-components";
 import { Product as JsonLdProduct } from "schema-dts";
-import Router from "next/router";
-import { FaInfoCircle, FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
+import { FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
 import Flex from "../layout/Flex";
 import CollectionItem from "./CollectionItem";
 import ProductItem from "../product/ProductItem";
 import JsonLd from "../seo/JsonLd";
 import { stripTags } from "../../utilities/decode";
-import { productToJsonLd } from "../../utilities/json-ld";
-import Card from "../layout/Card";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import shop from "../../i18n/shop";
 import {
@@ -27,14 +17,13 @@ import {
   trackPageView,
 } from "../../utilities/analytics";
 import Flexbar from "../layout/Flexbar";
-import UnsafeHTMLContent from "../content/UnsafeHTMLContent";
 import Head from "next/head";
-import { Language } from "../../utilities/i18n";
-import { Collection } from "../../schema";
+import { Collection, CollectionLinkType } from "../../schema";
 import useSWR from "swr";
 import { GET_COLLECTION } from "../../gql/collection";
 import { ABSOLUTE_URL } from "../../utilities/api";
 import request from "../../utilities/request";
+import StyledLink from "../elements/StyledLink";
 
 const messages = defineMessages({
   downloadsAndLinks: {
@@ -68,6 +57,10 @@ const DownloadList = styled.ul`
     display: block;
     margin-right: 0.5rem;
   }
+`;
+
+const ProductCollectionWrapper = styled.div`
+  margin-bottom: 1rem;
 `;
 
 const ProductCategoryHead: FunctionComponent<{
@@ -114,121 +107,108 @@ const RichSnippet: FunctionComponent<{
 ));
 
 const ProductCollection: FunctionComponent<{
-  collectionId: number;
   showDescription?: boolean;
-  initialData?: { collection: Collection };
-}> = React.memo(({ collectionId, initialData, showDescription }) => {
+  collection?: Collection;
+}> = React.memo(({ collection, showDescription }) => {
   const intl = useIntl();
-
-  const { data, error } = useSWR(
-    [GET_COLLECTION, collectionId],
-    (query, collectionId) => request(intl.locale, query, { id: collectionId }),
-    {
-      initialData,
-    }
-  );
-  const loading = !data;
 
   const productsJsonLd = useMemo<JsonLdProduct[]>(() => {
     //TODO JsonLd
     return [];
-  }, [data]);
+  }, [collection]);
 
   useEffect(() => {
-    if (!data.collection) {
+    if (!collection) {
       return;
     }
 
     trackPageView();
-    setProductCategoryView(stripTags(data.collection.name));
-  }, [data]); //caching ensures the object stays the same?
+    setProductCategoryView(stripTags(collection.name));
+  }, [collection]); //caching ensures the object stays the same?
 
   return (
-    <div>
+    <ProductCollectionWrapper>
       <div>
-        {data.collection && showDescription && (
+        {collection && showDescription && (
           <>
-            <ProductCategoryHead collection={data.collection} />
+            <ProductCategoryHead collection={collection} />
             <RichSnippet productsJsonLd={productsJsonLd} />
             <InfoWrapper>
               <Flex flexWrap="wrap">
                 <Box width={[1, 1, 1 / 2, 1 / 2]} pr={[0, 0, 4, 4]}>
                   <H1
-                    dangerouslySetInnerHTML={{ __html: data.collection.name }}
+                    dangerouslySetInnerHTML={{ __html: collection.name }}
                   ></H1>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: data.collection.description,
+                      __html: collection.description,
                     }}
                   ></div>
                 </Box>
-                {/*category.links && category.links.length > 0 && (
-                <Box width={[1, 1, 1 / 2, 1 / 2]}>
-                  <H2>{intl.formatMessage(messages.downloadsAndLinks)}</H2>
-                  <DownloadList>
-                    {category.links.map((link, index) => {
-                      let Icon;
-                      let url;
-                      let target;
+                {collection && collection.links && collection.links.length > 0 && (
+                  <Box width={[1, 1, 1 / 2, 1 / 2]}>
+                    <H2>{intl.formatMessage(messages.downloadsAndLinks)}</H2>
+                    <DownloadList>
+                      {collection.links.map((link, index) => {
+                        let Icon;
+                        let url = link.url;
+                        let target = "_blank";
 
-                      switch (link.type) {
-                        case "pdf":
-                          Icon = FaRegFilePdf;
-                          url = link.url;
-                          target = "_blank";
-                          break;
+                        switch (link.type) {
+                          case CollectionLinkType.Pdf:
+                            Icon = FaRegFilePdf;
+                            target = "_blank";
+                            break;
 
-                        case "video":
-                          Icon = FaFilm;
-                          url = link.url;
-                          target = "_blank";
+                          case CollectionLinkType.Video:
+                            Icon = FaFilm;
+                            target = "_blank";
 
-                          break;
-                        case "link":
-                        default:
-                          Icon = FaLink;
-                          url = link.url;
-                          target = "_blank";
-                      }
+                            break;
+                          case CollectionLinkType.Link:
+                          default:
+                            Icon = FaLink;
+                            target = "_blank";
+                        }
 
-                      return (
-                        <li key={index}>
-                          <Flexbar>
-                            <Icon size={24} />{" "}
-                            <Link href={url} target={target} styled>
-                              {link.title}
-                            </Link>
-                          </Flexbar>
-                        </li>
-                      );
-                    })}
-                  </DownloadList>
-                </Box>
-                  )*/}
+                        return (
+                          <li key={index}>
+                            <Flexbar>
+                              <Icon size={24} />{" "}
+                              <StyledLink href={url} target={target} underlined>
+                                {link.name}
+                              </StyledLink>
+                            </Flexbar>
+                          </li>
+                        );
+                      })}
+                    </DownloadList>
+                  </Box>
+                )}
               </Flex>
             </InfoWrapper>
           </>
         )}
         <Flex flexWrap="wrap" style={{ overflowX: "hidden" }}>
-          {data.collection &&
-            data.collection.children.map((collection) => (
+          {collection &&
+            collection.children.map((collection) => (
               <CollectionItem
                 key={"collection-" + collection.id}
                 collection={collection}
               />
             ))}
-          {data.collection &&
-            data.collection.products.map((product) => (
+          {collection &&
+            collection.products.map((product) => (
               <ProductItem key={"product-" + product.id} product={product} />
             ))}
 
-          {loading &&
+          {!collection &&
             new Array(12)
               .fill(0)
               .map((el, index) => <CollectionItem key={index} />)}
         </Flex>
       </div>
-    </div>
+    </ProductCollectionWrapper>
   );
 });
 

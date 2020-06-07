@@ -47,9 +47,18 @@ const Home: FunctionComponent<{
 }> = ({ collectionResponse, posts }) => {
   const intl = useIntl();
 
+  const { data, error } = useSWR(
+    [GET_COLLECTION, 1],
+    (query, collectionSlug) =>
+      request(intl.locale, query, { id: collectionSlug }),
+    {
+      initialData: collectionResponse,
+    }
+  );
+
   const {
-    data,
-    error,
+    data: postsData,
+    error: postsError,
   }: {
     data?: Post[];
     error?: any;
@@ -66,13 +75,16 @@ const Home: FunctionComponent<{
 
   return (
     <Wrapper sidebar={null} breadcrumbs={[]}>
-      <SaleProducts posts={data ? data.filter((p) => p.sticky) : data} />
+      <SaleProducts
+        posts={postsData ? postsData.filter((p) => p.sticky) : postsData}
+      />
       <ProductCollection
-        collectionId={1}
-        initialData={collectionResponse}
+        collection={data?.collection}
         showDescription={false}
       />
-      <LatestPosts posts={data ? data.filter((p) => !p.sticky) : data} />
+      <LatestPosts
+        posts={postsData ? postsData.filter((p) => !p.sticky) : postsData}
+      />
       <Card>
         <H1>Hauser Feuerschutz AG</H1>
         <p>{intl.formatMessage(messages.aboutCompany)}</p>

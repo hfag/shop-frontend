@@ -21,11 +21,12 @@ const css: CSSProperties = {
 
 const StyledImage: FunctionComponent<{
   placeholder?: boolean;
+  squared?: boolean;
   width?: number;
   height?: number;
   src?: string;
   alt?: string;
-}> = React.memo(({ placeholder, width, height, src, alt }) => {
+}> = React.memo(({ placeholder, squared, width, height, src, alt }) => {
   return !placeholder ? (
     <LazyImage
       src={src}
@@ -35,19 +36,34 @@ const StyledImage: FunctionComponent<{
           <Placeholder block />
         </div>
       )}
-      actual={({ imageProps }) => (
-        <img
-          {...imageProps}
-          className={width < height ? "b-height" : "b-width"}
-          style={css}
-          width={width}
-          height={height}
-          alt={alt}
-        />
-      )}
+      actual={({ imageProps }) =>
+        squared ? (
+          <div>
+            <img
+              {...imageProps}
+              className={width < height ? "b-height" : "b-width"}
+              style={css}
+              width={width}
+              height={height}
+              alt={alt}
+            />
+          </div>
+        ) : (
+          <img
+            {...imageProps}
+            className={width < height ? "b-height" : "b-width"}
+            style={css}
+            width={width}
+            height={height}
+            alt={alt}
+          />
+        )
+      }
     />
   ) : (
-    <Placeholder block />
+    <div>
+      <Placeholder block />
+    </div>
   );
 });
 

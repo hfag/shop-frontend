@@ -19,6 +19,11 @@ export const GET_COLLECTION = /* GraphQL */ `
       name
       description
       position
+      links {
+        type
+        name
+        url
+      }
       featuredAsset {
         id
         name

@@ -45,13 +45,13 @@ const StyledProduct = styled.div`
       transform: translate(-50%, -50%);
 
       &.b-height {
-        height: 90%;
-        width: auto;
+        height: 90% !important;
+        width: auto !important;
       }
 
       &.b-width {
-        width: 90%;
-        height: auto;
+        width: 90% !important;
+        height: auto !important;
       }
     }
   }
@@ -62,6 +62,10 @@ const StyledProduct = styled.div`
 
   & > div {
     padding: 0.5rem;
+  }
+
+  &:hover div > div:first-child {
+    text-decoration: underline;
   }
 `;
 
@@ -122,7 +126,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
           ? product.variants.reduce(
               (min, variant) => (min < variant.price ? min : variant.price),
               product.variants[0].price
-            ) / 100
+            )
           : null,
       [product]
     );
@@ -141,9 +145,9 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
             <FaPercent />
           </Discount>
         )}
-        <StyledLink href={url}>
+        <StyledLink href={url} noHover>
           <StyledProduct>
-            <Asset asset={product.featuredAsset} />
+            <Asset asset={product.featuredAsset} squared />
             <div>
               {product ? (
                 <Title dangerouslySetInnerHTML={{ __html: product.name }} />

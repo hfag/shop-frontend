@@ -35,13 +35,13 @@ const StyledCategory = styled.div`
       transform: translate(-50%, -50%);
 
       &.b-height {
-        height: 90%;
-        width: auto;
+        height: 90% !important;
+        width: auto !important;
       }
 
       &.b-width {
-        width: 90%;
-        height: auto;
+        width: 90% !important;
+        height: auto !important;
       }
     }
   }
@@ -91,7 +91,7 @@ const CollectionItem: FunctionComponent<{
     <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
       <StyledLink href={url}>
         <StyledCategory>
-          <Asset asset={collection.featuredAsset} />
+          <Asset asset={collection?.featuredAsset} squared />
           <div>
             {collection ? (
               <Title dangerouslySetInnerHTML={{ __html: collection.name }} />

@@ -49,7 +49,7 @@ const SidebarBreadcrumbs: FunctionComponent<{
           </SidebarBreadcrumb>
         )
       )}
-      <hr />
+      {breadcrumbs.length > 0 && <hr />}
       {children}
     </SidebarListWrapper>
   );

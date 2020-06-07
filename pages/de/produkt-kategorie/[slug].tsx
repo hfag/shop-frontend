@@ -3,12 +3,16 @@ import request from "../../../utilities/request";
 import { GET_ALL_COLLECTIONS, GET_COLLECTION } from "../../../gql/collection";
 import { Collection } from "../../../schema";
 import { locale } from "../config.json";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo } from "react";
 import Wrapper from "../../../components/layout/Wrapper";
 import ProductCollection from "../../../components/collection/ProductCollection";
 import useSWR from "swr";
 import { useIntl } from "react-intl";
 import { pathnamesByLanguage } from "../../../utilities/urls";
+import SidebarCollections from "../../../components/layout/sidebar/SidebarCollections";
+import SidebarProducts from "../../../components/layout/sidebar/SidebarProducts";
+import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
+import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
 
 const Page: FunctionComponent<{
   slug: string;
@@ -24,20 +28,53 @@ const Page: FunctionComponent<{
     }
   );
 
+  const breadcrumbs = useMemo(() => {
+    return data
+      ? data.collection.breadcrumbs
+          .filter(
+            (b) =>
+              !["1", data.collection.id].includes(
+                b.id
+              ) /* remove root collection */
+          )
+          .map((b) => ({
+            name: b.name,
+            url: `/${intl.locale}/${
+              pathnamesByLanguage.productCategory.languages[intl.locale]
+            }/${b.id}`,
+          }))
+      : [];
+  }, [data]);
+
   return (
     <Wrapper
-      sidebar={null}
+      sidebar={
+        <>
+          <SidebarBreadcrumbs breadcrumbs={breadcrumbs}>
+            {data ? (
+              <SidebarBreadcrumb active>
+                {data.collection.name}
+              </SidebarBreadcrumb>
+            ) : null}
+          </SidebarBreadcrumbs>
+          <SidebarCollections
+            collections={data ? data.collection.children : []}
+          />
+          <SidebarProducts products={data ? data.collection.products : []} />
+        </>
+      }
       breadcrumbs={
         data
           ? [
+              ...breadcrumbs,
               {
                 name: data.collection.name,
                 url: `/${intl.locale}/${
                   pathnamesByLanguage.productCategory.languages[intl.locale]
-                }/${slug}`,
+                }/${data.collection.id}`,
               },
             ]
-          : []
+          : breadcrumbs
       }
     >
       <ProductCollection collection={data?.collection} showDescription={true} />

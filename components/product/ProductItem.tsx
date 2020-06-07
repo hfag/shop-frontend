@@ -108,7 +108,6 @@ const Discount = styled.div`
 const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
   ({ product }) => {
     const intl = useIntl();
-    const resellerDiscount = null; //useContext
 
     const url = useMemo(
       () =>
@@ -133,18 +132,6 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
 
     return (
       <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
-        {resellerDiscount && (
-          <Discount
-            data-balloon={
-              resellerDiscount +
-              "% " +
-              intl.formatMessage(messages.discountForResellers)
-            }
-            data-balloon-pos="up"
-          >
-            <FaPercent />
-          </Discount>
-        )}
         <StyledLink href={url} noHover>
           <StyledProduct>
             <Asset asset={product.featuredAsset} squared />

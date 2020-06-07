@@ -25,10 +25,6 @@ import { pathnamesByLanguage } from "../../../utilities/urls";
 import page from "../../../i18n/page";
 import { AppContext } from "../../../pages/_app";
 
-interface IProps {
-  isOpen?: boolean;
-}
-
 const BurgerContainer = styled(Card)`
   height: 100%;
   z-index: 100;

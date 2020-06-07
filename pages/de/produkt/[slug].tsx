@@ -40,14 +40,7 @@ const ProductPage: FunctionComponent<{
               pathnamesByLanguage.productCategory.languages[intl.locale]
             }/${b.id}`,
           }))
-      : [
-          {
-            name: intl.formatMessage(page.products),
-            url: `/${intl.locale}/${
-              pathnamesByLanguage.product.languages[intl.locale]
-            }/${productSlug}`,
-          },
-        ];
+      : [];
   }, [data]);
 
   return (

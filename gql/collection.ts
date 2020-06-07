@@ -24,6 +24,10 @@ export const GET_COLLECTION = /* GraphQL */ `
         name
         url
       }
+      breadcrumbs {
+        id
+        name
+      }
       featuredAsset {
         id
         name

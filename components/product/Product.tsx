@@ -47,6 +47,7 @@ import StyledLink from "../elements/StyledLink";
 import request from "../../utilities/request";
 import { ADD_TO_ORDER, GET_ACTIVE_ORDER } from "../../gql/order";
 import { mutate } from "swr";
+import Placeholder from "../elements/Placeholder";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;
@@ -86,7 +87,7 @@ const Product: FunctionComponent<{
   const { user, token } = useContext(AppContext);
 
   if (!product) {
-    return <>Loading</>;
+    return <Placeholder block />;
   }
 
   const [selectedOptions, setSelectedOptions] = useState<{
@@ -142,8 +143,8 @@ const Product: FunctionComponent<{
   );
 
   const activeResellerDiscounts = useMemo(
-    () =>
-      user
+    () => [
+      ...(user
         ? user.resellerDiscounts.filter((discount) =>
             discount.facetValueIds.reduce(
               (has, valueId) =>
@@ -153,8 +154,23 @@ const Product: FunctionComponent<{
               true
             )
           )
-        : [],
-    [user, product]
+        : []),
+      ...(user && selectedVariant
+        ? user.resellerDiscounts.filter((discount) =>
+            discount.facetValueIds.reduce(
+              (has, valueId) =>
+                has &&
+                selectedVariant.facetValues.find(
+                  (value) => value.id === valueId
+                )
+                  ? true
+                  : false,
+              true
+            )
+          )
+        : []),
+    ],
+    [user, product, selectedVariant]
   );
 
   const activeBulkDiscount: BulkDiscount | null = useMemo(() => {
@@ -354,13 +370,16 @@ const Product: FunctionComponent<{
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
               <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
               {activeResellerDiscounts.map((d) => (
-                <FormattedMessage
-                  id="Product.resellerDiscountMessage"
-                  defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
-                  values={{
-                    resellerDiscount: d.discount,
-                  }}
-                />
+                <>
+                  <FormattedMessage
+                    id="Product.resellerDiscountMessage"
+                    defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
+                    values={{
+                      resellerDiscount: d.discount,
+                    }}
+                  />
+                  <br />
+                </>
               ))}
             </Box>
           )}

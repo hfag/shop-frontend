@@ -10,7 +10,6 @@ import Card from "./layout/Card";
 import CheckoutAddressForm from "./cart/CheckoutAddressForm";
 import CheckoutForm from "./cart/CheckoutForm";
 import Button from "./elements/Button";
-import SkuSelection from "./SkuSelection";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
 import { Order, CreateAddressInput, Country } from "../schema";
@@ -51,7 +50,6 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
   const intl = useIntl();
   const [step, setStep] = useState("cart");
   const { user, token } = useContext(AppContext);
-  const [showSkuSelection, setShowSkuSelection] = useState(false);
   const [
     billingAddress,
     setBillingAddress,
@@ -96,13 +94,6 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
 
       <h1>{intl.formatMessage(messages.cart)}</h1>
 
-      {showSkuSelection && step === "cart" && (
-        <div>
-          <SkuSelection />
-          <hr />
-        </div>
-      )}
-
       {orderData ? (
         <>
           <CartForm
@@ -111,14 +102,7 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
             token={token}
             enabled={step === "cart"}
             onProceed={() => setStep("address")}
-            lastRow={
-              !showSkuSelection &&
-              step === "cart" && (
-                <Button onClick={() => setShowSkuSelection(true)} state="">
-                  {intl.formatMessage(messages.searchProduct)}
-                </Button>
-              )
-            }
+            lastRow={null}
           />
           {(step === "address" || step === "checkout") && (
             <CheckoutAddressForm

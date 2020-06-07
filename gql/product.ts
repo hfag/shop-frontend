@@ -23,6 +23,7 @@ export const VARIANT_FRAGMENT = `
   }
   price
   facetValues{
+    id
     name
     facet{
       name

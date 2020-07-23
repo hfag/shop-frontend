@@ -82,7 +82,7 @@ const CollectionItem: FunctionComponent<{
       collection
         ? `/${intl.locale}/${
             pathnamesByLanguage.productCategory.languages[intl.locale]
-          }/${collection.id}`
+          }/${collection.slug}`
         : "",
     [collection]
   );

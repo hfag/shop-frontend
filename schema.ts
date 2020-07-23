@@ -147,6 +147,7 @@ export type Collection = Node & {
   updatedAt: Scalars["DateTime"];
   languageCode?: Maybe<LanguageCode>;
   name: Scalars["String"];
+  slug: Scalars["String"];
   breadcrumbs: Array<CollectionBreadcrumb>;
   position: Scalars["Int"];
   description: Scalars["String"];
@@ -170,6 +171,7 @@ export type CollectionBreadcrumb = {
   __typename?: "CollectionBreadcrumb";
   id: Scalars["ID"];
   name: Scalars["String"];
+  slug: Scalars["String"];
 };
 
 export type CollectionCustomFields = {
@@ -183,6 +185,7 @@ export type CollectionFilterParameter = {
   updatedAt?: Maybe<DateOperators>;
   languageCode?: Maybe<StringOperators>;
   name?: Maybe<StringOperators>;
+  slug?: Maybe<StringOperators>;
   position?: Maybe<NumberOperators>;
   description?: Maybe<StringOperators>;
   hasLinks?: Maybe<BooleanOperators>;
@@ -232,6 +235,7 @@ export type CollectionSortParameter = {
   createdAt?: Maybe<SortOrder>;
   updatedAt?: Maybe<SortOrder>;
   name?: Maybe<SortOrder>;
+  slug?: Maybe<SortOrder>;
   position?: Maybe<SortOrder>;
   description?: Maybe<SortOrder>;
   hasLinks?: Maybe<SortOrder>;
@@ -245,6 +249,7 @@ export type CollectionTranslation = {
   updatedAt: Scalars["DateTime"];
   languageCode: LanguageCode;
   name: Scalars["String"];
+  slug: Scalars["String"];
   description: Scalars["String"];
 };
 
@@ -541,18 +546,51 @@ export type CustomerOrdersArgs = {
   options?: Maybe<OrderListOptions>;
 };
 
+export type CustomerFilterParameter = {
+  createdAt?: Maybe<DateOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  title?: Maybe<StringOperators>;
+  firstName?: Maybe<StringOperators>;
+  lastName?: Maybe<StringOperators>;
+  phoneNumber?: Maybe<StringOperators>;
+  emailAddress?: Maybe<StringOperators>;
+};
+
 export type CustomerGroup = Node & {
   __typename?: "CustomerGroup";
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
   name: Scalars["String"];
+  customers: CustomerList;
+};
+
+export type CustomerGroupCustomersArgs = {
+  options?: Maybe<CustomerListOptions>;
 };
 
 export type CustomerList = PaginatedList & {
   __typename?: "CustomerList";
   items: Array<Customer>;
   totalItems: Scalars["Int"];
+};
+
+export type CustomerListOptions = {
+  skip?: Maybe<Scalars["Int"]>;
+  take?: Maybe<Scalars["Int"]>;
+  sort?: Maybe<CustomerSortParameter>;
+  filter?: Maybe<CustomerFilterParameter>;
+};
+
+export type CustomerSortParameter = {
+  id?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+  title?: Maybe<SortOrder>;
+  firstName?: Maybe<SortOrder>;
+  lastName?: Maybe<SortOrder>;
+  phoneNumber?: Maybe<SortOrder>;
+  emailAddress?: Maybe<SortOrder>;
 };
 
 export type CustomField = {
@@ -753,6 +791,20 @@ export type HistoryEntrySortParameter = {
 };
 
 export enum HistoryEntryType {
+  CustomerRegistered = "CUSTOMER_REGISTERED",
+  CustomerVerified = "CUSTOMER_VERIFIED",
+  CustomerDetailUpdated = "CUSTOMER_DETAIL_UPDATED",
+  CustomerAddedToGroup = "CUSTOMER_ADDED_TO_GROUP",
+  CustomerRemovedFromGroup = "CUSTOMER_REMOVED_FROM_GROUP",
+  CustomerAddressCreated = "CUSTOMER_ADDRESS_CREATED",
+  CustomerAddressUpdated = "CUSTOMER_ADDRESS_UPDATED",
+  CustomerAddressDeleted = "CUSTOMER_ADDRESS_DELETED",
+  CustomerPasswordUpdated = "CUSTOMER_PASSWORD_UPDATED",
+  CustomerPasswordResetRequested = "CUSTOMER_PASSWORD_RESET_REQUESTED",
+  CustomerPasswordResetVerified = "CUSTOMER_PASSWORD_RESET_VERIFIED",
+  CustomerEmailUpdateRequested = "CUSTOMER_EMAIL_UPDATE_REQUESTED",
+  CustomerEmailUpdateVerified = "CUSTOMER_EMAIL_UPDATE_VERIFIED",
+  CustomerNote = "CUSTOMER_NOTE",
   OrderStateTransition = "ORDER_STATE_TRANSITION",
   OrderPaymentTransition = "ORDER_PAYMENT_TRANSITION",
   OrderFullfillment = "ORDER_FULLFILLMENT",
@@ -784,189 +836,162 @@ export type IntCustomFieldConfig = CustomField & {
 };
 
 export enum LanguageCode {
-  Aa = "aa",
-  Ab = "ab",
   Af = "af",
   Ak = "ak",
   Sq = "sq",
   Am = "am",
   Ar = "ar",
-  An = "an",
   Hy = "hy",
   As = "as",
-  Av = "av",
-  Ae = "ae",
-  Ay = "ay",
   Az = "az",
-  Ba = "ba",
   Bm = "bm",
+  Bn = "bn",
   Eu = "eu",
   Be = "be",
-  Bn = "bn",
-  Bh = "bh",
-  Bi = "bi",
   Bs = "bs",
   Br = "br",
   Bg = "bg",
   My = "my",
   Ca = "ca",
-  Ch = "ch",
   Ce = "ce",
   Zh = "zh",
+  ZhHans = "zh_Hans",
+  ZhHant = "zh_Hant",
   Cu = "cu",
-  Cv = "cv",
   Kw = "kw",
   Co = "co",
-  Cr = "cr",
+  Hr = "hr",
   Cs = "cs",
   Da = "da",
-  Dv = "dv",
   Nl = "nl",
+  NlBe = "nl_BE",
   Dz = "dz",
   En = "en",
+  EnAu = "en_AU",
+  EnCa = "en_CA",
+  EnGb = "en_GB",
+  EnUs = "en_US",
   Eo = "eo",
   Et = "et",
   Ee = "ee",
   Fo = "fo",
-  Fj = "fj",
   Fi = "fi",
   Fr = "fr",
-  Fy = "fy",
+  FrCa = "fr_CA",
+  FrCh = "fr_CH",
   Ff = "ff",
+  Gl = "gl",
+  Lg = "lg",
   Ka = "ka",
   De = "de",
-  Gd = "gd",
-  Ga = "ga",
-  Gl = "gl",
-  Gv = "gv",
+  DeAt = "de_AT",
+  DeCh = "de_CH",
   El = "el",
-  Gn = "gn",
   Gu = "gu",
   Ht = "ht",
   Ha = "ha",
   He = "he",
-  Hz = "hz",
   Hi = "hi",
-  Ho = "ho",
-  Hr = "hr",
   Hu = "hu",
-  Ig = "ig",
   Is = "is",
-  Io = "io",
-  Ii = "ii",
-  Iu = "iu",
-  Ie = "ie",
-  Ia = "ia",
+  Ig = "ig",
   Id = "id",
-  Ik = "ik",
+  Ia = "ia",
+  Ga = "ga",
   It = "it",
-  Jv = "jv",
   Ja = "ja",
+  Jv = "jv",
   Kl = "kl",
   Kn = "kn",
   Ks = "ks",
-  Kr = "kr",
   Kk = "kk",
   Km = "km",
   Ki = "ki",
   Rw = "rw",
-  Ky = "ky",
-  Kv = "kv",
-  Kg = "kg",
   Ko = "ko",
-  Kj = "kj",
   Ku = "ku",
+  Ky = "ky",
   Lo = "lo",
   La = "la",
   Lv = "lv",
-  Li = "li",
   Ln = "ln",
   Lt = "lt",
-  Lb = "lb",
   Lu = "lu",
-  Lg = "lg",
+  Lb = "lb",
   Mk = "mk",
-  Mh = "mh",
+  Mg = "mg",
+  Ms = "ms",
   Ml = "ml",
+  Mt = "mt",
+  Gv = "gv",
   Mi = "mi",
   Mr = "mr",
-  Ms = "ms",
-  Mg = "mg",
-  Mt = "mt",
   Mn = "mn",
-  Na = "na",
-  Nv = "nv",
-  Nr = "nr",
-  Nd = "nd",
-  Ng = "ng",
   Ne = "ne",
-  Nn = "nn",
+  Nd = "nd",
+  Se = "se",
   Nb = "nb",
-  No = "no",
+  Nn = "nn",
   Ny = "ny",
-  Oc = "oc",
-  Oj = "oj",
   Or = "or",
   Om = "om",
   Os = "os",
-  Pa = "pa",
+  Ps = "ps",
   Fa = "fa",
-  Pi = "pi",
+  FaAf = "fa_AF",
   Pl = "pl",
   Pt = "pt",
-  Ps = "ps",
+  PtBr = "pt_BR",
+  PtPt = "pt_PT",
+  Pa = "pa",
   Qu = "qu",
-  Rm = "rm",
   Ro = "ro",
+  RoMd = "ro_MD",
+  Rm = "rm",
   Rn = "rn",
   Ru = "ru",
+  Sm = "sm",
   Sg = "sg",
   Sa = "sa",
+  Gd = "gd",
+  Sr = "sr",
+  Sn = "sn",
+  Ii = "ii",
+  Sd = "sd",
   Si = "si",
   Sk = "sk",
   Sl = "sl",
-  Se = "se",
-  Sm = "sm",
-  Sn = "sn",
-  Sd = "sd",
   So = "so",
   St = "st",
   Es = "es",
-  Sc = "sc",
-  Sr = "sr",
-  Ss = "ss",
+  EsEs = "es_ES",
+  EsMx = "es_MX",
   Su = "su",
   Sw = "sw",
+  SwCd = "sw_CD",
   Sv = "sv",
-  Ty = "ty",
+  Tg = "tg",
   Ta = "ta",
   Tt = "tt",
   Te = "te",
-  Tg = "tg",
-  Tl = "tl",
   Th = "th",
   Bo = "bo",
   Ti = "ti",
   To = "to",
-  Tn = "tn",
-  Ts = "ts",
-  Tk = "tk",
   Tr = "tr",
-  Tw = "tw",
-  Ug = "ug",
+  Tk = "tk",
   Uk = "uk",
   Ur = "ur",
+  Ug = "ug",
   Uz = "uz",
-  Ve = "ve",
   Vi = "vi",
   Vo = "vo",
   Cy = "cy",
-  Wa = "wa",
+  Fy = "fy",
   Wo = "wo",
   Xh = "xh",
   Yi = "yi",
   Yo = "yo",
-  Za = "za",
   Zu = "zu",
 }
 
@@ -986,6 +1011,11 @@ export type LocalizedString = {
   languageCode: LanguageCode;
   value: Scalars["String"];
 };
+
+export enum LogicalOperator {
+  And = "AND",
+  Or = "OR",
+}
 
 export type LoginResult = {
   __typename?: "LoginResult";
@@ -1330,17 +1360,6 @@ export type PriceRange = {
   max: Scalars["Int"];
 };
 
-export type PriceRangeBucket = {
-  __typename?: "PriceRangeBucket";
-  to: Scalars["Int"];
-  count: Scalars["Int"];
-};
-
-export type PriceRangeInput = {
-  min: Scalars["Int"];
-  max: Scalars["Int"];
-};
-
 export type Product = Node & {
   __typename?: "Product";
   id: Scalars["ID"];
@@ -1585,7 +1604,7 @@ export type Query = {
   search: SearchResponse;
   productRecommendations: Array<ProductRecommendation>;
   productBulkDiscounts: Array<BulkDiscount>;
-  productBySlug: Product;
+  productBySlug?: Maybe<Product>;
 };
 
 export type QueryCollectionsArgs = {
@@ -1593,7 +1612,8 @@ export type QueryCollectionsArgs = {
 };
 
 export type QueryCollectionArgs = {
-  id: Scalars["ID"];
+  id?: Maybe<Scalars["ID"]>;
+  slug?: Maybe<Scalars["String"]>;
 };
 
 export type QueryOrderArgs = {
@@ -1710,13 +1730,12 @@ export type Sale = Node &
 export type SearchInput = {
   term?: Maybe<Scalars["String"]>;
   facetValueIds?: Maybe<Array<Scalars["ID"]>>;
+  facetValueOperator?: Maybe<LogicalOperator>;
   collectionId?: Maybe<Scalars["ID"]>;
   groupByProduct?: Maybe<Scalars["Boolean"]>;
   take?: Maybe<Scalars["Int"]>;
   skip?: Maybe<Scalars["Int"]>;
   sort?: Maybe<SearchResultSortParameter>;
-  priceRange?: Maybe<PriceRangeInput>;
-  priceRangeWithTax?: Maybe<PriceRangeInput>;
 };
 
 export type SearchReindexResponse = {
@@ -1729,15 +1748,6 @@ export type SearchResponse = {
   items: Array<SearchResult>;
   totalItems: Scalars["Int"];
   facetValues: Array<FacetValueResult>;
-  prices: SearchResponsePriceData;
-};
-
-export type SearchResponsePriceData = {
-  __typename?: "SearchResponsePriceData";
-  range: PriceRange;
-  rangeWithTax: PriceRange;
-  buckets: Array<PriceRangeBucket>;
-  bucketsWithTax: Array<PriceRangeBucket>;
 };
 
 export type SearchResult = {

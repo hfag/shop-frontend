@@ -36,7 +36,9 @@ const VariationSlider: FunctionComponent<{
   const imageIdToAsset = useMemo<{ [id: string]: AssetType }>(
     () =>
       variants.reduce((object, variant) => {
-        object[variant.featuredAsset.id] = variant.featuredAsset;
+        if (variant.featuredAsset) {
+          object[variant.featuredAsset.id] = variant.featuredAsset;
+        }
         return object;
       }, {}),
     [variants]
@@ -49,7 +51,7 @@ const VariationSlider: FunctionComponent<{
       [id: string]: { [optionGroupId: string]: ProductOption };
     } = {};
     variants.forEach((v) => {
-      if (v.featuredAsset.id in imageMap) {
+      if (v.featuredAsset && v.featuredAsset.id in imageMap) {
         //compare
         Object.keys(imageMap[v.featuredAsset.id]).forEach((optionGroupId) => {
           const option = v.options.find((o) => o.groupId === optionGroupId);
@@ -62,10 +64,12 @@ const VariationSlider: FunctionComponent<{
           }
         });
       } else {
-        imageMap[v.featuredAsset.id] = v.options.reduce((object, option) => {
-          object[option.groupId] = option;
-          return object;
-        }, {});
+        if (v.featuredAsset) {
+          imageMap[v.featuredAsset.id] = v.options.reduce((object, option) => {
+            object[option.groupId] = option;
+            return object;
+          }, {});
+        }
       }
     });
 
@@ -75,11 +79,12 @@ const VariationSlider: FunctionComponent<{
   const activeImageIds = useMemo(
     () =>
       Object.keys(imageMap).filter((imageId) =>
-        Object.keys(selectedOptions).reduce(
+        Object.keys(imageMap[imageId]).reduce(
           (active, optionGroupId) =>
             active &&
-            selectedOptions[optionGroupId].code ===
-              imageMap[imageId][optionGroupId].code,
+            (!selectedOptions[optionGroupId] ||
+              selectedOptions[optionGroupId].code ===
+                imageMap[imageId][optionGroupId].code),
           true
         )
       ),

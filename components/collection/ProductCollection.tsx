@@ -19,10 +19,7 @@ import {
 import Flexbar from "../layout/Flexbar";
 import Head from "next/head";
 import { Collection, CollectionLinkType } from "../../schema";
-import useSWR from "swr";
-import { GET_COLLECTION } from "../../gql/collection";
 import { ABSOLUTE_URL } from "../../utilities/api";
-import request from "../../utilities/request";
 import StyledLink from "../elements/StyledLink";
 
 const messages = defineMessages({
@@ -90,7 +87,7 @@ const ProductCategoryHead: FunctionComponent<{
             collection &&
             `${ABSOLUTE_URL}/${intl.locale}/${
               pathnamesByLanguage.productCategory.languages[intl.locale]
-            }/${collection.id}`
+            }/${collection.slug}`
           }
         />
       )}

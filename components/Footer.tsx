@@ -6,6 +6,7 @@ import {
   FaPhone as Phone,
   FaEnvelope as Envelope,
   FaDownload,
+  FaTwitter,
 } from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
 import { defineMessages, useIntl } from "react-intl";
@@ -35,6 +36,10 @@ const messages = defineMessages({
   downloads: {
     id: "Footer.downloads",
     defaultMessage: "Downloads",
+  },
+  socialMedia: {
+    id: "Footer.socialMedia",
+    defaultMessage: "Soziale Medien",
   },
 });
 
@@ -89,7 +94,8 @@ const IconList = styled.table`
   }
 `;
 
-const Icon = styled.span`
+const Icon = styled.span<{ margin?: boolean }>`
+  ${({ margin }) => (margin ? "margin: 0.5rem 0.5rem 0.5rem 0;" : "")}
   padding: 0.5rem;
   border: ${colors.primaryContrast} 1px solid;
   border-radius: 50%;
@@ -149,7 +155,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                       </td>
                       <td>
                         <StyledLink
-                          styled
+                          underlined
                           target="_blank"
                           external
                           href="https://www.google.ch/maps/place/Sonnmattweg+6,+5000+Aarau/@47.3971534,8.0412625,17z/data=!3m1!4b1!4m5!3m4!1s0x47903be72641ef39:0x35e802ea186c4a2d!8m2!3d47.3971534!4d8.0434512"
@@ -169,7 +175,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                       </td>
                       <td>
                         <StyledLink
-                          styled
+                          underlined
                           external
                           href="tel:+41628340540"
                           negative
@@ -186,7 +192,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                       </td>
                       <td>
                         <StyledLink
-                          styled
+                          underlined
                           external
                           href="mailto:info@feuerschutz.ch"
                           negative
@@ -230,6 +236,18 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                 >
                   {intl.formatMessage(messages.moreAbout)}
                 </StyledLink>
+                <br />
+                <Flex>
+                  <StyledLink
+                    external
+                    href="https://twitter.com/Hauser_AG"
+                    negative
+                  >
+                    <Icon margin>
+                      <FaTwitter />
+                    </Icon>
+                  </StyledLink>
+                </Flex>
               </BorderBox>
             </Flex>
           </Container>

@@ -122,6 +122,7 @@ type Collection implements Node {
   updatedAt: DateTime!
   languageCode: LanguageCode
   name: String!
+  slug: String!
   breadcrumbs: [CollectionBreadcrumb!]!
   position: Int!
   description: String!
@@ -140,6 +141,7 @@ type Collection implements Node {
 type CollectionBreadcrumb {
   id: ID!
   name: String!
+  slug: String!
 }
 
 type CollectionCustomFields {
@@ -152,6 +154,7 @@ input CollectionFilterParameter {
   updatedAt: DateOperators
   languageCode: StringOperators
   name: StringOperators
+  slug: StringOperators
   position: NumberOperators
   description: StringOperators
   hasLinks: BooleanOperators
@@ -198,6 +201,7 @@ input CollectionSortParameter {
   createdAt: SortOrder
   updatedAt: SortOrder
   name: SortOrder
+  slug: SortOrder
   position: SortOrder
   description: SortOrder
   hasLinks: SortOrder
@@ -210,6 +214,7 @@ type CollectionTranslation {
   updatedAt: DateTime!
   languageCode: LanguageCode!
   name: String!
+  slug: String!
   description: String!
 }
 
@@ -808,16 +813,45 @@ type Customer implements Node {
   customFields: JSON
 }
 
+input CustomerFilterParameter {
+  createdAt: DateOperators
+  updatedAt: DateOperators
+  title: StringOperators
+  firstName: StringOperators
+  lastName: StringOperators
+  phoneNumber: StringOperators
+  emailAddress: StringOperators
+}
+
 type CustomerGroup implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  customers(options: CustomerListOptions): CustomerList!
 }
 
 type CustomerList implements PaginatedList {
   items: [Customer!]!
   totalItems: Int!
+}
+
+input CustomerListOptions {
+  skip: Int
+  take: Int
+  sort: CustomerSortParameter
+  filter: CustomerFilterParameter
+}
+
+input CustomerSortParameter {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  title: SortOrder
+  firstName: SortOrder
+  lastName: SortOrder
+  phoneNumber: SortOrder
+  emailAddress: SortOrder
 }
 
 interface CustomField {
@@ -1016,6 +1050,20 @@ input HistoryEntrySortParameter {
 }
 
 enum HistoryEntryType {
+  CUSTOMER_REGISTERED
+  CUSTOMER_VERIFIED
+  CUSTOMER_DETAIL_UPDATED
+  CUSTOMER_ADDED_TO_GROUP
+  CUSTOMER_REMOVED_FROM_GROUP
+  CUSTOMER_ADDRESS_CREATED
+  CUSTOMER_ADDRESS_UPDATED
+  CUSTOMER_ADDRESS_DELETED
+  CUSTOMER_PASSWORD_UPDATED
+  CUSTOMER_PASSWORD_RESET_REQUESTED
+  CUSTOMER_PASSWORD_RESET_VERIFIED
+  CUSTOMER_EMAIL_UPDATE_REQUESTED
+  CUSTOMER_EMAIL_UPDATE_VERIFIED
+  CUSTOMER_NOTE
   ORDER_STATE_TRANSITION
   ORDER_PAYMENT_TRANSITION
   ORDER_FULLFILLMENT
@@ -1048,16 +1096,13 @@ type IntCustomFieldConfig implements CustomField {
 scalar JSON
 
 # @description
-# ISO 639-1 language code
+# Languages in the form of a ISO 639-1 language code with optional
+# region or script modifier (e.g. de_AT). The selection available is based
+# on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
+# and includes the major spoken languages of the world and any widely-used variants.
 #
 # @docsCategory common
 enum LanguageCode {
-  # Afar
-  aa
-
-  # Abkhazian
-  ab
-
   # Afrikaans
   af
 
@@ -1073,47 +1118,26 @@ enum LanguageCode {
   # Arabic
   ar
 
-  # Aragonese
-  an
-
   # Armenian
   hy
 
   # Assamese
   as
 
-  # Avaric
-  av
-
-  # Avestan
-  ae
-
-  # Aymara
-  ay
-
   # Azerbaijani
   az
 
-  # Bashkir
-  ba
-
   # Bambara
   bm
+
+  # Bangla
+  bn
 
   # Basque
   eu
 
   # Belarusian
   be
-
-  # Bengali
-  bn
-
-  # Bihari languages
-  bh
-
-  # Bislama
-  bi
 
   # Bosnian
   bs
@@ -1127,11 +1151,8 @@ enum LanguageCode {
   # Burmese
   my
 
-  # Catalan; Valencian
+  # Catalan
   ca
-
-  # Chamorro
-  ch
 
   # Chechen
   ce
@@ -1139,11 +1160,14 @@ enum LanguageCode {
   # Chinese
   zh
 
-  # Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic
-  cu
+  # Simplified Chinese
+  zh_Hans
 
-  # Chuvash
-  cv
+  # Traditional Chinese
+  zh_Hant
+
+  # Church Slavic
+  cu
 
   # Cornish
   kw
@@ -1151,8 +1175,8 @@ enum LanguageCode {
   # Corsican
   co
 
-  # Cree
-  cr
+  # Croatian
+  hr
 
   # Czech
   cs
@@ -1160,17 +1184,29 @@ enum LanguageCode {
   # Danish
   da
 
-  # Divehi; Dhivehi; Maldivian
-  dv
-
-  # Dutch; Flemish
+  # Dutch
   nl
+
+  # Flemish
+  nl_BE
 
   # Dzongkha
   dz
 
   # English
   en
+
+  # Australian English
+  en_AU
+
+  # Canadian English
+  en_CA
+
+  # British English
+  en_GB
+
+  # American English
+  en_US
 
   # Esperanto
   eo
@@ -1184,20 +1220,26 @@ enum LanguageCode {
   # Faroese
   fo
 
-  # Fijian
-  fj
-
   # Finnish
   fi
 
   # French
   fr
 
-  # Western Frisian
-  fy
+  # Canadian French
+  fr_CA
+
+  # Swiss French
+  fr_CH
 
   # Fulah
   ff
+
+  # Galician
+  gl
+
+  # Ganda
+  lg
 
   # Georgian
   ka
@@ -1205,28 +1247,19 @@ enum LanguageCode {
   # German
   de
 
-  # Gaelic; Scottish Gaelic
-  gd
+  # Austrian German
+  de_AT
 
-  # Irish
-  ga
+  # Swiss High German
+  de_CH
 
-  # Galician
-  gl
-
-  # Manx
-  gv
-
-  # Greek, Modern (1453-)
+  # Greek
   el
-
-  # Guarani
-  gn
 
   # Gujarati
   gu
 
-  # Haitian; Haitian Creole
+  # Haitian Creole
   ht
 
   # Hausa
@@ -1235,58 +1268,37 @@ enum LanguageCode {
   # Hebrew
   he
 
-  # Herero
-  hz
-
   # Hindi
   hi
-
-  # Hiri Motu
-  ho
-
-  # Croatian
-  hr
 
   # Hungarian
   hu
 
-  # Igbo
-  ig
-
   # Icelandic
   is
 
-  # Ido
-  io
-
-  # Sichuan Yi; Nuosu
-  ii
-
-  # Inuktitut
-  iu
-
-  # Interlingue; Occidental
-  ie
-
-  # Interlingua (International Auxiliary Language Association)
-  ia
+  # Igbo
+  ig
 
   # Indonesian
   id
 
-  # Inupiaq
-  ik
+  # Interlingua
+  ia
+
+  # Irish
+  ga
 
   # Italian
   it
 
-  # Javanese
-  jv
-
   # Japanese
   ja
 
-  # Kalaallisut; Greenlandic
+  # Javanese
+  jv
+
+  # Kalaallisut
   kl
 
   # Kannada
@@ -1295,38 +1307,26 @@ enum LanguageCode {
   # Kashmiri
   ks
 
-  # Kanuri
-  kr
-
   # Kazakh
   kk
 
-  # Central Khmer
+  # Khmer
   km
 
-  # Kikuyu; Gikuyu
+  # Kikuyu
   ki
 
   # Kinyarwanda
   rw
 
-  # Kirghiz; Kyrgyz
-  ky
-
-  # Komi
-  kv
-
-  # Kongo
-  kg
-
   # Korean
   ko
 
-  # Kuanyama; Kwanyama
-  kj
-
   # Kurdish
   ku
+
+  # Kyrgyz
+  ky
 
   # Lao
   lo
@@ -1337,32 +1337,35 @@ enum LanguageCode {
   # Latvian
   lv
 
-  # Limburgan; Limburger; Limburgish
-  li
-
   # Lingala
   ln
 
   # Lithuanian
   lt
 
-  # Luxembourgish; Letzeburgesch
-  lb
-
   # Luba-Katanga
   lu
 
-  # Ganda
-  lg
+  # Luxembourgish
+  lb
 
   # Macedonian
   mk
 
-  # Marshallese
-  mh
+  # Malagasy
+  mg
+
+  # Malay
+  ms
 
   # Malayalam
   ml
+
+  # Maltese
+  mt
+
+  # Manx
+  gv
 
   # Maori
   mi
@@ -1370,71 +1373,44 @@ enum LanguageCode {
   # Marathi
   mr
 
-  # Malay
-  ms
-
-  # Malagasy
-  mg
-
-  # Maltese
-  mt
-
   # Mongolian
   mn
-
-  # Nauru
-  na
-
-  # Navajo; Navaho
-  nv
-
-  # Ndebele, South; South Ndebele
-  nr
-
-  # Ndebele, North; North Ndebele
-  nd
-
-  # Ndonga
-  ng
 
   # Nepali
   ne
 
-  # Norwegian Nynorsk; Nynorsk, Norwegian
-  nn
+  # North Ndebele
+  nd
 
-  # Bokmål, Norwegian; Norwegian Bokmål
+  # Northern Sami
+  se
+
+  # Norwegian Bokmål
   nb
 
-  # Norwegian
-  no
+  # Norwegian Nynorsk
+  nn
 
-  # Chichewa; Chewa; Nyanja
+  # Nyanja
   ny
 
-  # Occitan (post 1500); Provençal
-  oc
-
-  # Ojibwa
-  oj
-
-  # Oriya
+  # Odia
   or
 
   # Oromo
   om
 
-  # Ossetian; Ossetic
+  # Ossetic
   os
 
-  # Panjabi; Punjabi
-  pa
+  # Pashto
+  ps
 
   # Persian
   fa
 
-  # Pali
-  pi
+  # Dari
+  fa_AF
 
   # Polish
   pl
@@ -1442,17 +1418,26 @@ enum LanguageCode {
   # Portuguese
   pt
 
-  # Pushto; Pashto
-  ps
+  # Brazilian Portuguese
+  pt_BR
+
+  # European Portuguese
+  pt_PT
+
+  # Punjabi
+  pa
 
   # Quechua
   qu
 
+  # Romanian
+  ro
+
+  # Moldavian
+  ro_MD
+
   # Romansh
   rm
-
-  # Romanian; Moldavian; Moldovan
-  ro
 
   # Rundi
   rn
@@ -1460,13 +1445,31 @@ enum LanguageCode {
   # Russian
   ru
 
+  # Samoan
+  sm
+
   # Sango
   sg
 
   # Sanskrit
   sa
 
-  # Sinhala; Sinhalese
+  # Scottish Gaelic
+  gd
+
+  # Serbian
+  sr
+
+  # Shona
+  sn
+
+  # Sichuan Yi
+  ii
+
+  # Sindhi
+  sd
+
+  # Sinhala
   si
 
   # Slovak
@@ -1475,35 +1478,20 @@ enum LanguageCode {
   # Slovenian
   sl
 
-  # Northern Sami
-  se
-
-  # Samoan
-  sm
-
-  # Shona
-  sn
-
-  # Sindhi
-  sd
-
   # Somali
   so
 
-  # Sotho, Southern
+  # Southern Sotho
   st
 
-  # Spanish; Castilian
+  # Spanish
   es
 
-  # Sardinian
-  sc
+  # European Spanish
+  es_ES
 
-  # Serbian
-  sr
-
-  # Swati
-  ss
+  # Mexican Spanish
+  es_MX
 
   # Sundanese
   su
@@ -1511,11 +1499,14 @@ enum LanguageCode {
   # Swahili
   sw
 
+  # Congo Swahili
+  sw_CD
+
   # Swedish
   sv
 
-  # Tahitian
-  ty
+  # Tajik
+  tg
 
   # Tamil
   ta
@@ -1526,12 +1517,6 @@ enum LanguageCode {
   # Telugu
   te
 
-  # Tajik
-  tg
-
-  # Tagalog
-  tl
-
   # Thai
   th
 
@@ -1541,26 +1526,14 @@ enum LanguageCode {
   # Tigrinya
   ti
 
-  # Tonga (Tonga Islands)
+  # Tongan
   to
-
-  # Tswana
-  tn
-
-  # Tsonga
-  ts
-
-  # Turkmen
-  tk
 
   # Turkish
   tr
 
-  # Twi
-  tw
-
-  # Uighur; Uyghur
-  ug
+  # Turkmen
+  tk
 
   # Ukrainian
   uk
@@ -1568,11 +1541,11 @@ enum LanguageCode {
   # Urdu
   ur
 
+  # Uyghur
+  ug
+
   # Uzbek
   uz
-
-  # Venda
-  ve
 
   # Vietnamese
   vi
@@ -1583,8 +1556,8 @@ enum LanguageCode {
   # Welsh
   cy
 
-  # Walloon
-  wa
+  # Western Frisian
+  fy
 
   # Wolof
   wo
@@ -1597,9 +1570,6 @@ enum LanguageCode {
 
   # Yoruba
   yo
-
-  # Zhuang; Chuang
-  za
 
   # Zulu
   zu
@@ -1618,6 +1588,11 @@ type LocaleStringCustomFieldConfig implements CustomField {
 type LocalizedString {
   languageCode: LanguageCode!
   value: String!
+}
+
+enum LogicalOperator {
+  AND
+  OR
 }
 
 type LoginResult {
@@ -1733,6 +1708,8 @@ type Order implements Node {
   # Order-level adjustments to the order total, such as discounts from promotions
   adjustments: [Adjustment!]!
   couponCodes: [String!]!
+
+  # Promotions applied to the order. Only gets populated after the payment process has completed.
   promotions: [Promotion!]!
   payments: [Payment!]
   fulfillments: [Fulfillment!]
@@ -1918,16 +1895,6 @@ enum Permission {
 
 # The price range where the result has more than one price
 type PriceRange {
-  min: Int!
-  max: Int!
-}
-
-type PriceRangeBucket {
-  to: Int!
-  count: Int!
-}
-
-input PriceRangeInput {
   min: Int!
   max: Int!
 }
@@ -2149,7 +2116,7 @@ type Query {
   activeOrder: Order
   availableCountries: [Country!]!
   collections(options: CollectionListOptions): CollectionList!
-  collection(id: ID!): Collection
+  collection(id: ID, slug: String): Collection
   eligibleShippingMethods: [ShippingMethodQuote!]!
   me: CurrentUser
   nextOrderStates: [String!]!
@@ -2162,7 +2129,7 @@ type Query {
   search(input: SearchInput!): SearchResponse!
   productRecommendations(productId: ID!): [ProductRecommendation!]!
   productBulkDiscounts(productId: ID!): [BulkDiscount!]!
-  productBySlug(slug: String!): Product!
+  productBySlug(slug: String!): Product
 }
 
 enum RecommendationType {
@@ -2238,13 +2205,12 @@ type Sale implements Node & StockMovement {
 input SearchInput {
   term: String
   facetValueIds: [ID!]
+  facetValueOperator: LogicalOperator
   collectionId: ID
   groupByProduct: Boolean
   take: Int
   skip: Int
   sort: SearchResultSortParameter
-  priceRange: PriceRangeInput
-  priceRangeWithTax: PriceRangeInput
 }
 
 type SearchReindexResponse {
@@ -2255,14 +2221,6 @@ type SearchResponse {
   items: [SearchResult!]!
   totalItems: Int!
   facetValues: [FacetValueResult!]!
-  prices: SearchResponsePriceData!
-}
-
-type SearchResponsePriceData {
-  range: PriceRange!
-  rangeWithTax: PriceRange!
-  buckets: [PriceRangeBucket!]!
-  bucketsWithTax: [PriceRangeBucket!]!
 }
 
 type SearchResult {

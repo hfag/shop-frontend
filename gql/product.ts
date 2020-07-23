@@ -89,6 +89,7 @@ export const FULL_PRODUCT_FRAGMENT = `
     name
     breadcrumbs{
       id
+      slug
       name
     }
   }

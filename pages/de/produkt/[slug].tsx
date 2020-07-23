@@ -38,7 +38,7 @@ const ProductPage: FunctionComponent<{
             name: b.name,
             url: `/${intl.locale}/${
               pathnamesByLanguage.productCategory.languages[intl.locale]
-            }/${b.id}`,
+            }/${b.slug}`,
           }))
       : [];
   }, [data]);

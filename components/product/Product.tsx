@@ -115,18 +115,16 @@ const Product: FunctionComponent<{
 
   //recalculate the possible options
   const possibleOptions = useMemo(() => {
-    const possibleOptions: { [option: string]: string[] } = {};
+    const possibleOptions: { [optionGroupId: string]: ProductOption[] } = {};
 
     product.optionGroups.forEach((group: ProductOptionGroup) => {
-      possibleOptions[group.code] = group.options
-        .filter((option) =>
-          possibleVariants.find((v) => {
-            //check if at least one variant still has this option
-            const o = v.options.find((o) => o.groupId === group.id);
-            return o && o.id === option.id;
-          })
-        )
-        .map((o) => o.code);
+      possibleOptions[group.id] = group.options.filter((option) =>
+        possibleVariants.find((v) => {
+          //check if at least one variant still has this option
+          const o = v.options.find((o) => o.groupId === group.id);
+          return o && o.id === option.id;
+        })
+      );
     });
 
     return possibleOptions;
@@ -206,6 +204,43 @@ const Product: FunctionComponent<{
     [product]
   );
 
+  const defaultOptions = useMemo(() => {
+    //on the initial render select
+    const defaultOptions: {
+      [groupId: string]: ProductOption;
+    } = product.optionGroups.reduce((object, optionGroup) => {
+      if (optionGroup.options.length === 1) {
+        object[optionGroup.id] = optionGroup.options[0];
+      }
+      return object;
+    }, {});
+
+    return defaultOptions;
+  }, []);
+
+  useEffect(() => {
+    //on the initial render select the default options
+    setSelectedOptions(defaultOptions);
+  }, []);
+  useEffect(() => {
+    const autoSelection: { [groupId: string]: ProductOption } = Object.keys(
+      possibleOptions
+    )
+      .filter(
+        (groupId) =>
+          !selectedOptions[groupId] && possibleOptions[groupId].length === 1
+      )
+      .reduce((obj, groupId) => {
+        obj[groupId] = possibleOptions[groupId][0];
+        return obj;
+      }, {});
+
+    if (Object.keys(autoSelection).length > 0) {
+      console.log(selectedOptions, { ...selectedOptions, ...autoSelection });
+      setSelectedOptions({ ...selectedOptions, ...autoSelection });
+    }
+  }, [possibleVariants]);
+
   return (
     <div>
       <Head>
@@ -223,7 +258,6 @@ const Product: FunctionComponent<{
           "@context": "http://schema.org/",
           ...productToJsonLd(product),
         }}
-        }
       </JsonLd>
       <ProductCard>
         <h1 dangerouslySetInnerHTML={{ __html: product.name }} />
@@ -237,45 +271,51 @@ const Product: FunctionComponent<{
           />
         </div>
         <Flex flexWrap="wrap">
-          {product.optionGroups.map((optionGroup) => (
-            <Box key={optionGroup.id} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
-              <h4>{optionGroup.name}</h4>
-              <Select
-                placeholder={intl.formatMessage(messages.chooseAnAttribute)}
-                onChange={(item: { label: string; value: string }) => {
-                  const group = product.optionGroups.find(
-                    (g) => g.id === optionGroup.id
-                  );
-                  if (!group) {
-                    console.error(
-                      "The select isn't paired to a group, this shouldn't happen"
+          {product.optionGroups
+            .filter((optionGroup) => !(optionGroup.id in defaultOptions))
+            .map((optionGroup) => (
+              <Box key={optionGroup.id} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+                <h4>{optionGroup.name}</h4>
+                <Select
+                  placeholder={intl.formatMessage(messages.chooseAnAttribute)}
+                  onChange={(item: { label: string; value: string }) => {
+                    const group = product.optionGroups.find(
+                      (g) => g.id === optionGroup.id
                     );
-                    return;
+                    if (!group) {
+                      console.error(
+                        "The select isn't paired to a group, this shouldn't happen"
+                      );
+                      return;
+                    }
+                    if (!item) {
+                      const o = { ...selectedOptions };
+                      delete o[optionGroup.id];
+                      setSelectedOptions(o);
+                    } else {
+                      setSelectedOptions({
+                        ...selectedOptions,
+                        [optionGroup.id]: group.options.find(
+                          (o) => o.code === item.value
+                        ),
+                      });
+                    }
+                  }}
+                  value={
+                    selectedOptions[optionGroup.id] &&
+                    selectedOptions[optionGroup.id].code
                   }
-                  if (!item) {
-                    const o = { ...selectedOptions };
-                    delete o[optionGroup.id];
-                    setSelectedOptions(o);
-                  } else {
-                    setSelectedOptions({
-                      ...selectedOptions,
-                      [optionGroup.id]: group.options.find(
-                        (o) => o.code === item.value
-                      ),
-                    });
-                  }
-                }}
-                value={
-                  selectedOptions[optionGroup.id] &&
-                  selectedOptions[optionGroup.id].code
-                }
-                options={optionGroup.options.map((option) => ({
-                  label: option.name,
-                  value: option.code,
-                }))}
-              />
-            </Box>
-          ))}
+                  options={optionGroup.options
+                    .filter((option) =>
+                      possibleOptions[optionGroup.id].includes(option)
+                    )
+                    .map((option) => ({
+                      label: option.name,
+                      value: option.code,
+                    }))}
+                />
+              </Box>
+            ))}
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
             <h4>{intl.formatMessage(productMessages.quantity)}</h4>
             <Counter

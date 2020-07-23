@@ -1,7 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from "next";
 import { FunctionComponent } from "react";
 import { useIntl, defineMessages } from "react-intl";
-import { GET_COLLECTION } from "../../gql/collection";
+import { GET_COLLECTION_BY_ID } from "../../gql/collection";
 import ProductCollection from "../../components/collection/ProductCollection";
 import { Collection } from "../../schema";
 import Wrapper from "../../components/layout/Wrapper";
@@ -48,9 +48,9 @@ const Home: FunctionComponent<{
   const intl = useIntl();
 
   const { data, error } = useSWR(
-    [GET_COLLECTION, 1],
+    [GET_COLLECTION_BY_ID, 1],
     (query, collectionSlug) =>
-      request(intl.locale, query, { id: collectionSlug }),
+      request(intl.locale, query, { slug: collectionSlug }),
     {
       initialData: collectionResponse,
     }
@@ -106,7 +106,9 @@ export default Home;
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      collectionResponse: await request(locale, GET_COLLECTION, { id: 1 }),
+      collectionResponse: await request(locale, GET_COLLECTION_BY_ID, {
+        id: 1,
+      }),
       posts: await fetch(
         `${getWordpressUrl(
           locale

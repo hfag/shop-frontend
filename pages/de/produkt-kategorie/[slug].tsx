@@ -1,6 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import request from "../../../utilities/request";
-import { GET_ALL_COLLECTIONS, GET_COLLECTION } from "../../../gql/collection";
+import {
+  GET_ALL_COLLECTIONS,
+  GET_COLLECTION_BY_SLUG,
+} from "../../../gql/collection";
 import { Collection } from "../../../schema";
 import { locale } from "../config.json";
 import { FunctionComponent, useMemo } from "react";
@@ -21,7 +24,7 @@ const Page: FunctionComponent<{
   const intl = useIntl();
 
   const { data, error } = useSWR(
-    [GET_COLLECTION, slug],
+    [GET_COLLECTION_BY_SLUG, slug],
     (query, collectionId) => request(intl.locale, query, { id: collectionId }),
     {
       initialData: collectionResponse,
@@ -41,7 +44,7 @@ const Page: FunctionComponent<{
             name: b.name,
             url: `/${intl.locale}/${
               pathnamesByLanguage.productCategory.languages[intl.locale]
-            }/${b.id}`,
+            }/${b.slug}`,
           }))
       : [];
   }, [data]);
@@ -71,7 +74,7 @@ const Page: FunctionComponent<{
                 name: data.collection.name,
                 url: `/${intl.locale}/${
                   pathnamesByLanguage.productCategory.languages[intl.locale]
-                }/${data.collection.id}`,
+                }/${data.collection.slug}`,
               },
             ]
           : breadcrumbs
@@ -92,7 +95,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: data.collections.items.map((collection) => ({
-      params: { slug: collection.id },
+      params: { slug: collection.slug },
     })),
     fallback: false,
   };
@@ -102,8 +105,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       slug: context.params.slug,
-      collectionResponse: await request(locale, GET_COLLECTION, {
-        id: context.params.slug,
+      collectionResponse: await request(locale, GET_COLLECTION_BY_SLUG, {
+        slug: context.params.slug,
       }),
     },
   };

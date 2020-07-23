@@ -14,5 +14,9 @@
   {
     "id": "Footer.downloads",
     "defaultMessage": "Downloads"
+  },
+  {
+    "id": "Footer.socialMedia",
+    "defaultMessage": "Soziale Medien"
   }
 ]

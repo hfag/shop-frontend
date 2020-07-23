@@ -34,6 +34,7 @@ const SidebarProducts: FunctionComponent<{
       </SidebarBreadcrumb>
       {products.map((product, index) => (
         <StyledLink
+          key={index}
           href={`/${intl.locale}/${
             pathnamesByLanguage.product.languages[intl.locale]
           }/${product.slug}`}

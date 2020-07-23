@@ -11,21 +11,20 @@ import Placeholder from "../../elements/Placeholder";
 
 const SidebarBreadcrumbs: FunctionComponent<{
   breadcrumbs: Breadcrumb[];
-  children: ReactNode;
+  children?: ReactNode;
 }> = ({ breadcrumbs, children }) => {
   const intl = useIntl();
 
   return (
     <SidebarListWrapper>
       <StyledLink href="/">
-        <SidebarBreadcrumb active={false}>
+        <SidebarBreadcrumb active={breadcrumbs.length === 0 && !children}>
           <div>
             <ChevronDown />
           </div>
           <div>{intl.formatMessage(page.home)}</div>
         </SidebarBreadcrumb>
       </StyledLink>
-      <hr />
       {breadcrumbs.map((b, index) =>
         b.url === null ? (
           <SidebarBreadcrumb active={false}>

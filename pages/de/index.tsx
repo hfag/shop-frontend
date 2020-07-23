@@ -16,6 +16,10 @@ import { Post, WP_Post, mapPost } from "../../utilities/wordpress";
 import useSWR from "swr";
 import { WP_BLOG_URL, getWordpressUrl } from "../../utilities/api";
 import SaleProducts from "../../components/SaleProducts";
+import SidebarBreadcrumbs from "../../components/layout/sidebar/SidebarBreadcrumbs";
+import SidebarCollections from "../../components/layout/sidebar/SidebarCollections";
+import SidebarProducts from "../../components/layout/sidebar/SidebarProducts";
+import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb";
 
 const messages = defineMessages({
   ourProducts: {
@@ -74,7 +78,18 @@ const Home: FunctionComponent<{
   );
 
   return (
-    <Wrapper sidebar={null} breadcrumbs={[]}>
+    <Wrapper
+      sidebar={
+        <>
+          <SidebarBreadcrumbs breadcrumbs={[]} />
+          <SidebarCollections
+            collections={data ? data.collection.children : []}
+          />
+          <SidebarProducts products={data ? data.collection.products : []} />
+        </>
+      }
+      breadcrumbs={[]}
+    >
       <SaleProducts
         posts={postsData ? postsData.filter((p) => p.sticky) : postsData}
       />

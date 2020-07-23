@@ -11,6 +11,7 @@ import { Collection } from "../../../schema";
 import styled from "styled-components";
 import product from "../../../i18n/product";
 import { colors } from "../../../utilities/style";
+import { pathnamesByLanguage } from "../../../utilities/urls";
 
 const H4 = styled.h4`
   margin: 1rem 0 0 0;
@@ -33,11 +34,21 @@ const SidebarCollections: FunctionComponent<{
       <SidebarBreadcrumb>
         <H4>{intl.formatMessage(product.categories)}</H4>
       </SidebarBreadcrumb>
-      {collections.map((collection, index) => (
-        <SidebarBreadcrumb active={false}>
-          <div>{collection.name}</div>
-        </SidebarBreadcrumb>
-      ))}
+      <ul>
+        {collections.map((collection, index) => (
+          <li>
+            <SidebarBreadcrumb active={false}>
+              <StyledLink
+                href={`/${intl.locale}/${
+                  pathnamesByLanguage.productCategory.languages[intl.locale]
+                }/${collection.slug}`}
+              >
+                {collection.name}
+              </StyledLink>
+            </SidebarBreadcrumb>
+          </li>
+        ))}
+      </ul>
     </SidebarListWrapper>
   );
 };

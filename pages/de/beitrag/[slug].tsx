@@ -7,11 +7,13 @@ import {
   Post as PostType,
 } from "../../../utilities/wordpress";
 import { locale } from "../config.json";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo } from "react";
 import useSWR from "swr";
 import Wrapper from "../../../components/layout/Wrapper";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import Post from "../../../components/Post";
+import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
+import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
 
 const Page: FunctionComponent<{ slug: string; post: PostType }> = ({
   slug,
@@ -28,17 +30,26 @@ const Page: FunctionComponent<{ slug: string; post: PostType }> = ({
     { initialData: post }
   );
 
+  const breadcrumbs = useMemo(
+    () => [
+      {
+        name: data.title,
+        url: `/${intl.locale}/${
+          pathnamesByLanguage.post.languages[intl.locale]
+        }/${slug}`,
+      },
+    ],
+    [data]
+  );
+
   return (
     <Wrapper
-      sidebar={null}
-      breadcrumbs={[
-        {
-          name: post.title,
-          url: `/${intl.locale}/${
-            pathnamesByLanguage.post.languages[intl.locale]
-          }/${slug}`,
-        },
-      ]}
+      sidebar={
+        <SidebarBreadcrumbs breadcrumbs={[]}>
+          {data && <SidebarBreadcrumb active>{data.title}</SidebarBreadcrumb>}
+        </SidebarBreadcrumbs>
+      }
+      breadcrumbs={breadcrumbs}
     >
       <Post post={data} />
     </Wrapper>

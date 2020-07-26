@@ -1,4 +1,4 @@
-{ "de": {
+{
   "Cart.siteTitle": {
     "defaultMessage": "Warenkorb im Shop der Hauser Feuerschutz AG"
   },
@@ -353,4 +353,4 @@
   "404.siteNotFound": {
     "defaultMessage": "Die Seite konnte nicht gefunden werden! Gehen Sie eine Seite zurück oder versuchen Sie es mit der Suche. Vermuten Sie, dies sei ein Fehler, dann kontaktieren Sie uns unter"
   }
-} }
+}

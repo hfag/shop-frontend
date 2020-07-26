@@ -10,7 +10,7 @@
     "start": "NODE_ENV=production node server.js",
     "dev": "PORT=8080 node server.js",
     "build": "yarn extract-messages && yarn collect-messages && next build",
-    "extract-messages": "formatjs extract --messages-dir ./messages ./**/*.ts && formatjs extract --messages-dir ./messages ./**/*.tsx",
+    "extract-messages": "formatjs extract --out-file ./messages.json ./**/*.ts*",
     "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
     "collect-messages": "node scripts/collect-i18n-strings.js",
     "prettier": "prettier --write .",

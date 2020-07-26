@@ -1,62 +1,17 @@
 [
-  {
-    "id": "pages.home",
-    "defaultMessage": "Startseite"
-  },
-  {
-    "id": "pages.products",
-    "defaultMessage": "Produkte"
-  },
-  {
-    "id": "pages.search",
-    "defaultMessage": "Suche"
-  },
-  {
-    "id": "pages.cart",
-    "defaultMessage": "Warenkorb"
-  },
-  {
-    "id": "page.confirmation",
-    "defaultMessage": "Bestellbestätigung"
-  },
-  {
-    "id": "page.verifyEmail",
-    "defaultMessage": "E-Mail verifizieren"
-  },
-  {
-    "id": "page.verifyNewEmail",
-    "defaultMessage": "Neue E-Mail verifizieren"
-  },
-  {
-    "id": "pages.myAccount",
-    "defaultMessage": "Mein Konto"
-  },
-  {
-    "id": "pages.accountDetails",
-    "defaultMessage": "Details"
-  },
-  {
-    "id": "pages.accountAddresses",
-    "defaultMessage": "Adressen"
-  },
-  {
-    "id": "pages.accountOrders",
-    "defaultMessage": "Bestellungen"
-  },
-  {
-    "id": "pages.login",
-    "defaultMessage": "Login"
-  },
-  {
-    "id": "pages.logout",
-    "defaultMessage": "Logout"
-  },
-  {
-    "id": "page.shopAdmin",
-    "defaultMessage": "Shop-Admin"
-  },
-  {
-    "id": "page.networkAdmin",
-    "defaultMessage": "Netzwerk-Admin"
-  }
+  { "id": "pages.home", "defaultMessage": "Startseite" },
+  { "id": "pages.products", "defaultMessage": "Produkte" },
+  { "id": "pages.search", "defaultMessage": "Suche" },
+  { "id": "pages.cart", "defaultMessage": "Warenkorb" },
+  { "id": "page.confirmation", "defaultMessage": "Bestellbestätigung" },
+  { "id": "page.verifyEmail", "defaultMessage": "E-Mail verifizieren" },
+  { "id": "page.verifyNewEmail", "defaultMessage": "Neue E-Mail verifizieren" },
+  { "id": "pages.myAccount", "defaultMessage": "Mein Konto" },
+  { "id": "pages.accountDetails", "defaultMessage": "Details" },
+  { "id": "pages.accountAddresses", "defaultMessage": "Adressen" },
+  { "id": "pages.accountOrders", "defaultMessage": "Bestellungen" },
+  { "id": "pages.login", "defaultMessage": "Login" },
+  { "id": "pages.logout", "defaultMessage": "Logout" },
+  { "id": "page.shopAdmin", "defaultMessage": "Shop-Admin" },
+  { "id": "page.networkAdmin", "defaultMessage": "Netzwerk-Admin" }
 ]

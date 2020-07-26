@@ -7,10 +7,7 @@
     "id": "OrderConfirmation.siteDescription",
     "defaultMessage": "Bestätigungsseite nach einer Bestellung"
   },
-  {
-    "id": "OrderConfirmation.title",
-    "defaultMessage": "Bestellbestätigung"
-  },
+  { "id": "OrderConfirmation.title", "defaultMessage": "Bestellbestätigung" },
   {
     "id": "OrderConfirmation.message",
     "defaultMessage": "Vielen Dank für Ihre Bestellung bei der Hauser Feuerschutz AG. Sie werden in Kürze eine Bestätigungsemail erhalten."

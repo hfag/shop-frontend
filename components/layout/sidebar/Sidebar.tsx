@@ -25,7 +25,7 @@ import { pathnamesByLanguage } from "../../../utilities/urls";
 import page from "../../../i18n/page";
 import { AppContext } from "../../../pages/_app";
 
-const BurgerContainer = styled(Card)`
+const BurgerContainer = styled(Card)<{ isOpen?: boolean }>`
   height: 100%;
   z-index: 100;
   border-top-left-radius: 0;

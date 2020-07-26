@@ -545,7 +545,7 @@ const Product: FunctionComponent<{
                         </StyledLink>
                       ))
                       //@ts-ignore
-                      .reduce((prev, curr) => [prev, ", ", curr])}
+                      .reduce((prev, curr) => [prev, ", ", curr], [])}
                   </td>
                 </tr>
                 <tr>

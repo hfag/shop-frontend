@@ -1,6 +1,1 @@
-[
-  {
-    "id": "cart.table.column.description",
-    "defaultMessage": "Beschreibung"
-  }
-]
+[{ "id": "cart.table.column.description", "defaultMessage": "Beschreibung" }]

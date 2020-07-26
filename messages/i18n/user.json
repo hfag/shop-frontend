@@ -1,14 +1,5 @@
 [
-  {
-    "id": "user.login",
-    "defaultMessage": "Anmelden"
-  },
-  {
-    "id": "user.logout",
-    "defaultMessage": "Abmelden"
-  },
-  {
-    "id": "user.password",
-    "defaultMessage": "Passwort"
-  }
+  { "id": "user.login", "defaultMessage": "Anmelden" },
+  { "id": "user.logout", "defaultMessage": "Abmelden" },
+  { "id": "user.password", "defaultMessage": "Passwort" }
 ]

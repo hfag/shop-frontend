@@ -1,46 +1,16 @@
 [
-  {
-    "id": "order.orders",
-    "defaultMessage": "Bestellungen"
-  },
-  {
-    "id": "order.orderNumber",
-    "defaultMessage": "Bestellnummer"
-  },
-  {
-    "id": "order.orderDate",
-    "defaultMessage": "Bestelldatum"
-  },
-  {
-    "id": "order.order",
-    "defaultMessage": "Bestellung"
-  },
-  {
-    "id": "order.invoice",
-    "defaultMessage": "Rechnung"
-  },
-  {
-    "id": "order.shipping",
-    "defaultMessage": "Versand"
-  },
-  {
-    "id": "order.taxes",
-    "defaultMessage": "Steuern"
-  },
-  {
-    "id": "CartForm.taxesOfThat",
-    "defaultMessage": "Davon MWST (7.7%)"
-  },
+  { "id": "order.orders", "defaultMessage": "Bestellungen" },
+  { "id": "order.orderNumber", "defaultMessage": "Bestellnummer" },
+  { "id": "order.orderDate", "defaultMessage": "Bestelldatum" },
+  { "id": "order.order", "defaultMessage": "Bestellung" },
+  { "id": "order.invoice", "defaultMessage": "Rechnung" },
+  { "id": "order.shipping", "defaultMessage": "Versand" },
+  { "id": "order.taxes", "defaultMessage": "Steuern" },
+  { "id": "CartForm.taxesOfThat", "defaultMessage": "Davon MWST (7.7%)" },
   {
     "id": "order.noOrders",
     "defaultMessage": "Sie haben noch keine Bestellung getätigt."
   },
-  {
-    "id": "order.lastThreeOrders",
-    "defaultMessage": "Letzte 3 Bestellungen"
-  },
-  {
-    "id": "order.total",
-    "defaultMessage": "Gesamtsumme"
-  }
+  { "id": "order.lastThreeOrders", "defaultMessage": "Letzte 3 Bestellungen" },
+  { "id": "order.total", "defaultMessage": "Gesamtsumme" }
 ]

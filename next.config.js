@@ -10,7 +10,7 @@ const withTM = require("next-transpile-modules")([
 const withImages = require("next-images");
 
 const env = {
-  API_URL: "http://localhost:3000/shop-api",
+  API_URL: "https://vendure.feuerschutz.ch/shop-api",
   WP_BLOG_URL: "https://api.feuerschutz.ch",
   ABSOLUTE_URL: "",
   PUBLIC_PATH: "/",

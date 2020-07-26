@@ -62,7 +62,7 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
   return schema;
 };
 
-export const BUSINESS_JSON_LD: LocalBusiness = {
+export const BUSINESS_JSON_LD /*: LocalBusiness*/ = {
   "@context": "http://schema.org",
   "@type": "LocalBusiness ",
   image: [

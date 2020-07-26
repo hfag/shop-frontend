@@ -11,6 +11,7 @@ import {
   ShippingMethodQuote,
   CreateAddressInput,
   Order,
+  Customer,
 } from "../../schema";
 import request from "../../utilities/request";
 import {
@@ -80,7 +81,7 @@ interface IProps {
   intl: IntlShape;
   router: NextRouter;
   token?: string;
-  account: CurrentUser | null;
+  account: Customer | null;
   values?: FormValues;
   billingAddress: CreateAddressInput | null;
   order: Order | null;

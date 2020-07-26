@@ -3,12 +3,6 @@
     "id": "Searchbar.placeholder",
     "defaultMessage": "Suchen Sie nach einem Produkt (mindestens 2 Zeichen)"
   },
-  {
-    "id": "Searchbar.from",
-    "defaultMessage": "Ab"
-  },
-  {
-    "id": "Searchbar.showMore",
-    "defaultMessage": "Zeige mehr..."
-  }
+  { "id": "Searchbar.from", "defaultMessage": "Ab" },
+  { "id": "Searchbar.showMore", "defaultMessage": "Zeige mehr..." }
 ]

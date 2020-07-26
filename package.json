@@ -10,12 +10,12 @@
     "start": "NODE_ENV=production node server.js",
     "dev": "PORT=8080 node server.js",
     "build": "yarn extract-messages && yarn collect-messages && next build",
-    "extract-messages": "NODE_ENV=production babel ./src  --out-file /dev/null",
+    "extract-messages": "formatjs extract --messages-dir ./messages ./**/*.ts && formatjs extract --messages-dir ./messages ./**/*.tsx",
     "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
     "collect-messages": "node scripts/collect-i18n-strings.js",
-    "analysis": "webpack-bundle-analyzer ./dist/stats.json",
     "prettier": "prettier --write .",
-    "test": "echo 'not implemented'"
+    "test": "echo 'not implemented'",
+    "deploy": "yarn build"
   },
   "config": {
     "ghooks": {
@@ -37,10 +37,10 @@
     "@graphql-codegen/typescript-operations": "^1.15.0",
     "@types/color": "^3.0.1",
     "@types/lodash": "^4.14.108",
-    "@types/react": "^16.9.35",
+    "@types/react": "^16.9.43",
     "@types/react-autosuggest": "^9.3.14",
     "@types/react-collapse": "^5.0.0",
-    "@types/react-dom": "^16.0.5",
+    "@types/react-dom": "^16.9.8",
     "@types/react-images": "^0.5.3",
     "@types/reflexbox": "^4.0.1",
     "@types/styled-components": "^5.1.0",

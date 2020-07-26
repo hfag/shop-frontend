@@ -1,57 +1,20 @@
 language: node_js
 node_js:
-  - "11"
+  - "14"
 cache:
   directories:
     - node_modules
   yarn: true
-env:
-  global:
-    - secure: rFRf8UP0lljgh2fqobtDEXIu0xdmpTWtE4o5WWSsJaur9TO7rcMndoQASeOzTtI0P/U9PPoHJEp7l4lDRNC3aTuUx/LKsI4Cx7WTL+1WcP1u/ZkxWbhwBe1W5w1TgWNYMyE4Pu4w5PskAmuHaw6kn8c2OoZQChlPmc7k2eahCWd0ipfLtP7PBTFjokD6mNGBBDvXNxZIQTx6GeZ+/YmgvF/q1MvYOPNHI15HJhmwcL5+EP2VE0vqFdNIHvqz6vRZNv02TzNDOGT1jrsSLZ4XU+bymx6vT+OteqWvm/DKzpXdut7WQo6Z9Oa8/kgDJtkHW2p0kOwuj4mB7S5lVTHsKEw1Ao51yqJs9n+uhP+ra1h5e3njmSNg5nybuX7yoaCwDW3lUCXaO1H3pAgTl6xv0EUJb2AYgISESSdZb5gI2piwR+rUC1A+ZJozB5XOuIyeJ5lgKqLvoYChSN54OnDfZBZ5V7+CI2r5HKi7xvUqrNyYC9waKbqjyYruLOGQh/VQrqDev7koo4UhB63vntY/PkHYMl0ZBUZoMi2273mCPdyAify43ZhhuKGOgxVRxrpWA5gmti89vo3gVxDQ0av9xf3I3gZXvL8+SB7NPFIiOcPsmKtVqOmPJ7vBbDWRZEMQeR7ggU42E54bU+BFJZaqs/1ReCpEsEo/Q/NPQ2D/c4Q=
 install:
   - yarn install
 before_script:
   - cp .env.example .env
 script:
   - yarn build
-  - yarn build-server
 branches:
   only:
     - master
     - staging
-before_deploy:
-  - git config --local user.name "Travis CI"
-  - git config --local user.email "contact@travis-ci.com"
-  - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
-  - mkdir release
-  - tar -zcf release/react-frontend-${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}-server.tar.gz
-    dist/server
-  - tar -zcf release/react-frontend-${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}-client.tar.gz
-    dist/client-build
-deploy:
-  name: "v1.0#${TRAVIS_BUILD_NUMBER}"
-  provider: releases
-  api_key: $GITHUB_OAUTH_TOKEN
-  file_glob: true
-  file: release/**/*
-  skip_cleanup: true
-  on:
-    repo: hfag/shop-frontend
-after_deploy:
-  - if ! [[ $TRAVIS_BRANCH =~ (master) ]]; then
-    RELEASE_ID=$(curl https://api.github.com/repos/hfag/shop-frontend/releases/latest |
-    grep -m 1 id |
-    sed "s/\"id\"://g;s/,//g" |
-    xargs
-    );
-
-    echo "Latest relase id is $RELEASE_ID";
-
-    curl -u Tyratox:$GITHUB_OAUTH_TOKEN
-    --request PATCH https://api.github.com/repos/hfag/shop-frontend/releases/$RELEASE_ID
-    --data "{\"prerelease\":true}"
-    ;
-    fi
 notifications:
   webhooks:
     urls:

@@ -7,8 +7,6 @@ cache:
   yarn: true
 install:
   - yarn install
-before_script:
-  - cp .env.example .env
 script:
   - yarn build
 branches:

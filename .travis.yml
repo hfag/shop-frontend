@@ -7,6 +7,7 @@ cache:
   yarn: true
 install:
   - yarn install
+  - yarn global add @formatjs/cli
 script:
   - yarn build
 branches:

@@ -21,13 +21,17 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
     priceCurrency: "CHF",
     lowPrice: product.variants.reduce(
       (lowest, variant) =>
-        lowest < variant.price && lowest !== 0 ? lowest : variant.price,
-      product.variants[0].price
+        !variant || (lowest < variant.price && lowest !== 0)
+          ? lowest
+          : variant.price,
+      product.variants.length > 0 ? product.variants[0].price : 0
     ),
     highPrice: product.variants.reduce(
       (highest, variant) =>
-        highest > variant.price && highest !== 0 ? highest : variant.price,
-      product.variants[0].price
+        !variant || (highest > variant.price && highest) !== 0
+          ? highest
+          : variant.price,
+      product.variants.length > 0 ? product.variants[0].price : 0
     ),
     offerCount: product.variants.length,
     itemCondition: "NewCondition",

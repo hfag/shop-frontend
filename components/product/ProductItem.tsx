@@ -123,8 +123,9 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
       () =>
         product
           ? product.variants.reduce(
-              (min, variant) => (min < variant.price ? min : variant.price),
-              product.variants[0].price
+              (min, variant) =>
+                !variant || min < variant.price ? min : variant.price,
+              product.variants.length > 0 ? product.variants[0].price : 0
             )
           : null,
       [product]

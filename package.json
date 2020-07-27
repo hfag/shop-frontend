@@ -58,6 +58,7 @@
     "color": "^3.0.0",
     "compression": "^1.7.3",
     "decode-html": "^2.0.0",
+    "emotion": "^10.0.27",
     "emotion-server": "^10.0.27",
     "eslint": "^6.6.0",
     "eslint-plugin-babel": "^4.1.2",

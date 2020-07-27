@@ -1,4 +1,8 @@
 {
+  "home": {
+    "path": "de/index.tsx",
+    "languages": { "de": "index", "fr": "index" }
+  },
   "productCategory": {
     "path": "de/produkt-kategorie",
     "languages": {

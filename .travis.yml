@@ -9,17 +9,8 @@ install:
   - yarn install
   - yarn global add @formatjs/cli
 script:
-  - yarn build
+  - yarn test
 branches:
   only:
     - master
     - staging
-notifications:
-  webhooks:
-    urls:
-      - https://neowise.feuerschutz.ch/webhook/travis
-    on_success: always
-    on_failure: never
-    on_start: never
-    on_cancel: never
-    on_error: never

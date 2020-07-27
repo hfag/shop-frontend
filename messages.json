@@ -1,106 +1,4 @@
 {
-  "Cart.siteTitle": {
-    "defaultMessage": "Warenkorb im Shop der Hauser Feuerschutz AG"
-  },
-  "Cart.siteDescription": {
-    "defaultMessage": "Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
-  },
-  "Cart.cart": {
-    "defaultMessage": "Warenkorb"
-  },
-  "Cart.searchProduct": {
-    "defaultMessage": "Suche Produkt"
-  },
-  "Footer.aboutTitle": {
-    "defaultMessage": "Über die Hauser Feuerschutz AG"
-  },
-  "Footer.about": {
-    "defaultMessage": "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte an in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz."
-  },
-  "Footer.moreAbout": {
-    "defaultMessage": "Weitere Informationen"
-  },
-  "Footer.downloads": {
-    "defaultMessage": "Downloads"
-  },
-  "Footer.socialMedia": {
-    "defaultMessage": "Soziale Medien"
-  },
-  "LatestPosts.title": {
-    "defaultMessage": "Aktuelle Beiträge"
-  },
-  "Login.siteTitle": {
-    "defaultMessage": "Anmelden bei der Hauser Feuerschutz AG"
-  },
-  "Login.siteDescription": {
-    "defaultMessage": "Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
-  },
-  "Login.reset": {
-    "defaultMessage": "Zurücksetzen"
-  },
-  "Login.emailAlreadyExists": {
-    "defaultMessage": "Diese E-Mail wurde bereits registriert!"
-  },
-  "Login.wrongPassword": {
-    "defaultMessage": "Das Passwort stimmt nicht!"
-  },
-  "Login.unknownError": {
-    "defaultMessage": "Es ist ein unbekannter Fehler aufgetreten!"
-  },
-  "Login.passwordForgotten": {
-    "defaultMessage": "Passwort vergessen?"
-  },
-  "Login.confirmationEmail": {
-    "defaultMessage": "Sie sollten in Kürze eine E-Mail erhalten."
-  },
-  "Login.newAccount": {
-    "defaultMessage": "Neues Kundenkonto anlegen"
-  },
-  "Login.createAccount": {
-    "defaultMessage": "Kundenkonto anlegen"
-  },
-  "OrderConfirmation.siteTitle": {
-    "defaultMessage": "Bestellbestätigung - Hauser Feuerschutz AG"
-  },
-  "OrderConfirmation.siteDescription": {
-    "defaultMessage": "Bestätigungsseite nach einer Bestellung"
-  },
-  "OrderConfirmation.title": {
-    "defaultMessage": "Bestellbestätigung"
-  },
-  "OrderConfirmation.message": {
-    "defaultMessage": "Vielen Dank für Ihre Bestellung bei der Hauser Feuerschutz AG. Sie werden in Kürze eine Bestätigungsemail erhalten."
-  },
-  "OrderConfirmation.notFound": {
-    "defaultMessage": "Die angegebene Bestellung wurde nicht gefunden. Falls Sie noch keine E-Mail erhalten haben, kontaktieren Sie uns."
-  },
-  "Confirmation.support": {
-    "defaultMessage": "Bei Fragen können sie uns per E-Mail unter {mail} oder per Telefon unter {phone} erreichen."
-  },
-  "SaleProducts.newsAndDiscounts": {
-    "defaultMessage": "News und Aktionen"
-  },
-  "Searchbar.placeholder": {
-    "defaultMessage": "Suchen Sie nach einem Produkt (mindestens 2 Zeichen)"
-  },
-  "Searchbar.from": {
-    "defaultMessage": "Ab"
-  },
-  "Searchbar.showMore": {
-    "defaultMessage": "Zeige mehr..."
-  },
-  "VerifyEmail.verifyEmail": {
-    "defaultMessage": "Email verifizieren und Benutzerkonto anlegen"
-  },
-  "VerifyEmail.invalidLink": {
-    "defaultMessage": "Der Link aus der E-Mail ist abgelaufen."
-  },
-  "VerifyNewEmail.verifyNewEmail": {
-    "defaultMessage": "Neue Email verifizieren und Benutzerkonto anlegen"
-  },
-  "VerifyNewEmail.invalidLink": {
-    "defaultMessage": "Der Link aus der E-Mail ist abgelaufen."
-  },
   "address.billingAddress": {
     "defaultMessage": "Rechnungsadresse"
   },
@@ -352,5 +250,302 @@
   },
   "404.siteNotFound": {
     "defaultMessage": "Die Seite konnte nicht gefunden werden! Gehen Sie eine Seite zurück oder versuchen Sie es mit der Suche. Vermuten Sie, dies sei ein Fehler, dann kontaktieren Sie uns unter"
+  },
+  "Frontpage.ourProducts": {
+    "defaultMessage": "Unsere Produkte"
+  },
+  "Frontpage.moreAboutCompany": {
+    "defaultMessage": "Mehr über das Unternehmen"
+  },
+  "Frontpage.aboutCompany": {
+    "defaultMessage": "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz an. Die Faszination der Lumineszenz bewegte uns hin zu einem führenden Schweizer Fachunternehmen für langnachleuchtende Produkte. Als kleines Familienunternehmen sind wir auf Ihre Zufriedenheit angewiesen. Teilen Sie uns Ihre Anliegen mit!"
+  },
+  "logout.pleaseWait": {
+    "defaultMessage": "Bitte warten..."
+  },
+  "Cart.siteTitle": {
+    "defaultMessage": "Warenkorb im Shop der Hauser Feuerschutz AG"
+  },
+  "Cart.siteDescription": {
+    "defaultMessage": "Sehen Sie welche Produkte Sie bereits im Warenkorb haben, ändern sie deren Anzahl, entfernen ungewollte oder fügen neue hinzu. Anschliessen können Sie Ihre Bestellung absenden."
+  },
+  "Cart.cart": {
+    "defaultMessage": "Warenkorb"
+  },
+  "Cart.searchProduct": {
+    "defaultMessage": "Suche Produkt"
+  },
+  "Footer.aboutTitle": {
+    "defaultMessage": "Über die Hauser Feuerschutz AG"
+  },
+  "Footer.about": {
+    "defaultMessage": "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte an in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz."
+  },
+  "Footer.moreAbout": {
+    "defaultMessage": "Weitere Informationen"
+  },
+  "Footer.downloads": {
+    "defaultMessage": "Downloads"
+  },
+  "Footer.socialMedia": {
+    "defaultMessage": "Soziale Medien"
+  },
+  "LatestPosts.title": {
+    "defaultMessage": "Aktuelle Beiträge"
+  },
+  "Login.siteTitle": {
+    "defaultMessage": "Anmelden bei der Hauser Feuerschutz AG"
+  },
+  "Login.siteDescription": {
+    "defaultMessage": "Melden Sie sich mit Ihrem Kundenkonto bei der Hauser Feuerschutz AG an um Ihre bisherigen Bestellungen zu sehen oder Ihre Benutzerdaten zu bearbeiten."
+  },
+  "Login.reset": {
+    "defaultMessage": "Zurücksetzen"
+  },
+  "Login.emailAlreadyExists": {
+    "defaultMessage": "Diese E-Mail wurde bereits registriert!"
+  },
+  "Login.wrongPassword": {
+    "defaultMessage": "Das Passwort stimmt nicht!"
+  },
+  "Login.unknownError": {
+    "defaultMessage": "Es ist ein unbekannter Fehler aufgetreten!"
+  },
+  "Login.passwordForgotten": {
+    "defaultMessage": "Passwort vergessen?"
+  },
+  "Login.confirmationEmail": {
+    "defaultMessage": "Sie sollten in Kürze eine E-Mail erhalten."
+  },
+  "Login.newAccount": {
+    "defaultMessage": "Neues Kundenkonto anlegen"
+  },
+  "Login.createAccount": {
+    "defaultMessage": "Kundenkonto anlegen"
+  },
+  "OrderConfirmation.siteTitle": {
+    "defaultMessage": "Bestellbestätigung - Hauser Feuerschutz AG"
+  },
+  "OrderConfirmation.siteDescription": {
+    "defaultMessage": "Bestätigungsseite nach einer Bestellung"
+  },
+  "OrderConfirmation.title": {
+    "defaultMessage": "Bestellbestätigung"
+  },
+  "OrderConfirmation.message": {
+    "defaultMessage": "Vielen Dank für Ihre Bestellung bei der Hauser Feuerschutz AG. Sie werden in Kürze eine Bestätigungsemail erhalten."
+  },
+  "OrderConfirmation.notFound": {
+    "defaultMessage": "Die angegebene Bestellung wurde nicht gefunden. Falls Sie noch keine E-Mail erhalten haben, kontaktieren Sie uns."
+  },
+  "Confirmation.support": {
+    "defaultMessage": "Bei Fragen können sie uns per E-Mail unter {mail} oder per Telefon unter {phone} erreichen."
+  },
+  "SaleProducts.newsAndDiscounts": {
+    "defaultMessage": "News und Aktionen"
+  },
+  "Searchbar.placeholder": {
+    "defaultMessage": "Suchen Sie nach einem Produkt (mindestens 2 Zeichen)"
+  },
+  "Searchbar.from": {
+    "defaultMessage": "Ab"
+  },
+  "Searchbar.showMore": {
+    "defaultMessage": "Zeige mehr..."
+  },
+  "VerifyEmail.verifyEmail": {
+    "defaultMessage": "Email verifizieren und Benutzerkonto anlegen"
+  },
+  "VerifyEmail.invalidLink": {
+    "defaultMessage": "Der Link aus der E-Mail ist abgelaufen."
+  },
+  "VerifyNewEmail.verifyNewEmail": {
+    "defaultMessage": "Neue Email verifizieren und Benutzerkonto anlegen"
+  },
+  "VerifyNewEmail.invalidLink": {
+    "defaultMessage": "Der Link aus der E-Mail ist abgelaufen."
+  },
+  "Product.chooseAVariation": {
+    "defaultMessage": "Wählen Sie eine Variante"
+  },
+  "Product.chooseAnAttribute": {
+    "defaultMessage": "Wählen Sie eine Eigenschaft"
+  },
+  "Product.reset": {
+    "defaultMessage": "Zurücksetzen"
+  },
+  "Product.resetSelection": {
+    "defaultMessage": "Auswahl zurücksetzen"
+  },
+  "Product.mustSelectVariation": {
+    "defaultMessage": "Wählen Sie zuerst eine Variante aus!"
+  },
+  "Product.contactUs": {
+    "defaultMessage": "Kontaktieren Sie uns für dieses Produkt"
+  },
+  "Product.contactEmail": {
+    "defaultMessage": "Senden Sie uns eine E-Mail"
+  },
+  "Product.contactCall": {
+    "defaultMessage": "Rufen Sie uns an"
+  },
+  "Product.imageGallery": {
+    "defaultMessage": "Bildergalerie"
+  },
+  "Product.specifications": {
+    "defaultMessage": "Spezifikationen"
+  },
+  "Product.additionalProducts": {
+    "defaultMessage": "Ergänzende Produkte"
+  },
+  "Product.previousImage": {
+    "defaultMessage": "Vorheriges Bild (linke Pfeiltaste)"
+  },
+  "Product.nextImage": {
+    "defaultMessage": "Nächstes Bild (rechte Pfeiltaste)"
+  },
+  "Product.closeLightBox": {
+    "defaultMessage": "Schliessen (Esc)"
+  },
+  "AccountAddresses.address": {
+    "defaultMessage": "Adresse"
+  },
+  "AccountAddresses.addresses": {
+    "defaultMessage": "Adressen"
+  },
+  "AccountAddresses.noAddresses": {
+    "defaultMessage": "Es wurden bisher keine Adressen hinterlegt."
+  },
+  "AccountAddresses.newAddress": {
+    "defaultMessage": "Neue Adresse erstellen"
+  },
+  "AccountDashboard.here": {
+    "defaultMessage": "hier"
+  },
+  "AccountDashboard.provideName": {
+    "defaultMessage": "Wir wissen noch nicht viel über Sie. Wenn Sie mit Ihrem Namen angesprochen werden möchten, können Sie {here} Ihren Namen hinterlegen."
+  },
+  "AccountDashboard.provideAddress": {
+    "defaultMessage": "Sie haben noch keine Rechnungsaddresse hinterlegt. Falls sie möchten dass diese bei jeder Bestellung von selbst ausgefüllt wird, fügen Sie {here} eine hinzu."
+  },
+  "AccountForm.unknownError": {
+    "defaultMessage": "Beim Aktualisieren ist ein unbekannter Fehler aufgetreten. Bitte kontaktieren Sie uns."
+  },
+  "AccountForm.newEmailError": {
+    "defaultMessage": "Die E-Mail konnte nicht aktualisiert werden. Ist die neue Adresse gültig?"
+  },
+  "AccountForm.newPasswordError": {
+    "defaultMessage": "Das Passwort konnte nicht geändert werden."
+  },
+  "AccountForm.password": {
+    "defaultMessage": "Aktuelles Passwort (leer lassen um nichts zu ändern)"
+  },
+  "AccountForm.newPassword": {
+    "defaultMessage": "Neues Passwort (leer lassen um nichts zu ändern)"
+  },
+  "AccountForm.passwordConfirmation": {
+    "defaultMessage": "Bestätige das neue Passwort"
+  },
+  "Account.siteTitle": {
+    "defaultMessage": "Mein Kundenkonto bei der Hauser Feuerschutz AG"
+  },
+  "Account.siteDescription": {
+    "defaultMessage": "Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
+  },
+  "Account.myAccount": {
+    "defaultMessage": "Mein Kundenkonto"
+  },
+  "Account.overview": {
+    "defaultMessage": "Übersicht"
+  },
+  "Account.details": {
+    "defaultMessage": "Details"
+  },
+  "Account.addresses": {
+    "defaultMessage": "Adressen"
+  },
+  "CartFrom.showMoreDetails": {
+    "defaultMessage": "Zeige Details"
+  },
+  "CartFrom.showLessDetails": {
+    "defaultMessage": "Weniger Details"
+  },
+  "CartFrom.refreshCart": {
+    "defaultMessage": "Warenkorb aktualisieren"
+  },
+  "CartForm.toCheckout": {
+    "defaultMessage": "Weiter zur Bestellung"
+  },
+  "CheckoutAddressForm.shipToDifferentAddress": {
+    "defaultMessage": "Lieferung an eine andere Adresse"
+  },
+  "CheckoutAddressForm.continue": {
+    "defaultMessage": "Weiter"
+  },
+  "CheckoutForm.orderComments": {
+    "defaultMessage": "Bestellnotiz"
+  },
+  "CheckoutForm.orderCommentsPlaceholder": {
+    "defaultMessage": "Anmerkungen zu Ihrer Bestellung, z.B. besondere Hinweise für die Lieferung."
+  },
+  "CheckoutForm.paymentMethods": {
+    "defaultMessage": "Zahlungsmethoden"
+  },
+  "CheckoutForm.shippingMethods": {
+    "defaultMessage": "Liefermethoden"
+  },
+  "CheckoutForm.acceptTos": {
+    "defaultMessage": "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und akzeptiere diese *"
+  },
+  "CheckoutForm.submitOrder": {
+    "defaultMessage": "Bestellung abschicken"
+  },
+  "CheckoutForm.tosMustBeAccepted": {
+    "defaultMessage": "Die AGBs müssen akzeptiert werden!"
+  },
+  "CheckoutForm.invalidPaymentMethod": {
+    "defaultMessage": "Die ausgewählte Zahlungsmethode ist ungültig!"
+  },
+  "ProductCategories.downloadsAndLinks": {
+    "defaultMessage": "Downloads und Links"
+  },
+  "LightboxGallery.imageXOfY": {
+    "defaultMessage": "von"
+  },
+  "LightboxGallery.previousImage": {
+    "defaultMessage": "Vorheriges Bild (linke Pfeiltaste)"
+  },
+  "LightboxGallery.nextImage": {
+    "defaultMessage": "Nächstes Bild (rechte Pfeiltaste)"
+  },
+  "LightboxGallery.closeLightBox": {
+    "defaultMessage": "Schliessen (Esc)"
+  },
+  "Bill.taxes": {
+    "defaultMessage": "zzgl. MwSt., zzgl. Versandkosten"
+  },
+  "Header.siteDescription": {
+    "defaultMessage": "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
+  },
+  "NavCart.emptyCart": {
+    "defaultMessage": "Es befinden sich bisher noch keine Produkte im Warenkorb."
+  },
+  "NavCart.toCart": {
+    "defaultMessage": "Zum Warenkorb"
+  },
+  "NavUser.toAccount": {
+    "defaultMessage": "Zum Konto"
+  },
+  "ScrollToTopButton.backToTop": {
+    "defaultMessage": "Zurück nach oben"
+  },
+  "SupportButton.call": {
+    "defaultMessage": "Rufen Sie uns un"
+  },
+  "Product.resellerDiscountMessage": {
+    "defaultMessage": "Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
+  },
+  "ProductItem.discountForResellers": {
+    "defaultMessage": "Rabatt für Wiederverkäufer"
   }
 }

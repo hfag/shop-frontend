@@ -12,5 +12,14 @@ mkdirpSync(outputDir);
 // Write the messages to this directory
 fs.writeFileSync(
   outputDir + "de.json",
-  `{ "de": ${JSON.stringify(messages, null, 2)} }`
+  `${JSON.stringify(
+    Object.keys(messages)
+      .sort()
+      .reduce((object, key) => {
+        object[key] = messages[key].defaultMessage;
+        return object;
+      }, {}),
+    null,
+    2
+  )}`
 );

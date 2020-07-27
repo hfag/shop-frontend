@@ -105,78 +105,83 @@ const Discount = styled.div`
   z-index: 2;
 `;
 
-const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
-  ({ product }) => {
-    const intl = useIntl();
+const ProductItem: FunctionComponent<{
+  product?: Product;
+  scrollPosition?: any;
+}> = React.memo(({ product, scrollPosition }) => {
+  const intl = useIntl();
 
-    const url = useMemo(
-      () =>
-        product
-          ? `/${intl.locale}/${
-              pathnamesByLanguage.product.languages[intl.locale]
-            }/${product.slug}`
-          : "",
-      [product, intl.locale]
-    );
+  const url = useMemo(
+    () =>
+      product
+        ? `/${intl.locale}/${
+            pathnamesByLanguage.product.languages[intl.locale]
+          }/${product.slug}`
+        : "",
+    [product, intl.locale]
+  );
 
-    const minPrice = useMemo(
-      () =>
-        product
-          ? product.variants.reduce(
-              (min, variant) =>
-                !variant || min < variant.price ? min : variant.price,
-              product.variants.length > 0 ? product.variants[0].price : 0
-            )
-          : null,
-      [product]
-    );
+  const minPrice = useMemo(
+    () =>
+      product
+        ? product.variants.reduce(
+            (min, variant) =>
+              !variant || min < variant.price ? min : variant.price,
+            product.variants.length > 0 ? product.variants[0].price : 0
+          )
+        : null,
+    [product]
+  );
 
-    return (
-      <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
-        <StyledLink href={url} noHover>
-          <StyledProduct>
-            <Asset asset={product.featuredAsset} squared />
-            <div>
-              {product ? (
-                <Title dangerouslySetInnerHTML={{ __html: product.name }} />
-              ) : (
-                <Placeholder text />
-              )}
-              {minPrice && (
-                <div>
-                  <Subtitle>
-                    Ab{" "}
-                    <u>
-                      <Price>{minPrice}</Price>
-                    </u>
-                  </Subtitle>
-                </div>
-              )}
-              {product ? (
-                product.collections &&
-                product.collections
-                  .map((collection) => (
-                    <Subtitle
-                      key={collection.name}
-                      dangerouslySetInnerHTML={{ __html: collection.name }}
-                    />
-                  ))
-                  .slice(0, 2)
-                  .reduce(
-                    //@ts-ignore
-                    (all, item) => (all ? [...all, ", ", item] : [item]),
-                    false
-                  )
-              ) : (
-                <Placeholder text />
-              )}
-              {product && product.collections.length > 2 && <span>, ...</span>}
-            </div>
-          </StyledProduct>
-        </StyledLink>
-      </RelativeBox>
-    );
-  }
-);
+  return (
+    <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
+      <StyledLink href={url} noHover>
+        <StyledProduct>
+          <Asset
+            asset={product.featuredAsset}
+            squared
+            scrollPosition={scrollPosition}
+          />
+          <div>
+            {product ? (
+              <Title dangerouslySetInnerHTML={{ __html: product.name }} />
+            ) : (
+              <Placeholder text />
+            )}
+            {minPrice && (
+              <div>
+                <Subtitle>
+                  Ab{" "}
+                  <u>
+                    <Price>{minPrice}</Price>
+                  </u>
+                </Subtitle>
+              </div>
+            )}
+            {product ? (
+              product.collections &&
+              product.collections
+                .map((collection) => (
+                  <Subtitle
+                    key={collection.name}
+                    dangerouslySetInnerHTML={{ __html: collection.name }}
+                  />
+                ))
+                .slice(0, 2)
+                .reduce(
+                  //@ts-ignore
+                  (all, item) => (all ? [...all, ", ", item] : [item]),
+                  false
+                )
+            ) : (
+              <Placeholder text />
+            )}
+            {product && product.collections.length > 2 && <span>, ...</span>}
+          </div>
+        </StyledProduct>
+      </StyledLink>
+    </RelativeBox>
+  );
+});
 
 export default ProductItem;

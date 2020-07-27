@@ -99,7 +99,7 @@ app.prepare().then(() => {
 
       request.locale = locale;
       request.localeDataScript = getLocaleDataScript(locale);
-      request.messages = getMessages(locale)[locale];
+      request.messages = getMessages(locale);
     }
 
     handle(request, response);

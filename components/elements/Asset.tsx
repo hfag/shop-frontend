@@ -8,7 +8,8 @@ import { Asset as AssetType } from "../../schema";
 const Asset: FunctionComponent<{
   asset?: AssetType;
   squared?: boolean;
-}> = React.memo(({ asset, squared }) => {
+  scrollPosition?: any;
+}> = React.memo(({ asset, squared, scrollPosition }) => {
   return (
     <StyledImage
       placeholder={!asset}
@@ -17,6 +18,7 @@ const Asset: FunctionComponent<{
       width={asset?.width}
       height={asset?.height}
       alt={asset?.name}
+      scrollPosition={scrollPosition}
     />
   );
 });

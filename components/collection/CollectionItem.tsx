@@ -75,7 +75,8 @@ const Subtitle = styled.div`
 
 const CollectionItem: FunctionComponent<{
   collection?: Collection;
-}> = React.memo(({ collection }) => {
+  scrollPosition?: any;
+}> = React.memo(({ collection, scrollPosition }) => {
   const intl = useIntl();
   const url = useMemo<string>(
     () =>
@@ -91,7 +92,11 @@ const CollectionItem: FunctionComponent<{
     <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
       <StyledLink href={url}>
         <StyledCategory>
-          <Asset asset={collection?.featuredAsset} squared />
+          <Asset
+            asset={collection?.featuredAsset}
+            squared
+            scrollPosition={scrollPosition}
+          />
           <div>
             {collection ? (
               <Title dangerouslySetInnerHTML={{ __html: collection.name }} />

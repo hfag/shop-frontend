@@ -4,6 +4,7 @@ import { useIntl, defineMessages } from "react-intl";
 import styled from "styled-components";
 import { Product as JsonLdProduct } from "schema-dts";
 import { FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
+import { trackWindowScroll } from "react-lazy-load-image-component";
 
 import Flex from "../layout/Flex";
 import CollectionItem from "./CollectionItem";
@@ -64,7 +65,6 @@ const ProductCategoryHead: FunctionComponent<{
   collection: Collection;
 }> = React.memo(({ collection }) => {
   const intl = useIntl();
-  //TODO change to slug!!
   return (
     <Head>
       <title>
@@ -106,7 +106,8 @@ const RichSnippet: FunctionComponent<{
 const ProductCollection: FunctionComponent<{
   showDescription?: boolean;
   collection?: Collection;
-}> = React.memo(({ collection, showDescription }) => {
+  scrollPosition?: any;
+}> = React.memo(({ collection, showDescription, scrollPosition }) => {
   const intl = useIntl();
 
   const productsJsonLd = useMemo<JsonLdProduct[]>(() => {
@@ -192,11 +193,16 @@ const ProductCollection: FunctionComponent<{
               <CollectionItem
                 key={"collection-" + collection.id}
                 collection={collection}
+                scrollPosition={scrollPosition}
               />
             ))}
           {collection &&
             collection.products.map((product) => (
-              <ProductItem key={"product-" + product.id} product={product} />
+              <ProductItem
+                key={"product-" + product.id}
+                product={product}
+                scrollPosition={scrollPosition}
+              />
             ))}
 
           {!collection &&
@@ -209,4 +215,4 @@ const ProductCollection: FunctionComponent<{
   );
 });
 
-export default ProductCollection;
+export default trackWindowScroll(ProductCollection);

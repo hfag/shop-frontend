@@ -8,7 +8,7 @@ import {
   FaDownload,
   FaTwitter,
 } from "react-icons/fa";
-import { LazyImage } from "react-lazy-images";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { defineMessages, useIntl } from "react-intl";
 import Container from "./layout/Container";
 
@@ -118,30 +118,18 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
           <Container>
             <Flex flexWrap="wrap">
               <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
-                <LazyImage
+                <LazyLoadImage
                   src={Logo}
                   alt="Logo"
-                  placeholder={({ imageProps, ref }) => (
-                    <div ref={ref}>
-                      <Placeholder block />
-                    </div>
-                  )}
-                  actual={({ imageProps }) => (
-                    <img {...imageProps} className="logo" />
-                  )}
+                  placeholder={<Placeholder block />}
+                  className="logo"
                 />
                 <br />
-                <LazyImage
+                <LazyLoadImage
                   src={NameSlogan}
                   alt="Slogan"
-                  placeholder={({ imageProps, ref }) => (
-                    <div ref={ref}>
-                      <Placeholder block />
-                    </div>
-                  )}
-                  actual={({ imageProps }) => (
-                    <img {...imageProps} className="slogan" />
-                  )}
+                  placeholder={<Placeholder block />}
+                  className="slogan"
                 />
               </BorderBox>
               <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>

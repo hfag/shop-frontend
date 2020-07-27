@@ -4,10 +4,11 @@ import React, {
   FunctionComponent,
   CSSProperties,
 } from "react";
-import { LazyImage } from "react-lazy-images";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import Placeholder from "./Placeholder";
 import { borders } from "../../utilities/style";
+import { isServer } from "../../utilities/ssr";
 
 const css: CSSProperties = {
   width: "100%",
@@ -26,45 +27,48 @@ const StyledImage: FunctionComponent<{
   height?: number;
   src?: string;
   alt?: string;
-}> = React.memo(({ placeholder, squared, width, height, src, alt }) => {
-  return !placeholder ? (
-    <LazyImage
-      src={src}
-      alt={alt}
-      placeholder={({ imageProps, ref }) => (
-        <div ref={ref}>
+  scrollPosition?: any;
+}> = React.memo(
+  ({ placeholder, squared, width, height, src, alt, scrollPosition }) => {
+    if (placeholder) {
+      return (
+        <div>
           <Placeholder block />
         </div>
-      )}
-      actual={({ imageProps }) =>
-        squared ? (
-          <div>
-            <img
-              {...imageProps}
-              className={width < height ? "b-height" : "b-width"}
-              style={css}
-              width={width}
-              height={height}
-              alt={alt}
-            />
-          </div>
-        ) : (
-          <img
-            {...imageProps}
-            className={width < height ? "b-height" : "b-width"}
+      );
+    }
+    if (squared) {
+      return (
+        <div>
+          <LazyLoadImage
+            scrollPosition={scrollPosition}
+            src={src}
+            alt={alt}
+            placeholder={<Placeholder block />}
             style={css}
             width={width}
             height={height}
-            alt={alt}
+            className={width < height ? "b-height" : "b-width"}
+            visibleByDefault={isServer}
           />
-        )
-      }
-    />
-  ) : (
-    <div>
-      <Placeholder block />
-    </div>
-  );
-});
+        </div>
+      );
+    } else {
+      return (
+        <LazyLoadImage
+          scrollPosition={scrollPosition}
+          src={src}
+          alt={alt}
+          placeholder={<Placeholder block />}
+          style={css}
+          width={width}
+          height={height}
+          className={width < height ? "b-height" : "b-width"}
+          visibleByDefault={isServer}
+        />
+      );
+    }
+  }
+);
 
 export default StyledImage;

@@ -10,12 +10,12 @@
     "start": "NODE_ENV=production node server.js",
     "dev": "PORT=8080 node server.js",
     "build": "yarn extract-messages && yarn collect-messages && next build",
-    "extract-messages": "formatjs extract --out-file ./messages.json ./**/*.ts*",
+    "extract-messages": "formatjs extract --out-file ./messages.json ./i18n/*.{js,ts,tsx} ./i18n/**/*.{js,ts,tsx} ./pages/*.{js,ts,tsx} ./pages/**/*.{js,ts,tsx} ./components/*.{js,ts,tsx} ./components/**/*.{js,ts,tsx}",
     "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
     "collect-messages": "node scripts/collect-i18n-strings.js",
     "prettier": "prettier --write .",
     "test": "echo 'not implemented'",
-    "deploy": "yarn build"
+    "deploy": "echo 'deployed, not built yet'"
   },
   "config": {
     "ghooks": {
@@ -95,7 +95,7 @@
     "react-iframe-resizer-super": "^0.2.0",
     "react-images": "^0.5.19",
     "react-intl": "^3.6.0",
-    "react-lazy-images": "^1.1.0",
+    "react-lazy-load-image-component": "^1.5.0",
     "react-motion": "^0.5.2",
     "react-paginate": "^5.0.0",
     "react-progress-button": "^5.1.0",

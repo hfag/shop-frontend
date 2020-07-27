@@ -9,7 +9,7 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import Triangle from "../shapes/Triangle";
 import userMessages from "../../i18n/user";
 import page from "../../i18n/page";
-import { AppContext } from "../../pages/_app";
+import { AppContext } from "../AppWrapper";
 
 const messages = defineMessages({
   toAccount: {

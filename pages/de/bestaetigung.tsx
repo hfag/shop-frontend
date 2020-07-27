@@ -5,6 +5,8 @@ import Card from "../../components/layout/Card";
 import { useIntl } from "react-intl";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
+import { locale, messages } from "./config.json";
+import { withApp } from "../../components/AppWrapper";
 
 const Page: FunctionComponent<{}> = () => {
   const intl = useIntl();
@@ -26,4 +28,4 @@ const Page: FunctionComponent<{}> = () => {
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);

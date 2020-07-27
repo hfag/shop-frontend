@@ -10,11 +10,11 @@ import Wrapper from "../../../components/layout/Wrapper";
 import Product from "../../../components/product/Product";
 import { useIntl } from "react-intl";
 import useSWR from "swr";
-import page from "../../../i18n/page";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
 import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
-import { locale } from "../config.json";
+import { locale, messages } from "../config.json";
+import { withApp } from "../../../components/AppWrapper";
 
 const ProductPage: FunctionComponent<{
   productSlug: string;
@@ -73,7 +73,7 @@ const ProductPage: FunctionComponent<{
   );
 };
 
-export default ProductPage;
+export default withApp(locale, messages)(ProductPage);
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: { products: { items: ProductType[] } } = await request(

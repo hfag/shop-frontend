@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 
 import order from "../../i18n/order";
-import { AppContext } from "../../pages/_app";
+import { AppContext } from "../AppWrapper";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import StyledLink from "../elements/StyledLink";
 import { Address as AddressType, Node, Order as OrderType } from "../../schema";

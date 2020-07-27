@@ -16,7 +16,7 @@ import { Order, CreateAddressInput, Country } from "../schema";
 import Head from "next/head";
 import { ABSOLUTE_URL } from "../utilities/api";
 import { GET_ACTIVE_ORDER } from "../gql/order";
-import { AppContext } from "../pages/_app";
+import { AppContext } from "./AppWrapper";
 import request from "../utilities/request";
 import useSWR from "swr";
 import Placeholder from "./elements/Placeholder";

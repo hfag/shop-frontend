@@ -7,6 +7,8 @@ import Wrapper from "../../components/layout/Wrapper";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Card from "../../components/layout/Card";
+import { locale, messages as appMessages } from "./config.json";
+import { withApp } from "../../components/AppWrapper";
 
 const messages = defineMessages({
   pleaseWait: {
@@ -43,4 +45,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withApp(locale, appMessages)(Page);

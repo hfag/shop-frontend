@@ -3,7 +3,8 @@ import AccountForm from "../../../components/account/AccountForm";
 import AccountWrapper from "../../../components/account/AccountWrapper";
 import { useIntl, defineMessages } from "react-intl";
 import { useState, useContext } from "react";
-import { AppContext } from "../../_app";
+import { locale, messages } from "../config.json";
+import { withApp, AppContext } from "../../../components/AppWrapper";
 import Placeholder from "../../../components/elements/Placeholder";
 import Message from "../../../components/elements/Message";
 import { pathnamesByLanguage } from "../../../utilities/urls";
@@ -70,4 +71,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);

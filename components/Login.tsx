@@ -26,7 +26,7 @@ import Card from "./layout/Card";
 import { useRouter } from "next/router";
 import { ABSOLUTE_URL } from "../utilities/api";
 import Message from "./elements/Message";
-import { AppContext } from "../pages/_app";
+import { AppContext } from "./AppWrapper";
 import { mutate } from "swr";
 
 const messages = defineMessages({

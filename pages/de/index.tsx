@@ -6,7 +6,7 @@ import ProductCollection from "../../components/collection/ProductCollection";
 import { Collection } from "../../schema";
 import Wrapper from "../../components/layout/Wrapper";
 import request from "../../utilities/request";
-import { locale } from "./config.json";
+import { locale, messages as appMessages } from "./config.json";
 import styled from "styled-components";
 import Card from "../../components/layout/Card";
 import StyledLink from "../../components/elements/StyledLink";
@@ -20,6 +20,7 @@ import SidebarBreadcrumbs from "../../components/layout/sidebar/SidebarBreadcrum
 import SidebarCollections from "../../components/layout/sidebar/SidebarCollections";
 import SidebarProducts from "../../components/layout/sidebar/SidebarProducts";
 import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb";
+import { withApp } from "../../components/AppWrapper";
 
 const messages = defineMessages({
   ourProducts: {
@@ -116,7 +117,7 @@ const Home: FunctionComponent<{
   );
 };
 
-export default Home;
+export default withApp(locale, appMessages)(Home);
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {

@@ -1,20 +1,18 @@
-import { GetStaticPaths, GetStaticProps } from "next";
 import Wrapper from "../../../../components/layout/Wrapper";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
-import Order from "../../../../components/elements/Order";
-import { GET_ORDER_BY_CODE } from "../../../../gql/order";
-import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { AppContext } from "../../../_app";
+import { locale, messages } from "../../config.json";
+import { AppContext, withApp } from "../../../../components/AppWrapper";
 import { useContext, useMemo } from "react";
 import request from "../../../../utilities/request";
-import { Order as OrderType, Country, Address } from "../../../../schema";
+import { Country, Address } from "../../../../schema";
 import Placeholder from "../../../../components/elements/Placeholder";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
 import AddressForm from "../../../../components/account/AddressForm";
 import { AVAILABLE_COUNTRIES } from "../../../../gql/country";
+import { useIntl } from "react-intl";
 
 const Page = () => {
   const intl = useIntl();
@@ -94,4 +92,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);

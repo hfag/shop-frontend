@@ -3,7 +3,8 @@ import AccountWrapper from "../../../../components/account/AccountWrapper";
 import AccountOrders from "../../../../components/account/AccountOrders";
 import { useIntl } from "react-intl";
 import { GET_CURRENT_CUSTOMER_ALL_ORDERS } from "../../../../gql/user";
-import { AppContext } from "../../../_app";
+import { locale, messages } from "../../config.json";
+import { withApp, AppContext } from "../../../../components/AppWrapper";
 import { useContext } from "react";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
@@ -53,4 +54,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);

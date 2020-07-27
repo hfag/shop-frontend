@@ -17,10 +17,6 @@ export default class MyDocument extends Document<IProps> {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
     const initialProps = await super.getInitialProps(ctx);
-    const {
-      //@ts-ignore
-      req: { locale, localeDataScript },
-    } = ctx;
 
     try {
       ctx.renderPage = () =>
@@ -31,8 +27,6 @@ export default class MyDocument extends Document<IProps> {
 
       return {
         ...initialProps,
-        locale,
-        localeDataScript,
         styles: (
           <>
             {initialProps.styles}
@@ -55,11 +49,6 @@ export default class MyDocument extends Document<IProps> {
         <body>
           <Main />
           {/*<script src={polyfill} />*/}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: this.props.localeDataScript,
-            }}
-          />
           <NextScript />
         </body>
       </Html>

@@ -42,7 +42,7 @@ import {
 } from "../../schema";
 import { ABSOLUTE_URL } from "../../utilities/api";
 import Head from "next/head";
-import { AppContext } from "../../pages/_app";
+import { AppContext } from "../AppWrapper";
 import StyledLink from "../elements/StyledLink";
 import request from "../../utilities/request";
 import { ADD_TO_ORDER, GET_ACTIVE_ORDER } from "../../gql/order";

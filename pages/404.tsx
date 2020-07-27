@@ -8,6 +8,8 @@ import StyledLink from "../components/elements/StyledLink";
 import Searchbar from "../components/Searchbar";
 import { ABSOLUTE_URL } from "../utilities/api";
 import Wrapper from "../components/layout/Wrapper";
+import { locale, messages as appMessages } from "./de/config.json";
+import { withApp } from "../components/AppWrapper";
 
 const messages = defineMessages({
   siteTitle: {
@@ -64,4 +66,4 @@ const Page404 = React.memo(({}) => {
   );
 });
 
-export default Page404;
+export default withApp(locale, appMessages)(Page404);

@@ -5,7 +5,7 @@ import {
   GET_COLLECTION_BY_SLUG,
 } from "../../../gql/collection";
 import { Collection } from "../../../schema";
-import { locale } from "../config.json";
+import { locale, messages } from "../config.json";
 import { FunctionComponent, useMemo } from "react";
 import Wrapper from "../../../components/layout/Wrapper";
 import ProductCollection from "../../../components/collection/ProductCollection";
@@ -16,6 +16,7 @@ import SidebarCollections from "../../../components/layout/sidebar/SidebarCollec
 import SidebarProducts from "../../../components/layout/sidebar/SidebarProducts";
 import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
 import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
+import { withApp } from "../../../components/AppWrapper";
 
 const Page: FunctionComponent<{
   slug: string;
@@ -85,7 +86,7 @@ const Page: FunctionComponent<{
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data: { collections: { items: Collection[] } } = await request(

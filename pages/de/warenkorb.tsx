@@ -3,8 +3,10 @@ import Wrapper from "../../components/layout/Wrapper";
 import Cart from "../../components/Cart";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
+import { locale, messages } from "./config.json";
+import { withApp } from "../../components/AppWrapper";
 
-const Page = (props) => {
+const Page = () => {
   const intl = useIntl();
 
   return (
@@ -24,4 +26,4 @@ const Page = (props) => {
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);

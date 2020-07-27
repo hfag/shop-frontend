@@ -22,7 +22,7 @@ import Card from "../Card";
 import RestrictedView from "../../elements/RestrictedView";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import page from "../../../i18n/page";
-import { AppContext } from "../../../pages/_app";
+import { AppContext } from "../../AppWrapper";
 
 const BurgerContainer = styled(Card)<{ isOpen?: boolean }>`
   height: 100%;

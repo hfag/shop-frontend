@@ -4,6 +4,7 @@ const rimraf = require("rimraf");
 const pathnames = require("../utilities/pathnames");
 
 const pages = _path.resolve(__dirname, "..", "pages");
+const locales = _path.resolve(__dirname, "..", "locales");
 const defaultLanguage = "de";
 const languages = ["de", "fr"];
 
@@ -46,10 +47,29 @@ const generatePages = (language, replacements, pathnames) => {
     });
 };
 
+fs.writeFileSync(
+  _path.resolve(pages, defaultLanguage, "config.json"),
+  JSON.stringify({
+    locale: defaultLanguage,
+    messages: JSON.parse(
+      fs.readFileSync(_path.resolve(locales, `${defaultLanguage}.json`))
+    ),
+  })
+);
+
 languages
   .filter((l) => l !== defaultLanguage)
   .forEach((lang) => {
     rimraf.sync(_path.resolve(pages, lang));
     fs.mkdirSync(_path.resolve(pages, lang));
+    fs.writeFileSync(
+      _path.resolve(pages, lang, "config.json"),
+      JSON.stringify({
+        locale: lang,
+        messages: JSON.parse(
+          fs.readFileSync(_path.resolve(locales, `${lang}.json`))
+        ),
+      })
+    );
     generatePages(lang, [[defaultLanguage, lang]], pathnames);
   });

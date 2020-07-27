@@ -12,7 +12,7 @@ import Button from "../elements/Button";
 import Triangle from "../shapes/Triangle";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { colors } from "../../utilities/style";
-import { AppContext } from "../../pages/_app";
+import { AppContext } from "../AppWrapper";
 import request from "../../utilities/request";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
 import { Order } from "../../schema";

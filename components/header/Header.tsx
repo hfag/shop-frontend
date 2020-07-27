@@ -30,7 +30,7 @@ import { colors } from "../../utilities/style";
 import page from "../../i18n/page";
 import { ABSOLUTE_URL } from "../../utilities/api";
 import StyledLink from "../elements/StyledLink";
-import { AppContext } from "../../pages/_app";
+import { AppContext } from "../AppWrapper";
 
 const messages = defineMessages({
   siteDescription: {

@@ -1,4 +1,3 @@
-import { GetStaticPaths, GetStaticProps } from "next";
 import Wrapper from "../../../../components/layout/Wrapper";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
 import Order from "../../../../components/elements/Order";
@@ -6,11 +5,11 @@ import { GET_ORDER_BY_CODE } from "../../../../gql/order";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { AppContext } from "../../../_app";
+import { locale, messages } from "../../config.json";
+import { withApp, AppContext } from "../../../../components/AppWrapper";
 import { useContext } from "react";
 import request from "../../../../utilities/request";
 import { Order as OrderType } from "../../../../schema";
-import Placeholder from "../../../../components/elements/Placeholder";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
 
@@ -64,4 +63,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);

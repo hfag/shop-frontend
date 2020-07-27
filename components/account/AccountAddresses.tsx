@@ -11,7 +11,7 @@ import Placeholder from "../elements/Placeholder";
 import { GET_CURRENT_CUSTOMER, DELETE_CUSTOMER_ADDRESS } from "../../gql/user";
 import address from "../../i18n/address";
 import request from "../../utilities/request";
-import { AppContext } from "../../pages/_app";
+import { AppContext } from "../AppWrapper";
 import { mutate } from "swr";
 import TableAction from "../cart/TableAction";
 import Button from "../elements/Button";

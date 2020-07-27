@@ -2,7 +2,8 @@ import Wrapper from "../../../../components/layout/Wrapper";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
 import AccountAddresses from "../../../../components/account/AccountAddresses";
 import { useIntl } from "react-intl";
-import { AppContext } from "../../../_app";
+import { locale, messages } from "../../config.json";
+import { withApp, AppContext } from "../../../../components/AppWrapper";
 import { useContext } from "react";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
@@ -38,4 +39,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);

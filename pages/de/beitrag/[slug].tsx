@@ -6,7 +6,7 @@ import {
   mapPost,
   Post as PostType,
 } from "../../../utilities/wordpress";
-import { locale } from "../config.json";
+import { locale, messages } from "../config.json";
 import { FunctionComponent, useMemo } from "react";
 import useSWR from "swr";
 import Wrapper from "../../../components/layout/Wrapper";
@@ -14,6 +14,7 @@ import { pathnamesByLanguage } from "../../../utilities/urls";
 import Post from "../../../components/Post";
 import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
 import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
+import { withApp } from "../../../components/AppWrapper";
 
 const Page: FunctionComponent<{ slug: string; post: PostType }> = ({
   slug,
@@ -56,7 +57,7 @@ const Page: FunctionComponent<{ slug: string; post: PostType }> = ({
   );
 };
 
-export default Page;
+export default withApp(locale, messages)(Page);
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const response: WP_Post[] = await fetch(

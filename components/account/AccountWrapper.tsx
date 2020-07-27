@@ -13,7 +13,7 @@ import address from "../../i18n/address";
 import order from "../../i18n/order";
 import userMessages from "../../i18n/user";
 import { trackPageView } from "../../utilities/analytics";
-import { AppContext } from "../../pages/_app";
+import { AppContext } from "../AppWrapper";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { ABSOLUTE_URL } from "../../utilities/api";

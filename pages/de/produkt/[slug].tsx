@@ -82,9 +82,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
   );
 
   return {
-    paths: data.products.items.map((product) => ({
-      params: { slug: product.slug, id: product.id },
-    })),
+    paths: data.products.items
+      .filter((p) => p.translations.find((t) => t.languageCode === locale))
+      .map((product) => ({
+        params: {
+          slug: product.translations.find((t) => t.languageCode === locale)
+            .slug,
+          id: product.id,
+        },
+      })),
     fallback: false,
   };
 };

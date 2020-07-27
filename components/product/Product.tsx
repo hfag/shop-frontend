@@ -278,7 +278,7 @@ const Product: FunctionComponent<{
                 <h4>{optionGroup.name}</h4>
                 <Select
                   placeholder={intl.formatMessage(messages.chooseAnAttribute)}
-                  onChange={(item: { label: string; value: string }) => {
+                  onChange={(option: ProductOption) => {
                     const group = product.optionGroups.find(
                       (g) => g.id === optionGroup.id
                     );
@@ -288,31 +288,23 @@ const Product: FunctionComponent<{
                       );
                       return;
                     }
-                    if (!item) {
+                    if (!option) {
                       const o = { ...selectedOptions };
                       delete o[optionGroup.id];
                       setSelectedOptions(o);
                     } else {
                       setSelectedOptions({
                         ...selectedOptions,
-                        [optionGroup.id]: group.options.find(
-                          (o) => o.code === item.value
-                        ),
+                        [optionGroup.id]: option,
                       });
                     }
                   }}
-                  value={
-                    selectedOptions[optionGroup.id] &&
-                    selectedOptions[optionGroup.id].code
-                  }
-                  options={optionGroup.options
-                    .filter((option) =>
-                      possibleOptions[optionGroup.id].includes(option)
-                    )
-                    .map((option) => ({
-                      label: option.name,
-                      value: option.code,
-                    }))}
+                  value={selectedOptions[optionGroup.id]}
+                  options={optionGroup.options.filter((option) =>
+                    possibleOptions[optionGroup.id].includes(option)
+                  )}
+                  getOptionLabel={({ name }) => name}
+                  getOptionValue={({ code }) => code}
                 />
               </Box>
             ))}

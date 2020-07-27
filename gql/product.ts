@@ -6,6 +6,10 @@ export const GET_ALL_PRODUCT_SLUGS = /* GraphQL */ `
       items {
         id
         slug
+        translations {
+          languageCode
+          slug
+        }
       }
     }
   }

@@ -94,9 +94,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
   );
 
   return {
-    paths: data.collections.items.map((collection) => ({
-      params: { slug: collection.slug },
-    })),
+    paths: data.collections.items
+      .filter((p) => p.translations.find((t) => t.languageCode === locale))
+      .map((collection) => ({
+        params: {
+          slug: collection.translations.find((t) => t.languageCode === locale)
+            .slug,
+        },
+      })),
     fallback: false,
   };
 };

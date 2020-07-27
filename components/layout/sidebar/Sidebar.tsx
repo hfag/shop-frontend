@@ -7,7 +7,6 @@ import React, {
 import styled from "styled-components";
 import {
   FaHome as HomeIcon,
-  FaSearch as SearchIcon,
   FaShoppingCart as CartIcon,
   FaUser as AccountIcon,
   FaSignInAlt as SignInIcon,
@@ -115,17 +114,6 @@ const Sidebar: FunctionComponent<{ children: ReactNode }> = React.memo(
                 <Link href={`/${intl.locale}/`} flex>
                   <HomeIcon />
                   {intl.formatMessage(page.home)}
-                </Link>
-              </BurgerItem>
-              <BurgerItem seperator>
-                <Link
-                  href={`/${intl.locale}/${
-                    pathnamesByLanguage.search.languages[intl.locale]
-                  }`}
-                  flex
-                >
-                  <SearchIcon />
-                  {intl.formatMessage(page.search)}
                 </Link>
               </BurgerItem>
               <BurgerItem seperator>

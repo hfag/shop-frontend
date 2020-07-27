@@ -278,7 +278,7 @@ const Product: FunctionComponent<{
                 <h4>{optionGroup.name}</h4>
                 <Select
                   placeholder={intl.formatMessage(messages.chooseAnAttribute)}
-                  onChange={(option: ProductOption) => {
+                  onChange={(item: { label: string; value: string }) => {
                     const group = product.optionGroups.find(
                       (g) => g.id === optionGroup.id
                     );
@@ -288,23 +288,31 @@ const Product: FunctionComponent<{
                       );
                       return;
                     }
-                    if (!option) {
+                    if (!item) {
                       const o = { ...selectedOptions };
                       delete o[optionGroup.id];
                       setSelectedOptions(o);
                     } else {
                       setSelectedOptions({
                         ...selectedOptions,
-                        [optionGroup.id]: option,
+                        [optionGroup.id]: group.options.find(
+                          (o) => o.code === item.value
+                        ),
                       });
                     }
                   }}
-                  value={selectedOptions[optionGroup.id]}
-                  options={optionGroup.options.filter((option) =>
-                    possibleOptions[optionGroup.id].includes(option)
-                  )}
-                  getOptionLabel={({ name }) => name}
-                  getOptionValue={({ code }) => code}
+                  value={
+                    selectedOptions[optionGroup.id] &&
+                    selectedOptions[optionGroup.id].code
+                  }
+                  options={optionGroup.options
+                    .filter((option) =>
+                      possibleOptions[optionGroup.id].includes(option)
+                    )
+                    .map((option) => ({
+                      label: option.name,
+                      value: option.code,
+                    }))}
                 />
               </Box>
             ))}

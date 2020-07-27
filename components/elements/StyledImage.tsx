@@ -8,7 +8,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import Placeholder from "./Placeholder";
 import { borders } from "../../utilities/style";
-import { isServer } from "../../utilities/ssr";
 
 const css: CSSProperties = {
   width: "100%",
@@ -49,7 +48,6 @@ const StyledImage: FunctionComponent<{
             width={width}
             height={height}
             className={width < height ? "b-height" : "b-width"}
-            visibleByDefault={isServer}
           />
         </div>
       );
@@ -64,7 +62,6 @@ const StyledImage: FunctionComponent<{
           width={width}
           height={height}
           className={width < height ? "b-height" : "b-width"}
-          visibleByDefault={isServer}
         />
       );
     }

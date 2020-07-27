@@ -6,6 +6,7 @@ import Document, {
   DocumentContext,
 } from "next/document";
 import { ServerStyleSheet } from "styled-components";
+import { extractCritical } from "emotion-server";
 
 interface IProps {
   locale: string;
@@ -17,6 +18,7 @@ export default class MyDocument extends Document<IProps> {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
     const initialProps = await super.getInitialProps(ctx);
+    const emotionStyles = extractCritical(initialProps.html);
 
     try {
       ctx.renderPage = () =>
@@ -31,6 +33,10 @@ export default class MyDocument extends Document<IProps> {
           <>
             {initialProps.styles}
             {sheet.getStyleElement()}
+            <style
+              data-emotion-css={emotionStyles.ids.join(" ")}
+              dangerouslySetInnerHTML={{ __html: emotionStyles.css }}
+            />
           </>
         ),
       };

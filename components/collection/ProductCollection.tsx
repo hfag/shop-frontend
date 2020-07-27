@@ -189,21 +189,29 @@ const ProductCollection: FunctionComponent<{
         )}
         <Flex flexWrap="wrap" style={{ overflowX: "hidden" }}>
           {collection &&
-            collection.children.map((collection) => (
-              <CollectionItem
-                key={"collection-" + collection.id}
-                collection={collection}
-                scrollPosition={scrollPosition}
-              />
-            ))}
+            collection.children
+              .filter((c) =>
+                c.translations.find((t) => t.languageCode === intl.locale)
+              )
+              .map((collection) => (
+                <CollectionItem
+                  key={"collection-" + collection.id}
+                  collection={collection}
+                  scrollPosition={scrollPosition}
+                />
+              ))}
           {collection &&
-            collection.products.map((product) => (
-              <ProductItem
-                key={"product-" + product.id}
-                product={product}
-                scrollPosition={scrollPosition}
-              />
-            ))}
+            collection.products
+              .filter((p) =>
+                p.translations.find((t) => t.languageCode === intl.locale)
+              )
+              .map((product) => (
+                <ProductItem
+                  key={"product-" + product.id}
+                  product={product}
+                  scrollPosition={scrollPosition}
+                />
+              ))}
 
           {!collection &&
             new Array(12)

@@ -132,7 +132,6 @@
     "languages": { "de": "bestaetigung", "fr": "confirmation" }
   },
   "tos": {
-    "path": "de/agbs.tsx",
     "languages": { "de": "agbs", "fr": "conditions-generales" }
   }
 }

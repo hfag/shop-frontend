@@ -8,40 +8,42 @@ const defaultLanguage = "de";
 const languages = ["de", "fr"];
 
 const generatePages = (language, replacements, pathnames) => {
-  Object.values(pathnames).forEach(({ path, languages, pathnames = null }) => {
-    const isFile = path.endsWith(".tsx");
-    const term = languages[defaultLanguage];
-    const rep = [...replacements, [term, languages[language]]];
-    // console.log(`rep: ${rep.map((a) => `[${a.join(",")}]`).join(",")}`);
+  Object.values(pathnames)
+    .filter((p) => p.path)
+    .forEach(({ path, languages, pathnames = null }) => {
+      const isFile = path.endsWith(".tsx");
+      const term = languages[defaultLanguage];
+      const rep = [...replacements, [term, languages[language]]];
+      // console.log(`rep: ${rep.map((a) => `[${a.join(",")}]`).join(",")}`);
 
-    if (isFile) {
-      const src = _path.resolve(pages, path);
-      const dst = _path.resolve(
-        pages,
-        rep.reduce(
-          (path, [term, localizedTerm]) => path.replace(term, localizedTerm),
-          path
-        )
-      );
-      //   console.log(`Copy ${src} to ${dst}`);
+      if (isFile) {
+        const src = _path.resolve(pages, path);
+        const dst = _path.resolve(
+          pages,
+          rep.reduce(
+            (path, [term, localizedTerm]) => path.replace(term, localizedTerm),
+            path
+          )
+        );
+        //   console.log(`Copy ${src} to ${dst}`);
 
-      fs.copyFileSync(src, dst);
-    } else {
-      const dir = _path.resolve(
-        pages,
-        rep.reduce(
-          (path, [term, localizedTerm]) => path.replace(term, localizedTerm),
-          path
-        )
-      );
-      //   console.log(`Create ${dir}`);
-      fs.mkdirSync(dir);
+        fs.copyFileSync(src, dst);
+      } else {
+        const dir = _path.resolve(
+          pages,
+          rep.reduce(
+            (path, [term, localizedTerm]) => path.replace(term, localizedTerm),
+            path
+          )
+        );
+        //   console.log(`Create ${dir}`);
+        fs.mkdirSync(dir);
 
-      if (pathnames) {
-        generatePages(language, rep, pathnames);
+        if (pathnames) {
+          generatePages(language, rep, pathnames);
+        }
       }
-    }
-  });
+    });
 };
 
 languages

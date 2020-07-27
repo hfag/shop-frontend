@@ -5,6 +5,10 @@ export const GET_ALL_COLLECTIONS = /* GraphQL */ `
         id
         slug
         name
+        translations {
+          languageCode
+          slug
+        }
         children {
           id
           name

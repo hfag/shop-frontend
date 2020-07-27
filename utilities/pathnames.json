@@ -15,10 +15,6 @@
       }
     }
   },
-  "search": {
-    "path": "de/suche.tsx",
-    "languages": { "de": "suche", "fr": "recherche" }
-  },
   "product": {
     "path": "de/produkt",
     "languages": { "de": "produkt", "fr": "produit" },

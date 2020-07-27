@@ -53,11 +53,21 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
     id
     slug
     name
+    translations{
+      languageCode
+      name
+      slug
+    }
   }
   products {
     id
     name
     slug
+    translations{
+      languageCode
+      name
+      slug
+    }
     featuredAsset {
       id
       name

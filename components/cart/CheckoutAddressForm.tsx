@@ -315,8 +315,8 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     const sAddress = isBillingAddress ? shippingAddress : null;
 
     const values: FormValues = {
-      billingFirstName: customer.firstName || "",
-      billingLastName: customer.lastName || "",
+      billingFirstName: customer?.firstName || "",
+      billingLastName: customer?.lastName || "",
       billingCompany: bAddress.company || "",
       billingStreetLine1: bAddress.streetLine1 || "",
       billingStreetLine2: bAddress.streetLine2 || "",
@@ -330,7 +330,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
           ? ""
           : bAddress.country.code,
       billingPhone: bAddress.phoneNumber || "",
-      billingEmail: customer.emailAddress || "",
+      billingEmail: customer?.emailAddress || "",
     };
 
     if (isShippingAddress && sAddress) {

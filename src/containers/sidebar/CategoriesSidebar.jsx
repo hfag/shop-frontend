@@ -48,13 +48,7 @@ const CategoriesSidebar = React.memo(
     );
 
     const urlWithoutPage = useMemo(
-      () =>
-        page
-          ? url
-              .split("/")
-              .slice(0, -1)
-              .join("/")
-          : url,
+      () => (page ? url.split("/").slice(0, -1).join("/") : url),
       [page, url]
     );
 
@@ -91,20 +85,22 @@ const CategoriesSidebar = React.memo(
 
         {active && (
           <div>
-            {categoryIds.length > 0 ? (
-              <ul>
-                <li className="header">
-                  <h4>{intl.formatMessage(product.categories)}</h4>
-                </li>
-                {categoryIds.map(categoryId => (
-                  <CategoryItem
-                    key={categoryId}
-                    id={categoryId}
-                    parents={newParents}
-                  />
-                ))}
-              </ul>
-            ) : null /*<p>Keine weiteren Unterkategorien gefunden</p>*/}
+            {
+              categoryIds.length > 0 ? (
+                <ul>
+                  <li className="header">
+                    <h4>{intl.formatMessage(product.categories)}</h4>
+                  </li>
+                  {categoryIds.map(categoryId => (
+                    <CategoryItem
+                      key={categoryId}
+                      id={categoryId}
+                      parents={newParents}
+                    />
+                  ))}
+                </ul>
+              ) : null /*<p>Keine weiteren Unterkategorien gefunden</p>*/
+            }
           </div>
         )}
         <Route

@@ -115,9 +115,7 @@ const Cart = React.memo(
           updateShoppingCart={updateShoppingCart}
           enabled={step === "cart"}
           onProceed={() => setStep("checkout")}
-          lastRow={
-            null
-          }
+          lastRow={null}
         />
 
         {step === "checkout" && (

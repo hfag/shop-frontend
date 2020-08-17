@@ -21,34 +21,34 @@ import { trackOrder } from "../../utilities/analytics";
 const messages = defineMessages({
   shipToDifferentAddress: {
     id: "CheckoutForm.shipToDifferentAddress",
-    defaultMessage: "Lieferung an eine andere Adresse"
+    defaultMessage: "Lieferung an eine andere Adresse",
   },
   orderComments: {
     id: "CheckoutForm.orderComments",
-    defaultMessage: "Bestellnotiz"
+    defaultMessage: "Bestellnotiz",
   },
   orderCommentsPlaceholder: {
     id: "CheckoutForm.orderCommentsPlaceholder",
     defaultMessage:
-      "Anmerkungen zu Ihrer Bestellung, z.B. besondere Hinweise für die Lieferung."
+      "Anmerkungen zu Ihrer Bestellung, z.B. besondere Hinweise für die Lieferung.",
   },
   paymentMethods: {
     id: "CheckoutForm.paymentMethods",
-    defaultMessage: "Zahlungsmethoden"
+    defaultMessage: "Zahlungsmethoden",
   },
   acceptTos: {
     id: "CheckoutForm.acceptTos",
     defaultMessage:
-      "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und akzeptiere diese *"
+      "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und akzeptiere diese *",
   },
   submitOrder: {
     id: "CheckoutForm.submitOrder",
-    defaultMessage: "Bestellung abschicken"
+    defaultMessage: "Bestellung abschicken",
   },
   tosMustBeAccepted: {
     id: "CheckoutForm.tosMustBeAccepted",
-    defaultMessage: "Die AGBs müssen akzeptiert werden!"
-  }
+    defaultMessage: "Die AGBs müssen akzeptiert werden!",
+  },
 });
 
 /**
@@ -58,9 +58,9 @@ const messages = defineMessages({
  * @returns {Array<Object>} The option list
  */
 const getStateOptionsByCountry = (countries, country) => {
-  return Object.keys(countries[country].states).map(value => ({
+  return Object.keys(countries[country].states).map((value) => ({
     value,
-    label: countries[country].states[value]
+    label: countries[country].states[value],
   }));
 };
 
@@ -81,7 +81,7 @@ const InnerCheckoutForm = React.memo(
     isSubmitting,
     showShipping,
     setShowShipping,
-    countries
+    countries,
   }) => {
     const intl = useIntl();
     return (
@@ -124,9 +124,9 @@ const InnerCheckoutForm = React.memo(
               name="billing_country"
               required={true}
               placeholder={intl.formatMessage(address.chooseCountry)}
-              options={Object.keys(countries).map(key => ({
+              options={Object.keys(countries).map((key) => ({
                 value: key,
-                label: countries[key].name
+                label: countries[key].name,
               }))}
             />
             <InputField
@@ -185,7 +185,7 @@ const InnerCheckoutForm = React.memo(
               name="ship_to_different_address"
               type="checkbox"
               value="1"
-              onChange={e =>
+              onChange={(e) =>
                 setShowShipping(e.currentTarget.checked ? true : false)
               }
               checkbox={true}
@@ -232,9 +232,9 @@ const InnerCheckoutForm = React.memo(
                   name="shipping_country"
                   required={true}
                   placeholder={intl.formatMessage(address.chooseCountry)}
-                  options={Object.keys(countries).map(key => ({
+                  options={Object.keys(countries).map((key) => ({
                     value: key,
-                    label: countries[key].name
+                    label: countries[key].name,
                   }))}
                 />
                 <InputField
@@ -324,7 +324,7 @@ const CheckoutForm = injectIntl(
     enableReinitialize: true,
     mapPropsToValues: ({ values = {} }) => ({
       payment_method: "feuerschutz_invoice",
-      ...values
+      ...values,
     }),
     validationSchema: ({ countries, intl }) => {
       const countryKeys = Object.keys(countries);
@@ -339,14 +339,14 @@ const CheckoutForm = injectIntl(
         shipping_first_name: yup.string().when("ship_to_different_address", {
           is: true,
           then: yup.string().required(),
-          otherwise: yup.string().notRequired()
+          otherwise: yup.string().notRequired(),
         }),
 
         billing_last_name: yup.string().required(),
         shipping_last_name: yup.string().when("ship_to_different_address", {
           is: true,
           then: yup.string().required(),
-          otherwise: yup.string().notRequired()
+          otherwise: yup.string().notRequired(),
         }),
 
         billing_description: yup.string(),
@@ -355,30 +355,21 @@ const CheckoutForm = injectIntl(
         billing_company: yup.string(),
         shipping_company: yup.string(),
 
-        billing_country: yup
-          .string()
-          .oneOf(countryKeys)
-          .required(),
+        billing_country: yup.string().oneOf(countryKeys).required(),
         shipping_country: yup
           .string()
           .oneOf(countryKeys)
           .when("ship_to_different_address", {
             is: true,
-            then: yup
-              .string()
-              .oneOf(countryKeys)
-              .required(),
-            otherwise: yup
-              .string()
-              .oneOf(countryKeys)
-              .notRequired()
+            then: yup.string().oneOf(countryKeys).required(),
+            otherwise: yup.string().oneOf(countryKeys).notRequired(),
           }),
 
         billing_address_1: yup.string().required(),
         shipping_address_1: yup.string().when("ship_to_different_address", {
           is: true,
           then: yup.string().required(),
-          otherwise: yup.string().notRequired()
+          otherwise: yup.string().notRequired(),
         }),
 
         billing_post_office_box: yup.string(),
@@ -388,14 +379,14 @@ const CheckoutForm = injectIntl(
         shipping_postcode: yup.number().when("ship_to_different_address", {
           is: true,
           then: yup.number().required(),
-          otherwise: yup.number().notRequired()
+          otherwise: yup.number().notRequired(),
         }),
 
         billing_city: yup.string().required(),
         shipping_city: yup.string().when("ship_to_different_address", {
           is: true,
           then: yup.string().required(),
-          otherwise: yup.string().notRequired()
+          otherwise: yup.string().notRequired(),
         }),
 
         billing_state: yup
@@ -429,25 +420,22 @@ const CheckoutForm = injectIntl(
           ),
 
         billing_phone: yup.string().required(),
-        billing_email: yup
-          .string()
-          .email()
-          .required(),
+        billing_email: yup.string().email().required(),
 
         terms: yup
           .mixed()
           .test(
             "is-checked",
             intl.formatMessage(messages.tosMustBeAccepted),
-            value => value === true
-          )
+            (value) => value === true
+          ),
       });
     },
     handleSubmit: (
       values,
       {
         props: { language, dispatch, submitOrder },
-        setStatus
+        setStatus,
         /* setErrors, setValues, setStatus, and other goodies */
       }
     ) => {
@@ -456,7 +444,7 @@ const CheckoutForm = injectIntl(
         comments = values["order_comments"],
         shipToDifferentAddress = values["ship_to_different_address"];
 
-      Object.keys(values).forEach(key => {
+      Object.keys(values).forEach((key) => {
         if (key.startsWith("shipping_") && shipToDifferentAddress) {
           shippingAddress[key.replace("shipping_", "")] = values[key];
         } else if (key.startsWith("billing_")) {
@@ -471,7 +459,11 @@ const CheckoutForm = injectIntl(
           setTimeout(() => {
             setStatus("");
 
-            trackOrder(transactionId, total);
+            try {
+              trackOrder(transactionId, total);
+            } catch (e) {
+              console.error(e);
+            }
 
             dispatch(clearShoppingCart());
             dispatch(
@@ -479,11 +471,11 @@ const CheckoutForm = injectIntl(
             );
           }, 300);
         })
-        .catch(e => {
+        .catch((e) => {
           setStatus("error");
           setTimeout(() => setStatus(""), 300);
         });
-    }
+    },
   })(InnerCheckoutForm)
 );
 
@@ -493,7 +485,7 @@ CheckoutForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   showShipping: PropTypes.bool.isRequired,
   setShowShipping: PropTypes.func.isRequired,
-  countries: PropTypes.object.isRequired
+  countries: PropTypes.object.isRequired,
 };
 
 export default CheckoutForm;

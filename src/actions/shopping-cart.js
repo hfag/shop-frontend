@@ -43,7 +43,11 @@ export const fetchShoppingCart = (language, visualize = false) => dispatch => {
         addCartItem(item.sku, item.title, undefined, item.price, item.quantity);
       }
 
-      trackCartUpdate(cart.total);
+      try {
+        trackCartUpdate(cart.total);
+      } catch (e) {
+        console.error(e);
+      }
 
       return Promise.resolve(cart);
     })
@@ -127,14 +131,18 @@ export const addShoppingCartItem = (
         return Promise.reject(new Error("Unknown error while adding"));
       }
 
-      trackAddingCartItem(
-        sku,
-        productName,
-        undefined,
-        minPrice,
-        quantity,
-        cart.total
-      );
+      try {
+        trackAddingCartItem(
+          sku,
+          productName,
+          undefined,
+          minPrice,
+          quantity,
+          cart.total
+        );
+      } catch (e) {
+        console.error(e);
+      }
 
       dispatch(addShoppingCartItemAction(false, null, visualize, cart));
 
@@ -193,7 +201,11 @@ export const updateShoppingCart = (
         addCartItem(item.sku, item.title, undefined, item.price, item.quantity);
       }
 
-      trackCartUpdate(cart.total);
+      try {
+        trackCartUpdate(cart.total);
+      } catch (e) {
+        console.error(e);
+      }
 
       dispatch(updateShoppingCartAction(false, null, visualize, cart));
 
@@ -309,6 +321,10 @@ const clearShoppingCartAction = () => ({ type: "CLEAR_SHOPPING_CART" });
  * @returns {function} The redux thunk
  */
 export const clearShoppingCart = () => dispatch => {
-  trackClearingCart();
+  try {
+    trackClearingCart();
+  } catch (e) {
+    console.error(e);
+  }
   dispatch(clearShoppingCartAction());
 };

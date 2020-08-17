@@ -91,7 +91,6 @@ const BulkDiscountTable = styled.table`
   width: 100%;
 `;
 
-
 const debouncedSearch = debounce((keyword, resultCount) => {
   trackSiteSearch(keyword, false, resultCount);
 }, 300);

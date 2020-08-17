@@ -5,6 +5,6 @@ import React from "react";
  * @returns {Component} The component
  */
 class Keyer extends React.PureComponent {
-	render = () => this.props.children;
+  render = () => this.props.children;
 }
 export default Keyer;

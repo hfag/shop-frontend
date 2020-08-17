@@ -5,6 +5,6 @@ const itemName = "attachment";
 
 export default createReducer(itemName);
 export {
-	getAllItems as getAttachments,
-	getItemById as getAttachmentById
+  getAllItems as getAttachments,
+  getItemById as getAttachmentById
 } from "utilities/reducer";

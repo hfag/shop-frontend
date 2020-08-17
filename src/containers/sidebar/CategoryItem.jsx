@@ -75,7 +75,4 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   dispatch
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CategoryItem);
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryItem);

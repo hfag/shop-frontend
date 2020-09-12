@@ -264,7 +264,7 @@ const Login = React.memo(() => {
   const intl = useIntl();
   const router = useRouter();
 
-  const { user, token } = useContext(AppContext);
+  const { customer: user, token } = useContext(AppContext);
   const [didRegister, setDidRegister] = useState(false);
   const [didResetPassword, setDidResetPassword] = useState(false);
   const redirect: string | null = useMemo(() => {

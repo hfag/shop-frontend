@@ -74,9 +74,21 @@ enum AssetType {
   BINARY
 }
 
+input AuthenticationInput {
+  native: NativeAuthInput
+}
+
+type AuthenticationMethod implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  strategy: String!
+}
+
 type BooleanCustomFieldConfig implements CustomField {
   name: String!
   type: String!
+  list: Boolean!
   label: [LocalizedString!]
   description: [LocalizedString!]
   readonly: Boolean
@@ -145,7 +157,6 @@ type CollectionBreadcrumb {
 }
 
 type CollectionCustomFields {
-  hasLinks: Boolean
   seoDescription: String
 }
 
@@ -157,7 +168,6 @@ input CollectionFilterParameter {
   slug: StringOperators
   position: NumberOperators
   description: StringOperators
-  hasLinks: BooleanOperators
   seoDescription: StringOperators
 }
 
@@ -165,10 +175,9 @@ type CollectionLink {
   id: ID!
   collection: Collection!
   collectionId: ID!
-  type: CollectionLinkType!
+  icon: CollectionLinkType!
   name: String!
   url: String!
-  translations: [CollectionLinkTranslation!]!
 }
 
 type CollectionLinkTranslation {
@@ -204,7 +213,6 @@ input CollectionSortParameter {
   slug: SortOrder
   position: SortOrder
   description: SortOrder
-  hasLinks: SortOrder
   seoDescription: SortOrder
 }
 
@@ -220,21 +228,20 @@ type CollectionTranslation {
 
 type ConfigArg {
   name: String!
-  type: String!
   value: String!
 }
 
 type ConfigArgDefinition {
   name: String!
   type: String!
+  list: Boolean!
   label: String
   description: String
-  config: JSON
+  ui: JSON
 }
 
 input ConfigArgInput {
   name: String!
-  type: String!
   value: String!
 }
 
@@ -857,6 +864,7 @@ input CustomerSortParameter {
 interface CustomField {
   name: String!
   type: String!
+  list: Boolean!
   label: [LocalizedString!]
   description: [LocalizedString!]
   readonly: Boolean
@@ -885,6 +893,7 @@ type CustomFields {
   ProductOptionGroup: [CustomFieldConfig!]!
   ProductVariant: [CustomFieldConfig!]!
   User: [CustomFieldConfig!]!
+  ShippingMethod: [CustomFieldConfig!]!
 }
 
 input DateOperators {
@@ -904,11 +913,12 @@ input DateRange {
 # 8601 standard for representation of dates and times using the Gregorian calendar.
 scalar DateTime
 
-# Expects the same validation formats as the <input type="datetime-local"> HTML element.
+# Expects the same validation formats as the `<input type="datetime-local">` HTML element.
 # See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes
 type DateTimeCustomFieldConfig implements CustomField {
   name: String!
   type: String!
+  list: Boolean!
   label: [LocalizedString!]
   description: [LocalizedString!]
   readonly: Boolean
@@ -986,6 +996,7 @@ type FacetValueTranslation {
 type FloatCustomFieldConfig implements CustomField {
   name: String!
   type: String!
+  list: Boolean!
   label: [LocalizedString!]
   description: [LocalizedString!]
   readonly: Boolean
@@ -1083,6 +1094,7 @@ type ImportInfo {
 type IntCustomFieldConfig implements CustomField {
   name: String!
   type: String!
+  list: Boolean!
   label: [LocalizedString!]
   description: [LocalizedString!]
   readonly: Boolean
@@ -1578,6 +1590,8 @@ enum LanguageCode {
 type LocaleStringCustomFieldConfig implements CustomField {
   name: String!
   type: String!
+  list: Boolean!
+  length: Int
   label: [LocalizedString!]
   description: [LocalizedString!]
   readonly: Boolean
@@ -1603,7 +1617,12 @@ type Mutation {
   # Adds an item to the order. If custom fields are defined on the OrderLine
   # entity, a third argument 'customFields' will be available.
   addItemToOrder(productVariantId: ID!, quantity: Int!): Order
+
+  # Remove an OrderLine from the Order
   removeOrderLine(orderLineId: ID!): Order
+
+  # Remove all OrderLine from the Order
+  removeAllOrderLines: Order
 
   # Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a
   # third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available.
@@ -1614,19 +1633,61 @@ type Mutation {
 
   # Removes the given coupon code from the active Order
   removeCouponCode(couponCode: String!): Order
+
+  # Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates`
   transitionOrderToState(state: String!): Order
+
+  # Sets the shipping address for this order
   setOrderShippingAddress(input: CreateAddressInput!): Order
+
+  # Sets the billing address for this order
+  setOrderBillingAddress(input: CreateAddressInput!): Order
+
+  # Allows any custom fields to be set for the active order
+  setOrderCustomFields(input: UpdateOrderInput!): Order
+
+  # Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query
   setOrderShippingMethod(shippingMethodId: ID!): Order
+
+  # Add a Payment to the Order
   addPaymentToOrder(input: PaymentInput!): Order
+
+  # Set the Customer for the Order. Required only if the Customer is not currently logged in
   setCustomerForOrder(input: CreateCustomerInput!): Order
+
+  # Authenticates the user using the native authentication strategy. This mutation
+  # is an alias for `authenticate({ native: { ... }})`
   login(username: String!, password: String!, rememberMe: Boolean): LoginResult!
+
+  # Authenticates the user using a named authentication strategy
+  authenticate(input: AuthenticationInput!, rememberMe: Boolean): LoginResult!
+
+  # End the current authenticated session
   logout: Boolean!
 
   # Regenerate and send a verification token for a new Customer registration. Only
   # applicable if `authOptions.requireVerification` is set to true.
   refreshCustomerVerification(emailAddress: String!): Boolean!
 
-  # Register a Customer account with the given credentials
+  # Register a Customer account with the given credentials. There are three possible registration flows:
+  #
+  # _If `authOptions.requireVerification` is set to `true`:_
+  #
+  # 1. **The Customer is registered _with_ a password**. A verificationToken will
+  # be created (and typically emailed to the Customer). That
+  #    verificationToken would then be passed to the `verifyCustomerAccount`
+  # mutation _without_ a password. The Customer is then
+  #    verified and authenticated in one step.
+  # 2. **The Customer is registered _without_ a password**. A verificationToken
+  # will be created (and typically emailed to the Customer). That
+  #    verificationToken would then be passed to the `verifyCustomerAccount`
+  # mutation _with_ the chosed password of the Customer. The Customer is then
+  #    verified and authenticated in one step.
+  #
+  # _If `authOptions.requireVerification` is set to `false`:_
+  #
+  # 3. The Customer _must_ be registered _with_ a password. No further action is
+  # needed - the Customer is able to authenticate immediately.
   registerCustomerAccount(input: RegisterCustomerInput!): Boolean!
 
   # Update an existing Customer
@@ -1643,7 +1704,10 @@ type Mutation {
 
   # Verify a Customer email address with the token sent to that address. Only
   # applicable if `authOptions.requireVerification` is set to true.
-  verifyCustomerAccount(token: String!, password: String!): LoginResult!
+  #
+  # If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
+  # provided here.
+  verifyCustomerAccount(token: String!, password: String): LoginResult!
 
   # Update the password of the active Customer
   updateCustomerPassword(
@@ -1669,6 +1733,11 @@ type Mutation {
 
   # Resets a Customer's password based on the provided token
   resetPassword(token: String!, password: String!): LoginResult!
+}
+
+input NativeAuthInput {
+  username: String!
+  password: String!
 }
 
 interface Node {
@@ -1797,6 +1866,11 @@ input OrderListOptions {
   filter: OrderFilterParameter
 }
 
+type OrderProcessState {
+  name: String!
+  to: [String!]!
+}
+
 input OrderSortParameter {
   id: SortOrder
   createdAt: SortOrder
@@ -1847,6 +1921,7 @@ type PaymentMethod implements Node {
   code: String!
   enabled: Boolean!
   configArgs: [ConfigArg!]!
+  definition: ConfigurableOperationDefinition!
 }
 
 # "
@@ -1895,6 +1970,16 @@ enum Permission {
 
 # The price range where the result has more than one price
 type PriceRange {
+  min: Int!
+  max: Int!
+}
+
+type PriceRangeBucket {
+  to: Int!
+  count: Int!
+}
+
+input PriceRangeInput {
   min: Int!
   max: Int!
 }
@@ -1956,6 +2041,7 @@ type ProductOption implements Node {
   code: String!
   name: String!
   groupId: ID!
+  group: ProductOptionGroup!
   translations: [ProductOptionTranslation!]!
   customFields: JSON
 }
@@ -2018,6 +2104,7 @@ type ProductTranslation {
 
 type ProductVariant implements Node {
   id: ID!
+  product: Product!
   productId: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2111,21 +2198,52 @@ type PromotionList implements PaginatedList {
 }
 
 type Query {
+  # The active Channel
   activeChannel: Channel!
+
+  # The active Customer
   activeCustomer: Customer
+
+  # The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
+  # state of `PaymentApproved` or `PaymentSettled`, then that Order is no longer considered "active" and this
+  # query will once again return `null`.
   activeOrder: Order
+
+  # An array of supported Countries
   availableCountries: [Country!]!
+
+  # A list of Collections available to the shop
   collections(options: CollectionListOptions): CollectionList!
+
+  # Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is speicified, an error will result.
   collection(id: ID, slug: String): Collection
+
+  # Returns a list of eligible shipping methods based on the current active Order
   eligibleShippingMethods: [ShippingMethodQuote!]!
+
+  # Returns information about the current authenticated User
   me: CurrentUser
+
+  # Returns the possible next states that the activeOrder can transition to
   nextOrderStates: [String!]!
+
+  # Returns an Order based on the id. Note that in the Shop API, only orders belonging to the
+  # currently-authenticated User may be queried.
   order(id: ID!): Order
+
+  # Returns an Order based on the order `code`. For guest Orders (i.e. Orders placed by non-authenticated Customers)
+  # this query will only return the Order within 2 hours of the Order being placed. This allows an Order confirmation
+  # screen to be shown immediately after completion of a guest checkout, yet prevents security risks of allowing
+  # general anonymous access to Order data.
   orderByCode(code: String!): Order
 
   # Get a Product either by id or slug. If neither 'id' nor 'slug' is speicified, an error will result.
   product(id: ID, slug: String): Product
+
+  # Get a list of Products
   products(options: ProductListOptions): ProductList!
+
+  # Search Products based on the criteria set by the `SearchInput`
   search(input: SearchInput!): SearchResponse!
   productRecommendations(productId: ID!): [ProductRecommendation!]!
   productBulkDiscounts(productId: ID!): [BulkDiscount!]!
@@ -2159,6 +2277,7 @@ input RegisterCustomerInput {
   title: String
   firstName: String
   lastName: String
+  phoneNumber: String
   password: String
 }
 
@@ -2207,10 +2326,13 @@ input SearchInput {
   facetValueIds: [ID!]
   facetValueOperator: LogicalOperator
   collectionId: ID
+  collectionSlug: String
   groupByProduct: Boolean
   take: Int
   skip: Int
   sort: SearchResultSortParameter
+  priceRange: PriceRangeInput
+  priceRangeWithTax: PriceRangeInput
 }
 
 type SearchReindexResponse {
@@ -2221,6 +2343,14 @@ type SearchResponse {
   items: [SearchResult!]!
   totalItems: Int!
   facetValues: [FacetValueResult!]!
+  prices: SearchResponsePriceData!
+}
+
+type SearchResponsePriceData {
+  range: PriceRange!
+  rangeWithTax: PriceRange!
+  buckets: [PriceRangeBucket!]!
+  bucketsWithTax: [PriceRangeBucket!]!
 }
 
 type SearchResult {
@@ -2265,6 +2395,8 @@ input SearchResultSortParameter {
 }
 
 type ServerConfig {
+  orderProcess: [OrderProcessState!]!
+  permittedAssetTypes: [String!]!
   customFieldConfig: CustomFields!
 }
 
@@ -2276,6 +2408,7 @@ type ShippingMethod implements Node {
   description: String!
   checker: ConfigurableOperation!
   calculator: ConfigurableOperation!
+  customFields: JSON
 }
 
 type ShippingMethodList implements PaginatedList {
@@ -2336,6 +2469,7 @@ enum StockMovementType {
 type StringCustomFieldConfig implements CustomField {
   name: String!
   type: String!
+  list: Boolean!
   length: Int
   label: [LocalizedString!]
   description: [LocalizedString!]
@@ -2403,6 +2537,10 @@ input UpdateCustomerInput {
   customFields: JSON
 }
 
+input UpdateOrderInput {
+  customFields: JSON
+}
+
 # The `Upload` scalar type represents a file upload.
 scalar Upload
 
@@ -2413,7 +2551,8 @@ type User implements Node {
   identifier: String!
   verified: Boolean!
   roles: [Role!]!
-  lastLogin: String
+  lastLogin: DateTime
+  authenticationMethods: [AuthenticationMethod!]!
   customFields: JSON
 }
 

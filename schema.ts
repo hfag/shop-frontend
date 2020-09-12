@@ -93,10 +93,23 @@ export enum AssetType {
   Binary = "BINARY",
 }
 
+export type AuthenticationInput = {
+  native?: Maybe<NativeAuthInput>;
+};
+
+export type AuthenticationMethod = Node & {
+  __typename?: "AuthenticationMethod";
+  id: Scalars["ID"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  strategy: Scalars["String"];
+};
+
 export type BooleanCustomFieldConfig = CustomField & {
   __typename?: "BooleanCustomFieldConfig";
   name: Scalars["String"];
   type: Scalars["String"];
+  list: Scalars["Boolean"];
   label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
   readonly?: Maybe<Scalars["Boolean"]>;
@@ -176,7 +189,6 @@ export type CollectionBreadcrumb = {
 
 export type CollectionCustomFields = {
   __typename?: "CollectionCustomFields";
-  hasLinks?: Maybe<Scalars["Boolean"]>;
   seoDescription?: Maybe<Scalars["String"]>;
 };
 
@@ -188,7 +200,6 @@ export type CollectionFilterParameter = {
   slug?: Maybe<StringOperators>;
   position?: Maybe<NumberOperators>;
   description?: Maybe<StringOperators>;
-  hasLinks?: Maybe<BooleanOperators>;
   seoDescription?: Maybe<StringOperators>;
 };
 
@@ -197,10 +208,9 @@ export type CollectionLink = {
   id: Scalars["ID"];
   collection: Collection;
   collectionId: Scalars["ID"];
-  type: CollectionLinkType;
+  icon: CollectionLinkType;
   name: Scalars["String"];
   url: Scalars["String"];
-  translations: Array<CollectionLinkTranslation>;
 };
 
 export type CollectionLinkTranslation = {
@@ -238,7 +248,6 @@ export type CollectionSortParameter = {
   slug?: Maybe<SortOrder>;
   position?: Maybe<SortOrder>;
   description?: Maybe<SortOrder>;
-  hasLinks?: Maybe<SortOrder>;
   seoDescription?: Maybe<SortOrder>;
 };
 
@@ -256,7 +265,6 @@ export type CollectionTranslation = {
 export type ConfigArg = {
   __typename?: "ConfigArg";
   name: Scalars["String"];
-  type: Scalars["String"];
   value: Scalars["String"];
 };
 
@@ -264,14 +272,14 @@ export type ConfigArgDefinition = {
   __typename?: "ConfigArgDefinition";
   name: Scalars["String"];
   type: Scalars["String"];
+  list: Scalars["Boolean"];
   label?: Maybe<Scalars["String"]>;
   description?: Maybe<Scalars["String"]>;
-  config?: Maybe<Scalars["JSON"]>;
+  ui?: Maybe<Scalars["JSON"]>;
 };
 
 export type ConfigArgInput = {
   name: Scalars["String"];
-  type: Scalars["String"];
   value: Scalars["String"];
 };
 
@@ -596,6 +604,7 @@ export type CustomerSortParameter = {
 export type CustomField = {
   name: Scalars["String"];
   type: Scalars["String"];
+  list: Scalars["Boolean"];
   label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
   readonly?: Maybe<Scalars["Boolean"]>;
@@ -625,6 +634,7 @@ export type CustomFields = {
   ProductOptionGroup: Array<CustomFieldConfig>;
   ProductVariant: Array<CustomFieldConfig>;
   User: Array<CustomFieldConfig>;
+  ShippingMethod: Array<CustomFieldConfig>;
 };
 
 export type DateOperators = {
@@ -643,6 +653,7 @@ export type DateTimeCustomFieldConfig = CustomField & {
   __typename?: "DateTimeCustomFieldConfig";
   name: Scalars["String"];
   type: Scalars["String"];
+  list: Scalars["Boolean"];
   label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
   readonly?: Maybe<Scalars["Boolean"]>;
@@ -723,6 +734,7 @@ export type FloatCustomFieldConfig = CustomField & {
   __typename?: "FloatCustomFieldConfig";
   name: Scalars["String"];
   type: Scalars["String"];
+  list: Scalars["Boolean"];
   label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
   readonly?: Maybe<Scalars["Boolean"]>;
@@ -826,6 +838,7 @@ export type IntCustomFieldConfig = CustomField & {
   __typename?: "IntCustomFieldConfig";
   name: Scalars["String"];
   type: Scalars["String"];
+  list: Scalars["Boolean"];
   label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
   readonly?: Maybe<Scalars["Boolean"]>;
@@ -999,6 +1012,8 @@ export type LocaleStringCustomFieldConfig = CustomField & {
   __typename?: "LocaleStringCustomFieldConfig";
   name: Scalars["String"];
   type: Scalars["String"];
+  list: Scalars["Boolean"];
+  length?: Maybe<Scalars["Int"]>;
   label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
   readonly?: Maybe<Scalars["Boolean"]>;
@@ -1026,15 +1041,19 @@ export type Mutation = {
   __typename?: "Mutation";
   addItemToOrder?: Maybe<Order>;
   removeOrderLine?: Maybe<Order>;
+  removeAllOrderLines?: Maybe<Order>;
   adjustOrderLine?: Maybe<Order>;
   applyCouponCode?: Maybe<Order>;
   removeCouponCode?: Maybe<Order>;
   transitionOrderToState?: Maybe<Order>;
   setOrderShippingAddress?: Maybe<Order>;
+  setOrderBillingAddress?: Maybe<Order>;
+  setOrderCustomFields?: Maybe<Order>;
   setOrderShippingMethod?: Maybe<Order>;
   addPaymentToOrder?: Maybe<Order>;
   setCustomerForOrder?: Maybe<Order>;
   login: LoginResult;
+  authenticate: LoginResult;
   logout: Scalars["Boolean"];
   refreshCustomerVerification: Scalars["Boolean"];
   registerCustomerAccount: Scalars["Boolean"];
@@ -1080,6 +1099,14 @@ export type MutationSetOrderShippingAddressArgs = {
   input: CreateAddressInput;
 };
 
+export type MutationSetOrderBillingAddressArgs = {
+  input: CreateAddressInput;
+};
+
+export type MutationSetOrderCustomFieldsArgs = {
+  input: UpdateOrderInput;
+};
+
 export type MutationSetOrderShippingMethodArgs = {
   shippingMethodId: Scalars["ID"];
 };
@@ -1095,6 +1122,11 @@ export type MutationSetCustomerForOrderArgs = {
 export type MutationLoginArgs = {
   username: Scalars["String"];
   password: Scalars["String"];
+  rememberMe?: Maybe<Scalars["Boolean"]>;
+};
+
+export type MutationAuthenticateArgs = {
+  input: AuthenticationInput;
   rememberMe?: Maybe<Scalars["Boolean"]>;
 };
 
@@ -1124,7 +1156,7 @@ export type MutationDeleteCustomerAddressArgs = {
 
 export type MutationVerifyCustomerAccountArgs = {
   token: Scalars["String"];
-  password: Scalars["String"];
+  password?: Maybe<Scalars["String"]>;
 };
 
 export type MutationUpdateCustomerPasswordArgs = {
@@ -1147,6 +1179,11 @@ export type MutationRequestPasswordResetArgs = {
 
 export type MutationResetPasswordArgs = {
   token: Scalars["String"];
+  password: Scalars["String"];
+};
+
+export type NativeAuthInput = {
+  username: Scalars["String"];
   password: Scalars["String"];
 };
 
@@ -1275,6 +1312,12 @@ export type OrderListOptions = {
   filter?: Maybe<OrderFilterParameter>;
 };
 
+export type OrderProcessState = {
+  __typename?: "OrderProcessState";
+  name: Scalars["String"];
+  to: Array<Scalars["String"]>;
+};
+
 export type OrderSortParameter = {
   id?: Maybe<SortOrder>;
   createdAt?: Maybe<SortOrder>;
@@ -1321,6 +1364,7 @@ export type PaymentMethod = Node & {
   code: Scalars["String"];
   enabled: Scalars["Boolean"];
   configArgs: Array<ConfigArg>;
+  definition: ConfigurableOperationDefinition;
 };
 
 export enum Permission {
@@ -1356,6 +1400,17 @@ export enum Permission {
 
 export type PriceRange = {
   __typename?: "PriceRange";
+  min: Scalars["Int"];
+  max: Scalars["Int"];
+};
+
+export type PriceRangeBucket = {
+  __typename?: "PriceRangeBucket";
+  to: Scalars["Int"];
+  count: Scalars["Int"];
+};
+
+export type PriceRangeInput = {
   min: Scalars["Int"];
   max: Scalars["Int"];
 };
@@ -1421,6 +1476,7 @@ export type ProductOption = Node & {
   code: Scalars["String"];
   name: Scalars["String"];
   groupId: Scalars["ID"];
+  group: ProductOptionGroup;
   translations: Array<ProductOptionTranslation>;
   customFields?: Maybe<Scalars["JSON"]>;
 };
@@ -1489,6 +1545,7 @@ export type ProductTranslation = {
 export type ProductVariant = Node & {
   __typename?: "ProductVariant";
   id: Scalars["ID"];
+  product: Product;
   productId: Scalars["ID"];
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
@@ -1677,6 +1734,7 @@ export type RegisterCustomerInput = {
   title?: Maybe<Scalars["String"]>;
   firstName?: Maybe<Scalars["String"]>;
   lastName?: Maybe<Scalars["String"]>;
+  phoneNumber?: Maybe<Scalars["String"]>;
   password?: Maybe<Scalars["String"]>;
 };
 
@@ -1732,10 +1790,13 @@ export type SearchInput = {
   facetValueIds?: Maybe<Array<Scalars["ID"]>>;
   facetValueOperator?: Maybe<LogicalOperator>;
   collectionId?: Maybe<Scalars["ID"]>;
+  collectionSlug?: Maybe<Scalars["String"]>;
   groupByProduct?: Maybe<Scalars["Boolean"]>;
   take?: Maybe<Scalars["Int"]>;
   skip?: Maybe<Scalars["Int"]>;
   sort?: Maybe<SearchResultSortParameter>;
+  priceRange?: Maybe<PriceRangeInput>;
+  priceRangeWithTax?: Maybe<PriceRangeInput>;
 };
 
 export type SearchReindexResponse = {
@@ -1748,6 +1809,15 @@ export type SearchResponse = {
   items: Array<SearchResult>;
   totalItems: Scalars["Int"];
   facetValues: Array<FacetValueResult>;
+  prices: SearchResponsePriceData;
+};
+
+export type SearchResponsePriceData = {
+  __typename?: "SearchResponsePriceData";
+  range: PriceRange;
+  rangeWithTax: PriceRange;
+  buckets: Array<PriceRangeBucket>;
+  bucketsWithTax: Array<PriceRangeBucket>;
 };
 
 export type SearchResult = {
@@ -1790,6 +1860,8 @@ export type SearchResultSortParameter = {
 
 export type ServerConfig = {
   __typename?: "ServerConfig";
+  orderProcess: Array<OrderProcessState>;
+  permittedAssetTypes: Array<Scalars["String"]>;
   customFieldConfig: CustomFields;
 };
 
@@ -1802,6 +1874,7 @@ export type ShippingMethod = Node & {
   description: Scalars["String"];
   checker: ConfigurableOperation;
   calculator: ConfigurableOperation;
+  customFields?: Maybe<Scalars["JSON"]>;
 };
 
 export type ShippingMethodList = PaginatedList & {
@@ -1868,6 +1941,7 @@ export type StringCustomFieldConfig = CustomField & {
   __typename?: "StringCustomFieldConfig";
   name: Scalars["String"];
   type: Scalars["String"];
+  list: Scalars["Boolean"];
   length?: Maybe<Scalars["Int"]>;
   label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
@@ -1939,6 +2013,10 @@ export type UpdateCustomerInput = {
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
+export type UpdateOrderInput = {
+  customFields?: Maybe<Scalars["JSON"]>;
+};
+
 export type User = Node & {
   __typename?: "User";
   id: Scalars["ID"];
@@ -1947,7 +2025,8 @@ export type User = Node & {
   identifier: Scalars["String"];
   verified: Scalars["Boolean"];
   roles: Array<Role>;
-  lastLogin?: Maybe<Scalars["String"]>;
+  lastLogin?: Maybe<Scalars["DateTime"]>;
+  authenticationMethods: Array<AuthenticationMethod>;
   customFields?: Maybe<Scalars["JSON"]>;
 };
 

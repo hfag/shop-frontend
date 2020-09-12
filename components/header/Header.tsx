@@ -17,8 +17,6 @@ import MediaQuery from "../layout/MediaQuery";
 import NavItem from "./NavItem";
 import Navbar from "./Navbar";
 import Searchbar from "../Searchbar";
-import LogoNegative from "../../public/images/logo/logo_negative.svg";
-import NameSloganNegative from "../../public/images/logo/name_slogan_negative.svg";
 import JsonLd from "../seo/JsonLd";
 import { BUSINESS_JSON_LD } from "../../utilities/json-ld";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -104,7 +102,7 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
                 <LogoLeft>
                   <NavItem>
                     <StyledLink href={`/${intl.locale}`} title="Homepage">
-                      <img src={LogoNegative} alt="Logo" />
+                      <img src="/images/logo/logo_negative.svg" alt="Logo" />
                     </StyledLink>
                   </NavItem>
                 </LogoLeft>
@@ -120,7 +118,10 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
                         href={`/${intl.locale}`}
                         title="Homepage"
                       >
-                        <img src={NameSloganNegative} alt="Slogan" />
+                        <img
+                          src="/images/logo/name_slogan_negative.svg"
+                          alt="Slogan"
+                        />
                       </StyledLink>
                     </NavItem>
                   </MediaQuery>
@@ -137,7 +138,10 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
                           href={`/${intl.locale}`}
                           title="Homepage"
                         >
-                          <img src={LogoNegative} alt="Logo" />
+                          <img
+                            src="/images/logo/logo_negative.svg"
+                            alt="Logo"
+                          />
                         </StyledLink>
                       </NavItem>
                     </Flexbar>

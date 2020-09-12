@@ -3,7 +3,6 @@ import { Box } from "reflexbox";
 import { useIntl, defineMessages } from "react-intl";
 import styled from "styled-components";
 import { Product as JsonLdProduct } from "schema-dts";
-import { FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
 import Flex from "../layout/Flex";
 import CollectionItem from "./CollectionItem";
@@ -16,44 +15,18 @@ import {
   setProductCategoryView,
   trackPageView,
 } from "../../utilities/analytics";
-import Flexbar from "../layout/Flexbar";
 import Head from "next/head";
 import { Collection, CollectionLinkType } from "../../schema";
 import { ABSOLUTE_URL } from "../../utilities/api";
-import StyledLink from "../elements/StyledLink";
 
-const messages = defineMessages({
-  downloadsAndLinks: {
-    id: "ProductCategories.downloadsAndLinks",
-    defaultMessage: "Downloads und Links",
-  },
-});
+import ProductCollectionLinks from "./ProductCollectionLinks";
 
 const H1 = styled.h1`
   margin: 0 0 0.5rem 0;
 `;
-const H2 = styled.h2`
-  margin-top: 0;
-`;
 
 const InfoWrapper = styled.div`
   margin: 2rem 1rem;
-`;
-
-const DownloadList = styled.ul`
-  margin: 0;
-  padding: 0;
-
-  list-style: none;
-
-  li {
-    margin-bottom: 0.5rem;
-  }
-
-  li svg {
-    display: block;
-    margin-right: 0.5rem;
-  }
 `;
 
 const ProductCollectionWrapper = styled.div`
@@ -142,46 +115,7 @@ const ProductCollection: FunctionComponent<{
                     }}
                   ></div>
                 </Box>
-                {collection && collection.links && collection.links.length > 0 && (
-                  <Box width={[1, 1, 1 / 2, 1 / 2]}>
-                    <H2>{intl.formatMessage(messages.downloadsAndLinks)}</H2>
-                    <DownloadList>
-                      {collection.links.map((link, index) => {
-                        let Icon;
-                        let url = link.url;
-                        let target = "_blank";
-
-                        switch (link.type) {
-                          case CollectionLinkType.Pdf:
-                            Icon = FaRegFilePdf;
-                            target = "_blank";
-                            break;
-
-                          case CollectionLinkType.Video:
-                            Icon = FaFilm;
-                            target = "_blank";
-
-                            break;
-                          case CollectionLinkType.Link:
-                          default:
-                            Icon = FaLink;
-                            target = "_blank";
-                        }
-
-                        return (
-                          <li key={index}>
-                            <Flexbar>
-                              <Icon size={24} />{" "}
-                              <StyledLink href={url} target={target} underlined>
-                                {link.name}
-                              </StyledLink>
-                            </Flexbar>
-                          </li>
-                        );
-                      })}
-                    </DownloadList>
-                  </Box>
-                )}
+                <ProductCollectionLinks collection={collection} />
               </Flex>
             </InfoWrapper>
           </>

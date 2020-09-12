@@ -9,7 +9,7 @@ import page from "../../../../i18n/page";
 
 const Page = () => {
   const intl = useIntl();
-  const { user } = useContext(AppContext);
+  const { customer: user } = useContext(AppContext);
 
   return (
     <Wrapper

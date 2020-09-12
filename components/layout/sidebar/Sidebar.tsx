@@ -17,7 +17,6 @@ import { useIntl } from "react-intl";
 
 import Link from "../../elements/StyledLink";
 import { media, colors } from "../../../utilities/style";
-import NameSlogan from "../../../public/images/logo/name_slogan.svg";
 import MediaQuery from "../MediaQuery";
 import Card from "../Card";
 import RestrictedView from "../../elements/RestrictedView";
@@ -109,7 +108,7 @@ const Sidebar: FunctionComponent<{ children: ReactNode }> = React.memo(
         <BurgerBackground onClick={toggleBurgerMenu} isOpen={burgerMenuOpen} />
         <BurgerContainer isOpen={burgerMenuOpen}>
           <MediaQuery lg down style={{ height: "auto" }}>
-            <BurgerLogo src={NameSlogan} alt="Slogan" />
+            <BurgerLogo src="/images/logo/name_slogan.svg" alt="Slogan" />
             <BurgerList>
               <BurgerItem seperator>
                 <Link href={`/${intl.locale}/`} flex>

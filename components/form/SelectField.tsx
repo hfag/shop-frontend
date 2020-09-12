@@ -41,7 +41,9 @@ const SelectField: FunctionComponent<{
           {required === true ? "*" : required === false ? "(optional)" : ""}
         </label>
         <Select
-          value={value}
+          value={options.filter((o) => o.value === value)}
+          getOptionLabel={(option) => option.label}
+          getOptionValue={(option) => option.value}
           placeholder={placeholder}
           onChange={(option) => {
             setFieldValue(name, option ? option.value : undefined);

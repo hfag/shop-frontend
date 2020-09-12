@@ -33,9 +33,9 @@ const NavUser: FunctionComponent<{
   setDropdown: (dropdown: string | boolean) => void;
 }> = React.memo(({ dropdown, setDropdown }) => {
   const intl = useIntl();
-  const { user } = useContext(AppContext);
+  const { customer, user } = useContext(AppContext);
 
-  return user ? (
+  return customer ? (
     <div>
       <StyledLink
         onClick={() => setDropdown(dropdown === "user" ? false : "user")}
@@ -43,9 +43,9 @@ const NavUser: FunctionComponent<{
         flex
       >
         <Login>
-          {user.firstName.length > 0 || user.lastName.length > 0
-            ? `${user.firstName} ${user.lastName}`
-            : user.emailAddress}
+          {customer.firstName.length > 0 || customer.lastName.length > 0
+            ? `${customer.firstName} ${customer.lastName}`
+            : customer.emailAddress}
         </Login>
         <Triangle color="#fff" size="0.5rem" />
       </StyledLink>
@@ -61,21 +61,36 @@ const NavUser: FunctionComponent<{
               {intl.formatMessage(messages.toAccount)}
             </StyledLink>
           </div>
-          <RestrictedView>
-            <div>
-              <StyledLink external href="https://api.feuerschutz.ch/wp-admin">
-                {intl.formatMessage(page.shopAdmin)}
-              </StyledLink>
-            </div>
-            <div>
-              <StyledLink
-                external
-                href="https://feuerschutz.ch/wp-login.php?action=login"
-              >
-                {intl.formatMessage(page.networkAdmin)}
-              </StyledLink>
-            </div>
-          </RestrictedView>
+          <div>
+            <StyledLink
+              href={`/${intl.locale}/${
+                pathnamesByLanguage.logout.languages[intl.locale]
+              }`}
+              active={false}
+            >
+              {intl.formatMessage(userMessages.logout)}
+            </StyledLink>
+          </div>
+        </UserDropdown>
+      )}
+    </div>
+  ) : user ? (
+    <div>
+      <StyledLink
+        onClick={() => setDropdown(dropdown === "user" ? false : "user")}
+        negative
+        flex
+      >
+        <Login>{user.identifier}</Login>
+        <Triangle color="#fff" size="0.5rem" />
+      </StyledLink>
+      {dropdown === "user" && (
+        <UserDropdown>
+          <div>
+            <StyledLink external href="https://api.feuerschutz.ch/wp-admin">
+              {intl.formatMessage(page.shopAdmin)}
+            </StyledLink>
+          </div>
           <div>
             <StyledLink
               href={`/${intl.locale}/${

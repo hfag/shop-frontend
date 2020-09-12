@@ -2,7 +2,7 @@
 // https://github.com/prisma-labs/graphql-request
 
 import { isClient } from "./ssr";
-import { API_URL } from "./api";
+import { API_URL, ADMIN_API_URL } from "./api";
 import { getLanguageFromCurrentWindow } from "./i18n";
 
 export type Variables = { [key: string]: any };
@@ -195,6 +195,30 @@ export async function request<T = any>(
 }
 
 export default request;
+
+export async function requestAdmin<T = any>(
+  languageCode: string,
+  query: string,
+  variables?: Variables
+): Promise<T> {
+  const token = isClient ? localStorage.getItem("vendure-auth-token") : null;
+
+  const client = new GraphQLClient(
+    `${ADMIN_API_URL}?languageCode=${languageCode}`,
+    token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+  );
+  const { data, headers: responseHeaders, status } = await client.rawRequest<T>(
+    query,
+    variables
+  );
+  if (responseHeaders.get("vendure-auth-token") && isClient) {
+    localStorage.setItem(
+      "vendure-auth-token",
+      responseHeaders.get("vendure-auth-token")
+    );
+  }
+  return data;
+}
 
 function getResult(response: Response): Promise<any> {
   const contentType = response.headers.get("Content-Type");

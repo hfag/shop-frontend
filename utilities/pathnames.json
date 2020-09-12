@@ -66,17 +66,7 @@
     "path": "de/logout.tsx",
     "languages": { "de": "logout", "fr": "logout" }
   },
-  "verifyEmail": {
-    "path": "de/email-verifizieren.tsx",
-    "languages": { "de": "email-verifizieren", "fr": "verifier-e-mail" }
-  },
-  "verifyNewEmail": {
-    "path": "de/neue-email-verifizieren.tsx",
-    "languages": {
-      "de": "neue-email-verifizieren",
-      "fr": "verifier-nouveau-e-mail"
-    }
-  },
+
   "account": {
     "path": "de/konto",
     "languages": { "de": "konto", "fr": "compte" },

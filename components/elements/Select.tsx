@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import Select from "react-select";
+import dynamic from "next/dynamic";
+
+const Select = dynamic(() => import("react-select"), { ssr: false });
 
 import { colors, borders } from "../../utilities/style";
 

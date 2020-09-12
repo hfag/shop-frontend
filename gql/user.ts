@@ -9,14 +9,6 @@ export const CURRENT_USER_FRAGMENT = `
   }
 `;
 
-export const GET_CURRENT_USER = /* GraphQL */ `
-  query {
-    me {
-      ${CURRENT_USER_FRAGMENT}
-    }
-  }
-`;
-
 export const ACTIVE_CUSTOMER_FRAGMENT = `
   id
   title
@@ -30,6 +22,17 @@ export const ACTIVE_CUSTOMER_FRAGMENT = `
   resellerDiscounts {
     facetValueIds
     discount
+  }
+`;
+
+export const GET_CURRENT_USER = /* GraphQL */ `
+  query {
+    me {
+      ${CURRENT_USER_FRAGMENT}
+    }
+    activeCustomer {
+      ${ACTIVE_CUSTOMER_FRAGMENT}
+    }
   }
 `;
 

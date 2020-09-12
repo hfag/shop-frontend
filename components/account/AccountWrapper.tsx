@@ -79,18 +79,7 @@ const AccountContainer = styled.div`
 const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
   ({ children }) => {
     const intl = useIntl();
-    const router = useRouter();
 
-    const { user } = useContext(AppContext);
-
-    // useEffect(() => {
-    //   if (!user) {
-    //     console.log("user", user);
-    //     router.push(
-    //       `/${intl.locale}/${pathnamesByLanguage.login.languages[intl.locale]}`
-    //     );
-    //   }
-    // }, [user]);
     useEffect(() => {
       trackPageView();
     }, []);

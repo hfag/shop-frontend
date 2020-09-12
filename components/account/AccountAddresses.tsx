@@ -16,6 +16,7 @@ import { mutate } from "swr";
 import TableAction from "../cart/TableAction";
 import Button from "../elements/Button";
 import { useRouter } from "next/router";
+import { Unavailable } from "../administrator/Unavailable";
 
 const messages = defineMessages({
   address: {
@@ -47,7 +48,7 @@ const AccountAddresses: FunctionComponent<{
 }> = React.memo(({ addresses }) => {
   const intl = useIntl();
   const router = useRouter();
-  const { token } = useContext(AppContext);
+  const { user, customer, token } = useContext(AppContext);
 
   const deleteAddress = useCallback(
     (id: string) => async () => {
@@ -56,6 +57,10 @@ const AccountAddresses: FunctionComponent<{
     },
     [token]
   );
+
+  if (!customer && user) {
+    return <Unavailable />;
+  }
 
   return (
     <AddressWrapper>

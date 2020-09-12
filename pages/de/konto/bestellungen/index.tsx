@@ -46,7 +46,7 @@ const Page = () => {
     >
       <AccountWrapper>
         <AccountOrders
-          orders={data?.activeCustomer.orders.items}
+          orders={data?.activeCustomer?.orders.items}
         ></AccountOrders>
       </AccountWrapper>
     </Wrapper>

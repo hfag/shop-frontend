@@ -22,7 +22,7 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
   description
   position
   links {
-    type
+    icon
     name
     url
   }

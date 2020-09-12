@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext } from "react";
 import styled from "styled-components";
 import { useIntl } from "react-intl";
 import { Order as OrderType } from "../../schema";
@@ -8,6 +8,8 @@ import Price from "../elements/Price";
 import StyledLink from "../elements/StyledLink";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Placeholder from "../elements/Placeholder";
+import { AppContext } from "../../pages/_app";
+import { Unavailable } from "../administrator/Unavailable";
 
 const OrdersWrapper = styled.div`
   h2 {
@@ -18,6 +20,11 @@ const OrdersWrapper = styled.div`
 const AccountOrders: FunctionComponent<{ orders?: OrderType[] }> = React.memo(
   ({ orders }) => {
     const intl = useIntl();
+    const { user, customer } = useContext(AppContext);
+
+    if (!customer && user) {
+      return <Unavailable />;
+    }
 
     return (
       <OrdersWrapper>

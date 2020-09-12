@@ -1,14 +1,33 @@
-import React, { ReactNode, FunctionComponent } from "react";
+import React, {
+  ReactNode,
+  FunctionComponent,
+  useContext,
+  useMemo,
+} from "react";
+import { AppContext } from "../../pages/_app";
+import { Permission } from "../../schema";
 
 const RestrictedView: FunctionComponent<{
-  userRole?: string;
   children?: ReactNode;
-}> = ({ children, userRole = "administrator" }) => {
-  const account = false;
+  permission?: Permission;
+  channelId?: string;
+}> = ({ children, permission = Permission.SuperAdmin, channelId = "1" }) => {
+  const { user } = useContext(AppContext);
 
-  return account ? (
-    <>{children}</>
-  ) : null; /*&& userRole === account.role ? children : null*/
+  const isAllowed = useMemo(() => {
+    if (!user) {
+      return false;
+    }
+
+    const channel = user.channels.find((c) => c.id === channelId);
+    if (!channel) {
+      return false;
+    }
+
+    return channel.permissions.includes(permission);
+  }, [user]);
+
+  return isAllowed ? <>{children}</> : null;
 };
 
 export default RestrictedView;

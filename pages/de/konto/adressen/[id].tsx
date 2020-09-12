@@ -19,7 +19,7 @@ import { AVAILABLE_COUNTRIES } from "../../../../gql/country";
 const Page = () => {
   const intl = useIntl();
   const router = useRouter();
-  const { user, token } = useContext(AppContext);
+  const { customer: user, token } = useContext(AppContext);
 
   const { id } = router.query;
 

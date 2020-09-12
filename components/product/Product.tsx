@@ -84,7 +84,7 @@ const Product: FunctionComponent<{
   product?: ProductType;
 }> = React.memo(({ product }) => {
   const intl = useIntl();
-  const { user, token } = useContext(AppContext);
+  const { customer: user, token } = useContext(AppContext);
 
   if (!product) {
     return <Placeholder block />;
@@ -278,7 +278,7 @@ const Product: FunctionComponent<{
                 <h4>{optionGroup.name}</h4>
                 <Select
                   placeholder={intl.formatMessage(messages.chooseAnAttribute)}
-                  onChange={(item: { label: string; value: string }) => {
+                  onChange={(item: ProductOption) => {
                     const group = product.optionGroups.find(
                       (g) => g.id === optionGroup.id
                     );
@@ -296,23 +296,16 @@ const Product: FunctionComponent<{
                       setSelectedOptions({
                         ...selectedOptions,
                         [optionGroup.id]: group.options.find(
-                          (o) => o.code === item.value
+                          (o) => o.code === item.code
                         ),
                       });
                     }
                   }}
-                  value={
-                    selectedOptions[optionGroup.id] &&
-                    selectedOptions[optionGroup.id].code
-                  }
-                  options={optionGroup.options
-                    .filter((option) =>
-                      possibleOptions[optionGroup.id].includes(option)
-                    )
-                    .map((option) => ({
-                      label: option.name,
-                      value: option.code,
-                    }))}
+                  value={selectedOptions[optionGroup.id] || null}
+                  options={optionGroup.options.filter((option) =>
+                    possibleOptions[optionGroup.id].includes(option)
+                  )}
+                  getOptionLabel={(item: ProductOption) => item.name}
                 />
               </Box>
             ))}

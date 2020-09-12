@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ProductCategories.downloadsAndLinks",
+    "defaultMessage": "Downloads und Links"
+  },
+  {
+    "id": "ProductCategories.addAsset",
+    "defaultMessage": "Datei hinzufügen"
+  },
+  {
+    "id": "ProductCategories.addLink",
+    "defaultMessage": "Link hinzufügen"
+  },
+  {
+    "id": "ProductCategories.saveLink",
+    "defaultMessage": "Link speichern"
+  }
+]

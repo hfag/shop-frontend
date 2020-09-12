@@ -15,6 +15,7 @@ import useSWR from "swr";
 import { GET_CURRENT_CUSTOMER_ORDERS } from "../../gql/user";
 import request from "../../utilities/request";
 import Placeholder from "../elements/Placeholder";
+import { Unavailable } from "../administrator/Unavailable";
 
 const messages = defineMessages({
   here: {
@@ -33,13 +34,13 @@ const DashboardWrapper = styled.div`
 `;
 
 const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
-  const { user, token } = useContext(AppContext);
+  const { user, customer, token } = useContext(AppContext);
   const intl = useIntl();
 
-  const billing: AddressType | undefined = user?.addresses.find(
+  const billing: AddressType | undefined = customer?.addresses.find(
     (a) => a.defaultBillingAddress
   );
-  const shipping: AddressType | undefined = user?.addresses.find(
+  const shipping: AddressType | undefined = customer?.addresses.find(
     (a) => a.defaultShippingAddress
   );
 
@@ -56,17 +57,25 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
     (query, token, skip, take) => request(intl.locale, query, { skip, take })
   );
 
+  if (!customer && user) {
+    return (
+      <DashboardWrapper>
+        <Unavailable />
+      </DashboardWrapper>
+    );
+  }
+
   return (
     <DashboardWrapper>
       <Flex flexWrap="wrap">
         <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
-          {user ? (
-            user.firstName && user.lastName && user.emailAddress ? (
+          {customer ? (
+            customer.firstName && customer.lastName && customer.emailAddress ? (
               <div>
                 <h2 className="no-margin">
-                  {user.firstName} {user.lastName}
+                  {customer.firstName} {customer.lastName}
                 </h2>
-                <div>{user.emailAddress}</div>
+                <div>{customer.emailAddress}</div>
               </div>
             ) : (
               <div>
@@ -101,7 +110,7 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
           <Flex flexWrap="wrap">
             <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
               <h4 className="no-margin">{intl.formatMessage(order.invoice)}</h4>
-              {user ? (
+              {customer ? (
                 !billing ? (
                   <div>
                     <FormattedMessage
@@ -130,7 +139,7 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
                 <Placeholder block />
               )}
             </Box>
-            {user ? (
+            {customer ? (
               shipping && (
                 <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
                   <h4 className="no-margin">
@@ -153,10 +162,10 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
           <h2 className="no-margin-top">
             {intl.formatMessage(order.lastThreeOrders)}
           </h2>
-          {data?.activeCustomer.orders.totalItems === 0 && (
+          {data?.activeCustomer?.orders.totalItems === 0 && (
             <div>{intl.formatMessage(order.noOrders)}</div>
           )}
-          {data
+          {data?.activeCustomer
             ? data.activeCustomer.orders.items
                 .sort(
                   (a, b) =>

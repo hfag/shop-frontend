@@ -14,8 +14,6 @@ import Container from "./layout/Container";
 
 import { colors, media } from "../utilities/style";
 import StyledLink from "./elements/StyledLink";
-import Logo from "../public/images/logo/logo_negative.svg";
-import NameSlogan from "../public/images/logo/name_slogan_negative.svg";
 import Placeholder from "./elements/Placeholder";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
 
@@ -119,7 +117,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
             <Flex flexWrap="wrap">
               <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
                 <LazyImage
-                  src={Logo}
+                  src="/images/logo/logo_negative.svg"
                   alt="Logo"
                   placeholder={({ imageProps, ref }) => (
                     <div ref={ref}>
@@ -132,7 +130,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                 />
                 <br />
                 <LazyImage
-                  src={NameSlogan}
+                  src="/images/logo/name_slogan_negative.svg"
                   alt="Slogan"
                   placeholder={({ imageProps, ref }) => (
                     <div ref={ref}>

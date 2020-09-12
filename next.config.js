@@ -7,16 +7,16 @@ const withTM = require("next-transpile-modules")([
   "intl-messageformat-parser",
   "intl-messageformat",
 ]);
-const withImages = require("next-images");
 
 const env = {
   API_URL: "http://localhost:3000/shop-api",
+  ADMIN_API_URL: "http://localhost:3000/admin-api",
   WP_BLOG_URL: "https://api.feuerschutz.ch",
   ABSOLUTE_URL: "",
   PUBLIC_PATH: "/",
 };
 
-module.exports = withPlugins([withTM, withImages], {
+module.exports = withPlugins([withTM], {
   env,
 });
 

@@ -82,7 +82,11 @@ app.prepare().then(() => {
     // const locale = accept.language(supportedLanguages) || "de";
 
     //add locale for pages but no static assets
-    if (!request.url.startsWith("/_next/")) {
+    if (
+      !request.url.startsWith("/_next/") && //next js stuff
+      !request.url.startsWith("/verify") && // global urls
+      request.url.indexOf(".") === -1 //static files from public folder
+    ) {
       let locale = getLanguageFromPathname(request.url, "no-language");
       if (locale === "no-language") {
         //if the requested path doesn't contain a language, redirect

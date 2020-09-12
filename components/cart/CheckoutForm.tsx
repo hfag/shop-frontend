@@ -80,7 +80,6 @@ interface IProps {
   intl: IntlShape;
   router: NextRouter;
   token?: string;
-  account: CurrentUser | null;
   values?: FormValues;
   billingAddress: CreateAddressInput | null;
   order: Order | null;

@@ -8,6 +8,7 @@ import Placeholder from "../../../components/elements/Placeholder";
 import Message from "../../../components/elements/Message";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import page from "../../../i18n/page";
+import { Unavailable } from "../../../components/administrator/Unavailable";
 
 const messages = defineMessages({
   newEmail: {
@@ -20,7 +21,7 @@ const messages = defineMessages({
 const Page = () => {
   const intl = useIntl();
   const [message, setMessage] = useState<string | null>(null);
-  const { user, token } = useContext(AppContext);
+  const { customer, user, token } = useContext(AppContext);
 
   return (
     <Wrapper
@@ -41,15 +42,15 @@ const Page = () => {
       ]}
     >
       <AccountWrapper>
-        {user ? (
+        {customer ? (
           <>
             <AccountForm
               intl={intl}
               token={token}
               values={{
-                email: user.emailAddress,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                email: customer.emailAddress,
+                firstName: customer.firstName,
+                lastName: customer.lastName,
               }}
               newEmailCallback={() =>
                 setMessage(intl.formatMessage(messages.newEmail))
@@ -62,6 +63,8 @@ const Page = () => {
               </>
             )}
           </>
+        ) : user ? (
+          <Unavailable />
         ) : (
           <Placeholder block />
         )}

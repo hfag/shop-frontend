@@ -49,7 +49,7 @@ const messages = defineMessages({
 const Cart: FunctionComponent<{}> = React.memo(() => {
   const intl = useIntl();
   const [step, setStep] = useState("cart");
-  const { user, token } = useContext(AppContext);
+  const { customer: user, token } = useContext(AppContext);
   const [
     billingAddress,
     setBillingAddress,
@@ -129,7 +129,6 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
               intl={intl}
               router={router}
               order={orderData?.activeOrder}
-              account={user}
               token={token}
               billingAddress={billingAddress}
             />

@@ -24,6 +24,8 @@ const InputField: FunctionComponent<{
   value?: string;
   onChange?: (e: React.ChangeEvent<any>) => void;
   checkbox?: boolean;
+  marginRight?: number;
+  flexGrow?: number;
   component?: React.ComponentType | "textarea";
   children?: ReactNode;
   componentProps?: { [key: string]: any };
@@ -37,6 +39,8 @@ const InputField: FunctionComponent<{
   value: forceValue,
   onChange: secondOnChange,
   checkbox,
+  marginRight,
+  flexGrow,
   component,
   children,
   componentProps = {},
@@ -44,7 +48,11 @@ const InputField: FunctionComponent<{
   const Component = component ? component : "input";
 
   return (
-    <InputFieldWrapper checkbox={checkbox}>
+    <InputFieldWrapper
+      checkbox={checkbox}
+      marginRight={marginRight}
+      flexGrow={flexGrow}
+    >
       {label && (
         <label className="input-label" htmlFor={name}>
           {label}{" "}

@@ -2,9 +2,17 @@ import styled from "styled-components";
 
 import { colors, borders } from "../../utilities/style";
 
-export const InputFieldWrapper = styled.div<{ checkbox?: boolean }>`
+export const InputFieldWrapper = styled.div<{
+  checkbox?: boolean;
+  flexGrow?: number;
+  marginRight?: number;
+}>`
   margin-bottom: 0.25rem;
 
+  ${({ flexGrow }) => (flexGrow ? `flex-grow: ${flexGrow};` : "")}
+  ${({ marginRight }) =>
+    marginRight ? `margin-right: ${marginRight}rem;` : ""}
+    
   ${({ checkbox }) =>
     checkbox
       ? `position: absolute;

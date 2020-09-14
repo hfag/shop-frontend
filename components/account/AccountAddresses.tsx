@@ -13,7 +13,7 @@ import address from "../../i18n/address";
 import request from "../../utilities/request";
 import { AppContext } from "../../pages/_app";
 import { mutate } from "swr";
-import TableAction from "../cart/TableAction";
+import ActionButton from "../ActionButton";
 import Button from "../elements/Button";
 import { useRouter } from "next/router";
 import { Unavailable } from "../administrator/Unavailable";
@@ -110,9 +110,9 @@ const AccountAddresses: FunctionComponent<{
                     {address.defaultBillingAddress ? <FaCheckCircle /> : "-"}
                   </td>
                   <td>
-                    <TableAction>
+                    <ActionButton>
                       <MdDelete onClick={deleteAddress(address.id)} />
-                    </TableAction>
+                    </ActionButton>
                   </td>
                 </tr>
               ))

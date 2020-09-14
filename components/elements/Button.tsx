@@ -24,10 +24,12 @@ interface IProps {
   state?: string;
   height?: string;
   fullWidth?: boolean;
+  marginLeft?: number;
 }
 
 const ButtonWrapper = styled.div<IProps>`
   float: ${({ float }) => float || "none"};
+  ${({ marginLeft }) => (marginLeft ? `margin-left:${marginLeft}rem;` : "")}
 
   .pb-container {
     display: inline-block;
@@ -170,6 +172,7 @@ const Button: FunctionComponent<{
   height?: string;
   fullWidth?: boolean;
   float?: "left" | "right";
+  marginLeft?: number;
   children: ReactNode;
 }> = ({
   state = "",
@@ -186,6 +189,7 @@ const Button: FunctionComponent<{
   height,
   fullWidth,
   float,
+  marginLeft,
   children,
 }) => {
   return (
@@ -195,6 +199,7 @@ const Button: FunctionComponent<{
         fullWidth={fullWidth}
         float={float}
         state={state}
+        marginLeft={marginLeft}
       >
         <ProgressButton
           controlled={controlled}

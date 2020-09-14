@@ -22,6 +22,7 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
   description
   position
   links {
+    id
     icon
     name
     url
@@ -82,6 +83,65 @@ export const GET_COLLECTION_BY_ID = /* GraphQL */ `
   query Collection($id: ID!) {
     collection(id: $id) {
       ${FULL_COLLECTION_FRAGMENT}
+    }
+  }
+`;
+
+export const ADMIN_COLLECTION_LINK_FRAGMENT = /* GraphQl */ `
+    id
+    slug
+    links {
+      ... on CollectionUrlLink {
+        linkId
+        linkUrlId
+        collectionId
+        icon
+        translations {
+          id
+          languageCode
+          name
+          url
+        }
+      }
+      ... on CollectionAssetLink {
+        linkId
+        linkAssetId
+        collectionId
+        icon
+        assetId
+      }
+      __typename
+    }
+`;
+
+export const ADMIN_GET_COLLECTION_LINKS_BY_SLUG = /* GraphQL */ `
+  query Collection($slug: String!) {
+    collection(slug: $slug) {
+      ${ADMIN_COLLECTION_LINK_FRAGMENT}
+    }
+  }
+`;
+
+export const ADMIN_CREATE_COLLECTION_LINK_URL = /* GraphQL */ `
+  mutation CreateCollectionLinkUrl($input: CreateCollectionLinkUrlInput!) {
+    createCollectionLinkUrl(input: $input) {
+      ${ADMIN_COLLECTION_LINK_FRAGMENT}
+    }
+  }
+`;
+
+export const ADMIN_UPDATE_COLLECTION_LINK_URL = /* GraphQL */ `
+  mutation UpdateCollectionUrlLink($input: UpdateCollectionLinkUrlInput!) {
+    updateCollectionUrlLink(input: $input) {
+      ${ADMIN_COLLECTION_LINK_FRAGMENT}
+    }
+  }
+`;
+
+export const ADMIN_DELETE_COLLECTION_LINK_URL = /* GraphQL */ `
+  mutation DeleteCollectionLink($id: ID!) {
+    deleteCollectionLink(id: $id){
+      ${ADMIN_COLLECTION_LINK_FRAGMENT}
     }
   }
 `;

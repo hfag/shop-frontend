@@ -19,7 +19,7 @@ import Button from "../elements/Button";
 import request from "../../utilities/request";
 import { mutate } from "swr";
 import CartTable from "./CartTable";
-import CartTableAction from "./TableAction";
+import CartTableAction from "../ActionButton";
 
 const messages = defineMessages({
   showMoreDetails: {

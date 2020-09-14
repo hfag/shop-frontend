@@ -22,40 +22,63 @@ const ValidationErrors = styled.div`
  * Select field
  */
 //TODO: translate optional, no results etc
+
 const SelectField: FunctionComponent<{
   name: string;
   label?: string;
   placeholder?: string;
   options: { label: string; value: any }[];
   required?: boolean;
-}> = React.memo(({ name, label, options, required, placeholder }) => (
-  <Field
-    name={name}
-    render={({
-      field: { name, value },
-      form: { errors, touched, setFieldValue, setFieldTouched },
-    }) => (
-      <SelectFieldWrapper>
-        <label>
-          {label}{" "}
-          {required === true ? "*" : required === false ? "(optional)" : ""}
-        </label>
-        <Select
-          value={options.filter((o) => o.value === value)}
-          getOptionLabel={(option) => option.label}
-          getOptionValue={(option) => option.value}
-          placeholder={placeholder}
-          onChange={(option) => {
-            setFieldValue(name, option ? option.value : undefined);
-            setFieldTouched(name, true);
-          }}
-          noResultsText="Keine Resultate gefunden"
-          options={options}
-        />
-        <ValidationErrors>{get(errors, name, false)}</ValidationErrors>
-      </SelectFieldWrapper>
-    )}
-  />
-));
+  formatOptionLabel?: (option: { label: string; value: any }) => JSX.Element;
+  width?: number;
+  flexGrow?: number;
+  marginRight?: number;
+}> = React.memo(
+  ({
+    name,
+    label,
+    options,
+    required,
+    placeholder,
+    formatOptionLabel,
+    width,
+    flexGrow,
+    marginRight,
+  }) => (
+    <Field
+      name={name}
+      render={({
+        field: { name, value },
+        form: { errors, touched, setFieldValue, setFieldTouched },
+      }) => (
+        <SelectFieldWrapper>
+          {label && (
+            <label>
+              {label}{" "}
+              {required === true ? "*" : required === false ? "(optional)" : ""}
+            </label>
+          )}
+          <Select
+            value={options.filter((o) => o.value === value)}
+            getOptionLabel={(option) => option.label}
+            getOptionValue={(option) => option.value}
+            placeholder={placeholder}
+            onChange={(option) => {
+              setFieldValue(name, option ? option.value : undefined);
+              setFieldTouched(name, true);
+            }}
+            noResultsText="Keine Resultate gefunden"
+            options={options}
+            formatOptionLabel={formatOptionLabel}
+            width={width}
+            flexGrow={flexGrow}
+            marginRight={marginRight}
+          />
+          <ValidationErrors>{get(errors, name, false)}</ValidationErrors>
+        </SelectFieldWrapper>
+      )}
+    />
+  )
+);
 
 export default SelectField;

@@ -25,7 +25,7 @@ const Page: FunctionComponent<{
 
   const { data, error } = useSWR(
     [GET_COLLECTION_BY_SLUG, slug],
-    (query, collectionId) => request(intl.locale, query, { id: collectionId }),
+    (query, slug) => request(intl.locale, query, { slug }),
     {
       initialData: collectionResponse,
     }

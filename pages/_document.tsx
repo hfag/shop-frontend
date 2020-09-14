@@ -60,6 +60,7 @@ export default class MyDocument extends Document<IProps> {
               __html: this.props.localeDataScript,
             }}
           />
+          <div id="modal" />
           <NextScript />
         </body>
       </Html>

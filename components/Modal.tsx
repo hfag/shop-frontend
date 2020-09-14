@@ -15,8 +15,8 @@ const Backdrop = styled.div`
 const ModalWrapper = styled.div`
   position: absolute;
   top: 2rem;
-  width: 40rem;
-  height: 25rem;
+  width: 50rem;
+  height: 40rem;
   left: 50%;
   transform: translateX(-50%);
 

@@ -17,6 +17,7 @@ import {
 } from "../../gql/collection";
 import { mutate } from "swr";
 import EditProductCollectionLinks from "./EditProductCollectionLinks";
+import { ASSET_URL } from "../../utilities/api";
 
 const messages = defineMessages({
   downloadsAndLinks: {
@@ -92,7 +93,11 @@ const ProductCollectionLinks: FunctionComponent<{ collection: Collection }> = ({
                       <Flexbar>
                         <Icon size={24} />{" "}
                         <StyledLink
-                          href={link.url}
+                          href={
+                            link.url.startsWith("http")
+                              ? link.url
+                              : `${ASSET_URL}/${link.url}`
+                          }
                           target={"_blank"}
                           underlined
                         >
@@ -106,6 +111,7 @@ const ProductCollectionLinks: FunctionComponent<{ collection: Collection }> = ({
             )}
             {editing && (
               <EditProductCollectionLinks
+                intl={intl}
                 collection={collection}
                 onSave={() => {
                   setEditing(false);

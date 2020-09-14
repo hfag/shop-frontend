@@ -2,5 +2,9 @@
   {
     "id": "AssetField.fileSelection",
     "defaultMessage": "Dateiauswahl"
+  },
+  {
+    "id": "AssetField.chooseFile",
+    "defaultMessage": "Wähle Datei"
   }
 ]

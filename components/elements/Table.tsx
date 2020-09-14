@@ -7,6 +7,7 @@ import { colors } from "../../utilities/style";
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 1rem;
 
   thead {
     border-bottom: ${Color(colors.background).darken(0.2).rgb().string()} 2px

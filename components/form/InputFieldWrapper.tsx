@@ -6,12 +6,14 @@ export const InputFieldWrapper = styled.div<{
   checkbox?: boolean;
   flexGrow?: number;
   marginRight?: number;
+  marginLeft?: number;
 }>`
   margin-bottom: 0.25rem;
 
   ${({ flexGrow }) => (flexGrow ? `flex-grow: ${flexGrow};` : "")}
   ${({ marginRight }) =>
     marginRight ? `margin-right: ${marginRight}rem;` : ""}
+  ${({ marginLeft }) => (marginLeft ? `margin-left: ${marginLeft}rem;` : "")}
     
   ${({ checkbox }) =>
     checkbox

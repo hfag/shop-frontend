@@ -6,6 +6,7 @@ import { defineMessages, useIntl } from "react-intl";
 import styled from "styled-components";
 import { borders, colors } from "../../utilities/style";
 import ClientOnlyPortal from "../ClientOnlyPortal";
+import FileChooser from "../FileChooser";
 import Flexbar from "../layout/Flexbar";
 import Modal from "../Modal";
 import { InputFieldWrapper } from "./InputFieldWrapper";
@@ -15,13 +16,17 @@ const messages = defineMessages({
     id: "AssetField.fileSelection",
     defaultMessage: "Dateiauswahl",
   },
+  chooseFile: {
+    id: "AssetField.chooseFile",
+    defaultMessage: "Wähle Datei",
+  },
 });
 
 const ValidationErrors = styled.div`
   color: ${colors.danger};
 `;
 
-const FileChooser = styled.div`
+const FileChooserInput = styled.div`
   cursor: pointer;
   border: ${colors.primary} 1px solid;
   border-radius: ${borders.inputRadius};
@@ -51,30 +56,35 @@ const AssetField: FunctionComponent<{
           name={name}
           render={({
             field: { value, onChange, onBlur },
-            form: { values, errors, touched, validateForm },
+            form: { values, errors, touched, validateForm, setFieldValue },
           }) => (
-            <div>
-              <FileChooser onClick={() => setModalOpen(true)}>
+            <>
+              <FileChooserInput onClick={() => setModalOpen(true)}>
                 <Flexbar>
                   <FaFile />
-                  hi.pdf
+                  {value ? value.name : intl.formatMessage(messages.chooseFile)}
                 </Flexbar>
-              </FileChooser>
+              </FileChooserInput>
               <ValidationErrors>{get(errors, name)}</ValidationErrors>
-            </div>
+              {modalOpen && (
+                <ClientOnlyPortal selector="#modal">
+                  <Modal
+                    title={intl.formatMessage(messages.fileSelection)}
+                    onClose={() => setModalOpen(false)}
+                  >
+                    <FileChooser
+                      onSelect={(asset) => {
+                        setFieldValue(name, asset);
+                        setModalOpen(false);
+                      }}
+                    />
+                  </Modal>
+                </ClientOnlyPortal>
+              )}
+            </>
           )}
         />
       </InputFieldWrapper>
-      {modalOpen && (
-        <ClientOnlyPortal selector="#modal">
-          <Modal
-            title={intl.formatMessage(messages.fileSelection)}
-            onClose={() => setModalOpen(false)}
-          >
-            hi
-          </Modal>
-        </ClientOnlyPortal>
-      )}
     </>
   );
 };

@@ -10,9 +10,11 @@ export default styled(Select)<{
   width?: number;
   flexGrow?: number;
   marginRight?: number;
+  marginLeft?: number;
 }>`
   ${({ width }) => (width ? `width:${width}rem;` : "")}
   ${({ flexGrow }) => (flexGrow ? `flex-grow: ${flexGrow};` : "")}
   ${({ marginRight }) =>
     marginRight ? `margin-right: ${marginRight}rem;` : ""}
+  ${({ marginLeft }) => (marginLeft ? `margin-left: ${marginLeft}rem;` : "")}
 `;

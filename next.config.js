@@ -9,6 +9,7 @@ const withTM = require("next-transpile-modules")([
 ]);
 
 const env = {
+  ASSET_URL: "http://localhost:3000/assets",
   API_URL: "http://localhost:3000/shop-api",
   ADMIN_API_URL: "http://localhost:3000/admin-api",
   WP_BLOG_URL: "https://api.feuerschutz.ch",

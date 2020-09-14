@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { defineMessages, useIntl } from "react-intl";
+import { defineMessages, IntlShape, useIntl } from "react-intl";
 import { Box } from "reflexbox";
 import styled from "styled-components";
 import { FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
@@ -13,7 +13,12 @@ import { MdDelete, MdArrowUpward } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import { AppContext } from "../../pages/_app";
-import { Collection, CollectionLinkType, LanguageCode } from "../../schema";
+import {
+  Asset,
+  Collection,
+  CollectionLinkType,
+  LanguageCode,
+} from "../../schema";
 import Button from "../elements/Button";
 import Flexbar from "../layout/Flexbar";
 import StyledLink from "../elements/StyledLink";
@@ -25,9 +30,13 @@ import { InputFieldWrapper } from "../form/InputFieldWrapper";
 import ActionButton from "../ActionButton";
 import { requestAdmin } from "../../utilities/request";
 import {
+  ADMIN_CREATE_COLLECTION_LINK_ASSET,
   ADMIN_CREATE_COLLECTION_LINK_URL,
+  ADMIN_DELETE_COLLECTION_LINK,
   ADMIN_DELETE_COLLECTION_LINK_URL,
   ADMIN_GET_COLLECTION_LINKS_BY_SLUG,
+  ADMIN_UPDATE_COLLECTION_LINK_ASSET,
+  ADMIN_UPDATE_COLLECTION_LINK_URL,
   GET_COLLECTION_BY_ID,
   GET_COLLECTION_BY_SLUG,
 } from "../../gql/collection";
@@ -85,13 +94,14 @@ interface CollectionAssetLink {
   id: string | number;
   collectionId: string | number;
   icon: CollectionLinkType;
-  assetId: string | number;
+  asset: Asset;
   __typename: "CollectionAssetLink";
 }
 
 type AdminCollectionLink = CollectionUrlLink | CollectionAssetLink;
 
 interface IProps {
+  intl: IntlShape;
   collection: Collection;
   onSave: () => void;
   onAbort: () => void;
@@ -119,6 +129,7 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
   handleBlur,
   handleSubmit,
   setValues,
+  status,
 }) => {
   const intl = useIntl();
   //@ts-ignore
@@ -178,6 +189,7 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
       name="links"
       render={({ swap, remove, insert }) => (
         <>
+          {JSON.stringify(values)}
           <LanguageChooser value={language} onChange={setLanguage} />
           <DownloadList>
             {values.links.map((item, index) => {
@@ -211,7 +223,7 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
                           marginRight={1}
                         />
                         <AssetField
-                          name={`links[${index}].assetId`}
+                          name={`links[${index}].asset`}
                           flexGrow={1}
                           marginRight={1}
                         />
@@ -282,7 +294,9 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
                   __typename: "CollectionUrlLink",
                   collectionId: collection.id,
                   icon: CollectionLinkType.Pdf,
-                  translations: [],
+                  translations: [
+                    { languageCode: intl.locale, name: "", url: "" },
+                  ],
                 });
 
                 return Promise.resolve();
@@ -294,7 +308,7 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
               onClick={() => {
                 insert(values.links.length, {
                   __typename: "CollectionAssetLink",
-                  assetId: null,
+                  asset: { id: null },
                   collectionId: collection.id,
                   icon: CollectionLinkType.Pdf,
                 });
@@ -307,7 +321,7 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
             </Button>
           </Buttons>
           <Buttons>
-            <Button onClick={handleSubmit}>
+            <Button state={status} onClick={handleSubmit}>
               {intl.formatMessage(messages.saveLinks)}
             </Button>
             <Button onClick={() => onAbort()} marginLeft={0.5}>
@@ -327,25 +341,82 @@ const EditProductCollectionLinks = withFormik<
   mapPropsToValues: () => ({
     links: [],
   }),
-  handleSubmit: (values) => {
-    // if (!values.id) {
-    //   //create a new link
-    //   requestAdmin(intl.locale, ADMIN_CREATE_COLLECTION_LINK_URL, {
-    //     input: {
-    //       collectionId: collection.id,
-    //       icon: values.icon,
-    //       translations: [
-    //         { languageCode: intl.locale, name: values.name, url: values.url },
-    //       ],
-    //     },
-    //   }).then((data) => {
-    //     console.log(data);
-    //     onSave();
-    //   });
-    // } else {
-    //   //update an existing one
-    //   alert(JSON.stringify(values));
-    // }
+  handleSubmit: (
+    values,
+    { props: { intl, collection, onSave }, setStatus }
+  ) => {
+    const links = values.links.map((l, index) => ({ ...l, order: index }));
+    setStatus("loading");
+    const createPromises = links
+      .filter((link) => !("linkId" in link))
+      .map((link) => {
+        if (link.__typename === "CollectionUrlLink") {
+          return requestAdmin(intl.locale, ADMIN_CREATE_COLLECTION_LINK_URL, {
+            input: {
+              collectionId: link.collectionId,
+              icon: link.icon,
+              order: link.order,
+              translations: link.translations,
+            },
+          });
+        } else {
+          return requestAdmin(intl.locale, ADMIN_CREATE_COLLECTION_LINK_ASSET, {
+            input: {
+              collectionId: link.collectionId,
+              icon: link.icon,
+              order: link.order,
+              assetId: link.asset.id,
+            },
+          });
+        }
+      });
+
+    const updatePromises = links
+      .filter((link) => "linkId" in link)
+      .map((link) => {
+        if (link.__typename === "CollectionUrlLink") {
+          return requestAdmin(intl.locale, ADMIN_UPDATE_COLLECTION_LINK_URL, {
+            input: {
+              //@ts-ignore
+              id: link.linkUrlId,
+              icon: link.icon,
+              order: link.order,
+              translations: link.translations,
+            },
+          });
+        } else {
+          return requestAdmin(intl.locale, ADMIN_UPDATE_COLLECTION_LINK_ASSET, {
+            input: {
+              //@ts-ignore
+              id: link.linkAssetId,
+              icon: link.icon,
+              order: link.order,
+              assetId: link.asset.id,
+            },
+          });
+        }
+      });
+
+    const deletePromises = collection.links
+      .filter(
+        //@ts-ignore
+        (link) => !links.find((l) => "linkId" in l && l.linkId === link.id)
+      )
+      .map((link) =>
+        requestAdmin(intl.locale, ADMIN_DELETE_COLLECTION_LINK, {
+          id: link.id,
+        })
+      );
+
+    return Promise.all([
+      ...createPromises,
+      ...updatePromises,
+      ...deletePromises,
+    ]).then(() => {
+      setStatus("success");
+      setTimeout(() => setStatus(""), 300);
+      onSave();
+    });
   },
 })(EditProductCollectionLinksInnerForm);
 

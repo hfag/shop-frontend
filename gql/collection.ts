@@ -108,7 +108,11 @@ export const ADMIN_COLLECTION_LINK_FRAGMENT = /* GraphQl */ `
         linkAssetId
         collectionId
         icon
-        assetId
+        asset{
+          id
+          name
+          source
+        }
       }
       __typename
     }
@@ -130,6 +134,14 @@ export const ADMIN_CREATE_COLLECTION_LINK_URL = /* GraphQL */ `
   }
 `;
 
+export const ADMIN_CREATE_COLLECTION_LINK_ASSET = /* GraphQL */ `
+  mutation CreateCollectionLinkAsset($input: CreateCollectionLinkAssetInput!) {
+    createCollectionLinkAsset(input: $input) {
+      ${ADMIN_COLLECTION_LINK_FRAGMENT}
+    }
+  }
+`;
+
 export const ADMIN_UPDATE_COLLECTION_LINK_URL = /* GraphQL */ `
   mutation UpdateCollectionUrlLink($input: UpdateCollectionLinkUrlInput!) {
     updateCollectionUrlLink(input: $input) {
@@ -138,7 +150,15 @@ export const ADMIN_UPDATE_COLLECTION_LINK_URL = /* GraphQL */ `
   }
 `;
 
-export const ADMIN_DELETE_COLLECTION_LINK_URL = /* GraphQL */ `
+export const ADMIN_UPDATE_COLLECTION_LINK_ASSET = /* GraphQL */ `
+  mutation UpdateCollectionAssetLink($input: UpdateCollectionLinkAssetInput!) {
+    updateCollectionAssetLink(input: $input) {
+      ${ADMIN_COLLECTION_LINK_FRAGMENT}
+    }
+  }
+`;
+
+export const ADMIN_DELETE_COLLECTION_LINK = /* GraphQL */ `
   mutation DeleteCollectionLink($id: ID!) {
     deleteCollectionLink(id: $id){
       ${ADMIN_COLLECTION_LINK_FRAGMENT}

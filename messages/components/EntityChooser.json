@@ -1,0 +1,42 @@
+[
+  {
+    "id": "EntityChooser.sortBy",
+    "defaultMessage": "Sortiere nach"
+  },
+  {
+    "id": "EntityChooser.sortOrder",
+    "defaultMessage": "Sortierreihenfolge"
+  },
+  {
+    "id": "EntityChooser.search",
+    "defaultMessage": "Suche"
+  },
+  {
+    "id": "EntityChooser.itemsPerPage",
+    "defaultMessage": "Zeilen pro Seite"
+  },
+  {
+    "id": "EntityChooser.nextPage",
+    "defaultMessage": "Nächste Seite"
+  },
+  {
+    "id": "EntityChooser.previousPage",
+    "defaultMessage": "Vorherige Seite"
+  },
+  {
+    "id": "EntityChooser.page",
+    "defaultMessage": "Seite"
+  },
+  {
+    "id": "EntityChooser.of",
+    "defaultMessage": "von"
+  },
+  {
+    "id": "EntityChooser.sortOrderAsc",
+    "defaultMessage": "Aufsteigend"
+  },
+  {
+    "id": "EntityChooser.sortOrderDesc",
+    "defaultMessage": "Absteigend"
+  }
+]

@@ -189,7 +189,6 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
       name="links"
       render={({ swap, remove, insert }) => (
         <>
-          {JSON.stringify(values)}
           <LanguageChooser value={language} onChange={setLanguage} />
           <DownloadList>
             {values.links.map((item, index) => {

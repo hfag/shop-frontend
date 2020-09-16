@@ -8,6 +8,7 @@ import { requestAdmin } from "../utilities/request";
 import Button from "./elements/Button";
 import Select from "./elements/Select";
 import Table from "./elements/Table";
+import EntityChooser from "./EntityChooser";
 import { InputFieldWrapper } from "./form/InputFieldWrapper";
 
 const messages = defineMessages({
@@ -134,159 +135,41 @@ const ClickableTr = styled.tr`
   cursor: pointer;
 `;
 
+interface Response {
+  assets?: { items: Asset[]; totalItems: number };
+}
+
 const FileChooser: FunctionComponent<{
-  onSelect: (id: number | string) => void;
+  onSelect: (asset: Asset) => void;
 }> = ({ onSelect }) => {
-  const intl = useIntl();
-
-  const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
-  const [sortBy, setSortBy] = useState<AssetSortBy>("updatedAt");
-  const [order, setOrder] = useState<SortOrder>(SortOrder.Desc);
-  const [nameFilter, setNameFilter] = useState<string>("");
-
-  const options = useMemo(
-    () => ({
-      skip: page * itemsPerPage,
-      take: itemsPerPage,
-      sort: { [sortBy]: order },
-      filter: { name: { contains: nameFilter } },
-    }),
-    [sortBy, order, nameFilter, page, itemsPerPage]
-  );
-
-  const {
-    data,
-  }: {
-    data?: { assets: { items: Asset[]; totalItems: number } };
-    error?: any;
-  } = useSWR([ADMIN_ASSETS, options], (query) =>
-    requestAdmin(intl.locale, query, { options })
-  );
-
-  const totalPages = useMemo(
-    () =>
-      data?.assets?.totalItems
-        ? Math.ceil(data.assets.totalItems / itemsPerPage)
-        : null,
-    [data]
-  );
-
   return (
-    <div>
-      <FilterRow>
-        {intl.formatMessage(messages.sortBy)}
-        <Select
-          options={SORT_BY_OPTIONS}
-          onChange={(option) => {
-            setSortBy(option.value);
-            setPage(0);
-          }}
-          getOptionLabel={(option) =>
-            intl.formatMessage(messages[option.label])
-          }
-          value={SORT_BY_OPTIONS.find((o) => o.value === sortBy)}
-          flexGrow={1}
-          marginLeft={1}
-        />
-      </FilterRow>
-      <FilterRow>
-        {intl.formatMessage(messages.sortOrder)}
-        <Select
-          options={SORT_ORDER_OPTIONS}
-          onChange={(option) => {
-            setOrder(option.value);
-            setPage(0);
-          }}
-          getOptionLabel={(option) =>
-            intl.formatMessage(messages[option.label])
-          }
-          value={SORT_ORDER_OPTIONS.find((o) => o.value === order)}
-          flexGrow={1}
-          marginLeft={1}
-        />
-      </FilterRow>
-      <FilterRow>
-        {intl.formatMessage(messages.search)}
-        <InputFieldWrapper marginLeft={1} flexGrow={1}>
-          <input
-            type="text"
-            value={nameFilter}
-            onChange={(e) => {
-              setNameFilter(e.currentTarget.value);
-              setPage(0);
-            }}
-          />
-        </InputFieldWrapper>
-      </FilterRow>
-      <FilterRow>
-        {intl.formatMessage(messages.itemsPerPage)}
-        <InputFieldWrapper marginLeft={1}>
-          <input
-            type="number"
-            value={itemsPerPage}
-            onChange={(e) => {
-              setItemsPerPage(parseInt(e.currentTarget.value));
-            }}
-          />
-        </InputFieldWrapper>
-      </FilterRow>
-      <Table>
-        <thead>
-          <tr>
-            <th>{intl.formatMessage(messages.sortByName)}</th>
-            <th>{intl.formatMessage(messages.sortBySource)}</th>
-            <th>{intl.formatMessage(messages.sortByUpdatedAt)}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.assets?.items &&
-            data.assets.items.map((item) => {
-              const d = new Date(item.updatedAt);
-              return (
-                <ClickableTr
-                  key={item.id}
-                  onClick={() => {
-                    onSelect(item);
-                  }}
-                >
-                  <td>{item.name}</td>
-                  <td>{item.source}</td>
-                  <td>
-                    {d.toLocaleDateString() + " " + d.toLocaleTimeString()}
-                  </td>
-                </ClickableTr>
-              );
-            })}
-        </tbody>
-      </Table>
-      <FilterRow center>
-        {`${intl.formatMessage(messages.page)} ${page + 1} ${intl.formatMessage(
-          messages.of
-        )} ${totalPages ? totalPages : "?"}`}
-      </FilterRow>
-      <FilterRow center>
-        <Button
-          state={page === 0 ? "disabled" : ""}
-          onClick={() => {
-            setPage(page - 1);
-            return Promise.resolve();
-          }}
-        >
-          {intl.formatMessage(messages.previousPage)}
-        </Button>
-        <Button
-          state={page + 1 === totalPages ? "disabled" : ""}
-          onClick={() => {
-            setPage(page + 1);
-            return Promise.resolve();
-          }}
-          marginLeft={1}
-        >
-          {intl.formatMessage(messages.nextPage)}
-        </Button>
-      </FilterRow>
-    </div>
+    <EntityChooser
+      onSelect={onSelect}
+      defaultSortBy="updatedAt"
+      sortByLabelMessages={messages}
+      sortByOptions={SORT_BY_OPTIONS}
+      tableColumns={[
+        messages.sortByName,
+        messages.sortBySource,
+        messages.sortByUpdatedAt,
+      ]}
+      query={ADMIN_ASSETS}
+      mapResponseToTotalItems={(response: Response) =>
+        response?.assets?.totalItems
+      }
+      mapResponseToEntities={(response: Response) =>
+        response?.assets?.items || []
+      }
+      mapEntityToTableColumns={(asset: Asset) => {
+        const d = new Date(asset.updatedAt);
+
+        return [
+          <td>{asset.name}</td>,
+          <td>{asset.source}</td>,
+          <td>{d.toLocaleDateString() + " " + d.toLocaleTimeString()}</td>,
+        ];
+      }}
+    />
   );
 };
 

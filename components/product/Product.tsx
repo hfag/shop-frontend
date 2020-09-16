@@ -21,14 +21,11 @@ import VariationSlider from "./VariationSlider";
 import { colors, borders } from "../../utilities/style";
 import { stripTags } from "../../utilities/decode";
 import Bill from "../elements/Bill";
-import ProductItem from "./ProductItem";
-import { InputFieldWrapper } from "../form/InputFieldWrapper";
 import JsonLd from "../seo/JsonLd";
 import { productToJsonLd } from "../../utilities/json-ld";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import productMessages from "../../i18n/product";
 import { setProductView, trackPageView } from "../../utilities/analytics";
-import CrossSellFlex from "../layout/Flex";
 import LightboxGallery from "../content/LightboxGallery";
 import UnsafeHTMLContent from "../content/UnsafeHTMLContent";
 import messages from "./messages";
@@ -48,6 +45,7 @@ import request from "../../utilities/request";
 import { ADD_TO_ORDER, GET_ACTIVE_ORDER } from "../../gql/order";
 import { mutate } from "swr";
 import Placeholder from "../elements/Placeholder";
+import ProductCrossSells from "./ProductCrossSells";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;
@@ -200,6 +198,14 @@ const Product: FunctionComponent<{
     () =>
       product.recommendations.filter(
         (r) => r.type === RecommendationType.Crosssell
+      ),
+    [product]
+  );
+
+  const upsells = useMemo(
+    () =>
+      product.recommendations.filter(
+        (r) => r.type === RecommendationType.Upsell
       ),
     [product]
   );
@@ -595,19 +601,13 @@ const Product: FunctionComponent<{
         </Flex>
       </ProductCard>
 
-      {crosssells.length > 0 && (
-        <Card mb={0}>
-          <h2 ref={crosssellRef} style={{ margin: 0 }}>
-            {intl.formatMessage(messages.additionalProducts)}
-          </h2>
-        </Card>
-      )}
-
-      <CrossSellFlex flexWrap="wrap" style={{ paddingBottom: 16 }}>
-        {crosssells.map((r, index) => (
-          <ProductItem key={index} product={r.recommendation} />
-        ))}
-      </CrossSellFlex>
+      <ProductCrossSells
+        productId={product.id}
+        productSlug={product.slug}
+        crosssellRef={crosssellRef}
+        crosssells={crosssells}
+        upsells={upsells}
+      />
     </div>
   );
 });

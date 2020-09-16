@@ -41,10 +41,6 @@ export default defineMessages({
     id: "Product.specifications",
     defaultMessage: "Spezifikationen",
   },
-  additionalProducts: {
-    id: "Product.additionalProducts",
-    defaultMessage: "Ergänzende Produkte",
-  },
   previousImage: {
     id: "Product.previousImage",
     defaultMessage: "Vorheriges Bild (linke Pfeiltaste)",

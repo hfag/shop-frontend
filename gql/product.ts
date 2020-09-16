@@ -11,6 +11,17 @@ export const GET_ALL_PRODUCT_SLUGS = /* GraphQL */ `
   }
 `;
 
+export const GET_PRODUCTS = /* GraphQL */ `
+  query GetProducts($options: ProductListOptions) {
+    products(options: $options) {
+      items {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const VARIANT_FRAGMENT = `
   id
   sku
@@ -95,6 +106,7 @@ export const FULL_PRODUCT_FRAGMENT = `
   }
   recommendations{
     recommendation{
+      id
       name
       slug
       variants {
@@ -124,5 +136,17 @@ export const GET_PRODUCT_BY_SLUG = /* GraphQL */ `
     productBySlug(slug: $slug) {
       ${FULL_PRODUCT_FRAGMENT}
     }
+  }
+`;
+
+export const ADMIN_UPDATE_CROSS_SELLS = /* GraphQL */ `
+  mutation UpdateCrossSellingProducts($productId: ID!, $productIds: [ID!]!) {
+    updateCrossSellingProducts(productId: $productId, productIds: $productIds)
+  }
+`;
+
+export const ADMIN_UPDATE_UP_SELLS = /* GraphQL */ `
+  mutation UpdateUpSellingProducts($productId: ID!, $productIds: [ID!]!) {
+    updateUpSellingProducts(productId: $productId, productIds: $productIds)
   }
 `;

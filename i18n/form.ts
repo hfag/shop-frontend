@@ -9,4 +9,8 @@ export default defineMessages({
     id: "form.saveChanges",
     defaultMessage: "Änderungen speichern",
   },
+  cancel: {
+    id: "form.cancel",
+    defaultMessage: "Abbrechen",
+  },
 });

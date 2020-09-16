@@ -6,7 +6,7 @@ import { defineMessages, useIntl } from "react-intl";
 import styled from "styled-components";
 import { borders, colors } from "../../utilities/style";
 import ClientOnlyPortal from "../ClientOnlyPortal";
-import FileChooser from "../FileChooser";
+import FileChooser from "../choosers/FileChooser";
 import Flexbar from "../layout/Flexbar";
 import Modal from "../Modal";
 import { InputFieldWrapper } from "./InputFieldWrapper";

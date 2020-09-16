@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Flexbar = styled.div<{ spaceBetween?: boolean }>`
+const Flexbar = styled.div<{ spaceBetween?: boolean; marginBottom?: number }>`
   position: relative;
   height: 100%;
 
@@ -11,6 +11,9 @@ const Flexbar = styled.div<{ spaceBetween?: boolean }>`
 
   ${({ spaceBetween }) =>
     spaceBetween ? "justify-content: space-between;" : ""}
+
+  ${({ marginBottom }) =>
+    marginBottom ? `margin-bottom: ${marginBottom}rem;` : ""}
 `;
 
 export default Flexbar;

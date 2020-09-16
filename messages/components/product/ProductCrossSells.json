@@ -1,0 +1,14 @@
+[
+  {
+    "id": "ProductCrossSells.additionalProducts",
+    "defaultMessage": "Ergänzende Produkte"
+  },
+  {
+    "id": "ProductCrossSells.crossSell",
+    "defaultMessage": "Ergänzende Produkte"
+  },
+  {
+    "id": "ProductCrossSells.upSell",
+    "defaultMessage": "Bessere Produkte"
+  }
+]

@@ -24,7 +24,7 @@ const ProductPage: FunctionComponent<{
 
   const { data, error } = useSWR(
     [GET_PRODUCT_BY_SLUG, productSlug],
-    (query, id) => request(intl.locale, query, { slug: productSlug }),
+    (query, productSlug) => request(intl.locale, query, { slug: productSlug }),
     {
       initialData: productResponse,
     }

@@ -251,7 +251,7 @@ const Product: FunctionComponent<{
     <div>
       <Head>
         <title>{stripTags(product.name)} - Hauser Feuerschutz AG</title>
-        <meta name="description" content={stripTags(product.description)} />
+        {/* <meta name="description" content={stripTags(product.description)} /> */}
         <link
           rel="canonical"
           href={`${ABSOLUTE_URL}/${intl.locale}/${

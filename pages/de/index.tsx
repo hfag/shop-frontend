@@ -53,8 +53,7 @@ const Home: FunctionComponent<{
 
   const { data, error } = useSWR(
     [GET_COLLECTION_BY_ID, 1],
-    (query, collectionSlug) =>
-      request(intl.locale, query, { slug: collectionSlug }),
+    (query, collectionId) => request(intl.locale, query, { id: collectionId }),
     {
       initialData: collectionResponse,
     }

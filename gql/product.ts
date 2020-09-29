@@ -78,7 +78,6 @@ export const FULL_PRODUCT_FRAGMENT = `
     ${ASSET_FRAGMENT}
   }
   customFields {
-    seoDescription
     groupKey
   }
   variants{

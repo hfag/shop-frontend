@@ -20,6 +20,7 @@ import { Collection, CollectionLinkType } from "../../schema";
 import { ABSOLUTE_URL } from "../../utilities/api";
 
 import ProductCollectionLinks from "./ProductCollectionLinks";
+import { productToJsonLd } from "../../utilities/json-ld";
 
 const H1 = styled.h1`
   margin: 0 0 0.5rem 0;
@@ -37,7 +38,6 @@ const ProductCategoryHead: FunctionComponent<{
   collection: Collection;
 }> = React.memo(({ collection }) => {
   const intl = useIntl();
-  //TODO change to slug!!
   return (
     <Head>
       <title>
@@ -45,14 +45,9 @@ const ProductCategoryHead: FunctionComponent<{
           ? stripTags(collection.name) + " - Hauser Feuerschutz AG"
           : intl.formatMessage(shop.siteTitle)}
       </title>
-      <meta
-        name="description"
-        content={
-          collection
-            ? collection.customFields.seoDescription
-            : intl.formatMessage(shop.siteMessage)
-        }
-      />
+      {/* {collection && (
+        <meta name="description" content={stripTags(collection.description)} />
+      )} */}
       {collection && (
         <link
           rel="canonical"
@@ -82,10 +77,10 @@ const ProductCollection: FunctionComponent<{
 }> = React.memo(({ collection, showDescription }) => {
   const intl = useIntl();
 
-  const productsJsonLd = useMemo<JsonLdProduct[]>(() => {
-    //TODO JsonLd
-    return [];
-  }, [collection]);
+  const productsJsonLd = useMemo<JsonLdProduct[]>(
+    () => collection.products.map(productToJsonLd),
+    [collection]
+  );
 
   useEffect(() => {
     if (!collection) {
@@ -122,12 +117,14 @@ const ProductCollection: FunctionComponent<{
         )}
         <Flex flexWrap="wrap" style={{ overflowX: "hidden" }}>
           {collection &&
-            collection.children.map((collection) => (
-              <CollectionItem
-                key={"collection-" + collection.id}
-                collection={collection}
-              />
-            ))}
+            collection.children
+              .sort((a, b) => a.position - b.position)
+              .map((collection) => (
+                <CollectionItem
+                  key={"collection-" + collection.id}
+                  collection={collection}
+                />
+              ))}
           {collection &&
             collection.products.map((product) => (
               <ProductItem key={"product-" + product.id} product={product} />

@@ -33,12 +33,9 @@ import {
   ADMIN_CREATE_COLLECTION_LINK_ASSET,
   ADMIN_CREATE_COLLECTION_LINK_URL,
   ADMIN_DELETE_COLLECTION_LINK,
-  ADMIN_DELETE_COLLECTION_LINK_URL,
   ADMIN_GET_COLLECTION_LINKS_BY_SLUG,
   ADMIN_UPDATE_COLLECTION_LINK_ASSET,
   ADMIN_UPDATE_COLLECTION_LINK_URL,
-  GET_COLLECTION_BY_ID,
-  GET_COLLECTION_BY_SLUG,
 } from "../../gql/collection";
 import useSWR, { mutate } from "swr";
 import {
@@ -51,6 +48,7 @@ import { FieldArray, FormikProps, withFormik } from "formik";
 import SelectField from "../form/SelectField";
 import InputField from "../form/InputField";
 import AssetField from "../form/AssetField";
+import { DEFAULT_LANGUAGE } from "../../utilities/i18n";
 
 const messages = defineMessages({
   saveLinks: {
@@ -78,7 +76,7 @@ const messages = defineMessages({
 interface CollectionLinkTranslation {
   id?: string | number;
   languageCode: LanguageCode;
-  name: string | number;
+  name: string;
   url: string;
 }
 
@@ -94,6 +92,7 @@ interface CollectionAssetLink {
   id: string | number;
   collectionId: string | number;
   icon: CollectionLinkType;
+  languageCode: LanguageCode;
   asset: Asset;
   __typename: "CollectionAssetLink";
 }
@@ -192,6 +191,14 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
           <LanguageChooser value={language} onChange={setLanguage} />
           <DownloadList>
             {values.links.map((item, index) => {
+              //don't use filter as the field indices will change!
+              if (
+                item.__typename === "CollectionAssetLink" &&
+                language !== item.languageCode
+              ) {
+                return null;
+              }
+
               const translationIndex =
                 "translations" in item
                   ? item.translations.findIndex(
@@ -249,14 +256,22 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
                         <InputField
                           type="text"
                           name={`links[${index}].translations[${translationIndex}].name`}
-                          placeholder="Dateiname"
+                          placeholder={
+                            item.translations.find(
+                              (t) => t.languageCode === DEFAULT_LANGUAGE
+                            )?.name || "Beschreibung"
+                          }
                           flexGrow={1}
                           marginRight={1}
                         />
                         <InputField
                           type="text"
                           name={`links[${index}].translations[${translationIndex}].url`}
-                          placeholder="https://feuerschutz.ch/file-49583.pdf"
+                          placeholder={
+                            item.translations.find(
+                              (t) => t.languageCode === DEFAULT_LANGUAGE
+                            )?.url || "https://feuerschutz.ch/file-49583.pdf"
+                          }
                           flexGrow={1}
                           marginRight={1}
                         />
@@ -309,6 +324,7 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
                   __typename: "CollectionAssetLink",
                   asset: { id: null },
                   collectionId: collection.id,
+                  languageCode: language,
                   icon: CollectionLinkType.Pdf,
                 });
 
@@ -364,6 +380,7 @@ const EditProductCollectionLinks = withFormik<
               collectionId: link.collectionId,
               icon: link.icon,
               order: link.order,
+              languageCode: link.languageCode,
               assetId: link.asset.id,
             },
           });
@@ -390,6 +407,7 @@ const EditProductCollectionLinks = withFormik<
               id: link.linkAssetId,
               icon: link.icon,
               order: link.order,
+              languageCode: link.languageCode,
               assetId: link.asset.id,
             },
           });

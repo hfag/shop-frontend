@@ -36,7 +36,7 @@ const SidebarCollections: FunctionComponent<{
       </SidebarBreadcrumb>
       <ul>
         {collections.map((collection, index) => (
-          <li>
+          <li key={index}>
             <SidebarBreadcrumb active={false}>
               <StyledLink
                 href={`/${intl.locale}/${

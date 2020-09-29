@@ -20,7 +20,6 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
   slug
   name
   description
-  position
   links {
     id
     icon
@@ -39,9 +38,6 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
     height
     source
   }
-  customFields {
-    seoDescription
-  }
   parent {
     id
     name
@@ -50,6 +46,14 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
     id
     slug
     name
+    position
+    featuredAsset {
+      id
+      name
+      width
+      height
+      source
+    }
   }
   products {
     id
@@ -67,6 +71,9 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
     }
     collections {
       name
+    }
+    customFields {
+      groupKey
     }
   }
 `;
@@ -96,6 +103,7 @@ export const ADMIN_COLLECTION_LINK_FRAGMENT = /* GraphQl */ `
         linkUrlId
         collectionId
         icon
+        order
         translations {
           id
           languageCode
@@ -108,6 +116,8 @@ export const ADMIN_COLLECTION_LINK_FRAGMENT = /* GraphQl */ `
         linkAssetId
         collectionId
         icon
+        order
+        languageCode
         asset{
           id
           name

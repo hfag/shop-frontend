@@ -10,6 +10,7 @@ import page from "../../../../i18n/page";
 import useSWR from "swr";
 import request from "../../../../utilities/request";
 import { Order } from "../../../../schema";
+import { GetStaticProps } from "next";
 
 const Page = () => {
   const intl = useIntl();
@@ -51,6 +52,13 @@ const Page = () => {
       </AccountWrapper>
     </Wrapper>
   );
+};
+
+//do everything client side
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default Page;

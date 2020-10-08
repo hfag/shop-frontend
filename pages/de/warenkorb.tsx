@@ -3,6 +3,7 @@ import Wrapper from "../../components/layout/Wrapper";
 import Cart from "../../components/Cart";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
+import { GetStaticProps } from "next";
 
 const Page = (props) => {
   const intl = useIntl();
@@ -22,6 +23,13 @@ const Page = (props) => {
       <Cart />
     </Wrapper>
   );
+};
+
+//do everything client side
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default Page;

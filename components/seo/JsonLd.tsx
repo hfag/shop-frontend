@@ -3,9 +3,7 @@ import React, { FunctionComponent } from "react";
 /**
  * Renders the passed json as json-ld
  */
-const JsonLd: FunctionComponent<{ children: { [key: string]: any } }> = ({
-  children,
-}) => {
+const JsonLd: FunctionComponent<{ children: any }> = ({ children }) => {
   return (
     <script
       type="application/ld+json"

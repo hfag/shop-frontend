@@ -49,5 +49,9 @@ languages
   .forEach((lang) => {
     rimraf.sync(_path.resolve(pages, lang));
     fs.mkdirSync(_path.resolve(pages, lang));
+    fs.writeFileSync(
+      _path.resolve(pages, lang, "config.json"),
+      JSON.stringify({ locale: lang })
+    );
     generatePages(lang, [[defaultLanguage, lang]], pathnames);
   });

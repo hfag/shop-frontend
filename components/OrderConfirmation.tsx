@@ -1,7 +1,6 @@
 import { FunctionComponent, useMemo } from "react";
 import useSWR from "swr";
 import { useIntl, defineMessages, FormattedMessage } from "react-intl";
-import queryString from "query-string";
 
 import { Order, AdjustmentType, Adjustment } from "../schema";
 import { GET_ORDER_BY_CODE } from "../gql/order";

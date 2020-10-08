@@ -24,7 +24,7 @@ import { pathnamesByLanguage } from "../../../utilities/urls";
 import page from "../../../i18n/page";
 import { AppContext } from "../../../pages/_app";
 
-const BurgerContainer = styled(Card)`
+const BurgerContainer = styled(Card)<{ isOpen: boolean }>`
   height: 100%;
   z-index: 100;
   border-top-left-radius: 0;
@@ -116,7 +116,7 @@ const Sidebar: FunctionComponent<{ children: ReactNode }> = React.memo(
                   {intl.formatMessage(page.home)}
                 </Link>
               </BurgerItem>
-              <BurgerItem seperator>
+              {/* <BurgerItem seperator>
                 <Link
                   href={`/${intl.locale}/${
                     pathnamesByLanguage.search.languages[intl.locale]
@@ -126,7 +126,7 @@ const Sidebar: FunctionComponent<{ children: ReactNode }> = React.memo(
                   <SearchIcon />
                   {intl.formatMessage(page.search)}
                 </Link>
-              </BurgerItem>
+              </BurgerItem> */}
               <BurgerItem seperator>
                 <Link
                   href={`/${intl.locale}/${

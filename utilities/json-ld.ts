@@ -64,6 +64,7 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
 
 export const BUSINESS_JSON_LD: LocalBusiness = {
   "@context": "http://schema.org",
+  //@ts-ignore
   "@type": "LocalBusiness ",
   image: [
     ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-1x1.png",

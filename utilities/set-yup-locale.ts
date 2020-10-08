@@ -35,9 +35,6 @@ export default setLocale({
   number: {
     min: "Muss grösser oder gleich wie ${min} sein",
     max: "Muss kleiner oder gleich wie ${max} sein",
-    less: "Muss kleiner als ${less} sein",
-    more: "Muss grösser als ${more} sein",
-    notEqual: "Darf nicht ${notEqual} sein",
     positive: "Muss eine positive Nummer sein",
     negative: "Muss eine negative Nummer sein",
     integer: "Muss eine ganzzahlige Nummer sein",

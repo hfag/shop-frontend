@@ -64,4 +64,18 @@ const Page = () => {
   );
 };
 
+//do everything client side
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
+
 export default Page;

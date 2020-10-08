@@ -5,6 +5,7 @@ import Card from "../../components/layout/Card";
 import { useIntl } from "react-intl";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
+import { GetStaticProps } from "next";
 
 const Page: FunctionComponent<{}> = () => {
   const intl = useIntl();
@@ -20,10 +21,16 @@ const Page: FunctionComponent<{}> = () => {
       ]}
     >
       <Card>
-        <OrderConfirmation></OrderConfirmation>
+        <OrderConfirmation />
       </Card>
     </Wrapper>
   );
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  return {
+    props: {},
+  };
 };
 
 export default Page;

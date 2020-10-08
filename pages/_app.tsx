@@ -50,7 +50,7 @@ const AppWrapper: FunctionComponent<{ children: ReactNode }> = ({
 
   const [token, setToken] = useLocalStorage("vendure-auth-token");
 
-  const { data, error } = useSWR<{ activeCustomer: Customer; me: User }>(
+  const { data, error } = useSWR<{ activeCustomer: Customer; me: CurrentUser }>(
     token ? [GET_CURRENT_USER, token] : null,
     (query) => request(intl.locale, query)
   );

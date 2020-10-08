@@ -9,6 +9,7 @@ import Message from "../../../components/elements/Message";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import page from "../../../i18n/page";
 import { Unavailable } from "../../../components/administrator/Unavailable";
+import { GetStaticProps } from "next";
 
 const messages = defineMessages({
   newEmail: {
@@ -71,6 +72,13 @@ const Page = () => {
       </AccountWrapper>
     </Wrapper>
   );
+};
+
+//do everything client side
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default Page;

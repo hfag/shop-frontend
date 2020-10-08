@@ -15,10 +15,6 @@
       }
     }
   },
-  "search": {
-    "path": "de/suche.tsx",
-    "languages": { "de": "suche", "fr": "recherche" }
-  },
   "product": {
     "path": "de/produkt",
     "languages": { "de": "produkt", "fr": "produit" },
@@ -124,9 +120,5 @@
   "confirmation": {
     "path": "de/bestaetigung.tsx",
     "languages": { "de": "bestaetigung", "fr": "confirmation" }
-  },
-  "tos": {
-    "path": "de/agbs.tsx",
-    "languages": { "de": "agbs", "fr": "conditions-generales" }
   }
 }

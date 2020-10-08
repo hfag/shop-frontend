@@ -4,6 +4,7 @@ import page from "../../../i18n/page";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import AccountWrapper from "../../../components/account/AccountWrapper";
 import AccountDashboard from "../../../components/account/AccountDashboard";
+import { GetStaticProps } from "next";
 
 const Page = () => {
   const intl = useIntl();
@@ -20,10 +21,17 @@ const Page = () => {
       ]}
     >
       <AccountWrapper>
-        <AccountDashboard></AccountDashboard>
+        <AccountDashboard />
       </AccountWrapper>
     </Wrapper>
   );
+};
+
+//do everything client side
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default Page;

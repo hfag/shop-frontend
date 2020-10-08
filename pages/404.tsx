@@ -8,6 +8,7 @@ import StyledLink from "../components/elements/StyledLink";
 import Searchbar from "../components/Searchbar";
 import { ABSOLUTE_URL } from "../utilities/api";
 import Wrapper from "../components/layout/Wrapper";
+import { GetStaticProps } from "next";
 
 const messages = defineMessages({
   siteTitle: {
@@ -63,5 +64,11 @@ const Page404 = React.memo(({}) => {
     </Wrapper>
   );
 });
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  return {
+    props: {},
+  };
+};
 
 export default Page404;

@@ -4,5 +4,8 @@
   },
   "downloads": {
     "languages": { "de": "downloads", "fr": "telechargements" }
+  },
+  "tos": {
+    "languages": { "de": "agbs", "fr": "conditions-generales" }
   }
 }

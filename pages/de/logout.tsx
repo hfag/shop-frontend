@@ -7,6 +7,7 @@ import Wrapper from "../../components/layout/Wrapper";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Card from "../../components/layout/Card";
+import { GetStaticProps } from "next";
 
 const messages = defineMessages({
   pleaseWait: {
@@ -41,6 +42,13 @@ const Page = () => {
       <Card>{intl.formatMessage(messages.pleaseWait)}</Card>
     </Wrapper>
   );
+};
+
+//do everything client side
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default Page;

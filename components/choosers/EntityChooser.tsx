@@ -172,6 +172,7 @@ const EntityChooser = <
           <input
             type="text"
             value={nameFilter}
+            autoFocus
             onChange={(e) => {
               setNameFilter(e.currentTarget.value);
               setPage(0);

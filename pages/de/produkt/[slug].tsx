@@ -76,21 +76,22 @@ const ProductPage: FunctionComponent<{
 export default ProductPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const data: { products: { items: ProductType[] } } = await request(
-    locale,
-    GET_ALL_PRODUCT_SLUGS
-  );
+  // const data: { products: { items: ProductType[] } } = await request(
+  //   locale,
+  //   GET_ALL_PRODUCT_SLUGS
+  // );
 
   return {
-    paths: data.products.items.map((product) => ({
+    paths: [] /*data.products.items.map((product) => ({
       params: { slug: product.slug, id: product.id },
-    })),
-    fallback: false,
+    }))*/,
+    fallback: "unstable_blocking",
   };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
+    revalidate: 10, //products will be rerendered at most every 10s
     props: {
       productResponse: await request(locale, GET_PRODUCT_BY_SLUG, {
         slug: context.params.slug,

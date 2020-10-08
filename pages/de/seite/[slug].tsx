@@ -59,20 +59,21 @@ const Page: FunctionComponent<{ slug: string; page: PageType }> = ({
 export default Page;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response: WP_Page[] = await fetch(
-    `${getWordpressUrl(
-      locale
-    )}/wp-json/wp/v2/pages?per_page=100&orderby=date&order=desc`
-  ).then((r) => r.json());
+  // const response: WP_Page[] = await fetch(
+  //   `${getWordpressUrl(
+  //     locale
+  //   )}/wp-json/wp/v2/pages?per_page=100&orderby=date&order=desc`
+  // ).then((r) => r.json());
 
   return {
-    paths: response.map((page) => ({ params: { slug: page.slug } })),
-    fallback: false,
+    paths: [] /*response.map((page) => ({ params: { slug: page.slug } }))*/,
+    fallback: "unstable_blocking",
   };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
+    revalidate: 60, //pages will be rerendered at most every minute
     props: {
       slug: context.params.slug,
       page: await fetch(

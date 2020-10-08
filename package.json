@@ -9,15 +9,20 @@
   "scripts": {
     "start": "NODE_ENV=production node server.js",
     "dev": "PORT=8080 node server.js",
-    "build": "yarn extract-messages && yarn collect-messages && next build",
+    "build": "next build",
     "build-server": "webpack --config webpack-build-server.config.js",
     "dev-server": "npm run build && npm run build-server && node dist/server/index.js",
-    "extract-messages": "NODE_ENV=production babel ./src  --out-file /dev/null",
-    "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
+    "extract-messages": "yarn extract-messages-components && yarn extract-messages-pages && yarn extract-messages-utilities",
+    "extract-messages-components": "formatjs extract ./components/*.tsx ./components/**/*.tsx --out-file ./messages/components.json",
+    "extract-messages-pages": "formatjs extract ./pages/*.tsx ./pages/**/*.tsx --out-file ./messages/pages.json",
+    "extract-messages-utilities": "formatjs extract ./utilities/*.tsx ./utilities/**/*.tsx --out-file ./messages/utilities.json",
     "collect-messages": "node scripts/collect-i18n-strings.js",
+    "generate-messages": "rm -r messages/* && yarn extract-messages && yarn collect-messages && node scripts/update-18n.js",
+    "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
     "analysis": "webpack-bundle-analyzer ./dist/stats.json",
     "prettier": "prettier --write .",
-    "test": "echo 'not implemented'"
+    "test": "echo 'not implemented'",
+    "deploy": "node scripts/generate-i18n-pages.js && yarn build"
   },
   "config": {
     "ghooks": {
@@ -32,6 +37,7 @@
     "@babel/preset-react": "^7.7.0",
     "@babel/preset-typescript": "^7.7.2",
     "@emotion/core": "^10.0.28",
+    "@formatjs/cli": "^2.13.1",
     "@formatjs/intl-pluralrules": "^1.3.2",
     "@formatjs/intl-relativetimeformat": "^5.1.0",
     "@graphql-codegen/cli": "^1.15.0",
@@ -53,7 +59,6 @@
     "apollo-link-http": "^1.5.17",
     "autoprefixer": "^9.7.1",
     "babel-eslint": "^8.2.3",
-    "babel-plugin-react-intl": "^3.0.1",
     "babel-plugin-styled-components": "^1.5.1",
     "balloon-css": "^0.5.0",
     "color": "^3.0.0",

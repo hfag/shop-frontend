@@ -13,21 +13,31 @@ const outputDir = "./locales/";
 let defaultMessages = globSync(filePattern)
   .map((filename) => fs.readFileSync(filename, "utf8"))
   .map((file) => JSON.parse(file))
-  .reduce((collection, descriptors) => {
-    descriptors.forEach(({ id, defaultMessage }) => {
-      if (collection.hasOwnProperty(id)) {
-        throw new Error(`Duplicate message id: ${id}`);
-      }
-      collection[id] = defaultMessage;
-    });
+  .reduce(
+    (collection, descriptors) =>
+      Object.assign(
+        collection,
+        Object.keys(descriptors).reduce((obj, key) => {
+          obj[key] = descriptors[key].defaultMessage;
+          return obj;
+        }, {})
+      ),
+    {}
+  );
 
-    return collection;
-  }, {});
+//order keys
+const orderedMessages = {};
+Object.keys(defaultMessages)
+  .sort()
+  .forEach((key) => {
+    orderedMessages[key] = defaultMessages[key];
+  });
+
 // Create a new directory that we want to write the aggregate messages to
 mkdirpSync(outputDir);
 
 // Write the messages to this directory
 fs.writeFileSync(
   outputDir + "de.json",
-  `{ "de": ${JSON.stringify(defaultMessages, null, 2)} }`
+  JSON.stringify({ de: orderedMessages }, null, 2)
 );

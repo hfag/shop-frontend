@@ -84,6 +84,7 @@ interface CollectionUrlLink {
   id: string | number;
   collectionId: string | number;
   icon: CollectionLinkType;
+  order: number;
   translations: CollectionLinkTranslation[];
   __typename: "CollectionUrlLink";
 }
@@ -92,6 +93,7 @@ interface CollectionAssetLink {
   id: string | number;
   collectionId: string | number;
   icon: CollectionLinkType;
+  order: number;
   languageCode: LanguageCode;
   asset: Asset;
   __typename: "CollectionAssetLink";
@@ -146,7 +148,9 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
 
   useEffect(() => {
     if (data?.collection?.links) {
-      setValues({ links: data.collection.links });
+      setValues({
+        links: data.collection.links.sort((a, b) => a.order - b.order),
+      });
     }
   }, [data]);
 
@@ -307,7 +311,7 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
                 insert(values.links.length, {
                   __typename: "CollectionUrlLink",
                   collectionId: collection.id,
-                  icon: CollectionLinkType.Pdf,
+                  icon: CollectionLinkType.Link,
                   translations: [
                     { languageCode: intl.locale, name: "", url: "" },
                   ],

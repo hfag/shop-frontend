@@ -6,8 +6,47 @@ import Price from "../elements/Price";
 import StyledLink from "../elements/StyledLink";
 import { Order as OrderType } from "../../schema";
 import { pathnamesByLanguage } from "../../utilities/urls";
-import { useIntl } from "react-intl";
+import { defineMessages, IntlShape, useIntl } from "react-intl";
 import Placeholder from "./Placeholder";
+
+const messages = defineMessages({
+  order: {
+    id: "Order.order",
+    defaultMessage: "Bestellung",
+  },
+  differentProducts: {
+    id: "Order.differentProducts",
+    defaultMessage: "verschiedene Produkte für",
+  },
+  addingItems: {
+    id: "Order.addingItem",
+    defaultMessage: "Noch nicht versendet",
+  },
+  arrangingPayment: {
+    id: "Order.arrangingPayment",
+    defaultMessage: "Bezahlung ausstehend",
+  },
+  paymentAuthorized: {
+    id: "Order.paymentAuthorized",
+    defaultMessage: "Zahlung freigegeben",
+  },
+  paymentSettled: {
+    id: "Order.paymentSettled",
+    defaultMessage: "Zahlung abgeschlossen",
+  },
+  partiallyFulfilled: {
+    id: "Order.partiallyFulfilled",
+    defaultMessage: "Teilweise abgeschlossen",
+  },
+  cancelled: {
+    id: "Order.cancelled",
+    defaultMessage: "Storniert",
+  },
+  fulfilled: {
+    id: "Order.fulfilled",
+    defaultMessage: "Abgeschlossen",
+  },
+});
 
 const OrderWrapper = styled.div`
   margin-top: -1px; /*border*/
@@ -38,27 +77,46 @@ const OrderMeta = styled.div``;
 
 /**
  * Gets the state object based on the wc status
- * @param {string} status The woocommerce status string
- * @returns {Object} The state object
  */
-const getState = (status) => {
+const getState = (status: string | undefined, intl: IntlShape) => {
   switch (status) {
     case "AddingItems":
-      return { color: colors.info, label: "Noch nicht versendet" };
+      return {
+        color: colors.info,
+        label: intl.formatMessage(messages.addingItems),
+      };
     case "ArrangingPayment":
-      return { color: colors.info, label: "Bezahlung ausstehend" };
+      return {
+        color: colors.info,
+        label: intl.formatMessage(messages.arrangingPayment),
+      };
     case "PaymentAuthorized":
-      return { color: colors.info, label: "Zahlung freigegeben" };
+      return {
+        color: colors.info,
+        label: intl.formatMessage(messages.paymentAuthorized),
+      };
     case "PaymentSettled":
-      return { color: colors.success, label: "Zahlung abgeschlossen" };
+      return {
+        color: colors.success,
+        label: intl.formatMessage(messages.paymentSettled),
+      };
     case "PartiallyFulfilled":
-      return { color: colors.warning, label: "Teilweise abgeschlossen" };
+      return {
+        color: colors.warning,
+        label: intl.formatMessage(messages.partiallyFulfilled),
+      };
     case "Cancelled":
-      return { color: colors.danger, label: "Storniert" };
+      return {
+        color: colors.danger,
+        label: intl.formatMessage(messages.cancelled),
+      };
     case "Fulfilled":
-      return { color: colors.success, label: "Abgeschlossen" };
+      return {
+        color: colors.success,
+        label: intl.formatMessage(messages.fulfilled),
+      };
     default:
-      return { color: colors.danger, label: "Fehlgeschlagen" };
+      return { color: colors.danger, label: status };
   }
 };
 
@@ -71,8 +129,7 @@ const Order: FunctionComponent<{ order?: OrderType; compact?: boolean }> = ({
 }) => {
   const intl = useIntl();
   const date = new Date(order?.updatedAt);
-  const state = getState(order?.state);
-  //TODO: translate
+  const state = getState(order?.state, intl);
 
   return (
     <OrderWrapper>
@@ -89,7 +146,8 @@ const Order: FunctionComponent<{ order?: OrderType; compact?: boolean }> = ({
             underlined
           >
             <h4>
-              Bestellung #{order.code} vom {date.toLocaleDateString()}
+              {intl.formatMessage(messages.order)} #{order.code}{" "}
+              {date.toLocaleDateString()}
             </h4>
           </StyledLink>
         ) : (
@@ -99,7 +157,8 @@ const Order: FunctionComponent<{ order?: OrderType; compact?: boolean }> = ({
       {compact ? (
         order ? (
           <>
-            {order.lines.length} verschiedene Produkte für{" "}
+            {order.lines.length}{" "}
+            {intl.formatMessage(messages.differentProducts)}{" "}
             <Price>{order.total}</Price>
           </>
         ) : (

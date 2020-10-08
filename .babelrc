@@ -9,12 +9,6 @@
         "preprocess": false
       }
     ],
-    [
-      "react-intl",
-      {
-        "messagesDir": "./messages/"
-      }
-    ],
     "emotion"
   ]
 }

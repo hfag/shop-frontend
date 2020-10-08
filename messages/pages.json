@@ -1,0 +1,26 @@
+{
+  "404.siteDescription": {
+    "defaultMessage": "Diese Seite konnte leider nicht gefunden werden. Verwenden Sie die Suche oder wenden Sie sich an unseren Kundensupport."
+  },
+  "404.siteNotFound": {
+    "defaultMessage": "Die Seite konnte nicht gefunden werden! Gehen Sie eine Seite zurück oder versuchen Sie es mit der Suche. Vermuten Sie, dies sei ein Fehler, dann kontaktieren Sie uns unter"
+  },
+  "404.siteTitle": {
+    "defaultMessage": "Seite nicht gefunden! Fehler 404 - Hauser Feuerschutz AG"
+  },
+  "404.title": {
+    "defaultMessage": "Fehler 404"
+  },
+  "Frontpage.aboutCompany": {
+    "defaultMessage": "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz an. Die Faszination der Lumineszenz bewegte uns hin zu einem führenden Schweizer Fachunternehmen für langnachleuchtende Produkte. Als kleines Familienunternehmen sind wir auf Ihre Zufriedenheit angewiesen. Teilen Sie uns Ihre Anliegen mit!"
+  },
+  "Frontpage.moreAboutCompany": {
+    "defaultMessage": "Mehr über das Unternehmen"
+  },
+  "Frontpage.ourProducts": {
+    "defaultMessage": "Unsere Produkte"
+  },
+  "logout.pleaseWait": {
+    "defaultMessage": "Bitte warten..."
+  }
+}

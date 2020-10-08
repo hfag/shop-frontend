@@ -90,7 +90,6 @@ interface FormValuesLoginRegister {
 /**
  * The inner login form
  */
-//TODO translation
 const InnerLoginRegisterForm = ({
   isValid,
   status = "",

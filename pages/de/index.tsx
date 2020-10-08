@@ -119,6 +119,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
+    revalidate: 60, //landing page will be rerendered at most every minute
     props: {
       collectionResponse: await request(locale, GET_COLLECTION_BY_ID, {
         id: 1,

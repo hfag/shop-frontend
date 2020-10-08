@@ -12,38 +12,6 @@ import EntityChooser from "./EntityChooser";
 import { InputFieldWrapper } from "../form/InputFieldWrapper";
 
 const messages = defineMessages({
-  sortBy: {
-    id: "FileChooser.sortBy",
-    defaultMessage: "Sortiere nach",
-  },
-  sortOrder: {
-    id: "FileChooser.sortOrder",
-    defaultMessage: "Sortierreihenfolge",
-  },
-  search: {
-    id: "FileChooser.search",
-    defaultMessage: "Suche",
-  },
-  itemsPerPage: {
-    id: "FileChooser.itemsPerPage",
-    defaultMessage: "Zeilen pro Seite",
-  },
-  nextPage: {
-    id: "FileChooser.nextPage",
-    defaultMessage: "Nächste Seite",
-  },
-  previousPage: {
-    id: "FileChooser.previousPage",
-    defaultMessage: "Vorherige Seite",
-  },
-  page: {
-    id: "FileChooser.page",
-    defaultMessage: "Seite",
-  },
-  of: {
-    id: "FileChooser.of",
-    defaultMessage: "von",
-  },
   // sortById: {
   //     id: "FileChooser.sortById",
   //     defaultMessage: "ID"
@@ -66,7 +34,7 @@ const messages = defineMessages({
   },
   sortByMimeType: {
     id: "FileChooser.sortByMimeType",
-    defaultMessage: "Datetyp",
+    defaultMessage: "Dateityp",
   },
   sortByWidth: {
     id: "FileChooser.sortByWidth",
@@ -79,18 +47,6 @@ const messages = defineMessages({
   sortBySource: {
     id: "FileChooser.sortBySource",
     defaultMessage: "Dateiname",
-  },
-  // sortByPreview: {
-  //     id: "FileChooser.sortByPreview",
-  //     defaultMessage: "Vorschau"
-  // },
-  sortOrderAsc: {
-    id: "FileChooser.sortOrderAsc",
-    defaultMessage: "Aufsteigend",
-  },
-  sortOrderDesc: {
-    id: "FileChooser.sortOrderDesc",
-    defaultMessage: "Absteigend",
   },
 });
 

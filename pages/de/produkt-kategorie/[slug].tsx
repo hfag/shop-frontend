@@ -88,21 +88,22 @@ const Page: FunctionComponent<{
 export default Page;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const data: { collections: { items: Collection[] } } = await request(
-    locale,
-    GET_ALL_COLLECTIONS
-  );
+  // const data: { collections: { items: Collection[] } } = await request(
+  //   locale,
+  //   GET_ALL_COLLECTIONS
+  // );
 
   return {
-    paths: data.collections.items.map((collection) => ({
+    paths: [] /*data.collections.items.map((collection) => ({
       params: { slug: collection.slug },
-    })),
-    fallback: false,
+    }))*/,
+    fallback: "unstable_blocking",
   };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
+    revalidate: 30, //product categories will be rerendered at most every 30s
     props: {
       slug: context.params.slug,
       collectionResponse: await request(locale, GET_COLLECTION_BY_SLUG, {

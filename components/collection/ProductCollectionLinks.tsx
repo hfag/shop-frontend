@@ -21,11 +21,11 @@ import { ASSET_URL } from "../../utilities/api";
 
 const messages = defineMessages({
   downloadsAndLinks: {
-    id: "ProductCategories.downloadsAndLinks",
+    id: "ProductCollectionLinks.downloadsAndLinks",
     defaultMessage: "Downloads und Links",
   },
   editLinks: {
-    id: "ProductCategories.editLinks",
+    id: "ProductCollectionLinks.editLinks",
     defaultMessage: "Links bearbeiten",
   },
 });

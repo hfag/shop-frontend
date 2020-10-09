@@ -16,6 +16,7 @@ import { colors, media } from "../utilities/style";
 import StyledLink from "./elements/StyledLink";
 import Placeholder from "./elements/Placeholder";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
+import Flexbar from "./layout/Flexbar";
 
 const messages = defineMessages({
   aboutTitle: {
@@ -103,6 +104,11 @@ const Icon = styled.span<{ margin?: boolean }>`
     display: block;
     margin: 0 auto;
   }
+`;
+
+const IconRow = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Footer: FunctionComponent<{}> = React.memo(({}) => {
@@ -235,17 +241,18 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                   {intl.formatMessage(messages.moreAbout)}
                 </StyledLink>
                 <br />
-                <Flex>
-                  <StyledLink
-                    external
-                    href="https://twitter.com/Hauser_AG"
-                    negative
-                  >
+                <StyledLink
+                  external
+                  href="https://twitter.com/Hauser_AG"
+                  negative
+                >
+                  <IconRow>
                     <Icon margin>
                       <FaTwitter />
                     </Icon>
-                  </StyledLink>
-                </Flex>
+                    Twitter
+                  </IconRow>
+                </StyledLink>
               </BorderBox>
             </Flex>
           </Container>

@@ -20,7 +20,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 import { SearchResult } from "../schema";
 import request from "../utilities/request";
 import { SEARCH } from "../gql/search";
-import SearchAsset from "./elements/SearchAsset";
+import Asset from "./elements/Asset";
 
 const messages = defineMessages({
   placeholder: {
@@ -215,7 +215,7 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
     return (
       <Suggestion>
         <Flexbar>
-          <SearchAsset asset={result.productVariantAsset} />
+          <Asset asset={result.productVariantAsset} preset="small" />
           <div className="name">
             <div>{result.productVariantName}</div>
             <Detail>{result.sku}</Detail>

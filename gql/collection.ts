@@ -36,7 +36,7 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
     name
     width
     height
-    source
+    preview
   }
   parent {
     id
@@ -52,7 +52,7 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
       name
       width
       height
-      source
+      preview
     }
   }
   products {
@@ -64,7 +64,7 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
       name
       width
       height
-      source
+      preview
     }
     variants {
       price
@@ -121,7 +121,7 @@ export const ADMIN_COLLECTION_LINK_FRAGMENT = /* GraphQl */ `
         asset{
           id
           name
-          source
+          preview
         }
       }
       __typename

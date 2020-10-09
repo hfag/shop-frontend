@@ -3,7 +3,7 @@ export const ASSET_FRAGMENT = /* GraphQL */ `
     name
     width
     height
-    source
+    preview
 `;
 
 export const ADMIN_ASSETS = /* GraphQL */ `

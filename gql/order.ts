@@ -54,7 +54,7 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
         name
         width
         height
-        source
+        preview
       }
       options{
         name

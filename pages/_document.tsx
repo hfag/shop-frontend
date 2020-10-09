@@ -50,7 +50,7 @@ export default class MyDocument extends Document<IProps> {
     //const polyfill = `https://cdn.polyfill.io/v3/polyfill.min.js?features=Intl.~locale.${this.props.locale}`;
 
     return (
-      <Html>
+      <Html lang={this.props.locale}>
         <Head />
         <body>
           <Main />

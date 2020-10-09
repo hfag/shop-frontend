@@ -76,6 +76,7 @@ export const FULL_PRODUCT_FRAGMENT = `
   }
   assets {
     ${ASSET_FRAGMENT}
+    source
   }
   customFields {
     groupKey

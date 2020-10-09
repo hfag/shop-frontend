@@ -150,7 +150,7 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
                   </MediaQuery>
                   <SearchWrapper>
                     <MediaQuery lg up>
-                      <Searchbar />
+                      <Searchbar id="navigation" />
                     </MediaQuery>
                   </SearchWrapper>
                   <Push left>
@@ -190,7 +190,7 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
           <Container>
             <Card>
               <h3>{intl.formatMessage(page.search)}</h3>
-              <Searchbar />
+              <Searchbar id="mobile" />
             </Card>
           </Container>
         </MediaQuery>

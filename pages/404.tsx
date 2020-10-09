@@ -59,7 +59,7 @@ const Page404 = React.memo(({}) => {
           </StyledLink>
           .
         </p>
-        <Searchbar />
+        <Searchbar id="404" />
       </Card>
     </Wrapper>
   );

@@ -122,7 +122,7 @@ const SearchInput = styled.input`
   }
 `;
 
-const InvisibleLabel = styled.span`
+const InvisibleLabel = styled.label`
   display: none;
 `;
 
@@ -148,7 +148,7 @@ const renderInputComponent = (inputProps: { [key: string]: any }) => {
   return <SearchInput {...inputProps} />;
 };
 
-const Searchbar: FunctionComponent<{}> = ({}) => {
+const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [lastQuery, setLastQuery] = useState("");
@@ -241,6 +241,7 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
 
   // Autosuggest will pass through all these props to the input.
   const inputProps = {
+    id: `search-bar-${id}`, //allows a label to be placed
     placeholder: intl.formatMessage(messages.placeholder),
     value,
     onChange,
@@ -255,26 +256,24 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
 
   return (
     <StyledSearch>
-      <label>
-        <Autosuggest
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={onSuggestionsClearRequested}
-          onSuggestionSelected={onSuggestionSelected}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          renderSuggestionsContainer={renderSuggestionContainer}
-          renderInputComponent={renderInputComponent}
-          focusInputOnSuggestionClick={false}
-          inputProps={inputProps}
-        />
-        <InvisibleLabel>
-          {intl.formatMessage(messages.placeholder)}
-        </InvisibleLabel>
-      </label>
+      <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
+        onSuggestionSelected={onSuggestionSelected}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        renderSuggestionsContainer={renderSuggestionContainer}
+        renderInputComponent={renderInputComponent}
+        focusInputOnSuggestionClick={false}
+        inputProps={inputProps}
+      />
       <SpinWrapper>
         <ClipLoader loading={loading} size={20} color={colors.primary} />
       </SpinWrapper>
+      <InvisibleLabel htmlFor={`search-bar-${id}`}>
+        {intl.formatMessage(messages.placeholder)}
+      </InvisibleLabel>
     </StyledSearch>
   );
 };

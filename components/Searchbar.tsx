@@ -122,7 +122,7 @@ const SearchInput = styled.input`
   }
 `;
 
-const InvisibleLabel = styled.label`
+const InvisibleLabel = styled.span`
   display: none;
 `;
 
@@ -241,7 +241,6 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
 
   // Autosuggest will pass through all these props to the input.
   const inputProps = {
-    id: "search-bar", //allows a label to be placed
     placeholder: intl.formatMessage(messages.placeholder),
     value,
     onChange,
@@ -256,24 +255,26 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
 
   return (
     <StyledSearch>
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        onSuggestionSelected={onSuggestionSelected}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        renderSuggestionsContainer={renderSuggestionContainer}
-        renderInputComponent={renderInputComponent}
-        focusInputOnSuggestionClick={false}
-        inputProps={inputProps}
-      />
+      <label>
+        <Autosuggest
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={onSuggestionsClearRequested}
+          onSuggestionSelected={onSuggestionSelected}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          renderSuggestionsContainer={renderSuggestionContainer}
+          renderInputComponent={renderInputComponent}
+          focusInputOnSuggestionClick={false}
+          inputProps={inputProps}
+        />
+        <InvisibleLabel>
+          {intl.formatMessage(messages.placeholder)}
+        </InvisibleLabel>
+      </label>
       <SpinWrapper>
         <ClipLoader loading={loading} size={20} color={colors.primary} />
       </SpinWrapper>
-      <InvisibleLabel htmlFor="search-bar">
-        {intl.formatMessage(messages.placeholder)}
-      </InvisibleLabel>
     </StyledSearch>
   );
 };

@@ -7,13 +7,13 @@ import { Asset as AssetType, SearchResultAsset } from "../../schema";
 
 type Preset = "tiny" | "thumb" | "small" | "medium" | "large";
 
-const SIZE_BY_PRESET: {[key: string]: {width: number, height: number}} = {
-  tiny: {width: 50, height: 50},
-  thumb: {width: 150, height: 150},
-  small: {width: 300, height: 300},
-  medium: {width: 500, height: 500},
-  large: {width: 800, height: 800},
-}
+const SIZE_BY_PRESET: { [key: string]: { width: number; height: number } } = {
+  tiny: { width: 50, height: 50 },
+  thumb: { width: 150, height: 150 },
+  small: { width: 300, height: 300 },
+  medium: { width: 500, height: 500 },
+  large: { width: 800, height: 800 },
+};
 
 const Asset: FunctionComponent<{
   asset?: AssetType | SearchResultAsset;
@@ -21,7 +21,7 @@ const Asset: FunctionComponent<{
   preset?: Preset;
 }> = React.memo(({ asset, squared, preset }) => {
   const p = preset || "small";
-  const alt = ("name" in asset) ? asset.name : "";
+  const alt = "name" in asset ? asset.name : "";
 
   return (
     <StyledImage

@@ -84,7 +84,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
               src={post.thumbnail.url}
               width={post.thumbnail.width}
               height={post.thumbnail.height}
-              alt={post.thumbnail.alt}
+              alt={post.thumbnail.alt || post.title}
             />
           </Box>
           <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>

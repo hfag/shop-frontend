@@ -26,7 +26,7 @@ import shop from "../../i18n/shop";
 import Card from "../layout/Card";
 import { colors } from "../../utilities/style";
 import page from "../../i18n/page";
-import { ABSOLUTE_URL } from "../../utilities/api";
+import { ABSOLUTE_URL, API_BASE_URL, WP_BLOG_URL } from "../../utilities/api";
 import StyledLink from "../elements/StyledLink";
 import { AppContext } from "../../pages/_app";
 
@@ -81,6 +81,8 @@ const HtmlHead: FunctionComponent<{ intl: IntlShape }> = React.memo(
         content={intl.formatMessage(messages.siteDescription)}
       />
       <link rel="canonical" href={ABSOLUTE_URL} />
+      <link rel="preconnect" href={API_BASE_URL} />
+      <link rel="preconnect" href={WP_BLOG_URL} />
     </Head>
   )
 );

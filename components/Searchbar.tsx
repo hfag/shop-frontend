@@ -122,6 +122,10 @@ const SearchInput = styled.input`
   }
 `;
 
+const InvisibleLabel = styled.label`
+  display: none;
+`;
+
 /**
  * Gets the suggestions' value
  */
@@ -237,6 +241,7 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
 
   // Autosuggest will pass through all these props to the input.
   const inputProps = {
+    id: "search-bar", //allows a label to be placed
     placeholder: intl.formatMessage(messages.placeholder),
     value,
     onChange,
@@ -266,6 +271,9 @@ const Searchbar: FunctionComponent<{}> = ({}) => {
       <SpinWrapper>
         <ClipLoader loading={loading} size={20} color={colors.primary} />
       </SpinWrapper>
+      <InvisibleLabel htmlFor="search-bar">
+        {intl.formatMessage(messages.placeholder)}
+      </InvisibleLabel>
     </StyledSearch>
   );
 };

@@ -1,5 +1,6 @@
 import { DEFAULT_LANGUAGE } from "./i18n";
 
+export const API_BASE_URL = process.env.API_BASE_URL;
 export const ADMIN_API_URL = process.env.ADMIN_API_URL;
 export const API_URL = process.env.API_URL;
 export const ASSET_URL = process.env.ASSET_URL;

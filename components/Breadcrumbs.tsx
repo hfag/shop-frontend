@@ -145,7 +145,7 @@ const Breadcrumbs: FunctionComponent<{
     <Card>
       <div>
         <Breadcrumb>
-          <StyledLink href="/">
+          <StyledLink href={`/${intl.locale}`}>
             <span
               dangerouslySetInnerHTML={{
                 __html: intl.formatMessage(page.home),

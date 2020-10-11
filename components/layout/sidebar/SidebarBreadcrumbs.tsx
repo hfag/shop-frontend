@@ -17,7 +17,7 @@ const SidebarBreadcrumbs: FunctionComponent<{
 
   return (
     <SidebarListWrapper>
-      <StyledLink href="/">
+      <StyledLink href={`/${intl.locale}`}>
         <SidebarBreadcrumb active={breadcrumbs.length === 0 && !children}>
           <div>
             <ChevronDown />

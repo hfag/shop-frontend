@@ -38,15 +38,15 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
     height
     preview
   }
-  parent {
-    id
-    name
-  }
   children {
     id
     slug
     name
     position
+    parent {
+      id
+      name
+    }
     featuredAsset {
       id
       name

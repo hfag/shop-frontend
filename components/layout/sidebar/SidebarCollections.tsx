@@ -35,19 +35,21 @@ const SidebarCollections: FunctionComponent<{
         <H4>{intl.formatMessage(product.categories)}</H4>
       </SidebarBreadcrumb>
       <ul>
-        {collections.map((collection, index) => (
-          <li key={index}>
-            <SidebarBreadcrumb active={false}>
-              <StyledLink
-                href={`/${intl.locale}/${
-                  pathnamesByLanguage.productCategory.languages[intl.locale]
-                }/${collection.slug}`}
-              >
-                {collection.name}
-              </StyledLink>
-            </SidebarBreadcrumb>
-          </li>
-        ))}
+        {collections
+          .sort((a, b) => a.position - b.position)
+          .map((collection, index) => (
+            <li key={index}>
+              <SidebarBreadcrumb active={false}>
+                <StyledLink
+                  href={`/${intl.locale}/${
+                    pathnamesByLanguage.productCategory.languages[intl.locale]
+                  }/${collection.slug}`}
+                >
+                  {collection.name}
+                </StyledLink>
+              </SidebarBreadcrumb>
+            </li>
+          ))}
       </ul>
     </SidebarListWrapper>
   );

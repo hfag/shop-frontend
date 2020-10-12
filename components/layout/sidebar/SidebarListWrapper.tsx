@@ -7,7 +7,6 @@ const SidebarListWrapper = styled.div`
     list-style: none;
     margin: 0 0 1rem 0;
     padding: 0;
-    word-break: keep-all;
 
     h4 {
       margin: 0;

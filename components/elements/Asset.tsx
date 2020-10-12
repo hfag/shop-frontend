@@ -30,6 +30,8 @@ const Asset: FunctionComponent<{
       src={asset?.preview ? `${asset.preview}?preset=${p}` : undefined}
       width={SIZE_BY_PRESET[p].width}
       height={SIZE_BY_PRESET[p].height}
+      originalHeight={"height" in asset ? asset.height : undefined}
+      originalWidth={"width" in asset ? asset.width : undefined}
       alt={alt}
     />
   );

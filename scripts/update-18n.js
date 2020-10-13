@@ -5,13 +5,15 @@ const languages = ["de", "fr"];
 
 const defaultMessages = JSON.parse(
   fs.readFileSync(`./locales/${defaultLanguage}.json`, "utf-8")
-)[defaultLanguage];
+);
 
 languages
   .filter((l) => l !== defaultLanguage)
   .forEach((language) => {
     const path = `./locales/${language}.json`;
-    const messages = JSON.parse(fs.readFileSync(path, "utf-8"));
+    const messages = fs.existsSync(path)
+      ? JSON.parse(fs.readFileSync(path, "utf-8"))
+      : {};
     Object.keys(defaultMessages).forEach((key) => {
       if (!(key in messages) || messages[key].startsWith("TODO:")) {
         messages[key] = `TODO: (${defaultLanguage}) ${defaultMessages[key]}`;

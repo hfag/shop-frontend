@@ -1,0 +1,245 @@
+{
+  "CartForm.taxesOfThat": {
+    "defaultMessage": "Davon MWST (7.7%)"
+  },
+  "address.additionalLineAbove": {
+    "defaultMessage": "Zusatzzeile oben"
+  },
+  "address.billingAddress": {
+    "defaultMessage": "Rechnungsadresse"
+  },
+  "address.chooseCountry": {
+    "defaultMessage": "Wählen Sie ein Land"
+  },
+  "address.chooseState": {
+    "defaultMessage": "Wählen Sie einen Kanton"
+  },
+  "address.city": {
+    "defaultMessage": "Ort / Stadt"
+  },
+  "address.company": {
+    "defaultMessage": "Firma"
+  },
+  "address.country": {
+    "defaultMessage": "Land"
+  },
+  "address.defaultBillingAddress": {
+    "defaultMessage": "Standardrechnungsadresse?"
+  },
+  "address.defaultShippingAddress": {
+    "defaultMessage": "Standardliferadresse?"
+  },
+  "address.description": {
+    "defaultMessage": "Bezeichnung"
+  },
+  "address.email": {
+    "defaultMessage": "E-Mail Adresse"
+  },
+  "address.firstName": {
+    "defaultMessage": "Vorname"
+  },
+  "address.fullName": {
+    "defaultMessage": "Vollständiger Name"
+  },
+  "address.lastName": {
+    "defaultMessage": "Nachname"
+  },
+  "address.postOfficeBox": {
+    "defaultMessage": "Postfach"
+  },
+  "address.postalCode": {
+    "defaultMessage": "Postleitzahl"
+  },
+  "address.province": {
+    "defaultMessage": "Kanton"
+  },
+  "address.shippingAddress": {
+    "defaultMessage": "Lieferadresse"
+  },
+  "address.street1": {
+    "defaultMessage": "Strasse 1"
+  },
+  "address.street2": {
+    "defaultMessage": "Strasse 2"
+  },
+  "address.tel": {
+    "defaultMessage": "Telefon"
+  },
+  "cart.table.column.description": {
+    "defaultMessage": "Beschreibung"
+  },
+  "form.cancel": {
+    "defaultMessage": "Abbrechen"
+  },
+  "form.noInformation": {
+    "defaultMessage": "Keine Angabe"
+  },
+  "form.saveChanges": {
+    "defaultMessage": "Änderungen speichern"
+  },
+  "order.invoice": {
+    "defaultMessage": "Rechnung"
+  },
+  "order.lastThreeOrders": {
+    "defaultMessage": "Letzte 3 Bestellungen"
+  },
+  "order.noOrders": {
+    "defaultMessage": "Sie haben noch keine Bestellung getätigt."
+  },
+  "order.order": {
+    "defaultMessage": "Bestellung"
+  },
+  "order.orderDate": {
+    "defaultMessage": "Bestelldatum"
+  },
+  "order.orderNumber": {
+    "defaultMessage": "Bestellnummer"
+  },
+  "order.orders": {
+    "defaultMessage": "Bestellungen"
+  },
+  "order.shipping": {
+    "defaultMessage": "Versand"
+  },
+  "order.taxes": {
+    "defaultMessage": "Steuern"
+  },
+  "order.total": {
+    "defaultMessage": "Gesamtsumme"
+  },
+  "page.confirmation": {
+    "defaultMessage": "Bestellbestätigung"
+  },
+  "page.networkAdmin": {
+    "defaultMessage": "Netzwerk-Admin"
+  },
+  "page.shopAdmin": {
+    "defaultMessage": "Shop-Admin"
+  },
+  "page.verifyEmail": {
+    "defaultMessage": "E-Mail verifizieren"
+  },
+  "page.verifyNewEmail": {
+    "defaultMessage": "Neue E-Mail verifizieren"
+  },
+  "pages.accountAddresses": {
+    "defaultMessage": "Adressen"
+  },
+  "pages.accountDetails": {
+    "defaultMessage": "Details"
+  },
+  "pages.accountOrders": {
+    "defaultMessage": "Bestellungen"
+  },
+  "pages.cart": {
+    "defaultMessage": "Warenkorb"
+  },
+  "pages.home": {
+    "defaultMessage": "Startseite"
+  },
+  "pages.login": {
+    "defaultMessage": "Login"
+  },
+  "pages.logout": {
+    "defaultMessage": "Logout"
+  },
+  "pages.myAccount": {
+    "defaultMessage": "Mein Konto"
+  },
+  "pages.products": {
+    "defaultMessage": "Produkte"
+  },
+  "pages.search": {
+    "defaultMessage": "Suche"
+  },
+  "pagination.next": {
+    "defaultMessage": "Nächste"
+  },
+  "pagination.of": {
+    "defaultMessage": "von"
+  },
+  "pagination.page": {
+    "defaultMessage": "Seite"
+  },
+  "pagination.previous": {
+    "defaultMessage": "Vorherige"
+  },
+  "pagination.rows": {
+    "defaultMessage": "Zeilen"
+  },
+  "product.addToCart": {
+    "defaultMessage": "Zum Warenkorb hinzufügen"
+  },
+  "product.bulkDiscount": {
+    "defaultMessage": "Mengenrabatt"
+  },
+  "product.categories": {
+    "defaultMessage": "Kategorien"
+  },
+  "product.category": {
+    "defaultMessage": "Kategorie"
+  },
+  "product.from": {
+    "defaultMessage": "ab"
+  },
+  "product.name": {
+    "defaultMessage": "Name"
+  },
+  "product.pieces": {
+    "defaultMessage": "Stück"
+  },
+  "product.price": {
+    "defaultMessage": "Preis"
+  },
+  "product.pricePerUnit": {
+    "defaultMessage": "Stückpreis"
+  },
+  "product.product": {
+    "defaultMessage": "Produkt"
+  },
+  "product.products": {
+    "defaultMessage": "Produkte"
+  },
+  "product.quantity": {
+    "defaultMessage": "Anzahl"
+  },
+  "product.resellerDiscount": {
+    "defaultMessage": "Wiederverkäuferrabatt"
+  },
+  "product.sku": {
+    "defaultMessage": "Artikelnummer"
+  },
+  "product.subtotal": {
+    "defaultMessage": "Subtotal"
+  },
+  "product.variation": {
+    "defaultMessage": "Variante"
+  },
+  "product.withBulkDiscount": {
+    "defaultMessage": "mit Mengenrabatt"
+  },
+  "shop.siteMessage": {
+    "defaultMessage": "Die Hauser Feuerschutz AG bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz an."
+  },
+  "shop.siteTitle": {
+    "defaultMessage": "Shop der Hauser Feuerschutz AG"
+  },
+  "user.login": {
+    "defaultMessage": "Anmelden"
+  },
+  "user.logout": {
+    "defaultMessage": "Abmelden"
+  },
+  "user.password": {
+    "defaultMessage": "Passwort"
+  },
+  "validation.isRequired": {
+    "defaultMessage": "Dieses Feld darf nicht leer sein"
+  },
+  "validation.passwordConfirmation": {
+    "defaultMessage": "Passwort bestätigen"
+  },
+  "validation.passwordsMustMatch": {
+    "defaultMessage": "Die beiden Passwörter müssen übereinstimmen!"
+  }
+}

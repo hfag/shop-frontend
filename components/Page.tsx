@@ -1,5 +1,4 @@
 import React, { useEffect, FunctionComponent } from "react";
-import { Flex, Box } from "reflexbox";
 import Head from "next/head";
 import { stripTags } from "../utilities/decode";
 import { ABSOLUTE_URL } from "../utilities/api";

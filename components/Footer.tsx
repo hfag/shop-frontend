@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import { Flex, Box } from "reflexbox";
 import {
   FaMapMarkerAlt as MapMarker,
   FaPhone as Phone,
@@ -16,7 +15,8 @@ import { colors, media } from "../utilities/style";
 import StyledLink from "./elements/StyledLink";
 import Placeholder from "./elements/Placeholder";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
-import Flexbar from "./layout/Flexbar";
+import Flex from "./layout/Flex";
+import Box from "./layout/Box";
 
 const messages = defineMessages({
   aboutTitle: {
@@ -121,7 +121,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
         <Box width={[1, 1, 1, 5 / 6]}>
           <Container>
             <Flex flexWrap="wrap">
-              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
+              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} paddingX={3}>
                 <LazyImage
                   src="/images/logo/logo_negative.svg"
                   alt="Logo"
@@ -148,7 +148,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                   )}
                 />
               </BorderBox>
-              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
+              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} paddingX={3}>
                 <IconList>
                   <tbody>
                     <tr>
@@ -228,7 +228,7 @@ const Footer: FunctionComponent<{}> = React.memo(({}) => {
                   </tbody>
                 </IconList>
               </BorderBox>
-              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} px={3}>
+              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} paddingX={3}>
                 <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
                 {intl.formatMessage(messages.about)}{" "}
                 <StyledLink

@@ -5,19 +5,19 @@ import React, {
   FunctionComponent,
 } from "react";
 import styled from "styled-components";
-import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl, IntlShape } from "react-intl";
 
 import { colors, shadows, borders } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
 import StyledLink from "./elements/StyledLink";
-import LatestPostFlex from "../components/layout/Flex";
 import { WP_BLOG_URL } from "../utilities/api";
 import useSWR from "swr";
 import Placeholder from "./elements/Placeholder";
 import { Post as PostType } from "../utilities/wordpress";
 import StyledImage from "./elements/StyledImage";
+import Flex from "../components/layout/Flex";
+import Box from "./layout/Box";
 
 const messages = defineMessages({
   title: {
@@ -51,7 +51,7 @@ const Post: FunctionComponent<{
   intl: IntlShape;
   post?: PostType;
 }> = ({ intl, post }) => (
-  <Box width={[1, 1, 1 / 2, 1 / 3]} px={2} mt={3}>
+  <Box width={[1, 1, 1 / 2, 1 / 3]} paddingX={0.5} marginTop={1}>
     <PostWrapper>
       {post ? (
         <StyledLink
@@ -61,7 +61,7 @@ const Post: FunctionComponent<{
           noHover
         >
           <Flex>
-            <Box width={[1, 1, 1 / 2, 1 / 3]} pr={2}>
+            <Box width={[1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
               <StyledImage
                 src={post.thumbnail.url}
                 width={post.thumbnail.width}
@@ -69,7 +69,7 @@ const Post: FunctionComponent<{
                 alt={post.thumbnail.alt || post.title}
               />
             </Box>
-            <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
+            <Box width={[1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
               <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
               <p dangerouslySetInnerHTML={{ __html: post.description }} />
             </Box>
@@ -77,10 +77,10 @@ const Post: FunctionComponent<{
         </StyledLink>
       ) : (
         <Flex>
-          <Box width={[1, 1, 1 / 2, 1 / 3]} pr={2}>
+          <Box width={[1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
             <Placeholder block />
           </Box>
-          <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
+          <Box width={[1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
             <Placeholder text height={1.5} mb={1} />
             <Placeholder text height={4} />
           </Box>
@@ -99,7 +99,7 @@ const LatestPosts: FunctionComponent<{ posts?: PostType[] }> = React.memo(
         <h2 style={{ marginBottom: 0 }}>
           {intl.formatMessage(messages.title)}
         </h2>
-        <LatestPostFlex flexWrap="wrap">
+        <Flex flexWrap="wrap" marginX>
           {posts
             ? posts.map((post) => (
                 <Post intl={intl} post={post} key={post.slug} />
@@ -107,7 +107,7 @@ const LatestPosts: FunctionComponent<{ posts?: PostType[] }> = React.memo(
             : new Array(6)
                 .fill(undefined)
                 .map((_) => <Post intl={intl} post={undefined} />)}
-        </LatestPostFlex>
+        </Flex>
       </div>
     );
   }

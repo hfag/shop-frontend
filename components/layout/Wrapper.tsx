@@ -1,6 +1,4 @@
 import React, { useMemo, FunctionComponent, ReactNode } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { Flex, Box } from "reflexbox";
 import Router, { useRouter } from "next/router";
 
 import { useIntl } from "react-intl";
@@ -12,6 +10,8 @@ import Sidebar from "./sidebar/Sidebar";
 import ScrollToTop from "../helpers/ScrollToTop";
 import ScrollToTopButton from "../helpers/ScrollToTopButton";
 import SupportButton from "../helpers/SupportButton";
+import Flex from "./Flex";
+import Box from "./Box";
 
 const Wrapper: FunctionComponent<{
   sidebar: ReactNode;
@@ -27,31 +27,25 @@ const Wrapper: FunctionComponent<{
   ]);
 
   return (
-    <ThemeProvider
-      theme={{
-        breakpoints: ["36rem", "48rem", "62rem", "75rem"],
-      }}
-    >
-      <ScrollToTop>
-        <Header />
-        <div>
-          <Flex>
-            <Box width={[0, 0, 0, 1 / 6]}>
-              {sidebar && <Sidebar>{sidebar}</Sidebar>}
-            </Box>
-            <Box width={[1, 1, 1, 5 / 6]}>
-              <Container>
-                {showBreadcrums && <Breadcrumbs breadcrumbs={breadcrumbs} />}
-                {children}
-              </Container>
-            </Box>
-          </Flex>
-        </div>
-        <Footer />
-        <SupportButton />
-        <ScrollToTopButton />
-      </ScrollToTop>
-    </ThemeProvider>
+    <ScrollToTop>
+      <Header />
+      <div>
+        <Flex>
+          <Box width={[0, 0, 0, 1 / 6]}>
+            {sidebar && <Sidebar>{sidebar}</Sidebar>}
+          </Box>
+          <Box width={[1, 1, 1, 5 / 6]}>
+            <Container>
+              {showBreadcrums && <Breadcrumbs breadcrumbs={breadcrumbs} />}
+              {children}
+            </Container>
+          </Box>
+        </Flex>
+      </div>
+      <Footer />
+      <SupportButton />
+      <ScrollToTopButton />
+    </ScrollToTop>
   );
 });
 

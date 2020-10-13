@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, FunctionComponent } from "react";
-import { Box } from "reflexbox";
 import { useIntl, defineMessages } from "react-intl";
 import styled from "styled-components";
 import { Product as JsonLdProduct } from "schema-dts";
@@ -21,13 +20,14 @@ import { ABSOLUTE_URL } from "../../utilities/api";
 
 import ProductCollectionLinks from "./ProductCollectionLinks";
 import { productToJsonLd } from "../../utilities/json-ld";
+import Box from "../layout/Box";
 
 const H1 = styled.h1`
   margin: 0 0 0.5rem 0;
 `;
 
 const InfoWrapper = styled.div`
-  margin: 2rem 1rem;
+  margin: 2rem 0;
 `;
 
 const ProductCollectionWrapper = styled.div`
@@ -100,7 +100,10 @@ const ProductCollection: FunctionComponent<{
             <RichSnippet productsJsonLd={productsJsonLd} />
             <InfoWrapper>
               <Flex flexWrap="wrap">
-                <Box width={[1, 1, 1 / 2, 1 / 2]} pr={[0, 0, 4, 4]}>
+                <Box
+                  width={[1, 1, 1 / 2, 1 / 2]}
+                  paddingRight={4 /* TODO: [0, 0, 4, 4] */}
+                >
                   <H1
                     dangerouslySetInnerHTML={{ __html: collection.name }}
                   ></H1>
@@ -115,7 +118,7 @@ const ProductCollection: FunctionComponent<{
             </InfoWrapper>
           </>
         )}
-        <Flex flexWrap="wrap" style={{ overflowX: "hidden" }}>
+        <Flex flexWrap="wrap" style={{ overflowX: "hidden" }} marginX>
           {collection &&
             collection.children
               .sort((a, b) => a.position - b.position)

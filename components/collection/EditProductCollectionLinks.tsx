@@ -1,18 +1,9 @@
-import {
-  FunctionComponent,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { defineMessages, IntlShape, useIntl } from "react-intl";
-import { Box } from "reflexbox";
 import styled from "styled-components";
-import { FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 import { MdDelete, MdArrowUpward } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
 
-import { AppContext } from "../../pages/_app";
 import {
   Asset,
   Collection,
@@ -21,12 +12,7 @@ import {
 } from "../../schema";
 import Button from "../elements/Button";
 import Flexbar from "../layout/Flexbar";
-import StyledLink from "../elements/StyledLink";
-import RestrictedView from "../elements/RestrictedView";
 import { colors } from "../../utilities/style";
-import { IconType } from "react-icons/lib";
-import Select from "../elements/Select";
-import { InputFieldWrapper } from "../form/InputFieldWrapper";
 import ActionButton from "../ActionButton";
 import { requestAdmin } from "../../utilities/request";
 import {

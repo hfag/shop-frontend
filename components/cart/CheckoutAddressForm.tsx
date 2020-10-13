@@ -1,11 +1,9 @@
 import React, { FunctionComponent } from "react";
-import { withFormik, Form, Field, FormikProps } from "formik";
-import { Flex, Box } from "reflexbox";
+import { withFormik, Form, FormikProps } from "formik";
 import * as yup from "yup";
-import { defineMessages, useIntl, injectIntl, IntlShape } from "react-intl";
+import { defineMessages, IntlShape } from "react-intl";
 
 import Button from "../elements/Button";
-import RelativeBox from "../layout/RelativeBox";
 import SelectField from "../form/SelectField";
 import InputField from "../form/InputField";
 import address from "../../i18n/address";
@@ -24,6 +22,8 @@ import {
   ORDER_SET_SHIPPING_ADDRESS,
 } from "../../gql/order";
 import { mutate } from "swr";
+import Flex from "../layout/Flex";
+import Box from "../layout/Box";
 
 const messages = defineMessages({
   shipToDifferentAddress: {
@@ -94,7 +94,7 @@ const InnerCheckoutAddressForm = React.memo(
   }: IProps & FormikProps<FormValues>) => (
     <Form>
       <Flex flexWrap="wrap">
-        <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
           <h3>Rechnungsdetails</h3>
           {/*<InputField
               type="text"
@@ -185,7 +185,7 @@ const InnerCheckoutAddressForm = React.memo(
             required={true}
           />
         </Box>
-        <RelativeBox width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
           <InputField
             id="shipToDifferentAddress"
             name="shipToDifferentAddress"
@@ -279,7 +279,7 @@ const InnerCheckoutAddressForm = React.memo(
               />
             </div>
           )}
-        </RelativeBox>
+        </Box>
       </Flex>
       <br />
       <Button

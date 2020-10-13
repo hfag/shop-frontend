@@ -6,7 +6,6 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import { MdMenu } from "react-icons/md";
-import { Flex, Box } from "reflexbox";
 import { defineMessages, useIntl, IntlShape } from "react-intl";
 
 import Head from "next/head";
@@ -29,6 +28,8 @@ import page from "../../i18n/page";
 import { ABSOLUTE_URL, API_BASE_URL, WP_BLOG_URL } from "../../utilities/api";
 import StyledLink from "../elements/StyledLink";
 import { AppContext } from "../../pages/_app";
+import Flex from "../layout/Flex";
+import Box from "../layout/Box";
 
 const messages = defineMessages({
   siteDescription: {
@@ -100,7 +101,7 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
         <Navbar>
           <Flex>
             <FullHeightBox width={[0, 0, 0, 1 / 6]}>
-              <MediaQuery lg up>
+              <MediaQuery xlg up>
                 <LogoLeft>
                   <NavItem>
                     <StyledLink href={`/${intl.locale}`} title="Homepage">
@@ -110,7 +111,7 @@ const Header: FunctionComponent<{}> = React.memo(({}) => {
                 </LogoLeft>
               </MediaQuery>
             </FullHeightBox>
-            <FullHeightBox width={[1, 1, 1, 5 / 6]} pl={2}>
+            <FullHeightBox width={[1, 1, 1, 5 / 6]} paddingLeft={0}>
               <Container>
                 <Flexbar>
                   <MediaQuery lg up>

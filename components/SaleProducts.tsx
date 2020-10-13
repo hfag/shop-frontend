@@ -1,18 +1,18 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl, IntlShape } from "react-intl";
 
 import { colors, shadows, borders } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
-import SalesFlex from "./layout/Flex";
 import { Post } from "../utilities/wordpress";
 import StyledLink from "./elements/StyledLink";
 import StyledImage from "./elements/StyledImage";
 import { ProductVariant, Promotion, Product } from "../schema";
 import Asset from "./elements/Asset";
 import Price from "./elements/Price";
+import Flex from "./layout/Flex";
+import Box from "./layout/Box";
 
 const messages = defineMessages({
   newsAndDiscounts: {
@@ -70,7 +70,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
   intl,
   post,
 }) => (
-  <Box width={[1, 1, 1 / 2, 1 / 3]} px={2} mt={3}>
+  <Box width={[1, 1, 1 / 2, 1 / 3]} paddingX={0.5} marginTop={1}>
     <SaleWrapper>
       <StyledLink
         href={`/${intl.locale}/${
@@ -79,7 +79,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
         noHover
       >
         <Flex>
-          <Box width={[1, 1, 1 / 2, 1 / 3]} pr={2}>
+          <Box width={[1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
             <StyledImage
               src={post.thumbnail.url}
               width={post.thumbnail.width}
@@ -87,7 +87,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
               alt={post.thumbnail.alt || post.title}
             />
           </Box>
-          <Box width={[1, 1, 1 / 2, 2 / 3]} pl={2}>
+          <Box width={[1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
             <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
             <p dangerouslySetInnerHTML={{ __html: post.description }}></p>
           </Box>
@@ -106,7 +106,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
   promotion: Promotion;
 }> = ({ intl, productSlug, variant, promotion }) => {
   return (
-    <Box width={[1, 1, 1 / 3, 1 / 3]} px={2} mt={3}>
+    <Box width={[1, 1, 1 / 3, 1 / 3]} paddingX={2} marginTop={3}>
       <SaleWrapper>
         <StyledLink
           href={`/${intl.locale}/${
@@ -119,10 +119,10 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
           </DiscountLogo>
 
           <Flex>
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={2}>
+            <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={2}>
               <Asset asset={variant.featuredAsset} />
             </Box>
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pl={2}>
+            <Box width={[1, 1, 1 / 2, 1 / 2]} paddingLeft={2}>
               <h3
                 dangerouslySetInnerHTML={{
                   __html: product.name,
@@ -165,7 +165,7 @@ const SaleProducts: FunctionComponent<{ posts: Post[] }> = React.memo(
         <h2 style={{ marginBottom: 0 }}>
           {intl.formatMessage(messages.newsAndDiscounts)}
         </h2>
-        <SalesFlex flexWrap="wrap">
+        <Flex flexWrap="wrap" marginX>
           {posts.map((post) => (
             <PostComponent intl={intl} post={post} key={post.slug} />
           ))}
@@ -176,7 +176,7 @@ const SaleProducts: FunctionComponent<{ posts: Post[] }> = React.memo(
               key={product.id}
             />
           ))*/}
-        </SalesFlex>
+        </Flex>
       </div>
     );
   }

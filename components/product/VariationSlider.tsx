@@ -1,12 +1,13 @@
 import React, { FunctionComponent, useMemo } from "react";
 import styled from "styled-components";
-import { Flex, Box } from "reflexbox";
 import {
   ProductVariant,
   Asset as AssetType,
   ProductOption,
 } from "../../schema";
 import Asset from "../elements/Asset";
+import Box from "../layout/Box";
+import Flex from "../layout/Flex";
 
 const Slider = styled.div`
   & > div:first-child {
@@ -93,9 +94,14 @@ const VariationSlider: FunctionComponent<{
 
   return (
     <Slider>
-      <Flex flexWrap={"wrap"}>
+      <Flex flexWrap="wrap">
         {Object.keys(imageMap).map((imageId) => (
-          <Box key={imageId} width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} pr={2} pb={2}>
+          <Box
+            key={imageId}
+            width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
+            paddingRight={0.5}
+            paddingBottom={0.5}
+          >
             <Slide
               isSlideActive={
                 activeImageIds.length > 1 &&

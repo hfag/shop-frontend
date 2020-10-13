@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useContext } from "react";
-import { Flex, Box } from "reflexbox";
 import styled from "styled-components";
 import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 
@@ -7,8 +6,7 @@ import order from "../../i18n/order";
 import { AppContext } from "../../pages/_app";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import StyledLink from "../elements/StyledLink";
-import { Address as AddressType, Node, Order as OrderType } from "../../schema";
-import Link from "next/link";
+import { Address as AddressType, Order as OrderType } from "../../schema";
 import Address from "../elements/Address";
 import Order from "../elements/Order";
 import useSWR from "swr";
@@ -16,6 +14,8 @@ import { GET_CURRENT_CUSTOMER_ORDERS } from "../../gql/user";
 import request from "../../utilities/request";
 import Placeholder from "../elements/Placeholder";
 import { Unavailable } from "../administrator/Unavailable";
+import Flex from "../layout/Flex";
+import Box from "../layout/Box";
 
 const messages = defineMessages({
   here: {
@@ -68,7 +68,7 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
   return (
     <DashboardWrapper>
       <Flex flexWrap="wrap">
-        <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
           {customer ? (
             customer.firstName && customer.lastName && customer.emailAddress ? (
               <div>
@@ -108,7 +108,7 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
           )}
           <br />
           <Flex flexWrap="wrap">
-            <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+            <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
               <h4 className="no-margin">{intl.formatMessage(order.invoice)}</h4>
               {customer ? (
                 !billing ? (
@@ -141,7 +141,7 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
             </Box>
             {customer ? (
               shipping && (
-                <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+                <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
                   <h4 className="no-margin">
                     {intl.formatMessage(order.shipping)}
                   </h4>
@@ -149,7 +149,7 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
                 </Box>
               )
             ) : (
-              <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+              <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
                 <h4 className="no-margin">
                   {intl.formatMessage(order.shipping)}
                 </h4>
@@ -158,7 +158,7 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
             )}
           </Flex>
         </Box>
-        <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3}>
+        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
           <h2 className="no-margin-top">
             {intl.formatMessage(order.lastThreeOrders)}
           </h2>

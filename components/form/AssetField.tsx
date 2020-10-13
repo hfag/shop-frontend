@@ -1,5 +1,5 @@
 import { Field } from "formik";
-import { get } from "lodash";
+import get from "lodash/get";
 import { FunctionComponent, useState } from "react";
 import { FaFile } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";

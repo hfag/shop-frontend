@@ -1,24 +1,17 @@
-import React, {
-  useEffect,
-  FunctionComponent,
-  useContext,
-  ReactNode,
-} from "react";
-import { Flex, Box } from "reflexbox";
+import React, { useEffect, FunctionComponent, ReactNode } from "react";
 import styled from "styled-components";
 import { defineMessages, useIntl } from "react-intl";
 
 import { pathnamesByLanguage } from "../../utilities/urls";
-import address from "../../i18n/address";
 import order from "../../i18n/order";
 import userMessages from "../../i18n/user";
 import { trackPageView } from "../../utilities/analytics";
-import { AppContext } from "../../pages/_app";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import { ABSOLUTE_URL } from "../../utilities/api";
 import Card from "../layout/Card";
 import StyledLink from "../elements/StyledLink";
+import Flex from "../layout/Flex";
+import Box from "../layout/Box";
 
 const messages = defineMessages({
   siteTitle: {
@@ -102,7 +95,10 @@ const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
           />
         </Head>
         <Flex flexWrap="wrap">
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} pr={[0, 4, 4, 4]}>
+          <Box
+            width={[1, 1 / 2, 1 / 3, 1 / 3]}
+            paddingRight={1 /* TODO: [0, 4, 4, 4] */}
+          >
             <Card>
               <h1>{intl.formatMessage(messages.myAccount)}</h1>
               <ProfileNavigation>

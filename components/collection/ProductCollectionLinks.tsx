@@ -1,6 +1,5 @@
 import { FunctionComponent, useCallback, useContext, useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
-import { Box } from "reflexbox";
 import styled from "styled-components";
 import { FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
@@ -18,6 +17,7 @@ import {
 import { mutate } from "swr";
 import EditProductCollectionLinks from "./EditProductCollectionLinks";
 import { ASSET_URL } from "../../utilities/api";
+import Box from "../layout/Box";
 
 const messages = defineMessages({
   downloadsAndLinks: {

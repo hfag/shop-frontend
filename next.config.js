@@ -7,6 +7,9 @@ const withTM = require("next-transpile-modules")([
   "intl-messageformat-parser",
   "intl-messageformat",
 ]);
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
 const env = {
   // ASSET_URL: "http://localhost:3000/assets",
@@ -21,7 +24,7 @@ const env = {
   PUBLIC_PATH: "/",
 };
 
-module.exports = withPlugins([withTM], {
+module.exports = withPlugins([withTM, withBundleAnalyzer({})], {
   env,
 });
 

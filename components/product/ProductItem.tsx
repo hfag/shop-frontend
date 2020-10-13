@@ -1,17 +1,16 @@
 import React, { useEffect, useMemo, FunctionComponent } from "react";
 import styled from "styled-components";
-import { Flex, Box } from "reflexbox";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
 
 import Asset from "../elements/Asset";
 import Placeholder from "../elements/Placeholder";
 import { colors, borders, shadows } from "../../utilities/style";
-import RelativeBox from "../layout/RelativeBox";
 import Price from "../elements/Price";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { Product } from "../../schema";
 import StyledLink from "../elements/StyledLink";
+import Box from "../layout/Box";
 
 const messages = defineMessages({
   discountForResellers: {
@@ -131,7 +130,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
     );
 
     return (
-      <RelativeBox width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
+      <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} paddingX={0.5} marginTop={1}>
         <StyledLink href={url} noHover>
           <StyledProduct>
             <Asset asset={product.featuredAsset} squared />
@@ -173,7 +172,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
             </div>
           </StyledProduct>
         </StyledLink>
-      </RelativeBox>
+      </Box>
     );
   }
 );

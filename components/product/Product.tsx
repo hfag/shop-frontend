@@ -9,7 +9,6 @@ import React, {
 } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import { Flex, Box } from "reflexbox";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import Card from "../layout/Card";
@@ -46,6 +45,8 @@ import { ADD_TO_ORDER, GET_ACTIVE_ORDER } from "../../gql/order";
 import { mutate } from "swr";
 import Placeholder from "../elements/Placeholder";
 import ProductCrossSells from "./ProductCrossSells";
+import Flex from "../layout/Flex";
+import Box from "../layout/Box";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;
@@ -276,11 +277,15 @@ const Product: FunctionComponent<{
             onSelect={onVariationSliderSelect}
           />
         </div>
-        <Flex flexWrap="wrap">
+        <Flex flexWrap="wrap" marginX>
           {product.optionGroups
             .filter((optionGroup) => !(optionGroup.id in defaultOptions))
             .map((optionGroup) => (
-              <Box key={optionGroup.id} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+              <Box
+                key={optionGroup.id}
+                width={[1, 1 / 2, 1 / 3, 1 / 3]}
+                paddingX={0.5}
+              >
                 <h4>{optionGroup.name}</h4>
                 <Select
                   placeholder={intl.formatMessage(messages.chooseAnAttribute)}
@@ -315,7 +320,7 @@ const Product: FunctionComponent<{
                 />
               </Box>
             ))}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
             <h4>{intl.formatMessage(productMessages.quantity)}</h4>
             <Counter
               type="number"
@@ -326,7 +331,7 @@ const Product: FunctionComponent<{
             />
           </Box>
           {/*fields.map(({ label, placeholder, type, maxLength }, index) => (
-            <Box key={index} width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+            <Box key={index} width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={2}>
               <h4>{label}</h4>
               {type === "text" && (
                 <InputFieldWrapper>
@@ -351,7 +356,7 @@ const Product: FunctionComponent<{
               )}
             </Box>
               ))*/}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2}>
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
             <h4>{intl.formatMessage(messages.reset)}</h4>
             <Button
               onClick={() =>
@@ -365,11 +370,11 @@ const Product: FunctionComponent<{
             </Button>
           </Box>
         </Flex>
-        <Flex flexWrap="wrap">
+        <Flex flexWrap="wrap" marginX>
           {activeResellerDiscounts.length === 0 ? (
             selectedVariant &&
             selectedVariant.bulkDiscounts.length > 0 && (
-              <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+              <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={2} marginTop={3}>
                 <h4>{intl.formatMessage(productMessages.bulkDiscount)}</h4>
                 <DiscountTable>
                   <thead>
@@ -406,7 +411,7 @@ const Product: FunctionComponent<{
               </Box>
             )
           ) : (
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
               <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
               {activeResellerDiscounts.map((d) => (
                 <>
@@ -422,7 +427,7 @@ const Product: FunctionComponent<{
               ))}
             </Box>
           )}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} px={2} mt={3}>
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
             {selectedVariant && selectedVariant.price ? (
               <div>
                 <h4>{intl.formatMessage(productMessages.price)}</h4>
@@ -508,13 +513,13 @@ const Product: FunctionComponent<{
         </Flex>
         <Flex flexWrap="wrap">
           {product.description && (
-            <Box width={[1, 1, 1 / 2, 2 / 3]} pr={3} mt={3}>
+            <Box width={[1, 1, 1 / 2, 2 / 3]} paddingRight={1} marginTop={1}>
               <UnsafeHTMLContent content={product.description} />
               <h2>{intl.formatMessage(messages.imageGallery)}</h2>
               <LightboxGallery assets={product.assets} />
             </Box>
           )}
-          <Box width={[1, 1, 1 / 2, 1 / 3]} pl={3} mt={3}>
+          <Box width={[1, 1, 1 / 2, 1 / 3]} paddingLeft={1} marginTop={1}>
             <h4>{intl.formatMessage(messages.specifications)}</h4>
             <StyledTable>
               <tbody>

@@ -1,16 +1,12 @@
-import React, {
-  useState,
-  useReducer,
-  FunctionComponent,
-  useCallback,
-} from "react";
+import React, { useReducer, FunctionComponent, useCallback } from "react";
 import styled from "styled-components";
 import Lightbox from "react-images";
-import { Flex, Box } from "reflexbox";
 import { useIntl, defineMessages } from "react-intl";
 
 import Asset from "../elements/Asset";
 import { Asset as AssetType } from "../../schema";
+import Box from "../layout/Box";
+import Flex from "../layout/Flex";
 
 const messages = defineMessages({
   imageXOfY: {
@@ -33,10 +29,6 @@ const messages = defineMessages({
 
 const LightboxBox = styled(Box)`
   cursor: zoom-in;
-`;
-
-const GalleryFlex = styled(Flex)`
-  margin: 0 -0.5rem !important;
 `;
 
 interface OPEN_LIGHTBOX_ACTION {
@@ -134,19 +126,19 @@ const LightboxGallery: FunctionComponent<{ assets: AssetType[] }> = React.memo(
 
     return (
       <React.Fragment>
-        <GalleryFlex flexWrap="wrap">
+        <Flex flexWrap="wrap" marginX>
           {assets.map((asset, index) => (
             <LightboxBox
               key={asset.id}
               width={[1 / 2, 1 / 2, 1 / 4, 1 / 6]}
-              px={2}
-              mb={2}
+              paddingX={0.5}
+              marginBottom={1}
               onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}
             >
               <Asset asset={asset} />
             </LightboxBox>
           ))}
-        </GalleryFlex>
+        </Flex>
         <Lightbox
           images={assets.map((asset) => ({
             src: asset.source,

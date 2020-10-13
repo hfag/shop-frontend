@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useMemo } from "react";
 import { withFormik, Form, Field, FormikProps } from "formik";
-import { Flex, Box } from "reflexbox";
 import * as yup from "yup";
 import { defineMessages, useIntl, injectIntl, IntlShape } from "react-intl";
 
@@ -31,6 +30,8 @@ import orderMessages from "../../i18n/order";
 import { NextRouter } from "next/router";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../../utilities/urls";
 import InlinePage from "../InlinePage";
+import Flex from "../layout/Flex";
+import Box from "../layout/Box";
 
 const messages = defineMessages({
   orderComments: {
@@ -137,7 +138,7 @@ const InnerCheckoutForm = React.memo(
         <Flex flexWrap="wrap">
           {data ? (
             data.eligibleShippingMethods.map((shippingMethod) => (
-              <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} pr={3}>
+              <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} paddingRight={1}>
                 <label>
                   <Field
                     name="shippingMethod"
@@ -151,14 +152,14 @@ const InnerCheckoutForm = React.memo(
               </Box>
             ))
           ) : (
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} pr={3}>
+            <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} paddingRight={1}>
               <Placeholder block />
             </Box>
           )}
         </Flex>
         <h3>{intl.formatMessage(messages.paymentMethods)}</h3>
         <Flex flexWrap="wrap">
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} pr={3}>
+          <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} paddingRight={1}>
             <label>
               <Field
                 name="paymentMethod"

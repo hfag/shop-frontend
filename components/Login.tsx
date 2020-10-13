@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { withFormik, Form, FormikProps } from "formik";
 import * as yup from "yup";
-import { Flex, Box } from "reflexbox";
 import { defineMessages, useIntl, IntlShape } from "react-intl";
 
 import { pathnamesByLanguage } from "../utilities/urls";
@@ -28,6 +27,8 @@ import { ABSOLUTE_URL } from "../utilities/api";
 import Message from "./elements/Message";
 import { AppContext } from "../pages/_app";
 import { mutate } from "swr";
+import Flex from "./layout/Flex";
+import Box from "./layout/Box";
 
 const messages = defineMessages({
   siteTitle: {
@@ -319,7 +320,7 @@ const Login = React.memo(() => {
         />
       </Head>
       <Flex flexWrap="wrap">
-        <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
+        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1} paddingBottom={1}>
           <h1>{intl.formatMessage(userMessages.login)}</h1>
           <LoginRegisterForm
             intl={intl}
@@ -352,7 +353,7 @@ const Login = React.memo(() => {
             callback={() => setDidResetPassword(true)}
           />
         </Box>
-        <Box width={[1, 1, 1 / 2, 1 / 2]} pr={3} pb={3}>
+        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1} paddingBottom={1}>
           <h1>{intl.formatMessage(messages.newAccount)}</h1>
           <LoginRegisterForm
             intl={intl}

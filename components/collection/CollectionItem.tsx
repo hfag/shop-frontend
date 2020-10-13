@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, FunctionComponent } from "react";
 import styled from "styled-components";
-import { Flex, Box } from "reflexbox";
 
 import { useIntl } from "react-intl";
 import Asset from "../elements/Asset";
@@ -9,6 +8,7 @@ import { colors, borders, shadows } from "../../utilities/style";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { Collection } from "../../schema";
 import StyledLink from "../elements/StyledLink";
+import Box from "../layout/Box";
 
 const StyledCategory = styled.div`
   background-color: #fff;
@@ -88,7 +88,7 @@ const CollectionItem: FunctionComponent<{
   );
 
   return (
-    <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} px={2} mt={3}>
+    <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} paddingX={0.5} marginTop={1}>
       <StyledLink href={url}>
         <StyledCategory>
           <Asset asset={collection?.featuredAsset} squared />

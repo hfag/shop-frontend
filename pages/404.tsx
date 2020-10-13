@@ -9,8 +9,10 @@ import Searchbar from "../components/Searchbar";
 import { ABSOLUTE_URL } from "../utilities/api";
 import Wrapper from "../components/layout/Wrapper";
 import { GetStaticProps } from "next";
+import { withApp } from "../components/AppWrapper";
+import { locale, messages } from "./de/config";
 
-const messages = defineMessages({
+const errorMessages = defineMessages({
   siteTitle: {
     id: "404.siteTitle",
     defaultMessage: "Seite nicht gefunden! Fehler 404 - Hauser Feuerschutz AG",
@@ -43,17 +45,18 @@ const Page404 = React.memo(({}) => {
       <Card>
         <Head>
           <title>
-            {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
+            {intl.formatMessage(errorMessages.siteTitle)} - Hauser Feuerschutz
+            AG
           </title>
           <meta
             name="description"
-            content={intl.formatMessage(messages.siteDescription)}
+            content={intl.formatMessage(errorMessages.siteDescription)}
           />
           <link rel="canonical" href={`${ABSOLUTE_URL}/${intl.locale}/404`} />
         </Head>
-        <h1>{intl.formatMessage(messages.title)}</h1>
+        <h1>{intl.formatMessage(errorMessages.title)}</h1>
         <p>
-          {intl.formatMessage(messages.siteNotFound)}{" "}
+          {intl.formatMessage(errorMessages.siteNotFound)}{" "}
           <StyledLink external href="mailto:info@feuerschutz.ch">
             info@feuerschutz.ch
           </StyledLink>
@@ -71,4 +74,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
   };
 };
 
-export default Page404;
+export default withApp(locale, messages)(Page404);

@@ -3,6 +3,8 @@ import { useIntl } from "react-intl";
 import page from "../i18n/page";
 import VerifyEmail from "../components/VerifyEmail";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { withApp } from "../components/AppWrapper";
+import { locale, messages } from "./de/config";
 
 const Page = () => {
   const intl = useIntl();
@@ -28,4 +30,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default Page;
+export default withApp(locale, messages);

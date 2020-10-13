@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback, useContext } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useIntl, defineMessages } from "react-intl";
@@ -11,12 +11,12 @@ import Placeholder from "../elements/Placeholder";
 import { GET_CURRENT_CUSTOMER, DELETE_CUSTOMER_ADDRESS } from "../../gql/user";
 import address from "../../i18n/address";
 import request from "../../utilities/request";
-import { AppContext } from "../../pages/_app";
 import { mutate } from "swr";
 import ActionButton from "../ActionButton";
 import Button from "../elements/Button";
 import { useRouter } from "next/router";
 import { Unavailable } from "../administrator/Unavailable";
+import { AppContext } from "../AppWrapper";
 
 const messages = defineMessages({
   address: {

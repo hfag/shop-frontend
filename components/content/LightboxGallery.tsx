@@ -1,5 +1,5 @@
 import React, { useReducer, FunctionComponent, useCallback } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import Lightbox from "react-images";
 import { useIntl, defineMessages } from "react-intl";
 

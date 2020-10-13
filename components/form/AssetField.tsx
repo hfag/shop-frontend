@@ -3,7 +3,7 @@ import get from "lodash/get";
 import { FunctionComponent, useState } from "react";
 import { FaFile } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { borders, colors } from "../../utilities/style";
 import ClientOnlyPortal from "../ClientOnlyPortal";
 import FileChooser from "../choosers/FileChooser";

@@ -1,9 +1,8 @@
 import { FunctionComponent, useCallback, useContext, useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
-import { AppContext } from "../../pages/_app";
 import { Collection, CollectionLinkType } from "../../schema";
 import Button from "../elements/Button";
 import Flexbar from "../layout/Flexbar";

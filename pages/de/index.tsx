@@ -6,8 +6,8 @@ import ProductCollection from "../../components/collection/ProductCollection";
 import { Collection } from "../../schema";
 import Wrapper from "../../components/layout/Wrapper";
 import request from "../../utilities/request";
-import { locale } from "./config.json";
-import styled from "styled-components";
+import { locale, messages } from "./config";
+import styled from "@emotion/styled";
 import Card from "../../components/layout/Card";
 import StyledLink from "../../components/elements/StyledLink";
 import { pathnamesByLanguage, pageSlugsByLanguage } from "../../utilities/urls";
@@ -20,12 +20,9 @@ import SidebarBreadcrumbs from "../../components/layout/sidebar/SidebarBreadcrum
 import SidebarCollections from "../../components/layout/sidebar/SidebarCollections";
 import SidebarProducts from "../../components/layout/sidebar/SidebarProducts";
 import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb";
+import { withApp } from "../../components/AppWrapper";
 
-const messages = defineMessages({
-  ourProducts: {
-    id: "Frontpage.ourProducts",
-    defaultMessage: "Unsere Produkte",
-  },
+const homeMessages = defineMessages({
   moreAboutCompany: {
     id: "Frontpage.moreAboutCompany",
     defaultMessage: "Mehr über das Unternehmen",
@@ -45,7 +42,7 @@ const H2 = styled.h2`
   margin-bottom: 0;
 `;
 
-const Home: FunctionComponent<{
+const Page: FunctionComponent<{
   collectionResponse: { collection: Collection };
   posts: Post[];
 }> = ({ collectionResponse, posts }) => {
@@ -101,21 +98,21 @@ const Home: FunctionComponent<{
       />
       <Card>
         <H1>Hauser Feuerschutz AG</H1>
-        <p>{intl.formatMessage(messages.aboutCompany)}</p>
+        <p>{intl.formatMessage(homeMessages.aboutCompany)}</p>
         <StyledLink
           href={`/${intl.locale}/${
             pathnamesByLanguage.page.languages[intl.locale]
           }/${pageSlugsByLanguage.companyAbout.languages[intl.locale]}`}
           underlined
         >
-          {intl.formatMessage(messages.moreAboutCompany)}
+          {intl.formatMessage(homeMessages.moreAboutCompany)}
         </StyledLink>
       </Card>
     </Wrapper>
   );
 };
 
-export default Home;
+export default withApp(locale, messages)(Page);
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useEffect } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { FaShoppingCart } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
 
@@ -12,12 +12,12 @@ import Button from "../elements/Button";
 import Triangle from "../shapes/Triangle";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { colors } from "../../utilities/style";
-import { AppContext } from "../../pages/_app";
 import request from "../../utilities/request";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
 import { Order } from "../../schema";
 import Placeholder from "../elements/Placeholder";
 import Asset from "../elements/Asset";
+import { AppContext } from "../AppWrapper";
 
 const messages = defineMessages({
   emptyCart: {

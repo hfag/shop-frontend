@@ -5,6 +5,8 @@ import { pathnamesByLanguage } from "../../../utilities/urls";
 import AccountWrapper from "../../../components/account/AccountWrapper";
 import AccountDashboard from "../../../components/account/AccountDashboard";
 import { GetStaticProps } from "next";
+import { withApp } from "../../../components/AppWrapper";
+import { locale, messages } from "../config";
 
 const Page = () => {
   const intl = useIntl();
@@ -27,11 +29,11 @@ const Page = () => {
   );
 };
 
+export default withApp(locale, messages)(Page);
+
 //do everything client side
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
   };
 };
-
-export default Page;

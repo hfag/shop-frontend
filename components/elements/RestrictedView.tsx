@@ -4,7 +4,6 @@ import React, {
   useContext,
   useMemo,
 } from "react";
-import { AppContext } from "../../pages/_app";
 import { Permission } from "../../schema";
 import { useAuthenticate } from "../../utilities/hooks";
 

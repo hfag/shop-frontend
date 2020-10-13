@@ -50,8 +50,12 @@ languages
     rimraf.sync(_path.resolve(pages, lang));
     fs.mkdirSync(_path.resolve(pages, lang));
     fs.writeFileSync(
-      _path.resolve(pages, lang, "config.json"),
-      JSON.stringify({ locale: lang })
+      _path.resolve(pages, lang, "config.ts"),
+      `import m from "../../locales/${lang}.json";
+
+export const locale = "${lang}";
+export const messages = m;
+      `
     );
     generatePages(lang, [[defaultLanguage, lang]], pathnames);
   });

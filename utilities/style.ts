@@ -1,4 +1,4 @@
-import { css, CSSObject, SimpleInterpolation } from "styled-components";
+import { css } from "@emotion/styled";
 
 export const colors = {
   primary: "#000000",
@@ -26,44 +26,12 @@ export const shadows = {
 };
 
 export const media = {
-  minSmall: (first: any, ...interpolations: any) => css`
-    @media (min-width: 576px) {
-      ${css(first, ...interpolations)};
-    }
-  `,
-  maxSmall: (first: any, ...interpolations: any) => css`
-    @media (max-width: 575px) {
-      ${css(first, ...interpolations)};
-    }
-  `,
-  minMedium: (first: any, ...interpolations: any) => css`
-    @media (min-width: 768px) {
-      ${css(first, ...interpolations)};
-    }
-  `,
-  maxMedium: (first: any, ...interpolations: any) => css`
-    @media (max-width: 767px) {
-      ${css(first, ...interpolations)};
-    }
-  `,
-  minLarge: (first: any, ...interpolations: any) => css`
-    @media (min-width: 992px) {
-      ${css(first, ...interpolations)};
-    }
-  `,
-  maxLarge: (first: any, ...interpolations: any) => css`
-    @media (max-width: 991px) {
-      ${css(first, ...interpolations)};
-    }
-  `,
-  minXLarge: (first: any, ...interpolations: any) => css`
-    @media (min-width: 1200px) {
-      ${css(first, ...interpolations)};
-    }
-  `,
-  maxXLarge: (first: any, ...interpolations: any) => css`
-    @media (max-width: 1199px) {
-      ${css(first, ...interpolations)};
-    }
-  `,
+  minSmall: "@media (min-width: 576px)",
+  maxSmall: "@media (max-width: 575px)",
+  minMedium: "@media (min-width: 768px)",
+  maxMedium: "@media (max-width: 767px)",
+  minLarge: "@media (min-width: 992px)",
+  maxLarge: "@media (max-width: 991px)",
+  minXLarge: "@media (min-width: 1200px)",
+  maxXLarge: "@media (max-width: 1199px)",
 };

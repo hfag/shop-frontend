@@ -7,7 +7,7 @@ import { ADMIN_GET_AVAILABLE_LANGUAGES } from "../gql/admin";
 import { colors } from "../utilities/style";
 import Select from "./elements/Select";
 import { FunctionComponent } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { LanguageCode } from "../schema";
 
 const messages = defineMessages({

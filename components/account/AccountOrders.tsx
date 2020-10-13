@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { useIntl } from "react-intl";
 import { Order as OrderType } from "../../schema";
 import orderMessages from "../../i18n/order";
@@ -8,8 +8,8 @@ import Price from "../elements/Price";
 import StyledLink from "../elements/StyledLink";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Placeholder from "../elements/Placeholder";
-import { AppContext } from "../../pages/_app";
 import { Unavailable } from "../administrator/Unavailable";
+import { AppContext } from "../AppWrapper";
 
 const OrdersWrapper = styled.div`
   h2 {

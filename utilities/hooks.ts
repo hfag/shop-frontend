@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react";
-import { AppContext } from "../pages/_app";
+import { AppContext } from "../components/AppWrapper";
 import { Permission } from "../schema";
 import { isClient } from "./ssr";
 

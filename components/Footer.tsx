@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import {
   FaMapMarkerAlt as MapMarker,
   FaPhone as Phone,
@@ -73,9 +73,9 @@ const BorderBox = styled(Box)`
   padding: 1rem 0;
   margin-bottom: 1rem;
 
-  ${media.maxMedium`
+  ${media.maxMedium} {
     border-bottom: #fff 1px solid;
-	`};
+  }
 
   &:last-child {
     border-bottom: none;

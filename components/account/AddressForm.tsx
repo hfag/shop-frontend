@@ -2,7 +2,7 @@ import React from "react";
 import { withFormik, Form, FormikProps } from "formik";
 import PropTypes from "prop-types";
 import * as yup from "yup";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { IntlShape } from "react-intl";
 
 import {

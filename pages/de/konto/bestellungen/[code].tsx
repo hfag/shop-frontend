@@ -6,13 +6,14 @@ import { GET_ORDER_BY_CODE } from "../../../../gql/order";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { AppContext } from "../../../_app";
 import { useContext } from "react";
 import request from "../../../../utilities/request";
 import { Order as OrderType } from "../../../../schema";
 import Placeholder from "../../../../components/elements/Placeholder";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
+import { AppContext, withApp } from "../../../../components/AppWrapper";
+import { locale, messages } from "../../config";
 
 const Page = () => {
   const intl = useIntl();
@@ -64,6 +65,8 @@ const Page = () => {
   );
 };
 
+export default withApp(locale, messages)(Page);
+
 //do everything client side
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -77,5 +80,3 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: true,
   };
 };
-
-export default Page;

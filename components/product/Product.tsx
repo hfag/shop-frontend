@@ -8,7 +8,7 @@ import React, {
   useContext,
 } from "react";
 import ReactDOM from "react-dom";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import Card from "../layout/Card";
@@ -38,7 +38,6 @@ import {
 } from "../../schema";
 import { ABSOLUTE_URL } from "../../utilities/api";
 import Head from "next/head";
-import { AppContext } from "../../pages/_app";
 import StyledLink from "../elements/StyledLink";
 import request from "../../utilities/request";
 import { ADD_TO_ORDER, GET_ACTIVE_ORDER } from "../../gql/order";
@@ -47,6 +46,7 @@ import Placeholder from "../elements/Placeholder";
 import ProductCrossSells from "./ProductCrossSells";
 import Flex from "../layout/Flex";
 import Box from "../layout/Box";
+import { AppContext } from "../AppWrapper";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;

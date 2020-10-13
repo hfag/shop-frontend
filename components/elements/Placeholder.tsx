@@ -1,5 +1,6 @@
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import { keyframes } from "@emotion/core";
+import styled from "@emotion/styled";
 
 import { colors, borders } from "../../utilities/style";
 

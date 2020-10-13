@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { defineMessages, useIntl } from "react-intl";
 
 import StyledLink from "../elements/StyledLink";
@@ -9,7 +9,7 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import Triangle from "../shapes/Triangle";
 import userMessages from "../../i18n/user";
 import page from "../../i18n/page";
-import { AppContext } from "../../pages/_app";
+import { AppContext } from "../AppWrapper";
 
 const messages = defineMessages({
   toAccount: {

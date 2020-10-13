@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { colors } from "../../utilities/style";
 import Table from "../elements/Table";
 import { FunctionComponent, ReactNode } from "react";

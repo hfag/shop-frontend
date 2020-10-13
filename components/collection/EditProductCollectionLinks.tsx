@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { defineMessages, IntlShape, useIntl } from "react-intl";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { MdDelete, MdArrowUpward } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
 

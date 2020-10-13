@@ -8,7 +8,7 @@ import SidebarBreadcrumb from "./SidebarBreadcrumb";
 import { useIntl } from "react-intl";
 import Placeholder from "../../elements/Placeholder";
 import { Collection } from "../../../schema";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import product from "../../../i18n/product";
 import { colors } from "../../../utilities/style";
 import { pathnamesByLanguage } from "../../../utilities/urls";

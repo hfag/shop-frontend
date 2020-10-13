@@ -56,25 +56,6 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-// We need to expose React Intl's locale data on the request for the user's
-// locale. This function will also cache the scripts by lang in memory.
-const localeDataCache = new Map();
-const getLocaleDataScript = (locale) => {
-  const lang = locale.split("-")[0];
-  if (!localeDataCache.has(lang)) {
-    const localeDataFile = require.resolve(
-      `@formatjs/intl-relativetimeformat/dist/locale-data/${lang}`
-    );
-    const localeDataScript = readFileSync(localeDataFile, "utf8");
-    localeDataCache.set(lang, localeDataScript);
-  }
-  return localeDataCache.get(lang);
-};
-
-const getMessages = (locale) => {
-  return require(`./locales/${locale}.json`);
-};
-
 app.prepare().then(() => {
   const server = express();
   server.all("*", (request, response) => {
@@ -99,11 +80,7 @@ app.prepare().then(() => {
         return;
       }
 
-      // console.log("render with locale", request.url, locale);
-
       request.locale = locale;
-      request.localeDataScript = getLocaleDataScript(locale);
-      request.messages = getMessages(locale)[locale];
     }
 
     handle(request, response);

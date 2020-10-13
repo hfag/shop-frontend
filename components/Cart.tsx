@@ -16,12 +16,12 @@ import { Order, CreateAddressInput, Country } from "../schema";
 import Head from "next/head";
 import { ABSOLUTE_URL } from "../utilities/api";
 import { GET_ACTIVE_ORDER } from "../gql/order";
-import { AppContext } from "../pages/_app";
 import request from "../utilities/request";
 import useSWR from "swr";
 import Placeholder from "./elements/Placeholder";
 import { AVAILABLE_COUNTRIES } from "../gql/country";
 import { useRouter } from "next/router";
+import { AppContext } from "./AppWrapper";
 
 const messages = defineMessages({
   siteTitle: {

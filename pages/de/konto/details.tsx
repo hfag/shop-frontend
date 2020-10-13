@@ -3,15 +3,16 @@ import AccountForm from "../../../components/account/AccountForm";
 import AccountWrapper from "../../../components/account/AccountWrapper";
 import { useIntl, defineMessages } from "react-intl";
 import { useState, useContext } from "react";
-import { AppContext } from "../../_app";
 import Placeholder from "../../../components/elements/Placeholder";
 import Message from "../../../components/elements/Message";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import page from "../../../i18n/page";
 import { Unavailable } from "../../../components/administrator/Unavailable";
 import { GetStaticProps } from "next";
+import { AppContext, withApp } from "../../../components/AppWrapper";
+import { locale, messages } from "../config";
 
-const messages = defineMessages({
+const detailMessages = defineMessages({
   newEmail: {
     id: "account.details.newEmail",
     defaultMessage:
@@ -54,7 +55,7 @@ const Page = () => {
                 lastName: customer.lastName,
               }}
               newEmailCallback={() =>
-                setMessage(intl.formatMessage(messages.newEmail))
+                setMessage(intl.formatMessage(detailMessages.newEmail))
               }
             />
             {message && (
@@ -74,11 +75,11 @@ const Page = () => {
   );
 };
 
+export default withApp(locale, messages)(Page);
+
 //do everything client side
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
   };
 };
-
-export default Page;

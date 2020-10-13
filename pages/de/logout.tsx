@@ -8,8 +8,10 @@ import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Card from "../../components/layout/Card";
 import { GetStaticProps } from "next";
+import { withApp } from "../../components/AppWrapper";
+import { locale, messages } from "./config";
 
-const messages = defineMessages({
+const logoutMessages = defineMessages({
   pleaseWait: {
     id: "logout.pleaseWait",
     defaultMessage: "Bitte warten...",
@@ -39,10 +41,12 @@ const Page = () => {
         },
       ]}
     >
-      <Card>{intl.formatMessage(messages.pleaseWait)}</Card>
+      <Card>{intl.formatMessage(logoutMessages.pleaseWait)}</Card>
     </Wrapper>
   );
 };
+
+export default withApp(locale, messages)(Page);
 
 //do everything client side
 export const getStaticProps: GetStaticProps = async () => {
@@ -50,5 +54,3 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {},
   };
 };
-
-export default Page;

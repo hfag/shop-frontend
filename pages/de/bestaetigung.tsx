@@ -6,6 +6,8 @@ import { useIntl } from "react-intl";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { GetStaticProps } from "next";
+import { withApp } from "../../components/AppWrapper";
+import { locale, messages } from "./config";
 
 const Page: FunctionComponent<{}> = () => {
   const intl = useIntl();
@@ -27,10 +29,10 @@ const Page: FunctionComponent<{}> = () => {
   );
 };
 
+export default withApp(locale, messages)(Page);
+
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {},
   };
 };
-
-export default Page;

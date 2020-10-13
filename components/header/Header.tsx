@@ -4,7 +4,7 @@ import React, {
   FunctionComponent,
   useContext,
 } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { MdMenu } from "react-icons/md";
 import { defineMessages, useIntl, IntlShape } from "react-intl";
 
@@ -27,9 +27,9 @@ import { colors } from "../../utilities/style";
 import page from "../../i18n/page";
 import { ABSOLUTE_URL, API_BASE_URL, WP_BLOG_URL } from "../../utilities/api";
 import StyledLink from "../elements/StyledLink";
-import { AppContext } from "../../pages/_app";
 import Flex from "../layout/Flex";
 import Box from "../layout/Box";
+import { AppContext } from "../AppWrapper";
 
 const messages = defineMessages({
   siteDescription: {

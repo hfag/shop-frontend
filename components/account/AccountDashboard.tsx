@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useContext } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 
 import order from "../../i18n/order";
-import { AppContext } from "../../pages/_app";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import StyledLink from "../elements/StyledLink";
 import { Address as AddressType, Order as OrderType } from "../../schema";
@@ -16,6 +15,7 @@ import Placeholder from "../elements/Placeholder";
 import { Unavailable } from "../administrator/Unavailable";
 import Flex from "../layout/Flex";
 import Box from "../layout/Box";
+import { AppContext } from "../AppWrapper";
 
 const messages = defineMessages({
   here: {

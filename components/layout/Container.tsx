@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { media } from "../../utilities/style";
 
 const Container = styled.div`
@@ -9,18 +9,18 @@ const Container = styled.div`
 
   height: 100%;
 
-  ${media.minSmall`
-		max-width: 576px;
-	`};
-  ${media.minMedium`
-		max-width: 720px;
-	`};
-  ${media.minLarge`
-		max-width: 940px;
-	`};
-  ${media.minXLarge`
-		max-width: 1140px;
-	`};
+  ${media.minSmall} {
+    max-width: 576px;
+  }
+  ${media.minMedium} {
+    max-width: 720px;
+  }
+  ${media.minLarge} {
+    max-width: 940px;
+  }
+  ${media.minXLarge} {
+    max-width: 1140px;
+  }
 `;
 
 export default Container;

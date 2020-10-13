@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { withFormik, Form, FieldArray, Field, FormikProps } from "formik";
 import { MdDelete } from "react-icons/md";
 import { defineMessages, IntlShape } from "react-intl";

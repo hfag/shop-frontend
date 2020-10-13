@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useMemo } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import {
   ProductVariant,
   Asset as AssetType,

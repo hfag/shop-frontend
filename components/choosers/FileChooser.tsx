@@ -1,6 +1,6 @@
 import { FunctionComponent, useMemo, useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import useSWR from "swr";
 import { ADMIN_ASSETS } from "../../gql/asset";
 import { Asset, SortOrder } from "../../schema";

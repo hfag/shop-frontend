@@ -7,7 +7,7 @@ import SidebarBreadcrumb from "./SidebarBreadcrumb";
 import { useIntl } from "react-intl";
 import { Product } from "../../../schema";
 import product from "../../../i18n/product";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { colors } from "../../../utilities/style";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 

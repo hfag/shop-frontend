@@ -39,5 +39,5 @@ mkdirpSync(outputDir);
 // Write the messages to this directory
 fs.writeFileSync(
   outputDir + "de.json",
-  JSON.stringify({ de: orderedMessages }, null, 2)
+  JSON.stringify(orderedMessages, null, 2)
 );

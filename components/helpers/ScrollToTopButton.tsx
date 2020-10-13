@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { FaChevronUp } from "react-icons/fa";
 import { useIntl, defineMessages } from "react-intl";
 

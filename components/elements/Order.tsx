@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { colors, borders, shadows } from "../../utilities/style";
 import Price from "../elements/Price";

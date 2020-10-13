@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useContext,
 } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import {
   FaHome as HomeIcon,
   FaSearch as SearchIcon,
@@ -22,7 +22,7 @@ import Card from "../Card";
 import RestrictedView from "../../elements/RestrictedView";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import page from "../../../i18n/page";
-import { AppContext } from "../../../pages/_app";
+import { AppContext } from "../../AppWrapper";
 
 const BurgerContainer = styled(Card)<{ isOpen: boolean }>`
   height: 100%;
@@ -34,21 +34,20 @@ const BurgerContainer = styled(Card)<{ isOpen: boolean }>`
   transition: all 0.3s ease-in;
   -webkit-overflow-scrolling: touch;
 
-  ${media.maxLarge`
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 250px;
-      
-      overflow-y: scroll;
+  ${media.maxLarge} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
 
-      transform: translateX(${({ isOpen }) => (isOpen ? "0" : "-100%")});
+    overflow-y: scroll;
 
-      box-shadow: none !important;
-      margin: 0;
-    }
-`};
+    transform: translateX(${({ isOpen }) => (isOpen ? "0" : "-100%")});
+
+    box-shadow: none !important;
+    margin: 0;
+  }
 `;
 
 const BurgerLogo = styled.img`

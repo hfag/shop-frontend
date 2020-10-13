@@ -11,7 +11,7 @@ languages
   .filter((l) => l !== defaultLanguage)
   .forEach((language) => {
     const path = `./locales/${language}.json`;
-    const messages = JSON.parse(fs.readFileSync(path, "utf-8"))[language];
+    const messages = JSON.parse(fs.readFileSync(path, "utf-8"));
     Object.keys(defaultMessages).forEach((key) => {
       if (!(key in messages) || messages[key].startsWith("TODO:")) {
         messages[key] = `TODO: (${defaultLanguage}) ${defaultMessages[key]}`;
@@ -33,8 +33,5 @@ languages
         orderedMessages[key] = messages[key];
       });
 
-    fs.writeFileSync(
-      path,
-      JSON.stringify({ [language]: orderedMessages }, null, 2)
-    );
+    fs.writeFileSync(path, JSON.stringify(orderedMessages, null, 2));
   });

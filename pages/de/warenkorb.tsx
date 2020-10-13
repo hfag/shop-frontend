@@ -4,6 +4,8 @@ import Cart from "../../components/Cart";
 import page from "../../i18n/page";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { GetStaticProps } from "next";
+import { withApp } from "../../components/AppWrapper";
+import { locale, messages } from "./config";
 
 const Page = (props) => {
   const intl = useIntl();
@@ -25,11 +27,11 @@ const Page = (props) => {
   );
 };
 
+export default withApp(locale, messages)(Page);
+
 //do everything client side
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
   };
 };
-
-export default Page;

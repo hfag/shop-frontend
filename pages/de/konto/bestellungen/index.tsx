@@ -3,7 +3,6 @@ import AccountWrapper from "../../../../components/account/AccountWrapper";
 import AccountOrders from "../../../../components/account/AccountOrders";
 import { useIntl } from "react-intl";
 import { GET_CURRENT_CUSTOMER_ALL_ORDERS } from "../../../../gql/user";
-import { AppContext } from "../../../_app";
 import { useContext } from "react";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
@@ -11,6 +10,8 @@ import useSWR from "swr";
 import request from "../../../../utilities/request";
 import { Order } from "../../../../schema";
 import { GetStaticProps } from "next";
+import { AppContext, withApp } from "../../../../components/AppWrapper";
+import { locale, messages } from "../../config";
 
 const Page = () => {
   const intl = useIntl();
@@ -54,11 +55,11 @@ const Page = () => {
   );
 };
 
+export default withApp(locale, messages)(Page);
+
 //do everything client side
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
   };
 };
-
-export default Page;

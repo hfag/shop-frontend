@@ -1,12 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Wrapper from "../../../../components/layout/Wrapper";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
-import Order from "../../../../components/elements/Order";
-import { GET_ORDER_BY_CODE } from "../../../../gql/order";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { AppContext } from "../../../_app";
 import { useContext, useMemo } from "react";
 import request from "../../../../utilities/request";
 import { Order as OrderType, Country, Address } from "../../../../schema";
@@ -15,6 +12,8 @@ import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
 import AddressForm from "../../../../components/account/AddressForm";
 import { AVAILABLE_COUNTRIES } from "../../../../gql/country";
+import { AppContext, withApp } from "../../../../components/AppWrapper";
+import { locale, messages } from "../../config";
 
 const Page = () => {
   const intl = useIntl();
@@ -94,6 +93,8 @@ const Page = () => {
   );
 };
 
+export default withApp(locale, messages)(Page);
+
 //do everything client side
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -106,5 +107,3 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: true,
   };
 };
-
-export default Page;

@@ -9,7 +9,7 @@ import Button from "../elements/Button";
 import { useAuthenticate } from "../../utilities/hooks";
 import { FaEdit } from "react-icons/fa";
 import AsyncSelect from "react-select/async";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import request, { requestAdmin } from "../../utilities/request";
 import {
   ADMIN_UPDATE_CROSS_SELLS,

@@ -5,61 +5,40 @@ import Document, {
   Head,
   DocumentContext,
 } from "next/document";
-import { ServerStyleSheet } from "styled-components";
+import createEmotionServer from "create-emotion-server";
+import createCache from "@emotion/cache";
 
 interface IProps {
   locale: string;
-  localeDataScript: string;
 }
 
 export default class MyDocument extends Document<IProps> {
   static async getInitialProps(ctx: DocumentContext) {
-    const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
-    const initialProps = await super.getInitialProps(ctx);
-    const {
-      //@ts-ignore
-      req: { locale, localeDataScript },
-    } = ctx;
+    const cache = createCache();
+    const { extractCritical } = createEmotionServer(cache);
 
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />),
-        });
-
-      return {
-        ...initialProps,
-        locale,
-        localeDataScript,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      };
-    } finally {
-      sheet.seal();
-    }
+    const initialProps = await Document.getInitialProps(ctx);
+    const styles = extractCritical(initialProps.html);
+    return {
+      ...initialProps,
+      styles: (
+        <>
+          {initialProps.styles}
+          <style
+            data-emotion-css={styles.ids.join(" ")}
+            dangerouslySetInnerHTML={{ __html: styles.css }}
+          />
+        </>
+      ),
+    };
   }
 
   render() {
-    // Polyfill Intl API for older browsers
-    //const polyfill = `https://cdn.polyfill.io/v3/polyfill.min.js?features=Intl.~locale.${this.props.locale}`;
-
     return (
-      <Html lang={this.props.locale || "de"}>
+      <Html>
         <Head />
         <body>
           <Main />
-          {/*<script src={polyfill} />*/}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: this.props.localeDataScript,
-            }}
-          />
           <div id="modal" />
           <NextScript />
         </body>

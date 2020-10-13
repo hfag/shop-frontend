@@ -1,6 +1,6 @@
 import React from "react";
 import { FunctionComponent } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { media } from "../../utilities/style";
 
 const MediaBox = styled.div<{
@@ -15,18 +15,18 @@ const MediaBox = styled.div<{
   padding: ${({ padding }) => padding};
   margin: ${({ margin }) => margin};
 
-  ${media.minSmall`
+  ${media.minSmall} {
     width: ${({ widthSmall }) => widthSmall};
-  `};
-  ${media.minMedium`
+  }
+  ${media.minMedium} {
     width: ${({ widthMedium }) => widthMedium};
-  `};
-  ${media.minLarge`
+  }
+  ${media.minLarge} {
     width: ${({ widthLarge }) => widthLarge};
-  `};
-  ${media.minXLarge`
+  }
+  ${media.minXLarge} {
     width: ${({ widthXLarge }) => widthXLarge};
-  `};
+  }
 `;
 
 const Box: FunctionComponent<{

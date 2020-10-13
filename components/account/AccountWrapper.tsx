@@ -1,5 +1,5 @@
 import React, { useEffect, FunctionComponent, ReactNode } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { defineMessages, useIntl } from "react-intl";
 
 import { pathnamesByLanguage } from "../../utilities/urls";

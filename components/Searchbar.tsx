@@ -6,7 +6,7 @@ import React, {
   useEffect,
   KeyboardEvent,
 } from "react";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import Autosuggest from "react-autosuggest";
 import debounce from "lodash/debounce";
 import { defineMessages, useIntl } from "react-intl";

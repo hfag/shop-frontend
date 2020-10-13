@@ -82,7 +82,12 @@ const SelectField: FunctionComponent<{
               getOptionValue={(option) => option.value}
               placeholder={placeholder}
               onChange={(option) => {
-                setFieldValue(name, option ? option.value : undefined);
+                setFieldValue(
+                  name,
+                  option
+                    ? (option as { label: string; value: any }).value
+                    : undefined
+                );
                 setFieldTouched(name, true);
               }}
               noResultsText={intl.formatMessage(messages.noResults)}

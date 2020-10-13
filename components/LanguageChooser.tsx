@@ -53,7 +53,7 @@ const LanguageChooser: FunctionComponent<{
       <span>{intl.formatMessage(messages.chooseTranslationLanguage)}</span>
       <Select
         options={data}
-        onChange={(option) => onChange(option.value)}
+        onChange={(option) => onChange((option as { value: any }).value)}
         value={data.filter((l) => l.value === value)}
         getOptionLabel={(item) => item.value}
         width={8}

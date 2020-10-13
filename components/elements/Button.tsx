@@ -1,11 +1,9 @@
 import React, { FunctionComponent, ReactNode } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import Color from "color";
 import ProgressButton from "react-progress-button";
 
 import { colors, borders } from "../../utilities/style";
-const DISABLED = Color(colors.secondary).lighten(0.75).rgb().string();
 
 const Clearfix = styled.div`
   &:before,
@@ -53,7 +51,7 @@ const ButtonWrapper = styled.div<IProps>`
 
     color: #fff;
     background-color: ${({ state }) =>
-      state === "disabled" ? DISABLED : colors.secondary};
+      state === "disabled" ? colors.secondaryLight : colors.secondary};
 
     cursor: ${({ state }) =>
       state === "disabled" ? "not-allowed" : "pointer"};
@@ -63,9 +61,7 @@ const ButtonWrapper = styled.div<IProps>`
 
     &:hover {
       background-color: ${({ state }) =>
-        state === "disabled"
-          ? DISABLED
-          : Color(colors.secondary).darken(0.25).rgb().string()};
+        state === "disabled" ? colors.secondaryLight : colors.secondaryDark};
     }
   }
   .pb-container .pb-button span {

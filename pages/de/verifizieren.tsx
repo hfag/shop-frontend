@@ -1,10 +1,11 @@
-import Wrapper from "../components/layout/Wrapper";
+import Wrapper from "../../components/layout/Wrapper";
 import { useIntl } from "react-intl";
-import page from "../i18n/page";
-import VerifyEmail from "../components/VerifyEmail";
+import page from "../../i18n/page";
+import VerifyEmail from "../../components/VerifyEmail";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { withApp } from "../components/AppWrapper";
-import { locale, messages } from "./de/config";
+import { withApp } from "../../components/AppWrapper";
+import { locale, messages } from "./config";
+import { pathnamesByLanguage } from "../../utilities/urls";
 
 const Page = () => {
   const intl = useIntl();
@@ -14,7 +15,9 @@ const Page = () => {
       breadcrumbs={[
         {
           name: intl.formatMessage(page.verifyEmail),
-          url: `/${intl.locale}/verify`,
+          url: `/${intl.locale}/${
+            pathnamesByLanguage.verify.languages[intl.locale]
+          }`,
         },
       ]}
     >

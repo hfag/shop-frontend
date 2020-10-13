@@ -139,7 +139,7 @@ const EntityChooser = <
         <Select
           options={sortByOptions}
           onChange={(option) => {
-            setSortBy(option.value);
+            setSortBy((option as { label: string; value: any }).value);
             setPage(0);
           }}
           getOptionLabel={(option) =>
@@ -155,7 +155,7 @@ const EntityChooser = <
         <Select
           options={SORT_ORDER_OPTIONS}
           onChange={(option) => {
-            setOrder(option.value);
+            setOrder((option as { label: string; value: any }).value);
             setPage(0);
           }}
           getOptionLabel={(option) =>

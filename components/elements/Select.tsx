@@ -4,8 +4,6 @@ import dynamic from "next/dynamic";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
-import { colors, borders } from "../../utilities/style";
-
 export default styled(Select)<{
   width?: number;
   flexGrow?: number;

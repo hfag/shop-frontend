@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Color from "color";
 
 import { colors } from "../../utilities/style";
 
@@ -10,8 +9,7 @@ const Table = styled.table`
   margin-bottom: 1rem;
 
   thead {
-    border-bottom: ${Color(colors.background).darken(0.2).rgb().string()} 2px
-      solid;
+    border-bottom: ${colors.backgroundDark} 2px solid;
     text-align: left;
   }
   tbody {

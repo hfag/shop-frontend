@@ -1,10 +1,11 @@
-import { css } from "@emotion/styled";
-
 export const colors = {
   primary: "#000000",
   primaryContrast: "#ffffff",
   secondary: "#464646",
+  secondaryLight: "#d0d0d0",
+  secondaryDark: "#343434",
   background: "#f5f5f5",
+  backgroundDark: "#f7f7f7",
   backgroundOverlay: "#ffffff",
   font: "#464646",
   fontLight: "#888888",

@@ -71,15 +71,15 @@ const StyledLink: FunctionComponent<{
   const router = useRouter();
 
   const LinkComponent: StyledComponent<
-    "a",
-    any,
-    IProps & {
+    {
       href?: string;
       rel?: string;
       title?: string;
       target?: string;
+      onClick?: (e: MouseEvent) => void;
     },
-    never
+    IProps,
+    any
   > = underlined ? BorderLink : _StyledLink;
 
   if (external || onClick) {

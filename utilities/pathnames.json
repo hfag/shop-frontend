@@ -120,5 +120,16 @@
   "confirmation": {
     "path": "de/bestaetigung.tsx",
     "languages": { "de": "bestaetigung", "fr": "confirmation" }
+  },
+  "verify": {
+    "path": "de/verifizieren.tsx",
+    "languages": { "de": "verifizieren", "fr": "verifier" }
+  },
+  "verifyNewEmail": {
+    "path": "de/neue-email-verifizieren.tsx",
+    "languages": {
+      "de": "neue-email-verifizieren",
+      "fr": "vérifier-nouveau-courrier"
+    }
   }
 }

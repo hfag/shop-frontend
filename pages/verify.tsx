@@ -30,4 +30,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default withApp(locale, messages);
+export default withApp(locale, messages)(Page);

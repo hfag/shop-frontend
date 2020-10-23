@@ -1,8 +1,8 @@
 import React, { useReducer, FunctionComponent, useCallback } from "react";
 import styled from "@emotion/styled";
-import Lightbox from "react-images";
 import { useIntl, defineMessages } from "react-intl";
 
+import Lightbox from "./Lightbox";
 import Asset from "../elements/Asset";
 import { Asset as AssetType } from "../../schema";
 import Box from "../layout/Box";
@@ -119,11 +119,6 @@ const LightboxGallery: FunctionComponent<{ assets: AssetType[] }> = React.memo(
       dispatch,
     ]);
 
-    const onClickThumbnail = useCallback(
-      (index) => dispatch({ type: "GOTO_IMAGE", index }),
-      [dispatch]
-    );
-
     return (
       <React.Fragment>
         <Flex flexWrap="wrap" marginX>
@@ -156,10 +151,6 @@ const LightboxGallery: FunctionComponent<{ assets: AssetType[] }> = React.memo(
           leftArrowTitle={intl.formatMessage(messages.previousImage)}
           rightArrowTitle={intl.formatMessage(messages.nextImage)}
           closeButtonTitle={intl.formatMessage(messages.closeLightbox)}
-          backdropClosesModal={true}
-          preventScroll={false}
-          showThumbnails={true}
-          onClickThumbnail={onClickThumbnail}
         />
       </React.Fragment>
     );

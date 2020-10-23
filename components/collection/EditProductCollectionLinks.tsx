@@ -205,15 +205,6 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
                           name={`links[${index}].icon`}
                           placeholder={intl.formatMessage(messages.chooseIcon)}
                           options={COLLECTION_LINK_TYPE_OPTIONS}
-                          formatOptionLabel={(option) => {
-                            const Icon =
-                              ICON_BY_COLLECTION_LINK_TYPE[option.value];
-                            return (
-                              <Flexbar>
-                                <Icon size={16} /> {option.value}
-                              </Flexbar>
-                            );
-                          }}
                           width={7}
                           flexGrow={1}
                           marginRight={1}
@@ -230,15 +221,6 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
                           name={`links[${index}].icon`}
                           placeholder={intl.formatMessage(messages.chooseIcon)}
                           options={COLLECTION_LINK_TYPE_OPTIONS}
-                          formatOptionLabel={(option) => {
-                            const Icon =
-                              ICON_BY_COLLECTION_LINK_TYPE[option.value];
-                            return (
-                              <Flexbar>
-                                <Icon size={16} /> {option.value}
-                              </Flexbar>
-                            );
-                          }}
                           width={7}
                           flexGrow={1}
                           marginRight={1}

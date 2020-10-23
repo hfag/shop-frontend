@@ -58,7 +58,7 @@ const Select = <Option extends unknown>({
   options: Option[];
   placeholder?: string;
   onChange: (option: Option) => void;
-  mapOptionToLabel: (option: Option) => string | React.Component;
+  mapOptionToLabel: (option: Option) => string;
   selected?: Option;
   width?: number;
   flexGrow?: number;

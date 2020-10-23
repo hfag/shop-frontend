@@ -40,6 +40,7 @@ export default class MyDocument extends Document<IProps> {
         <body>
           <Main />
           <div id="modal" />
+          <div id="lightbox" />
           <NextScript />
         </body>
       </Html>

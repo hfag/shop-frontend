@@ -42,7 +42,13 @@ const AppWrapper: FunctionComponent<{
 
   const { data, error } = useSWR<{ activeCustomer: Customer; me: CurrentUser }>(
     token ? [GET_CURRENT_USER, token] : null,
-    (query) => request(locale, query)
+    (query) =>
+      request(locale, query).catch((e: Error) => {
+        if (e.message.includes("not currently authorized")) {
+          return { activeCustomer: null, me: null };
+        }
+        throw e;
+      })
   );
 
   return (

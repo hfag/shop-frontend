@@ -27,7 +27,7 @@ import productMessages from "../../i18n/product";
 import { setProductView, trackPageView } from "../../utilities/analytics";
 import LightboxGallery from "../content/LightboxGallery";
 import UnsafeHTMLContent from "../content/UnsafeHTMLContent";
-import messages from "./messages";
+import messages from "../../i18n/product";
 import {
   Product as ProductType,
   ProductOptionGroup,
@@ -312,11 +312,11 @@ const Product: FunctionComponent<{
                       });
                     }
                   }}
-                  value={selectedOptions[optionGroup.id] || null}
+                  selected={selectedOptions[optionGroup.id] || null}
                   options={optionGroup.options.filter((option) =>
                     possibleOptions[optionGroup.id].includes(option)
                   )}
-                  getOptionLabel={(item: ProductOption) => item.name}
+                  mapOptionToLabel={(item: ProductOption) => item.name}
                 />
               </Box>
             ))}

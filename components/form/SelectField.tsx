@@ -12,10 +12,6 @@ const messages = defineMessages({
     id: "SelectField.optional",
     defaultMessage: "optional",
   },
-  noResults: {
-    id: "SelectField.noResults",
-    defaultMessage: "Keine Resultate gefunden",
-  },
 });
 
 const SelectFieldWrapper = styled.div`
@@ -40,7 +36,6 @@ const SelectField: FunctionComponent<{
   placeholder?: string;
   options: { label: string; value: any }[];
   required?: boolean;
-  formatOptionLabel?: (option: { label: string; value: any }) => JSX.Element;
   width?: number;
   flexGrow?: number;
   marginRight?: number;
@@ -51,7 +46,6 @@ const SelectField: FunctionComponent<{
     options,
     required,
     placeholder,
-    formatOptionLabel,
     width,
     flexGrow,
     marginRight,
@@ -77,22 +71,14 @@ const SelectField: FunctionComponent<{
               </label>
             )}
             <Select
-              value={options.filter((o) => o.value === value)}
-              getOptionLabel={(option) => option.label}
-              getOptionValue={(option) => option.value}
+              selected={options.find((o) => o.value === value)}
+              mapOptionToLabel={(option) => option.label}
               placeholder={placeholder}
               onChange={(option) => {
-                setFieldValue(
-                  name,
-                  option
-                    ? (option as { label: string; value: any }).value
-                    : undefined
-                );
+                setFieldValue(name, option ? option.value : undefined);
                 setFieldTouched(name, true);
               }}
-              noResultsText={intl.formatMessage(messages.noResults)}
               options={options}
-              formatOptionLabel={formatOptionLabel}
               width={width}
               flexGrow={flexGrow}
               marginRight={marginRight}

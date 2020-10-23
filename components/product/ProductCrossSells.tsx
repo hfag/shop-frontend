@@ -8,7 +8,7 @@ import RestrictedView from "../elements/RestrictedView";
 import Button from "../elements/Button";
 import { useAuthenticate } from "../../utilities/hooks";
 import { FaEdit } from "react-icons/fa";
-import AsyncSelect from "react-select/async";
+import dynamic from "next/dynamic";
 import styled from "@emotion/styled";
 import request, { requestAdmin } from "../../utilities/request";
 import {
@@ -21,6 +21,8 @@ import {
 import Flexbar from "../layout/Flexbar";
 import form from "../../i18n/form";
 import { mutate } from "swr";
+
+const AsyncSelect = dynamic(() => import("react-select/async"), { ssr: false });
 
 const Edit = styled(FaEdit)`
   cursor: pointer;

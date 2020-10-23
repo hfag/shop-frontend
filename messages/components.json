@@ -344,9 +344,6 @@
   "Searchbar.showMore": {
     "defaultMessage": "Zeige mehr..."
   },
-  "SelectField.noResults": {
-    "defaultMessage": "Keine Resultate gefunden"
-  },
   "SelectField.optional": {
     "defaultMessage": "optional"
   },

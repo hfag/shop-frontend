@@ -2,6 +2,45 @@
   "CartForm.taxesOfThat": {
     "defaultMessage": "Davon MWST (7.7%)"
   },
+  "Product.chooseAVariation": {
+    "defaultMessage": "Wählen Sie eine Variante"
+  },
+  "Product.chooseAnAttribute": {
+    "defaultMessage": "Wählen Sie eine Eigenschaft"
+  },
+  "Product.closeLightBox": {
+    "defaultMessage": "Schliessen (Esc)"
+  },
+  "Product.contactCall": {
+    "defaultMessage": "Rufen Sie uns an"
+  },
+  "Product.contactEmail": {
+    "defaultMessage": "Senden Sie uns eine E-Mail"
+  },
+  "Product.contactUs": {
+    "defaultMessage": "Kontaktieren Sie uns für dieses Produkt"
+  },
+  "Product.imageGallery": {
+    "defaultMessage": "Bildergalerie"
+  },
+  "Product.mustSelectVariation": {
+    "defaultMessage": "Wählen Sie zuerst eine Variante aus!"
+  },
+  "Product.nextImage": {
+    "defaultMessage": "Nächstes Bild (rechte Pfeiltaste)"
+  },
+  "Product.previousImage": {
+    "defaultMessage": "Vorheriges Bild (linke Pfeiltaste)"
+  },
+  "Product.reset": {
+    "defaultMessage": "Zurücksetzen"
+  },
+  "Product.resetSelection": {
+    "defaultMessage": "Auswahl zurücksetzen"
+  },
+  "Product.specifications": {
+    "defaultMessage": "Spezifikationen"
+  },
   "address.additionalLineAbove": {
     "defaultMessage": "Zusatzzeile oben"
   },

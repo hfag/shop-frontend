@@ -55,6 +55,9 @@ languages
 
 export const locale = "${lang}";
 export const messages = m;
+
+const Page = () => null;
+export default Page;
       `
     );
     generatePages(lang, [[defaultLanguage, lang]], pathnames);

@@ -142,10 +142,10 @@ const EntityChooser = <
             setSortBy((option as { label: string; value: any }).value);
             setPage(0);
           }}
-          getOptionLabel={(option) =>
+          mapOptionToLabel={(option) =>
             intl.formatMessage(sortByLabelMessages[option.label])
           }
-          value={sortByOptions.find((o) => o.value === sortBy)}
+          selected={sortByOptions.find((o) => o.value === sortBy)}
           flexGrow={1}
           marginLeft={1}
         />
@@ -158,10 +158,10 @@ const EntityChooser = <
             setOrder((option as { label: string; value: any }).value);
             setPage(0);
           }}
-          getOptionLabel={(option) =>
+          mapOptionToLabel={(option) =>
             intl.formatMessage(messages[option.label])
           }
-          value={SORT_ORDER_OPTIONS.find((o) => o.value === order)}
+          selected={SORT_ORDER_OPTIONS.find((o) => o.value === order)}
           flexGrow={1}
           marginLeft={1}
         />

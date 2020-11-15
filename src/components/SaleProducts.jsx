@@ -113,20 +113,6 @@ const Product = React.memo(({ language, product }) => {
                   <Price>{parseFloat(product.salePrice)}</Price>
                 </strong>
               </p>
-              <p>
-                Nur{" "}
-                {product.saleEnd ? (
-                  <span>
-                    bis am{" "}
-                    <strong>
-                      {new Date(product.saleEnd * 1000).toLocaleDateString()}
-                    </strong>
-                    !
-                  </span>
-                ) : (
-                  "für kurze Zeit!"
-                )}
-              </p>
             </Box>
           </Flex>
         </Link>

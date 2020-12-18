@@ -8,7 +8,7 @@ import { colors } from "../utilities/style";
 import Select from "./elements/Select";
 import { FunctionComponent } from "react";
 import styled from "@emotion/styled";
-import { LanguageCode } from "../schema";
+import { GlobalSettings, LanguageCode } from "../schema";
 
 const messages = defineMessages({
   chooseTranslationLanguage: {
@@ -34,14 +34,13 @@ const LanguageChooser: FunctionComponent<{
 }> = ({ value, onChange }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR<{ value: LanguageCode }[]>(
-    ADMIN_GET_AVAILABLE_LANGUAGES,
-    (query) =>
-      requestAdmin(intl.locale, query).then((response) =>
+  const { data, error } = useSWR(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
+    requestAdmin(intl.locale, query).then(
+      (response: { globalSettings: GlobalSettings }) =>
         response.globalSettings.availableLanguages.map((l) => ({
           value: l,
         }))
-      )
+    )
   );
 
   if (!data) {

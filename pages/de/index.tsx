@@ -3,7 +3,7 @@ import { FunctionComponent } from "react";
 import { useIntl, defineMessages } from "react-intl";
 import { GET_COLLECTION_BY_ID } from "../../gql/collection";
 import ProductCollection from "../../components/collection/ProductCollection";
-import { Collection } from "../../schema";
+import { Collection, Query } from "../../schema";
 import Wrapper from "../../components/layout/Wrapper";
 import request from "../../utilities/request";
 import { locale, messages } from "./config";
@@ -50,7 +50,10 @@ const Page: FunctionComponent<{
 
   const { data, error } = useSWR(
     [GET_COLLECTION_BY_ID, 1],
-    (query, collectionId) => request(intl.locale, query, { id: collectionId }),
+    (query, collectionId) =>
+      request<{ collection: Query["collection"] }>(intl.locale, query, {
+        id: collectionId,
+      }),
     {
       initialData: collectionResponse,
     }

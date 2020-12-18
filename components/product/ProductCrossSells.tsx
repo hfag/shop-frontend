@@ -2,7 +2,7 @@ import ProductItem from "./ProductItem";
 import Flex from "../layout/Flex";
 import Card from "../layout/Card";
 import { FunctionComponent, useCallback, useState } from "react";
-import { ProductRecommendation } from "../../schema";
+import { Product, ProductRecommendation, Query } from "../../schema";
 import { defineMessages, useIntl } from "react-intl";
 import RestrictedView from "../elements/RestrictedView";
 import Button from "../elements/Button";
@@ -79,13 +79,11 @@ const ProductCrossSells: FunctionComponent<{
 
   const fetchOptions = useCallback(
     (input: string) =>
-      request(intl.locale, GET_PRODUCTS, {
+      request<{ products: Query["products"] }>(intl.locale, GET_PRODUCTS, {
         options: { filter: { name: { contains: input } } },
       }).then(
-        (response: {
-          products: { items: { id: number | string; name: string }[] };
-        }) =>
-          response?.products?.items.map((item) => ({
+        (response) =>
+          response?.products?.items.map((item: Product) => ({
             label: item.name,
             value: item.id,
           })) || []

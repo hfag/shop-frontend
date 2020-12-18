@@ -4,7 +4,7 @@ import {
   GET_ALL_COLLECTIONS,
   GET_COLLECTION_BY_SLUG,
 } from "../../../gql/collection";
-import { Collection } from "../../../schema";
+import { Collection, Query } from "../../../schema";
 import { locale, messages } from "../config";
 import { FunctionComponent, useMemo } from "react";
 import Wrapper from "../../../components/layout/Wrapper";
@@ -26,7 +26,10 @@ const Page: FunctionComponent<{
 
   const { data, error } = useSWR(
     [GET_COLLECTION_BY_SLUG, slug],
-    (query, slug) => request(intl.locale, query, { slug }),
+    (query, slug) =>
+      request<{ collection: Query["collection"] }>(intl.locale, query, {
+        slug,
+      }),
     {
       initialData: collectionResponse,
     }
@@ -98,7 +101,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: [] /*data.collections.items.map((collection) => ({
       params: { slug: collection.slug },
     }))*/,
-    fallback: "unstable_blocking",
+    fallback: "blocking",
   };
 };
 

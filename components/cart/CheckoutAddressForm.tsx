@@ -14,6 +14,7 @@ import {
   Address,
   Customer,
   OrderAddress,
+  Mutation,
 } from "../../schema";
 import request from "../../utilities/request";
 import {
@@ -24,6 +25,7 @@ import {
 import { mutate } from "swr";
 import Flex from "../layout/Flex";
 import Box from "../layout/Box";
+import { errorCodeToMessage } from "../../utilities/i18n";
 
 const messages = defineMessages({
   shipToDifferentAddress: {
@@ -433,6 +435,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     {
       props: { intl, customer, token, setBillingAddress, onProceed },
       setStatus,
+      setErrors,
     }
   ) => {
     const billingAddress: CreateAddressInput = {
@@ -470,7 +473,9 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     if (customer) {
       //do something
     } else {
-      await request(intl.locale, ORDER_SET_CUSTOMER, {
+      const response = await request<{
+        setCustomerForOrder: Mutation["setCustomerForOrder"];
+      }>(intl.locale, ORDER_SET_CUSTOMER, {
         customer: {
           firstName: values.billingFirstName,
           lastName: values.billingLastName,
@@ -478,9 +483,23 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
           emailAddress: values.billingEmail,
         },
       });
+
+      if ("errorCode" in response.setCustomerForOrder) {
+        setErrors({
+          billingFirstName: errorCodeToMessage(
+            intl,
+            response.setCustomerForOrder
+          ),
+        });
+        setStatus("error");
+        setTimeout(() => setStatus(""), 300);
+        return;
+      }
     }
 
-    const data = await request(intl.locale, ORDER_SET_SHIPPING_ADDRESS, {
+    const data = await request<{
+      setOrderShippingAddress: Mutation["setOrderShippingAddress"];
+    }>(intl.locale, ORDER_SET_SHIPPING_ADDRESS, {
       shippingAddress,
     });
 

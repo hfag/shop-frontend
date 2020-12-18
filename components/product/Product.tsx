@@ -35,6 +35,7 @@ import {
   ProductVariant,
   BulkDiscount,
   RecommendationType,
+  Mutation,
 } from "../../schema";
 import { ABSOLUTE_URL } from "../../utilities/api";
 import Head from "next/head";
@@ -47,6 +48,8 @@ import ProductCrossSells from "./ProductCrossSells";
 import Flex from "../layout/Flex";
 import Box from "../layout/Box";
 import { AppContext } from "../AppWrapper";
+import { isClient } from "../../utilities/ssr";
+import { errorCodeToMessage } from "../../utilities/i18n";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;
@@ -62,6 +65,10 @@ const Counter = styled.input`
   border: ${colors.secondary} 1px solid;
   padding: 0.25rem 0.5rem;
   border-radius: ${borders.inputRadius};
+`;
+
+const ErrorContainer = styled.div`
+  color: ${colors.danger};
 `;
 
 const DiscountTable = styled(Table)`
@@ -93,6 +100,7 @@ const Product: FunctionComponent<{
     [optionGroupId: string]: ProductOption;
   }>({});
   const [quantity, setQuantity] = useState(1);
+  const [error, setError] = useState<string | null>(null);
   const crosssellRef = useRef(null);
 
   const possibleVariants = useMemo(
@@ -362,7 +370,7 @@ const Product: FunctionComponent<{
               onClick={() =>
                 new Promise((resolve, reject) => {
                   setSelectedOptions({});
-                  resolve();
+                  resolve(true);
                 })
               }
             >
@@ -453,10 +461,18 @@ const Product: FunctionComponent<{
                   state={!selectedVariant || quantity <= 0 ? "disabled" : ""}
                   onClick={async () => {
                     if (selectedVariant) {
-                      const data = await request(intl.locale, ADD_TO_ORDER, {
+                      const data = await request<{
+                        addItemToOrder: Mutation["addItemToOrder"];
+                      }>(intl.locale, ADD_TO_ORDER, {
                         productVariantId: selectedVariant.id,
                         quantity,
                       });
+
+                      if ("errorCode" in data.addItemToOrder) {
+                        setError(errorCodeToMessage(intl, data.addItemToOrder));
+                        return;
+                      }
+
                       //trigger refetching of the active order
                       mutate([GET_ACTIVE_ORDER, token]);
 
@@ -469,12 +485,19 @@ const Product: FunctionComponent<{
 
                       return true;
                     } else {
-                      throw new Error();
+                      if (isClient) {
+                        window.location.reload();
+                      } else {
+                        throw new Error(
+                          "What the hell is going on here? This should never ever happen, please contact us!"
+                        );
+                      }
                     }
                   }}
                 >
                   {intl.formatMessage(productMessages.addToCart)}
                 </Button>
+                {error && <ErrorContainer>{error}</ErrorContainer>}
               </div>
             ) : !selectedVariant ? (
               <div>

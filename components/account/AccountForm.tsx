@@ -18,6 +18,8 @@ import {
   GET_CURRENT_CUSTOMER,
 } from "../../gql/user";
 import { mutate } from "swr";
+import { Mutation } from "../../schema";
+import { errorCodeToMessage } from "../../utilities/i18n";
 
 const FormWrapper = styled(Form)`
   h2 {
@@ -136,7 +138,7 @@ const AccountForm = withFormik<IProps, FormValues>({
         .test("is-required", isRequiredString, function (value) {
           const { newPassword, passwordConfirmation, email } = this.parent;
           return newPassword || passwordConfirmation || email !== previousEmail
-            ? value
+            ? false
             : true;
         }),
       newPassword: yup
@@ -144,7 +146,7 @@ const AccountForm = withFormik<IProps, FormValues>({
         .min(7)
         .test("is-required", isRequiredString, function (value) {
           const { password, passwordConfirmation } = this.parent;
-          return password && passwordConfirmation ? value : true;
+          return password && passwordConfirmation ? false : true;
         })
         .oneOf(
           [yup.ref("passwordConfirmation")],
@@ -158,7 +160,7 @@ const AccountForm = withFormik<IProps, FormValues>({
         )
         .test("is-required", isRequiredString, function (value) {
           const { newPassword } = this.parent;
-          return newPassword ? value : true;
+          return newPassword ? false : true;
         }),
     });
   },
@@ -178,9 +180,12 @@ const AccountForm = withFormik<IProps, FormValues>({
     setStatus("loading");
 
     try {
-      const customerUpdate = await request(intl.locale, UPDATE_CUSTOMER, {
+      const customerUpdate = await request<{
+        updateCustomer: Mutation["updateCustomer"];
+      }>(intl.locale, UPDATE_CUSTOMER, {
         input: { firstName, lastName },
       });
+
       mutate(
         [GET_CURRENT_CUSTOMER, token],
         { activeCustomer: customerUpdate.updateCustomer },
@@ -195,21 +200,28 @@ const AccountForm = withFormik<IProps, FormValues>({
     }
     try {
       if (password && email !== previousEmail) {
-        const emailUpdate = await request(
-          intl.locale,
-          REQUEST_UPDATE_CUSTOMER_EMAIL,
-          {
-            currentPassword: password,
-            email,
-          }
-        );
+        const emailUpdate = await request<{
+          requestUpdateCustomerEmailAddress: Mutation["requestUpdateCustomerEmailAddress"];
+        }>(intl.locale, REQUEST_UPDATE_CUSTOMER_EMAIL, {
+          currentPassword: password,
+          email,
+        });
+
+        if ("errorCode" in emailUpdate.requestUpdateCustomerEmailAddress) {
+          throw new Error(
+            errorCodeToMessage(
+              intl,
+              emailUpdate.requestUpdateCustomerEmailAddress
+            )
+          );
+        }
 
         newEmailCallback();
       }
     } catch (e) {
-      setErrors({
-        passwordConfirmation: intl.formatMessage(messages.newEmailError),
-      });
+      const msg = "message" in e ? e.message : JSON.stringify(e);
+
+      setErrors({ passwordConfirmation: msg });
       setStatus("error");
       setTimeout(() => setStatus(""), 300);
     }

@@ -8,7 +8,7 @@ import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
 import useSWR from "swr";
 import request from "../../../../utilities/request";
-import { Order } from "../../../../schema";
+import { Order, Query } from "../../../../schema";
 import { GetStaticProps } from "next";
 import { AppContext, withApp } from "../../../../components/AppWrapper";
 import { locale, messages } from "../../config";
@@ -16,14 +16,10 @@ import { locale, messages } from "../../config";
 const Page = () => {
   const intl = useIntl();
   const { token } = useContext(AppContext);
-  const {
-    data,
-    error,
-  }: {
-    data?: { activeCustomer: { orders: { items: Order[] } } };
-    error?: any;
-  } = useSWR([GET_CURRENT_CUSTOMER_ALL_ORDERS, token], (query) =>
-    request(intl.locale, query)
+  const { data, error } = useSWR(
+    [GET_CURRENT_CUSTOMER_ALL_ORDERS, token],
+    (query) =>
+      request<{ activeCustomer: Query["activeCustomer"] }>(intl.locale, query)
   );
 
   return (

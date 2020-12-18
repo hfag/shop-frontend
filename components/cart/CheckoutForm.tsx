@@ -1,22 +1,15 @@
 import React, { FunctionComponent, useMemo } from "react";
 import { withFormik, Form, Field, FormikProps } from "formik";
 import * as yup from "yup";
-import { defineMessages, useIntl, injectIntl, IntlShape } from "react-intl";
+import { defineMessages, IntlShape } from "react-intl";
 
 import Button from "../elements/Button";
 import InputField from "../form/InputField";
-import {
-  CurrentUser,
-  ShippingMethodQuote,
-  CreateAddressInput,
-  Order,
-} from "../../schema";
+import { CreateAddressInput, Mutation, Order, Query } from "../../schema";
 import request from "../../utilities/request";
 import {
   GET_ACTIVE_ORDER,
-  ORDER_SET_CUSTOMER,
   ORDER_SET_SHIPPING_METHOD,
-  ORDER_SET_SHIPPING_ADDRESS,
   ORDER_GET_SHIPPING_METHODS,
   TRANSITION_ORDER_AND_ADD_PAYMENT,
   ORDER_ADD_PAYMENT,
@@ -32,6 +25,7 @@ import { pathnamesByLanguage, pageSlugsByLanguage } from "../../utilities/urls";
 import InlinePage from "../InlinePage";
 import Flex from "../layout/Flex";
 import Box from "../layout/Box";
+import { errorCodeToMessage } from "../../utilities/i18n";
 
 const messages = defineMessages({
   orderComments: {
@@ -103,13 +97,11 @@ const InnerCheckoutForm = React.memo(
     intl,
     order,
   }: IProps & FormikProps<FormValues>) => {
-    const {
-      data,
-    }: {
-      data?: { eligibleShippingMethods: ShippingMethodQuote[] };
-      error?: any;
-    } = useSWR(ORDER_GET_SHIPPING_METHODS, (query) =>
-      request(intl.locale, query)
+    const { data } = useSWR(ORDER_GET_SHIPPING_METHODS, (query) =>
+      request<{ eligibleShippingMethods: Query["eligibleShippingMethods"] }>(
+        intl.locale,
+        query
+      )
     );
 
     const shipping: number | null = useMemo(() => {
@@ -247,29 +239,83 @@ const CheckoutForm = withFormik<IProps, FormValues>({
   },
   handleSubmit: async (
     values,
-    { props: { intl, token, billingAddress, order, router }, setStatus }
+    {
+      props: { intl, token, billingAddress, order, router },
+      setStatus,
+      setErrors,
+    }
   ) => {
     if (!order) {
       return;
     }
     if (values.paymentMethod === "invoice") {
-      let data;
+      let data: { addPaymentToOrder: Order };
 
       if (order.state === "ArrangingPayment") {
-        data = await request(intl.locale, ORDER_ADD_PAYMENT, {
+        const response = await request<{
+          addPaymentToOrder: Mutation["addPaymentToOrder"];
+        }>(intl.locale, ORDER_ADD_PAYMENT, {
           input: { method: values.paymentMethod, metadata: { billingAddress } },
         });
+
+        if ("errorCode" in response.addPaymentToOrder) {
+          setErrors({
+            terms: errorCodeToMessage(intl, response.addPaymentToOrder),
+          });
+          setStatus("error");
+          setTimeout(() => setStatus(""), 300);
+          return;
+        }
+
+        data = { addPaymentToOrder: response.addPaymentToOrder };
       } else {
-        await request(intl.locale, ORDER_SET_SHIPPING_METHOD, {
+        const setShipping = await request<{
+          setOrderShippingMethod: Mutation["setOrderShippingMethod"];
+        }>(intl.locale, ORDER_SET_SHIPPING_METHOD, {
           shippingMethodId: values.shippingMethod,
         });
 
-        data = await request(intl.locale, TRANSITION_ORDER_AND_ADD_PAYMENT, {
+        if ("errorCode" in setShipping.setOrderShippingMethod) {
+          setErrors({
+            shippingMethod: errorCodeToMessage(
+              intl,
+              setShipping.setOrderShippingMethod
+            ),
+          });
+          setStatus("error");
+          setTimeout(() => setStatus(""), 300);
+          return;
+        }
+
+        const response = await request<{
+          transitionOrderToState: Mutation["transitionOrderToState"];
+          addPaymentToOrder: Mutation["addPaymentToOrder"];
+        }>(intl.locale, TRANSITION_ORDER_AND_ADD_PAYMENT, {
           input: {
             method: values.paymentMethod,
             metadata: { billingAddress },
           },
         });
+
+        if ("errorCode" in response.transitionOrderToState) {
+          setErrors({
+            terms: errorCodeToMessage(intl, response.transitionOrderToState),
+          });
+          setStatus("error");
+          setTimeout(() => setStatus(""), 300);
+          return;
+        }
+
+        if ("errorCode" in response.addPaymentToOrder) {
+          setErrors({
+            paymentMethod: errorCodeToMessage(intl, response.addPaymentToOrder),
+          });
+          setStatus("error");
+          setTimeout(() => setStatus(""), 300);
+          return;
+        }
+
+        data = { addPaymentToOrder: response.addPaymentToOrder };
       }
 
       mutate(

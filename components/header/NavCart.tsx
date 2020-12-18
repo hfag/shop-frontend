@@ -14,7 +14,7 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import { colors } from "../../utilities/style";
 import request from "../../utilities/request";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
-import { Order } from "../../schema";
+import { Order, Query } from "../../schema";
 import Placeholder from "../elements/Placeholder";
 import Asset from "../elements/Asset";
 import { AppContext } from "../AppWrapper";
@@ -61,11 +61,8 @@ const NavCart: FunctionComponent<{
   const intl = useIntl();
   const router = useRouter();
   const { token } = useContext(AppContext);
-  const {
-    data,
-  }: { data?: { activeOrder: Order | null }; error?: any } = useSWR(
-    [GET_ACTIVE_ORDER, token],
-    (query) => request(intl.locale, query)
+  const { data } = useSWR([GET_ACTIVE_ORDER, token], (query) =>
+    request<{ activeOrder: Query["activeOrder"] }>(intl.locale, query)
   );
 
   return (

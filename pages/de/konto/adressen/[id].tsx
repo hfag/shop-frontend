@@ -6,7 +6,12 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useContext, useMemo } from "react";
 import request from "../../../../utilities/request";
-import { Order as OrderType, Country, Address } from "../../../../schema";
+import {
+  Order as OrderType,
+  Country,
+  Address,
+  Query,
+} from "../../../../schema";
 import Placeholder from "../../../../components/elements/Placeholder";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
@@ -27,12 +32,12 @@ const Page = () => {
     [user, id]
   );
 
-  const {
-    data: countryData,
-  }: {
-    data?: { availableCountries: Country[] };
-    error?: any;
-  } = useSWR(AVAILABLE_COUNTRIES, (query) => request(intl.locale, query));
+  const { data: countryData } = useSWR(AVAILABLE_COUNTRIES, (query) =>
+    request<{ availableCountries: Query["availableCountries"] }>(
+      intl.locale,
+      query
+    )
+  );
 
   return (
     <Wrapper

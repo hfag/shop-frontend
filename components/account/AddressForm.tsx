@@ -12,7 +12,7 @@ import {
 } from "../../gql/user";
 import address from "../../i18n/address";
 import form from "../../i18n/form";
-import { Country } from "../../schema";
+import { Country, Mutation } from "../../schema";
 import InputField from "../form/InputField";
 import SelectField from "../form/SelectField";
 import Button from "../elements/Button";
@@ -205,7 +205,9 @@ const AddressForm = withFormik<IProps, FormValues>({
 
     try {
       if (id === "new") {
-        await request(intl.locale, CREATE_CUSTOMER_ADDRESS, {
+        await request<{
+          createCustomerAddress: Mutation["createCustomerAddress"];
+        }>(intl.locale, CREATE_CUSTOMER_ADDRESS, {
           input: {
             fullName: values.fullName,
             company: values.company,
@@ -221,7 +223,9 @@ const AddressForm = withFormik<IProps, FormValues>({
           },
         });
       } else {
-        await request(intl.locale, UPDATE_CUSTOMER_ADDRESS, {
+        await request<{
+          updateCustomerAddress: Mutation["updateCustomerAddress"];
+        }>(intl.locale, UPDATE_CUSTOMER_ADDRESS, {
           input: {
             id,
             fullName: values.fullName,

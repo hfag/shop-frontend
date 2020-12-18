@@ -167,14 +167,16 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
         setLastQuery(value);
         setLoading(true);
 
-        request(intl.locale, SEARCH, {
-          input: { term: value },
-        }).then(
-          (data: { search: { items: SearchResult[]; totalItems: number } }) => {
-            setSuggestions(data.search.items);
-            setLoading(false);
+        request<{ search: { items: SearchResult[]; totalItems: number } }>(
+          intl.locale,
+          SEARCH,
+          {
+            input: { term: value },
           }
-        );
+        ).then((data) => {
+          setSuggestions(data.search.items);
+          setLoading(false);
+        });
         return [];
       }
     }, 300),

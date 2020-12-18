@@ -68,7 +68,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: [] /*response.map((page) => ({ params: { slug: page.slug } }))*/,
-    fallback: "unstable_blocking",
+    fallback: "blocking",
   };
 };
 

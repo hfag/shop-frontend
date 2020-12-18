@@ -1,3 +1,6 @@
+import { IntlShape } from "react-intl";
+import errors from "../i18n/errors";
+import { ErrorCode } from "../schema";
 import { isClient } from "./ssr";
 
 export type Language = "de" | "fr";
@@ -55,3 +58,40 @@ export const getLanguageFromCurrentWindow = (fallback = DEFAULT_LANGUAGE) => {
  */
 export const languageToFetchString = (language: string) =>
   language === "de" ? "" : "/" + language;
+
+/**
+ * Generates a translated error message based on an error code and message
+ * @param intl The int object
+ * @param errorCode The error code to translate
+ * @param errorMessage Optional error message
+ */
+export const errorCodeToMessage = <
+  TError extends { errorCode: ErrorCode; errorMessage?: string }
+>(
+  intl: IntlShape,
+  error: TError
+) => {
+  const msg =
+    error.errorCode in errors
+      ? intl.formatMessage(errors[error.errorCode])
+      : intl.formatMessage(errors.UNKNOWN_ERROR);
+
+  if (!error.errorMessage) {
+    return msg;
+  }
+
+  switch (error.errorCode) {
+    case ErrorCode.UnknownError:
+    case ErrorCode.NativeAuthStrategyError:
+    case ErrorCode.OrderStateTransitionError:
+    case ErrorCode.OrderModificationError:
+    case ErrorCode.IneligibleShippingMethodError:
+    case ErrorCode.OrderPaymentStateError:
+    case ErrorCode.PaymentFailedError:
+    case ErrorCode.PaymentDeclinedError:
+    case ErrorCode.PaymentDeclinedError:
+      return `${msg} \n${error.errorMessage}`;
+    default:
+      return msg;
+  }
+};

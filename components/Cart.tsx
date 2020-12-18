@@ -12,7 +12,7 @@ import CheckoutForm from "./cart/CheckoutForm";
 import Button from "./elements/Button";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
-import { Order, CreateAddressInput, Country } from "../schema";
+import { CreateAddressInput, Query } from "../schema";
 import Head from "next/head";
 import { ABSOLUTE_URL } from "../utilities/api";
 import { GET_ACTIVE_ORDER } from "../gql/order";
@@ -56,19 +56,16 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
   ] = useState<CreateAddressInput | null>(null);
   const router = useRouter();
 
-  const {
-    data: orderData,
-  }: { data?: { activeOrder: Order | null }; error?: any } = useSWR(
-    [GET_ACTIVE_ORDER, token],
-    (query) => request(intl.locale, query)
+  const { data: orderData } = useSWR([GET_ACTIVE_ORDER, token], (query) =>
+    request<{ activeOrder: Query["activeOrder"] }>(intl.locale, query)
   );
 
-  const {
-    data: countryData,
-  }: {
-    data?: { availableCountries: Country[] };
-    error?: any;
-  } = useSWR(AVAILABLE_COUNTRIES, (query) => request(intl.locale, query));
+  const { data: countryData } = useSWR(AVAILABLE_COUNTRIES, (query) =>
+    request<{ availableCountries: Query["availableCountries"] }>(
+      intl.locale,
+      query
+    )
+  );
 
   useEffect(() => {
     trackPageView();

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import StyledImage from "./StyledImage";
-import { Asset as AssetType, SearchResultAsset } from "../../schema";
+import { Asset as AssetType, Maybe, SearchResultAsset } from "../../schema";
 /**
  * Renders a thumbnail
  */
@@ -16,12 +16,12 @@ const SIZE_BY_PRESET: { [key: string]: { width: number; height: number } } = {
 };
 
 const Asset: FunctionComponent<{
-  asset?: AssetType | SearchResultAsset;
+  asset?: Maybe<AssetType | SearchResultAsset>;
   squared?: boolean;
   preset?: Preset;
 }> = React.memo(({ asset, squared, preset }) => {
   const p = preset || "small";
-  const alt = "name" in asset ? asset.name : "";
+  const alt = asset && "name" in asset ? asset.name : "";
 
   return (
     <StyledImage
@@ -30,8 +30,8 @@ const Asset: FunctionComponent<{
       src={asset?.preview ? `${asset.preview}?preset=${p}` : undefined}
       width={SIZE_BY_PRESET[p].width}
       height={SIZE_BY_PRESET[p].height}
-      originalHeight={"height" in asset ? asset.height : undefined}
-      originalWidth={"width" in asset ? asset.width : undefined}
+      originalHeight={asset && "height" in asset ? asset.height : undefined}
+      originalWidth={asset && "width" in asset ? asset.width : undefined}
       alt={alt}
     />
   );

@@ -103,12 +103,44 @@ export const REQUEST_UPDATE_CUSTOMER_EMAIL = /* GraphQL */ `
     requestUpdateCustomerEmailAddress(
       password: $currentPassword
       newEmailAddress: $email
-    )
+    ) {
+      ... on Success {
+        success
+      }
+      ... on InvalidCredentialsError {
+        errorCode
+        message
+      }
+      ... on EmailAddressConflictError {
+        errorCode
+        message
+      }
+      ... on NativeAuthStrategyError {
+        errorCode
+        message
+      }
+    }
   }
 `;
 export const UPDATE_CUSTOMER_EMAIL = /* GraphQL */ `
   mutation UpdateCustomerEmailAddress($token: String!) {
-    updateCustomerEmailAddress(token: $token)
+    updateCustomerEmailAddress(token: $token) {
+      ... on Success {
+        success
+      }
+      ... on IdentifierChangeTokenInvalidError {
+        errorCode
+        message
+      }
+      ... on IdentifierChangeTokenExpiredError {
+        errorCode
+        message
+      }
+      ... on NativeAuthStrategyError {
+        errorCode
+        message
+      }
+    }
   }
 `;
 
@@ -130,11 +162,19 @@ export const UPDATE_CUSTOMER_ADDRESS = /* GraphQL */ `
 
 export const DELETE_CUSTOMER_ADDRESS = /* GraphQL */ `
   mutation DeleteCustomerAddress($id: ID!) {
-    deleteCustomerAddress(id: $id)
+    deleteCustomerAddress(id: $id) {
+      ... on Success {
+        success
+      }
+    }
   }
 `;
 export const LOGOUT = /* GraphQL */ `
   mutation logout {
-    logout
+    logout {
+      ... on Success {
+        success
+      }
+    }
   }
 `;

@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useIntl, defineMessages } from "react-intl";
-import { Address as AddressType } from "../../schema";
+import { Address as AddressType, Mutation } from "../../schema";
 import Table from "../elements/Table";
 import StyledLink from "../elements/StyledLink";
 import { pathnamesByLanguage } from "../../utilities/urls";
@@ -52,7 +52,12 @@ const AccountAddresses: FunctionComponent<{
 
   const deleteAddress = useCallback(
     (id: string) => async () => {
-      await request(intl.locale, DELETE_CUSTOMER_ADDRESS, { id });
+      //if it doesn't work the UI won't update and the user knows it wasn't deleted.
+      await request<Mutation["deleteCustomerAddress"]>(
+        intl.locale,
+        DELETE_CUSTOMER_ADDRESS,
+        { id }
+      );
       mutate([GET_CURRENT_CUSTOMER, token]);
     },
     [token]

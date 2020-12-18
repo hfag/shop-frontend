@@ -10,6 +10,7 @@ import Card from "../../components/layout/Card";
 import { GetStaticProps } from "next";
 import { withApp } from "../../components/AppWrapper";
 import { locale, messages } from "./config";
+import { Mutation } from "../../schema";
 
 const logoutMessages = defineMessages({
   pleaseWait: {
@@ -23,7 +24,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    request(intl.locale, LOGOUT)
+    request<{ logout: Mutation["logout"] }>(intl.locale, LOGOUT)
       .catch(() => Promise.resolve()) //always redirect
       .then(() => {
         router.push(`/${intl.locale}`);

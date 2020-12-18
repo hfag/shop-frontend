@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useContext,
 } from "react";
-import { withFormik, Form, FormikProps } from "formik";
+import { withFormik, Form, FormikProps, FormikErrors } from "formik";
 import * as yup from "yup";
 import { defineMessages, useIntl, IntlShape } from "react-intl";
 
@@ -29,6 +29,9 @@ import { mutate } from "swr";
 import Flex from "./layout/Flex";
 import Box from "./layout/Box";
 import { AppContext } from "./AppWrapper";
+import { Mutation, RegisterCustomerAccountResult } from "../schema";
+import styled from "@emotion/styled";
+import { errorCodeToMessage } from "../utilities/i18n";
 
 const messages = defineMessages({
   siteTitle: {
@@ -87,6 +90,10 @@ interface FormValuesLoginRegister {
   email?: string;
   password?: string;
 }
+
+const Section = styled.div`
+  margin-bottom: 1rem;
+`;
 
 /**
  * The inner login form
@@ -194,25 +201,9 @@ const LoginRegisterForm = withFormik<
         }, 300);
       })
       .catch((e) => {
-        switch (e) {
-          case "existing_user_email":
-          case "existing_user_login":
-            setErrors({
-              email: intl.formatMessage(messages.emailAlreadyExists),
-            });
-            break;
-          case "incorrect_password":
-            setErrors({
-              password: intl.formatMessage(messages.wrongPassword),
-            });
-            break;
-          default:
-            setErrors({
-              password: intl.formatMessage(messages.unknownError),
-            });
-            break;
-        }
+        const msg = "message" in e ? e.message : JSON.stringify(e);
 
+        setErrors({ password: msg });
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
       });
@@ -233,17 +224,20 @@ const PasswordResetForm = withFormik<
     {
       props: { intl, callback },
       setStatus,
+      setErrors,
       /* setErrors, setValues, setStatus, and other goodies */
     }
   ) => {
     setStatus("loading");
     try {
-      const data = await request(intl.locale, REQUEST_PASSWORD_RESET, {
-        emailAddress: email,
+      const data = await request<{
+        requestPasswordReset: Mutation["requestPasswordReset"];
+      }>(intl.locale, REQUEST_PASSWORD_RESET, {
+        email,
       });
 
-      if (!data?.requestPasswordReset) {
-        throw new Error();
+      if (!("success" in data.requestPasswordReset)) {
+        throw new Error(errorCodeToMessage(intl, data.requestPasswordReset));
       }
 
       setStatus("success");
@@ -254,6 +248,9 @@ const PasswordResetForm = withFormik<
         }
       }, 300);
     } catch (e) {
+      const msg = "message" in e ? e.message : JSON.stringify(e);
+
+      setErrors({ email: msg });
       setStatus("error");
       setTimeout(() => setStatus(""), 300);
     }
@@ -273,21 +270,32 @@ const Login = React.memo(() => {
       : null;
   }, [router.query]);
 
-  const login = useCallback(async (email, password) => {
-    const data = await request(intl.locale, LOGIN, { email, password });
-    if (data?.login?.user) {
-      mutate([GET_CURRENT_CUSTOMER, token]);
+  const login = useCallback(async (email: string, password: string) => {
+    const data = await request<{ login: Mutation["login"] }>(
+      intl.locale,
+      LOGIN,
+      { email, password }
+    );
+
+    if ("errorCode" in data.login) {
+      throw new Error(errorCodeToMessage(intl, data.login));
     }
+
+    mutate([GET_CURRENT_CUSTOMER, token]);
+
     return true;
   }, []);
 
-  const register = useCallback(async (email, password) => {
-    const data = await request(intl.locale, REGISTER, { email, password });
-    if (data?.registerCustomerAccount) {
-      return true;
-    } else {
-      throw new Error();
+  const register = useCallback(async (email: string, password: string) => {
+    const data = await request<{
+      registerCustomerAccount: RegisterCustomerAccountResult;
+    }>(intl.locale, REGISTER, { email, password });
+
+    if ("errorCode" in data.registerCustomerAccount) {
+      throw new Error(errorCodeToMessage(intl, data.registerCustomerAccount));
     }
+
+    return true;
   }, []);
 
   useEffect(() => {
@@ -321,37 +329,41 @@ const Login = React.memo(() => {
       </Head>
       <Flex flexWrap="wrap">
         <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1} paddingBottom={1}>
-          <h1>{intl.formatMessage(userMessages.login)}</h1>
-          <LoginRegisterForm
-            intl={intl}
-            action={login}
-            password
-            callback={() => {
-              if (redirect) {
-                router.push(redirect);
-              } else {
-                router.push(
-                  `/${intl.locale}/${
-                    pathnamesByLanguage.account.languages[intl.locale]
-                  }`
-                );
+          <Section>
+            <h1>{intl.formatMessage(userMessages.login)}</h1>
+            <LoginRegisterForm
+              intl={intl}
+              action={login}
+              password
+              callback={() => {
+                if (redirect) {
+                  router.push(redirect);
+                } else {
+                  router.push(
+                    `/${intl.locale}/${
+                      pathnamesByLanguage.account.languages[intl.locale]
+                    }`
+                  );
+                }
+              }}
+              submitText={intl.formatMessage(userMessages.login)}
+              message={null}
+            />
+          </Section>
+          <Section>
+            <h1>{intl.formatMessage(messages.passwordForgotten)}</h1>
+            <PasswordResetForm
+              intl={intl}
+              message={
+                didResetPassword && (
+                  <Message>
+                    {intl.formatMessage(messages.confirmationEmail)}
+                  </Message>
+                )
               }
-            }}
-            submitText={intl.formatMessage(userMessages.login)}
-            message={null}
-          />
-          <h1>{intl.formatMessage(messages.passwordForgotten)}</h1>
-          <PasswordResetForm
-            intl={intl}
-            message={
-              didResetPassword && (
-                <Message>
-                  {intl.formatMessage(messages.confirmationEmail)}
-                </Message>
-              )
-            }
-            callback={() => setDidResetPassword(true)}
-          />
+              callback={() => setDidResetPassword(true)}
+            />
+          </Section>
         </Box>
         <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1} paddingBottom={1}>
           <h1>{intl.formatMessage(messages.newAccount)}</h1>

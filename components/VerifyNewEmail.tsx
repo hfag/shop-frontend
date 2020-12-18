@@ -8,15 +8,13 @@ import { useRouter } from "next/router";
 import Card from "./layout/Card";
 import Message from "./elements/Message";
 import { pathnamesByLanguage } from "../utilities/urls";
+import { Mutation } from "../schema";
+import { errorCodeToMessage } from "../utilities/i18n";
 
 const messages = defineMessages({
   verifyNewEmail: {
     id: "VerifyNewEmail.verifyNewEmail",
     defaultMessage: "Neue Email verifizieren und Benutzerkonto anlegen",
-  },
-  invalidLink: {
-    id: "VerifyNewEmail.invalidLink",
-    defaultMessage: "Der Link aus der E-Mail ist abgelaufen.",
   },
 });
 
@@ -27,24 +25,22 @@ const VerifyNewEmail: FunctionComponent<{}> = (props) => {
     return typeof router.query?.token === "string" ? router.query.token : null;
   }, [router.query]);
 
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onVerify = useCallback(async () => {
-    try {
-      const response = await request(intl.locale, UPDATE_CUSTOMER_EMAIL, {
-        token,
-      });
-      if (!response.updateCustomerEmailAddress) {
-        throw new Error("updateCustomerEmailAddress: false");
-      }
-
-      router.push(
-        `/${intl.locale}/${pathnamesByLanguage.account.languages[intl.locale]}`
-      );
-    } catch (e) {
-      setError(true);
-      console.error(e);
+    const data = await request<{
+      updateCustomerEmailAddress: Mutation["updateCustomerEmailAddress"];
+    }>(intl.locale, UPDATE_CUSTOMER_EMAIL, {
+      token,
+    });
+    if ("errorCode" in data.updateCustomerEmailAddress) {
+      setError(errorCodeToMessage(intl, data.updateCustomerEmailAddress));
+      return;
     }
+
+    router.push(
+      `/${intl.locale}/${pathnamesByLanguage.account.languages[intl.locale]}`
+    );
   }, [token, intl.locale, router]);
 
   return (
@@ -56,7 +52,7 @@ const VerifyNewEmail: FunctionComponent<{}> = (props) => {
       {error && (
         <>
           <br />
-          <Message>{intl.formatMessage(messages.invalidLink)}</Message>
+          <Message>{error}</Message>
         </>
       )}
     </Card>

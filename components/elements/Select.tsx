@@ -9,8 +9,7 @@ const StyledWrapper = styled.div<{
   marginRight?: number;
   marginLeft?: number;
 }>`
-
-  position:relative;
+  position: relative;
 
   ${({ width }) => (width ? `width:${width}rem;` : "")}
   ${({ flexGrow }) => (flexGrow ? `flex-grow: ${flexGrow};` : "")}
@@ -26,7 +25,6 @@ const StyledWrapper = styled.div<{
     background-color: #fff;
     border: ${colors.secondary} 1px solid;
     border-radius: ${borders.inputRadius};
-
   }
 
   select::-ms-expand {

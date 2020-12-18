@@ -12,6 +12,8 @@ import { mutate } from "swr";
 import { useRouter, NextRouter } from "next/router";
 import Card from "./layout/Card";
 import { pathnamesByLanguage } from "../utilities/urls";
+import { Mutation } from "../schema";
+import { errorCodeToMessage } from "../utilities/i18n";
 
 const messages = defineMessages({
   verifyEmail: {
@@ -62,20 +64,24 @@ const VerifyEmailForm = withFormik<IProps, FormValues>({
   ) => {
     setStatus("loading");
     try {
-      const data = await request(intl.locale, VERIFY_ACCOUNT, {
+      const data = await request<{
+        verifyCustomerAccount: Mutation["verifyCustomerAccount"];
+      }>(intl.locale, VERIFY_ACCOUNT, {
         token,
         password,
       });
-      if (data?.verifyCustomerAccount?.user) {
-        setStatus("success");
-        router.push(
-          `/${intl.locale}/${pathnamesByLanguage.login.languages[intl.locale]}`
-        );
-      } else {
-        throw new Error();
+      if ("errorCode" in data.verifyCustomerAccount) {
+        throw new Error(errorCodeToMessage(intl, data.verifyCustomerAccount));
       }
+
+      setStatus("success");
+      router.push(
+        `/${intl.locale}/${pathnamesByLanguage.login.languages[intl.locale]}`
+      );
     } catch (e) {
-      setErrors({ password: intl.formatMessage(messages.invalidLink) });
+      const msg = "message" in e ? e.message : JSON.stringify(e);
+
+      setErrors({ password: msg });
       setStatus("error");
       setTimeout(() => setStatus(""), 300);
     }

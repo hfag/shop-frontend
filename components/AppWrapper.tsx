@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useState,
 } from "react";
-import { CurrentUser, Customer } from "../schema";
+import { CurrentUser, Customer, Maybe, Query } from "../schema";
 import useSWR from "swr";
 import { useLocalStorage } from "../utilities/hooks";
 import { GET_CURRENT_USER } from "../gql/user";
@@ -16,9 +16,9 @@ import { Language } from "../utilities/i18n";
 export const AppContext = React.createContext<{
   burgerMenuOpen: boolean;
   toggleBurgerMenu: () => void;
-  user: CurrentUser | null;
-  customer: Customer | null;
-  token: string | null;
+  user: Maybe<CurrentUser>;
+  customer: Maybe<Customer>;
+  token: Maybe<string>;
 }>({
   burgerMenuOpen: false,
   toggleBurgerMenu: () => {},
@@ -40,15 +40,16 @@ const AppWrapper: FunctionComponent<{
 
   const [token, setToken] = useLocalStorage("vendure-auth-token");
 
-  const { data, error } = useSWR<{ activeCustomer: Customer; me: CurrentUser }>(
-    token ? [GET_CURRENT_USER, token] : null,
-    (query) =>
-      request(locale, query).catch((e: Error) => {
-        if (e.message.includes("not currently authorized")) {
-          return { activeCustomer: null, me: null };
-        }
-        throw e;
-      })
+  const { data, error } = useSWR<{
+    activeCustomer: Query["activeCustomer"];
+    me: Query["me"];
+  }>(token ? [GET_CURRENT_USER, token] : null, (query) =>
+    request(locale, query).catch((e: Error) => {
+      if (e.message.includes("not currently authorized")) {
+        return { activeCustomer: null, me: null };
+      }
+      throw e;
+    })
   );
 
   return (

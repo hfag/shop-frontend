@@ -13,7 +13,7 @@ export const colors = {
   info: "#3498db",
   warning: "#FCBF37",
   danger: "#e74c3c",
-  disabled: "#cccccc",
+  disabled: "#999999",
 };
 
 export const borders = {

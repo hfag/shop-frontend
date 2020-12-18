@@ -2,7 +2,7 @@ import { FunctionComponent, useMemo } from "react";
 import useSWR from "swr";
 import { useIntl, defineMessages, FormattedMessage } from "react-intl";
 
-import { Order, AdjustmentType, Adjustment } from "../schema";
+import { Order, AdjustmentType, Adjustment, Query } from "../schema";
 import { GET_ORDER_BY_CODE } from "../gql/order";
 import request from "../utilities/request";
 import { useRouter } from "next/router";
@@ -51,12 +51,8 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
     return typeof router.query.code === "string" ? router.query.code : null;
   }, [router.query]);
 
-  const {
-    data,
-    error,
-  }: { data?: { orderByCode: Order | null }; error?: any } = useSWR(
-    [GET_ORDER_BY_CODE, code],
-    (query, code) => request(intl.locale, query, { code })
+  const { data, error } = useSWR([GET_ORDER_BY_CODE, code], (query, code) =>
+    request<{ orderByCode: Query["orderByCode"] }>(intl.locale, query, { code })
   );
 
   if (!data && !error) {

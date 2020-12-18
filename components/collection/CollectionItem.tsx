@@ -91,7 +91,7 @@ const CollectionItem: FunctionComponent<{
     <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} paddingX={0.5} marginTop={1}>
       <StyledLink href={url}>
         <StyledCategory>
-          <Asset asset={collection?.featuredAsset} squared />
+          <Asset asset={collection.featuredAsset} squared />
           <div>
             {collection ? (
               <Title dangerouslySetInnerHTML={{ __html: collection.name }} />

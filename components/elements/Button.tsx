@@ -51,7 +51,7 @@ const ButtonWrapper = styled.div<IProps>`
 
     color: #fff;
     background-color: ${({ state }) =>
-      state === "disabled" ? colors.secondaryLight : colors.secondary};
+      state === "disabled" ? colors.disabled : colors.secondary};
 
     cursor: ${({ state }) =>
       state === "disabled" ? "not-allowed" : "pointer"};
@@ -61,7 +61,7 @@ const ButtonWrapper = styled.div<IProps>`
 
     &:hover {
       background-color: ${({ state }) =>
-        state === "disabled" ? colors.secondaryLight : colors.secondaryDark};
+        state === "disabled" ? colors.disabled : colors.secondaryDark};
     }
   }
   .pb-container .pb-button span {

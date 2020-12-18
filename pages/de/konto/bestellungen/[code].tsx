@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useContext } from "react";
 import request from "../../../../utilities/request";
-import { Order as OrderType } from "../../../../schema";
+import { Order as OrderType, Query } from "../../../../schema";
 import Placeholder from "../../../../components/elements/Placeholder";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import page from "../../../../i18n/page";
@@ -22,12 +22,12 @@ const Page = () => {
 
   const { code } = router.query;
 
-  const {
-    data,
-    error,
-  }: { data?: { orderByCode: OrderType }; error?: any } = useSWR(
+  const { data, error } = useSWR(
     [GET_ORDER_BY_CODE, code, token],
-    (query, code) => request(intl.locale, query, { code })
+    (query, code) =>
+      request<{ orderByCode: Query["orderByCode"] }>(intl.locale, query, {
+        code,
+      })
   );
 
   return (

@@ -5,7 +5,11 @@ import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 import order from "../../i18n/order";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import StyledLink from "../elements/StyledLink";
-import { Address as AddressType, Order as OrderType } from "../../schema";
+import {
+  Address as AddressType,
+  Order as OrderType,
+  Query,
+} from "../../schema";
 import Address from "../elements/Address";
 import Order from "../elements/Order";
 import useSWR from "swr";
@@ -44,17 +48,12 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
     (a) => a.defaultShippingAddress
   );
 
-  const {
-    data,
-    error,
-  }: {
-    data?: {
-      activeCustomer: { orders: { items: OrderType[]; totalItems: number } };
-    };
-    error?: any;
-  } = useSWR(
+  const { data, error } = useSWR(
     [GET_CURRENT_CUSTOMER_ORDERS, token, 0, 3],
-    (query, token, skip, take) => request(intl.locale, query, { skip, take })
+    (query, token, skip, take) =>
+      request<{
+        activeCustomer: Query["activeCustomer"];
+      }>(intl.locale, query, { skip, take })
   );
 
   if (!customer && user) {
@@ -168,11 +167,13 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
           {data?.activeCustomer
             ? data.activeCustomer.orders.items
                 .sort(
-                  (a, b) =>
+                  (a: OrderType, b: OrderType) =>
                     new Date(b.updatedAt).getTime() -
                     new Date(a.updatedAt).getTime()
                 )
-                .map((order) => <Order key={order.id} order={order} compact />)
+                .map((order: OrderType) => (
+                  <Order key={order.id} order={order} compact />
+                ))
             : new Array(3)
                 .fill(undefined)
                 .map((_, index) => (

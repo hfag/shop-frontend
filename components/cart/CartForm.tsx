@@ -9,7 +9,7 @@ import {
   REMOVE_ORDER_LINE,
   ADJUST_ORDER_LINE,
 } from "../../gql/order";
-import { Order, AdjustmentType, Adjustment } from "../../schema";
+import { Order, AdjustmentType, Adjustment, Mutation } from "../../schema";
 import orderMessages from "../../i18n/order";
 import cart from "../../i18n/cart";
 import product from "../../i18n/product";
@@ -20,6 +20,7 @@ import request from "../../utilities/request";
 import { mutate } from "swr";
 import CartTable from "./CartTable";
 import CartTableAction from "../ActionButton";
+import { errorCodeToMessage } from "../../utilities/i18n";
 
 const messages = defineMessages({
   showMoreDetails: {
@@ -49,6 +50,10 @@ const LastRow = styled.div`
     float: right;
     margin-left: 1rem;
   }
+`;
+
+const ValidationErrors = styled.div`
+  color: ${colors.danger};
 `;
 
 interface FormValues {
@@ -236,6 +241,7 @@ const InnerCartForm = React.memo(
           </tr>
         </tfoot>
       </CartTable>
+      {errors.lines && <ValidationErrors>{errors.lines}</ValidationErrors>}
       {enabled && values.lines.length > 0 && order && order.total > 0 && (
         <Button
           controlled
@@ -273,7 +279,19 @@ const CartForm = withFormik({
 
       await Promise.all(
         orderLinesToRemove.map((line) =>
-          request(intl.locale, REMOVE_ORDER_LINE, { orderLineId: line.id })
+          request<{ removeOrderLine: Mutation["removeOrderLine"] }>(
+            intl.locale,
+            REMOVE_ORDER_LINE,
+            { orderLineId: line.id }
+          ).then((response) => {
+            if ("errorCode" in response.removeOrderLine) {
+              return Promise.reject(
+                new Error(errorCodeToMessage(intl, response.removeOrderLine))
+              );
+            }
+
+            return response;
+          })
         )
       );
 
@@ -286,9 +304,21 @@ const CartForm = withFormik({
               )
           )
           .map((line) =>
-            request(intl.locale, ADJUST_ORDER_LINE, {
-              orderLineId: line.id,
-              quantity: line.quantity,
+            request<{ adjustOrderLine: Mutation["adjustOrderLine"] }>(
+              intl.locale,
+              ADJUST_ORDER_LINE,
+              {
+                orderLineId: line.id,
+                quantity: line.quantity,
+              }
+            ).then((response) => {
+              if ("errorCode" in response.adjustOrderLine) {
+                return Promise.reject(
+                  new Error(errorCodeToMessage(intl, response.adjustOrderLine))
+                );
+              }
+
+              return response;
             })
           )
       );
@@ -298,6 +328,7 @@ const CartForm = withFormik({
 
       mutate([GET_ACTIVE_ORDER, token]);
     } catch (e) {
+      setErrors({ lines: "message" in e ? e.message : JSON.stringify(e) });
       setStatus("error");
       setTimeout(() => setStatus(""), 300);
     }

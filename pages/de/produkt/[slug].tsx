@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { FunctionComponent, useMemo } from "react";
-import { Product as ProductType } from "../../../schema";
+import { Product as ProductType, Query } from "../../../schema";
 import request from "../../../utilities/request";
 import {
   GET_ALL_PRODUCT_SLUGS,
@@ -25,7 +25,10 @@ const Page: FunctionComponent<{
 
   const { data, error } = useSWR(
     [GET_PRODUCT_BY_SLUG, productSlug],
-    (query, productSlug) => request(intl.locale, query, { slug: productSlug }),
+    (query, productSlug) =>
+      request<{ productBySlug: Query["productBySlug"] }>(intl.locale, query, {
+        slug: productSlug,
+      }),
     {
       initialData: productResponse,
     }
@@ -86,7 +89,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: [] /*data.products.items.map((product) => ({
       params: { slug: product.slug, id: product.id },
     }))*/,
-    fallback: "unstable_blocking",
+    fallback: "blocking",
   };
 };
 

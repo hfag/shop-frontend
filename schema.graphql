@@ -1,3 +1,16 @@
+# Exposes a URL that specifies the behaviour of this scalar.
+directive @specifiedBy(
+  # The URL that specifies the behaviour of this scalar.
+  url: String!
+) on SCALAR
+
+union AddPaymentToOrderResult =
+    Order
+  | OrderPaymentStateError
+  | PaymentFailedError
+  | PaymentDeclinedError
+  | OrderStateTransitionError
+
 type Address implements Node {
   id: ID!
   createdAt: DateTime!
@@ -48,6 +61,28 @@ type AdministratorList implements PaginatedList {
   totalItems: Int!
 }
 
+type Allocation implements Node & StockMovement {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  productVariant: ProductVariant!
+  type: StockMovementType!
+  quantity: Int!
+  orderLine: OrderLine!
+}
+
+# Retured when attemting to set the Customer for an Order when already logged in.
+type AlreadyLoggedInError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+union ApplyCouponCodeResult =
+    Order
+  | CouponCodeExpiredError
+  | CouponCodeInvalidError
+  | CouponCodeLimitError
+
 type Asset implements Node {
   id: ID!
   createdAt: DateTime!
@@ -84,6 +119,11 @@ type AuthenticationMethod implements Node {
   updatedAt: DateTime!
   strategy: String!
 }
+
+union AuthenticationResult =
+    CurrentUser
+  | InvalidCredentialsError
+  | NotVerifiedError
 
 type BooleanCustomFieldConfig implements CustomField {
   name: String!
@@ -147,17 +187,13 @@ type Collection implements Node {
   productVariants(options: ProductVariantListOptions): ProductVariantList!
   links: [CollectionLink!]!
   products: [Product!]!
-  customFields: CollectionCustomFields
+  customFields: JSON
 }
 
 type CollectionBreadcrumb {
   id: ID!
   name: String!
   slug: String!
-}
-
-type CollectionCustomFields {
-  seoDescription: String
 }
 
 input CollectionFilterParameter {
@@ -168,7 +204,6 @@ input CollectionFilterParameter {
   slug: StringOperators
   position: NumberOperators
   description: StringOperators
-  seoDescription: StringOperators
 }
 
 type CollectionLink {
@@ -176,6 +211,7 @@ type CollectionLink {
   collection: Collection!
   collectionId: ID!
   icon: CollectionLinkType!
+  order: Int!
   name: String!
   url: String!
 }
@@ -213,7 +249,6 @@ input CollectionSortParameter {
   slug: SortOrder
   position: SortOrder
   description: SortOrder
-  seoDescription: SortOrder
 }
 
 type CollectionTranslation {
@@ -288,6 +323,28 @@ type CountryTranslation {
   updatedAt: DateTime!
   languageCode: LanguageCode!
   name: String!
+}
+
+# Returned if the provided coupon code is invalid
+type CouponCodeExpiredError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  couponCode: String!
+}
+
+# Returned if the provided coupon code is invalid
+type CouponCodeInvalidError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  couponCode: String!
+}
+
+# Returned if the provided coupon code is invalid
+type CouponCodeLimitError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  couponCode: String!
+  limit: Int!
 }
 
 input CreateAddressInput {
@@ -885,6 +942,7 @@ type CustomFields {
   Customer: [CustomFieldConfig!]!
   Facet: [CustomFieldConfig!]!
   FacetValue: [CustomFieldConfig!]!
+  Fulfillment: [CustomFieldConfig!]!
   GlobalSettings: [CustomFieldConfig!]!
   Order: [CustomFieldConfig!]!
   OrderLine: [CustomFieldConfig!]!
@@ -939,6 +997,46 @@ enum DeletionResult {
 
   # Deletion did not take place, reason given in message
   NOT_DELETED
+}
+
+# Retured when attemting to create a Customer with an email address already registered to an existing User.
+type EmailAddressConflictError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+enum ErrorCode {
+  UNKNOWN_ERROR
+  NATIVE_AUTH_STRATEGY_ERROR
+  INVALID_CREDENTIALS_ERROR
+  ORDER_STATE_TRANSITION_ERROR
+  EMAIL_ADDRESS_CONFLICT_ERROR
+  ORDER_MODIFICATION_ERROR
+  ORDER_LIMIT_ERROR
+  NEGATIVE_QUANTITY_ERROR
+  INSUFFICIENT_STOCK_ERROR
+  INELIGIBLE_SHIPPING_METHOD_ERROR
+  ORDER_PAYMENT_STATE_ERROR
+  PAYMENT_FAILED_ERROR
+  PAYMENT_DECLINED_ERROR
+  COUPON_CODE_INVALID_ERROR
+  COUPON_CODE_EXPIRED_ERROR
+  COUPON_CODE_LIMIT_ERROR
+  ALREADY_LOGGED_IN_ERROR
+  MISSING_PASSWORD_ERROR
+  PASSWORD_ALREADY_SET_ERROR
+  VERIFICATION_TOKEN_INVALID_ERROR
+  VERIFICATION_TOKEN_EXPIRED_ERROR
+  IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR
+  IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR
+  PASSWORD_RESET_TOKEN_INVALID_ERROR
+  PASSWORD_RESET_TOKEN_EXPIRED_ERROR
+  NOT_VERIFIED_ERROR
+}
+
+interface ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
 }
 
 type Facet implements Node {
@@ -1011,8 +1109,16 @@ type Fulfillment implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   orderItems: [OrderItem!]!
+  state: String!
   method: String!
   trackingCode: String
+  customFields: JSON
+}
+
+enum GlobalFlag {
+  TRUE
+  FALSE
+  INHERIT
 }
 
 type GlobalSettings {
@@ -1021,6 +1127,7 @@ type GlobalSettings {
   updatedAt: DateTime!
   availableLanguages: [LanguageCode!]!
   trackInventory: Boolean!
+  outOfStockThreshold: Int!
   serverConfig: ServerConfig!
   customFields: JSON
 }
@@ -1077,18 +1184,47 @@ enum HistoryEntryType {
   CUSTOMER_NOTE
   ORDER_STATE_TRANSITION
   ORDER_PAYMENT_TRANSITION
-  ORDER_FULLFILLMENT
+  ORDER_FULFILLMENT
   ORDER_CANCELLATION
   ORDER_REFUND_TRANSITION
+  ORDER_FULFILLMENT_TRANSITION
   ORDER_NOTE
   ORDER_COUPON_APPLIED
   ORDER_COUPON_REMOVED
+}
+
+# Retured if the token used to change a Customer's email address is valid, but has
+# expired according to the `verificationTokenDuration` setting in the AuthOptions.
+type IdentifierChangeTokenExpiredError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+# Retured if the token used to change a Customer's email address is either
+# invalid or does not match any expected tokens.
+type IdentifierChangeTokenInvalidError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
 }
 
 type ImportInfo {
   errors: [String!]
   processed: Int!
   imported: Int!
+}
+
+# Returned when attempting to set a ShippingMethod for which the order is not eligible
+type IneligibleShippingMethodError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+# Returned when attempting to add more items to the Order than are available
+type InsufficientStockError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  quantityAvailable: Int!
+  order: Order!
 }
 
 type IntCustomFieldConfig implements CustomField {
@@ -1102,6 +1238,13 @@ type IntCustomFieldConfig implements CustomField {
   min: Int
   max: Int
   step: Int
+}
+
+# Returned if the user authentication credentials are not valid
+type InvalidCredentialsError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  authenticationError: String!
 }
 
 # The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
@@ -1609,33 +1752,35 @@ enum LogicalOperator {
   OR
 }
 
-type LoginResult {
-  user: CurrentUser!
+# Retured when attemting to register or verify a customer account without a password, when one is required.
+type MissingPasswordError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
 }
 
 type Mutation {
   # Adds an item to the order. If custom fields are defined on the OrderLine
   # entity, a third argument 'customFields' will be available.
-  addItemToOrder(productVariantId: ID!, quantity: Int!): Order
+  addItemToOrder(productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
 
   # Remove an OrderLine from the Order
-  removeOrderLine(orderLineId: ID!): Order
+  removeOrderLine(orderLineId: ID!): RemoveOrderItemsResult!
 
   # Remove all OrderLine from the Order
-  removeAllOrderLines: Order
+  removeAllOrderLines: RemoveOrderItemsResult!
 
   # Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a
   # third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available.
-  adjustOrderLine(orderLineId: ID!, quantity: Int): Order
+  adjustOrderLine(orderLineId: ID!, quantity: Int): UpdateOrderItemsResult!
 
   # Applies the given coupon code to the active Order
-  applyCouponCode(couponCode: String!): Order
+  applyCouponCode(couponCode: String!): ApplyCouponCodeResult!
 
   # Removes the given coupon code from the active Order
   removeCouponCode(couponCode: String!): Order
 
   # Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates`
-  transitionOrderToState(state: String!): Order
+  transitionOrderToState(state: String!): TransitionOrderToStateResult
 
   # Sets the shipping address for this order
   setOrderShippingAddress(input: CreateAddressInput!): Order
@@ -1647,27 +1792,30 @@ type Mutation {
   setOrderCustomFields(input: UpdateOrderInput!): Order
 
   # Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query
-  setOrderShippingMethod(shippingMethodId: ID!): Order
+  setOrderShippingMethod(shippingMethodId: ID!): SetOrderShippingMethodResult!
 
   # Add a Payment to the Order
-  addPaymentToOrder(input: PaymentInput!): Order
+  addPaymentToOrder(input: PaymentInput!): AddPaymentToOrderResult
 
   # Set the Customer for the Order. Required only if the Customer is not currently logged in
-  setCustomerForOrder(input: CreateCustomerInput!): Order
+  setCustomerForOrder(input: CreateCustomerInput!): SetCustomerForOrderResult
 
   # Authenticates the user using the native authentication strategy. This mutation
   # is an alias for `authenticate({ native: { ... }})`
-  login(username: String!, password: String!, rememberMe: Boolean): LoginResult!
+  login(
+    username: String!
+    password: String!
+    rememberMe: Boolean
+  ): NativeAuthenticationResult!
 
   # Authenticates the user using a named authentication strategy
-  authenticate(input: AuthenticationInput!, rememberMe: Boolean): LoginResult!
+  authenticate(
+    input: AuthenticationInput!
+    rememberMe: Boolean
+  ): AuthenticationResult!
 
   # End the current authenticated session
-  logout: Boolean!
-
-  # Regenerate and send a verification token for a new Customer registration. Only
-  # applicable if `authOptions.requireVerification` is set to true.
-  refreshCustomerVerification(emailAddress: String!): Boolean!
+  logout: Success!
 
   # Register a Customer account with the given credentials. There are three possible registration flows:
   #
@@ -1688,7 +1836,15 @@ type Mutation {
   #
   # 3. The Customer _must_ be registered _with_ a password. No further action is
   # needed - the Customer is able to authenticate immediately.
-  registerCustomerAccount(input: RegisterCustomerInput!): Boolean!
+  registerCustomerAccount(
+    input: RegisterCustomerInput!
+  ): RegisterCustomerAccountResult!
+
+  # Regenerate and send a verification token for a new Customer registration. Only
+  # applicable if `authOptions.requireVerification` is set to true.
+  refreshCustomerVerification(
+    emailAddress: String!
+  ): RefreshCustomerVerificationResult!
 
   # Update an existing Customer
   updateCustomer(input: UpdateCustomerInput!): Customer!
@@ -1700,20 +1856,23 @@ type Mutation {
   updateCustomerAddress(input: UpdateAddressInput!): Address!
 
   # Delete an existing Address
-  deleteCustomerAddress(id: ID!): Boolean!
+  deleteCustomerAddress(id: ID!): Success!
 
   # Verify a Customer email address with the token sent to that address. Only
   # applicable if `authOptions.requireVerification` is set to true.
   #
   # If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
   # provided here.
-  verifyCustomerAccount(token: String!, password: String): LoginResult!
+  verifyCustomerAccount(
+    token: String!
+    password: String
+  ): VerifyCustomerAccountResult!
 
   # Update the password of the active Customer
   updateCustomerPassword(
     currentPassword: String!
     newPassword: String!
-  ): Boolean
+  ): UpdateCustomerPasswordResult!
 
   # Request to update the emailAddress of the active Customer. If `authOptions.requireVerification` is enabled
   # (as is the default), then the `identifierChangeToken` will be assigned to the current User and
@@ -1722,26 +1881,51 @@ type Mutation {
   requestUpdateCustomerEmailAddress(
     password: String!
     newEmailAddress: String!
-  ): Boolean
+  ): RequestUpdateCustomerEmailAddressResult!
 
   # Confirm the update of the emailAddress with the provided token, which has been generated by the
   # `requestUpdateCustomerEmailAddress` mutation.
-  updateCustomerEmailAddress(token: String!): Boolean
+  updateCustomerEmailAddress(token: String!): UpdateCustomerEmailAddressResult!
 
   # Requests a password reset email to be sent
-  requestPasswordReset(emailAddress: String!): Boolean
+  requestPasswordReset(emailAddress: String!): RequestPasswordResetResult
 
   # Resets a Customer's password based on the provided token
-  resetPassword(token: String!, password: String!): LoginResult!
+  resetPassword(token: String!, password: String!): ResetPasswordResult!
 }
+
+union NativeAuthenticationResult =
+    CurrentUser
+  | InvalidCredentialsError
+  | NotVerifiedError
+  | NativeAuthStrategyError
 
 input NativeAuthInput {
   username: String!
   password: String!
 }
 
+# Retured when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured.
+type NativeAuthStrategyError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+# Retured when attemting to set a negative OrderLine quantity.
+type NegativeQuantityError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
 interface Node {
   id: ID!
+}
+
+# Returned if `authOptions.requireVerification` is set to `true` (which is the default)
+# and an unverified user attempts to authenticate.
+type NotVerifiedError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
 }
 
 input NumberOperators {
@@ -1763,6 +1947,10 @@ type Order implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
 
+  # The date & time that the Order was placed, i.e. the Customer
+  # completed the checkout and the Order is no longer "active"
+  orderPlacedAt: DateTime
+
   # A unique code for the Order
   code: String!
   state: String!
@@ -1782,6 +1970,7 @@ type Order implements Node {
   promotions: [Promotion!]!
   payments: [Payment!]
   fulfillments: [Fulfillment!]
+  totalQuantity: Int!
   subTotalBeforeTax: Int!
 
   # The subTotal is the total of the OrderLines, before order-level promotions and shipping has been applied.
@@ -1792,6 +1981,7 @@ type Order implements Node {
   shippingMethod: ShippingMethod
   totalBeforeTax: Int!
   total: Int!
+  taxSummary: [OrderTaxSummary!]!
   history(options: HistoryEntryListOptions): HistoryEntryList!
   customFields: JSON
 }
@@ -1812,9 +2002,11 @@ type OrderAddress {
 input OrderFilterParameter {
   createdAt: DateOperators
   updatedAt: DateOperators
+  orderPlacedAt: DateOperators
   code: StringOperators
   state: StringOperators
   active: BooleanOperators
+  totalQuantity: NumberOperators
   subTotalBeforeTax: NumberOperators
   subTotal: NumberOperators
   currencyCode: StringOperators
@@ -1829,13 +2021,25 @@ type OrderItem implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   cancelled: Boolean!
+
+  # The price of a single unit, excluding tax
   unitPrice: Int!
+
+  # The price of a single unit, including tax
   unitPriceWithTax: Int!
   unitPriceIncludesTax: Boolean!
+    @deprecated(reason: "`unitPrice` is now always without tax")
   taxRate: Float!
   adjustments: [Adjustment!]!
   fulfillment: Fulfillment
   refundId: ID
+}
+
+# Retured when the maximum order size limit has been reached.
+type OrderLimitError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  maxItems: Int!
 }
 
 type OrderLine implements Node {
@@ -1848,7 +2052,17 @@ type OrderLine implements Node {
   unitPriceWithTax: Int!
   quantity: Int!
   items: [OrderItem!]!
-  totalPrice: Int!
+  totalPrice: Int! @deprecated(reason: "Use `linePriceWithTax` instead")
+  taxRate: Float!
+
+  # The total price of the line excluding tax
+  linePrice: Int!
+
+  # The total tax on this line
+  lineTax: Int!
+
+  # The total price of the line including tax
+  linePriceWithTax: Int!
   adjustments: [Adjustment!]!
   order: Order!
   customFields: JSON
@@ -1866,6 +2080,18 @@ input OrderListOptions {
   filter: OrderFilterParameter
 }
 
+# Returned when attempting to modify the contents of an Order that is not in the `AddingItems` state.
+type OrderModificationError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+# Returned when attempting to add a Payment to an Order that is not in the `ArrangingPayment` state.
+type OrderPaymentStateError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
 type OrderProcessState {
   name: String!
   to: [String!]!
@@ -1875,8 +2101,10 @@ input OrderSortParameter {
   id: SortOrder
   createdAt: SortOrder
   updatedAt: SortOrder
+  orderPlacedAt: SortOrder
   code: SortOrder
   state: SortOrder
+  totalQuantity: SortOrder
   subTotalBeforeTax: SortOrder
   subTotal: SortOrder
   shipping: SortOrder
@@ -1885,9 +2113,51 @@ input OrderSortParameter {
   total: SortOrder
 }
 
+# Returned if there is an error in transitioning the Order state
+type OrderStateTransitionError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  transitionError: String!
+  fromState: String!
+  toState: String!
+}
+
+# A summary of the taxes being applied to this order, grouped
+# by taxRate.
+type OrderTaxSummary {
+  # The taxRate as a percentage
+  taxRate: Float!
+
+  # The total net price or OrderItems to which this taxRate applies
+  taxBase: Int!
+
+  # The total tax being applied to the Order at this taxRate
+  taxTotal: Int!
+}
+
 interface PaginatedList {
   items: [Node!]!
   totalItems: Int!
+}
+
+# Retured when attemting to verify a customer account with a password, when a password has already been set.
+type PasswordAlreadySetError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+# Retured if the token used to reset a Customer's password is valid, but has
+# expired according to the `verificationTokenDuration` setting in the AuthOptions.
+type PasswordResetTokenExpiredError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+# Retured if the token used to reset a Customer's password is either
+# invalid or does not match any expected tokens.
+type PasswordResetTokenInvalidError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
 }
 
 type Payment implements Node {
@@ -1901,6 +2171,20 @@ type Payment implements Node {
   errorMessage: String
   refunds: [Refund!]!
   metadata: JSON
+}
+
+# Returned when a Payment is declined by the payment provider.
+type PaymentDeclinedError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  paymentErrorMessage: String!
+}
+
+# Returned when a Payment fails due to an error.
+type PaymentFailedError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  paymentErrorMessage: String!
 }
 
 # Passed as input to the `addPaymentToOrder` mutation.
@@ -1924,48 +2208,101 @@ type PaymentMethod implements Node {
   definition: ConfigurableOperationDefinition!
 }
 
-# "
 # @description
 # Permissions for administrators and customers. Used to control access to
 # GraphQL resolvers via the {@link Allow} decorator.
 #
 # @docsCategory common
 enum Permission {
-  #  The Authenticated role means simply that the user is logged in
+  # Authenticated means simply that the user is logged in
   Authenticated
 
-  #  SuperAdmin can perform the most sensitive tasks
+  # SuperAdmin has unrestricted access to all operations
   SuperAdmin
 
-  #  Owner means the user owns this entity, e.g. a Customer's own Order
+  # Owner means the user owns this entity, e.g. a Customer's own Order
   Owner
 
-  #  Public means any unauthenticated user may perform the operation
+  # Public means any unauthenticated user may perform the operation
   Public
+
+  # Grants permission to create Catalog
   CreateCatalog
+
+  # Grants permission to read Catalog
   ReadCatalog
+
+  # Grants permission to update Catalog
   UpdateCatalog
+
+  # Grants permission to delete Catalog
   DeleteCatalog
+
+  # Grants permission to create Customer
   CreateCustomer
+
+  # Grants permission to read Customer
   ReadCustomer
+
+  # Grants permission to update Customer
   UpdateCustomer
+
+  # Grants permission to delete Customer
   DeleteCustomer
+
+  # Grants permission to create Administrator
   CreateAdministrator
+
+  # Grants permission to read Administrator
   ReadAdministrator
+
+  # Grants permission to update Administrator
   UpdateAdministrator
+
+  # Grants permission to delete Administrator
   DeleteAdministrator
+
+  # Grants permission to create Order
   CreateOrder
+
+  # Grants permission to read Order
   ReadOrder
+
+  # Grants permission to update Order
   UpdateOrder
+
+  # Grants permission to delete Order
   DeleteOrder
+
+  # Grants permission to create Promotion
   CreatePromotion
+
+  # Grants permission to read Promotion
   ReadPromotion
+
+  # Grants permission to update Promotion
   UpdatePromotion
+
+  # Grants permission to delete Promotion
   DeletePromotion
+
+  # Grants permission to create Settings
   CreateSettings
+
+  # Grants permission to read Settings
   ReadSettings
+
+  # Grants permission to update Settings
   UpdateSettings
+
+  # Grants permission to delete Settings
   DeleteSettings
+}
+
+type PermissionDefinition {
+  name: String!
+  description: String!
+  assignable: Boolean!
 }
 
 # The price range where the result has more than one price
@@ -2006,7 +2343,6 @@ type Product implements Node {
 type ProductCustomFields {
   productRecommendationsEnabled: Boolean
   groupKey: String
-  seoDescription: String
 }
 
 input ProductFilterParameter {
@@ -2018,7 +2354,6 @@ input ProductFilterParameter {
   description: StringOperators
   productRecommendationsEnabled: BooleanOperators
   groupKey: StringOperators
-  seoDescription: StringOperators
 }
 
 type ProductList implements PaginatedList {
@@ -2089,7 +2424,6 @@ input ProductSortParameter {
   description: SortOrder
   productRecommendationsEnabled: SortOrder
   groupKey: SortOrder
-  seoDescription: SortOrder
 }
 
 type ProductTranslation {
@@ -2255,6 +2589,8 @@ enum RecommendationType {
   UPSELL
 }
 
+union RefreshCustomerVerificationResult = Success | NativeAuthStrategyError
+
 type Refund implements Node {
   id: ID!
   createdAt: DateTime!
@@ -2272,6 +2608,11 @@ type Refund implements Node {
   metadata: JSON
 }
 
+union RegisterCustomerAccountResult =
+    Success
+  | MissingPasswordError
+  | NativeAuthStrategyError
+
 input RegisterCustomerInput {
   emailAddress: String!
   title: String
@@ -2281,10 +2622,36 @@ input RegisterCustomerInput {
   password: String
 }
 
+type Release implements Node & StockMovement {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  productVariant: ProductVariant!
+  type: StockMovementType!
+  quantity: Int!
+  orderItem: OrderItem!
+}
+
+union RemoveOrderItemsResult = Order | OrderModificationError
+
+union RequestPasswordResetResult = Success | NativeAuthStrategyError
+
+union RequestUpdateCustomerEmailAddressResult =
+    Success
+  | InvalidCredentialsError
+  | EmailAddressConflictError
+  | NativeAuthStrategyError
+
 type ResellerDiscount {
   facetValueIds: [ID!]!
   discount: Int!
 }
+
+union ResetPasswordResult =
+    CurrentUser
+  | PasswordResetTokenInvalidError
+  | PasswordResetTokenExpiredError
+  | NativeAuthStrategyError
 
 type Return implements Node & StockMovement {
   id: ID!
@@ -2318,7 +2685,7 @@ type Sale implements Node & StockMovement {
   productVariant: ProductVariant!
   type: StockMovementType!
   quantity: Int!
-  orderLine: OrderLine!
+  orderItem: OrderItem!
 }
 
 input SearchInput {
@@ -2397,17 +2764,30 @@ input SearchResultSortParameter {
 type ServerConfig {
   orderProcess: [OrderProcessState!]!
   permittedAssetTypes: [String!]!
+  permissions: [PermissionDefinition!]!
   customFieldConfig: CustomFields!
 }
+
+union SetCustomerForOrderResult =
+    Order
+  | AlreadyLoggedInError
+  | EmailAddressConflictError
+
+union SetOrderShippingMethodResult =
+    Order
+  | OrderModificationError
+  | IneligibleShippingMethodError
 
 type ShippingMethod implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   code: String!
+  name: String!
   description: String!
   checker: ConfigurableOperation!
   calculator: ConfigurableOperation!
+  translations: [ShippingMethodTranslation!]!
   customFields: JSON
 }
 
@@ -2420,8 +2800,18 @@ type ShippingMethodQuote {
   id: ID!
   price: Int!
   priceWithTax: Int!
+  name: String!
   description: String!
   metadata: JSON
+}
+
+type ShippingMethodTranslation {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  languageCode: LanguageCode!
+  name: String!
+  description: String!
 }
 
 # The price value where the result has a single price
@@ -2452,7 +2842,13 @@ interface StockMovement {
   quantity: Int!
 }
 
-union StockMovementItem = StockAdjustment | Sale | Cancellation | Return
+union StockMovementItem =
+    StockAdjustment
+  | Allocation
+  | Sale
+  | Cancellation
+  | Return
+  | Release
 
 type StockMovementList {
   items: [StockMovementItem!]!
@@ -2461,6 +2857,8 @@ type StockMovementList {
 
 enum StockMovementType {
   ADJUSTMENT
+  ALLOCATION
+  RELEASE
   SALE
   CANCELLATION
   RETURN
@@ -2486,7 +2884,17 @@ type StringFieldOption {
 
 input StringOperators {
   eq: String
+  notEq: String
   contains: String
+  notContains: String
+  in: [String!]
+  notIn: [String!]
+  regex: String
+}
+
+# Indicates that an operation succeeded, where we do not want to return any more specific information.
+type Success {
+  success: Boolean!
 }
 
 type TaxCategory implements Node {
@@ -2513,6 +2921,8 @@ type TaxRateList implements PaginatedList {
   totalItems: Int!
 }
 
+union TransitionOrderToStateResult = Order | OrderStateTransitionError
+
 input UpdateAddressInput {
   id: ID!
   fullName: String
@@ -2529,6 +2939,12 @@ input UpdateAddressInput {
   customFields: JSON
 }
 
+union UpdateCustomerEmailAddressResult =
+    Success
+  | IdentifierChangeTokenInvalidError
+  | IdentifierChangeTokenExpiredError
+  | NativeAuthStrategyError
+
 input UpdateCustomerInput {
   title: String
   firstName: String
@@ -2537,9 +2953,21 @@ input UpdateCustomerInput {
   customFields: JSON
 }
 
+union UpdateCustomerPasswordResult =
+    Success
+  | InvalidCredentialsError
+  | NativeAuthStrategyError
+
 input UpdateOrderInput {
   customFields: JSON
 }
+
+union UpdateOrderItemsResult =
+    Order
+  | OrderModificationError
+  | OrderLimitError
+  | NegativeQuantityError
+  | InsufficientStockError
 
 # The `Upload` scalar type represents a file upload.
 scalar Upload
@@ -2555,6 +2983,28 @@ type User implements Node {
   authenticationMethods: [AuthenticationMethod!]!
   customFields: JSON
 }
+
+# Returned if the verification token (used to verify a Customer's email address) is valid, but has
+# expired according to the `verificationTokenDuration` setting in the AuthOptions.
+type VerificationTokenExpiredError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+# Retured if the verification token (used to verify a Customer's email address) is either
+# invalid or does not match any expected tokens.
+type VerificationTokenInvalidError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+union VerifyCustomerAccountResult =
+    CurrentUser
+  | VerificationTokenInvalidError
+  | VerificationTokenExpiredError
+  | MissingPasswordError
+  | PasswordAlreadySetError
+  | NativeAuthStrategyError
 
 type Zone implements Node {
   id: ID!

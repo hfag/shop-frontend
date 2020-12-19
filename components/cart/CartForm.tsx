@@ -21,6 +21,7 @@ import { mutate } from "swr";
 import CartTable from "./CartTable";
 import CartTableAction from "../ActionButton";
 import { errorCodeToMessage } from "../../utilities/i18n";
+import { colors } from "../../utilities/style";
 
 const messages = defineMessages({
   showMoreDetails: {

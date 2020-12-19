@@ -17,7 +17,7 @@ import Flexbar from "./layout/Flexbar";
 import { colors, shadows } from "../utilities/style";
 import Price from "./elements/Price";
 import { pathnamesByLanguage } from "../utilities/urls";
-import { SearchResult } from "../schema";
+import { Query, SearchResult } from "../schema";
 import request from "../utilities/request";
 import { SEARCH } from "../gql/search";
 import Asset from "./elements/Asset";
@@ -167,13 +167,9 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
         setLastQuery(value);
         setLoading(true);
 
-        request<{ search: { items: SearchResult[]; totalItems: number } }>(
-          intl.locale,
-          SEARCH,
-          {
-            input: { term: value },
-          }
-        ).then((data) => {
+        request<{ search: Query["search"] }>(intl.locale, SEARCH, {
+          input: { term: value },
+        }).then((data) => {
           setSuggestions(data.search.items);
           setLoading(false);
         });

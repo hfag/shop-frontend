@@ -106,13 +106,20 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  const collectionResponse = await request<{ collection: Query["collection"] }>(
+    locale,
+    GET_COLLECTION_BY_SLUG,
+    {
+      slug: context.params.slug,
+    }
+  );
+
   return {
     revalidate: 30, //product categories will be rerendered at most every 30s
+    notFound: collectionResponse?.collection ? false : true,
     props: {
       slug: context.params.slug,
-      collectionResponse: await request(locale, GET_COLLECTION_BY_SLUG, {
-        slug: context.params.slug,
-      }),
+      collectionResponse,
     },
   };
 };

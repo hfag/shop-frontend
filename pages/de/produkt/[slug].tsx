@@ -94,12 +94,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  const productResponse = await request<{
+    productBySlug: Query["productBySlug"];
+  }>(locale, GET_PRODUCT_BY_SLUG, {
+    slug: context.params.slug,
+  });
+
   return {
     revalidate: 10, //products will be rerendered at most every 10s
+    notFound: productResponse?.productBySlug ? false : true,
     props: {
-      productResponse: await request(locale, GET_PRODUCT_BY_SLUG, {
-        slug: context.params.slug,
-      }),
+      productResponse,
       productSlug: context.params.slug,
     },
   };

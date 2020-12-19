@@ -73,17 +73,32 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  let notFound = false;
+  let post = null;
+
+  try {
+    post = await fetch(
+      `${getWordpressUrl(locale)}/wp-json/wp/v2/posts?slug=${
+        context.params.slug
+      }&_embed`
+    )
+      .then((r) => r.json())
+      .then((posts: WP_Post[]) => mapPost(posts[0]));
+
+    if (!post) {
+      notFound = true;
+    }
+  } catch (e) {
+    notFound = true;
+    post = null;
+  }
+
   return {
     revalidate: 60, //posts will be rerendered at most every minute
+    notFound,
     props: {
       slug: context.params.slug,
-      post: await fetch(
-        `${getWordpressUrl(locale)}/wp-json/wp/v2/posts?slug=${
-          context.params.slug
-        }&_embed`
-      )
-        .then((r) => r.json())
-        .then((posts: WP_Post[]) => mapPost(posts[0])),
+      post,
     },
   };
 };

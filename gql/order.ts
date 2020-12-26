@@ -63,7 +63,7 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     unitPrice
     unitPriceWithTax
     quantity
-    totalPrice
+    linePriceWithTax
     adjustments {
       adjustmentSource
       type
@@ -90,6 +90,11 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
   shippingMethod {
     code
     description
+  }
+  taxSummary {
+    taxRate
+    taxBase
+    taxTotal
   }
   totalBeforeTax
   total

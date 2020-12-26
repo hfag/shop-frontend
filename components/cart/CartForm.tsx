@@ -121,9 +121,14 @@ const InnerCartForm = React.memo(
                 return null;
               }
               return order.lines.map((line, index) => {
-                const adjustmentSources = line.adjustments.reduce(
+                //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
+                const adjustmentSources: string[] = line.adjustments.reduce(
                   (array, adjustment) => {
-                    if (array.includes(adjustment.adjustmentSource)) {
+                    //ignore taxes and already included adjustments
+                    if (
+                      adjustment.type === AdjustmentType.Tax ||
+                      array.includes(adjustment.adjustmentSource)
+                    ) {
                       return array;
                     } else {
                       array.push(adjustment.adjustmentSource);
@@ -187,7 +192,7 @@ const InnerCartForm = React.memo(
                       )}
                     </td>
                     <td>
-                      <Price>{price * line.quantity}</Price>
+                      <Price>{line.linePriceWithTax}</Price>
                     </td>
                     <td>
                       {enabled && (

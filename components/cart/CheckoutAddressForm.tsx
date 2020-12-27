@@ -20,7 +20,7 @@ import request from "../../utilities/request";
 import {
   GET_ACTIVE_ORDER,
   ORDER_SET_CUSTOMER,
-  ORDER_SET_SHIPPING_ADDRESS,
+  ORDER_SET_ADDRESS,
 } from "../../gql/order";
 import { mutate } from "swr";
 import Flex from "../layout/Flex";
@@ -65,7 +65,6 @@ interface FormValues {
 }
 
 interface IProps {
-  setBillingAddress: (address: CreateAddressInput) => void;
   countries: Country[];
   token?: string;
   billingAddress: Address | OrderAddress | null;
@@ -93,6 +92,8 @@ const InnerCheckoutAddressForm = React.memo(
     countries,
     intl,
     enabled,
+    billingAddress,
+    shippingAddress,
   }: IProps & FormikProps<FormValues>) => (
     <Form>
       <Flex flexWrap="wrap">
@@ -432,11 +433,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
   },
   handleSubmit: async (
     values,
-    {
-      props: { intl, customer, token, setBillingAddress, onProceed },
-      setStatus,
-      setErrors,
-    }
+    { props: { intl, customer, token, onProceed }, setStatus, setErrors }
   ) => {
     const billingAddress: CreateAddressInput = {
       fullName: `${values.billingFirstName} ${values.billingLastName}`,
@@ -497,19 +494,20 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       }
     }
 
-    const data = await request<{
-      setOrderShippingAddress: Mutation["setOrderShippingAddress"];
-    }>(intl.locale, ORDER_SET_SHIPPING_ADDRESS, {
+    const billingRequest = await request<{
+      setOrderShippingAddress: { id: number };
+      setOrderBillingAddress: Mutation["setOrderBillingAddress"];
+    }>(intl.locale, ORDER_SET_ADDRESS, {
       shippingAddress,
+      billingAddress,
     });
 
     mutate(
       [GET_ACTIVE_ORDER, token],
-      { activeOrder: data.setOrderShippingAddress },
+      { activeOrder: billingRequest.setOrderBillingAddress },
       false
     );
 
-    setBillingAddress(billingAddress);
     onProceed();
   },
 })(InnerCheckoutAddressForm);

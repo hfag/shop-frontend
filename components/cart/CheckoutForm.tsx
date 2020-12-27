@@ -13,6 +13,7 @@ import {
   ORDER_GET_SHIPPING_METHODS,
   TRANSITION_ORDER_AND_ADD_PAYMENT,
   ORDER_ADD_PAYMENT,
+  ORDER_SET_CUSTOM_FIELDS,
 } from "../../gql/order";
 import useSWR, { mutate } from "swr";
 import Placeholder from "../elements/Placeholder";
@@ -76,7 +77,6 @@ interface IProps {
   router: NextRouter;
   token?: string;
   values?: FormValues;
-  billingAddress: CreateAddressInput | null;
   order: Order | null;
 }
 
@@ -219,8 +219,9 @@ const InnerCheckoutForm = React.memo(
 
 const CheckoutForm = withFormik<IProps, FormValues>({
   enableReinitialize: true,
-  mapPropsToValues: ({ values = {} }) => ({
+  mapPropsToValues: ({ order, values = {} }) => ({
     paymentMethod: "invoice",
+    orderComments: order?.customFields?.notes,
     ...values,
   }),
 
@@ -239,15 +240,19 @@ const CheckoutForm = withFormik<IProps, FormValues>({
   },
   handleSubmit: async (
     values,
-    {
-      props: { intl, token, billingAddress, order, router },
-      setStatus,
-      setErrors,
-    }
+    { props: { intl, token, order, router }, setStatus, setErrors }
   ) => {
     if (!order) {
       return;
     }
+
+    //store order comments
+    await request<{
+      addPaymentToOrder: Mutation["setOrderCustomFields"];
+    }>(intl.locale, ORDER_SET_CUSTOM_FIELDS, {
+      input: { customFields: { notes: values.orderComments } },
+    });
+
     if (values.paymentMethod === "invoice") {
       let data: { addPaymentToOrder: Order };
 
@@ -255,7 +260,7 @@ const CheckoutForm = withFormik<IProps, FormValues>({
         const response = await request<{
           addPaymentToOrder: Mutation["addPaymentToOrder"];
         }>(intl.locale, ORDER_ADD_PAYMENT, {
-          input: { method: values.paymentMethod, metadata: { billingAddress } },
+          input: { method: values.paymentMethod, metadata: {} },
         });
 
         if ("errorCode" in response.addPaymentToOrder) {
@@ -293,7 +298,7 @@ const CheckoutForm = withFormik<IProps, FormValues>({
         }>(intl.locale, TRANSITION_ORDER_AND_ADD_PAYMENT, {
           input: {
             method: values.paymentMethod,
-            metadata: { billingAddress },
+            metadata: {},
           },
         });
 

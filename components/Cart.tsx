@@ -50,10 +50,6 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
   const intl = useIntl();
   const [step, setStep] = useState("cart");
   const { customer: user, token } = useContext(AppContext);
-  const [
-    billingAddress,
-    setBillingAddress,
-  ] = useState<CreateAddressInput | null>(null);
   const router = useRouter();
 
   const { data: orderData } = useSWR([GET_ACTIVE_ORDER, token], (query) =>
@@ -106,7 +102,6 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
               intl={intl}
               enabled={step === "address"}
               token={token}
-              setBillingAddress={setBillingAddress}
               countries={countryData?.availableCountries || []}
               onProceed={() => setStep("checkout")}
               billingAddress={
@@ -127,7 +122,6 @@ const Cart: FunctionComponent<{}> = React.memo(() => {
               router={router}
               order={orderData?.activeOrder}
               token={token}
-              billingAddress={billingAddress}
             />
           )}
         </>

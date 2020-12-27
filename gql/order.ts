@@ -98,6 +98,9 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
   }
   totalBeforeTax
   total
+  customFields {
+    notes
+  }
   updatedAt
 `;
 
@@ -201,9 +204,12 @@ export const ORDER_SET_CUSTOMER = /* GraphQL */ `
   }
 `;
 
-export const ORDER_SET_SHIPPING_ADDRESS = /* GraphQL */ `
-  mutation SetOrderShippingAddress($shippingAddress: CreateAddressInput!) {
+export const ORDER_SET_ADDRESS = /* GraphQL */ `
+  mutation SetOrderAddress($billingAddress: CreateAddressInput!, $shippingAddress: CreateAddressInput!) {
     setOrderShippingAddress(input: $shippingAddress) {
+      id
+    }
+    setOrderBillingAddress(input: $billingAddress) {
       ${FULL_ORDER_FRAGMENT}
     }
   }
@@ -217,6 +223,14 @@ export const ORDER_GET_SHIPPING_METHODS = /* GraphQL */ `
       priceWithTax
       description
       metadata
+    }
+  }
+`;
+
+export const ORDER_SET_CUSTOM_FIELDS = /* GraphQL */ `
+  mutation SetOrderNotes($input: UpdateOrderInput!) {
+    setOrderCustomFields(input: $input) {
+      id
     }
   }
 `;

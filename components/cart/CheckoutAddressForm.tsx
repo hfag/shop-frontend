@@ -317,8 +317,8 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     const sAddress = isBillingAddress ? shippingAddress : null;
 
     const values: FormValues = {
-      billingFirstName: customer.firstName || "",
-      billingLastName: customer.lastName || "",
+      billingFirstName: customer ? customer.firstName : "",
+      billingLastName: customer ? customer.lastName : "",
       billingCompany: bAddress.company || "",
       billingStreetLine1: bAddress.streetLine1 || "",
       billingStreetLine2: bAddress.streetLine2 || "",
@@ -327,12 +327,12 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       billingPostalCode: bAddress.postalCode || "",
       billingCountry:
         "countryCode" in bAddress
-          ? bAddress.countryCode
+          ? bAddress.countryCode || ""
           : typeof bAddress.country === "string"
           ? ""
-          : bAddress.country.code,
+          : bAddress?.country?.code || "",
       billingPhone: bAddress.phoneNumber || "",
-      billingEmail: customer.emailAddress || "",
+      billingEmail: customer ? customer.emailAddress : "",
     };
 
     if (isShippingAddress && sAddress) {
@@ -345,10 +345,10 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       values.shippingPostalCode = sAddress.postalCode || "";
       values.shippingCountry =
         "countryCode" in sAddress
-          ? sAddress.countryCode
+          ? sAddress.countryCode || ""
           : typeof sAddress.country === "string"
           ? ""
-          : sAddress.country.code;
+          : sAddress?.country?.code || "";
       values.shippingPhoneNumber = sAddress.postalCode || "";
 
       values.shipToDifferentAddress = true;

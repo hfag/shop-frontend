@@ -142,6 +142,12 @@ const Product: FunctionComponent<{
     [possibleVariants]
   );
 
+  const rate: number | null = useMemo(
+    () =>
+      selectedVariant ? 1.0 + selectedVariant.taxRateApplied.value / 100 : null,
+    [selectedVariant]
+  );
+
   const onVariationSliderSelect = useCallback(
     (options) => setSelectedOptions({ ...selectedOptions, ...options }),
     [selectedOptions, setSelectedOptions]
@@ -398,21 +404,28 @@ const Product: FunctionComponent<{
                   </thead>
                   <tbody>
                     {selectedVariant.bulkDiscounts.map(
-                      ({ quantity, price }, index) => (
-                        <DiscountRow
-                          onClick={() => setQuantity(quantity)}
-                          selected={
-                            activeBulkDiscount &&
-                            quantity === activeBulkDiscount.quantity
-                          }
-                          key={index}
-                        >
-                          <td>{quantity}</td>
-                          <td>
-                            <Price>{price}</Price>
-                          </td>
-                        </DiscountRow>
-                      )
+                      ({ quantity, price }, index) => {
+                        const promotion = price / rate - selectedVariant.price;
+
+                        return (
+                          <DiscountRow
+                            onClick={() => setQuantity(quantity)}
+                            selected={
+                              activeBulkDiscount &&
+                              quantity === activeBulkDiscount.quantity
+                            }
+                            key={index}
+                          >
+                            <td>{quantity}</td>
+                            <td>
+                              <Price>
+                                {Math.round(selectedVariant.price + promotion) *
+                                  rate}
+                              </Price>
+                            </td>
+                          </DiscountRow>
+                        );
+                      }
                     )}
                   </tbody>
                 </DiscountTable>
@@ -447,7 +460,14 @@ const Product: FunctionComponent<{
                       discountPrice:
                         activeResellerDiscounts.length === 0
                           ? activeBulkDiscount
-                            ? activeBulkDiscount.price
+                            ? Math.round(
+                                //s.t. multiplication by quantity is the same as in the backend
+                                Math.round(
+                                  selectedVariant.price +
+                                    (activeBulkDiscount.price / rate -
+                                      selectedVariant.price)
+                                ) * rate
+                              )
                             : undefined
                           : activeResellerDiscounts.reduce(
                               (price, d) => (1 - d.discount / 100) * price,

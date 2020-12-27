@@ -124,9 +124,14 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
         </thead>
         <tbody>
           {data.orderByCode.lines.map((line, index) => {
-            const adjustmentSources = line.adjustments.reduce(
+            //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
+            const adjustmentSources: string[] = line.adjustments.reduce(
               (array, adjustment) => {
-                if (array.includes(adjustment.adjustmentSource)) {
+                //ignore taxes and already included adjustments
+                if (
+                  adjustment.type === AdjustmentType.Tax ||
+                  array.includes(adjustment.adjustmentSource)
+                ) {
                   return array;
                 } else {
                   array.push(adjustment.adjustmentSource);
@@ -165,18 +170,14 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
                 <td>{line.productVariant.sku}</td>
                 <td>
                   {price !== line.unitPriceWithTax ? (
-                    <div>
-                      <Price strike>{line.unitPriceWithTax}</Price>
-                      {adjustmentsPerUnit.map((adjustment) => (
-                        <>
-                          <div>
-                            <Price>{adjustment.amount}</Price> (
-                            {adjustment.description})
-                          </div>
-                        </>
-                      ))}
-                      <Price>{price}</Price>
-                    </div>
+                    <>
+                      <div>
+                        <Price strike>{line.unitPriceWithTax}</Price>
+                      </div>
+                      <div>
+                        <Price>{price}</Price>
+                      </div>
+                    </>
                   ) : (
                     <Price>{line.unitPriceWithTax}</Price>
                   )}
@@ -185,7 +186,7 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
                   <span>{line.quantity}</span>
                 </td>
                 <td>
-                  <Price>{line.unitPrice * line.quantity}</Price>
+                  <Price>{line.linePriceWithTax}</Price>
                 </td>
               </tr>
             );

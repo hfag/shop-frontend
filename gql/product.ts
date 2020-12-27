@@ -53,6 +53,9 @@ export const VARIANT_FRAGMENT = `
     quantity
     price
   }
+  taxRateApplied{
+    value
+  }
 `;
 
 export const OPTION_GROUP_FRAGMENT = `

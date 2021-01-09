@@ -110,6 +110,10 @@ export default defineMessages({
   },
   NOT_VERIFIED_ERROR: {
     id: "errors.NOT_VERIFIED_ERROR",
-    defaultMessage: "Standardrechnungsadresse?",
+    defaultMessage: "Konto ist nicht verifiziert.",
+  },
+  NO_ACTIVE_ORDER_ERROR: {
+    id: "errors.NO_ACTIVE_ORDER_ERROR",
+    defaultMessage: "Es existiert keine aktive Bestellung.",
   },
 });

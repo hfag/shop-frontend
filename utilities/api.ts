@@ -1,4 +1,3 @@
-import { Success } from "../schema";
 import { DEFAULT_LANGUAGE } from "./i18n";
 
 export const API_BASE_URL = process.env.API_BASE_URL;

@@ -63,14 +63,14 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     unitPrice
     unitPriceWithTax
     quantity
-    linePriceWithTax
-    adjustments {
+    proratedLinePriceWithTax
+    discounts {
       adjustmentSource
       type
       amount
     }
   }
-  adjustments {
+  discounts {
     adjustmentSource
     type
     description
@@ -82,22 +82,24 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     name
     enabled
   }
-  subTotalBeforeTax
   subTotal
+  subTotalWithTax
   currencyCode
   shipping
   shippingWithTax
-  shippingMethod {
-    code
-    description
+  shippingLines {
+    shippingMethod {
+      code
+      description
+    }
   }
   taxSummary {
     taxRate
     taxBase
     taxTotal
   }
-  totalBeforeTax
   total
+  totalWithTax
   customFields {
     notes
   }
@@ -205,12 +207,27 @@ export const ORDER_SET_CUSTOMER = /* GraphQL */ `
 `;
 
 export const ORDER_SET_ADDRESS = /* GraphQL */ `
-  mutation SetOrderAddress($billingAddress: CreateAddressInput!, $shippingAddress: CreateAddressInput!) {
+  mutation SetOrderAddress(
+    $billingAddress: CreateAddressInput!
+    $shippingAddress: CreateAddressInput!
+  ) {
     setOrderShippingAddress(input: $shippingAddress) {
-      id
+      ... on Order {
+        id
+      }
+      ... on NoActiveOrderError {
+        errorCode
+        message
+      }
     }
     setOrderBillingAddress(input: $billingAddress) {
-      ${FULL_ORDER_FRAGMENT}
+      ... on Order {
+        ${FULL_ORDER_FRAGMENT}
+      }
+      ... on NoActiveOrderError {
+        errorCode
+        message
+      }
     }
   }
 `;
@@ -221,6 +238,7 @@ export const ORDER_GET_SHIPPING_METHODS = /* GraphQL */ `
       id
       price
       priceWithTax
+      name
       description
       metadata
     }

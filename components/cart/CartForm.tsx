@@ -122,13 +122,10 @@ const InnerCartForm = React.memo(
               }
               return order.lines.map((line, index) => {
                 //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
-                const adjustmentSources: string[] = line.adjustments.reduce(
+                const adjustmentSources: string[] = line.discounts.reduce(
                   (array, adjustment) => {
-                    //ignore taxes and already included adjustments
-                    if (
-                      adjustment.type === AdjustmentType.Tax ||
-                      array.includes(adjustment.adjustmentSource)
-                    ) {
+                    //already included adjustments
+                    if (array.includes(adjustment.adjustmentSource)) {
                       return array;
                     } else {
                       array.push(adjustment.adjustmentSource);
@@ -140,11 +137,12 @@ const InnerCartForm = React.memo(
 
                 const adjustmentsPerUnit: Adjustment[] = adjustmentSources.map(
                   (source) =>
-                    line.adjustments.find((a) => a.adjustmentSource === source)
+                    line.discounts.find((a) => a.adjustmentSource === source)
                 );
 
                 const price = adjustmentsPerUnit.reduce(
-                  (price, adjustment) => price + adjustment.amount,
+                  (price, adjustment) =>
+                    price + adjustment.amount / line.quantity,
                   line.unitPriceWithTax
                 );
 
@@ -192,7 +190,7 @@ const InnerCartForm = React.memo(
                       )}
                     </td>
                     <td>
-                      <Price>{line.linePriceWithTax}</Price>
+                      <Price>{line.proratedLinePriceWithTax}</Price>
                     </td>
                     <td>
                       {enabled && (
@@ -227,11 +225,11 @@ const InnerCartForm = React.memo(
           <tr className="total">
             <td colSpan={5}>{intl.formatMessage(orderMessages.taxesOfThat)}</td>
             <td>
-              {order && <Price>{order.total - order.totalBeforeTax}</Price>}
+              {order && <Price>{order.subTotalWithTax - order.subTotal}</Price>}
             </td>
             <td />
           </tr>
-          {order && order.shippingMethod && (
+          {order && order.shippingLines && order.shippingLines.length > 0 && (
             <tr className="total">
               <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
               <td>
@@ -242,7 +240,7 @@ const InnerCartForm = React.memo(
           )}
           <tr className="total">
             <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
-            <td>{order && <Price>{order.total}</Price>}</td>
+            <td>{order && <Price>{order.totalWithTax}</Price>}</td>
             <td />
           </tr>
         </tfoot>

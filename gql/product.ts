@@ -32,7 +32,7 @@ export const VARIANT_FRAGMENT = `
   assets{
     ${ASSET_FRAGMENT}
   }
-  price
+  priceWithTax
   facetValues{
     id
     name
@@ -52,9 +52,6 @@ export const VARIANT_FRAGMENT = `
   bulkDiscounts{
     quantity
     price
-  }
-  taxRateApplied{
-    value
   }
 `;
 

@@ -71,6 +71,8 @@ const Select = <Option extends unknown>({
     [onChange]
   );
 
+  const selectedIndex = options.findIndex((option) => selected == option);
+
   return (
     <StyledWrapper
       width={width}
@@ -78,10 +80,13 @@ const Select = <Option extends unknown>({
       marginLeft={marginLeft}
       marginRight={marginRight}
     >
-      <select onChange={onSelectChange}>
-        {!selected && <option selected>{placeholder}</option>}
+      <select
+        onChange={onSelectChange}
+        value={selectedIndex < 0 ? "default" : selectedIndex.toString()}
+      >
+        {!selected && <option value="default">{placeholder}</option>}
         {options.map((option, index) => (
-          <option key={index} value={index} selected={selected == option}>
+          <option key={index} value={index.toString()}>
             {mapOptionToLabel(option)}
           </option>
         ))}

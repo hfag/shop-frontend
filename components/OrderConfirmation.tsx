@@ -129,13 +129,10 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
         <tbody>
           {data.orderByCode.lines.map((line, index) => {
             //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
-            const adjustmentSources: string[] = line.adjustments.reduce(
+            const adjustmentSources: string[] = line.discounts.reduce(
               (array, adjustment) => {
-                //ignore taxes and already included adjustments
-                if (
-                  adjustment.type === AdjustmentType.Tax ||
-                  array.includes(adjustment.adjustmentSource)
-                ) {
+                //ignore already included adjustments
+                if (array.includes(adjustment.adjustmentSource)) {
                   return array;
                 } else {
                   array.push(adjustment.adjustmentSource);
@@ -147,7 +144,7 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
 
             const adjustmentsPerUnit: Adjustment[] = adjustmentSources.map(
               (source) =>
-                line.adjustments.find((a) => a.adjustmentSource === source)
+                line.discounts.find((a) => a.adjustmentSource === source)
             );
 
             const price = adjustmentsPerUnit.reduce(
@@ -201,7 +198,7 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
             <td colSpan={5}>{intl.formatMessage(orderMessages.taxesOfThat)}</td>
             <td>
               <Price>
-                {data.orderByCode.total - data.orderByCode.totalBeforeTax}
+                {data.orderByCode.totalWithTax - data.orderByCode.total}
               </Price>
             </td>
           </tr>
@@ -214,7 +211,7 @@ const OrderConfirmation: FunctionComponent<{}> = () => {
           <tr className="total">
             <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
             <td>
-              <Price>{data.orderByCode.total}</Price>
+              <Price>{data.orderByCode.totalWithTax}</Price>
             </td>
           </tr>
         </tfoot>

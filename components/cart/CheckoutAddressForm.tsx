@@ -495,12 +495,36 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     }
 
     const billingRequest = await request<{
-      setOrderShippingAddress: { id: number };
+      setOrderShippingAddress: Mutation["setOrderShippingAddress"];
       setOrderBillingAddress: Mutation["setOrderBillingAddress"];
     }>(intl.locale, ORDER_SET_ADDRESS, {
       shippingAddress,
       billingAddress,
     });
+
+    if ("errorCode" in billingRequest.setOrderShippingAddress) {
+      setErrors({
+        billingFirstName: errorCodeToMessage(
+          intl,
+          billingRequest.setOrderShippingAddress
+        ),
+      });
+      setStatus("error");
+      setTimeout(() => setStatus(""), 300);
+      return;
+    }
+
+    if ("errorCode" in billingRequest.setOrderBillingAddress) {
+      setErrors({
+        billingFirstName: errorCodeToMessage(
+          intl,
+          billingRequest.setOrderBillingAddress
+        ),
+      });
+      setStatus("error");
+      setTimeout(() => setStatus(""), 300);
+      return;
+    }
 
     mutate(
       [GET_ACTIVE_ORDER, token],

@@ -142,12 +142,6 @@ const Product: FunctionComponent<{
     [possibleVariants]
   );
 
-  const rate: number | null = useMemo(
-    () =>
-      selectedVariant ? 1.0 + selectedVariant.taxRateApplied.value / 100 : null,
-    [selectedVariant]
-  );
-
   const onVariationSliderSelect = useCallback(
     (options) => setSelectedOptions({ ...selectedOptions, ...options }),
     [selectedOptions, setSelectedOptions]
@@ -257,7 +251,6 @@ const Product: FunctionComponent<{
       }, {});
 
     if (Object.keys(autoSelection).length > 0) {
-      console.log(selectedOptions, { ...selectedOptions, ...autoSelection });
       setSelectedOptions({ ...selectedOptions, ...autoSelection });
     }
   }, [possibleVariants]);
@@ -405,8 +398,6 @@ const Product: FunctionComponent<{
                   <tbody>
                     {selectedVariant.bulkDiscounts.map(
                       ({ quantity, price }, index) => {
-                        const promotion = price / rate - selectedVariant.price;
-
                         return (
                           <DiscountRow
                             onClick={() => setQuantity(quantity)}
@@ -418,10 +409,7 @@ const Product: FunctionComponent<{
                           >
                             <td>{quantity}</td>
                             <td>
-                              <Price>
-                                {Math.round(selectedVariant.price + promotion) *
-                                  rate}
-                              </Price>
+                              <Price>{price}</Price>
                             </td>
                           </DiscountRow>
                         );
@@ -449,25 +437,18 @@ const Product: FunctionComponent<{
             </Box>
           )}
           <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
-            {selectedVariant && selectedVariant.price ? (
+            {selectedVariant && selectedVariant.priceWithTax ? (
               <div>
                 <h4>{intl.formatMessage(productMessages.price)}</h4>
                 <Bill
                   items={[
                     {
-                      price: selectedVariant.price,
+                      price: selectedVariant.priceWithTax,
                       quantity,
                       discountPrice:
                         activeResellerDiscounts.length === 0
                           ? activeBulkDiscount
-                            ? Math.round(
-                                //s.t. multiplication by quantity is the same as in the backend
-                                Math.round(
-                                  selectedVariant.price +
-                                    (activeBulkDiscount.price / rate -
-                                      selectedVariant.price)
-                                ) * rate
-                              )
+                            ? activeBulkDiscount.price
                             : undefined
                           : activeResellerDiscounts.reduce(
                               (price, d) => (1 - d.discount / 100) * price,
@@ -509,7 +490,7 @@ const Product: FunctionComponent<{
                         window.location.reload();
                       } else {
                         throw new Error(
-                          "What the hell is going on here? This should never ever happen, please contact us!"
+                          "What is going on here? This should never ever happen, please contact us!"
                         );
                       }
                     }

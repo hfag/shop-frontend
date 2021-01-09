@@ -78,7 +78,6 @@ const Lightbox: FunctionComponent<{
   const backdrop = useRef();
 
   const onKeyUp = useCallback((e: KeyboardEvent) => {
-    console.log("keyup", e.key);
     if (e.key === "Escape" || e.which === 27) {
       onClose();
     } else if (e.key === "ArrowLeft" || e.which === 37) {

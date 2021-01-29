@@ -50,6 +50,7 @@ import Box from "../layout/Box";
 import { AppContext } from "../AppWrapper";
 import { isClient } from "../../utilities/ssr";
 import { errorCodeToMessage } from "../../utilities/i18n";
+import Asset from "../elements/Asset";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;
@@ -540,7 +541,11 @@ const Product: FunctionComponent<{
             <Box width={[1, 1, 1 / 2, 2 / 3]} paddingRight={1} marginTop={1}>
               <UnsafeHTMLContent content={product.description} />
               <h2>{intl.formatMessage(messages.imageGallery)}</h2>
-              <LightboxGallery assets={product.assets} />
+              <LightboxGallery
+                images={product.assets}
+                imageToUrl={(asset) => asset.source}
+                imageToPreviewElement={(asset) => <Asset asset={asset} />}
+              />
             </Box>
           )}
           <Box width={[1, 1, 1 / 2, 1 / 3]} paddingLeft={1} marginTop={1}>

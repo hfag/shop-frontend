@@ -89,6 +89,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       notFound = true;
     }
   } catch (e) {
+    console.log(e);
     notFound = true;
     post = null;
   }

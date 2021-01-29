@@ -38,11 +38,12 @@ interface OPEN_LIGHTBOX_ACTION {
 
 interface NEXT_IMAGE_ACTION {
   type: "NEXT_IMAGE";
-  maxIndex: number;
+  length: number;
 }
 
 interface PREVIOUS_IMAGE_ACTION {
   type: "PREVIOUS_IMAGE";
+  length: number;
 }
 
 interface GOTO_IMAGE_ACTION {
@@ -73,12 +74,12 @@ const reducer = (
       return { currentImage: action.index, isOpen: true };
     case "NEXT_IMAGE":
       return {
-        currentImage: Math.min(state.currentImage + 1, action.maxIndex),
+        currentImage: (state.currentImage + 1) % action.length,
         isOpen: true,
       };
     case "PREVIOUS_IMAGE":
       return {
-        currentImage: Math.max(state.currentImage - 1, 0),
+        currentImage: (state.currentImage - 1 + action.length) % action.length,
         isOpen: true,
       };
     case "GOTO_IMAGE":
@@ -93,68 +94,74 @@ const reducer = (
   }
 };
 
-const LightboxGallery: FunctionComponent<{ assets: AssetType[] }> = React.memo(
-  ({ assets }) => {
-    const [{ isOpen, currentImage }, dispatch] = useReducer(reducer, {
-      currentImage: 0,
-      isOpen: false,
-    });
+const LightboxGallery = <Image extends {}>({
+  images,
+  imageToUrl,
+  imageToPreviewElement,
+}: {
+  images: Image[];
+  imageToUrl: (image: Image) => string;
+  imageToPreviewElement: (image: Image) => JSX.Element;
+}) => {
+  const [{ isOpen, currentImage }, dispatch] = useReducer(reducer, {
+    currentImage: 0,
+    isOpen: false,
+  });
 
-    const intl = useIntl();
+  const intl = useIntl();
 
-    const onClickNext = useCallback(
-      () =>
-        dispatch({
-          type: "NEXT_IMAGE",
-          maxIndex: assets.length - 1,
-        }),
-      [dispatch, assets.length]
-    );
-    const onClickPrevious = useCallback(
-      () => dispatch({ type: "PREVIOUS_IMAGE" }),
-      [dispatch, assets.length]
-    );
+  const onClickNext = useCallback(
+    () =>
+      dispatch({
+        type: "NEXT_IMAGE",
+        length: images.length,
+      }),
+    [dispatch, images.length]
+  );
+  const onClickPrevious = useCallback(
+    () => dispatch({ type: "PREVIOUS_IMAGE", length: images.length }),
+    [dispatch, images.length]
+  );
 
-    const onClose = useCallback(() => dispatch({ type: "CLOSE_LIGHTBOX" }), [
-      dispatch,
-    ]);
+  const onClose = useCallback(() => dispatch({ type: "CLOSE_LIGHTBOX" }), [
+    dispatch,
+  ]);
 
-    return (
-      <React.Fragment>
-        <Flex flexWrap="wrap" marginX>
-          {assets.map((asset, index) => (
-            <LightboxBox
-              key={asset.id}
-              width={[1 / 2, 1 / 2, 1 / 4, 1 / 6]}
-              paddingX={0.5}
-              marginBottom={1}
-              onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}
-            >
-              <Asset asset={asset} />
-            </LightboxBox>
-          ))}
-        </Flex>
-        <Lightbox
-          images={assets.map((asset) => ({
-            src: asset.source,
-            /*thumbnail:
+  return (
+    <React.Fragment>
+      <Flex flexWrap="wrap" marginX>
+        {images.map((image, index) => (
+          <LightboxBox
+            key={index}
+            width={[1 / 2, 1 / 2, 1 / 4, 1 / 6]}
+            paddingX={0.5}
+            marginBottom={1}
+            onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}
+          >
+            {imageToPreviewElement(image)}
+          </LightboxBox>
+        ))}
+      </Flex>
+      <Lightbox
+        images={images.map((image) => ({
+          src: imageToUrl(image),
+          /*thumbnail:
                 attachment.sizes &&
                 attachment.sizes.thumbnail &&
                 attachment.sizes.thumbnail.source_url,*/
-          }))}
-          isOpen={isOpen}
-          currentImage={currentImage}
-          onClickPrev={onClickPrevious}
-          onClickNext={onClickNext}
-          onClose={onClose}
-          imageCountSeparator={` ${intl.formatMessage(messages.imageXOfY)} `}
-          leftArrowTitle={intl.formatMessage(messages.previousImage)}
-          rightArrowTitle={intl.formatMessage(messages.nextImage)}
-          closeButtonTitle={intl.formatMessage(messages.closeLightbox)}
-        />
-      </React.Fragment>
-    );
-  }
-);
+        }))}
+        isOpen={isOpen}
+        currentImage={currentImage}
+        onClickPrev={onClickPrevious}
+        onClickNext={onClickNext}
+        onClose={onClose}
+        imageCountSeparator={` ${intl.formatMessage(messages.imageXOfY)} `}
+        leftArrowTitle={intl.formatMessage(messages.previousImage)}
+        rightArrowTitle={intl.formatMessage(messages.nextImage)}
+        closeButtonTitle={intl.formatMessage(messages.closeLightbox)}
+      />
+    </React.Fragment>
+  );
+};
 
 export default LightboxGallery;

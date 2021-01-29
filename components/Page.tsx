@@ -9,6 +9,7 @@ import Card from "./layout/Card";
 import H1 from "./elements/H1";
 import UnsafeHTMLContent from "./content/UnsafeHTMLContent";
 import Placeholder from "./elements/Placeholder";
+import Block from "./content/Block";
 
 const Page: FunctionComponent<{ page?: PageType }> = React.memo(({ page }) => {
   const intl = useIntl();
@@ -31,8 +32,10 @@ const Page: FunctionComponent<{ page?: PageType }> = React.memo(({ page }) => {
         ) : (
           <Placeholder text height={3} />
         )}
-        {page ? (
-          <UnsafeHTMLContent content={page.content} />
+        {page && page.blocks ? (
+          page.blocks.map((block, index) => (
+            <Block key={index} block={block}></Block>
+          ))
         ) : (
           <Placeholder text height={15} />
         )}

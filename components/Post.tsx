@@ -7,7 +7,7 @@ import { Post as PostType } from "../utilities/wordpress";
 import { useIntl } from "react-intl";
 import Card from "./layout/Card";
 import H1 from "./elements/H1";
-import UnsafeHTMLContent from "./content/UnsafeHTMLContent";
+import Block from "./content/Block";
 import Placeholder from "./elements/Placeholder";
 
 const Post: FunctionComponent<{ post?: PostType }> = React.memo(({ post }) => {
@@ -31,8 +31,10 @@ const Post: FunctionComponent<{ post?: PostType }> = React.memo(({ post }) => {
         ) : (
           <Placeholder text height={3} />
         )}
-        {post ? (
-          <UnsafeHTMLContent content={post.content} />
+        {post && post.blocks ? (
+          post.blocks.map((block, index) => (
+            <Block key={index} block={block}></Block>
+          ))
         ) : (
           <Placeholder text height={15} />
         )}

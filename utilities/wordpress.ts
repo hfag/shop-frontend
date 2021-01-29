@@ -1,3 +1,64 @@
+export interface BlockBase {
+  blockName: string | null;
+  innerHTML: string;
+  innerContent: string[];
+}
+
+interface ParagraphBlock extends BlockBase {
+  blockName: "core/paragraph";
+}
+
+interface SeperatorBlock extends BlockBase {
+  blockName: "core/separator";
+}
+
+interface MappedSeperatorBlock {
+  blockName: "core/separator";
+}
+
+interface ListBlock extends BlockBase {
+  blockName: "core/list";
+}
+
+interface ImageBlock extends BlockBase {
+  blockName: "core/image";
+  attrs: {
+    id: number;
+  };
+}
+
+interface GalleryBlock extends BlockBase {
+  blockName: "core/gallery";
+  attrs: {
+    ids: number[];
+    columns: number;
+    linkTo: string;
+  };
+}
+
+interface MappedGalleryBlock extends BlockBase {
+  blockName: "core/gallery";
+  attrs: {
+    urls: string[];
+    columns: number;
+  };
+}
+
+export type Block =
+  | ParagraphBlock
+  | SeperatorBlock
+  | ListBlock
+  | ImageBlock
+  | GalleryBlock;
+
+export type MappedBlock =
+  | null
+  | ParagraphBlock
+  | MappedSeperatorBlock
+  | ListBlock
+  | ImageBlock
+  | MappedGalleryBlock;
+
 export interface WP_Post {
   id: number;
   slug: string;
@@ -7,6 +68,7 @@ export interface WP_Post {
   featured_media: number;
   sticky: boolean;
   description: string;
+  blocks: Block[];
   _embedded: {
     "wp:featuredmedia": {
       id: number;
@@ -33,7 +95,7 @@ export interface Post {
   id: number;
   slug: string;
   title: string;
-  content: string;
+  blocks: MappedBlock[];
   thumbnail: {
     url: string | null;
     width: number | null;
@@ -43,6 +105,29 @@ export interface Post {
   sticky: boolean;
   description: string;
 }
+
+const mapBlock = (block: Block): MappedBlock => {
+  switch (block.blockName) {
+    case "core/separator":
+      return { blockName: "core/separator" };
+
+    case "core/gallery":
+      return {
+        ...block,
+        attrs: {
+          urls: block.innerHTML
+            .match(/src="[^ <>]+"/g)
+            .map((s) => s.substr(5, s.length - 6)),
+          columns: block.attrs.columns,
+        },
+      };
+    default:
+      return {
+        ...block,
+        innerHTML: block.innerHTML.replace(/\r\n\r\n/g, "<br/>"),
+      };
+  }
+};
 
 export const mapPost = (post: WP_Post): Post => {
   const hasMedia =
@@ -59,7 +144,7 @@ export const mapPost = (post: WP_Post): Post => {
     id: post.id,
     slug: post.slug,
     title: post.title.rendered,
-    content: post.content.rendered,
+    blocks: post.blocks.filter((b) => b.blockName).map(mapBlock),
     thumbnail: {
       url:
         (hasThumbnail &&
@@ -88,6 +173,7 @@ export interface WP_Page {
   slug: string;
   title: { rendered: string };
   content: { rendered: string };
+  blocks: Block[];
   excerpt: { rendered: string };
 }
 
@@ -97,6 +183,7 @@ export interface Page {
   title: string;
   content: string;
   excerpt: string;
+  blocks: MappedBlock[];
 }
 
 export const mapPage = (page: WP_Page): Page => ({
@@ -105,4 +192,5 @@ export const mapPage = (page: WP_Page): Page => ({
   title: page.title.rendered,
   content: page.content.rendered,
   excerpt: page.excerpt.rendered,
+  blocks: page.blocks.map(mapBlock),
 });

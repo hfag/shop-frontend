@@ -20,8 +20,8 @@ const UnsafeHTMLContent = React.memo(({ locale, content, dispatch }) => {
   const decodedContent = useMemo(() => {
     const decoded = decodeHTMLEntities(content);
 
-    if(isServer){
-      return "";
+    if (isServer) {
+      return decoded;
     }
 
     //parse html and replace generated gallery with shortcode for compatibility reasons

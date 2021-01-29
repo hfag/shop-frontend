@@ -7,6 +7,7 @@ import LightboxGallery from "./LightboxGallery";
 import Keyer from "../containers/breadcrumbs/Keyer";
 import { fetchAllAttachments } from "../actions/attachments";
 import { getLanguageFetchString } from "../reducers";
+import { isServer } from "../utilities/ssr";
 
 const UnsafeHTMLContent = React.memo(({ locale, content, dispatch }) => {
   if (!content) {
@@ -18,6 +19,10 @@ const UnsafeHTMLContent = React.memo(({ locale, content, dispatch }) => {
 
   const decodedContent = useMemo(() => {
     const decoded = decodeHTMLEntities(content);
+
+    if(isServer){
+      return "";
+    }
 
     //parse html and replace generated gallery with shortcode for compatibility reasons
     //this is not the final solution but rather a workaround for the transition

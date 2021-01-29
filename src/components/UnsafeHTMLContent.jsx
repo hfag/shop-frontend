@@ -16,7 +16,25 @@ const UnsafeHTMLContent = React.memo(({ locale, content, dispatch }) => {
   const [fetchedImages, setFetchedImages] = useState(false);
   const imagesToFetch = useRef([]);
 
-  const decodedContent = useMemo(() => decodeHTMLEntities(content), [content]);
+  const decodedContent = useMemo(() => {
+    const decoded = decodeHTMLEntities(content);
+
+    //parse html and replace generated gallery with shortcode for compatibility reasons
+    //this is not the final solution but rather a workaround for the transition
+    const el = document.createElement("div");
+    el.innerHTML = decoded;
+    el.querySelectorAll(".wp-block-gallery").forEach(gallery => {
+      const images = gallery.querySelectorAll("img[data-id]");
+      const ids = [];
+      images.forEach(image => {
+        ids.push(image.getAttribute("data-id"));
+      });
+
+      gallery.innerHTML = `[gallery ids="${ids.join(",")}"]`;
+    });
+
+    return el.innerHTML;
+  }, [content]);
 
   const shortcodeSplit = useMemo(
     () =>

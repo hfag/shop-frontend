@@ -1,14 +1,14 @@
+import { FunctionComponent } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import useSWR from "swr";
 import ClipLoader from "react-spinners/ClipLoader";
+import styled from "@emotion/styled";
 
-import { requestAdmin } from "../utilities/request";
-import { ADMIN_GET_AVAILABLE_LANGUAGES } from "../gql/admin";
 import { colors } from "../utilities/style";
 import Select from "./elements/Select";
-import { FunctionComponent } from "react";
-import styled from "@emotion/styled";
-import { GlobalSettings, LanguageCode } from "../schema";
+import { ADMIN_GET_AVAILABLE_LANGUAGES } from "../gql/admin";
+import { requestAdmin } from "../utilities/request";
+import { LanguageCode } from "../schema";
 
 const messages = defineMessages({
   chooseTranslationLanguage: {
@@ -36,7 +36,7 @@ const LanguageChooser: FunctionComponent<{
 
   const { data, error } = useSWR(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
     requestAdmin(intl.locale, query).then(
-      (response: { globalSettings: GlobalSettings }) =>
+      (response: { globalSettings: { availableLanguages: LanguageCode[] } }) =>
         response.globalSettings.availableLanguages.map((l) => ({
           value: l,
         }))

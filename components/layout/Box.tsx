@@ -10,10 +10,13 @@ const MediaBox = styled.div<{
   widthXLarge: string;
   padding: string;
   margin: string;
+  defaultHidden: boolean;
 }>`
   position: relative;
   padding: ${({ padding }) => padding};
   margin: ${({ margin }) => margin};
+  width: ${({ defaultHidden }) => (defaultHidden ? "auto" : "100%")};
+  display: ${({ defaultHidden }) => (defaultHidden ? "hidden" : "block")};
 
   ${media.minSmall} {
     width: ${({ widthSmall }) => widthSmall};
@@ -46,6 +49,7 @@ const Box: FunctionComponent<{
   marginTop?: number;
   marginBottom?: number;
   className?: string; // recursive styled components
+  defaultHidden?: boolean;
   onClick?: () => void;
 }> = React.memo(
   ({
@@ -94,6 +98,7 @@ const Box: FunctionComponent<{
         margin={m}
         onClick={onClick}
         className={className}
+        defaultHidden={width[0] <= 0}
       >
         {children}
       </MediaBox>

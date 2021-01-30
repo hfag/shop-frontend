@@ -51,7 +51,7 @@ const Post: FunctionComponent<{
   intl: IntlShape;
   post?: PostType;
 }> = ({ intl, post }) => (
-  <Box width={[1, 1, 1 / 2, 1 / 3]} paddingX={0.5} marginTop={1}>
+  <Box width={[1 / 2, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
     <PostWrapper>
       {post ? (
         <StyledLink

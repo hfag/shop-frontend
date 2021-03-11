@@ -168,13 +168,6 @@ class Searchbar extends React.PureComponent {
     this.setState({
       value: newValue
     });
-    if(method === 'enter'){
-      return this.props.dispatch(
-        push(
-          `/${language}/${pathnamesByLanguage[language].search}?query=${this.state.value}`
-        )
-      );
-    }
   };
 
   /**
@@ -317,7 +310,7 @@ class Searchbar extends React.PureComponent {
 
   render = () => {
     const { value } = this.state;
-    const { dispatch, sections, lastQuery, intl } = this.props;
+    const { dispatch, sections, language, intl } = this.props;
 
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
@@ -326,9 +319,11 @@ class Searchbar extends React.PureComponent {
       onChange: this.onChange,
       onKeyDown: e => {
         if (e.keyCode === 13) {
-          if (this.state.value.trim() !== lastQuery.trim()) {
-            this.onSuggestionsFetchRequested({ value: this.state.value });
-          }
+          return dispatch(
+            push(
+              `/${language}/${pathnamesByLanguage[language].search}?query=${this.state.value}`
+            )
+          );
         }
       }
     };

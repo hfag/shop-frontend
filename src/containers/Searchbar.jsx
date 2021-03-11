@@ -164,10 +164,17 @@ class Searchbar extends React.PureComponent {
    * @param {Object} props react-autosuggest props
    * @returns {void}
    */
-  onChange = (event, { newValue }) => {
+  onChange = (event, { newValue, method }) => {
     this.setState({
       value: newValue
     });
+    if(method === 'enter'){
+      return this.props.dispatch(
+        push(
+          `/${language}/${pathnamesByLanguage[language].search}?query=${this.state.value}`
+        )
+      );
+    }
   };
 
   /**

@@ -26,7 +26,7 @@ import search from "../i18n/search";
 const messages = defineMessages({
   placeholder: {
     id: "Searchbar.placeholder",
-    defaultMessage: "Suchen Sie nach einem Produkt (mindestens 2 Zeichen)",
+    defaultMessage: "Suchen Sie nach einem Produkt (mindestens 3 Buchstaben)",
   },
   showMore: {
     id: "Searchbar.showMore",
@@ -145,6 +145,9 @@ const renderInputComponent = (inputProps: { [key: string]: any }) => {
   return <SearchInput {...inputProps} />;
 };
 
+type NO_RESULTS = { noResults: boolean };
+const NO_RESULTS_FOUND: NO_RESULTS = { noResults: true };
+
 const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -191,9 +194,13 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
       {
         suggestion,
       }: {
-        suggestion: SearchResult;
+        suggestion: SearchResult | NO_RESULTS;
       }
     ) => {
+      if ("noResults" in suggestion) {
+        return;
+      }
+
       setValue("");
       setLastQuery("");
 
@@ -219,29 +226,43 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
     }
   }, [shouldFetchSuggestions]);
 
-  const renderSuggestion = useCallback((result: SearchResult) => {
-    return (
-      <Suggestion>
-        <Flexbar>
-          <Asset asset={result.productVariantAsset} preset="small" />
-          <div className="name">
-            <div>{result.productVariantName}</div>
-            <Detail>{result.sku}</Detail>
-          </div>
-          <div className="price">
-            {"min" in result.priceWithTax ? (
-              <>
-                {intl.formatMessage(search.from)}{" "}
-                <Price>{result.priceWithTax.min}</Price>
-              </>
-            ) : (
-              <Price>{result.priceWithTax.value}</Price>
-            )}
-          </div>
-        </Flexbar>
-      </Suggestion>
-    );
-  }, []);
+  const renderSuggestion = useCallback(
+    (result: SearchResult | NO_RESULTS) => {
+      return "noResults" in result ? (
+        <>
+          {value.length <= 2 ? (
+            <>{intl.formatMessage(search.moreCharacters)}</>
+          ) : (
+            <>
+              {intl.formatMessage(search.noResults)}{" "}
+              {intl.formatMessage(search.tryOther)}
+            </>
+          )}
+        </>
+      ) : (
+        <Suggestion>
+          <Flexbar>
+            <Asset asset={result.productVariantAsset} preset="small" />
+            <div className="name">
+              <div>{result.productVariantName}</div>
+              <Detail>{result.sku}</Detail>
+            </div>
+            <div className="price">
+              {"min" in result.priceWithTax ? (
+                <>
+                  {intl.formatMessage(search.from)}{" "}
+                  <Price>{result.priceWithTax.min}</Price>
+                </>
+              ) : (
+                <Price>{result.priceWithTax.value}</Price>
+              )}
+            </div>
+          </Flexbar>
+        </Suggestion>
+      );
+    },
+    [value]
+  );
 
   // Autosuggest will pass through all these props to the input.
   const inputProps = {
@@ -263,7 +284,11 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
   return (
     <StyledSearch>
       <Autosuggest
-        suggestions={suggestions}
+        suggestions={
+          suggestions.length === 0 && !loading
+            ? [NO_RESULTS_FOUND]
+            : suggestions
+        }
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
         onSuggestionsClearRequested={onSuggestionsClearRequested}
         onSuggestionSelected={onSuggestionSelected}

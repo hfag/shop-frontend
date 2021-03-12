@@ -13,6 +13,16 @@ export default defineMessages({
     id: "search.noResults",
     defaultMessage: "Es wurden keine Ergebnisse gefunden.",
   },
+  tryOther: {
+    id: "search.tryOther",
+    defaultMessage:
+      "Überprüfen Sie Ihre Eingabe oder suchen Sie nach einem verwandten Begriff.",
+  },
+  moreCharacters: {
+    id: "search.moreCharacters",
+    defaultMessage:
+      "Geben Sie mindestens drei Buchstaben ein. Ansonsten können wir keine sinnvollen Suchergebnise liefern.",
+  },
   groupByProducts: {
     id: "search.groupByProducts",
     defaultMessage: "Nach Produkt gruppieren",

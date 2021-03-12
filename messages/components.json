@@ -336,7 +336,7 @@
     "defaultMessage": "Zurück nach oben"
   },
   "Searchbar.placeholder": {
-    "defaultMessage": "Suchen Sie nach einem Produkt (mindestens 2 Zeichen)"
+    "defaultMessage": "Suchen Sie nach einem Produkt (mindestens 3 Buchstaben)"
   },
   "Searchbar.showMore": {
     "defaultMessage": "Zeige mehr..."

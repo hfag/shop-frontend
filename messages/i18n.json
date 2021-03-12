@@ -344,6 +344,9 @@
   "search.groupByProducts": {
     "defaultMessage": "Nach Produkt gruppieren"
   },
+  "search.moreCharacters": {
+    "defaultMessage": "Geben Sie mindestens drei Buchstaben ein. Ansonsten können wir keine sinnvollen Suchergebnise liefern."
+  },
   "search.noResults": {
     "defaultMessage": "Es wurden keine Ergebnisse gefunden."
   },
@@ -352,6 +355,9 @@
   },
   "search.search": {
     "defaultMessage": "Suche"
+  },
+  "search.tryOther": {
+    "defaultMessage": "Überprüfen Sie Ihre Eingabe oder suchen Sie nach einem verwandten Begriff."
   },
   "shop.siteMessage": {
     "defaultMessage": "Die Hauser Feuerschutz AG bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz an."

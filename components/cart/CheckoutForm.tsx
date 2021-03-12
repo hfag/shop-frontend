@@ -246,11 +246,20 @@ const CheckoutForm = withFormik<IProps, FormValues>({
     }
 
     //store order comments
-    await request<{
-      addPaymentToOrder: Mutation["setOrderCustomFields"];
+    const response = await request<{
+      setOrderCustomFields: Mutation["setOrderCustomFields"];
     }>(intl.locale, ORDER_SET_CUSTOM_FIELDS, {
       input: { customFields: { notes: values.orderComments } },
     });
+
+    if ("errorCode" in response.setOrderCustomFields) {
+      setErrors({
+        terms: errorCodeToMessage(intl, response.setOrderCustomFields),
+      });
+      setStatus("error");
+      setTimeout(() => setStatus(""), 300);
+      return;
+    }
 
     if (values.paymentMethod === "invoice") {
       let data: { addPaymentToOrder: Order };

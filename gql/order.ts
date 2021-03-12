@@ -248,7 +248,13 @@ export const ORDER_GET_SHIPPING_METHODS = /* GraphQL */ `
 export const ORDER_SET_CUSTOM_FIELDS = /* GraphQL */ `
   mutation SetOrderNotes($input: UpdateOrderInput!) {
     setOrderCustomFields(input: $input) {
-      id
+      ... on Order {
+        id
+      }
+      ... on NoActiveOrderError {
+        errorCode
+        message
+      }
     }
   }
 `;

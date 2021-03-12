@@ -1,6 +1,6 @@
 export interface BlockBase {
   blockName: string | null;
-  innerHTML: string;
+  innerHTML: string | null;
   innerContent: string[];
 }
 
@@ -116,9 +116,11 @@ const mapBlock = (block: Block): MappedBlock => {
         ...block,
         attrs: {
           urls: block.innerHTML
-            .match(/src="[^ <>]+"/g)
-            .map((s) => s.substr(5, s.length - 6)),
-          columns: block.attrs.columns,
+            ? (block.innerHTML.match(/src="[^ <>]+"/g) || []).map((s) =>
+                s.substr(5, s.length - 6)
+              )
+            : [],
+          columns: block.attrs.columns || null,
         },
       };
     default:

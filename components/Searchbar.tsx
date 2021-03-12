@@ -149,12 +149,14 @@ const renderInputComponent = (inputProps: { [key: string]: any }) => {
 };
 
 const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>(
+    Array.isArray(router.query.query) ? null : router.query.query || ""
+  );
   const [lastQuery, setLastQuery] = useState("");
   const [suggestions, setSuggestions] = useState<SearchResult[]>([]);
   const intl = useIntl();
-  const router = useRouter();
 
   const shouldFetchSuggestions =
     value.trim() !== "" &&
@@ -201,11 +203,18 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
       router.push(
         `/${intl.locale}/${
           pathnamesByLanguage.product.languages[intl.locale]
-        }/${suggestion.slug}?variationId=${suggestion.productVariantId}`
+        }/${suggestion.slug}?sku=${suggestion.sku}`
       );
     },
     [router]
   );
+
+  //update value
+  useEffect(() => {
+    setValue(
+      Array.isArray(router.query.query) ? null : router.query.query || ""
+    );
+  }, [router.query.query]);
 
   useEffect(() => {
     if (shouldFetchSuggestions) {
@@ -245,9 +254,11 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
     onChange,
     onKeyDown: (e: KeyboardEvent<any>) => {
       if (e.keyCode === 13) {
-        if (value.trim() !== lastQuery.trim() && shouldFetchSuggestions) {
-          onSuggestionsFetchRequested();
-        }
+        router.push(
+          `/${intl.locale}/${
+            pathnamesByLanguage.search.languages[intl.locale]
+          }?query=${value}`
+        );
       }
     },
   };

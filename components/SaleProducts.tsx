@@ -111,7 +111,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
         <StyledLink
           href={`/${intl.locale}/${
             pathnamesByLanguage.product.languages[intl.locale]
-          }/${productSlug}?variationId=${variant.id}`}
+          }/${productSlug}?sku=${variant.sku}`}
           noHover
         >
           <DiscountLogo>

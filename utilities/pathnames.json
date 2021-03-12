@@ -1,4 +1,8 @@
 {
+  "search": {
+    "path": "de/suche.tsx",
+    "languages": { "de": "suche", "fr": "recherche" }
+  },
   "productCategory": {
     "path": "de/produkt-kategorie",
     "languages": {
@@ -62,7 +66,6 @@
     "path": "de/logout.tsx",
     "languages": { "de": "logout", "fr": "logout" }
   },
-
   "account": {
     "path": "de/konto",
     "languages": { "de": "konto", "fr": "compte" },

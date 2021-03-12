@@ -51,6 +51,7 @@ import { AppContext } from "../AppWrapper";
 import { isClient } from "../../utilities/ssr";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import Asset from "../elements/Asset";
+import { useRouter } from "next/router";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;
@@ -91,6 +92,8 @@ const Product: FunctionComponent<{
   product?: ProductType;
 }> = React.memo(({ product }) => {
   const intl = useIntl();
+  const router = useRouter();
+
   const { customer: user, token } = useContext(AppContext);
 
   if (!product) {
@@ -235,9 +238,18 @@ const Product: FunctionComponent<{
   }, []);
 
   useEffect(() => {
-    //on the initial render select the default options
-    setSelectedOptions(defaultOptions);
-  }, []);
+    //select the default options or the specified sku
+    setSelectedOptions(
+      router.query.sku && !Array.isArray(router.query.sku)
+        ? product.variants
+            .find((v) => v.sku === router.query.sku)
+            .options.reduce((obj, option) => {
+              obj[option.groupId] = option;
+              return obj;
+            }, {})
+        : defaultOptions
+    );
+  }, [router.query.sku]);
   useEffect(() => {
     const autoSelection: { [groupId: string]: ProductOption } = Object.keys(
       possibleOptions

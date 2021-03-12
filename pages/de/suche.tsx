@@ -43,24 +43,3 @@ const Page: FunctionComponent<{}> = ({}) => {
 };
 
 export default withApp(locale, messages)(Page);
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  // const data: { collections: { items: Collection[] } } = await request(
-  //   locale,
-  //   GET_ALL_COLLECTIONS
-  // );
-
-  return {
-    paths: [] /*data.collections.items.map((collection) => ({
-      params: { slug: collection.slug },
-    }))*/,
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  return {
-    notFound: false,
-    props: {},
-  };
-};

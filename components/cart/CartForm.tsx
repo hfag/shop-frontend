@@ -120,88 +120,90 @@ const InnerCartForm = React.memo(
               if (!order) {
                 return null;
               }
-              return order.lines.map((line, index) => {
-                //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
-                const adjustmentSources: string[] = line.discounts.reduce(
-                  (array, adjustment) => {
-                    //already included adjustments
-                    if (array.includes(adjustment.adjustmentSource)) {
-                      return array;
-                    } else {
-                      array.push(adjustment.adjustmentSource);
-                      return array;
-                    }
-                  },
-                  []
-                );
+              return order.lines
+                .filter((line) => values.lines.find((l) => l.id === line.id))
+                .map((line, index) => {
+                  //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
+                  const adjustmentSources: string[] = line.discounts.reduce(
+                    (array, adjustment) => {
+                      //already included adjustments
+                      if (array.includes(adjustment.adjustmentSource)) {
+                        return array;
+                      } else {
+                        array.push(adjustment.adjustmentSource);
+                        return array;
+                      }
+                    },
+                    []
+                  );
 
-                const adjustmentsPerUnit: Adjustment[] = adjustmentSources.map(
-                  (source) =>
-                    line.discounts.find((a) => a.adjustmentSource === source)
-                );
+                  const adjustmentsPerUnit: Adjustment[] = adjustmentSources.map(
+                    (source) =>
+                      line.discounts.find((a) => a.adjustmentSource === source)
+                  );
 
-                const price = adjustmentsPerUnit.reduce(
-                  (price, adjustment) =>
-                    price + adjustment.amount / line.quantity,
-                  line.unitPriceWithTax
-                );
+                  const price = adjustmentsPerUnit.reduce(
+                    (price, adjustment) =>
+                      price + adjustment.amount / line.quantity,
+                    line.unitPriceWithTax
+                  );
 
-                return (
-                  <tr key={index}>
-                    <td style={{ minWidth: "100px", maxWidth: "100px" }}>
-                      <Asset asset={line.productVariant.featuredAsset} />
-                    </td>
-                    <td>
-                      <h4
-                        dangerouslySetInnerHTML={{
-                          __html: line.productVariant.name,
-                        }}
-                      />
-                      {line.productVariant.options.length > 0 &&
-                        line.productVariant.options
-                          .map((option) => option.name)
-                          .join(", ")}
-                    </td>
-                    <td>{line.productVariant.sku}</td>
-                    <td>
-                      {price !== line.unitPriceWithTax ? (
-                        <>
-                          <div>
-                            <Price strike>{line.unitPriceWithTax}</Price>
-                          </div>
-                          <div>
-                            <Price>{price}</Price>
-                          </div>
-                        </>
-                      ) : (
-                        <Price>{line.unitPriceWithTax}</Price>
-                      )}
-                    </td>
-                    <td>
-                      {enabled ? (
-                        <Field
-                          name={`lines.${index}.quantity`}
-                          min="1"
-                          type="number"
-                          size="3"
+                  return (
+                    <tr key={index}>
+                      <td style={{ minWidth: "100px", maxWidth: "100px" }}>
+                        <Asset asset={line.productVariant.featuredAsset} />
+                      </td>
+                      <td>
+                        <h4
+                          dangerouslySetInnerHTML={{
+                            __html: line.productVariant.name,
+                          }}
                         />
-                      ) : (
-                        <span>{line.quantity}</span>
-                      )}
-                    </td>
-                    <td>
-                      <Price>{line.proratedLinePriceWithTax}</Price>
-                    </td>
-                    <td>
-                      {enabled && (
-                        <CartTableAction>
-                          <MdDelete onClick={() => remove(index)} />
-                        </CartTableAction>
-                      )}
-                    </td>
-                  </tr>
-                );
-              });
+                        {line.productVariant.options.length > 0 &&
+                          line.productVariant.options
+                            .map((option) => option.name)
+                            .join(", ")}
+                      </td>
+                      <td>{line.productVariant.sku}</td>
+                      <td>
+                        {price !== line.unitPriceWithTax ? (
+                          <>
+                            <div>
+                              <Price strike>{line.unitPriceWithTax}</Price>
+                            </div>
+                            <div>
+                              <Price>{price}</Price>
+                            </div>
+                          </>
+                        ) : (
+                          <Price>{line.unitPriceWithTax}</Price>
+                        )}
+                      </td>
+                      <td>
+                        {enabled ? (
+                          <Field
+                            name={`lines.${index}.quantity`}
+                            min="1"
+                            type="number"
+                            size="3"
+                          />
+                        ) : (
+                          <span>{line.quantity}</span>
+                        )}
+                      </td>
+                      <td>
+                        <Price>{line.proratedLinePriceWithTax}</Price>
+                      </td>
+                      <td>
+                        {enabled && (
+                          <CartTableAction>
+                            <MdDelete onClick={() => remove(index)} />
+                          </CartTableAction>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                });
             }}
           />
           <tr>

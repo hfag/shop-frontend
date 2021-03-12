@@ -11,6 +11,7 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import { Product, SearchResult } from "../../schema";
 import StyledLink from "../elements/StyledLink";
 import Box from "../layout/Box";
+import search from "../../i18n/search";
 
 const messages = defineMessages({
   discountForResellers: {
@@ -122,8 +123,6 @@ const SearchItem: FunctionComponent<{
     [result, intl.locale]
   );
 
-  //TODO: translate: "Ab"
-
   return (
     <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} paddingX={0.5} marginTop={1}>
       <StyledLink href={url} noHover>
@@ -154,7 +153,7 @@ const SearchItem: FunctionComponent<{
                   </>
                 ) : (
                   <>
-                    Ab{" "}
+                    {intl.formatMessage(search.from)}{" "}
                     <u>
                       <Price>{result.priceWithTax.min}</Price>
                     </u>

@@ -17,10 +17,11 @@ import useSWR from "swr";
 import request from "../utilities/request";
 import { SEARCH } from "../gql/search";
 import Select from "./elements/Select";
+import search from "../i18n/search";
 
 const ITEMS_PER_PAGE = 10;
 
-const search = (
+const searchRequest = (
   locale: string,
   term: string,
   groupByProduct: boolean,
@@ -51,7 +52,7 @@ const SearchResults: FunctionComponent<{ term: string }> = ({ term }) => {
   //if one of these changes, refetch
   useEffect(() => {
     setFetching(true);
-    search(intl.locale, term, groupByProduct, 0, ITEMS_PER_PAGE).then(
+    searchRequest(intl.locale, term, groupByProduct, 0, ITEMS_PER_PAGE).then(
       (results) => {
         setTotalItems(results.totalItems);
         items.current = results.items.reduce((obj, element, index) => {
@@ -84,14 +85,18 @@ const SearchResults: FunctionComponent<{ term: string }> = ({ term }) => {
       return;
     }
     const base = page * ITEMS_PER_PAGE;
-    return search(intl.locale, term, groupByProduct, base, ITEMS_PER_PAGE).then(
-      (newResults) => {
-        newResults.items.forEach((item, index) => {
-          items.current[base + index] = item;
-        });
-        setNextItem(Math.max(nextItem, base + newResults.items.length));
-      }
-    );
+    return searchRequest(
+      intl.locale,
+      term,
+      groupByProduct,
+      base,
+      ITEMS_PER_PAGE
+    ).then((newResults) => {
+      newResults.items.forEach((item, index) => {
+        items.current[base + index] = item;
+      });
+      setNextItem(Math.max(nextItem, base + newResults.items.length));
+    });
   }, [isFetching, term, groupByProduct]);
 
   return (
@@ -108,18 +113,18 @@ const SearchResults: FunctionComponent<{ term: string }> = ({ term }) => {
       >
         {items.current ? (
           totalItems === 0 ? (
-            <>Es wurden keine Ergebnisse gefunden.</>
+            <>{intl.formatMessage(search.noResults)}</>
           ) : (
             <>
               <Card>
-                Nach Produkt gruppieren:{" "}
+                {intl.formatMessage(search.groupByProducts)}:{" "}
                 <input
                   type="checkbox"
                   checked={groupByProduct}
                   onChange={() => setGroupByProduct(!groupByProduct)}
                 />
                 <br />
-                Es wurde(n) {totalItems} Produkt(e) gefunden
+                {totalItems} {intl.formatMessage(search.productsFound)}
               </Card>
 
               <Flex flexWrap="wrap" style={{ overflowX: "hidden" }} marginX>

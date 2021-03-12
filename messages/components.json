@@ -335,9 +335,6 @@
   "ScrollToTopButton.backToTop": {
     "defaultMessage": "Zurück nach oben"
   },
-  "Searchbar.from": {
-    "defaultMessage": "Ab"
-  },
   "Searchbar.placeholder": {
     "defaultMessage": "Suchen Sie nach einem Produkt (mindestens 2 Zeichen)"
   },
@@ -355,9 +352,6 @@
   },
   "VerifyEmail.verifyEmail": {
     "defaultMessage": "Email verifizieren und Benutzerkonto anlegen"
-  },
-  "VerifyNewEmail.invalidLink": {
-    "defaultMessage": "Der Link aus der E-Mail ist abgelaufen."
   },
   "VerifyNewEmail.verifyNewEmail": {
     "defaultMessage": "Neue Email verifizieren und Benutzerkonto anlegen"

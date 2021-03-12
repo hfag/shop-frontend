@@ -21,15 +21,12 @@ import { Query, SearchResult } from "../schema";
 import request from "../utilities/request";
 import { SEARCH } from "../gql/search";
 import Asset from "./elements/Asset";
+import search from "../i18n/search";
 
 const messages = defineMessages({
   placeholder: {
     id: "Searchbar.placeholder",
     defaultMessage: "Suchen Sie nach einem Produkt (mindestens 2 Zeichen)",
-  },
-  from: {
-    id: "Searchbar.from",
-    defaultMessage: "Ab",
   },
   showMore: {
     id: "Searchbar.showMore",
@@ -234,7 +231,7 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
           <div className="price">
             {"min" in result.priceWithTax ? (
               <>
-                {intl.formatMessage(messages.from)}{" "}
+                {intl.formatMessage(search.from)}{" "}
                 <Price>{result.priceWithTax.min}</Price>
               </>
             ) : (

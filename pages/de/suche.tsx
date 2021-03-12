@@ -9,25 +9,26 @@ import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb
 import { withApp } from "../../components/AppWrapper";
 import SearchResults from "../../components/SearchResults";
 import { useRouter } from "next/router";
+import search from "../../i18n/search";
 
 const Page: FunctionComponent<{}> = ({}) => {
   const intl = useIntl();
   const router = useRouter();
-
-  //TODO: translate various strings
 
   return (
     <Wrapper
       sidebar={
         <>
           <SidebarBreadcrumbs breadcrumbs={[]}>
-            <SidebarBreadcrumb active>Suche</SidebarBreadcrumb>
+            <SidebarBreadcrumb active>
+              {intl.formatMessage(search.search)}
+            </SidebarBreadcrumb>
           </SidebarBreadcrumbs>
         </>
       }
       breadcrumbs={[
         {
-          name: "Suche",
+          name: intl.formatMessage(search.search),
           url: `/${intl.locale}/${
             pathnamesByLanguage.search.languages[intl.locale]
           }`,

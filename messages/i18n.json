@@ -107,6 +107,87 @@
   "cart.table.column.description": {
     "defaultMessage": "Beschreibung"
   },
+  "errors.ALREADY_LOGGED_IN_ERROR": {
+    "defaultMessage": "Sie sind bereits angemeldet"
+  },
+  "errors.COUPON_CODE_EXPIRED_ERROR": {
+    "defaultMessage": "Dieser Coupon-Code ist nicht mehr gültig."
+  },
+  "errors.COUPON_CODE_INVALID_ERROR": {
+    "defaultMessage": "Dieser Coupon-Code ist ungültig."
+  },
+  "errors.COUPON_CODE_LIMIT_ERROR": {
+    "defaultMessage": "Dieser Coupon-Code wurde schon zu oft verwendet."
+  },
+  "errors.EMAIL_ADDRESS_CONFLICT_ERROR": {
+    "defaultMessage": "Es existiert bereits ein Benutzerkonto mit dieser E-Mail. Versuchen Sie sich anzumelden."
+  },
+  "errors.IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR": {
+    "defaultMessage": "Der Link ist nicht mehr gültig."
+  },
+  "errors.IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR": {
+    "defaultMessage": "Der Link ist nicht gültig."
+  },
+  "errors.INELIGIBLE_SHIPPING_METHOD_ERROR": {
+    "defaultMessage": "Wählen Sie eine gültige Liefermethode."
+  },
+  "errors.INSUFFICIENT_STOCK_ERROR": {
+    "defaultMessage": "Es sind nicht genügend Produkte an Lager."
+  },
+  "errors.INVALID_CREDENTIALS_ERROR": {
+    "defaultMessage": "Ungültige Anmeldedaten."
+  },
+  "errors.MISSING_PASSWORD_ERROR": {
+    "defaultMessage": "Es muss ein Passwort angegeben werden."
+  },
+  "errors.NATIVE_AUTH_STRATEGY_ERROR": {
+    "defaultMessage": "Authentifikationsfehler."
+  },
+  "errors.NEGATIVE_QUANTITY_ERROR": {
+    "defaultMessage": "Es können natürlich keine negativen Mengen bestellt werden."
+  },
+  "errors.NOT_VERIFIED_ERROR": {
+    "defaultMessage": "Konto ist nicht verifiziert."
+  },
+  "errors.NO_ACTIVE_ORDER_ERROR": {
+    "defaultMessage": "Es existiert keine aktive Bestellung."
+  },
+  "errors.ORDER_LIMIT_ERROR": {
+    "defaultMessage": "Das Bestelllimit wurde erreicht. Sollten Sie wirklich diese Menge bestellen wollen, erstellen Sie eine zweite oder kontaktieren Sie uns."
+  },
+  "errors.ORDER_MODIFICATION_ERROR": {
+    "defaultMessage": "Die Bestellung konnte nicht verändert werden. Bitte kontaktieren Sie uns."
+  },
+  "errors.ORDER_PAYMENT_STATE_ERROR": {
+    "defaultMessage": "Fehler beim Bezahlungszustand der Bestellung."
+  },
+  "errors.ORDER_STATE_TRANSITION_ERROR": {
+    "defaultMessage": "Fehler beim Ändern des Bestellungszustandes. Bitte kontaktieren Sie uns."
+  },
+  "errors.PASSWORD_ALREADY_SET_ERROR": {
+    "defaultMessage": "Es wurde bereits ein Passwort festgelegt."
+  },
+  "errors.PASSWORD_RESET_TOKEN_EXPIRED_ERROR": {
+    "defaultMessage": "Der Link ist nicht mehr gültig. Setzen Sie das Passwort erneut zurück."
+  },
+  "errors.PASSWORD_RESET_TOKEN_INVALID_ERROR": {
+    "defaultMessage": "Der Link ist nicht gültig."
+  },
+  "errors.PAYMENT_DECLINED_ERROR": {
+    "defaultMessage": "Bezahlung wurde abgelehnt."
+  },
+  "errors.PAYMENT_FAILED_ERROR": {
+    "defaultMessage": "Zahlung ist fehlgeschlagen."
+  },
+  "errors.UNKNOWN_ERROR": {
+    "defaultMessage": "Unbekannter Fehler. Bitte kontaktieren Sie uns."
+  },
+  "errors.VERIFICATION_TOKEN_EXPIRED_ERROR": {
+    "defaultMessage": "Der Verifikationslink ist nicht mehr gültig. Registrieren Sie sich erneut."
+  },
+  "errors.VERIFICATION_TOKEN_INVALID_ERROR": {
+    "defaultMessage": "Der Verifikationslink ist ungültig."
+  },
   "form.cancel": {
     "defaultMessage": "Abbrechen"
   },
@@ -256,6 +337,21 @@
   },
   "product.withBulkDiscount": {
     "defaultMessage": "mit Mengenrabatt"
+  },
+  "search.from": {
+    "defaultMessage": "Ab"
+  },
+  "search.groupByProducts": {
+    "defaultMessage": "Nach Produkt gruppieren"
+  },
+  "search.noResults": {
+    "defaultMessage": "Es wurden keine Ergebnisse gefunden."
+  },
+  "search.productsFound": {
+    "defaultMessage": "Produkt(e) gefunden"
+  },
+  "search.search": {
+    "defaultMessage": "Suche"
   },
   "shop.siteMessage": {
     "defaultMessage": "Die Hauser Feuerschutz AG bietet Ihnen Dienstleistungen und Produkte in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz an."

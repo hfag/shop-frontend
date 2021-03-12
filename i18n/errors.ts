@@ -44,7 +44,7 @@ export default defineMessages({
   },
   INELIGIBLE_SHIPPING_METHOD_ERROR: {
     id: "errors.INELIGIBLE_SHIPPING_METHOD_ERROR",
-    defaultMessage: "Wählen Sie eine gültige Lieferomethode.",
+    defaultMessage: "Wählen Sie eine gültige Liefermethode.",
   },
   ORDER_PAYMENT_STATE_ERROR: {
     id: "errors.ORDER_PAYMENT_STATE_ERROR",

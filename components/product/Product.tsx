@@ -575,22 +575,22 @@ const Product: FunctionComponent<{
                 <tr>
                   <td>{intl.formatMessage(productMessages.categories)}</td>
                   <td>
-                    {product.collections
-                      .map(({ id, name }) => (
-                        <StyledLink
-                          key={id}
-                          underlined
-                          href={`/${intl.locale}/${
-                            pathnamesByLanguage.productCategory.languages[
-                              intl.locale
-                            ]
-                          }/${id}`}
-                        >
-                          {name}
-                        </StyledLink>
-                      ))
-                      //@ts-ignore
-                      .reduce((prev, curr) => [prev, ", ", curr])}
+                    {product.collections.length > 0 &&
+                      product.collections
+                        .map<React.ReactNode>(({ id, name }) => (
+                          <StyledLink
+                            key={id}
+                            underlined
+                            href={`/${intl.locale}/${
+                              pathnamesByLanguage.productCategory.languages[
+                                intl.locale
+                              ]
+                            }/${id}`}
+                          >
+                            {name}
+                          </StyledLink>
+                        ))
+                        .reduce((prev, curr) => [prev, ", ", curr])}
                   </td>
                 </tr>
                 <tr>

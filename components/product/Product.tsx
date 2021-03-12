@@ -577,6 +577,7 @@ const Product: FunctionComponent<{
                   <td>
                     {product.collections.map(({ id, name }, index) => (
                       <>
+                        {index > 0 && ", "}
                         <StyledLink
                           key={id}
                           underlined
@@ -588,7 +589,6 @@ const Product: FunctionComponent<{
                         >
                           {name}
                         </StyledLink>
-                        {index === product.collections.length ? "" : ", "}
                       </>
                     ))}
                   </td>

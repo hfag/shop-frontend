@@ -21,6 +21,7 @@ const env = {
   // ADMIN_API_URL: "https://vendure.feuerschutz.ch/admin-api",
   // ASSET_URL: "https://vendure.feuerschutz.ch/assets",
   WP_BLOG_URL: "https://api.feuerschutz.ch",
+  // ABSOLUTE_URL: "https://beta.feuerschutz.ch",
   ABSOLUTE_URL: "",
   PUBLIC_PATH: "/",
 };

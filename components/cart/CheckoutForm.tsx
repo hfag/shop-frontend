@@ -172,8 +172,10 @@ const InnerCheckoutForm = React.memo(
         <br />
         <Table>
           <thead>
-            <th></th>
-            <th>Subtotal</th>
+            <tr>
+              <th></th>
+              <th>Subtotal</th>
+            </tr>
           </thead>
           <tbody>
             <tr>

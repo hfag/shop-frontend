@@ -69,6 +69,7 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
       type
       amount
     }
+    linePriceWithTax
   }
   discounts {
     adjustmentSource

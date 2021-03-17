@@ -435,8 +435,8 @@ const Product: FunctionComponent<{
           ) : (
             <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
               <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
-              {activeResellerDiscounts.map((d) => (
-                <>
+              {activeResellerDiscounts.map((d, i) => (
+                <span key={i}>
                   <FormattedMessage
                     id="Product.resellerDiscountMessage"
                     defaultMessage="Als Wiederverkäufer erhalten Sie {resellerDiscount}% Rabatt auf dieses Produkt."
@@ -445,7 +445,7 @@ const Product: FunctionComponent<{
                     }}
                   />
                   <br />
-                </>
+                </span>
               ))}
             </Box>
           )}
@@ -576,10 +576,9 @@ const Product: FunctionComponent<{
                   <td>{intl.formatMessage(productMessages.categories)}</td>
                   <td>
                     {product.collections.map(({ id, name }, index) => (
-                      <>
+                      <span key={id}>
                         {index > 0 && ", "}
                         <StyledLink
-                          key={id}
                           underlined
                           href={`/${intl.locale}/${
                             pathnamesByLanguage.productCategory.languages[
@@ -589,7 +588,7 @@ const Product: FunctionComponent<{
                         >
                           {name}
                         </StyledLink>
-                      </>
+                      </span>
                     ))}
                   </td>
                 </tr>

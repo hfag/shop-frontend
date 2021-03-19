@@ -236,10 +236,7 @@ const PasswordResetForm = withFormik<
         email,
       });
 
-      if (
-        !data.requestPasswordReset ||
-        !("success" in data.requestPasswordReset)
-      ) {
+      if (!("success" in data.requestPasswordReset)) {
         throw new Error(errorCodeToMessage(intl, data.requestPasswordReset));
       }
 

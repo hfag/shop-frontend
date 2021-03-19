@@ -43,7 +43,7 @@ const AccountOrders: FunctionComponent<{ orders?: OrderType[] }> = React.memo(
           <tbody>
             {orders
               ? orders.map((order) => (
-                  <tr>
+                  <tr key={order.id}>
                     <td>
                       <StyledLink
                         href={`/${intl.locale}/${

@@ -85,7 +85,7 @@ const AccountAddresses: FunctionComponent<{
         <tbody>
           {addresses
             ? addresses.map((address) => (
-                <tr>
+                <tr key={address.id}>
                   <td>
                     <StyledLink
                       href={`/${intl.locale}/${

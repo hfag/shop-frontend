@@ -52,9 +52,8 @@ const AssetField: FunctionComponent<{
             {required === true ? "*" : required === false ? "(optional)" : ""}
           </label>
         )}
-        <Field
-          name={name}
-          render={({
+        <Field name={name}>
+          {({
             field: { value, onChange, onBlur },
             form: { values, errors, touched, validateForm, setFieldValue },
           }) => (
@@ -83,7 +82,7 @@ const AssetField: FunctionComponent<{
               )}
             </>
           )}
-        />
+        </Field>
       </InputFieldWrapper>
     </>
   );

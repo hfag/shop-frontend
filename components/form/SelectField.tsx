@@ -53,9 +53,8 @@ const SelectField: FunctionComponent<{
     const intl = useIntl();
 
     return (
-      <Field
-        name={name}
-        render={({
+      <Field name={name}>
+        {({
           field: { name, value },
           form: { errors, touched, setFieldValue, setFieldTouched },
         }) => (
@@ -86,7 +85,7 @@ const SelectField: FunctionComponent<{
             <ValidationErrors>{get(errors, name, false)}</ValidationErrors>
           </SelectFieldWrapper>
         )}
-      />
+      </Field>
     );
   }
 );

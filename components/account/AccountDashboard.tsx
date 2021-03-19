@@ -107,7 +107,12 @@ const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
           )}
           <br />
           <Flex flexWrap="wrap">
-            <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
+            <Box
+              width={
+                !billing && !shipping ? [1, 1, 1, 1] : [1, 1, 1 / 2, 1 / 2]
+              }
+              paddingRight={3}
+            >
               <h4 className="no-margin">{intl.formatMessage(order.invoice)}</h4>
               {customer ? (
                 !billing ? (

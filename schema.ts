@@ -23,6 +23,7 @@ export type ActiveOrderResult = Order | NoActiveOrderError;
 export type AddPaymentToOrderResult =
   | Order
   | OrderPaymentStateError
+  | IneligiblePaymentMethodError
   | PaymentFailedError
   | PaymentDeclinedError
   | OrderStateTransitionError
@@ -86,6 +87,7 @@ export type Asset = Node & {
   source: Scalars["String"];
   preview: Scalars["String"];
   focalPoint?: Maybe<Coordinate>;
+  customFields?: Maybe<Scalars["JSON"]>;
 };
 
 export type AssetList = PaginatedList & {
@@ -102,6 +104,7 @@ export enum AssetType {
 
 export type AuthenticationInput = {
   native?: Maybe<NativeAuthInput>;
+  legacy?: Maybe<LegacyAuthInput>;
 };
 
 export type AuthenticationMethod = Node & {
@@ -151,6 +154,7 @@ export type Channel = Node & {
   defaultLanguageCode: LanguageCode;
   currencyCode: CurrencyCode;
   pricesIncludeTax: Scalars["Boolean"];
+  customFields?: Maybe<Scalars["JSON"]>;
 };
 
 export type Collection = Node & {
@@ -267,6 +271,8 @@ export type ConfigArgDefinition = {
   name: Scalars["String"];
   type: Scalars["String"];
   list: Scalars["Boolean"];
+  required: Scalars["Boolean"];
+  defaultValue?: Maybe<Scalars["JSON"]>;
   label?: Maybe<Scalars["String"]>;
   description?: Maybe<Scalars["String"]>;
   ui?: Maybe<Scalars["JSON"]>;
@@ -633,7 +639,8 @@ export type CustomFieldConfig =
   | IntCustomFieldConfig
   | FloatCustomFieldConfig
   | BooleanCustomFieldConfig
-  | DateTimeCustomFieldConfig;
+  | DateTimeCustomFieldConfig
+  | RelationCustomFieldConfig;
 
 export type DateOperators = {
   eq?: Maybe<Scalars["DateTime"]>;
@@ -690,6 +697,7 @@ export enum ErrorCode {
   OrderModificationError = "ORDER_MODIFICATION_ERROR",
   IneligibleShippingMethodError = "INELIGIBLE_SHIPPING_METHOD_ERROR",
   OrderPaymentStateError = "ORDER_PAYMENT_STATE_ERROR",
+  IneligiblePaymentMethodError = "INELIGIBLE_PAYMENT_METHOD_ERROR",
   PaymentFailedError = "PAYMENT_FAILED_ERROR",
   PaymentDeclinedError = "PAYMENT_DECLINED_ERROR",
   CouponCodeInvalidError = "COUPON_CODE_INVALID_ERROR",
@@ -872,6 +880,13 @@ export type IdentifierChangeTokenInvalidError = ErrorResult & {
   __typename?: "IdentifierChangeTokenInvalidError";
   errorCode: ErrorCode;
   message: Scalars["String"];
+};
+
+export type IneligiblePaymentMethodError = ErrorResult & {
+  __typename?: "IneligiblePaymentMethodError";
+  errorCode: ErrorCode;
+  message: Scalars["String"];
+  eligibilityCheckerMessage?: Maybe<Scalars["String"]>;
 };
 
 export type IneligibleShippingMethodError = ErrorResult & {
@@ -1068,6 +1083,11 @@ export enum LanguageCode {
   Yo = "yo",
   Zu = "zu",
 }
+
+export type LegacyAuthInput = {
+  email: Scalars["String"];
+  password: Scalars["String"];
+};
 
 export type LocaleStringCustomFieldConfig = CustomField & {
   __typename?: "LocaleStringCustomFieldConfig";
@@ -1412,6 +1432,8 @@ export type OrderLine = Node & {
   featuredAsset?: Maybe<Asset>;
   unitPrice: Scalars["Int"];
   unitPriceWithTax: Scalars["Int"];
+  unitPriceChangeSinceAdded: Scalars["Int"];
+  unitPriceWithTaxChangeSinceAdded: Scalars["Int"];
   discountedUnitPrice: Scalars["Int"];
   discountedUnitPriceWithTax: Scalars["Int"];
   proratedUnitPrice: Scalars["Int"];
@@ -1549,6 +1571,14 @@ export type PaymentFailedError = ErrorResult & {
 export type PaymentInput = {
   method: Scalars["String"];
   metadata: Scalars["JSON"];
+};
+
+export type PaymentMethodQuote = {
+  __typename?: "PaymentMethodQuote";
+  id: Scalars["ID"];
+  code: Scalars["String"];
+  isEligible: Scalars["Boolean"];
+  eligibilityMessage?: Maybe<Scalars["String"]>;
 };
 
 export enum Permission {
@@ -1740,6 +1770,7 @@ export type ProductVariant = Node & {
   /** @deprecated price now always excludes tax */
   priceIncludesTax: Scalars["Boolean"];
   priceWithTax: Scalars["Int"];
+  stockLevel: Scalars["String"];
   taxRateApplied: TaxRate;
   taxCategory: TaxCategory;
   options: Array<ProductOption>;
@@ -1765,6 +1796,7 @@ export type ProductVariantFilterParameter = {
   currencyCode?: Maybe<StringOperators>;
   priceIncludesTax?: Maybe<BooleanOperators>;
   priceWithTax?: Maybe<NumberOperators>;
+  stockLevel?: Maybe<StringOperators>;
   bulkDiscountEnabled?: Maybe<BooleanOperators>;
   minimumOrderQuantity?: Maybe<NumberOperators>;
 };
@@ -1791,6 +1823,7 @@ export type ProductVariantSortParameter = {
   name?: Maybe<SortOrder>;
   price?: Maybe<SortOrder>;
   priceWithTax?: Maybe<SortOrder>;
+  stockLevel?: Maybe<SortOrder>;
   bulkDiscountEnabled?: Maybe<SortOrder>;
   minimumOrderQuantity?: Maybe<SortOrder>;
 };
@@ -1834,6 +1867,7 @@ export type Query = {
   collections: CollectionList;
   collection?: Maybe<Collection>;
   eligibleShippingMethods: Array<ShippingMethodQuote>;
+  eligiblePaymentMethods: Array<PaymentMethodQuote>;
   me?: Maybe<CurrentUser>;
   nextOrderStates: Array<Scalars["String"]>;
   order?: Maybe<Order>;
@@ -1927,6 +1961,19 @@ export type RegisterCustomerInput = {
   lastName?: Maybe<Scalars["String"]>;
   phoneNumber?: Maybe<Scalars["String"]>;
   password?: Maybe<Scalars["String"]>;
+};
+
+export type RelationCustomFieldConfig = CustomField & {
+  __typename?: "RelationCustomFieldConfig";
+  name: Scalars["String"];
+  type: Scalars["String"];
+  list: Scalars["Boolean"];
+  label?: Maybe<Array<LocalizedString>>;
+  description?: Maybe<Array<LocalizedString>>;
+  readonly?: Maybe<Scalars["Boolean"]>;
+  internal?: Maybe<Scalars["Boolean"]>;
+  entity: Scalars["String"];
+  scalarFields: Array<Scalars["String"]>;
 };
 
 export type RemoveOrderItemsResult = Order | OrderModificationError;
@@ -2162,12 +2209,27 @@ export type Surcharge = Node & {
   taxRate: Scalars["Float"];
 };
 
+export type Tag = Node & {
+  __typename?: "Tag";
+  id: Scalars["ID"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  value: Scalars["String"];
+};
+
+export type TagList = PaginatedList & {
+  __typename?: "TagList";
+  items: Array<Tag>;
+  totalItems: Scalars["Int"];
+};
+
 export type TaxCategory = Node & {
   __typename?: "TaxCategory";
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
   name: Scalars["String"];
+  isDefault: Scalars["Boolean"];
 };
 
 export type TaxLine = {

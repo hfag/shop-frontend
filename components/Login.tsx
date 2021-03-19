@@ -177,7 +177,7 @@ const LoginRegisterForm = withFormik<
       password: yup
         .string()
         .when([], (schema) =>
-          password ? schema.min(7).required() : schema.notRequired()
+          password ? schema.required() : schema.notRequired()
         ),
     }),
   handleSubmit: (
@@ -201,7 +201,7 @@ const LoginRegisterForm = withFormik<
         }, 300);
       })
       .catch((e) => {
-        const msg = "message" in e ? e.message : JSON.stringify(e);
+        const msg = e && "message" in e ? e.message : JSON.stringify(e);
 
         setErrors({ password: msg });
         setStatus("error");
@@ -236,7 +236,10 @@ const PasswordResetForm = withFormik<
         email,
       });
 
-      if (!("success" in data.requestPasswordReset)) {
+      if (
+        !data.requestPasswordReset ||
+        !("success" in data.requestPasswordReset)
+      ) {
         throw new Error(errorCodeToMessage(intl, data.requestPasswordReset));
       }
 
@@ -248,7 +251,7 @@ const PasswordResetForm = withFormik<
         }
       }, 300);
     } catch (e) {
-      const msg = "message" in e ? e.message : JSON.stringify(e);
+      const msg = e && "message" in e ? e.message : JSON.stringify(e);
 
       setErrors({ email: msg });
       setStatus("error");
@@ -271,14 +274,14 @@ const Login = React.memo(() => {
   }, [router.query]);
 
   const login = useCallback(async (email: string, password: string) => {
-    const data = await request<{ login: Mutation["login"] }>(
+    const data = await request<{ authenticate: Mutation["authenticate"] }>(
       intl.locale,
       LOGIN,
       { email, password }
     );
 
-    if ("errorCode" in data.login) {
-      throw new Error(errorCodeToMessage(intl, data.login));
+    if ("errorCode" in data.authenticate) {
+      throw new Error(errorCodeToMessage(intl, data.authenticate));
     }
 
     mutate([GET_CURRENT_CUSTOMER, token]);

@@ -36,7 +36,11 @@ interface FormValues {
   password?: string;
 }
 
-const InnerForm = ({ isValid, intl }: IProps & FormikProps<FormValues>) => (
+const InnerForm = ({
+  isValid,
+  status,
+  intl,
+}: IProps & FormikProps<FormValues>) => (
   <Form>
     <InputField
       type="password"

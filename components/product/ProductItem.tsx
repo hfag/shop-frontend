@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, FunctionComponent } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  FunctionComponent,
+  useContext,
+} from "react";
 import styled from "@emotion/styled";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
@@ -11,6 +16,8 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import { Product } from "../../schema";
 import StyledLink from "../elements/StyledLink";
 import Box from "../layout/Box";
+import { AppContext } from "../AppWrapper";
+import { notEmpty } from "../../utilities/typescript";
 
 const messages = defineMessages({
   discountForResellers: {
@@ -107,6 +114,7 @@ const Discount = styled.div`
 const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
   ({ product }) => {
     const intl = useIntl();
+    const { customer } = useContext(AppContext);
 
     const url = useMemo(
       () =>
@@ -129,8 +137,36 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
       [product]
     );
 
+    const resellerDiscount: number | null = useMemo(() => {
+      if (!customer) {
+        return null;
+      }
+
+      return product.facetValues
+        .map((f) => {
+          const d = customer.resellerDiscounts.find((d) =>
+            d.facetValueIds.includes(f.id.toString())
+          );
+          return d ? d.discount : null;
+        })
+        .filter(notEmpty)
+        .reduce((sum, d) => sum + d, 0);
+    }, [customer]);
+
     return (
       <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} paddingX={0.5} marginTop={1}>
+        {resellerDiscount && (
+          <Discount
+            data-balloon={
+              resellerDiscount +
+              "% " +
+              intl.formatMessage(messages.discountForResellers)
+            }
+            data-balloon-pos="up"
+          >
+            <FaPercent />
+          </Discount>
+        )}
         <StyledLink href={url} noHover>
           <StyledProduct>
             <Asset asset={product.featuredAsset} squared />

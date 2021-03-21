@@ -2375,6 +2375,7 @@ type Product implements Node {
   translations: [ProductTranslation!]!
   collections: [Collection!]!
   recommendations: [ProductRecommendation!]!
+  resellerDiscount: Int!
   customFields: ProductCustomFields
 }
 
@@ -2390,6 +2391,7 @@ input ProductFilterParameter {
   name: StringOperators
   slug: StringOperators
   description: StringOperators
+  resellerDiscount: NumberOperators
   productRecommendationsEnabled: BooleanOperators
   groupKey: StringOperators
 }
@@ -2460,6 +2462,7 @@ input ProductSortParameter {
   name: SortOrder
   slug: SortOrder
   description: SortOrder
+  resellerDiscount: SortOrder
   productRecommendationsEnabled: SortOrder
   groupKey: SortOrder
 }
@@ -2497,6 +2500,7 @@ type ProductVariant implements Node {
   facetValues: [FacetValue!]!
   translations: [ProductVariantTranslation!]!
   bulkDiscounts: [BulkDiscount!]!
+  resellerDiscount: Int!
   customFields: ProductVariantCustomFields
 }
 
@@ -2516,6 +2520,7 @@ input ProductVariantFilterParameter {
   priceIncludesTax: BooleanOperators
   priceWithTax: NumberOperators
   stockLevel: StringOperators
+  resellerDiscount: NumberOperators
   bulkDiscountEnabled: BooleanOperators
   minimumOrderQuantity: NumberOperators
 }
@@ -2542,6 +2547,7 @@ input ProductVariantSortParameter {
   price: SortOrder
   priceWithTax: SortOrder
   stockLevel: SortOrder
+  resellerDiscount: SortOrder
   bulkDiscountEnabled: SortOrder
   minimumOrderQuantity: SortOrder
 }

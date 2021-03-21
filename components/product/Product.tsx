@@ -465,7 +465,7 @@ const Product: FunctionComponent<{
                             : undefined
                           : activeResellerDiscounts.reduce(
                               (price, d) => (1 - d.discount / 100) * price,
-                              selectedVariant.price
+                              selectedVariant.priceWithTax
                             ),
                       unit,
                     },

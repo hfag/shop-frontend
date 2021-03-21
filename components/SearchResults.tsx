@@ -127,7 +127,15 @@ const SearchResults: FunctionComponent<{ term: string }> = ({ term }) => {
                 {totalItems} {intl.formatMessage(search.productsFound)}
               </Card>
 
-              <Flex flexWrap="wrap" style={{ overflowX: "hidden" }} marginX>
+              <Flex
+                flexWrap="wrap"
+                style={{
+                  overflowX: "hidden",
+                  paddingTop: "3rem",
+                  marginTop: "-3rem",
+                }}
+                marginX
+              >
                 {Object.values(items.current).map((item) => (
                   <SearchItem
                     key={"product-" + item.sku}
@@ -140,7 +148,15 @@ const SearchResults: FunctionComponent<{ term: string }> = ({ term }) => {
           )
         ) : (
           <>
-            <Flex flexWrap="wrap" style={{ overflowX: "hidden" }} marginX>
+            <Flex
+              flexWrap="wrap"
+              style={{
+                overflowX: "hidden",
+                paddingTop: "3rem",
+                marginTop: "-3rem",
+              }}
+              marginX
+            >
               {new Array(12).fill(0).map((el, index) => (
                 <CollectionItem key={index} />
               ))}

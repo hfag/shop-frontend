@@ -24,6 +24,7 @@ export const SEARCH = /* GraphQL */ `
         }
         currencyCode
         score
+        facetValueIds
       }
       totalItems
       facetValues {

@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, FunctionComponent } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  FunctionComponent,
+  useContext,
+} from "react";
 import styled from "@emotion/styled";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
@@ -12,6 +17,8 @@ import { Product, SearchResult } from "../../schema";
 import StyledLink from "../elements/StyledLink";
 import Box from "../layout/Box";
 import search from "../../i18n/search";
+import { notEmpty } from "../../utilities/typescript";
+import { AppContext } from "../AppWrapper";
 
 const messages = defineMessages({
   discountForResellers: {
@@ -110,6 +117,7 @@ const SearchItem: FunctionComponent<{
   groupByProduct: boolean;
 }> = React.memo(({ result, groupByProduct }) => {
   const intl = useIntl();
+  const { customer } = useContext(AppContext);
 
   const url = useMemo(
     () =>
@@ -123,8 +131,36 @@ const SearchItem: FunctionComponent<{
     [result, intl.locale]
   );
 
+  const resellerDiscount: number | null = useMemo(() => {
+    if (!customer) {
+      return null;
+    }
+
+    return result.facetValueIds
+      .map((id) => {
+        const d = customer.resellerDiscounts.find((d) =>
+          d.facetValueIds.includes(id.toString())
+        );
+        return d ? d.discount : null;
+      })
+      .filter(notEmpty)
+      .reduce((sum, d) => sum + d, 0);
+  }, [customer]);
+
   return (
     <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} paddingX={0.5} marginTop={1}>
+      {resellerDiscount && (
+        <Discount
+          data-balloon={
+            resellerDiscount +
+            "% " +
+            intl.formatMessage(messages.discountForResellers)
+          }
+          data-balloon-pos="up"
+        >
+          <FaPercent />
+        </Discount>
+      )}
       <StyledLink href={url} noHover>
         <StyledProduct>
           <Asset

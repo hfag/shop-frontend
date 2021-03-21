@@ -66,6 +66,9 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
       height
       preview
     }
+    facetValues{
+      id
+    }
     variants {
       price
     }

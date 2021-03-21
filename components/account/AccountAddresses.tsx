@@ -121,8 +121,8 @@ const AccountAddresses: FunctionComponent<{
                   </td>
                 </tr>
               ))
-            : new Array(3).fill(undefined).map((_) => (
-                <tr>
+            : new Array(3).fill(undefined).map((_, index) => (
+                <tr key={index}>
                   <td>
                     <Placeholder height={1} text />
                   </td>

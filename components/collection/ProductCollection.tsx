@@ -26,9 +26,7 @@ const H1 = styled.h1`
   margin: 0 0 0.5rem 0;
 `;
 
-const InfoWrapper = styled.div`
-  margin: 2rem 0;
-`;
+const InfoWrapper = styled.div``;
 
 const ProductCollectionWrapper = styled.div`
   margin-bottom: 1rem;
@@ -118,7 +116,15 @@ const ProductCollection: FunctionComponent<{
             </InfoWrapper>
           </>
         )}
-        <Flex flexWrap="wrap" style={{ overflowX: "hidden" }} marginX>
+        <Flex
+          flexWrap="wrap"
+          style={{
+            overflowX: "hidden",
+            paddingTop: "3rem",
+            marginTop: "-3rem",
+          }}
+          marginX
+        >
           {collection &&
             collection.children
               .sort((a, b) => a.position - b.position)

@@ -1646,6 +1646,7 @@ export type Product = Node & {
   translations: Array<ProductTranslation>;
   collections: Array<Collection>;
   recommendations: Array<ProductRecommendation>;
+  resellerDiscount: Scalars["Int"];
   customFields?: Maybe<ProductCustomFields>;
 };
 
@@ -1662,6 +1663,7 @@ export type ProductFilterParameter = {
   name?: Maybe<StringOperators>;
   slug?: Maybe<StringOperators>;
   description?: Maybe<StringOperators>;
+  resellerDiscount?: Maybe<NumberOperators>;
   productRecommendationsEnabled?: Maybe<BooleanOperators>;
   groupKey?: Maybe<StringOperators>;
 };
@@ -1738,6 +1740,7 @@ export type ProductSortParameter = {
   name?: Maybe<SortOrder>;
   slug?: Maybe<SortOrder>;
   description?: Maybe<SortOrder>;
+  resellerDiscount?: Maybe<SortOrder>;
   productRecommendationsEnabled?: Maybe<SortOrder>;
   groupKey?: Maybe<SortOrder>;
 };
@@ -1777,6 +1780,7 @@ export type ProductVariant = Node & {
   facetValues: Array<FacetValue>;
   translations: Array<ProductVariantTranslation>;
   bulkDiscounts: Array<BulkDiscount>;
+  resellerDiscount: Scalars["Int"];
   customFields?: Maybe<ProductVariantCustomFields>;
 };
 
@@ -1797,6 +1801,7 @@ export type ProductVariantFilterParameter = {
   priceIncludesTax?: Maybe<BooleanOperators>;
   priceWithTax?: Maybe<NumberOperators>;
   stockLevel?: Maybe<StringOperators>;
+  resellerDiscount?: Maybe<NumberOperators>;
   bulkDiscountEnabled?: Maybe<BooleanOperators>;
   minimumOrderQuantity?: Maybe<NumberOperators>;
 };
@@ -1824,6 +1829,7 @@ export type ProductVariantSortParameter = {
   price?: Maybe<SortOrder>;
   priceWithTax?: Maybe<SortOrder>;
   stockLevel?: Maybe<SortOrder>;
+  resellerDiscount?: Maybe<SortOrder>;
   bulkDiscountEnabled?: Maybe<SortOrder>;
   minimumOrderQuantity?: Maybe<SortOrder>;
 };

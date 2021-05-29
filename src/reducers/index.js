@@ -331,6 +331,10 @@ export const getShoppingCartFees = wrap(
   fromShoppingCart.getShoppingCartFees,
   state => state.shoppingCart
 );
+export const getShoppingCartCoupons = wrap(
+  fromShoppingCart.getShoppingCartCoupons,
+  state => state.shoppingCart
+);
 /**
  * Gets the shopping shipping
  * @param {Object} state The redux state

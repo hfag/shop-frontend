@@ -13,7 +13,8 @@ const shoppingCartReducer = (
     total: 0,
     shipping: 0,
     taxes: [],
-    fees: []
+    fees: [],
+    coupons: []
   },
   action
 ) => {
@@ -21,6 +22,7 @@ const shoppingCartReducer = (
     case "FETCH_SHOPPING_CART":
     case "ADD_SHOPPING_CART_ITEM":
     case "UPDATE_SHOPPING_CART":
+    case "APPLY_COUPON":
       return {
         isFetching: state.isFetching + (action.isFetching ? 1 : -1),
         lastFetched: !action.isFetching && !action.error ? Date.now() : state,
@@ -35,6 +37,10 @@ const shoppingCartReducer = (
         taxes:
           action.cart && action.cart.taxes ? action.cart.taxes : state.taxes,
         fees: action.cart && action.cart.fees ? action.cart.fees : state.fees,
+        coupons:
+          action.cart && action.cart.coupons
+            ? action.cart.coupons
+            : state.coupons,
         shipping:
           action.cart && action.cart.shipping !== null
             ? action.cart.shipping
@@ -103,6 +109,7 @@ export const getShoppingCartTaxes = state => state.taxes;
  * @returns {number} The fees
  */
 export const getShoppingCartFees = state => state.fees;
+export const getShoppingCartCoupons = state => state.coupons;
 
 /**
  * Gets the shopping shipping

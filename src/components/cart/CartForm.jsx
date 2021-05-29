@@ -42,7 +42,11 @@ const messages = defineMessages({
   toCheckout: {
     id: "CartForm.toCheckout",
     defaultMessage: "Weiter zur Bestellung"
-  }
+  },
+  coupon: {
+    id: "CartForm.coupon",
+    defaultMessage: "Gutscheincode"
+  },
 });
 
 const Action = styled.span`
@@ -121,6 +125,7 @@ const InnerCartForm = React.memo(
     dirty,
     shipping,
     fees,
+    coupons,
     taxes,
     subtotalSum,
     total,
@@ -261,13 +266,24 @@ const InnerCartForm = React.memo(
                   <td />
                 </tr>
               ))}
+              {coupons.map((coupon, index) => (
+                <tr key={index}>
+                  <td colSpan="5">{intl.formatMessage(messages.coupon)} "{coupon.code}"</td>
+                  <td>
+                    <Price>{-coupon.discount}</Price>
+                  </td>
+                  <td />
+                </tr>
+              ))}
               <tr className="total">
                 <td colSpan="5">{intl.formatMessage(product.subtotal)}</td>
                 <td>
                   <Price>
                     {subtotalSum +
                       shipping +
-                      fees.reduce((sum, fee) => sum + fee.amount, 0)}
+                      fees.reduce((sum, fee) => sum + fee.amount, 0) -
+                      coupons.reduce((sum, coupon) => sum + coupon.discount, 0)
+                      }
                   </Price>
                 </td>
                 <td />

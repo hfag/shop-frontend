@@ -14,5 +14,17 @@
   {
     "id": "Cart.searchProduct",
     "defaultMessage": "Suche Produkt"
+  },
+  {
+    "id": "Cart.couponLabel",
+    "defaultMessage": "Gutscheincode / Coupon"
+  },
+  {
+    "id": "Cart.applyCoupon",
+    "defaultMessage": "Gutscheincode anwenden"
+  },
+  {
+    "id": "Cart.invalidCoupon",
+    "defaultMessage": "Ungültiger Gutscheincode"
   }
 ]

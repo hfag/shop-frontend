@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import universal from "react-universal-component";
 import { Helmet } from "react-helmet";
+import { Flex, Box } from "reflexbox";
 import { defineMessages, useIntl } from "react-intl";
 
 import {
   fetchShoppingCartIfNeeded,
   updateShoppingCart,
+  applyCoupon,
   submitOrder
 } from "../actions/shopping-cart";
 import { fetchCountriesIfNeeded } from "../actions/countries";
@@ -16,6 +18,7 @@ import {
   getShoppingCartTotal,
   getShoppingCartTaxes,
   getShoppingCartFees,
+  getShoppingCartCoupons,
   getShoppingCartShipping,
   getCountries,
   getAccount,
@@ -25,6 +28,7 @@ import {
 import CartForm from "../components/cart/CartForm";
 import CheckoutForm from "../components/cart/CheckoutForm";
 import Card from "../components/Card";
+import { InputFieldWrapper } from "../components/InputFieldWrapper";
 import Button from "../components/Button";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
@@ -46,6 +50,18 @@ const messages = defineMessages({
   searchProduct: {
     id: "Cart.searchProduct",
     defaultMessage: "Suche Produkt"
+  },
+  couponLabel: {
+    id: "Cart.couponLabel",
+    defaultMessage: "Gutscheincode / Coupon"
+  },
+  applyCoupon: {
+    id: "Cart.applyCoupon",
+    defaultMessage: "Gutscheincode anwenden"
+  },
+  invalidCoupon: {
+    id: "Cart.invalidCoupon",
+    defaultMessage: "Ungültiger Gutscheincode"
   }
 });
 
@@ -66,9 +82,11 @@ const Cart = React.memo(
     items,
     shipping,
     fees,
+    coupons,
     taxes,
     total,
     updateShoppingCart,
+    applyCoupon,
     submitOrder,
     countries,
     account,
@@ -77,6 +95,18 @@ const Cart = React.memo(
     const intl = useIntl();
     const [step, setStep] = useState("cart");
     const [showShipping, setShowShipping] = useState(false);
+    const [coupon, setCoupon] = useState("");
+    const [couponError, setCouponError] = useState(false);
+    const onApplyCoupon = useCallback(
+      e => {
+        setCouponError(false);
+        return applyCoupon(coupon, true).catch(e => {
+          setCouponError(true);
+          return Promise.reject(e);
+        });
+      },
+      [coupon]
+    );
 
     useEffect(() => {
       fetchCountriesIfNeeded();
@@ -109,6 +139,7 @@ const Cart = React.memo(
           items={items}
           shipping={shipping}
           fees={fees}
+          coupons={coupons}
           taxes={taxes}
           subtotalSum={subtotalSum}
           total={total}
@@ -117,6 +148,25 @@ const Cart = React.memo(
           onProceed={() => setStep("checkout")}
           lastRow={null}
         />
+
+        <Flex flexWrap="wrap">
+          <Box width={[1, 1, 1 / 2, 1 / 2]}>
+            <InputFieldWrapper>
+              <label className="input-label" htmlFor="coupon">
+                {intl.formatMessage(messages.couponLabel)}{" "}
+              </label>
+              <input
+                id="coupon"
+                type="text"
+                onChange={e => setCoupon(e.currentTarget.value)}
+              />
+            </InputFieldWrapper>
+            {couponError && intl.formatMessage(messages.invalidCoupon)}
+            <Button onClick={onApplyCoupon}>
+              {intl.formatMessage(messages.applyCoupon)}
+            </Button>
+          </Box>
+        </Flex>
 
         {step === "checkout" && (
           <CheckoutForm
@@ -145,6 +195,7 @@ const mapStateToProps = state => {
     total: getShoppingCartTotal(state),
     taxes: getShoppingCartTaxes(state),
     fees: getShoppingCartFees(state),
+    coupons: getShoppingCartCoupons(state),
     shipping: getShoppingCartShipping(state),
     countries: getCountries(state),
     account: account,
@@ -185,6 +236,9 @@ const mapDispatchToProps = dispatch => ({
    */
   updateShoppingCart(items, oldItems, language, visualize = false) {
     return dispatch(updateShoppingCart(items, oldItems, language, visualize));
+  },
+  applyCoupon(coupon, language, visualize = false) {
+    return dispatch(applyCoupon(coupon, language, visualize));
   },
   /**
    * Submits an order
@@ -242,6 +296,13 @@ const mergeProps = (mapStateToProps, mapDispatchToProps, ownProps) => ({
     return mapDispatchToProps.updateShoppingCart(
       items,
       mapStateToProps.items,
+      mapStateToProps.languageFetchString,
+      visualize
+    );
+  },
+  applyCoupon(coupon, visualize = false) {
+    return mapDispatchToProps.applyCoupon(
+      coupon,
       mapStateToProps.languageFetchString,
       visualize
     );

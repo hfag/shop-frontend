@@ -154,6 +154,37 @@ export const addShoppingCartItem = (
     });
 };
 
+const applyCouponAction = createFetchAction("APPLY_COUPON", "cart");
+
+export const applyCoupon = (
+  coupon,
+  language,
+  visualize = false
+) => dispatch => {
+  dispatch(applyCouponAction(true, null, visualize));
+
+  return fetchApi(`${language}/wp-json/hfag/coupon`, {
+    method: "POST",
+    credentials: "include",
+    body: JSON.stringify({
+      coupon: coupon
+    })
+  })
+    .then(({ json: cart }) => {
+      if (cart.error) {
+        return Promise.reject(new Error("Invalid coupon code"));
+      }
+
+      dispatch(applyCouponAction(false, null, visualize, cart));
+
+      return Promise.resolve(cart);
+    })
+    .catch(e => {
+      dispatch(applyCouponAction(false, e, visualize));
+      return Promise.reject(e);
+    });
+};
+
 /**
  * Updates the shopping cart
  * @param {boolean} isFetching Whether the cart is currently being updated

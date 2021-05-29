@@ -40,7 +40,7 @@
     "import/no-useless-path-segments": "error",
 
     "require-jsdoc-except/require-jsdoc": [
-      "error",
+      "warn",
       {
         "require": {
           "FunctionDeclaration": true,

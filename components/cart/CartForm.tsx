@@ -137,10 +137,10 @@ const InnerCartForm = React.memo(
                     []
                   );
 
-                  const adjustmentsPerUnit: Adjustment[] = adjustmentSources.map(
-                    (source) =>
+                  const adjustmentsPerUnit: Adjustment[] =
+                    adjustmentSources.map((source) =>
                       line.discounts.find((a) => a.adjustmentSource === source)
-                  );
+                    );
 
                   const price = adjustmentsPerUnit.reduce(
                     (price, adjustment) =>

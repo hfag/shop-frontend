@@ -21,10 +21,10 @@ const Wrapper: FunctionComponent<{
   const intl = useIntl();
   const router = useRouter();
 
-  const showBreadcrums = useMemo(() => router.pathname !== `/${intl.locale}`, [
-    router.pathname,
-    intl.locale,
-  ]);
+  const showBreadcrums = useMemo(
+    () => router.pathname !== `/${intl.locale}`,
+    [router.pathname, intl.locale]
+  );
 
   return (
     <ScrollToTop>

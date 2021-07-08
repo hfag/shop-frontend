@@ -181,10 +181,11 @@ export async function request<T = any>(
     `${API_URL}?languageCode=${languageCode}`,
     token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
   );
-  const { data, headers: responseHeaders, status } = await client.rawRequest<T>(
-    query,
-    variables
-  );
+  const {
+    data,
+    headers: responseHeaders,
+    status,
+  } = await client.rawRequest<T>(query, variables);
   if (responseHeaders.get("vendure-auth-token") && isClient) {
     localStorage.setItem(
       "vendure-auth-token",
@@ -207,10 +208,11 @@ export async function requestAdmin<T = any>(
     `${ADMIN_API_URL}?languageCode=${languageCode}`,
     token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
   );
-  const { data, headers: responseHeaders, status } = await client.rawRequest<T>(
-    query,
-    variables
-  );
+  const {
+    data,
+    headers: responseHeaders,
+    status,
+  } = await client.rawRequest<T>(query, variables);
   if (responseHeaders.get("vendure-auth-token") && isClient) {
     localStorage.setItem(
       "vendure-auth-token",

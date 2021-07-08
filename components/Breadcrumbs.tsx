@@ -14,12 +14,15 @@ import page from "../i18n/page";
  * @param {string} text The name of the breadcrumb
  * @returns {Array} The breadcrumb array
  */
-const generateStringBreadcrumb = (text) => ({ url }, location, state) => [
-  {
-    url,
-    name: text,
-  },
-];
+const generateStringBreadcrumb =
+  (text) =>
+  ({ url }, location, state) =>
+    [
+      {
+        url,
+        name: text,
+      },
+    ];
 
 const routes = [
   {

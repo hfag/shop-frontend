@@ -69,15 +69,15 @@ const AppWrapper: FunctionComponent<{
   );
 };
 
-export const withApp = (locale: Language, messages: any) => (
-  Component: React.JSXElementConstructor<any>
-) =>
-  React.memo((props: any) => {
-    return (
-      <AppWrapper locale={locale} messages={messages}>
-        <Component {...props} />
-      </AppWrapper>
-    );
-  });
+export const withApp =
+  (locale: Language, messages: any) =>
+  (Component: React.JSXElementConstructor<any>) =>
+    React.memo((props: any) => {
+      return (
+        <AppWrapper locale={locale} messages={messages}>
+          <Component {...props} />
+        </AppWrapper>
+      );
+    });
 
 export default AppWrapper;

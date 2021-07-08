@@ -123,9 +123,10 @@ const LightboxGallery = <Image extends {}>({
     [dispatch, images.length]
   );
 
-  const onClose = useCallback(() => dispatch({ type: "CLOSE_LIGHTBOX" }), [
-    dispatch,
-  ]);
+  const onClose = useCallback(
+    () => dispatch({ type: "CLOSE_LIGHTBOX" }),
+    [dispatch]
+  );
 
   return (
     <React.Fragment>

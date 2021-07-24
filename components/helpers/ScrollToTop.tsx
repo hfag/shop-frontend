@@ -29,7 +29,7 @@ const ScrollToTop: FunctionComponent<{ children: ReactNode }> = ({
       ) {
         toggleBurgerMenu();
       }
-      window.scrollTo({ left: 0, top: 0 });
+      //window.scrollTo({ left: 0, top: 0 });
     }
   }, [router.pathname]);
 

@@ -68,7 +68,7 @@ const Page: FunctionComponent<{
   } = useSWR(
     `${getWordpressUrl(
       intl.locale
-    )}/wp-json/wp/v2/posts?per_page=10&orderby=date&order=desc&_embed`,
+    )}/wp-json/wp/v2/posts?per_page=20&orderby=date&order=desc&_embed`,
     (url) =>
       fetch(url)
         .then((r) => r.json())

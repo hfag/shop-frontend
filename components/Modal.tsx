@@ -1,6 +1,6 @@
-import { FunctionComponent } from "react";
 import { MdClose } from "react-icons/md";
 import { borders } from "../utilities/style";
+import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
 const Backdrop = styled.div`

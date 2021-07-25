@@ -1,17 +1,16 @@
-import { FunctionComponent } from "react";
-import { GetStaticPaths, GetStaticProps } from "next";
 import { locale, messages } from "./config";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
 import { withApp } from "../../components/AppWrapper";
+import React, { FunctionComponent } from "react";
 import SearchResults from "../../components/SearchResults";
 import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb";
 import SidebarBreadcrumbs from "../../components/layout/sidebar/SidebarBreadcrumbs";
 import Wrapper from "../../components/layout/Wrapper";
 import search from "../../i18n/search";
 
-const Page: FunctionComponent<{}> = ({}) => {
+const Page: FunctionComponent = () => {
   const intl = useIntl();
   const router = useRouter();
 

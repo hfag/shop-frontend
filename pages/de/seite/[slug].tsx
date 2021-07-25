@@ -1,4 +1,3 @@
-import { FunctionComponent, useMemo } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
   Page as PageType,
@@ -11,6 +10,7 @@ import { pathnamesByLanguage } from "../../../utilities/urls";
 import { useIntl } from "react-intl";
 import { withApp } from "../../../components/AppWrapper";
 import PageComponent from "../../../components/Page";
+import React, { FunctionComponent, useMemo } from "react";
 import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
 import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
 import Wrapper from "../../../components/layout/Wrapper";

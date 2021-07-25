@@ -1,6 +1,5 @@
 import * as yup from "yup";
 import { Form, FormikProps, withFormik } from "formik";
-import { FunctionComponent, useMemo } from "react";
 import { IntlShape, defineMessages, useIntl } from "react-intl";
 import { Mutation } from "../schema";
 import { NextRouter, useRouter } from "next/router";
@@ -11,6 +10,7 @@ import { pathnamesByLanguage } from "../utilities/urls";
 import Button from "./elements/Button";
 import Card from "./layout/Card";
 import InputField from "./form/InputField";
+import React, { FunctionComponent, useMemo } from "react";
 import page from "../i18n/page";
 import request from "../utilities/request";
 import user from "../i18n/user";
@@ -92,7 +92,7 @@ const VerifyEmailForm = withFormik<IProps, FormValues>({
   },
 })(InnerForm);
 
-const VerifyEmail: FunctionComponent<{}> = (props) => {
+const VerifyEmail: FunctionComponent = (props) => {
   const intl = useIntl();
   const router = useRouter();
   const token: string | null = useMemo(() => {

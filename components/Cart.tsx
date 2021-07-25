@@ -46,7 +46,7 @@ const messages = defineMessages({
 /**
  * The cart page
  */
-const Cart: FunctionComponent<{}> = React.memo(() => {
+const Cart: FunctionComponent = React.memo(() => {
   const intl = useIntl();
   const [step, setStep] = useState("cart");
   const { customer: user, token } = useContext(AppContext);

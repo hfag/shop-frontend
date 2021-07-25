@@ -4,11 +4,11 @@ import { Unavailable } from "../../../components/administrator/Unavailable";
 import { defineMessages, useIntl } from "react-intl";
 import { locale, messages } from "../config";
 import { pathnamesByLanguage } from "../../../utilities/urls";
-import { useContext, useState } from "react";
 import AccountForm from "../../../components/account/AccountForm";
 import AccountWrapper from "../../../components/account/AccountWrapper";
 import Message from "../../../components/elements/Message";
 import Placeholder from "../../../components/elements/Placeholder";
+import React, { useContext, useState } from "react";
 import Wrapper from "../../../components/layout/Wrapper";
 import page from "../../../i18n/page";
 

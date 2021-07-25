@@ -1,6 +1,11 @@
 import { FaFilm, FaLink, FaRegFilePdf } from "react-icons/fa";
-import { FunctionComponent, useCallback, useContext, useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 import styled from "@emotion/styled";
 
 import { ASSET_URL } from "../../utilities/api";

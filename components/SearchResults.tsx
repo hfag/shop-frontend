@@ -1,5 +1,11 @@
 import { Collection, Query, SearchResult } from "../schema";
-import {
+import { SEARCH } from "../gql/search";
+import { useIntl } from "react-intl";
+import Card from "./layout/Card";
+import CollectionItem from "./collection/CollectionItem";
+import Flex from "./layout/Flex";
+import InfiniteScroll from "react-infinite-scroller";
+import React, {
   FunctionComponent,
   useCallback,
   useEffect,
@@ -7,12 +13,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { SEARCH } from "../gql/search";
-import { useIntl } from "react-intl";
-import Card from "./layout/Card";
-import CollectionItem from "./collection/CollectionItem";
-import Flex from "./layout/Flex";
-import InfiniteScroll from "react-infinite-scroller";
 import SearchItem from "./product/SearchItem";
 import Select from "./elements/Select";
 import request from "../utilities/request";

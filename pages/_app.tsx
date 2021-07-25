@@ -10,9 +10,7 @@ import { cache } from "emotion";
 import App from "next/app";
 import React from "react";
 
-interface IProps {}
-
-export default class MyApp extends App<IProps> {
+export default class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
 

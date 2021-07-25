@@ -26,11 +26,14 @@
   },
   "plugins": ["react", "@typescript-eslint", "sort-imports-es6-autofix"],
   "rules": {
-    "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
-    "react/display-name": ["off"],
+    "react/display-name": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "react/prop-types": "off",
     "sort-imports-es6-autofix/sort-imports-es6": [
       2,
       {

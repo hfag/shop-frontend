@@ -1,5 +1,5 @@
-import { FunctionComponent, ReactNode } from "react";
 import { colors } from "../../utilities/style";
+import React, { FunctionComponent, ReactNode } from "react";
 import Table from "../elements/Table";
 import styled from "@emotion/styled";
 

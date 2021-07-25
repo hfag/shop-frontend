@@ -5,6 +5,7 @@ import Document, {
   Main,
   NextScript,
 } from "next/document";
+import React from "react";
 import createCache from "@emotion/cache";
 import createEmotionServer from "create-emotion-server";
 

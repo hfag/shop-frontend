@@ -4,6 +4,7 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import { useIntl } from "react-intl";
 import { withApp } from "../../components/AppWrapper";
 import Cart from "../../components/Cart";
+import React from "react";
 import Wrapper from "../../components/layout/Wrapper";
 import page from "../../i18n/page";
 

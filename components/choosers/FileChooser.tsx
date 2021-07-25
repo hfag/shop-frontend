@@ -6,6 +6,7 @@ import { defineMessages, useIntl } from "react-intl";
 import { requestAdmin } from "../../utilities/request";
 import Button from "../elements/Button";
 import EntityChooser from "./EntityChooser";
+import React from "react";
 import Select from "../elements/Select";
 import Table from "../elements/Table";
 import styled from "@emotion/styled";
@@ -120,9 +121,11 @@ const FileChooser: FunctionComponent<{
         const d = new Date(asset.updatedAt);
 
         return [
-          <td>{asset.name}</td>,
-          <td>{asset.source}</td>,
-          <td>{d.toLocaleDateString() + " " + d.toLocaleTimeString()}</td>,
+          <td key={0}>{asset.name}</td>,
+          <td key={1}>{asset.source}</td>,
+          <td key={2}>
+            {d.toLocaleDateString() + " " + d.toLocaleTimeString()}
+          </td>,
         ];
       }}
     />

@@ -1,5 +1,4 @@
 import { Collection, Query } from "../../../schema";
-import { FunctionComponent, useMemo } from "react";
 import {
   GET_ALL_COLLECTIONS,
   GET_COLLECTION_BY_SLUG,
@@ -10,6 +9,7 @@ import { pathnamesByLanguage } from "../../../utilities/urls";
 import { useIntl } from "react-intl";
 import { withApp } from "../../../components/AppWrapper";
 import ProductCollection from "../../../components/collection/ProductCollection";
+import React, { FunctionComponent, useMemo } from "react";
 import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
 import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
 import SidebarCollections from "../../../components/layout/sidebar/SidebarCollections";

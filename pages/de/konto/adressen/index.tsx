@@ -2,10 +2,10 @@ import { AppContext, withApp } from "../../../../components/AppWrapper";
 import { GetStaticProps } from "next";
 import { locale, messages } from "../../config";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
-import { useContext } from "react";
 import { useIntl } from "react-intl";
 import AccountAddresses from "../../../../components/account/AccountAddresses";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
+import React, { useContext } from "react";
 import Wrapper from "../../../../components/layout/Wrapper";
 import page from "../../../../i18n/page";
 

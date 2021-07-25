@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import { withApp } from "../../../components/AppWrapper";
 import AccountDashboard from "../../../components/account/AccountDashboard";
 import AccountWrapper from "../../../components/account/AccountWrapper";
+import React from "react";
 import Wrapper from "../../../components/layout/Wrapper";
 import page from "../../../i18n/page";
 

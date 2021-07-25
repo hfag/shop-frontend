@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { withApp } from "../../components/AppWrapper";
 import Card from "../../components/layout/Card";
+import React from "react";
 import Wrapper from "../../components/layout/Wrapper";
 import page from "../../i18n/page";
 import request from "../../utilities/request";

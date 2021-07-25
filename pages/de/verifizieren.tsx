@@ -3,6 +3,7 @@ import { locale, messages } from "./config";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { useIntl } from "react-intl";
 import { withApp } from "../../components/AppWrapper";
+import React from "react";
 import VerifyEmail from "../../components/VerifyEmail";
 import Wrapper from "../../components/layout/Wrapper";
 import page from "../../i18n/page";

@@ -1,4 +1,3 @@
-import { FunctionComponent } from "react";
 import { GetStaticProps } from "next";
 import { locale, messages } from "./config";
 import { pathnamesByLanguage } from "../../utilities/urls";
@@ -6,10 +5,11 @@ import { useIntl } from "react-intl";
 import { withApp } from "../../components/AppWrapper";
 import Card from "../../components/layout/Card";
 import OrderConfirmation from "../../components/OrderConfirmation";
+import React, { FunctionComponent } from "react";
 import Wrapper from "../../components/layout/Wrapper";
 import page from "../../i18n/page";
 
-const Page: FunctionComponent<{}> = () => {
+const Page: FunctionComponent = () => {
   const intl = useIntl();
 
   return (

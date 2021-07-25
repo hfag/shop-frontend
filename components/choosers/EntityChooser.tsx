@@ -5,6 +5,7 @@ import { InputFieldWrapper } from "../form/InputFieldWrapper";
 import { defineMessages, useIntl } from "react-intl";
 import { requestAdmin } from "../../utilities/request";
 import Button from "../elements/Button";
+import React from "react";
 import Select from "../elements/Select";
 import Table from "../elements/Table";
 import styled from "@emotion/styled";
@@ -195,8 +196,8 @@ const EntityChooser = <
       <Table>
         <thead>
           <tr>
-            {tableColumns.map((message) => (
-              <th>{intl.formatMessage(message)}</th>
+            {tableColumns.map((message, index) => (
+              <th key={index}>{intl.formatMessage(message)}</th>
             ))}
           </tr>
         </thead>

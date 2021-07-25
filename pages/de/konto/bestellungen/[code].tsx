@@ -1,15 +1,14 @@
 import { AppContext, withApp } from "../../../../components/AppWrapper";
 import { GET_ORDER_BY_CODE } from "../../../../gql/order";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Order as OrderType, Query } from "../../../../schema";
+import { Query } from "../../../../schema";
 import { locale, messages } from "../../config";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
-import { useContext } from "react";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
 import Order from "../../../../components/elements/Order";
-import Placeholder from "../../../../components/elements/Placeholder";
+import React, { useContext } from "react";
 import Wrapper from "../../../../components/layout/Wrapper";
 import page from "../../../../i18n/page";
 import request from "../../../../utilities/request";

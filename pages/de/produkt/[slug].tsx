@@ -1,4 +1,3 @@
-import { FunctionComponent, useMemo } from "react";
 import {
   GET_ALL_PRODUCT_SLUGS,
   GET_PRODUCT_BY_SLUG,
@@ -10,6 +9,7 @@ import { pathnamesByLanguage } from "../../../utilities/urls";
 import { useIntl } from "react-intl";
 import { withApp } from "../../../components/AppWrapper";
 import Product from "../../../components/product/Product";
+import React, { FunctionComponent, useMemo } from "react";
 import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
 import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
 import Wrapper from "../../../components/layout/Wrapper";

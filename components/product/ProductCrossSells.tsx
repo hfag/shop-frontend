@@ -6,7 +6,6 @@ import {
   GET_PRODUCT_BY_SLUG,
 } from "../../gql/product";
 import { FaEdit } from "react-icons/fa";
-import { FunctionComponent, useCallback, useState } from "react";
 import { Product, ProductRecommendation, Query } from "../../schema";
 import { defineMessages, useIntl } from "react-intl";
 import { mutate } from "swr";
@@ -16,6 +15,7 @@ import Card from "../layout/Card";
 import Flex from "../layout/Flex";
 import Flexbar from "../layout/Flexbar";
 import ProductItem from "./ProductItem";
+import React, { FunctionComponent, useCallback, useState } from "react";
 import RestrictedView from "../elements/RestrictedView";
 import dynamic from "next/dynamic";
 import form from "../../i18n/form";

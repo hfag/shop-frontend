@@ -111,7 +111,7 @@ const IconRow = styled.div`
   align-items: center;
 `;
 
-const Footer: FunctionComponent<{}> = React.memo(({}) => {
+const Footer: FunctionComponent = React.memo(() => {
   const intl = useIntl();
 
   return (

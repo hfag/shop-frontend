@@ -106,7 +106,9 @@ const LatestPosts: FunctionComponent<{ posts?: PostType[] }> = React.memo(
               ))
             : new Array(6)
                 .fill(undefined)
-                .map((_) => <Post intl={intl} post={undefined} />)}
+                .map((_, index) => (
+                  <Post key={index} intl={intl} post={undefined} />
+                ))}
         </Flex>
       </div>
     );

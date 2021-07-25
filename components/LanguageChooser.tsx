@@ -1,6 +1,6 @@
-import { FunctionComponent } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import ClipLoader from "react-spinners/ClipLoader";
+import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 import useSWR from "swr";
 

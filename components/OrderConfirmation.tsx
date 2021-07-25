@@ -1,5 +1,5 @@
 import { FormattedMessage, defineMessages, useIntl } from "react-intl";
-import { FunctionComponent, useMemo } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import useSWR from "swr";
 
 import { ABSOLUTE_URL } from "../utilities/api";
@@ -43,7 +43,7 @@ const messages = defineMessages({
   },
 });
 
-const OrderConfirmation: FunctionComponent<{}> = () => {
+const OrderConfirmation: FunctionComponent = () => {
   const intl = useIntl();
   const router = useRouter();
 

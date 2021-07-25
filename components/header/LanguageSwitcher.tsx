@@ -18,7 +18,7 @@ const Language = styled.div`
   margin-right: 0.5rem;
 `;
 
-const LanguageSwitcher: FunctionComponent<{}> = React.memo(() => {
+const LanguageSwitcher: FunctionComponent = React.memo(() => {
   const intl = useIntl();
 
   return (

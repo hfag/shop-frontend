@@ -88,7 +88,7 @@ const HtmlHead: FunctionComponent<{ intl: IntlShape }> = React.memo(
   )
 );
 
-const Header: FunctionComponent<{}> = React.memo(({}) => {
+const Header: FunctionComponent = React.memo(() => {
   const intl = useIntl();
   const { toggleBurgerMenu } = useContext(AppContext);
   const [dropdown, setDropdown] = useState<string | boolean>(false);

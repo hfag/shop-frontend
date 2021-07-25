@@ -491,10 +491,7 @@ const Product: FunctionComponent<{
                       mutate([GET_ACTIVE_ORDER, token]);
 
                       if (crosssellRef.current) {
-                        const el = ReactDOM.findDOMNode(crosssellRef.current);
-                        if ("scrollIntoView" in el) {
-                          el.scrollIntoView();
-                        }
+                        crosssellRef.current.scrollIntoView();
                       }
 
                       return true;

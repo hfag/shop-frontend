@@ -1,6 +1,6 @@
-import { FunctionComponent, memo } from "react";
 import { MappedBlock } from "../../utilities/wordpress";
 import LightboxGallery from "./LightboxGallery";
+import React, { FunctionComponent, memo } from "react";
 import StyledImage from "../elements/StyledImage";
 import UnsafeHTMLContent from "./UnsafeHTMLContent";
 

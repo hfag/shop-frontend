@@ -1,5 +1,5 @@
 import { FaChevronDown as ChevronDown } from "react-icons/fa";
-import { FunctionComponent, ReactNode } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 
 import { Breadcrumb } from "../../Breadcrumbs";
 import { useIntl } from "react-intl";

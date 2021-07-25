@@ -37,7 +37,7 @@ const DashboardWrapper = styled.div`
   }
 `;
 
-const AccountDashboard: FunctionComponent<{}> = React.memo(() => {
+const AccountDashboard: FunctionComponent = React.memo(() => {
   const { user, customer, token } = useContext(AppContext);
   const intl = useIntl();
 

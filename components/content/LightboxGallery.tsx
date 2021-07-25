@@ -94,7 +94,7 @@ const reducer = (
   }
 };
 
-const LightboxGallery = <Image extends {}>({
+const LightboxGallery = <Image extends any>({
   images,
   imageToUrl,
   imageToPreviewElement,

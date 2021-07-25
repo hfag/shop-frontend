@@ -1,4 +1,8 @@
 {
+  "index": {
+    "path": "de/index.tsx",
+    "languages": { "de": "index", "fr": "index" }
+  },
   "search": {
     "path": "de/suche.tsx",
     "languages": { "de": "suche", "fr": "recherche" }

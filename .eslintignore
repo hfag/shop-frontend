@@ -2,3 +2,4 @@ node_modules
 .next
 .git
 next.config.js
+config.ts

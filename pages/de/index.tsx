@@ -126,7 +126,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       posts: await fetch(
         `${getWordpressUrl(
           locale
-        )}/wp-json/wp/v2/posts?per_page=10&orderby=date&order=desc&_embed`
+        )}/wp-json/wp/v2/posts?per_page=20&orderby=date&order=desc&_embed`
       )
         .then((r) => r.json())
         .then((posts: WP_Post[]) => posts.map(mapPost)),

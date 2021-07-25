@@ -1,15 +1,15 @@
+import { defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent, useContext } from "react";
 import styled from "@emotion/styled";
-import { defineMessages, useIntl } from "react-intl";
 
-import StyledLink from "../elements/StyledLink";
+import { AppContext } from "../AppWrapper";
+import { pathnamesByLanguage } from "../../utilities/urls";
 import Dropdown from "../elements/Dropdown";
 import RestrictedView from "../elements/RestrictedView";
-import { pathnamesByLanguage } from "../../utilities/urls";
+import StyledLink from "../elements/StyledLink";
 import Triangle from "../shapes/Triangle";
-import userMessages from "../../i18n/user";
 import page from "../../i18n/page";
-import { AppContext } from "../AppWrapper";
+import userMessages from "../../i18n/user";
 
 const messages = defineMessages({
   toAccount: {

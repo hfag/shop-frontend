@@ -1,6 +1,6 @@
+import { Asset as AssetType, Maybe, SearchResultAsset } from "../../schema";
 import React, { FunctionComponent } from "react";
 import StyledImage from "./StyledImage";
-import { Asset as AssetType, Maybe, SearchResultAsset } from "../../schema";
 /**
  * Renders a thumbnail
  */

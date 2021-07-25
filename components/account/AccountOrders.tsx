@@ -1,15 +1,15 @@
-import React, { FunctionComponent, useContext } from "react";
-import styled from "@emotion/styled";
-import { useIntl } from "react-intl";
-import { Order as OrderType } from "../../schema";
-import orderMessages from "../../i18n/order";
-import Table from "../elements/Table";
-import Price from "../elements/Price";
-import StyledLink from "../elements/StyledLink";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import Placeholder from "../elements/Placeholder";
-import { Unavailable } from "../administrator/Unavailable";
 import { AppContext } from "../AppWrapper";
+import { Order as OrderType } from "../../schema";
+import { Unavailable } from "../administrator/Unavailable";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { useIntl } from "react-intl";
+import Placeholder from "../elements/Placeholder";
+import Price from "../elements/Price";
+import React, { FunctionComponent, useContext } from "react";
+import StyledLink from "../elements/StyledLink";
+import Table from "../elements/Table";
+import orderMessages from "../../i18n/order";
+import styled from "@emotion/styled";
 
 const OrdersWrapper = styled.div`
   h2 {

@@ -1,14 +1,14 @@
+import { AppContext } from "../AppWrapper";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { useIntl } from "react-intl";
+import { useRouter } from "next/router";
 import React, {
   FunctionComponent,
-  useEffect,
-  useState,
   ReactNode,
   useContext,
+  useEffect,
+  useState,
 } from "react";
-import { useRouter } from "next/router";
-import { useIntl } from "react-intl";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import { AppContext } from "../AppWrapper";
 
 const ScrollToTop: FunctionComponent<{ children: ReactNode }> = ({
   children,

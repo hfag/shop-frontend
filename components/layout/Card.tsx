@@ -1,7 +1,7 @@
 import React, { FunctionComponent, ReactNode } from "react";
 import styled from "@emotion/styled";
 
-import { colors, borders, shadows } from "../../utilities/style";
+import { borders, colors, shadows } from "../../utilities/style";
 
 interface IProps {
   mb?: number;

@@ -1,13 +1,13 @@
 import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
-import { colors, borders, shadows } from "../../utilities/style";
+import { IntlShape, defineMessages, useIntl } from "react-intl";
+import { Order as OrderType } from "../../schema";
+import { borders, colors, shadows } from "../../utilities/style";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import Placeholder from "./Placeholder";
 import Price from "../elements/Price";
 import StyledLink from "../elements/StyledLink";
-import { Order as OrderType } from "../../schema";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import { defineMessages, IntlShape, useIntl } from "react-intl";
-import Placeholder from "./Placeholder";
 
 const messages = defineMessages({
   order: {

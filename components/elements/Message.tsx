@@ -1,8 +1,8 @@
+import { MdInfoOutline } from "react-icons/md";
 import React from "react";
 import styled from "@emotion/styled";
-import { MdInfoOutline } from "react-icons/md";
 
-import { colors, borders } from "../../utilities/style";
+import { borders, colors } from "../../utilities/style";
 import Flexbar from "../layout/Flexbar";
 
 const MessageWrapper = styled.div`

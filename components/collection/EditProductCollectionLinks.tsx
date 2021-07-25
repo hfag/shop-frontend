@@ -1,20 +1,9 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { defineMessages, IntlShape, useIntl } from "react-intl";
-import styled from "@emotion/styled";
-import { MdDelete, MdArrowUpward } from "react-icons/md";
+import { IntlShape, defineMessages, useIntl } from "react-intl";
+import { MdArrowUpward, MdDelete } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
+import styled from "@emotion/styled";
 
-import {
-  Asset,
-  Collection,
-  CollectionLinkType,
-  LanguageCode,
-} from "../../schema";
-import Button from "../elements/Button";
-import Flexbar from "../layout/Flexbar";
-import { colors } from "../../utilities/style";
-import ActionButton from "../ActionButton";
-import { requestAdmin } from "../../utilities/request";
 import {
   ADMIN_CREATE_COLLECTION_LINK_ASSET,
   ADMIN_CREATE_COLLECTION_LINK_URL,
@@ -23,18 +12,29 @@ import {
   ADMIN_UPDATE_COLLECTION_LINK_ASSET,
   ADMIN_UPDATE_COLLECTION_LINK_URL,
 } from "../../gql/collection";
-import useSWR, { mutate } from "swr";
+import {
+  Asset,
+  Collection,
+  CollectionLinkType,
+  LanguageCode,
+} from "../../schema";
 import {
   COLLECTION_LINK_TYPE_OPTIONS,
   DownloadList,
   ICON_BY_COLLECTION_LINK_TYPE,
 } from "./ProductCollectionLinks";
-import LanguageChooser from "../LanguageChooser";
-import { FieldArray, FormikProps, withFormik } from "formik";
-import SelectField from "../form/SelectField";
-import InputField from "../form/InputField";
-import AssetField from "../form/AssetField";
 import { DEFAULT_LANGUAGE } from "../../utilities/i18n";
+import { FieldArray, FormikProps, withFormik } from "formik";
+import { colors } from "../../utilities/style";
+import { requestAdmin } from "../../utilities/request";
+import ActionButton from "../ActionButton";
+import AssetField from "../form/AssetField";
+import Button from "../elements/Button";
+import Flexbar from "../layout/Flexbar";
+import InputField from "../form/InputField";
+import LanguageChooser from "../LanguageChooser";
+import SelectField from "../form/SelectField";
+import useSWR, { mutate } from "swr";
 
 const messages = defineMessages({
   saveLinks: {

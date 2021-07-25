@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from "react";
-import styled from "@emotion/styled";
 import { Field } from "formik";
+import React, { FunctionComponent } from "react";
 import get from "lodash/get";
+import styled from "@emotion/styled";
 
-import Select from "../elements/Select";
 import { colors } from "../../utilities/style";
 import { defineMessages, useIntl } from "react-intl";
+import Select from "../elements/Select";
 
 const messages = defineMessages({
   optional: {

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { colors, borders } from "../../utilities/style";
+import { borders, colors } from "../../utilities/style";
 
 export const InputFieldWrapper = styled.div<{
   checkbox?: boolean;

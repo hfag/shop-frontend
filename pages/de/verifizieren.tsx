@@ -1,11 +1,11 @@
-import Wrapper from "../../components/layout/Wrapper";
-import { useIntl } from "react-intl";
-import page from "../../i18n/page";
-import VerifyEmail from "../../components/VerifyEmail";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { withApp } from "../../components/AppWrapper";
 import { locale, messages } from "./config";
 import { pathnamesByLanguage } from "../../utilities/urls";
+import { useIntl } from "react-intl";
+import { withApp } from "../../components/AppWrapper";
+import VerifyEmail from "../../components/VerifyEmail";
+import Wrapper from "../../components/layout/Wrapper";
+import page from "../../i18n/page";
 
 const Page = () => {
   const intl = useIntl();

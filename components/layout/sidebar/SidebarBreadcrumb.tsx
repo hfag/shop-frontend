@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { colors, borders } from "../../../utilities/style";
+import { borders, colors } from "../../../utilities/style";
 
 const SidebarBreadcrumb = styled.div<{ active?: boolean }>`
   padding: 0.25rem;

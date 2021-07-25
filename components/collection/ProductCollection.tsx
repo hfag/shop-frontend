@@ -1,26 +1,26 @@
-import React, { useEffect, useMemo, FunctionComponent } from "react";
-import { useIntl, defineMessages } from "react-intl";
-import styled from "@emotion/styled";
 import { Product as JsonLdProduct } from "schema-dts";
+import { defineMessages, useIntl } from "react-intl";
+import React, { FunctionComponent, useEffect, useMemo } from "react";
+import styled from "@emotion/styled";
 
-import Flex from "../layout/Flex";
-import CollectionItem from "./CollectionItem";
-import ProductItem from "../product/ProductItem";
-import JsonLd from "../seo/JsonLd";
-import { stripTags } from "../../utilities/decode";
+import { ABSOLUTE_URL } from "../../utilities/api";
+import { Collection, CollectionLinkType } from "../../schema";
 import { pathnamesByLanguage } from "../../utilities/urls";
-import shop from "../../i18n/shop";
 import {
   setProductCategoryView,
   trackPageView,
 } from "../../utilities/analytics";
+import { stripTags } from "../../utilities/decode";
+import CollectionItem from "./CollectionItem";
+import Flex from "../layout/Flex";
 import Head from "next/head";
-import { Collection, CollectionLinkType } from "../../schema";
-import { ABSOLUTE_URL } from "../../utilities/api";
+import JsonLd from "../seo/JsonLd";
+import ProductItem from "../product/ProductItem";
+import shop from "../../i18n/shop";
 
-import ProductCollectionLinks from "./ProductCollectionLinks";
 import { productToJsonLd } from "../../utilities/json-ld";
 import Box from "../layout/Box";
+import ProductCollectionLinks from "./ProductCollectionLinks";
 
 const H1 = styled.h1`
   margin: 0 0 0.5rem 0;

@@ -1,8 +1,8 @@
-import React from "react";
 import { keyframes } from "@emotion/core";
+import React from "react";
 import styled from "@emotion/styled";
 
-import { colors, borders } from "../../utilities/style";
+import { borders, colors } from "../../utilities/style";
 
 const pulse = keyframes`
 	0%{

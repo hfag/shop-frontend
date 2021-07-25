@@ -1,16 +1,16 @@
-import Wrapper from "../../../components/layout/Wrapper";
+import { AppContext, withApp } from "../../../components/AppWrapper";
+import { GetStaticProps } from "next";
+import { Unavailable } from "../../../components/administrator/Unavailable";
+import { defineMessages, useIntl } from "react-intl";
+import { locale, messages } from "../config";
+import { pathnamesByLanguage } from "../../../utilities/urls";
+import { useContext, useState } from "react";
 import AccountForm from "../../../components/account/AccountForm";
 import AccountWrapper from "../../../components/account/AccountWrapper";
-import { useIntl, defineMessages } from "react-intl";
-import { useState, useContext } from "react";
-import Placeholder from "../../../components/elements/Placeholder";
 import Message from "../../../components/elements/Message";
-import { pathnamesByLanguage } from "../../../utilities/urls";
+import Placeholder from "../../../components/elements/Placeholder";
+import Wrapper from "../../../components/layout/Wrapper";
 import page from "../../../i18n/page";
-import { Unavailable } from "../../../components/administrator/Unavailable";
-import { GetStaticProps } from "next";
-import { AppContext, withApp } from "../../../components/AppWrapper";
-import { locale, messages } from "../config";
 
 const detailMessages = defineMessages({
   newEmail: {

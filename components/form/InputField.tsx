@@ -1,10 +1,10 @@
-import React, { FunctionComponent, ReactNode } from "react";
 import { Field } from "formik";
-import styled from "@emotion/styled";
+import React, { FunctionComponent, ReactNode } from "react";
 import get from "lodash/get";
+import styled from "@emotion/styled";
 
-import { colors, borders } from "../../utilities/style";
 import { InputFieldWrapper } from "./InputFieldWrapper";
+import { borders, colors } from "../../utilities/style";
 
 const ValidationErrors = styled.div`
   color: ${colors.danger};

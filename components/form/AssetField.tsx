@@ -1,15 +1,15 @@
-import { Field } from "formik";
-import get from "lodash/get";
-import { FunctionComponent, useState } from "react";
 import { FaFile } from "react-icons/fa";
-import { defineMessages, useIntl } from "react-intl";
-import styled from "@emotion/styled";
+import { Field } from "formik";
+import { FunctionComponent, useState } from "react";
+import { InputFieldWrapper } from "./InputFieldWrapper";
 import { borders, colors } from "../../utilities/style";
+import { defineMessages, useIntl } from "react-intl";
 import ClientOnlyPortal from "../ClientOnlyPortal";
 import FileChooser from "../choosers/FileChooser";
 import Flexbar from "../layout/Flexbar";
 import Modal from "../Modal";
-import { InputFieldWrapper } from "./InputFieldWrapper";
+import get from "lodash/get";
+import styled from "@emotion/styled";
 
 const messages = defineMessages({
   fileSelection: {

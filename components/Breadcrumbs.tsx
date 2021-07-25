@@ -1,12 +1,12 @@
+import { ABSOLUTE_URL } from "../utilities/api";
+import { stripTags } from "../utilities/decode";
+import { useIntl } from "react-intl";
+import Breadcrumb from "./Breadcrumb";
+import Card from "./layout/Card";
+import JsonLd from "./seo/JsonLd";
+import Placeholder from "./elements/Placeholder";
 import React, { FunctionComponent } from "react";
 import StyledLink from "./elements/StyledLink";
-import Card from "./layout/Card";
-import Placeholder from "./elements/Placeholder";
-import JsonLd from "./seo/JsonLd";
-import Breadcrumb from "./Breadcrumb";
-import { stripTags } from "../utilities/decode";
-import { ABSOLUTE_URL } from "../utilities/api";
-import { useIntl } from "react-intl";
 import page from "../i18n/page";
 
 /**

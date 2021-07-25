@@ -1,24 +1,24 @@
-import React, {
-  useEffect,
-  useMemo,
-  FunctionComponent,
-  useContext,
-} from "react";
-import styled from "@emotion/styled";
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
+import styled from "@emotion/styled";
 
-import Asset from "../elements/Asset";
-import Placeholder from "../elements/Placeholder";
-import { colors, borders, shadows } from "../../utilities/style";
-import Price from "../elements/Price";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import { Product, SearchResult } from "../../schema";
-import StyledLink from "../elements/StyledLink";
-import Box from "../layout/Box";
-import search from "../../i18n/search";
-import { notEmpty } from "../../utilities/typescript";
 import { AppContext } from "../AppWrapper";
+import { Product, SearchResult } from "../../schema";
+import { borders, colors, shadows } from "../../utilities/style";
+import { notEmpty } from "../../utilities/typescript";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import Asset from "../elements/Asset";
+import Box from "../layout/Box";
+import Placeholder from "../elements/Placeholder";
+import Price from "../elements/Price";
+import StyledLink from "../elements/StyledLink";
+import search from "../../i18n/search";
 
 const messages = defineMessages({
   discountForResellers: {

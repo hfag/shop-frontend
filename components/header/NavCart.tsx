@@ -1,23 +1,23 @@
-import React, { FunctionComponent, useContext, useEffect } from "react";
-import styled from "@emotion/styled";
 import { FaShoppingCart } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
+import React, { FunctionComponent, useContext, useEffect } from "react";
+import styled from "@emotion/styled";
 
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import Link from "../elements/StyledLink";
-import Dropdown from "../elements/Dropdown";
-import Circle from "../shapes/Circle";
-import Button from "../elements/Button";
-import Triangle from "../shapes/Triangle";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import { colors } from "../../utilities/style";
-import request from "../../utilities/request";
+import { AppContext } from "../AppWrapper";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
 import { Order, Query } from "../../schema";
-import Placeholder from "../elements/Placeholder";
+import { colors } from "../../utilities/style";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { useRouter } from "next/router";
 import Asset from "../elements/Asset";
-import { AppContext } from "../AppWrapper";
+import Button from "../elements/Button";
+import Circle from "../shapes/Circle";
+import Dropdown from "../elements/Dropdown";
+import Link from "../elements/StyledLink";
+import Placeholder from "../elements/Placeholder";
+import Triangle from "../shapes/Triangle";
+import request from "../../utilities/request";
+import useSWR from "swr";
 
 const messages = defineMessages({
   emptyCart: {

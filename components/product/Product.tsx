@@ -1,57 +1,57 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, {
   FunctionComponent,
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
   useCallback,
   useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 import ReactDOM from "react-dom";
 import styled from "@emotion/styled";
-import { FormattedMessage, useIntl } from "react-intl";
 
-import Card from "../layout/Card";
-import Table from "../elements/Table";
-import Button from "../elements/Button";
-import Price from "../elements/Price";
-import Select from "../elements/Select";
-import VariationSlider from "./VariationSlider";
-import { colors, borders } from "../../utilities/style";
-import { stripTags } from "../../utilities/decode";
-import Bill from "../elements/Bill";
-import JsonLd from "../seo/JsonLd";
-import { productToJsonLd } from "../../utilities/json-ld";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import productMessages from "../../i18n/product";
-import { setProductView, trackPageView } from "../../utilities/analytics";
-import LightboxGallery from "../content/LightboxGallery";
-import UnsafeHTMLContent from "../content/UnsafeHTMLContent";
-import messages from "../../i18n/product";
-import {
-  Product as ProductType,
-  ProductOptionGroup,
-  ProductOption,
-  ProductVariant,
-  BulkDiscount,
-  RecommendationType,
-  Mutation,
-} from "../../schema";
 import { ABSOLUTE_URL } from "../../utilities/api";
-import Head from "next/head";
-import StyledLink from "../elements/StyledLink";
-import request from "../../utilities/request";
 import { ADD_TO_ORDER, GET_ACTIVE_ORDER } from "../../gql/order";
-import { mutate } from "swr";
-import Placeholder from "../elements/Placeholder";
-import ProductCrossSells from "./ProductCrossSells";
-import Flex from "../layout/Flex";
-import Box from "../layout/Box";
 import { AppContext } from "../AppWrapper";
-import { isClient } from "../../utilities/ssr";
+import {
+  BulkDiscount,
+  Mutation,
+  ProductOption,
+  ProductOptionGroup,
+  Product as ProductType,
+  ProductVariant,
+  RecommendationType,
+} from "../../schema";
+import { borders, colors } from "../../utilities/style";
 import { errorCodeToMessage } from "../../utilities/i18n";
-import Asset from "../elements/Asset";
+import { isClient } from "../../utilities/ssr";
+import { mutate } from "swr";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { productToJsonLd } from "../../utilities/json-ld";
+import { setProductView, trackPageView } from "../../utilities/analytics";
+import { stripTags } from "../../utilities/decode";
 import { useRouter } from "next/router";
+import Asset from "../elements/Asset";
+import Bill from "../elements/Bill";
+import Box from "../layout/Box";
+import Button from "../elements/Button";
+import Card from "../layout/Card";
+import Flex from "../layout/Flex";
+import Head from "next/head";
+import JsonLd from "../seo/JsonLd";
+import LightboxGallery from "../content/LightboxGallery";
+import Placeholder from "../elements/Placeholder";
+import Price from "../elements/Price";
+import ProductCrossSells from "./ProductCrossSells";
+import Select from "../elements/Select";
+import StyledLink from "../elements/StyledLink";
+import Table from "../elements/Table";
+import UnsafeHTMLContent from "../content/UnsafeHTMLContent";
+import VariationSlider from "./VariationSlider";
+import messages from "../../i18n/product";
+import productMessages from "../../i18n/product";
+import request from "../../utilities/request";
 
 const ProductCard = styled(Card)`
   margin-bottom: 0;

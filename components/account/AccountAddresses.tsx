@@ -1,22 +1,22 @@
-import React, { FunctionComponent, useCallback, useContext } from "react";
-import styled from "@emotion/styled";
+import { Address as AddressType, Mutation } from "../../schema";
+import { AppContext } from "../AppWrapper";
+import { DELETE_CUSTOMER_ADDRESS, GET_CURRENT_CUSTOMER } from "../../gql/user";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { useIntl, defineMessages } from "react-intl";
-import { Address as AddressType, Mutation } from "../../schema";
-import Table from "../elements/Table";
-import StyledLink from "../elements/StyledLink";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import Placeholder from "../elements/Placeholder";
-import { GET_CURRENT_CUSTOMER, DELETE_CUSTOMER_ADDRESS } from "../../gql/user";
-import address from "../../i18n/address";
-import request from "../../utilities/request";
+import { Unavailable } from "../administrator/Unavailable";
+import { defineMessages, useIntl } from "react-intl";
 import { mutate } from "swr";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { useRouter } from "next/router";
 import ActionButton from "../ActionButton";
 import Button from "../elements/Button";
-import { useRouter } from "next/router";
-import { Unavailable } from "../administrator/Unavailable";
-import { AppContext } from "../AppWrapper";
+import Placeholder from "../elements/Placeholder";
+import React, { FunctionComponent, useCallback, useContext } from "react";
+import StyledLink from "../elements/StyledLink";
+import Table from "../elements/Table";
+import address from "../../i18n/address";
+import request from "../../utilities/request";
+import styled from "@emotion/styled";
 
 const messages = defineMessages({
   address: {

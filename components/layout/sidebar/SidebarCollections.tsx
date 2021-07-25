@@ -1,17 +1,17 @@
-import { FunctionComponent, ReactNode } from "react";
 import { FaChevronDown as ChevronDown } from "react-icons/fa";
+import { FunctionComponent, ReactNode } from "react";
 
+import { Collection } from "../../../schema";
+import { colors } from "../../../utilities/style";
+import { pathnamesByLanguage } from "../../../utilities/urls";
+import { useIntl } from "react-intl";
+import Placeholder from "../../elements/Placeholder";
+import SidebarBreadcrumb from "./SidebarBreadcrumb";
 import SidebarListWrapper from "./SidebarListWrapper";
 import StyledLink from "../../elements/StyledLink";
 import page from "../../../i18n/page";
-import SidebarBreadcrumb from "./SidebarBreadcrumb";
-import { useIntl } from "react-intl";
-import Placeholder from "../../elements/Placeholder";
-import { Collection } from "../../../schema";
-import styled from "@emotion/styled";
 import product from "../../../i18n/product";
-import { colors } from "../../../utilities/style";
-import { pathnamesByLanguage } from "../../../utilities/urls";
+import styled from "@emotion/styled";
 
 const H4 = styled.h4`
   margin: 1rem 0 0 0;

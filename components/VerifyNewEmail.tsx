@@ -1,15 +1,15 @@
-import { FunctionComponent, useMemo, useCallback, useState } from "react";
+import { FunctionComponent, useCallback, useMemo, useState } from "react";
 import { IntlShape, defineMessages, useIntl } from "react-intl";
-import page from "../i18n/page";
+import { Mutation } from "../schema";
 import { UPDATE_CUSTOMER_EMAIL } from "../gql/user";
-import Button from "./elements/Button";
-import request from "../utilities/request";
+import { errorCodeToMessage } from "../utilities/i18n";
+import { pathnamesByLanguage } from "../utilities/urls";
 import { useRouter } from "next/router";
+import Button from "./elements/Button";
 import Card from "./layout/Card";
 import Message from "./elements/Message";
-import { pathnamesByLanguage } from "../utilities/urls";
-import { Mutation } from "../schema";
-import { errorCodeToMessage } from "../utilities/i18n";
+import page from "../i18n/page";
+import request from "../utilities/request";
 
 const messages = defineMessages({
   verifyNewEmail: {

@@ -1,13 +1,13 @@
+import { LazyImage } from "react-lazy-images";
 import React, {
+  CSSProperties,
+  FunctionComponent,
   useEffect,
   useMemo,
-  FunctionComponent,
-  CSSProperties,
 } from "react";
-import { LazyImage } from "react-lazy-images";
 
-import Placeholder from "./Placeholder";
 import { borders } from "../../utilities/style";
+import Placeholder from "./Placeholder";
 
 const css: CSSProperties = {
   width: "100%",

@@ -1,22 +1,22 @@
+import { FaFilm, FaLink, FaRegFilePdf } from "react-icons/fa";
 import { FunctionComponent, useCallback, useContext, useState } from "react";
 import { defineMessages, useIntl } from "react-intl";
 import styled from "@emotion/styled";
-import { FaRegFilePdf, FaLink, FaFilm } from "react-icons/fa";
 
+import { ASSET_URL } from "../../utilities/api";
 import { Collection, CollectionLinkType } from "../../schema";
-import Button from "../elements/Button";
-import Flexbar from "../layout/Flexbar";
-import StyledLink from "../elements/StyledLink";
-import RestrictedView from "../elements/RestrictedView";
-import { IconType } from "react-icons/lib";
 import {
   GET_COLLECTION_BY_ID,
   GET_COLLECTION_BY_SLUG,
 } from "../../gql/collection";
+import { IconType } from "react-icons/lib";
 import { mutate } from "swr";
-import EditProductCollectionLinks from "./EditProductCollectionLinks";
-import { ASSET_URL } from "../../utilities/api";
 import Box from "../layout/Box";
+import Button from "../elements/Button";
+import EditProductCollectionLinks from "./EditProductCollectionLinks";
+import Flexbar from "../layout/Flexbar";
+import RestrictedView from "../elements/RestrictedView";
+import StyledLink from "../elements/StyledLink";
 
 const messages = defineMessages({
   downloadsAndLinks: {

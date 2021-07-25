@@ -1,26 +1,26 @@
-import { GetStaticProps, GetStaticPaths } from "next";
-import { FunctionComponent } from "react";
-import { useIntl, defineMessages } from "react-intl";
-import styled from "@emotion/styled";
-import useSWR from "swr";
-import { GET_COLLECTION_BY_ID } from "../../gql/collection";
-import ProductCollection from "../../components/collection/ProductCollection";
 import { Collection, Query } from "../../schema";
-import Wrapper from "../../components/layout/Wrapper";
-import request from "../../utilities/request";
-import { locale, messages } from "./config";
-import Card from "../../components/layout/Card";
-import StyledLink from "../../components/elements/StyledLink";
-import { pathnamesByLanguage, pageSlugsByLanguage } from "../../utilities/urls";
-import LatestPosts from "../../components/LatestPosts";
+import { FunctionComponent } from "react";
+import { GET_COLLECTION_BY_ID } from "../../gql/collection";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { Post, WP_Post, mapPost } from "../../utilities/wordpress";
 import { WP_BLOG_URL, getWordpressUrl } from "../../utilities/api";
+import { defineMessages, useIntl } from "react-intl";
+import { locale, messages } from "./config";
+import { pageSlugsByLanguage, pathnamesByLanguage } from "../../utilities/urls";
+import { withApp } from "../../components/AppWrapper";
+import Card from "../../components/layout/Card";
+import LatestPosts from "../../components/LatestPosts";
+import ProductCollection from "../../components/collection/ProductCollection";
 import SaleProducts from "../../components/SaleProducts";
+import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb";
 import SidebarBreadcrumbs from "../../components/layout/sidebar/SidebarBreadcrumbs";
 import SidebarCollections from "../../components/layout/sidebar/SidebarCollections";
 import SidebarProducts from "../../components/layout/sidebar/SidebarProducts";
-import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb";
-import { withApp } from "../../components/AppWrapper";
+import StyledLink from "../../components/elements/StyledLink";
+import Wrapper from "../../components/layout/Wrapper";
+import request from "../../utilities/request";
+import styled from "@emotion/styled";
+import useSWR from "swr";
 
 const homeMessages = defineMessages({
   moreAboutCompany: {

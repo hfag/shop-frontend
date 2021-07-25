@@ -1,20 +1,20 @@
+import { FunctionComponent, useMemo } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { useIntl } from "react-intl";
-import { getWordpressUrl } from "../../../utilities/api";
 import {
+  Post as PostType,
   WP_Post,
   mapPost,
-  Post as PostType,
 } from "../../../utilities/wordpress";
+import { getWordpressUrl } from "../../../utilities/api";
 import { locale, messages } from "../config";
-import { FunctionComponent, useMemo } from "react";
-import useSWR from "swr";
-import Wrapper from "../../../components/layout/Wrapper";
 import { pathnamesByLanguage } from "../../../utilities/urls";
-import Post from "../../../components/Post";
-import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
-import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
+import { useIntl } from "react-intl";
 import { withApp } from "../../../components/AppWrapper";
+import Post from "../../../components/Post";
+import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
+import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
+import Wrapper from "../../../components/layout/Wrapper";
+import useSWR from "swr";
 
 const Page: FunctionComponent<{ slug: string; post: PostType }> = ({
   slug,

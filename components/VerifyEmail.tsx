@@ -1,19 +1,19 @@
-import { FunctionComponent, useMemo } from "react";
-import { withFormik, Form, FormikProps } from "formik";
 import * as yup from "yup";
+import { Form, FormikProps, withFormik } from "formik";
+import { FunctionComponent, useMemo } from "react";
 import { IntlShape, defineMessages, useIntl } from "react-intl";
-import InputField from "./form/InputField";
-import user from "../i18n/user";
-import page from "../i18n/page";
-import { VERIFY_ACCOUNT } from "../gql/authentication";
-import Button from "./elements/Button";
-import request from "../utilities/request";
-import { mutate } from "swr";
-import { useRouter, NextRouter } from "next/router";
-import Card from "./layout/Card";
-import { pathnamesByLanguage } from "../utilities/urls";
 import { Mutation } from "../schema";
+import { NextRouter, useRouter } from "next/router";
+import { VERIFY_ACCOUNT } from "../gql/authentication";
 import { errorCodeToMessage } from "../utilities/i18n";
+import { mutate } from "swr";
+import { pathnamesByLanguage } from "../utilities/urls";
+import Button from "./elements/Button";
+import Card from "./layout/Card";
+import InputField from "./form/InputField";
+import page from "../i18n/page";
+import request from "../utilities/request";
+import user from "../i18n/user";
 
 const messages = defineMessages({
   verifyEmail: {

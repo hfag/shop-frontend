@@ -1,32 +1,32 @@
-import React, { FunctionComponent, useMemo } from "react";
-import { withFormik, Form, Field, FormikProps } from "formik";
 import * as yup from "yup";
-import { defineMessages, IntlShape } from "react-intl";
+import { Field, Form, FormikProps, withFormik } from "formik";
+import { IntlShape, defineMessages } from "react-intl";
+import React, { FunctionComponent, useMemo } from "react";
 
-import Button from "../elements/Button";
-import InputField from "../form/InputField";
 import { CreateAddressInput, Mutation, Order, Query } from "../../schema";
-import request from "../../utilities/request";
 import {
   GET_ACTIVE_ORDER,
-  ORDER_SET_SHIPPING_METHOD,
-  ORDER_GET_SHIPPING_METHODS,
-  TRANSITION_ORDER_AND_ADD_PAYMENT,
   ORDER_ADD_PAYMENT,
+  ORDER_GET_SHIPPING_METHODS,
   ORDER_SET_CUSTOM_FIELDS,
+  ORDER_SET_SHIPPING_METHOD,
+  TRANSITION_ORDER_AND_ADD_PAYMENT,
 } from "../../gql/order";
-import useSWR, { mutate } from "swr";
+import { NextRouter } from "next/router";
+import { errorCodeToMessage } from "../../utilities/i18n";
+import { pageSlugsByLanguage, pathnamesByLanguage } from "../../utilities/urls";
+import Box from "../layout/Box";
+import Button from "../elements/Button";
+import Flex from "../layout/Flex";
+import InlinePage from "../InlinePage";
+import InputField from "../form/InputField";
 import Placeholder from "../elements/Placeholder";
 import Price from "../elements/Price";
 import Table from "../elements/Table";
-import product from "../../i18n/product";
 import orderMessages from "../../i18n/order";
-import { NextRouter } from "next/router";
-import { pathnamesByLanguage, pageSlugsByLanguage } from "../../utilities/urls";
-import InlinePage from "../InlinePage";
-import Flex from "../layout/Flex";
-import Box from "../layout/Box";
-import { errorCodeToMessage } from "../../utilities/i18n";
+import product from "../../i18n/product";
+import request from "../../utilities/request";
+import useSWR, { mutate } from "swr";
 
 const messages = defineMessages({
   orderComments: {

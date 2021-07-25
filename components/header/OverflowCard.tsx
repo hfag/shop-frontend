@@ -1,6 +1,6 @@
-import React, { useState, FunctionComponent, ReactNode } from "react";
-import styled from "@emotion/styled";
 import { FaChevronDown } from "react-icons/fa";
+import React, { FunctionComponent, ReactNode, useState } from "react";
+import styled from "@emotion/styled";
 
 import Card from "../layout/Card";
 

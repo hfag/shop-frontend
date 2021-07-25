@@ -1,7 +1,7 @@
+import { FaSortDown } from "react-icons/fa";
+import { borders, colors } from "../../utilities/style";
 import React, { useCallback } from "react";
 import styled from "@emotion/styled";
-import { borders, colors } from "../../utilities/style";
-import { FaSortDown } from "react-icons/fa";
 
 const StyledWrapper = styled.div<{
   width?: number;

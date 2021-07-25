@@ -1,13 +1,13 @@
-import { FunctionComponent, ReactNode } from "react";
 import { FaChevronDown as ChevronDown } from "react-icons/fa";
+import { FunctionComponent, ReactNode } from "react";
 
+import { Breadcrumb } from "../../Breadcrumbs";
+import { useIntl } from "react-intl";
+import Placeholder from "../../elements/Placeholder";
+import SidebarBreadcrumb from "./SidebarBreadcrumb";
 import SidebarListWrapper from "./SidebarListWrapper";
 import StyledLink from "../../elements/StyledLink";
 import page from "../../../i18n/page";
-import { Breadcrumb } from "../../Breadcrumbs";
-import SidebarBreadcrumb from "./SidebarBreadcrumb";
-import { useIntl } from "react-intl";
-import Placeholder from "../../elements/Placeholder";
 
 const SidebarBreadcrumbs: FunctionComponent<{
   breadcrumbs: Breadcrumb[];

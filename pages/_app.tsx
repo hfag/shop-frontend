@@ -5,10 +5,10 @@ import "../styles/global.scss";
 import "../utilities/set-yup-locale";
 
 //dependencies
-import App from "next/app";
-import React from "react";
 import { CacheProvider } from "@emotion/core";
 import { cache } from "emotion";
+import App from "next/app";
+import React from "react";
 
 interface IProps {}
 

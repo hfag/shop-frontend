@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
 import { colors } from "../../utilities/style";
+import styled from "@emotion/styled";
 
 interface IProps {
   seperator?: boolean;

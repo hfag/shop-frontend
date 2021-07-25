@@ -1,17 +1,17 @@
-import React, { useMemo, FunctionComponent, ReactNode } from "react";
-import Router, { useRouter } from "next/router";
 import { useIntl } from "react-intl";
+import React, { FunctionComponent, ReactNode, useMemo } from "react";
+import Router, { useRouter } from "next/router";
 
-import Header from "../header/Header";
+import Box from "./Box";
 import Breadcrumbs, { Breadcrumb } from "../Breadcrumbs";
-import Footer from "../Footer";
 import Container from "./Container";
-import Sidebar from "./sidebar/Sidebar";
+import Flex from "./Flex";
+import Footer from "../Footer";
+import Header from "../header/Header";
 import ScrollToTop from "../helpers/ScrollToTop";
 import ScrollToTopButton from "../helpers/ScrollToTopButton";
+import Sidebar from "./sidebar/Sidebar";
 import SupportButton from "../helpers/SupportButton";
-import Flex from "./Flex";
-import Box from "./Box";
 
 const Wrapper: FunctionComponent<{
   sidebar: ReactNode;

@@ -1,12 +1,12 @@
 import Document, {
+  DocumentContext,
+  Head,
+  Html,
   Main,
   NextScript,
-  Html,
-  Head,
-  DocumentContext,
 } from "next/document";
-import createEmotionServer from "create-emotion-server";
 import createCache from "@emotion/cache";
+import createEmotionServer from "create-emotion-server";
 
 interface IProps {
   locale: string;

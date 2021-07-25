@@ -1,13 +1,13 @@
-import React, { FunctionComponent, useMemo } from "react";
-import styled from "@emotion/styled";
 import {
-  ProductVariant,
   Asset as AssetType,
   ProductOption,
+  ProductVariant,
 } from "../../schema";
 import Asset from "../elements/Asset";
 import Box from "../layout/Box";
 import Flex from "../layout/Flex";
+import React, { FunctionComponent, useMemo } from "react";
+import styled from "@emotion/styled";
 
 const Slider = styled.div`
   & > div:first-child {

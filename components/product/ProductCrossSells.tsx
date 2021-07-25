@@ -1,26 +1,26 @@
-import ProductItem from "./ProductItem";
-import Flex from "../layout/Flex";
-import Card from "../layout/Card";
-import { FunctionComponent, useCallback, useState } from "react";
-import { Product, ProductRecommendation, Query } from "../../schema";
-import { defineMessages, useIntl } from "react-intl";
-import RestrictedView from "../elements/RestrictedView";
-import Button from "../elements/Button";
-import { useAuthenticate } from "../../utilities/hooks";
-import { FaEdit } from "react-icons/fa";
-import dynamic from "next/dynamic";
-import styled from "@emotion/styled";
-import request, { requestAdmin } from "../../utilities/request";
 import {
   ADMIN_UPDATE_CROSS_SELLS,
   ADMIN_UPDATE_UP_SELLS,
   GET_PRODUCT,
-  GET_PRODUCT_BY_SLUG,
   GET_PRODUCTS,
+  GET_PRODUCT_BY_SLUG,
 } from "../../gql/product";
-import Flexbar from "../layout/Flexbar";
-import form from "../../i18n/form";
+import { FaEdit } from "react-icons/fa";
+import { FunctionComponent, useCallback, useState } from "react";
+import { Product, ProductRecommendation, Query } from "../../schema";
+import { defineMessages, useIntl } from "react-intl";
 import { mutate } from "swr";
+import { useAuthenticate } from "../../utilities/hooks";
+import Button from "../elements/Button";
+import Card from "../layout/Card";
+import Flex from "../layout/Flex";
+import Flexbar from "../layout/Flexbar";
+import ProductItem from "./ProductItem";
+import RestrictedView from "../elements/RestrictedView";
+import dynamic from "next/dynamic";
+import form from "../../i18n/form";
+import request, { requestAdmin } from "../../utilities/request";
+import styled from "@emotion/styled";
 
 const AsyncSelect = dynamic(() => import("react-select/async"), { ssr: false });
 

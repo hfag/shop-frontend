@@ -1,11 +1,11 @@
+import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
+import ClientOnlyPortal from "../ClientOnlyPortal";
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useRef,
 } from "react";
-import ClientOnlyPortal from "../ClientOnlyPortal";
-import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
 import styled from "@emotion/styled";
 
 const Backdrop = styled.div`

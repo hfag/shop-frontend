@@ -1,9 +1,9 @@
-import React, { FunctionComponent, ReactNode } from "react";
-import PropTypes from "prop-types";
-import styled from "@emotion/styled";
 import ProgressButton from "react-progress-button";
+import PropTypes from "prop-types";
+import React, { FunctionComponent, ReactNode } from "react";
+import styled from "@emotion/styled";
 
-import { colors, borders } from "../../utilities/style";
+import { borders, colors } from "../../utilities/style";
 
 const Clearfix = styled.div`
   &:before,

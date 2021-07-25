@@ -1,14 +1,14 @@
 import { FunctionComponent } from "react";
 import { defineMessages, useIntl } from "react-intl";
-import useSWR from "swr";
 import ClipLoader from "react-spinners/ClipLoader";
 import styled from "@emotion/styled";
+import useSWR from "swr";
 
-import { colors } from "../utilities/style";
-import Select from "./elements/Select";
 import { ADMIN_GET_AVAILABLE_LANGUAGES } from "../gql/admin";
-import { requestAdmin } from "../utilities/request";
 import { LanguageCode } from "../schema";
+import { colors } from "../utilities/style";
+import { requestAdmin } from "../utilities/request";
+import Select from "./elements/Select";
 
 const messages = defineMessages({
   chooseTranslationLanguage: {

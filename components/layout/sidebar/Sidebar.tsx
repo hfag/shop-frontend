@@ -1,3 +1,12 @@
+import {
+  FaUser as AccountIcon,
+  FaShoppingCart as CartIcon,
+  FaCogs as GearsIcon,
+  FaHome as HomeIcon,
+  FaSearch as SearchIcon,
+  FaSignInAlt as SignInIcon,
+} from "react-icons/fa";
+import { useIntl } from "react-intl";
 import React, {
   FunctionComponent,
   ReactNode,
@@ -5,24 +14,15 @@ import React, {
   useContext,
 } from "react";
 import styled from "@emotion/styled";
-import {
-  FaHome as HomeIcon,
-  FaSearch as SearchIcon,
-  FaShoppingCart as CartIcon,
-  FaUser as AccountIcon,
-  FaSignInAlt as SignInIcon,
-  FaCogs as GearsIcon,
-} from "react-icons/fa";
-import { useIntl } from "react-intl";
 
-import Link from "../../elements/StyledLink";
-import { media, colors } from "../../../utilities/style";
-import MediaQuery from "../MediaQuery";
-import Card from "../Card";
-import RestrictedView from "../../elements/RestrictedView";
-import { pathnamesByLanguage } from "../../../utilities/urls";
-import page from "../../../i18n/page";
 import { AppContext } from "../../AppWrapper";
+import { colors, media } from "../../../utilities/style";
+import { pathnamesByLanguage } from "../../../utilities/urls";
+import Card from "../Card";
+import Link from "../../elements/StyledLink";
+import MediaQuery from "../MediaQuery";
+import RestrictedView from "../../elements/RestrictedView";
+import page from "../../../i18n/page";
 
 const BurgerContainer = styled(Card)<{ isOpen: boolean }>`
   height: 100%;

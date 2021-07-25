@@ -1,19 +1,19 @@
-import { GetStaticPaths, GetStaticProps } from "next";
-import Wrapper from "../../../../components/layout/Wrapper";
-import AccountWrapper from "../../../../components/account/AccountWrapper";
-import Order from "../../../../components/elements/Order";
+import { AppContext, withApp } from "../../../../components/AppWrapper";
 import { GET_ORDER_BY_CODE } from "../../../../gql/order";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { Order as OrderType, Query } from "../../../../schema";
+import { locale, messages } from "../../config";
+import { pathnamesByLanguage } from "../../../../utilities/urls";
+import { useContext } from "react";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
-import useSWR from "swr";
-import { useContext } from "react";
-import request from "../../../../utilities/request";
-import { Order as OrderType, Query } from "../../../../schema";
+import AccountWrapper from "../../../../components/account/AccountWrapper";
+import Order from "../../../../components/elements/Order";
 import Placeholder from "../../../../components/elements/Placeholder";
-import { pathnamesByLanguage } from "../../../../utilities/urls";
+import Wrapper from "../../../../components/layout/Wrapper";
 import page from "../../../../i18n/page";
-import { AppContext, withApp } from "../../../../components/AppWrapper";
-import { locale, messages } from "../../config";
+import request from "../../../../utilities/request";
+import useSWR from "swr";
 
 const Page = () => {
   const intl = useIntl();

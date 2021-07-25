@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
 import { colors, shadows } from "../../utilities/style";
+import styled from "@emotion/styled";
 
 const Navbar = styled.div`
   position: fixed;

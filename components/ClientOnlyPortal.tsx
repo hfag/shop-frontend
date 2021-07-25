@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const ClientOnlyPortal: FunctionComponent<{ selector: string }> = ({

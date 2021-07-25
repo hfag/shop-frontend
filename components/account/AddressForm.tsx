@@ -1,23 +1,23 @@
-import React from "react";
-import { withFormik, Form, FormikProps } from "formik";
-import PropTypes from "prop-types";
 import * as yup from "yup";
-import styled from "@emotion/styled";
+import { Form, FormikProps, withFormik } from "formik";
 import { IntlShape } from "react-intl";
+import PropTypes from "prop-types";
+import React from "react";
+import styled from "@emotion/styled";
 
 import {
   CREATE_CUSTOMER_ADDRESS,
-  UPDATE_CUSTOMER_ADDRESS,
   GET_CURRENT_CUSTOMER,
+  UPDATE_CUSTOMER_ADDRESS,
 } from "../../gql/user";
-import address from "../../i18n/address";
-import form from "../../i18n/form";
 import { Country, Mutation } from "../../schema";
+import { mutate } from "swr";
+import Button from "../elements/Button";
 import InputField from "../form/InputField";
 import SelectField from "../form/SelectField";
-import Button from "../elements/Button";
+import address from "../../i18n/address";
+import form from "../../i18n/form";
 import request from "../../utilities/request";
-import { mutate } from "swr";
 
 const FormWrapper = styled(Form)`
   h2 {

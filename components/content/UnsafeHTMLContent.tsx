@@ -1,9 +1,9 @@
 import React, {
-  useMemo,
-  useState,
-  useRef,
-  useEffect,
   FunctionComponent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 
 const UnsafeHTMLContent: FunctionComponent<{ content: string }> = React.memo(

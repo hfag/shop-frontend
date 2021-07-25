@@ -1,27 +1,27 @@
-import React, {
-  useState,
-  useEffect,
-  FunctionComponent,
-  useContext,
-} from "react";
+import { ABSOLUTE_URL } from "../utilities/api";
+import { AVAILABLE_COUNTRIES } from "../gql/country";
+import { AppContext } from "./AppWrapper";
+import { CreateAddressInput, Query } from "../schema";
+import { GET_ACTIVE_ORDER } from "../gql/order";
 import { defineMessages, useIntl } from "react-intl";
-import CartForm from "./cart/CartForm";
-import Card from "./layout/Card";
-import CheckoutAddressForm from "./cart/CheckoutAddressForm";
-import CheckoutForm from "./cart/CheckoutForm";
-import Button from "./elements/Button";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { trackPageView } from "../utilities/analytics";
-import { CreateAddressInput, Query } from "../schema";
+import { useRouter } from "next/router";
+import Button from "./elements/Button";
+import Card from "./layout/Card";
+import CartForm from "./cart/CartForm";
+import CheckoutAddressForm from "./cart/CheckoutAddressForm";
+import CheckoutForm from "./cart/CheckoutForm";
 import Head from "next/head";
-import { ABSOLUTE_URL } from "../utilities/api";
-import { GET_ACTIVE_ORDER } from "../gql/order";
+import Placeholder from "./elements/Placeholder";
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import request from "../utilities/request";
 import useSWR from "swr";
-import Placeholder from "./elements/Placeholder";
-import { AVAILABLE_COUNTRIES } from "../gql/country";
-import { useRouter } from "next/router";
-import { AppContext } from "./AppWrapper";
 
 const messages = defineMessages({
   siteTitle: {

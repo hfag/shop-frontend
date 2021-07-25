@@ -1,18 +1,18 @@
+import { FaPercent } from "react-icons/fa";
+import { IntlShape, defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
-import { FaPercent } from "react-icons/fa";
-import { defineMessages, useIntl, IntlShape } from "react-intl";
 
-import { colors, shadows, borders } from "../utilities/style";
-import { pathnamesByLanguage } from "../utilities/urls";
 import { Post } from "../utilities/wordpress";
-import StyledLink from "./elements/StyledLink";
-import StyledImage from "./elements/StyledImage";
-import { ProductVariant, Promotion, Product } from "../schema";
+import { Product, ProductVariant, Promotion } from "../schema";
+import { borders, colors, shadows } from "../utilities/style";
+import { pathnamesByLanguage } from "../utilities/urls";
 import Asset from "./elements/Asset";
-import Price from "./elements/Price";
-import Flex from "./layout/Flex";
 import Box from "./layout/Box";
+import Flex from "./layout/Flex";
+import Price from "./elements/Price";
+import StyledImage from "./elements/StyledImage";
+import StyledLink from "./elements/StyledLink";
 
 const messages = defineMessages({
   newsAndDiscounts: {

@@ -1,21 +1,21 @@
-import { GetStaticPaths, GetStaticProps } from "next";
 import { FunctionComponent, useMemo } from "react";
-import { Product as ProductType, Query } from "../../../schema";
-import request from "../../../utilities/request";
 import {
   GET_ALL_PRODUCT_SLUGS,
   GET_PRODUCT_BY_SLUG,
 } from "../../../gql/product";
-import Wrapper from "../../../components/layout/Wrapper";
-import Product from "../../../components/product/Product";
-import { useIntl } from "react-intl";
-import useSWR from "swr";
-import page from "../../../i18n/page";
-import { pathnamesByLanguage } from "../../../utilities/urls";
-import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
-import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { Product as ProductType, Query } from "../../../schema";
 import { locale, messages } from "../config";
+import { pathnamesByLanguage } from "../../../utilities/urls";
+import { useIntl } from "react-intl";
 import { withApp } from "../../../components/AppWrapper";
+import Product from "../../../components/product/Product";
+import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
+import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
+import Wrapper from "../../../components/layout/Wrapper";
+import page from "../../../i18n/page";
+import request from "../../../utilities/request";
+import useSWR from "swr";
 
 const Page: FunctionComponent<{
   productSlug: string;

@@ -1,14 +1,14 @@
+import { FunctionComponent } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { locale, messages } from "./config";
-import { FunctionComponent } from "react";
-import Wrapper from "../../components/layout/Wrapper";
-import { useIntl } from "react-intl";
 import { pathnamesByLanguage } from "../../utilities/urls";
-import SidebarBreadcrumbs from "../../components/layout/sidebar/SidebarBreadcrumbs";
-import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb";
+import { useIntl } from "react-intl";
+import { useRouter } from "next/router";
 import { withApp } from "../../components/AppWrapper";
 import SearchResults from "../../components/SearchResults";
-import { useRouter } from "next/router";
+import SidebarBreadcrumb from "../../components/layout/sidebar/SidebarBreadcrumb";
+import SidebarBreadcrumbs from "../../components/layout/sidebar/SidebarBreadcrumbs";
+import Wrapper from "../../components/layout/Wrapper";
 import search from "../../i18n/search";
 
 const Page: FunctionComponent<{}> = ({}) => {

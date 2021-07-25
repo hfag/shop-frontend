@@ -1,5 +1,5 @@
-import React, { ReactNode, FunctionComponent, useState } from "react";
 import { Collapse } from "react-collapse";
+import React, { FunctionComponent, ReactNode, useState } from "react";
 
 import StyledLink from "./StyledLink";
 

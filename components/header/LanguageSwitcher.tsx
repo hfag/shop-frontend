@@ -2,8 +2,8 @@ import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
 import { useIntl } from "react-intl";
-import Link from "../elements/StyledLink";
 import Flexbar from "../layout/Flexbar";
+import Link from "../elements/StyledLink";
 
 const LANGUAGES = {
   de: {

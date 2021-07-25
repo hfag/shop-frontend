@@ -1,7 +1,7 @@
 import { FunctionComponent, memo } from "react";
 import { MappedBlock } from "../../utilities/wordpress";
-import StyledImage from "../elements/StyledImage";
 import LightboxGallery from "./LightboxGallery";
+import StyledImage from "../elements/StyledImage";
 import UnsafeHTMLContent from "./UnsafeHTMLContent";
 
 interface IProps {

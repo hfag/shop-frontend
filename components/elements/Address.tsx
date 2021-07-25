@@ -1,5 +1,5 @@
-import React, { FunctionComponent, ReactNode } from "react";
 import { Address as AddressType } from "../../schema";
+import React, { FunctionComponent, ReactNode } from "react";
 
 /**
  * Represents one line in an address

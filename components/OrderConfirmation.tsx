@@ -1,22 +1,22 @@
+import { FormattedMessage, defineMessages, useIntl } from "react-intl";
 import { FunctionComponent, useMemo } from "react";
 import useSWR from "swr";
-import { useIntl, defineMessages, FormattedMessage } from "react-intl";
 
-import { Order, AdjustmentType, Adjustment, Query } from "../schema";
-import { GET_ORDER_BY_CODE } from "../gql/order";
-import request from "../utilities/request";
-import { useRouter } from "next/router";
-import Placeholder from "./elements/Placeholder";
-import CartTable from "./cart/CartTable";
-import cart from "../i18n/cart";
-import product from "../i18n/product";
-import orderMessages from "../i18n/order";
-import Asset from "./elements/Asset";
-import Price from "./elements/Price";
-import Head from "next/head";
 import { ABSOLUTE_URL } from "../utilities/api";
+import { Adjustment, AdjustmentType, Order, Query } from "../schema";
+import { GET_ORDER_BY_CODE } from "../gql/order";
 import { pathnamesByLanguage } from "../utilities/urls";
+import { useRouter } from "next/router";
+import Asset from "./elements/Asset";
+import CartTable from "./cart/CartTable";
+import Head from "next/head";
+import Placeholder from "./elements/Placeholder";
+import Price from "./elements/Price";
 import StyledLink from "./elements/StyledLink";
+import cart from "../i18n/cart";
+import orderMessages from "../i18n/order";
+import product from "../i18n/product";
+import request from "../utilities/request";
 
 const messages = defineMessages({
   siteTitle: {

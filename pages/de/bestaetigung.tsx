@@ -1,13 +1,13 @@
-import OrderConfirmation from "../../components/OrderConfirmation";
 import { FunctionComponent } from "react";
-import Wrapper from "../../components/layout/Wrapper";
-import Card from "../../components/layout/Card";
-import { useIntl } from "react-intl";
-import page from "../../i18n/page";
-import { pathnamesByLanguage } from "../../utilities/urls";
 import { GetStaticProps } from "next";
-import { withApp } from "../../components/AppWrapper";
 import { locale, messages } from "./config";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import { useIntl } from "react-intl";
+import { withApp } from "../../components/AppWrapper";
+import Card from "../../components/layout/Card";
+import OrderConfirmation from "../../components/OrderConfirmation";
+import Wrapper from "../../components/layout/Wrapper";
+import page from "../../i18n/page";
 
 const Page: FunctionComponent<{}> = () => {
   const intl = useIntl();

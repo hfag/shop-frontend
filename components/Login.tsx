@@ -1,37 +1,37 @@
+import * as yup from "yup";
+import { Form, FormikErrors, FormikProps, withFormik } from "formik";
+import { IntlShape, defineMessages, useIntl } from "react-intl";
 import React, {
-  useState,
-  useEffect,
   ReactNode,
-  useMemo,
   useCallback,
   useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
-import { withFormik, Form, FormikProps, FormikErrors } from "formik";
-import * as yup from "yup";
-import { defineMessages, useIntl, IntlShape } from "react-intl";
 
+import { ABSOLUTE_URL } from "../utilities/api";
+import { AppContext } from "./AppWrapper";
+import { GET_CURRENT_CUSTOMER } from "../gql/user";
+import { LOGIN, REGISTER, REQUEST_PASSWORD_RESET } from "../gql/authentication";
+import { Mutation, RegisterCustomerAccountResult } from "../schema";
+import { errorCodeToMessage } from "../utilities/i18n";
+import { mutate } from "swr";
 import { pathnamesByLanguage } from "../utilities/urls";
+import { trackPageView } from "../utilities/analytics";
+import { useRouter } from "next/router";
+import Box from "./layout/Box";
+import Button from "./elements/Button";
+import Card from "./layout/Card";
+import Flex from "./layout/Flex";
+import Head from "next/head";
+import InputField from "./form/InputField";
+import Message from "./elements/Message";
 import address from "../i18n/address";
+import request from "../utilities/request";
+import styled from "@emotion/styled";
 import userMessages from "../i18n/user";
 import validation from "../i18n/validation";
-import { trackPageView } from "../utilities/analytics";
-import InputField from "./form/InputField";
-import Button from "./elements/Button";
-import request from "../utilities/request";
-import { GET_CURRENT_CUSTOMER } from "../gql/user";
-import { REQUEST_PASSWORD_RESET, LOGIN, REGISTER } from "../gql/authentication";
-import Head from "next/head";
-import Card from "./layout/Card";
-import { useRouter } from "next/router";
-import { ABSOLUTE_URL } from "../utilities/api";
-import Message from "./elements/Message";
-import { mutate } from "swr";
-import Flex from "./layout/Flex";
-import Box from "./layout/Box";
-import { AppContext } from "./AppWrapper";
-import { Mutation, RegisterCustomerAccountResult } from "../schema";
-import styled from "@emotion/styled";
-import { errorCodeToMessage } from "../utilities/i18n";
 
 const messages = defineMessages({
   siteTitle: {

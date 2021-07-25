@@ -1,22 +1,22 @@
-import React, { FunctionComponent } from "react";
-import styled from "@emotion/styled";
 import {
-  FaMapMarkerAlt as MapMarker,
-  FaPhone as Phone,
   FaEnvelope as Envelope,
   FaDownload,
   FaTwitter,
+  FaMapMarkerAlt as MapMarker,
+  FaPhone as Phone,
 } from "react-icons/fa";
 import { LazyImage } from "react-lazy-images";
 import { defineMessages, useIntl } from "react-intl";
 import Container from "./layout/Container";
+import React, { FunctionComponent } from "react";
+import styled from "@emotion/styled";
 
 import { colors, media } from "../utilities/style";
-import StyledLink from "./elements/StyledLink";
-import Placeholder from "./elements/Placeholder";
-import { pathnamesByLanguage, pageSlugsByLanguage } from "../utilities/urls";
-import Flex from "./layout/Flex";
+import { pageSlugsByLanguage, pathnamesByLanguage } from "../utilities/urls";
 import Box from "./layout/Box";
+import Flex from "./layout/Flex";
+import Placeholder from "./elements/Placeholder";
+import StyledLink from "./elements/StyledLink";
 
 const messages = defineMessages({
   aboutTitle: {

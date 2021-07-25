@@ -1,9 +1,9 @@
+import { FaChevronUp } from "react-icons/fa";
+import { defineMessages, useIntl } from "react-intl";
 import React, { useCallback } from "react";
 import styled from "@emotion/styled";
-import { FaChevronUp } from "react-icons/fa";
-import { useIntl, defineMessages } from "react-intl";
 
-import { shadows, colors } from "../../utilities/style";
+import { colors, shadows } from "../../utilities/style";
 
 const messages = defineMessages({
   backToTop: {

@@ -1,25 +1,25 @@
-import React from "react";
-import { withFormik, Form, FormikProps } from "formik";
 import * as yup from "yup";
+import { Form, FormikProps, withFormik } from "formik";
+import { IntlShape, defineMessages, injectIntl, useIntl } from "react-intl";
 import PropTypes from "prop-types";
+import React from "react";
 import styled from "@emotion/styled";
-import { defineMessages, injectIntl, useIntl, IntlShape } from "react-intl";
 
-import address from "../../i18n/address";
-import form from "../../i18n/form";
-import validation from "../../i18n/validation";
-import InputField from "../form/InputField";
-import Button from "../elements/Button";
-import request from "../../utilities/request";
 import {
+  GET_CURRENT_CUSTOMER,
+  REQUEST_UPDATE_CUSTOMER_EMAIL,
   UPDATE_CUSTOMER,
   UPDATE_CUSTOMER_PASSWORD,
-  REQUEST_UPDATE_CUSTOMER_EMAIL,
-  GET_CURRENT_CUSTOMER,
 } from "../../gql/user";
-import { mutate } from "swr";
 import { Mutation } from "../../schema";
 import { errorCodeToMessage } from "../../utilities/i18n";
+import { mutate } from "swr";
+import Button from "../elements/Button";
+import InputField from "../form/InputField";
+import address from "../../i18n/address";
+import form from "../../i18n/form";
+import request from "../../utilities/request";
+import validation from "../../i18n/validation";
 
 const FormWrapper = styled(Form)`
   h2 {

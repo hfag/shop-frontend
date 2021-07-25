@@ -1,7 +1,7 @@
-import React from "react";
 import { FunctionComponent } from "react";
-import styled from "@emotion/styled";
 import { media } from "../../utilities/style";
+import React from "react";
+import styled from "@emotion/styled";
 
 const MediaBox = styled.div<{
   widthSmall: string;

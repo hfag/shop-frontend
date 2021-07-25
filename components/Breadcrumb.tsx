@@ -1,6 +1,6 @@
+import { colors } from "../utilities/style";
 import React from "react";
 import styled from "@emotion/styled";
-import { colors } from "../utilities/style";
 
 const Breadcrumb = styled.div`
   position: relative;

@@ -1,35 +1,35 @@
+import { IntlShape, defineMessages, useIntl } from "react-intl";
+import { MdMenu } from "react-icons/md";
 import React, {
-  useState,
-  useEffect,
   FunctionComponent,
   useContext,
+  useEffect,
+  useState,
 } from "react";
 import styled from "@emotion/styled";
-import { MdMenu } from "react-icons/md";
-import { defineMessages, useIntl, IntlShape } from "react-intl";
 
-import Head from "next/head";
-import Container from "../layout/Container";
-import Flexbar from "../layout/Flexbar";
-import Push from "../layout/Push";
-import MediaQuery from "../layout/MediaQuery";
-import NavItem from "./NavItem";
-import Navbar from "./Navbar";
-import Searchbar from "../Searchbar";
-import JsonLd from "../seo/JsonLd";
-import { BUSINESS_JSON_LD } from "../../utilities/json-ld";
-import LanguageSwitcher from "./LanguageSwitcher";
-import NavCart from "./NavCart";
-import NavUser from "./NavUser";
-import shop from "../../i18n/shop";
-import Card from "../layout/Card";
-import { colors } from "../../utilities/style";
-import page from "../../i18n/page";
 import { ABSOLUTE_URL, API_BASE_URL, WP_BLOG_URL } from "../../utilities/api";
-import StyledLink from "../elements/StyledLink";
-import Flex from "../layout/Flex";
-import Box from "../layout/Box";
 import { AppContext } from "../AppWrapper";
+import { BUSINESS_JSON_LD } from "../../utilities/json-ld";
+import { colors } from "../../utilities/style";
+import Box from "../layout/Box";
+import Card from "../layout/Card";
+import Container from "../layout/Container";
+import Flex from "../layout/Flex";
+import Flexbar from "../layout/Flexbar";
+import Head from "next/head";
+import JsonLd from "../seo/JsonLd";
+import LanguageSwitcher from "./LanguageSwitcher";
+import MediaQuery from "../layout/MediaQuery";
+import NavCart from "./NavCart";
+import NavItem from "./NavItem";
+import NavUser from "./NavUser";
+import Navbar from "./Navbar";
+import Push from "../layout/Push";
+import Searchbar from "../Searchbar";
+import StyledLink from "../elements/StyledLink";
+import page from "../../i18n/page";
+import shop from "../../i18n/shop";
 
 const messages = defineMessages({
   siteDescription: {

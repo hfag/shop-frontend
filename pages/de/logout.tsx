@@ -1,16 +1,16 @@
+import { GetStaticProps } from "next";
+import { LOGOUT } from "../../gql/user";
+import { Mutation } from "../../schema";
+import { defineMessages, useIntl } from "react-intl";
+import { locale, messages } from "./config";
+import { pathnamesByLanguage } from "../../utilities/urls";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import request from "../../utilities/request";
-import { useIntl, defineMessages } from "react-intl";
-import { LOGOUT } from "../../gql/user";
+import { withApp } from "../../components/AppWrapper";
+import Card from "../../components/layout/Card";
 import Wrapper from "../../components/layout/Wrapper";
 import page from "../../i18n/page";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import Card from "../../components/layout/Card";
-import { GetStaticProps } from "next";
-import { withApp } from "../../components/AppWrapper";
-import { locale, messages } from "./config";
-import { Mutation } from "../../schema";
+import request from "../../utilities/request";
 
 const logoutMessages = defineMessages({
   pleaseWait: {

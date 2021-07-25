@@ -1,25 +1,25 @@
+import { FormattedMessage, defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent, useContext } from "react";
 import styled from "@emotion/styled";
-import { defineMessages, useIntl, FormattedMessage } from "react-intl";
 
-import order from "../../i18n/order";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import StyledLink from "../elements/StyledLink";
 import {
   Address as AddressType,
   Order as OrderType,
   Query,
 } from "../../schema";
-import Address from "../elements/Address";
-import Order from "../elements/Order";
-import useSWR from "swr";
-import { GET_CURRENT_CUSTOMER_ORDERS } from "../../gql/user";
-import request from "../../utilities/request";
-import Placeholder from "../elements/Placeholder";
-import { Unavailable } from "../administrator/Unavailable";
-import Flex from "../layout/Flex";
-import Box from "../layout/Box";
 import { AppContext } from "../AppWrapper";
+import { GET_CURRENT_CUSTOMER_ORDERS } from "../../gql/user";
+import { Unavailable } from "../administrator/Unavailable";
+import { pathnamesByLanguage } from "../../utilities/urls";
+import Address from "../elements/Address";
+import Box from "../layout/Box";
+import Flex from "../layout/Flex";
+import Order from "../elements/Order";
+import Placeholder from "../elements/Placeholder";
+import StyledLink from "../elements/StyledLink";
+import order from "../../i18n/order";
+import request from "../../utilities/request";
+import useSWR from "swr";
 
 const messages = defineMessages({
   here: {

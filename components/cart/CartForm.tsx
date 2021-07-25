@@ -1,27 +1,27 @@
+import { Field, FieldArray, Form, FormikProps, withFormik } from "formik";
+import { IntlShape, defineMessages } from "react-intl";
+import { MdDelete } from "react-icons/md";
 import React, { ReactNode } from "react";
 import styled from "@emotion/styled";
-import { withFormik, Form, FieldArray, Field, FormikProps } from "formik";
-import { MdDelete } from "react-icons/md";
-import { defineMessages, IntlShape } from "react-intl";
 
 import {
+  ADJUST_ORDER_LINE,
   GET_ACTIVE_ORDER,
   REMOVE_ORDER_LINE,
-  ADJUST_ORDER_LINE,
 } from "../../gql/order";
-import { Order, AdjustmentType, Adjustment, Mutation } from "../../schema";
-import orderMessages from "../../i18n/order";
-import cart from "../../i18n/cart";
-import product from "../../i18n/product";
-import Asset from "../elements/Asset";
-import Price from "../elements/Price";
-import Button from "../elements/Button";
-import request from "../../utilities/request";
+import { Adjustment, AdjustmentType, Mutation, Order } from "../../schema";
+import { colors } from "../../utilities/style";
+import { errorCodeToMessage } from "../../utilities/i18n";
 import { mutate } from "swr";
+import Asset from "../elements/Asset";
+import Button from "../elements/Button";
 import CartTable from "./CartTable";
 import CartTableAction from "../ActionButton";
-import { errorCodeToMessage } from "../../utilities/i18n";
-import { colors } from "../../utilities/style";
+import Price from "../elements/Price";
+import cart from "../../i18n/cart";
+import orderMessages from "../../i18n/order";
+import product from "../../i18n/product";
+import request from "../../utilities/request";
 
 const messages = defineMessages({
   showMoreDetails: {

@@ -1,6 +1,6 @@
-import React, { ReactNode, FunctionComponent } from "react";
-import styled from "@emotion/styled";
 import { colors } from "../../utilities/style";
+import React, { FunctionComponent, ReactNode } from "react";
+import styled from "@emotion/styled";
 
 interface IProps {
   padding?: string;
@@ -39,7 +39,7 @@ const CircleWrapper = styled.div<IProps>`
       : ""} ${({ width }) => (width ? `width: ${width};` : "")} ${({
   height,
 }) => (height ? `height: ${height};` : "")} ${({ inline }) =>
-  inline ? `display: inline-block;` : ""};
+  inline ? "display: inline-block;" : ""};
 
   ${({ centerChildren }) =>
     centerChildren

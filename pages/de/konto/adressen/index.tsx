@@ -1,13 +1,13 @@
-import Wrapper from "../../../../components/layout/Wrapper";
-import AccountWrapper from "../../../../components/account/AccountWrapper";
-import AccountAddresses from "../../../../components/account/AccountAddresses";
-import { useIntl } from "react-intl";
-import { useContext } from "react";
-import { pathnamesByLanguage } from "../../../../utilities/urls";
-import page from "../../../../i18n/page";
-import { GetStaticProps } from "next";
 import { AppContext, withApp } from "../../../../components/AppWrapper";
+import { GetStaticProps } from "next";
 import { locale, messages } from "../../config";
+import { pathnamesByLanguage } from "../../../../utilities/urls";
+import { useContext } from "react";
+import { useIntl } from "react-intl";
+import AccountAddresses from "../../../../components/account/AccountAddresses";
+import AccountWrapper from "../../../../components/account/AccountWrapper";
+import Wrapper from "../../../../components/layout/Wrapper";
+import page from "../../../../i18n/page";
 
 const Page = () => {
   const intl = useIntl();

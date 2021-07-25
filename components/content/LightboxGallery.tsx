@@ -1,12 +1,12 @@
-import React, { useReducer, FunctionComponent, useCallback } from "react";
+import { defineMessages, useIntl } from "react-intl";
+import React, { FunctionComponent, useCallback, useReducer } from "react";
 import styled from "@emotion/styled";
-import { useIntl, defineMessages } from "react-intl";
 
-import Lightbox from "./Lightbox";
-import Asset from "../elements/Asset";
 import { Asset as AssetType } from "../../schema";
+import Asset from "../elements/Asset";
 import Box from "../layout/Box";
 import Flex from "../layout/Flex";
+import Lightbox from "./Lightbox";
 
 const messages = defineMessages({
   imageXOfY: {

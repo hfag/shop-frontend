@@ -1,31 +1,31 @@
-import React, { FunctionComponent } from "react";
-import { withFormik, Form, FormikProps } from "formik";
 import * as yup from "yup";
-import { defineMessages, IntlShape } from "react-intl";
+import { Form, FormikProps, withFormik } from "formik";
+import { IntlShape, defineMessages } from "react-intl";
+import React, { FunctionComponent } from "react";
 
-import Button from "../elements/Button";
-import SelectField from "../form/SelectField";
-import InputField from "../form/InputField";
-import address from "../../i18n/address";
 import {
-  Country,
-  CurrentUser,
-  CreateAddressInput,
   Address,
+  Country,
+  CreateAddressInput,
+  CurrentUser,
   Customer,
-  OrderAddress,
   Mutation,
+  OrderAddress,
 } from "../../schema";
-import request from "../../utilities/request";
 import {
   GET_ACTIVE_ORDER,
-  ORDER_SET_CUSTOMER,
   ORDER_SET_ADDRESS,
+  ORDER_SET_CUSTOMER,
 } from "../../gql/order";
-import { mutate } from "swr";
-import Flex from "../layout/Flex";
-import Box from "../layout/Box";
 import { errorCodeToMessage } from "../../utilities/i18n";
+import { mutate } from "swr";
+import Box from "../layout/Box";
+import Button from "../elements/Button";
+import Flex from "../layout/Flex";
+import InputField from "../form/InputField";
+import SelectField from "../form/SelectField";
+import address from "../../i18n/address";
+import request from "../../utilities/request";
 
 const messages = defineMessages({
   shipToDifferentAddress: {

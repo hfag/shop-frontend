@@ -1,26 +1,26 @@
-import React, {
-  FunctionComponent,
-  useState,
-  useCallback,
-  FormEvent,
-  useEffect,
-  KeyboardEvent,
-} from "react";
-import styled from "@emotion/styled";
-import Autosuggest from "react-autosuggest";
-import debounce from "lodash/debounce";
 import { defineMessages, useIntl } from "react-intl";
 import { useRouter } from "next/router";
+import Autosuggest from "react-autosuggest";
 import ClipLoader from "react-spinners/ClipLoader";
+import React, {
+  FormEvent,
+  FunctionComponent,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import debounce from "lodash/debounce";
+import styled from "@emotion/styled";
 
-import Flexbar from "./layout/Flexbar";
-import { colors, shadows } from "../utilities/style";
-import Price from "./elements/Price";
-import { pathnamesByLanguage } from "../utilities/urls";
 import { Query, SearchResult } from "../schema";
-import request from "../utilities/request";
 import { SEARCH } from "../gql/search";
+import { colors, shadows } from "../utilities/style";
+import { pathnamesByLanguage } from "../utilities/urls";
 import Asset from "./elements/Asset";
+import Flexbar from "./layout/Flexbar";
+import Price from "./elements/Price";
+import request from "../utilities/request";
 import search from "../i18n/search";
 
 const messages = defineMessages({

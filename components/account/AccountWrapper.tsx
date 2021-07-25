@@ -1,17 +1,17 @@
-import React, { useEffect, FunctionComponent, ReactNode } from "react";
-import styled from "@emotion/styled";
 import { defineMessages, useIntl } from "react-intl";
+import React, { FunctionComponent, ReactNode, useEffect } from "react";
+import styled from "@emotion/styled";
 
+import { ABSOLUTE_URL } from "../../utilities/api";
 import { pathnamesByLanguage } from "../../utilities/urls";
+import { trackPageView } from "../../utilities/analytics";
+import Box from "../layout/Box";
+import Card from "../layout/Card";
+import Flex from "../layout/Flex";
+import Head from "next/head";
+import StyledLink from "../elements/StyledLink";
 import order from "../../i18n/order";
 import userMessages from "../../i18n/user";
-import { trackPageView } from "../../utilities/analytics";
-import Head from "next/head";
-import { ABSOLUTE_URL } from "../../utilities/api";
-import Card from "../layout/Card";
-import StyledLink from "../elements/StyledLink";
-import Flex from "../layout/Flex";
-import Box from "../layout/Box";
 
 const messages = defineMessages({
   siteTitle: {

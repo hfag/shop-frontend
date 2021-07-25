@@ -1,7 +1,7 @@
-import styled from "@emotion/styled";
+import { FunctionComponent, ReactNode } from "react";
 import { colors } from "../../utilities/style";
 import Table from "../elements/Table";
-import { FunctionComponent, ReactNode } from "react";
+import styled from "@emotion/styled";
 
 const StyledCartTable = styled(Table)<{ actions?: boolean }>`
   table-layout: auto;

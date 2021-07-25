@@ -1,6 +1,6 @@
+import { defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
-import { defineMessages, useIntl } from "react-intl";
 
 import { colors } from "../../utilities/style";
 import Price from "./Price";

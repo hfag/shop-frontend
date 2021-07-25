@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo, FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
 
+import { Collection } from "../../schema";
+import { borders, colors, shadows } from "../../utilities/style";
+import { pathnamesByLanguage } from "../../utilities/urls";
 import { useIntl } from "react-intl";
 import Asset from "../elements/Asset";
-import Placeholder from "../elements/Placeholder";
-import { colors, borders, shadows } from "../../utilities/style";
-import { pathnamesByLanguage } from "../../utilities/urls";
-import { Collection } from "../../schema";
-import StyledLink from "../elements/StyledLink";
 import Box from "../layout/Box";
+import Placeholder from "../elements/Placeholder";
+import StyledLink from "../elements/StyledLink";
 
 const StyledCategory = styled.div`
   background-color: #fff;

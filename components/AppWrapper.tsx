@@ -1,17 +1,17 @@
 //dependencies
+import { CurrentUser, Customer, Maybe, Query } from "../schema";
+import { GET_CURRENT_USER } from "../gql/user";
 import { IntlProvider } from "react-intl";
+import { Language } from "../utilities/i18n";
+import { useLocalStorage } from "../utilities/hooks";
 import React, {
   FunctionComponent,
   ReactNode,
   useCallback,
   useState,
 } from "react";
-import { CurrentUser, Customer, Maybe, Query } from "../schema";
-import useSWR from "swr";
-import { useLocalStorage } from "../utilities/hooks";
-import { GET_CURRENT_USER } from "../gql/user";
 import request from "../utilities/request";
-import { Language } from "../utilities/i18n";
+import useSWR from "swr";
 
 export const AppContext = React.createContext<{
   burgerMenuOpen: boolean;

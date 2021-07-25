@@ -31,5 +31,3 @@ module.exports = withPlugins([withTM, withBundleAnalyzer({})], {
 });
 
 module.exports.env = env;
-
-module.exports.eslint = { ignoreDuringBuilds: true };

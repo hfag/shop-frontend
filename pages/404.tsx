@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
 import { defineMessages, useIntl } from "react-intl";
+import React, { useEffect } from "react";
 
-import Head from "next/head";
-import Card from "../components/layout/Card";
-import { trackPageView } from "../utilities/analytics";
-import StyledLink from "../components/elements/StyledLink";
-import Searchbar from "../components/Searchbar";
 import { ABSOLUTE_URL } from "../utilities/api";
-import Wrapper from "../components/layout/Wrapper";
 import { GetStaticProps } from "next";
-import { withApp } from "../components/AppWrapper";
 import { locale, messages } from "./de/config";
+import { trackPageView } from "../utilities/analytics";
+import { withApp } from "../components/AppWrapper";
+import Card from "../components/layout/Card";
+import Head from "next/head";
+import Searchbar from "../components/Searchbar";
+import StyledLink from "../components/elements/StyledLink";
+import Wrapper from "../components/layout/Wrapper";
 
 const errorMessages = defineMessages({
   siteTitle: {
@@ -33,7 +33,7 @@ const errorMessages = defineMessages({
   },
 });
 
-const Page404 = React.memo(({}) => {
+const Page404 = React.memo(() => {
   const intl = useIntl();
 
   useEffect(() => {

@@ -168,7 +168,7 @@ const InnerCheckoutForm = React.memo(
         </Flex>
         <br />
         <InlinePage slug={pageSlugsByLanguage.tos.languages[intl.locale]} />
-        <InputField id="terms" name="terms" type="checkbox" value="1">
+        <InputField id="terms" name="terms" type="checkbox">
           <label htmlFor="terms">
             {intl.formatMessage(messages.acceptTos)}
           </label>
@@ -224,10 +224,12 @@ const InnerCheckoutForm = React.memo(
 
 const CheckoutForm = withFormik<IProps, FormValues>({
   enableReinitialize: true,
+  isInitialValid: false,
   mapPropsToValues: ({ order, values = {} }) => ({
     paymentMethod: "invoice",
     orderComments: order?.customFields?.notes,
     ...values,
+    terms: false,
   }),
 
   validationSchema: ({ intl }: { intl: IntlShape }) => {
@@ -235,12 +237,8 @@ const CheckoutForm = withFormik<IProps, FormValues>({
       shippingMethod: yup.string().required(),
       paymentMethod: yup.string().required(),
       terms: yup
-        .mixed()
-        .test(
-          "is-checked",
-          intl.formatMessage(messages.tosMustBeAccepted),
-          (value) => value === true
-        ),
+        .bool()
+        .oneOf([true], intl.formatMessage(messages.tosMustBeAccepted)),
     });
   },
   handleSubmit: async (

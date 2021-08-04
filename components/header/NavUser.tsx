@@ -87,7 +87,7 @@ const NavUser: FunctionComponent<{
       {dropdown === "user" && (
         <UserDropdown>
           <div>
-            <StyledLink external href="https://api.feuerschutz.ch/wp-admin">
+            <StyledLink external href="https://vendure.feuerschutz.ch/admin">
               {intl.formatMessage(page.shopAdmin)}
             </StyledLink>
           </div>

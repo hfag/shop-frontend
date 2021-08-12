@@ -14,7 +14,7 @@ const shoppingCartReducer = (
     shipping: 0,
     taxes: [],
     fees: [],
-    coupons: [],
+    coupons: []
   },
   action
 ) => {
@@ -44,7 +44,7 @@ const shoppingCartReducer = (
         shipping:
           action.cart && action.cart.shipping !== null
             ? action.cart.shipping
-            : state.shipping,
+            : state.shipping
       };
     case "CLEAR_SHOPPING_CART":
       return {
@@ -56,7 +56,7 @@ const shoppingCartReducer = (
         shipping: 0,
         taxes: [],
         fees: [],
-        coupons: [],
+        coupons: []
       };
     default:
       return state;
@@ -70,51 +70,51 @@ export default shoppingCartReducer;
  * @param {Object} state The redux state
  * @returns {Error} The fetch error
  */
-export const getShoppingCartError = (state) => state.error;
+export const getShoppingCartError = state => state.error;
 /**
  * Checks whether the shopping cart is currently being fetched
  * @param {Object} state The redux state
  * @returns {boolean} Whether the cart is currently being fetched
  */
-export const isFetchingShoppingCart = (state) => state.isFetching !== 0;
+export const isFetchingShoppingCart = state => state.isFetching !== 0;
 /**
  * Gets when the shopping cart was fetched for the last time
  * @param {Object} state The redux state
  * @returns {number} The last time the shopping cart was fetched
  */
-export const getShoppingCartLastFetched = (state) => state.lastFetched;
+export const getShoppingCartLastFetched = state => state.lastFetched;
 /**
  * Gets all items that are currenlty in the shopping cart
  * @param {Object} state The redux state
  * @returns {Array} The cart items
  */
-export const getShoppingCartItems = (state) => state.items;
+export const getShoppingCartItems = state => state.items;
 
 /**
  * Gets the total price of the cart
  * @param {Object} state The redux state
  * @returns {number} The sum
  */
-export const getShoppingCartTotal = (state) => state.total;
+export const getShoppingCartTotal = state => state.total;
 
 /**
  * Gets the shopping cart taxes
  * @param {Object} state The redux state
  * @returns {number} The taxes
  */
-export const getShoppingCartTaxes = (state) => state.taxes;
+export const getShoppingCartTaxes = state => state.taxes;
 
 /**
  * Gets the shopping cart fees
  * @param {Object} state The redux state
  * @returns {number} The fees
  */
-export const getShoppingCartFees = (state) => state.fees;
-export const getShoppingCartCoupons = (state) => state.coupons;
+export const getShoppingCartFees = state => state.fees;
+export const getShoppingCartCoupons = state => state.coupons;
 
 /**
  * Gets the shopping shipping
  * @param {Object} state The redux state
  * @returns {number} The shipping
  */
-export const getShoppingCartShipping = (state) => state.shipping;
+export const getShoppingCartShipping = state => state.shipping;

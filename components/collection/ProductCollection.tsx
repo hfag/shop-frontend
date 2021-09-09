@@ -99,7 +99,7 @@ const ProductCollection: FunctionComponent<{
             <InfoWrapper>
               <Flex flexWrap="wrap">
                 <Box
-                  width={[1, 1, 1 / 2, 1 / 2]}
+                  widths={[1, 1, 1, 1 / 2, 1 / 2]}
                   paddingRight={4 /* TODO: [0, 0, 4, 4] */}
                 >
                   <H1

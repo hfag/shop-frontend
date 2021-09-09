@@ -98,7 +98,7 @@ const VariationSlider: FunctionComponent<{
         {Object.keys(imageMap).map((imageId) => (
           <Box
             key={imageId}
-            width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]}
+            widths={[1 / 2, 1 / 2, 1 / 3, 1 / 4, 1 / 6]}
             paddingRight={0.5}
             paddingBottom={0.5}
           >

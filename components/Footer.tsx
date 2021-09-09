@@ -117,11 +117,11 @@ const Footer: FunctionComponent = React.memo(() => {
   return (
     <StyledFooter>
       <Flex>
-        <Box width={[0, 0, 0, 1 / 6]} />
-        <Box width={[1, 1, 1, 5 / 6]}>
+        <Box widths={[0, 0, 0, 0, 1 / 6]} />
+        <Box widths={[1, 1, 1, 1, 5 / 6]}>
           <Container>
             <Flex flexWrap="wrap">
-              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} paddingX={3}>
+              <BorderBox widths={[1, 1, 1, 1 / 3, 1 / 3]} paddingX={3}>
                 <LazyImage
                   src="/images/logo/logo_negative.svg"
                   alt="Logo"
@@ -148,7 +148,7 @@ const Footer: FunctionComponent = React.memo(() => {
                   )}
                 />
               </BorderBox>
-              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} paddingX={3}>
+              <BorderBox widths={[1, 1, 1 / 3, 1 / 3]} paddingX={3}>
                 <IconList>
                   <tbody>
                     <tr>
@@ -228,7 +228,7 @@ const Footer: FunctionComponent = React.memo(() => {
                   </tbody>
                 </IconList>
               </BorderBox>
-              <BorderBox width={[1, 1, 1 / 3, 1 / 3]} paddingX={3}>
+              <BorderBox widths={[1, 1, 1, 1 / 3, 1 / 3]} paddingX={3}>
                 <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
                 {intl.formatMessage(messages.about)}{" "}
                 <StyledLink

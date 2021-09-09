@@ -73,15 +73,20 @@ const reducer = (
     case "OPEN_LIGHTBOX":
       return { currentImage: action.index, isOpen: true };
     case "NEXT_IMAGE":
-      return {
-        currentImage: (state.currentImage + 1) % action.length,
-        isOpen: true,
-      };
+      return state.isOpen
+        ? {
+            currentImage: (state.currentImage + 1) % action.length,
+            isOpen: true,
+          }
+        : state;
     case "PREVIOUS_IMAGE":
-      return {
-        currentImage: (state.currentImage - 1 + action.length) % action.length,
-        isOpen: true,
-      };
+      return state.isOpen
+        ? {
+            currentImage:
+              (state.currentImage - 1 + action.length) % action.length,
+            isOpen: true,
+          }
+        : state;
     case "GOTO_IMAGE":
       return {
         currentImage: action.index,
@@ -134,7 +139,7 @@ const LightboxGallery = <Image extends any>({
         {images.map((image, index) => (
           <LightboxBox
             key={index}
-            width={[1 / 2, 1 / 2, 1 / 4, 1 / 6]}
+            widths={[1 / 2, 1 / 2, 1 / 2, 1 / 4, 1 / 6]}
             paddingX={0.5}
             marginBottom={1}
             onClick={() => dispatch({ type: "OPEN_LIGHTBOX", index })}

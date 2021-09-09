@@ -4,6 +4,7 @@ import React from "react";
 import styled from "@emotion/styled";
 
 const MediaBox = styled.div<{
+  width: string;
   widthSmall: string;
   widthMedium: string;
   widthLarge: string;
@@ -15,7 +16,7 @@ const MediaBox = styled.div<{
   position: relative;
   padding: ${({ padding }) => padding};
   margin: ${({ margin }) => margin};
-  width: ${({ defaultHidden }) => (defaultHidden ? "auto" : "100%")};
+  width: ${({ defaultHidden, width }) => (defaultHidden ? "auto" : width)};
   display: ${({ defaultHidden }) => (defaultHidden ? "hidden" : "block")};
 
   ${media.minSmall} {
@@ -33,7 +34,7 @@ const MediaBox = styled.div<{
 `;
 
 const Box: FunctionComponent<{
-  width: number[];
+  widths: number[];
   padding?: number;
   paddingX?: number;
   paddingLeft?: number;
@@ -53,7 +54,7 @@ const Box: FunctionComponent<{
   onClick?: () => void;
 }> = React.memo(
   ({
-    width,
+    widths,
     padding,
     paddingX,
     paddingLeft,
@@ -72,9 +73,8 @@ const Box: FunctionComponent<{
     className,
     children,
   }) => {
-    const [widthSmall, widthMedium, widthLarge, widthXLarge] = width.map(
-      (e) => `${e * 100}%`
-    );
+    const [width, widthSmall, widthMedium, widthLarge, widthXLarge] =
+      widths.map((e) => `${e * 100}%`);
 
     const p = `${paddingTop || paddingY || padding || 0}rem ${
       paddingRight || paddingX || padding || 0
@@ -90,6 +90,7 @@ const Box: FunctionComponent<{
 
     return (
       <MediaBox
+        width={width}
         widthSmall={widthSmall}
         widthMedium={widthMedium}
         widthLarge={widthLarge}
@@ -98,7 +99,7 @@ const Box: FunctionComponent<{
         margin={m}
         onClick={onClick}
         className={className}
-        defaultHidden={width[0] <= 0}
+        defaultHidden={widths[0] <= 0}
       >
         {children}
       </MediaBox>

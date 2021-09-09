@@ -51,7 +51,7 @@ const Post: FunctionComponent<{
   intl: IntlShape;
   post?: PostType;
 }> = ({ intl, post }) => (
-  <Box width={[1 / 2, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
+  <Box widths={[1, 1 / 2, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
     <PostWrapper>
       {post ? (
         <StyledLink
@@ -61,7 +61,7 @@ const Post: FunctionComponent<{
           noHover
         >
           <Flex>
-            <Box width={[1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
+            <Box widths={[1, 1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
               <StyledImage
                 src={post.thumbnail.url}
                 width={post.thumbnail.width}
@@ -69,7 +69,7 @@ const Post: FunctionComponent<{
                 alt={post.thumbnail.alt || post.title}
               />
             </Box>
-            <Box width={[1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
+            <Box widths={[1, 1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
               <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
               <p dangerouslySetInnerHTML={{ __html: post.description }} />
             </Box>
@@ -77,10 +77,10 @@ const Post: FunctionComponent<{
         </StyledLink>
       ) : (
         <Flex>
-          <Box width={[1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
+          <Box widths={[1, 1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
             <Placeholder block />
           </Box>
-          <Box width={[1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
+          <Box widths={[1, 1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
             <Placeholder text height={1.5} mb={1} />
             <Placeholder text height={4} />
           </Box>

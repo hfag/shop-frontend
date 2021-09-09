@@ -148,7 +148,11 @@ const SearchItem: FunctionComponent<{
   }, [customer]);
 
   return (
-    <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} paddingX={0.5} marginTop={1}>
+    <Box
+      widths={[1 / 2, 1 / 2, 1 / 3, 1 / 4, 1 / 6]}
+      paddingX={0.5}
+      marginTop={1}
+    >
       {resellerDiscount && (
         <Discount
           data-balloon={

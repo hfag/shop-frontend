@@ -70,7 +70,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
   intl,
   post,
 }) => (
-  <Box width={[1 / 2, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
+  <Box widths={[1, 1 / 2, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
     <SaleWrapper>
       <StyledLink
         href={`/${intl.locale}/${
@@ -79,7 +79,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
         noHover
       >
         <Flex>
-          <Box width={[1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
+          <Box widths={[1, 1, 1, 1 / 2, 1 / 3]} paddingRight={0.5}>
             <StyledImage
               src={post.thumbnail.url}
               width={post.thumbnail.width}
@@ -87,7 +87,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
               alt={post.thumbnail.alt || post.title}
             />
           </Box>
-          <Box width={[1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
+          <Box widths={[1, 1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>
             <h3 dangerouslySetInnerHTML={{ __html: post.title }} />
             <p dangerouslySetInnerHTML={{ __html: post.description }}></p>
           </Box>
@@ -106,7 +106,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
   promotion: Promotion;
 }> = ({ intl, productSlug, variant, promotion }) => {
   return (
-    <Box width={[1, 1, 1 / 3, 1 / 3]} paddingX={2} marginTop={3}>
+    <Box widths={[1, 1, 1, 1 / 3, 1 / 3]} paddingX={2} marginTop={3}>
       <SaleWrapper>
         <StyledLink
           href={`/${intl.locale}/${
@@ -119,10 +119,10 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: Post }> = ({
           </DiscountLogo>
 
           <Flex>
-            <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={2}>
+            <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={2}>
               <Asset asset={variant.featuredAsset} />
             </Box>
-            <Box width={[1, 1, 1 / 2, 1 / 2]} paddingLeft={2}>
+            <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingLeft={2}>
               <h3
                 dangerouslySetInnerHTML={{
                   __html: product.name,

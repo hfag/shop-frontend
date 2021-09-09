@@ -328,7 +328,11 @@ const Login = React.memo(() => {
         />
       </Head>
       <Flex flexWrap="wrap">
-        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1} paddingBottom={1}>
+        <Box
+          widths={[1, 1, 1, 1 / 2, 1 / 2]}
+          paddingRight={1}
+          paddingBottom={1}
+        >
           <Section>
             <h1>{intl.formatMessage(userMessages.login)}</h1>
             <LoginRegisterForm
@@ -365,7 +369,11 @@ const Login = React.memo(() => {
             />
           </Section>
         </Box>
-        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1} paddingBottom={1}>
+        <Box
+          widths={[1, 1, 1, 1 / 2, 1 / 2]}
+          paddingRight={1}
+          paddingBottom={1}
+        >
           <h1>{intl.formatMessage(messages.newAccount)}</h1>
           <LoginRegisterForm
             intl={intl}

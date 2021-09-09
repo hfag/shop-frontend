@@ -88,7 +88,11 @@ const CollectionItem: FunctionComponent<{
   );
 
   return (
-    <Box width={[1 / 2, 1 / 3, 1 / 4, 1 / 6]} paddingX={0.5} marginTop={1}>
+    <Box
+      widths={[1 / 2, 1 / 2, 1 / 3, 1 / 4, 1 / 6]}
+      paddingX={0.5}
+      marginTop={1}
+    >
       <StyledLink href={url}>
         <StyledCategory>
           <Asset asset={collection?.featuredAsset} squared />

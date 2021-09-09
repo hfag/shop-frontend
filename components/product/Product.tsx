@@ -303,7 +303,7 @@ const Product: FunctionComponent<{
             .map((optionGroup) => (
               <Box
                 key={optionGroup.id}
-                width={[1, 1 / 2, 1 / 3, 1 / 3]}
+                widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
                 paddingX={0.5}
               >
                 <h4>{optionGroup.name}</h4>
@@ -340,7 +340,7 @@ const Product: FunctionComponent<{
                 />
               </Box>
             ))}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
+          <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
             <h4>{intl.formatMessage(productMessages.quantity)}</h4>
             <Counter
               type="number"
@@ -351,7 +351,7 @@ const Product: FunctionComponent<{
             />
           </Box>
           {/*fields.map(({ label, placeholder, type, maxLength }, index) => (
-            <Box key={index} width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={2}>
+            <Box key={index} widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={2}>
               <h4>{label}</h4>
               {type === "text" && (
                 <InputFieldWrapper>
@@ -376,7 +376,7 @@ const Product: FunctionComponent<{
               )}
             </Box>
               ))*/}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
+          <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
             <h4>{intl.formatMessage(messages.reset)}</h4>
             <Button
               onClick={() =>
@@ -394,7 +394,11 @@ const Product: FunctionComponent<{
           {activeResellerDiscounts.length === 0 ? (
             selectedVariant &&
             selectedVariant.bulkDiscounts.length > 0 && (
-              <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={2} marginTop={3}>
+              <Box
+                widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
+                paddingX={2}
+                marginTop={3}
+              >
                 <h4>{intl.formatMessage(productMessages.bulkDiscount)}</h4>
                 <DiscountTable>
                   <thead>
@@ -433,7 +437,11 @@ const Product: FunctionComponent<{
               </Box>
             )
           ) : (
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
+            <Box
+              widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
+              paddingX={0.5}
+              marginTop={1}
+            >
               <h4>{intl.formatMessage(productMessages.resellerDiscount)}</h4>
               {activeResellerDiscounts.map((d, i) => (
                 <span key={i}>
@@ -449,7 +457,11 @@ const Product: FunctionComponent<{
               ))}
             </Box>
           )}
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5} marginTop={1}>
+          <Box
+            widths={[1, 1, 1, 1 / 2, 1 / 3, 1 / 3]}
+            paddingX={0.5}
+            marginTop={1}
+          >
             {selectedVariant && selectedVariant.priceWithTax ? (
               <div>
                 <h4>{intl.formatMessage(productMessages.price)}</h4>
@@ -547,7 +559,11 @@ const Product: FunctionComponent<{
         </Flex>
         <Flex flexWrap="wrap">
           {product.description && (
-            <Box width={[1, 1, 1 / 2, 2 / 3]} paddingRight={1} marginTop={1}>
+            <Box
+              widths={[1, 1, 1, 1 / 2, 2 / 3]}
+              paddingRight={1}
+              marginTop={1}
+            >
               <UnsafeHTMLContent content={product.description} />
               <h2>{intl.formatMessage(messages.imageGallery)}</h2>
               <LightboxGallery
@@ -557,7 +573,7 @@ const Product: FunctionComponent<{
               />
             </Box>
           )}
-          <Box width={[1, 1, 1 / 2, 1 / 3]} paddingLeft={1} marginTop={1}>
+          <Box widths={[1, 1, 1, 1 / 2, 1 / 3]} paddingLeft={1} marginTop={1}>
             <h4>{intl.formatMessage(messages.specifications)}</h4>
             <StyledTable>
               <tbody>

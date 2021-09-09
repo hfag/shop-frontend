@@ -100,7 +100,7 @@ const Header: FunctionComponent = React.memo(() => {
       <header>
         <Navbar>
           <Flex>
-            <FullHeightBox width={[0, 0, 0, 1 / 6]}>
+            <FullHeightBox widths={[0, 0, 0, 0, 1 / 6]}>
               <MediaQuery xlg up>
                 <LogoLeft>
                   <NavItem>
@@ -111,7 +111,7 @@ const Header: FunctionComponent = React.memo(() => {
                 </LogoLeft>
               </MediaQuery>
             </FullHeightBox>
-            <FullHeightBox width={[1, 1, 1, 5 / 6]} paddingLeft={0}>
+            <FullHeightBox widths={[1, 1, 1, 1, 5 / 6]} paddingLeft={0}>
               <Container>
                 <Flexbar>
                   <MediaQuery lg up>

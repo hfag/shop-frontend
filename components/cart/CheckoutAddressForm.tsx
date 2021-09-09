@@ -97,7 +97,7 @@ const InnerCheckoutAddressForm = React.memo(
   }: IProps & FormikProps<FormValues>) => (
     <Form>
       <Flex flexWrap="wrap">
-        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
+        <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
           <h3>Rechnungsdetails</h3>
           {/*<InputField
               type="text"
@@ -188,7 +188,7 @@ const InnerCheckoutAddressForm = React.memo(
             required={true}
           />
         </Box>
-        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
+        <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
           <InputField
             id="shipToDifferentAddress"
             name="shipToDifferentAddress"

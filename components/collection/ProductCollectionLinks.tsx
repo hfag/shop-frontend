@@ -82,7 +82,7 @@ const ProductCollectionLinks: FunctionComponent<{ collection: Collection }> = ({
 
   return (
     <>
-      <Box width={[1, 1, 1 / 2, 1 / 2]}>
+      <Box widths={[1, 1, 1, 1 / 2, 1 / 2]}>
         {(editing ||
           (collection && collection.links && collection.links.length > 0)) && (
           <>

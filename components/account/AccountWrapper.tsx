@@ -96,7 +96,7 @@ const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
         </Head>
         <Flex flexWrap="wrap">
           <Box
-            width={[1, 1 / 2, 1 / 3, 1 / 3]}
+            widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
             paddingRight={1 /* TODO: [0, 4, 4, 4] */}
           >
             <Card>
@@ -162,7 +162,7 @@ const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
               </ProfileNavigation>
             </Card>
           </Box>
-          <Box width={[1, 1 / 2, 2 / 3, 2 / 3]}>
+          <Box widths={[1, 1, 1 / 2, 2 / 3, 2 / 3]}>
             <Card>{children}</Card>
           </Box>
         </Flex>

@@ -67,7 +67,7 @@ const AccountDashboard: FunctionComponent = React.memo(() => {
   return (
     <DashboardWrapper>
       <Flex flexWrap="wrap">
-        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
+        <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
           {customer ? (
             customer.firstName && customer.lastName && customer.emailAddress ? (
               <div>
@@ -108,8 +108,10 @@ const AccountDashboard: FunctionComponent = React.memo(() => {
           <br />
           <Flex flexWrap="wrap">
             <Box
-              width={
-                !billing && !shipping ? [1, 1, 1, 1] : [1, 1, 1 / 2, 1 / 2]
+              widths={
+                !billing && !shipping
+                  ? [1, 1, 1, 1, 1]
+                  : [1, 1, 1, 1 / 2, 1 / 2]
               }
               paddingRight={3}
             >
@@ -145,7 +147,7 @@ const AccountDashboard: FunctionComponent = React.memo(() => {
             </Box>
             {customer ? (
               shipping && (
-                <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
+                <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
                   <h4 className="no-margin">
                     {intl.formatMessage(order.shipping)}
                   </h4>
@@ -153,7 +155,7 @@ const AccountDashboard: FunctionComponent = React.memo(() => {
                 </Box>
               )
             ) : (
-              <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
+              <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
                 <h4 className="no-margin">
                   {intl.formatMessage(order.shipping)}
                 </h4>
@@ -162,7 +164,7 @@ const AccountDashboard: FunctionComponent = React.memo(() => {
             )}
           </Flex>
         </Box>
-        <Box width={[1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
+        <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={3}>
           <h2 className="no-margin-top">
             {intl.formatMessage(order.lastThreeOrders)}
           </h2>

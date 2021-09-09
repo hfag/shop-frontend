@@ -132,7 +132,7 @@ const InnerCheckoutForm = React.memo(
             data.eligibleShippingMethods.map((shippingMethod, index) => (
               <Box
                 key={index}
-                width={[1, 1 / 2, 1 / 3, 1 / 4]}
+                widths={[1, 1, 1 / 2, 1 / 3, 1 / 4]}
                 paddingRight={1}
               >
                 <label>
@@ -147,14 +147,14 @@ const InnerCheckoutForm = React.memo(
               </Box>
             ))
           ) : (
-            <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} paddingRight={1}>
+            <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 4]} paddingRight={1}>
               <Placeholder block />
             </Box>
           )}
         </Flex>
         <h3>{intl.formatMessage(messages.paymentMethods)}</h3>
         <Flex flexWrap="wrap">
-          <Box width={[1, 1 / 2, 1 / 3, 1 / 4]} paddingRight={1}>
+          <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 4]} paddingRight={1}>
             <label>
               <Field
                 name="paymentMethod"

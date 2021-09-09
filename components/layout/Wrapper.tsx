@@ -31,10 +31,10 @@ const Wrapper: FunctionComponent<{
       <Header />
       <div>
         <Flex>
-          <Box width={[0, 0, 1 / 6, 1 / 6]}>
+          <Box widths={[0, 0, 0, 1 / 6, 1 / 6]}>
             {sidebar && <Sidebar>{sidebar}</Sidebar>}
           </Box>
-          <Box width={[1, 1, 5 / 6, 5 / 6]}>
+          <Box widths={[1, 1, 1, 5 / 6, 5 / 6]}>
             <Container>
               {showBreadcrums && <Breadcrumbs breadcrumbs={breadcrumbs} />}
               {children}

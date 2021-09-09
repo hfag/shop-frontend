@@ -77,6 +77,7 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
     }
     customFields {
       groupKey
+      ordering
     }
   }
 `;

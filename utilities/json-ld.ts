@@ -51,7 +51,7 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
   const schema: JsonLdProduct = {
     "@type": "Product",
     name: stripTags(product.name),
-    image: product.featuredAsset.source,
+    image: product?.featuredAsset?.source,
     description: product.description,
     sku: product.customFields.groupKey,
     offers: offer,

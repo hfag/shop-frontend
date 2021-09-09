@@ -135,9 +135,11 @@ const ProductCollection: FunctionComponent<{
                 />
               ))}
           {collection &&
-            collection.products.map((product) => (
-              <ProductItem key={"product-" + product.id} product={product} />
-            ))}
+            collection.products
+              .sort((a, b) => a.customFields.ordering - b.customFields.ordering)
+              .map((product) => (
+                <ProductItem key={"product-" + product.id} product={product} />
+              ))}
 
           {!collection &&
             new Array(12)

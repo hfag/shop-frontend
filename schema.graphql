@@ -1,8 +1,12 @@
 type Query {
-  """The active Channel"""
+  """
+  The active Channel
+  """
   activeChannel: Channel!
 
-  """The active Customer"""
+  """
+  The active Customer
+  """
   activeCustomer: Customer
 
   """
@@ -12,10 +16,14 @@ type Query {
   """
   activeOrder: Order
 
-  """An array of supported Countries"""
+  """
+  An array of supported Countries
+  """
   availableCountries: [Country!]!
 
-  """A list of Collections available to the shop"""
+  """
+  A list of Collections available to the shop
+  """
   collections(options: CollectionListOptions): CollectionList!
 
   """
@@ -33,13 +41,19 @@ type Query {
   """
   eligiblePaymentMethods: [PaymentMethodQuote!]!
 
-  """A list of Facets available to the shop"""
+  """
+  A list of Facets available to the shop
+  """
   facets(options: FacetListOptions): FacetList!
 
-  """Returns a Facet by its id"""
+  """
+  Returns a Facet by its id
+  """
   facet(id: ID!): Facet
 
-  """Returns information about the current authenticated User"""
+  """
+  Returns information about the current authenticated User
+  """
   me: CurrentUser
 
   """
@@ -66,10 +80,14 @@ type Query {
   """
   product(id: ID, slug: String): Product
 
-  """Get a list of Products"""
+  """
+  Get a list of Products
+  """
   products(options: ProductListOptions): ProductList!
 
-  """Search Products based on the criteria set by the `SearchInput`"""
+  """
+  Search Products based on the criteria set by the `SearchInput`
+  """
   search(input: SearchInput!): SearchResponse!
   productRecommendations(productId: ID!): [ProductRecommendation!]!
   productBulkDiscounts(productId: ID!): [BulkDiscount!]!
@@ -82,10 +100,14 @@ type Mutation {
   """
   addItemToOrder(productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
 
-  """Remove an OrderLine from the Order"""
+  """
+  Remove an OrderLine from the Order
+  """
   removeOrderLine(orderLineId: ID!): RemoveOrderItemsResult!
 
-  """Remove all OrderLine from the Order"""
+  """
+  Remove all OrderLine from the Order
+  """
   removeAllOrderLines: RemoveOrderItemsResult!
 
   """
@@ -93,10 +115,14 @@ type Mutation {
   """
   adjustOrderLine(orderLineId: ID!, quantity: Int!): UpdateOrderItemsResult!
 
-  """Applies the given coupon code to the active Order"""
+  """
+  Applies the given coupon code to the active Order
+  """
   applyCouponCode(couponCode: String!): ApplyCouponCodeResult!
 
-  """Removes the given coupon code from the active Order"""
+  """
+  Removes the given coupon code from the active Order
+  """
   removeCouponCode(couponCode: String!): Order
 
   """
@@ -104,13 +130,19 @@ type Mutation {
   """
   transitionOrderToState(state: String!): TransitionOrderToStateResult
 
-  """Sets the shipping address for this order"""
+  """
+  Sets the shipping address for this order
+  """
   setOrderShippingAddress(input: CreateAddressInput!): ActiveOrderResult!
 
-  """Sets the billing address for this order"""
+  """
+  Sets the billing address for this order
+  """
   setOrderBillingAddress(input: CreateAddressInput!): ActiveOrderResult!
 
-  """Allows any custom fields to be set for the active order"""
+  """
+  Allows any custom fields to be set for the active order
+  """
   setOrderCustomFields(input: UpdateOrderInput!): ActiveOrderResult!
 
   """
@@ -118,7 +150,9 @@ type Mutation {
   """
   setOrderShippingMethod(shippingMethodId: ID!): SetOrderShippingMethodResult!
 
-  """Add a Payment to the Order"""
+  """
+  Add a Payment to the Order
+  """
   addPaymentToOrder(input: PaymentInput!): AddPaymentToOrderResult!
 
   """
@@ -129,59 +163,90 @@ type Mutation {
   """
   Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})`
   """
-  login(username: String!, password: String!, rememberMe: Boolean): NativeAuthenticationResult!
+  login(
+    username: String!
+    password: String!
+    rememberMe: Boolean
+  ): NativeAuthenticationResult!
 
-  """Authenticates the user using a named authentication strategy"""
-  authenticate(input: AuthenticationInput!, rememberMe: Boolean): AuthenticationResult!
+  """
+  Authenticates the user using a named authentication strategy
+  """
+  authenticate(
+    input: AuthenticationInput!
+    rememberMe: Boolean
+  ): AuthenticationResult!
 
-  """End the current authenticated session"""
+  """
+  End the current authenticated session
+  """
   logout: Success!
 
   """
   Register a Customer account with the given credentials. There are three possible registration flows:
-  
+
   _If `authOptions.requireVerification` is set to `true`:_
-  
+
   1. **The Customer is registered _with_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
      verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
      verified and authenticated in one step.
   2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
      verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosed password of the Customer. The Customer is then
      verified and authenticated in one step.
-  
+
   _If `authOptions.requireVerification` is set to `false`:_
-  
+
   3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately.
   """
-  registerCustomerAccount(input: RegisterCustomerInput!): RegisterCustomerAccountResult!
+  registerCustomerAccount(
+    input: RegisterCustomerInput!
+  ): RegisterCustomerAccountResult!
 
   """
   Regenerate and send a verification token for a new Customer registration. Only applicable if `authOptions.requireVerification` is set to true.
   """
-  refreshCustomerVerification(emailAddress: String!): RefreshCustomerVerificationResult!
+  refreshCustomerVerification(
+    emailAddress: String!
+  ): RefreshCustomerVerificationResult!
 
-  """Update an existing Customer"""
+  """
+  Update an existing Customer
+  """
   updateCustomer(input: UpdateCustomerInput!): Customer!
 
-  """Create a new Customer Address"""
+  """
+  Create a new Customer Address
+  """
   createCustomerAddress(input: CreateAddressInput!): Address!
 
-  """Update an existing Address"""
+  """
+  Update an existing Address
+  """
   updateCustomerAddress(input: UpdateAddressInput!): Address!
 
-  """Delete an existing Address"""
+  """
+  Delete an existing Address
+  """
   deleteCustomerAddress(id: ID!): Success!
 
   """
   Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
-  
+
   If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
   provided here.
   """
-  verifyCustomerAccount(token: String!, password: String): VerifyCustomerAccountResult!
+  verifyCustomerAccount(
+    token: String!
+    password: String
+  ): VerifyCustomerAccountResult!
 
-  """Update the password of the active Customer"""
-  updateCustomerPassword(currentPassword: String!, newPassword: String!): UpdateCustomerPasswordResult!
+  """
+  Update the password of the active Customer
+  """
+  updateCustomerPassword(
+    currentPassword: String!
+    newPassword: String!
+  ): UpdateCustomerPasswordResult!
 
   """
   Request to update the emailAddress of the active Customer. If `authOptions.requireVerification` is enabled
@@ -189,7 +254,10 @@ type Mutation {
   a IdentifierChangeRequestEvent will be raised. This can then be used e.g. by the EmailPlugin to email
   that verification token to the Customer, which is then used to verify the change of email address.
   """
-  requestUpdateCustomerEmailAddress(password: String!, newEmailAddress: String!): RequestUpdateCustomerEmailAddressResult!
+  requestUpdateCustomerEmailAddress(
+    password: String!
+    newEmailAddress: String!
+  ): RequestUpdateCustomerEmailAddressResult!
 
   """
   Confirm the update of the emailAddress with the provided token, which has been generated by the
@@ -197,10 +265,14 @@ type Mutation {
   """
   updateCustomerEmailAddress(token: String!): UpdateCustomerEmailAddressResult!
 
-  """Requests a password reset email to be sent"""
+  """
+  Requests a password reset email to be sent
+  """
   requestPasswordReset(emailAddress: String!): RequestPasswordResetResult
 
-  """Resets a Customer's password based on the provided token"""
+  """
+  Resets a Customer's password based on the provided token
+  """
   resetPassword(token: String!, password: String!): ResetPasswordResult!
 }
 
@@ -348,10 +420,14 @@ enum AdjustmentType {
 }
 
 enum DeletionResult {
-  """The entity was successfully deleted"""
+  """
+  The entity was successfully deleted
+  """
   DELETED
 
-  """Deletion did not take place, reason given in message"""
+  """
+  Deletion did not take place, reason given in message
+  """
   NOT_DELETED
 }
 
@@ -363,31 +439,49 @@ GraphQL resolvers via the {@link Allow} decorator.
 @docsCategory common
 """
 enum Permission {
-  """Authenticated means simply that the user is logged in"""
+  """
+  Authenticated means simply that the user is logged in
+  """
   Authenticated
 
-  """SuperAdmin has unrestricted access to all operations"""
+  """
+  SuperAdmin has unrestricted access to all operations
+  """
   SuperAdmin
 
-  """Owner means the user owns this entity, e.g. a Customer's own Order"""
+  """
+  Owner means the user owns this entity, e.g. a Customer's own Order
+  """
   Owner
 
-  """Public means any unauthenticated user may perform the operation"""
+  """
+  Public means any unauthenticated user may perform the operation
+  """
   Public
 
-  """Grants permission to update GlobalSettings"""
+  """
+  Grants permission to update GlobalSettings
+  """
   UpdateGlobalSettings
 
-  """Grants permission to create Products, Facets, Assets, Collections"""
+  """
+  Grants permission to create Products, Facets, Assets, Collections
+  """
   CreateCatalog
 
-  """Grants permission to read Products, Facets, Assets, Collections"""
+  """
+  Grants permission to read Products, Facets, Assets, Collections
+  """
   ReadCatalog
 
-  """Grants permission to update Products, Facets, Assets, Collections"""
+  """
+  Grants permission to update Products, Facets, Assets, Collections
+  """
   UpdateCatalog
 
-  """Grants permission to delete Products, Facets, Assets, Collections"""
+  """
+  Grants permission to delete Products, Facets, Assets, Collections
+  """
   DeleteCatalog
 
   """
@@ -410,220 +504,364 @@ enum Permission {
   """
   DeleteSettings
 
-  """Grants permission to create Administrator"""
+  """
+  Grants permission to create Administrator
+  """
   CreateAdministrator
 
-  """Grants permission to read Administrator"""
+  """
+  Grants permission to read Administrator
+  """
   ReadAdministrator
 
-  """Grants permission to update Administrator"""
+  """
+  Grants permission to update Administrator
+  """
   UpdateAdministrator
 
-  """Grants permission to delete Administrator"""
+  """
+  Grants permission to delete Administrator
+  """
   DeleteAdministrator
 
-  """Grants permission to create Asset"""
+  """
+  Grants permission to create Asset
+  """
   CreateAsset
 
-  """Grants permission to read Asset"""
+  """
+  Grants permission to read Asset
+  """
   ReadAsset
 
-  """Grants permission to update Asset"""
+  """
+  Grants permission to update Asset
+  """
   UpdateAsset
 
-  """Grants permission to delete Asset"""
+  """
+  Grants permission to delete Asset
+  """
   DeleteAsset
 
-  """Grants permission to create Channel"""
+  """
+  Grants permission to create Channel
+  """
   CreateChannel
 
-  """Grants permission to read Channel"""
+  """
+  Grants permission to read Channel
+  """
   ReadChannel
 
-  """Grants permission to update Channel"""
+  """
+  Grants permission to update Channel
+  """
   UpdateChannel
 
-  """Grants permission to delete Channel"""
+  """
+  Grants permission to delete Channel
+  """
   DeleteChannel
 
-  """Grants permission to create Collection"""
+  """
+  Grants permission to create Collection
+  """
   CreateCollection
 
-  """Grants permission to read Collection"""
+  """
+  Grants permission to read Collection
+  """
   ReadCollection
 
-  """Grants permission to update Collection"""
+  """
+  Grants permission to update Collection
+  """
   UpdateCollection
 
-  """Grants permission to delete Collection"""
+  """
+  Grants permission to delete Collection
+  """
   DeleteCollection
 
-  """Grants permission to create Country"""
+  """
+  Grants permission to create Country
+  """
   CreateCountry
 
-  """Grants permission to read Country"""
+  """
+  Grants permission to read Country
+  """
   ReadCountry
 
-  """Grants permission to update Country"""
+  """
+  Grants permission to update Country
+  """
   UpdateCountry
 
-  """Grants permission to delete Country"""
+  """
+  Grants permission to delete Country
+  """
   DeleteCountry
 
-  """Grants permission to create Customer"""
+  """
+  Grants permission to create Customer
+  """
   CreateCustomer
 
-  """Grants permission to read Customer"""
+  """
+  Grants permission to read Customer
+  """
   ReadCustomer
 
-  """Grants permission to update Customer"""
+  """
+  Grants permission to update Customer
+  """
   UpdateCustomer
 
-  """Grants permission to delete Customer"""
+  """
+  Grants permission to delete Customer
+  """
   DeleteCustomer
 
-  """Grants permission to create CustomerGroup"""
+  """
+  Grants permission to create CustomerGroup
+  """
   CreateCustomerGroup
 
-  """Grants permission to read CustomerGroup"""
+  """
+  Grants permission to read CustomerGroup
+  """
   ReadCustomerGroup
 
-  """Grants permission to update CustomerGroup"""
+  """
+  Grants permission to update CustomerGroup
+  """
   UpdateCustomerGroup
 
-  """Grants permission to delete CustomerGroup"""
+  """
+  Grants permission to delete CustomerGroup
+  """
   DeleteCustomerGroup
 
-  """Grants permission to create Facet"""
+  """
+  Grants permission to create Facet
+  """
   CreateFacet
 
-  """Grants permission to read Facet"""
+  """
+  Grants permission to read Facet
+  """
   ReadFacet
 
-  """Grants permission to update Facet"""
+  """
+  Grants permission to update Facet
+  """
   UpdateFacet
 
-  """Grants permission to delete Facet"""
+  """
+  Grants permission to delete Facet
+  """
   DeleteFacet
 
-  """Grants permission to create Order"""
+  """
+  Grants permission to create Order
+  """
   CreateOrder
 
-  """Grants permission to read Order"""
+  """
+  Grants permission to read Order
+  """
   ReadOrder
 
-  """Grants permission to update Order"""
+  """
+  Grants permission to update Order
+  """
   UpdateOrder
 
-  """Grants permission to delete Order"""
+  """
+  Grants permission to delete Order
+  """
   DeleteOrder
 
-  """Grants permission to create PaymentMethod"""
+  """
+  Grants permission to create PaymentMethod
+  """
   CreatePaymentMethod
 
-  """Grants permission to read PaymentMethod"""
+  """
+  Grants permission to read PaymentMethod
+  """
   ReadPaymentMethod
 
-  """Grants permission to update PaymentMethod"""
+  """
+  Grants permission to update PaymentMethod
+  """
   UpdatePaymentMethod
 
-  """Grants permission to delete PaymentMethod"""
+  """
+  Grants permission to delete PaymentMethod
+  """
   DeletePaymentMethod
 
-  """Grants permission to create Product"""
+  """
+  Grants permission to create Product
+  """
   CreateProduct
 
-  """Grants permission to read Product"""
+  """
+  Grants permission to read Product
+  """
   ReadProduct
 
-  """Grants permission to update Product"""
+  """
+  Grants permission to update Product
+  """
   UpdateProduct
 
-  """Grants permission to delete Product"""
+  """
+  Grants permission to delete Product
+  """
   DeleteProduct
 
-  """Grants permission to create Promotion"""
+  """
+  Grants permission to create Promotion
+  """
   CreatePromotion
 
-  """Grants permission to read Promotion"""
+  """
+  Grants permission to read Promotion
+  """
   ReadPromotion
 
-  """Grants permission to update Promotion"""
+  """
+  Grants permission to update Promotion
+  """
   UpdatePromotion
 
-  """Grants permission to delete Promotion"""
+  """
+  Grants permission to delete Promotion
+  """
   DeletePromotion
 
-  """Grants permission to create ShippingMethod"""
+  """
+  Grants permission to create ShippingMethod
+  """
   CreateShippingMethod
 
-  """Grants permission to read ShippingMethod"""
+  """
+  Grants permission to read ShippingMethod
+  """
   ReadShippingMethod
 
-  """Grants permission to update ShippingMethod"""
+  """
+  Grants permission to update ShippingMethod
+  """
   UpdateShippingMethod
 
-  """Grants permission to delete ShippingMethod"""
+  """
+  Grants permission to delete ShippingMethod
+  """
   DeleteShippingMethod
 
-  """Grants permission to create Tag"""
+  """
+  Grants permission to create Tag
+  """
   CreateTag
 
-  """Grants permission to read Tag"""
+  """
+  Grants permission to read Tag
+  """
   ReadTag
 
-  """Grants permission to update Tag"""
+  """
+  Grants permission to update Tag
+  """
   UpdateTag
 
-  """Grants permission to delete Tag"""
+  """
+  Grants permission to delete Tag
+  """
   DeleteTag
 
-  """Grants permission to create TaxCategory"""
+  """
+  Grants permission to create TaxCategory
+  """
   CreateTaxCategory
 
-  """Grants permission to read TaxCategory"""
+  """
+  Grants permission to read TaxCategory
+  """
   ReadTaxCategory
 
-  """Grants permission to update TaxCategory"""
+  """
+  Grants permission to update TaxCategory
+  """
   UpdateTaxCategory
 
-  """Grants permission to delete TaxCategory"""
+  """
+  Grants permission to delete TaxCategory
+  """
   DeleteTaxCategory
 
-  """Grants permission to create TaxRate"""
+  """
+  Grants permission to create TaxRate
+  """
   CreateTaxRate
 
-  """Grants permission to read TaxRate"""
+  """
+  Grants permission to read TaxRate
+  """
   ReadTaxRate
 
-  """Grants permission to update TaxRate"""
+  """
+  Grants permission to update TaxRate
+  """
   UpdateTaxRate
 
-  """Grants permission to delete TaxRate"""
+  """
+  Grants permission to delete TaxRate
+  """
   DeleteTaxRate
 
-  """Grants permission to create System"""
+  """
+  Grants permission to create System
+  """
   CreateSystem
 
-  """Grants permission to read System"""
+  """
+  Grants permission to read System
+  """
   ReadSystem
 
-  """Grants permission to update System"""
+  """
+  Grants permission to update System
+  """
   UpdateSystem
 
-  """Grants permission to delete System"""
+  """
+  Grants permission to delete System
+  """
   DeleteSystem
 
-  """Grants permission to create Zone"""
+  """
+  Grants permission to create Zone
+  """
   CreateZone
 
-  """Grants permission to read Zone"""
+  """
+  Grants permission to read Zone
+  """
   ReadZone
 
-  """Grants permission to update Zone"""
+  """
+  Grants permission to update Zone
+  """
   UpdateZone
 
-  """Grants permission to delete Zone"""
+  """
+  Grants permission to delete Zone
+  """
   DeleteZone
 }
 
@@ -676,14 +914,18 @@ type NativeAuthStrategyError implements ErrorResult {
   message: String!
 }
 
-"""Returned if the user authentication credentials are not valid"""
+"""
+Returned if the user authentication credentials are not valid
+"""
 type InvalidCredentialsError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
   authenticationError: String!
 }
 
-"""Returned if there is an error in transitioning the Order state"""
+"""
+Returned if there is an error in transitioning the Order state
+"""
 type OrderStateTransitionError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
@@ -700,14 +942,18 @@ type EmailAddressConflictError implements ErrorResult {
   message: String!
 }
 
-"""Retured when the maximum order size limit has been reached."""
+"""
+Retured when the maximum order size limit has been reached.
+"""
 type OrderLimitError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
   maxItems: Int!
 }
 
-"""Retured when attemting to set a negative OrderLine quantity."""
+"""
+Retured when attemting to set a negative OrderLine quantity.
+"""
 type NegativeQuantityError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
@@ -733,7 +979,9 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-"""The `Upload` scalar type represents a file upload."""
+"""
+The `Upload` scalar type represents a file upload.
+"""
 scalar Upload
 
 interface PaginatedList {
@@ -797,7 +1045,9 @@ type DeletionResponse {
 input ConfigArgInput {
   name: String!
 
-  """A JSON stringified representation of the actual value"""
+  """
+  A JSON stringified representation of the actual value
+  """
   value: String!
 }
 
@@ -980,475 +1230,789 @@ ISO 4217 currency code
 @docsCategory common
 """
 enum CurrencyCode {
-  """United Arab Emirates dirham"""
+  """
+  United Arab Emirates dirham
+  """
   AED
 
-  """Afghan afghani"""
+  """
+  Afghan afghani
+  """
   AFN
 
-  """Albanian lek"""
+  """
+  Albanian lek
+  """
   ALL
 
-  """Armenian dram"""
+  """
+  Armenian dram
+  """
   AMD
 
-  """Netherlands Antillean guilder"""
+  """
+  Netherlands Antillean guilder
+  """
   ANG
 
-  """Angolan kwanza"""
+  """
+  Angolan kwanza
+  """
   AOA
 
-  """Argentine peso"""
+  """
+  Argentine peso
+  """
   ARS
 
-  """Australian dollar"""
+  """
+  Australian dollar
+  """
   AUD
 
-  """Aruban florin"""
+  """
+  Aruban florin
+  """
   AWG
 
-  """Azerbaijani manat"""
+  """
+  Azerbaijani manat
+  """
   AZN
 
-  """Bosnia and Herzegovina convertible mark"""
+  """
+  Bosnia and Herzegovina convertible mark
+  """
   BAM
 
-  """Barbados dollar"""
+  """
+  Barbados dollar
+  """
   BBD
 
-  """Bangladeshi taka"""
+  """
+  Bangladeshi taka
+  """
   BDT
 
-  """Bulgarian lev"""
+  """
+  Bulgarian lev
+  """
   BGN
 
-  """Bahraini dinar"""
+  """
+  Bahraini dinar
+  """
   BHD
 
-  """Burundian franc"""
+  """
+  Burundian franc
+  """
   BIF
 
-  """Bermudian dollar"""
+  """
+  Bermudian dollar
+  """
   BMD
 
-  """Brunei dollar"""
+  """
+  Brunei dollar
+  """
   BND
 
-  """Boliviano"""
+  """
+  Boliviano
+  """
   BOB
 
-  """Brazilian real"""
+  """
+  Brazilian real
+  """
   BRL
 
-  """Bahamian dollar"""
+  """
+  Bahamian dollar
+  """
   BSD
 
-  """Bhutanese ngultrum"""
+  """
+  Bhutanese ngultrum
+  """
   BTN
 
-  """Botswana pula"""
+  """
+  Botswana pula
+  """
   BWP
 
-  """Belarusian ruble"""
+  """
+  Belarusian ruble
+  """
   BYN
 
-  """Belize dollar"""
+  """
+  Belize dollar
+  """
   BZD
 
-  """Canadian dollar"""
+  """
+  Canadian dollar
+  """
   CAD
 
-  """Congolese franc"""
+  """
+  Congolese franc
+  """
   CDF
 
-  """Swiss franc"""
+  """
+  Swiss franc
+  """
   CHF
 
-  """Chilean peso"""
+  """
+  Chilean peso
+  """
   CLP
 
-  """Renminbi (Chinese) yuan"""
+  """
+  Renminbi (Chinese) yuan
+  """
   CNY
 
-  """Colombian peso"""
+  """
+  Colombian peso
+  """
   COP
 
-  """Costa Rican colon"""
+  """
+  Costa Rican colon
+  """
   CRC
 
-  """Cuban convertible peso"""
+  """
+  Cuban convertible peso
+  """
   CUC
 
-  """Cuban peso"""
+  """
+  Cuban peso
+  """
   CUP
 
-  """Cape Verde escudo"""
+  """
+  Cape Verde escudo
+  """
   CVE
 
-  """Czech koruna"""
+  """
+  Czech koruna
+  """
   CZK
 
-  """Djiboutian franc"""
+  """
+  Djiboutian franc
+  """
   DJF
 
-  """Danish krone"""
+  """
+  Danish krone
+  """
   DKK
 
-  """Dominican peso"""
+  """
+  Dominican peso
+  """
   DOP
 
-  """Algerian dinar"""
+  """
+  Algerian dinar
+  """
   DZD
 
-  """Egyptian pound"""
+  """
+  Egyptian pound
+  """
   EGP
 
-  """Eritrean nakfa"""
+  """
+  Eritrean nakfa
+  """
   ERN
 
-  """Ethiopian birr"""
+  """
+  Ethiopian birr
+  """
   ETB
 
-  """Euro"""
+  """
+  Euro
+  """
   EUR
 
-  """Fiji dollar"""
+  """
+  Fiji dollar
+  """
   FJD
 
-  """Falkland Islands pound"""
+  """
+  Falkland Islands pound
+  """
   FKP
 
-  """Pound sterling"""
+  """
+  Pound sterling
+  """
   GBP
 
-  """Georgian lari"""
+  """
+  Georgian lari
+  """
   GEL
 
-  """Ghanaian cedi"""
+  """
+  Ghanaian cedi
+  """
   GHS
 
-  """Gibraltar pound"""
+  """
+  Gibraltar pound
+  """
   GIP
 
-  """Gambian dalasi"""
+  """
+  Gambian dalasi
+  """
   GMD
 
-  """Guinean franc"""
+  """
+  Guinean franc
+  """
   GNF
 
-  """Guatemalan quetzal"""
+  """
+  Guatemalan quetzal
+  """
   GTQ
 
-  """Guyanese dollar"""
+  """
+  Guyanese dollar
+  """
   GYD
 
-  """Hong Kong dollar"""
+  """
+  Hong Kong dollar
+  """
   HKD
 
-  """Honduran lempira"""
+  """
+  Honduran lempira
+  """
   HNL
 
-  """Croatian kuna"""
+  """
+  Croatian kuna
+  """
   HRK
 
-  """Haitian gourde"""
+  """
+  Haitian gourde
+  """
   HTG
 
-  """Hungarian forint"""
+  """
+  Hungarian forint
+  """
   HUF
 
-  """Indonesian rupiah"""
+  """
+  Indonesian rupiah
+  """
   IDR
 
-  """Israeli new shekel"""
+  """
+  Israeli new shekel
+  """
   ILS
 
-  """Indian rupee"""
+  """
+  Indian rupee
+  """
   INR
 
-  """Iraqi dinar"""
+  """
+  Iraqi dinar
+  """
   IQD
 
-  """Iranian rial"""
+  """
+  Iranian rial
+  """
   IRR
 
-  """Icelandic króna"""
+  """
+  Icelandic króna
+  """
   ISK
 
-  """Jamaican dollar"""
+  """
+  Jamaican dollar
+  """
   JMD
 
-  """Jordanian dinar"""
+  """
+  Jordanian dinar
+  """
   JOD
 
-  """Japanese yen"""
+  """
+  Japanese yen
+  """
   JPY
 
-  """Kenyan shilling"""
+  """
+  Kenyan shilling
+  """
   KES
 
-  """Kyrgyzstani som"""
+  """
+  Kyrgyzstani som
+  """
   KGS
 
-  """Cambodian riel"""
+  """
+  Cambodian riel
+  """
   KHR
 
-  """Comoro franc"""
+  """
+  Comoro franc
+  """
   KMF
 
-  """North Korean won"""
+  """
+  North Korean won
+  """
   KPW
 
-  """South Korean won"""
+  """
+  South Korean won
+  """
   KRW
 
-  """Kuwaiti dinar"""
+  """
+  Kuwaiti dinar
+  """
   KWD
 
-  """Cayman Islands dollar"""
+  """
+  Cayman Islands dollar
+  """
   KYD
 
-  """Kazakhstani tenge"""
+  """
+  Kazakhstani tenge
+  """
   KZT
 
-  """Lao kip"""
+  """
+  Lao kip
+  """
   LAK
 
-  """Lebanese pound"""
+  """
+  Lebanese pound
+  """
   LBP
 
-  """Sri Lankan rupee"""
+  """
+  Sri Lankan rupee
+  """
   LKR
 
-  """Liberian dollar"""
+  """
+  Liberian dollar
+  """
   LRD
 
-  """Lesotho loti"""
+  """
+  Lesotho loti
+  """
   LSL
 
-  """Libyan dinar"""
+  """
+  Libyan dinar
+  """
   LYD
 
-  """Moroccan dirham"""
+  """
+  Moroccan dirham
+  """
   MAD
 
-  """Moldovan leu"""
+  """
+  Moldovan leu
+  """
   MDL
 
-  """Malagasy ariary"""
+  """
+  Malagasy ariary
+  """
   MGA
 
-  """Macedonian denar"""
+  """
+  Macedonian denar
+  """
   MKD
 
-  """Myanmar kyat"""
+  """
+  Myanmar kyat
+  """
   MMK
 
-  """Mongolian tögrög"""
+  """
+  Mongolian tögrög
+  """
   MNT
 
-  """Macanese pataca"""
+  """
+  Macanese pataca
+  """
   MOP
 
-  """Mauritanian ouguiya"""
+  """
+  Mauritanian ouguiya
+  """
   MRU
 
-  """Mauritian rupee"""
+  """
+  Mauritian rupee
+  """
   MUR
 
-  """Maldivian rufiyaa"""
+  """
+  Maldivian rufiyaa
+  """
   MVR
 
-  """Malawian kwacha"""
+  """
+  Malawian kwacha
+  """
   MWK
 
-  """Mexican peso"""
+  """
+  Mexican peso
+  """
   MXN
 
-  """Malaysian ringgit"""
+  """
+  Malaysian ringgit
+  """
   MYR
 
-  """Mozambican metical"""
+  """
+  Mozambican metical
+  """
   MZN
 
-  """Namibian dollar"""
+  """
+  Namibian dollar
+  """
   NAD
 
-  """Nigerian naira"""
+  """
+  Nigerian naira
+  """
   NGN
 
-  """Nicaraguan córdoba"""
+  """
+  Nicaraguan córdoba
+  """
   NIO
 
-  """Norwegian krone"""
+  """
+  Norwegian krone
+  """
   NOK
 
-  """Nepalese rupee"""
+  """
+  Nepalese rupee
+  """
   NPR
 
-  """New Zealand dollar"""
+  """
+  New Zealand dollar
+  """
   NZD
 
-  """Omani rial"""
+  """
+  Omani rial
+  """
   OMR
 
-  """Panamanian balboa"""
+  """
+  Panamanian balboa
+  """
   PAB
 
-  """Peruvian sol"""
+  """
+  Peruvian sol
+  """
   PEN
 
-  """Papua New Guinean kina"""
+  """
+  Papua New Guinean kina
+  """
   PGK
 
-  """Philippine peso"""
+  """
+  Philippine peso
+  """
   PHP
 
-  """Pakistani rupee"""
+  """
+  Pakistani rupee
+  """
   PKR
 
-  """Polish złoty"""
+  """
+  Polish złoty
+  """
   PLN
 
-  """Paraguayan guaraní"""
+  """
+  Paraguayan guaraní
+  """
   PYG
 
-  """Qatari riyal"""
+  """
+  Qatari riyal
+  """
   QAR
 
-  """Romanian leu"""
+  """
+  Romanian leu
+  """
   RON
 
-  """Serbian dinar"""
+  """
+  Serbian dinar
+  """
   RSD
 
-  """Russian ruble"""
+  """
+  Russian ruble
+  """
   RUB
 
-  """Rwandan franc"""
+  """
+  Rwandan franc
+  """
   RWF
 
-  """Saudi riyal"""
+  """
+  Saudi riyal
+  """
   SAR
 
-  """Solomon Islands dollar"""
+  """
+  Solomon Islands dollar
+  """
   SBD
 
-  """Seychelles rupee"""
+  """
+  Seychelles rupee
+  """
   SCR
 
-  """Sudanese pound"""
+  """
+  Sudanese pound
+  """
   SDG
 
-  """Swedish krona/kronor"""
+  """
+  Swedish krona/kronor
+  """
   SEK
 
-  """Singapore dollar"""
+  """
+  Singapore dollar
+  """
   SGD
 
-  """Saint Helena pound"""
+  """
+  Saint Helena pound
+  """
   SHP
 
-  """Sierra Leonean leone"""
+  """
+  Sierra Leonean leone
+  """
   SLL
 
-  """Somali shilling"""
+  """
+  Somali shilling
+  """
   SOS
 
-  """Surinamese dollar"""
+  """
+  Surinamese dollar
+  """
   SRD
 
-  """South Sudanese pound"""
+  """
+  South Sudanese pound
+  """
   SSP
 
-  """São Tomé and Príncipe dobra"""
+  """
+  São Tomé and Príncipe dobra
+  """
   STN
 
-  """Salvadoran colón"""
+  """
+  Salvadoran colón
+  """
   SVC
 
-  """Syrian pound"""
+  """
+  Syrian pound
+  """
   SYP
 
-  """Swazi lilangeni"""
+  """
+  Swazi lilangeni
+  """
   SZL
 
-  """Thai baht"""
+  """
+  Thai baht
+  """
   THB
 
-  """Tajikistani somoni"""
+  """
+  Tajikistani somoni
+  """
   TJS
 
-  """Turkmenistan manat"""
+  """
+  Turkmenistan manat
+  """
   TMT
 
-  """Tunisian dinar"""
+  """
+  Tunisian dinar
+  """
   TND
 
-  """Tongan paʻanga"""
+  """
+  Tongan paʻanga
+  """
   TOP
 
-  """Turkish lira"""
+  """
+  Turkish lira
+  """
   TRY
 
-  """Trinidad and Tobago dollar"""
+  """
+  Trinidad and Tobago dollar
+  """
   TTD
 
-  """New Taiwan dollar"""
+  """
+  New Taiwan dollar
+  """
   TWD
 
-  """Tanzanian shilling"""
+  """
+  Tanzanian shilling
+  """
   TZS
 
-  """Ukrainian hryvnia"""
+  """
+  Ukrainian hryvnia
+  """
   UAH
 
-  """Ugandan shilling"""
+  """
+  Ugandan shilling
+  """
   UGX
 
-  """United States dollar"""
+  """
+  United States dollar
+  """
   USD
 
-  """Uruguayan peso"""
+  """
+  Uruguayan peso
+  """
   UYU
 
-  """Uzbekistan som"""
+  """
+  Uzbekistan som
+  """
   UZS
 
-  """Venezuelan bolívar soberano"""
+  """
+  Venezuelan bolívar soberano
+  """
   VES
 
-  """Vietnamese đồng"""
+  """
+  Vietnamese đồng
+  """
   VND
 
-  """Vanuatu vatu"""
+  """
+  Vanuatu vatu
+  """
   VUV
 
-  """Samoan tala"""
+  """
+  Samoan tala
+  """
   WST
 
-  """CFA franc BEAC"""
+  """
+  CFA franc BEAC
+  """
   XAF
 
-  """East Caribbean dollar"""
+  """
+  East Caribbean dollar
+  """
   XCD
 
-  """CFA franc BCEAO"""
+  """
+  CFA franc BCEAO
+  """
   XOF
 
-  """CFP franc (franc Pacifique)"""
+  """
+  CFP franc (franc Pacifique)
+  """
   XPF
 
-  """Yemeni rial"""
+  """
+  Yemeni rial
+  """
   YER
 
-  """South African rand"""
+  """
+  South African rand
+  """
   ZAR
 
-  """Zambian kwacha"""
+  """
+  Zambian kwacha
+  """
   ZMW
 
-  """Zimbabwean dollar"""
+  """
+  Zimbabwean dollar
+  """
   ZWL
 }
 
@@ -1572,7 +2136,15 @@ type LocalizedString {
   value: String!
 }
 
-union CustomFieldConfig = StringCustomFieldConfig | LocaleStringCustomFieldConfig | IntCustomFieldConfig | FloatCustomFieldConfig | BooleanCustomFieldConfig | DateTimeCustomFieldConfig | RelationCustomFieldConfig | TextCustomFieldConfig
+union CustomFieldConfig =
+    StringCustomFieldConfig
+  | LocaleStringCustomFieldConfig
+  | IntCustomFieldConfig
+  | FloatCustomFieldConfig
+  | BooleanCustomFieldConfig
+  | DateTimeCustomFieldConfig
+  | RelationCustomFieldConfig
+  | TextCustomFieldConfig
 
 type CustomerGroup implements Node {
   id: ID!
@@ -1712,475 +2284,789 @@ and includes the major spoken languages of the world and any widely-used variant
 @docsCategory common
 """
 enum LanguageCode {
-  """Afrikaans"""
+  """
+  Afrikaans
+  """
   af
 
-  """Akan"""
+  """
+  Akan
+  """
   ak
 
-  """Albanian"""
+  """
+  Albanian
+  """
   sq
 
-  """Amharic"""
+  """
+  Amharic
+  """
   am
 
-  """Arabic"""
+  """
+  Arabic
+  """
   ar
 
-  """Armenian"""
+  """
+  Armenian
+  """
   hy
 
-  """Assamese"""
+  """
+  Assamese
+  """
   as
 
-  """Azerbaijani"""
+  """
+  Azerbaijani
+  """
   az
 
-  """Bambara"""
+  """
+  Bambara
+  """
   bm
 
-  """Bangla"""
+  """
+  Bangla
+  """
   bn
 
-  """Basque"""
+  """
+  Basque
+  """
   eu
 
-  """Belarusian"""
+  """
+  Belarusian
+  """
   be
 
-  """Bosnian"""
+  """
+  Bosnian
+  """
   bs
 
-  """Breton"""
+  """
+  Breton
+  """
   br
 
-  """Bulgarian"""
+  """
+  Bulgarian
+  """
   bg
 
-  """Burmese"""
+  """
+  Burmese
+  """
   my
 
-  """Catalan"""
+  """
+  Catalan
+  """
   ca
 
-  """Chechen"""
+  """
+  Chechen
+  """
   ce
 
-  """Chinese"""
+  """
+  Chinese
+  """
   zh
 
-  """Simplified Chinese"""
+  """
+  Simplified Chinese
+  """
   zh_Hans
 
-  """Traditional Chinese"""
+  """
+  Traditional Chinese
+  """
   zh_Hant
 
-  """Church Slavic"""
+  """
+  Church Slavic
+  """
   cu
 
-  """Cornish"""
+  """
+  Cornish
+  """
   kw
 
-  """Corsican"""
+  """
+  Corsican
+  """
   co
 
-  """Croatian"""
+  """
+  Croatian
+  """
   hr
 
-  """Czech"""
+  """
+  Czech
+  """
   cs
 
-  """Danish"""
+  """
+  Danish
+  """
   da
 
-  """Dutch"""
+  """
+  Dutch
+  """
   nl
 
-  """Flemish"""
+  """
+  Flemish
+  """
   nl_BE
 
-  """Dzongkha"""
+  """
+  Dzongkha
+  """
   dz
 
-  """English"""
+  """
+  English
+  """
   en
 
-  """Australian English"""
+  """
+  Australian English
+  """
   en_AU
 
-  """Canadian English"""
+  """
+  Canadian English
+  """
   en_CA
 
-  """British English"""
+  """
+  British English
+  """
   en_GB
 
-  """American English"""
+  """
+  American English
+  """
   en_US
 
-  """Esperanto"""
+  """
+  Esperanto
+  """
   eo
 
-  """Estonian"""
+  """
+  Estonian
+  """
   et
 
-  """Ewe"""
+  """
+  Ewe
+  """
   ee
 
-  """Faroese"""
+  """
+  Faroese
+  """
   fo
 
-  """Finnish"""
+  """
+  Finnish
+  """
   fi
 
-  """French"""
+  """
+  French
+  """
   fr
 
-  """Canadian French"""
+  """
+  Canadian French
+  """
   fr_CA
 
-  """Swiss French"""
+  """
+  Swiss French
+  """
   fr_CH
 
-  """Fulah"""
+  """
+  Fulah
+  """
   ff
 
-  """Galician"""
+  """
+  Galician
+  """
   gl
 
-  """Ganda"""
+  """
+  Ganda
+  """
   lg
 
-  """Georgian"""
+  """
+  Georgian
+  """
   ka
 
-  """German"""
+  """
+  German
+  """
   de
 
-  """Austrian German"""
+  """
+  Austrian German
+  """
   de_AT
 
-  """Swiss High German"""
+  """
+  Swiss High German
+  """
   de_CH
 
-  """Greek"""
+  """
+  Greek
+  """
   el
 
-  """Gujarati"""
+  """
+  Gujarati
+  """
   gu
 
-  """Haitian Creole"""
+  """
+  Haitian Creole
+  """
   ht
 
-  """Hausa"""
+  """
+  Hausa
+  """
   ha
 
-  """Hebrew"""
+  """
+  Hebrew
+  """
   he
 
-  """Hindi"""
+  """
+  Hindi
+  """
   hi
 
-  """Hungarian"""
+  """
+  Hungarian
+  """
   hu
 
-  """Icelandic"""
+  """
+  Icelandic
+  """
   is
 
-  """Igbo"""
+  """
+  Igbo
+  """
   ig
 
-  """Indonesian"""
+  """
+  Indonesian
+  """
   id
 
-  """Interlingua"""
+  """
+  Interlingua
+  """
   ia
 
-  """Irish"""
+  """
+  Irish
+  """
   ga
 
-  """Italian"""
+  """
+  Italian
+  """
   it
 
-  """Japanese"""
+  """
+  Japanese
+  """
   ja
 
-  """Javanese"""
+  """
+  Javanese
+  """
   jv
 
-  """Kalaallisut"""
+  """
+  Kalaallisut
+  """
   kl
 
-  """Kannada"""
+  """
+  Kannada
+  """
   kn
 
-  """Kashmiri"""
+  """
+  Kashmiri
+  """
   ks
 
-  """Kazakh"""
+  """
+  Kazakh
+  """
   kk
 
-  """Khmer"""
+  """
+  Khmer
+  """
   km
 
-  """Kikuyu"""
+  """
+  Kikuyu
+  """
   ki
 
-  """Kinyarwanda"""
+  """
+  Kinyarwanda
+  """
   rw
 
-  """Korean"""
+  """
+  Korean
+  """
   ko
 
-  """Kurdish"""
+  """
+  Kurdish
+  """
   ku
 
-  """Kyrgyz"""
+  """
+  Kyrgyz
+  """
   ky
 
-  """Lao"""
+  """
+  Lao
+  """
   lo
 
-  """Latin"""
+  """
+  Latin
+  """
   la
 
-  """Latvian"""
+  """
+  Latvian
+  """
   lv
 
-  """Lingala"""
+  """
+  Lingala
+  """
   ln
 
-  """Lithuanian"""
+  """
+  Lithuanian
+  """
   lt
 
-  """Luba-Katanga"""
+  """
+  Luba-Katanga
+  """
   lu
 
-  """Luxembourgish"""
+  """
+  Luxembourgish
+  """
   lb
 
-  """Macedonian"""
+  """
+  Macedonian
+  """
   mk
 
-  """Malagasy"""
+  """
+  Malagasy
+  """
   mg
 
-  """Malay"""
+  """
+  Malay
+  """
   ms
 
-  """Malayalam"""
+  """
+  Malayalam
+  """
   ml
 
-  """Maltese"""
+  """
+  Maltese
+  """
   mt
 
-  """Manx"""
+  """
+  Manx
+  """
   gv
 
-  """Maori"""
+  """
+  Maori
+  """
   mi
 
-  """Marathi"""
+  """
+  Marathi
+  """
   mr
 
-  """Mongolian"""
+  """
+  Mongolian
+  """
   mn
 
-  """Nepali"""
+  """
+  Nepali
+  """
   ne
 
-  """North Ndebele"""
+  """
+  North Ndebele
+  """
   nd
 
-  """Northern Sami"""
+  """
+  Northern Sami
+  """
   se
 
-  """Norwegian Bokmål"""
+  """
+  Norwegian Bokmål
+  """
   nb
 
-  """Norwegian Nynorsk"""
+  """
+  Norwegian Nynorsk
+  """
   nn
 
-  """Nyanja"""
+  """
+  Nyanja
+  """
   ny
 
-  """Odia"""
+  """
+  Odia
+  """
   or
 
-  """Oromo"""
+  """
+  Oromo
+  """
   om
 
-  """Ossetic"""
+  """
+  Ossetic
+  """
   os
 
-  """Pashto"""
+  """
+  Pashto
+  """
   ps
 
-  """Persian"""
+  """
+  Persian
+  """
   fa
 
-  """Dari"""
+  """
+  Dari
+  """
   fa_AF
 
-  """Polish"""
+  """
+  Polish
+  """
   pl
 
-  """Portuguese"""
+  """
+  Portuguese
+  """
   pt
 
-  """Brazilian Portuguese"""
+  """
+  Brazilian Portuguese
+  """
   pt_BR
 
-  """European Portuguese"""
+  """
+  European Portuguese
+  """
   pt_PT
 
-  """Punjabi"""
+  """
+  Punjabi
+  """
   pa
 
-  """Quechua"""
+  """
+  Quechua
+  """
   qu
 
-  """Romanian"""
+  """
+  Romanian
+  """
   ro
 
-  """Moldavian"""
+  """
+  Moldavian
+  """
   ro_MD
 
-  """Romansh"""
+  """
+  Romansh
+  """
   rm
 
-  """Rundi"""
+  """
+  Rundi
+  """
   rn
 
-  """Russian"""
+  """
+  Russian
+  """
   ru
 
-  """Samoan"""
+  """
+  Samoan
+  """
   sm
 
-  """Sango"""
+  """
+  Sango
+  """
   sg
 
-  """Sanskrit"""
+  """
+  Sanskrit
+  """
   sa
 
-  """Scottish Gaelic"""
+  """
+  Scottish Gaelic
+  """
   gd
 
-  """Serbian"""
+  """
+  Serbian
+  """
   sr
 
-  """Shona"""
+  """
+  Shona
+  """
   sn
 
-  """Sichuan Yi"""
+  """
+  Sichuan Yi
+  """
   ii
 
-  """Sindhi"""
+  """
+  Sindhi
+  """
   sd
 
-  """Sinhala"""
+  """
+  Sinhala
+  """
   si
 
-  """Slovak"""
+  """
+  Slovak
+  """
   sk
 
-  """Slovenian"""
+  """
+  Slovenian
+  """
   sl
 
-  """Somali"""
+  """
+  Somali
+  """
   so
 
-  """Southern Sotho"""
+  """
+  Southern Sotho
+  """
   st
 
-  """Spanish"""
+  """
+  Spanish
+  """
   es
 
-  """European Spanish"""
+  """
+  European Spanish
+  """
   es_ES
 
-  """Mexican Spanish"""
+  """
+  Mexican Spanish
+  """
   es_MX
 
-  """Sundanese"""
+  """
+  Sundanese
+  """
   su
 
-  """Swahili"""
+  """
+  Swahili
+  """
   sw
 
-  """Congo Swahili"""
+  """
+  Congo Swahili
+  """
   sw_CD
 
-  """Swedish"""
+  """
+  Swedish
+  """
   sv
 
-  """Tajik"""
+  """
+  Tajik
+  """
   tg
 
-  """Tamil"""
+  """
+  Tamil
+  """
   ta
 
-  """Tatar"""
+  """
+  Tatar
+  """
   tt
 
-  """Telugu"""
+  """
+  Telugu
+  """
   te
 
-  """Thai"""
+  """
+  Thai
+  """
   th
 
-  """Tibetan"""
+  """
+  Tibetan
+  """
   bo
 
-  """Tigrinya"""
+  """
+  Tigrinya
+  """
   ti
 
-  """Tongan"""
+  """
+  Tongan
+  """
   to
 
-  """Turkish"""
+  """
+  Turkish
+  """
   tr
 
-  """Turkmen"""
+  """
+  Turkmen
+  """
   tk
 
-  """Ukrainian"""
+  """
+  Ukrainian
+  """
   uk
 
-  """Urdu"""
+  """
+  Urdu
+  """
   ur
 
-  """Uyghur"""
+  """
+  Uyghur
+  """
   ug
 
-  """Uzbek"""
+  """
+  Uzbek
+  """
   uz
 
-  """Vietnamese"""
+  """
+  Vietnamese
+  """
   vi
 
-  """Volapük"""
+  """
+  Volapük
+  """
   vo
 
-  """Welsh"""
+  """
+  Welsh
+  """
   cy
 
-  """Western Frisian"""
+  """
+  Western Frisian
+  """
   fy
 
-  """Wolof"""
+  """
+  Wolof
+  """
   wo
 
-  """Xhosa"""
+  """
+  Xhosa
+  """
   xh
 
-  """Yiddish"""
+  """
+  Yiddish
+  """
   yi
 
-  """Yoruba"""
+  """
+  Yoruba
+  """
   yo
 
-  """Zulu"""
+  """
+  Zulu
+  """
   zu
 }
 
@@ -2195,7 +3081,9 @@ type Order implements Node {
   """
   orderPlacedAt: DateTime
 
-  """A unique code for the Order"""
+  """
+  A unique code for the Order
+  """
   code: String!
   state: String!
 
@@ -2217,7 +3105,9 @@ type Order implements Node {
   surcharges: [Surcharge!]!
   discounts: [Discount!]!
 
-  """An array of all coupon codes applied to the Order"""
+  """
+  An array of all coupon codes applied to the Order
+  """
   couponCodes: [String!]!
 
   """
@@ -2236,14 +3126,18 @@ type Order implements Node {
   """
   subTotal: Int!
 
-  """Same as subTotal, but inclusive of tax"""
+  """
+  Same as subTotal, but inclusive of tax
+  """
   subTotalWithTax: Int!
   currencyCode: CurrencyCode!
   shippingLines: [ShippingLine!]!
   shipping: Int!
   shippingWithTax: Int!
 
-  """Equal to subTotal plus shipping"""
+  """
+  Equal to subTotal plus shipping
+  """
   total: Int!
 
   """
@@ -2251,7 +3145,9 @@ type Order implements Node {
   """
   totalWithTax: Int!
 
-  """A summary of the taxes being applied to this Order"""
+  """
+  A summary of the taxes being applied to this Order
+  """
   taxSummary: [OrderTaxSummary!]!
   history(options: HistoryEntryListOptions): HistoryEntryList!
   customFields: OrderCustomFields
@@ -2262,16 +3158,24 @@ A summary of the taxes being applied to this order, grouped
 by taxRate.
 """
 type OrderTaxSummary {
-  """A description of this tax"""
+  """
+  A description of this tax
+  """
   description: String!
 
-  """The taxRate as a percentage"""
+  """
+  The taxRate as a percentage
+  """
   taxRate: Float!
 
-  """The total net price or OrderItems to which this taxRate applies"""
+  """
+  The total net price or OrderItems to which this taxRate applies
+  """
   taxBase: Int!
 
-  """The total tax being applied to the Order at this taxRate"""
+  """
+  The total tax being applied to the Order at this taxRate
+  """
   taxTotal: Int!
 }
 
@@ -2317,15 +3221,19 @@ type OrderItem implements Node {
   updatedAt: DateTime!
   cancelled: Boolean!
 
-  """The price of a single unit, excluding tax and discounts"""
+  """
+  The price of a single unit, excluding tax and discounts
+  """
   unitPrice: Int!
 
-  """The price of a single unit, including tax but excluding discounts"""
+  """
+  The price of a single unit, including tax but excluding discounts
+  """
   unitPriceWithTax: Int!
 
   """
   The price of a single unit including discounts, excluding tax.
-  
+
   If Order-level discounts have been applied, this will not be the
   actual taxable unit price (see `proratedUnitPrice`), but is generally the
   correct price to display to customers to avoid confusion
@@ -2333,7 +3241,9 @@ type OrderItem implements Node {
   """
   discountedUnitPrice: Int!
 
-  """The price of a single unit including discounts and tax"""
+  """
+  The price of a single unit including discounts and tax
+  """
   discountedUnitPriceWithTax: Int!
 
   """
@@ -2343,7 +3253,9 @@ type OrderItem implements Node {
   """
   proratedUnitPrice: Int!
 
-  """The proratedUnitPrice including tax"""
+  """
+  The proratedUnitPrice including tax
+  """
   proratedUnitPriceWithTax: Int!
   unitTax: Int!
   taxRate: Float!
@@ -2360,10 +3272,14 @@ type OrderLine implements Node {
   productVariant: ProductVariant!
   featuredAsset: Asset
 
-  """The price of a single unit, excluding tax and discounts"""
+  """
+  The price of a single unit, excluding tax and discounts
+  """
   unitPrice: Int!
 
-  """The price of a single unit, including tax but excluding discounts"""
+  """
+  The price of a single unit, including tax but excluding discounts
+  """
   unitPriceWithTax: Int!
 
   """
@@ -2378,7 +3294,7 @@ type OrderLine implements Node {
 
   """
   The price of a single unit including discounts, excluding tax.
-  
+
   If Order-level discounts have been applied, this will not be the
   actual taxable unit price (see `proratedUnitPrice`), but is generally the
   correct price to display to customers to avoid confusion
@@ -2386,7 +3302,9 @@ type OrderLine implements Node {
   """
   discountedUnitPrice: Int!
 
-  """The price of a single unit including discounts and tax"""
+  """
+  The price of a single unit including discounts and tax
+  """
   discountedUnitPriceWithTax: Int!
 
   """
@@ -2396,22 +3314,32 @@ type OrderLine implements Node {
   """
   proratedUnitPrice: Int!
 
-  """The proratedUnitPrice including tax"""
+  """
+  The proratedUnitPrice including tax
+  """
   proratedUnitPriceWithTax: Int!
   quantity: Int!
   items: [OrderItem!]!
   taxRate: Float!
 
-  """The total price of the line excluding tax and discounts."""
+  """
+  The total price of the line excluding tax and discounts.
+  """
   linePrice: Int!
 
-  """The total price of the line including tax bit excluding discounts."""
+  """
+  The total price of the line including tax bit excluding discounts.
+  """
   linePriceWithTax: Int!
 
-  """The price of the line including discounts, excluding tax"""
+  """
+  The price of the line including discounts, excluding tax
+  """
   discountedLinePrice: Int!
 
-  """The price of the line including discounts and tax"""
+  """
+  The price of the line including discounts and tax
+  """
   discountedLinePriceWithTax: Int!
 
   """
@@ -2421,10 +3349,14 @@ type OrderLine implements Node {
   """
   proratedLinePrice: Int!
 
-  """The proratedLinePrice including tax"""
+  """
+  The proratedLinePrice including tax
+  """
   proratedLinePriceWithTax: Int!
 
-  """The total tax on this line"""
+  """
+  The total tax on this line
+  """
   lineTax: Int!
   discounts: [Discount!]!
   taxLines: [TaxLine!]!
@@ -2578,7 +3510,9 @@ type SearchResult {
   facetIds: [ID!]!
   facetValueIds: [ID!]!
 
-  """An array of ids of the Collections in which this result appears"""
+  """
+  An array of ids of the Collections in which this result appears
+  """
   collectionIds: [ID!]!
 
   """
@@ -2592,12 +3526,16 @@ The price of a search result product, either as a range or as a single price
 """
 union SearchResultPrice = PriceRange | SinglePrice
 
-"""The price value where the result has a single price"""
+"""
+The price value where the result has a single price
+"""
 type SinglePrice {
   value: Int!
 }
 
-"""The price range where the result has more than one price"""
+"""
+The price range where the result has more than one price
+"""
 type PriceRange {
   min: Int!
   max: Int!
@@ -2830,35 +3768,45 @@ type IneligiblePaymentMethodError implements ErrorResult {
   eligibilityCheckerMessage: String
 }
 
-"""Returned when a Payment fails due to an error."""
+"""
+Returned when a Payment fails due to an error.
+"""
 type PaymentFailedError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
   paymentErrorMessage: String!
 }
 
-"""Returned when a Payment is declined by the payment provider."""
+"""
+Returned when a Payment is declined by the payment provider.
+"""
 type PaymentDeclinedError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
   paymentErrorMessage: String!
 }
 
-"""Returned if the provided coupon code is invalid"""
+"""
+Returned if the provided coupon code is invalid
+"""
 type CouponCodeInvalidError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
   couponCode: String!
 }
 
-"""Returned if the provided coupon code is invalid"""
+"""
+Returned if the provided coupon code is invalid
+"""
 type CouponCodeExpiredError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
   couponCode: String!
 }
 
-"""Returned if the provided coupon code is invalid"""
+"""
+Returned if the provided coupon code is invalid
+"""
 type CouponCodeLimitError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
@@ -2988,7 +3936,9 @@ input UpdateOrderInput {
   customFields: UpdateOrderCustomFieldsInput
 }
 
-"""Passed as input to the `addPaymentToOrder` mutation."""
+"""
+Passed as input to the `addPaymentToOrder` mutation.
+"""
 input PaymentInput {
   """
   This field should correspond to the `code` property of a PaymentMethodHandler.
@@ -3031,39 +3981,94 @@ input ProductListOptions {
   filter: ProductFilterParameter
 }
 
-union UpdateOrderItemsResult = Order | OrderModificationError | OrderLimitError | NegativeQuantityError | InsufficientStockError
+union UpdateOrderItemsResult =
+    Order
+  | OrderModificationError
+  | OrderLimitError
+  | NegativeQuantityError
+  | InsufficientStockError
 
 union RemoveOrderItemsResult = Order | OrderModificationError
 
-union SetOrderShippingMethodResult = Order | OrderModificationError | IneligibleShippingMethodError | NoActiveOrderError
+union SetOrderShippingMethodResult =
+    Order
+  | OrderModificationError
+  | IneligibleShippingMethodError
+  | NoActiveOrderError
 
-union ApplyCouponCodeResult = Order | CouponCodeExpiredError | CouponCodeInvalidError | CouponCodeLimitError
+union ApplyCouponCodeResult =
+    Order
+  | CouponCodeExpiredError
+  | CouponCodeInvalidError
+  | CouponCodeLimitError
 
-union AddPaymentToOrderResult = Order | OrderPaymentStateError | IneligiblePaymentMethodError | PaymentFailedError | PaymentDeclinedError | OrderStateTransitionError | NoActiveOrderError
+union AddPaymentToOrderResult =
+    Order
+  | OrderPaymentStateError
+  | IneligiblePaymentMethodError
+  | PaymentFailedError
+  | PaymentDeclinedError
+  | OrderStateTransitionError
+  | NoActiveOrderError
 
 union TransitionOrderToStateResult = Order | OrderStateTransitionError
 
-union SetCustomerForOrderResult = Order | AlreadyLoggedInError | EmailAddressConflictError | NoActiveOrderError
+union SetCustomerForOrderResult =
+    Order
+  | AlreadyLoggedInError
+  | EmailAddressConflictError
+  | NoActiveOrderError
 
-union RegisterCustomerAccountResult = Success | MissingPasswordError | NativeAuthStrategyError
+union RegisterCustomerAccountResult =
+    Success
+  | MissingPasswordError
+  | NativeAuthStrategyError
 
 union RefreshCustomerVerificationResult = Success | NativeAuthStrategyError
 
-union VerifyCustomerAccountResult = CurrentUser | VerificationTokenInvalidError | VerificationTokenExpiredError | MissingPasswordError | PasswordAlreadySetError | NativeAuthStrategyError
+union VerifyCustomerAccountResult =
+    CurrentUser
+  | VerificationTokenInvalidError
+  | VerificationTokenExpiredError
+  | MissingPasswordError
+  | PasswordAlreadySetError
+  | NativeAuthStrategyError
 
-union UpdateCustomerPasswordResult = Success | InvalidCredentialsError | NativeAuthStrategyError
+union UpdateCustomerPasswordResult =
+    Success
+  | InvalidCredentialsError
+  | NativeAuthStrategyError
 
-union RequestUpdateCustomerEmailAddressResult = Success | InvalidCredentialsError | EmailAddressConflictError | NativeAuthStrategyError
+union RequestUpdateCustomerEmailAddressResult =
+    Success
+  | InvalidCredentialsError
+  | EmailAddressConflictError
+  | NativeAuthStrategyError
 
-union UpdateCustomerEmailAddressResult = Success | IdentifierChangeTokenInvalidError | IdentifierChangeTokenExpiredError | NativeAuthStrategyError
+union UpdateCustomerEmailAddressResult =
+    Success
+  | IdentifierChangeTokenInvalidError
+  | IdentifierChangeTokenExpiredError
+  | NativeAuthStrategyError
 
 union RequestPasswordResetResult = Success | NativeAuthStrategyError
 
-union ResetPasswordResult = CurrentUser | PasswordResetTokenInvalidError | PasswordResetTokenExpiredError | NativeAuthStrategyError
+union ResetPasswordResult =
+    CurrentUser
+  | PasswordResetTokenInvalidError
+  | PasswordResetTokenExpiredError
+  | NativeAuthStrategyError
 
-union NativeAuthenticationResult = CurrentUser | InvalidCredentialsError | NotVerifiedError | NativeAuthStrategyError
+union NativeAuthenticationResult =
+    CurrentUser
+  | InvalidCredentialsError
+  | NotVerifiedError
+  | NativeAuthStrategyError
 
-union AuthenticationResult = CurrentUser | InvalidCredentialsError | NotVerifiedError
+union AuthenticationResult =
+    CurrentUser
+  | InvalidCredentialsError
+  | NotVerifiedError
 
 union ActiveOrderResult = Order | NoActiveOrderError
 
@@ -3317,4 +4322,3 @@ input LegacyAuthInput {
   email: String!
   password: String!
 }
-

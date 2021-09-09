@@ -243,6 +243,7 @@ const Footer: FunctionComponent = React.memo(() => {
                 <br />
                 <StyledLink
                   external
+                  target="_blank"
                   href="https://twitter.com/Hauser_AG"
                   negative
                 >

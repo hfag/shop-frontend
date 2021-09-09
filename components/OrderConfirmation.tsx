@@ -3,7 +3,7 @@ import React, { FunctionComponent, useMemo } from "react";
 import useSWR from "swr";
 
 import { ABSOLUTE_URL } from "../utilities/api";
-import { Adjustment, AdjustmentType, Order, Query } from "../schema";
+import { Adjustment, AdjustmentType, Discount, Order, Query } from "../schema";
 import { GET_ORDER_BY_CODE } from "../gql/order";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { useRouter } from "next/router";
@@ -142,7 +142,7 @@ const OrderConfirmation: FunctionComponent = () => {
               []
             );
 
-            const adjustmentsPerUnit: Adjustment[] = adjustmentSources.map(
+            const adjustmentsPerUnit: Discount[] = adjustmentSources.map(
               (source) =>
                 line.discounts.find((a) => a.adjustmentSource === source)
             );

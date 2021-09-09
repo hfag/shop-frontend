@@ -9,7 +9,13 @@ import {
   GET_ACTIVE_ORDER,
   REMOVE_ORDER_LINE,
 } from "../../gql/order";
-import { Adjustment, AdjustmentType, Mutation, Order } from "../../schema";
+import {
+  Adjustment,
+  AdjustmentType,
+  Discount,
+  Mutation,
+  Order,
+} from "../../schema";
 import { colors } from "../../utilities/style";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { mutate } from "swr";
@@ -137,10 +143,10 @@ const InnerCartForm = React.memo(
                     []
                   );
 
-                  const adjustmentsPerUnit: Adjustment[] =
-                    adjustmentSources.map((source) =>
+                  const adjustmentsPerUnit: Discount[] = adjustmentSources.map(
+                    (source) =>
                       line.discounts.find((a) => a.adjustmentSource === source)
-                    );
+                  );
 
                   const price = adjustmentsPerUnit.reduce(
                     (price, adjustment) =>

@@ -19,7 +19,7 @@
     "extract-messages-i18n": "formatjs extract ./i18n/*.ts ./i18n/**/*.ts --out-file ./messages/i18n.json",
     "collect-messages": "node scripts/collect-i18n-strings.js",
     "generate-messages": "rm -r messages/* && yarn extract-messages && yarn collect-messages && node scripts/update-18n.js",
-    "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
+    "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect -H 'Content-Type: application/json' > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
     "analysis": "webpack-bundle-analyzer ./dist/stats.json",
     "prettier": "prettier --write .",
     "test": "echo 'not implemented'",
@@ -33,7 +33,7 @@
     }
   },
   "resolutions": {
-    "graphql": "15.5.0"
+    "graphql": "15.5.1"
   },
   "dependencies": {
     "@babel/core": "^7.14.8",
@@ -50,10 +50,10 @@
     "@types/color": "^3.0.1",
     "@types/lodash": "^4.14.108",
     "@types/node": "^14.0.5",
-    "@types/react": "^16.9.35",
+    "@types/react": "^17.0.20",
     "@types/react-autosuggest": "^9.3.14",
     "@types/react-collapse": "^5.0.0",
-    "@types/react-dom": "^16.0.5",
+    "@types/react-dom": "^17.0.9",
     "@types/react-select": "^3.0.22",
     "@types/yup": "^0.29.0",
     "autoprefixer": "^9.7.1",
@@ -71,7 +71,7 @@
     "formik": "^2.2.6",
     "ghooks": "^2.0.4",
     "glob": "^7.1.6",
-    "graphql": "15.5.0",
+    "graphql": "15.5.1",
     "graphqurl": "^1.0.1",
     "intl": "^1.2.5",
     "intl-locales-supported": "^1.8.9",
@@ -102,7 +102,7 @@
     "schema-dts": "^0.6.0",
     "style-loader": "^0.19.0",
     "swr": "^0.2.2",
-    "typescript": "^4.3.5",
+    "typescript": "^4.4.2",
     "yup": "^0.26.6"
   },
   "devDependencies": {

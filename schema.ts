@@ -13,8 +13,11 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -61,6 +64,7 @@ export enum AdjustmentType {
   DistributedOrderPromotion = "DISTRIBUTED_ORDER_PROMOTION",
 }
 
+/** Retured when attemting to set the Customer for an Order when already logged in. */
 export type AlreadyLoggedInError = ErrorResult & {
   __typename?: "AlreadyLoggedInError";
   errorCode: ErrorCode;
@@ -239,6 +243,16 @@ export type CollectionListOptions = {
   filter?: Maybe<CollectionFilterParameter>;
 };
 
+/**
+ * Which Collections are present in the products returned
+ * by the search, and in what quantity.
+ */
+export type CollectionResult = {
+  __typename?: "CollectionResult";
+  collection: Collection;
+  count: Scalars["Int"];
+};
+
 export type CollectionSortParameter = {
   id?: Maybe<SortOrder>;
   createdAt?: Maybe<SortOrder>;
@@ -280,6 +294,7 @@ export type ConfigArgDefinition = {
 
 export type ConfigArgInput = {
   name: Scalars["String"];
+  /** A JSON stringified representation of the actual value */
   value: Scalars["String"];
 };
 
@@ -334,6 +349,7 @@ export type CountryTranslation = {
   name: Scalars["String"];
 };
 
+/** Returned if the provided coupon code is invalid */
 export type CouponCodeExpiredError = ErrorResult & {
   __typename?: "CouponCodeExpiredError";
   errorCode: ErrorCode;
@@ -341,6 +357,7 @@ export type CouponCodeExpiredError = ErrorResult & {
   couponCode: Scalars["String"];
 };
 
+/** Returned if the provided coupon code is invalid */
 export type CouponCodeInvalidError = ErrorResult & {
   __typename?: "CouponCodeInvalidError";
   errorCode: ErrorCode;
@@ -348,6 +365,7 @@ export type CouponCodeInvalidError = ErrorResult & {
   couponCode: Scalars["String"];
 };
 
+/** Returned if the provided coupon code is invalid */
 export type CouponCodeLimitError = ErrorResult & {
   __typename?: "CouponCodeLimitError";
   errorCode: ErrorCode;
@@ -380,163 +398,326 @@ export type CreateCustomerInput = {
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
+/**
+ * @description
+ * ISO 4217 currency code
+ *
+ * @docsCategory common
+ */
 export enum CurrencyCode {
+  /** United Arab Emirates dirham */
   Aed = "AED",
+  /** Afghan afghani */
   Afn = "AFN",
+  /** Albanian lek */
   All = "ALL",
+  /** Armenian dram */
   Amd = "AMD",
+  /** Netherlands Antillean guilder */
   Ang = "ANG",
+  /** Angolan kwanza */
   Aoa = "AOA",
+  /** Argentine peso */
   Ars = "ARS",
+  /** Australian dollar */
   Aud = "AUD",
+  /** Aruban florin */
   Awg = "AWG",
+  /** Azerbaijani manat */
   Azn = "AZN",
+  /** Bosnia and Herzegovina convertible mark */
   Bam = "BAM",
+  /** Barbados dollar */
   Bbd = "BBD",
+  /** Bangladeshi taka */
   Bdt = "BDT",
+  /** Bulgarian lev */
   Bgn = "BGN",
+  /** Bahraini dinar */
   Bhd = "BHD",
+  /** Burundian franc */
   Bif = "BIF",
+  /** Bermudian dollar */
   Bmd = "BMD",
+  /** Brunei dollar */
   Bnd = "BND",
+  /** Boliviano */
   Bob = "BOB",
+  /** Brazilian real */
   Brl = "BRL",
+  /** Bahamian dollar */
   Bsd = "BSD",
+  /** Bhutanese ngultrum */
   Btn = "BTN",
+  /** Botswana pula */
   Bwp = "BWP",
+  /** Belarusian ruble */
   Byn = "BYN",
+  /** Belize dollar */
   Bzd = "BZD",
+  /** Canadian dollar */
   Cad = "CAD",
+  /** Congolese franc */
   Cdf = "CDF",
+  /** Swiss franc */
   Chf = "CHF",
+  /** Chilean peso */
   Clp = "CLP",
+  /** Renminbi (Chinese) yuan */
   Cny = "CNY",
+  /** Colombian peso */
   Cop = "COP",
+  /** Costa Rican colon */
   Crc = "CRC",
+  /** Cuban convertible peso */
   Cuc = "CUC",
+  /** Cuban peso */
   Cup = "CUP",
+  /** Cape Verde escudo */
   Cve = "CVE",
+  /** Czech koruna */
   Czk = "CZK",
+  /** Djiboutian franc */
   Djf = "DJF",
+  /** Danish krone */
   Dkk = "DKK",
+  /** Dominican peso */
   Dop = "DOP",
+  /** Algerian dinar */
   Dzd = "DZD",
+  /** Egyptian pound */
   Egp = "EGP",
+  /** Eritrean nakfa */
   Ern = "ERN",
+  /** Ethiopian birr */
   Etb = "ETB",
+  /** Euro */
   Eur = "EUR",
+  /** Fiji dollar */
   Fjd = "FJD",
+  /** Falkland Islands pound */
   Fkp = "FKP",
+  /** Pound sterling */
   Gbp = "GBP",
+  /** Georgian lari */
   Gel = "GEL",
+  /** Ghanaian cedi */
   Ghs = "GHS",
+  /** Gibraltar pound */
   Gip = "GIP",
+  /** Gambian dalasi */
   Gmd = "GMD",
+  /** Guinean franc */
   Gnf = "GNF",
+  /** Guatemalan quetzal */
   Gtq = "GTQ",
+  /** Guyanese dollar */
   Gyd = "GYD",
+  /** Hong Kong dollar */
   Hkd = "HKD",
+  /** Honduran lempira */
   Hnl = "HNL",
+  /** Croatian kuna */
   Hrk = "HRK",
+  /** Haitian gourde */
   Htg = "HTG",
+  /** Hungarian forint */
   Huf = "HUF",
+  /** Indonesian rupiah */
   Idr = "IDR",
+  /** Israeli new shekel */
   Ils = "ILS",
+  /** Indian rupee */
   Inr = "INR",
+  /** Iraqi dinar */
   Iqd = "IQD",
+  /** Iranian rial */
   Irr = "IRR",
+  /** Icelandic króna */
   Isk = "ISK",
+  /** Jamaican dollar */
   Jmd = "JMD",
+  /** Jordanian dinar */
   Jod = "JOD",
+  /** Japanese yen */
   Jpy = "JPY",
+  /** Kenyan shilling */
   Kes = "KES",
+  /** Kyrgyzstani som */
   Kgs = "KGS",
+  /** Cambodian riel */
   Khr = "KHR",
+  /** Comoro franc */
   Kmf = "KMF",
+  /** North Korean won */
   Kpw = "KPW",
+  /** South Korean won */
   Krw = "KRW",
+  /** Kuwaiti dinar */
   Kwd = "KWD",
+  /** Cayman Islands dollar */
   Kyd = "KYD",
+  /** Kazakhstani tenge */
   Kzt = "KZT",
+  /** Lao kip */
   Lak = "LAK",
+  /** Lebanese pound */
   Lbp = "LBP",
+  /** Sri Lankan rupee */
   Lkr = "LKR",
+  /** Liberian dollar */
   Lrd = "LRD",
+  /** Lesotho loti */
   Lsl = "LSL",
+  /** Libyan dinar */
   Lyd = "LYD",
+  /** Moroccan dirham */
   Mad = "MAD",
+  /** Moldovan leu */
   Mdl = "MDL",
+  /** Malagasy ariary */
   Mga = "MGA",
+  /** Macedonian denar */
   Mkd = "MKD",
+  /** Myanmar kyat */
   Mmk = "MMK",
+  /** Mongolian tögrög */
   Mnt = "MNT",
+  /** Macanese pataca */
   Mop = "MOP",
+  /** Mauritanian ouguiya */
   Mru = "MRU",
+  /** Mauritian rupee */
   Mur = "MUR",
+  /** Maldivian rufiyaa */
   Mvr = "MVR",
+  /** Malawian kwacha */
   Mwk = "MWK",
+  /** Mexican peso */
   Mxn = "MXN",
+  /** Malaysian ringgit */
   Myr = "MYR",
+  /** Mozambican metical */
   Mzn = "MZN",
+  /** Namibian dollar */
   Nad = "NAD",
+  /** Nigerian naira */
   Ngn = "NGN",
+  /** Nicaraguan córdoba */
   Nio = "NIO",
+  /** Norwegian krone */
   Nok = "NOK",
+  /** Nepalese rupee */
   Npr = "NPR",
+  /** New Zealand dollar */
   Nzd = "NZD",
+  /** Omani rial */
   Omr = "OMR",
+  /** Panamanian balboa */
   Pab = "PAB",
+  /** Peruvian sol */
   Pen = "PEN",
+  /** Papua New Guinean kina */
   Pgk = "PGK",
+  /** Philippine peso */
   Php = "PHP",
+  /** Pakistani rupee */
   Pkr = "PKR",
+  /** Polish złoty */
   Pln = "PLN",
+  /** Paraguayan guaraní */
   Pyg = "PYG",
+  /** Qatari riyal */
   Qar = "QAR",
+  /** Romanian leu */
   Ron = "RON",
+  /** Serbian dinar */
   Rsd = "RSD",
+  /** Russian ruble */
   Rub = "RUB",
+  /** Rwandan franc */
   Rwf = "RWF",
+  /** Saudi riyal */
   Sar = "SAR",
+  /** Solomon Islands dollar */
   Sbd = "SBD",
+  /** Seychelles rupee */
   Scr = "SCR",
+  /** Sudanese pound */
   Sdg = "SDG",
+  /** Swedish krona/kronor */
   Sek = "SEK",
+  /** Singapore dollar */
   Sgd = "SGD",
+  /** Saint Helena pound */
   Shp = "SHP",
+  /** Sierra Leonean leone */
   Sll = "SLL",
+  /** Somali shilling */
   Sos = "SOS",
+  /** Surinamese dollar */
   Srd = "SRD",
+  /** South Sudanese pound */
   Ssp = "SSP",
+  /** São Tomé and Príncipe dobra */
   Stn = "STN",
+  /** Salvadoran colón */
   Svc = "SVC",
+  /** Syrian pound */
   Syp = "SYP",
+  /** Swazi lilangeni */
   Szl = "SZL",
+  /** Thai baht */
   Thb = "THB",
+  /** Tajikistani somoni */
   Tjs = "TJS",
+  /** Turkmenistan manat */
   Tmt = "TMT",
+  /** Tunisian dinar */
   Tnd = "TND",
+  /** Tongan paʻanga */
   Top = "TOP",
+  /** Turkish lira */
   Try = "TRY",
+  /** Trinidad and Tobago dollar */
   Ttd = "TTD",
+  /** New Taiwan dollar */
   Twd = "TWD",
+  /** Tanzanian shilling */
   Tzs = "TZS",
+  /** Ukrainian hryvnia */
   Uah = "UAH",
+  /** Ugandan shilling */
   Ugx = "UGX",
+  /** United States dollar */
   Usd = "USD",
+  /** Uruguayan peso */
   Uyu = "UYU",
+  /** Uzbekistan som */
   Uzs = "UZS",
+  /** Venezuelan bolívar soberano */
   Ves = "VES",
+  /** Vietnamese đồng */
   Vnd = "VND",
+  /** Vanuatu vatu */
   Vuv = "VUV",
+  /** Samoan tala */
   Wst = "WST",
+  /** CFA franc BEAC */
   Xaf = "XAF",
+  /** East Caribbean dollar */
   Xcd = "XCD",
+  /** CFA franc BCEAO */
   Xof = "XOF",
+  /** CFP franc (franc Pacifique) */
   Xpf = "XPF",
+  /** Yemeni rial */
   Yer = "YER",
+  /** South African rand */
   Zar = "ZAR",
+  /** Zambian kwacha */
   Zmw = "ZMW",
+  /** Zimbabwean dollar */
   Zwl = "ZWL",
 }
 
@@ -554,6 +735,26 @@ export type CurrentUserChannel = {
   code: Scalars["String"];
   permissions: Array<Permission>;
 };
+
+export type CustomField = {
+  name: Scalars["String"];
+  type: Scalars["String"];
+  list: Scalars["Boolean"];
+  label?: Maybe<Array<LocalizedString>>;
+  description?: Maybe<Array<LocalizedString>>;
+  readonly?: Maybe<Scalars["Boolean"]>;
+  internal?: Maybe<Scalars["Boolean"]>;
+};
+
+export type CustomFieldConfig =
+  | StringCustomFieldConfig
+  | LocaleStringCustomFieldConfig
+  | IntCustomFieldConfig
+  | FloatCustomFieldConfig
+  | BooleanCustomFieldConfig
+  | DateTimeCustomFieldConfig
+  | RelationCustomFieldConfig
+  | TextCustomFieldConfig;
 
 export type Customer = Node & {
   __typename?: "Customer";
@@ -623,25 +824,6 @@ export type CustomerSortParameter = {
   emailAddress?: Maybe<SortOrder>;
 };
 
-export type CustomField = {
-  name: Scalars["String"];
-  type: Scalars["String"];
-  list: Scalars["Boolean"];
-  label?: Maybe<Array<LocalizedString>>;
-  description?: Maybe<Array<LocalizedString>>;
-  readonly?: Maybe<Scalars["Boolean"]>;
-  internal?: Maybe<Scalars["Boolean"]>;
-};
-
-export type CustomFieldConfig =
-  | StringCustomFieldConfig
-  | LocaleStringCustomFieldConfig
-  | IntCustomFieldConfig
-  | FloatCustomFieldConfig
-  | BooleanCustomFieldConfig
-  | DateTimeCustomFieldConfig
-  | RelationCustomFieldConfig;
-
 export type DateOperators = {
   eq?: Maybe<Scalars["DateTime"]>;
   before?: Maybe<Scalars["DateTime"]>;
@@ -654,6 +836,10 @@ export type DateRange = {
   end: Scalars["DateTime"];
 };
 
+/**
+ * Expects the same validation formats as the `<input type="datetime-local">` HTML element.
+ * See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes
+ */
 export type DateTimeCustomFieldConfig = CustomField & {
   __typename?: "DateTimeCustomFieldConfig";
   name: Scalars["String"];
@@ -675,10 +861,22 @@ export type DeletionResponse = {
 };
 
 export enum DeletionResult {
+  /** The entity was successfully deleted */
   Deleted = "DELETED",
+  /** Deletion did not take place, reason given in message */
   NotDeleted = "NOT_DELETED",
 }
 
+export type Discount = {
+  __typename?: "Discount";
+  adjustmentSource: Scalars["String"];
+  type: AdjustmentType;
+  description: Scalars["String"];
+  amount: Scalars["Int"];
+  amountWithTax: Scalars["Int"];
+};
+
+/** Retured when attemting to create a Customer with an email address already registered to an existing User. */
 export type EmailAddressConflictError = ErrorResult & {
   __typename?: "EmailAddressConflictError";
   errorCode: ErrorCode;
@@ -734,10 +932,33 @@ export type Facet = Node & {
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
+export type FacetFilterParameter = {
+  createdAt?: Maybe<DateOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  languageCode?: Maybe<StringOperators>;
+  name?: Maybe<StringOperators>;
+  code?: Maybe<StringOperators>;
+};
+
 export type FacetList = PaginatedList & {
   __typename?: "FacetList";
   items: Array<Facet>;
   totalItems: Scalars["Int"];
+};
+
+export type FacetListOptions = {
+  skip?: Maybe<Scalars["Int"]>;
+  take?: Maybe<Scalars["Int"]>;
+  sort?: Maybe<FacetSortParameter>;
+  filter?: Maybe<FacetFilterParameter>;
+};
+
+export type FacetSortParameter = {
+  id?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+  name?: Maybe<SortOrder>;
+  code?: Maybe<SortOrder>;
 };
 
 export type FacetTranslation = {
@@ -762,6 +983,23 @@ export type FacetValue = Node & {
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
+/**
+ * Used to construct boolean expressions for filtering search results
+ * by FacetValue ID. Examples:
+ *
+ * * ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
+ * * ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
+ * * ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }`
+ */
+export type FacetValueFilterInput = {
+  and?: Maybe<Scalars["ID"]>;
+  or?: Maybe<Array<Scalars["ID"]>>;
+};
+
+/**
+ * Which FacetValues are present in the products returned
+ * by the search, and in what quantity.
+ */
 export type FacetValueResult = {
   __typename?: "FacetValueResult";
   facetValue: FacetValue;
@@ -870,18 +1108,27 @@ export enum HistoryEntryType {
   OrderModified = "ORDER_MODIFIED",
 }
 
+/**
+ * Retured if the token used to change a Customer's email address is valid, but has
+ * expired according to the `verificationTokenDuration` setting in the AuthOptions.
+ */
 export type IdentifierChangeTokenExpiredError = ErrorResult & {
   __typename?: "IdentifierChangeTokenExpiredError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+/**
+ * Retured if the token used to change a Customer's email address is either
+ * invalid or does not match any expected tokens.
+ */
 export type IdentifierChangeTokenInvalidError = ErrorResult & {
   __typename?: "IdentifierChangeTokenInvalidError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+/** Returned when attempting to add a Payment using a PaymentMethod for which the Order is not eligible. */
 export type IneligiblePaymentMethodError = ErrorResult & {
   __typename?: "IneligiblePaymentMethodError";
   errorCode: ErrorCode;
@@ -889,12 +1136,14 @@ export type IneligiblePaymentMethodError = ErrorResult & {
   eligibilityCheckerMessage?: Maybe<Scalars["String"]>;
 };
 
+/** Returned when attempting to set a ShippingMethod for which the Order is not eligible */
 export type IneligibleShippingMethodError = ErrorResult & {
   __typename?: "IneligibleShippingMethodError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+/** Returned when attempting to add more items to the Order than are available */
 export type InsufficientStockError = ErrorResult & {
   __typename?: "InsufficientStockError";
   errorCode: ErrorCode;
@@ -917,6 +1166,7 @@ export type IntCustomFieldConfig = CustomField & {
   step?: Maybe<Scalars["Int"]>;
 };
 
+/** Returned if the user authentication credentials are not valid */
 export type InvalidCredentialsError = ErrorResult & {
   __typename?: "InvalidCredentialsError";
   errorCode: ErrorCode;
@@ -924,163 +1174,329 @@ export type InvalidCredentialsError = ErrorResult & {
   authenticationError: Scalars["String"];
 };
 
+/**
+ * @description
+ * Languages in the form of a ISO 639-1 language code with optional
+ * region or script modifier (e.g. de_AT). The selection available is based
+ * on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
+ * and includes the major spoken languages of the world and any widely-used variants.
+ *
+ * @docsCategory common
+ */
 export enum LanguageCode {
+  /** Afrikaans */
   Af = "af",
+  /** Akan */
   Ak = "ak",
+  /** Albanian */
   Sq = "sq",
+  /** Amharic */
   Am = "am",
+  /** Arabic */
   Ar = "ar",
+  /** Armenian */
   Hy = "hy",
+  /** Assamese */
   As = "as",
+  /** Azerbaijani */
   Az = "az",
+  /** Bambara */
   Bm = "bm",
+  /** Bangla */
   Bn = "bn",
+  /** Basque */
   Eu = "eu",
+  /** Belarusian */
   Be = "be",
+  /** Bosnian */
   Bs = "bs",
+  /** Breton */
   Br = "br",
+  /** Bulgarian */
   Bg = "bg",
+  /** Burmese */
   My = "my",
+  /** Catalan */
   Ca = "ca",
+  /** Chechen */
   Ce = "ce",
+  /** Chinese */
   Zh = "zh",
+  /** Simplified Chinese */
   ZhHans = "zh_Hans",
+  /** Traditional Chinese */
   ZhHant = "zh_Hant",
+  /** Church Slavic */
   Cu = "cu",
+  /** Cornish */
   Kw = "kw",
+  /** Corsican */
   Co = "co",
+  /** Croatian */
   Hr = "hr",
+  /** Czech */
   Cs = "cs",
+  /** Danish */
   Da = "da",
+  /** Dutch */
   Nl = "nl",
+  /** Flemish */
   NlBe = "nl_BE",
+  /** Dzongkha */
   Dz = "dz",
+  /** English */
   En = "en",
+  /** Australian English */
   EnAu = "en_AU",
+  /** Canadian English */
   EnCa = "en_CA",
+  /** British English */
   EnGb = "en_GB",
+  /** American English */
   EnUs = "en_US",
+  /** Esperanto */
   Eo = "eo",
+  /** Estonian */
   Et = "et",
+  /** Ewe */
   Ee = "ee",
+  /** Faroese */
   Fo = "fo",
+  /** Finnish */
   Fi = "fi",
+  /** French */
   Fr = "fr",
+  /** Canadian French */
   FrCa = "fr_CA",
+  /** Swiss French */
   FrCh = "fr_CH",
+  /** Fulah */
   Ff = "ff",
+  /** Galician */
   Gl = "gl",
+  /** Ganda */
   Lg = "lg",
+  /** Georgian */
   Ka = "ka",
+  /** German */
   De = "de",
+  /** Austrian German */
   DeAt = "de_AT",
+  /** Swiss High German */
   DeCh = "de_CH",
+  /** Greek */
   El = "el",
+  /** Gujarati */
   Gu = "gu",
+  /** Haitian Creole */
   Ht = "ht",
+  /** Hausa */
   Ha = "ha",
+  /** Hebrew */
   He = "he",
+  /** Hindi */
   Hi = "hi",
+  /** Hungarian */
   Hu = "hu",
+  /** Icelandic */
   Is = "is",
+  /** Igbo */
   Ig = "ig",
+  /** Indonesian */
   Id = "id",
+  /** Interlingua */
   Ia = "ia",
+  /** Irish */
   Ga = "ga",
+  /** Italian */
   It = "it",
+  /** Japanese */
   Ja = "ja",
+  /** Javanese */
   Jv = "jv",
+  /** Kalaallisut */
   Kl = "kl",
+  /** Kannada */
   Kn = "kn",
+  /** Kashmiri */
   Ks = "ks",
+  /** Kazakh */
   Kk = "kk",
+  /** Khmer */
   Km = "km",
+  /** Kikuyu */
   Ki = "ki",
+  /** Kinyarwanda */
   Rw = "rw",
+  /** Korean */
   Ko = "ko",
+  /** Kurdish */
   Ku = "ku",
+  /** Kyrgyz */
   Ky = "ky",
+  /** Lao */
   Lo = "lo",
+  /** Latin */
   La = "la",
+  /** Latvian */
   Lv = "lv",
+  /** Lingala */
   Ln = "ln",
+  /** Lithuanian */
   Lt = "lt",
+  /** Luba-Katanga */
   Lu = "lu",
+  /** Luxembourgish */
   Lb = "lb",
+  /** Macedonian */
   Mk = "mk",
+  /** Malagasy */
   Mg = "mg",
+  /** Malay */
   Ms = "ms",
+  /** Malayalam */
   Ml = "ml",
+  /** Maltese */
   Mt = "mt",
+  /** Manx */
   Gv = "gv",
+  /** Maori */
   Mi = "mi",
+  /** Marathi */
   Mr = "mr",
+  /** Mongolian */
   Mn = "mn",
+  /** Nepali */
   Ne = "ne",
+  /** North Ndebele */
   Nd = "nd",
+  /** Northern Sami */
   Se = "se",
+  /** Norwegian Bokmål */
   Nb = "nb",
+  /** Norwegian Nynorsk */
   Nn = "nn",
+  /** Nyanja */
   Ny = "ny",
+  /** Odia */
   Or = "or",
+  /** Oromo */
   Om = "om",
+  /** Ossetic */
   Os = "os",
+  /** Pashto */
   Ps = "ps",
+  /** Persian */
   Fa = "fa",
+  /** Dari */
   FaAf = "fa_AF",
+  /** Polish */
   Pl = "pl",
+  /** Portuguese */
   Pt = "pt",
+  /** Brazilian Portuguese */
   PtBr = "pt_BR",
+  /** European Portuguese */
   PtPt = "pt_PT",
+  /** Punjabi */
   Pa = "pa",
+  /** Quechua */
   Qu = "qu",
+  /** Romanian */
   Ro = "ro",
+  /** Moldavian */
   RoMd = "ro_MD",
+  /** Romansh */
   Rm = "rm",
+  /** Rundi */
   Rn = "rn",
+  /** Russian */
   Ru = "ru",
+  /** Samoan */
   Sm = "sm",
+  /** Sango */
   Sg = "sg",
+  /** Sanskrit */
   Sa = "sa",
+  /** Scottish Gaelic */
   Gd = "gd",
+  /** Serbian */
   Sr = "sr",
+  /** Shona */
   Sn = "sn",
+  /** Sichuan Yi */
   Ii = "ii",
+  /** Sindhi */
   Sd = "sd",
+  /** Sinhala */
   Si = "si",
+  /** Slovak */
   Sk = "sk",
+  /** Slovenian */
   Sl = "sl",
+  /** Somali */
   So = "so",
+  /** Southern Sotho */
   St = "st",
+  /** Spanish */
   Es = "es",
+  /** European Spanish */
   EsEs = "es_ES",
+  /** Mexican Spanish */
   EsMx = "es_MX",
+  /** Sundanese */
   Su = "su",
+  /** Swahili */
   Sw = "sw",
+  /** Congo Swahili */
   SwCd = "sw_CD",
+  /** Swedish */
   Sv = "sv",
+  /** Tajik */
   Tg = "tg",
+  /** Tamil */
   Ta = "ta",
+  /** Tatar */
   Tt = "tt",
+  /** Telugu */
   Te = "te",
+  /** Thai */
   Th = "th",
+  /** Tibetan */
   Bo = "bo",
+  /** Tigrinya */
   Ti = "ti",
+  /** Tongan */
   To = "to",
+  /** Turkish */
   Tr = "tr",
+  /** Turkmen */
   Tk = "tk",
+  /** Ukrainian */
   Uk = "uk",
+  /** Urdu */
   Ur = "ur",
+  /** Uyghur */
   Ug = "ug",
+  /** Uzbek */
   Uz = "uz",
+  /** Vietnamese */
   Vi = "vi",
+  /** Volapük */
   Vo = "vo",
+  /** Welsh */
   Cy = "cy",
+  /** Western Frisian */
   Fy = "fy",
+  /** Wolof */
   Wo = "wo",
+  /** Xhosa */
   Xh = "xh",
+  /** Yiddish */
   Yi = "yi",
+  /** Yoruba */
   Yo = "yo",
+  /** Zulu */
   Zu = "zu",
 }
 
@@ -1113,6 +1529,7 @@ export enum LogicalOperator {
   Or = "OR",
 }
 
+/** Retured when attemting to register or verify a customer account without a password, when one is required. */
 export type MissingPasswordError = ErrorResult & {
   __typename?: "MissingPasswordError";
   errorCode: ErrorCode;
@@ -1121,33 +1538,89 @@ export type MissingPasswordError = ErrorResult & {
 
 export type Mutation = {
   __typename?: "Mutation";
+  /** Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available. */
   addItemToOrder: UpdateOrderItemsResult;
+  /** Remove an OrderLine from the Order */
   removeOrderLine: RemoveOrderItemsResult;
+  /** Remove all OrderLine from the Order */
   removeAllOrderLines: RemoveOrderItemsResult;
+  /** Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available. */
   adjustOrderLine: UpdateOrderItemsResult;
+  /** Applies the given coupon code to the active Order */
   applyCouponCode: ApplyCouponCodeResult;
+  /** Removes the given coupon code from the active Order */
   removeCouponCode?: Maybe<Order>;
+  /** Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates` */
   transitionOrderToState?: Maybe<TransitionOrderToStateResult>;
+  /** Sets the shipping address for this order */
   setOrderShippingAddress: ActiveOrderResult;
+  /** Sets the billing address for this order */
   setOrderBillingAddress: ActiveOrderResult;
+  /** Allows any custom fields to be set for the active order */
   setOrderCustomFields: ActiveOrderResult;
+  /** Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query */
   setOrderShippingMethod: SetOrderShippingMethodResult;
+  /** Add a Payment to the Order */
   addPaymentToOrder: AddPaymentToOrderResult;
+  /** Set the Customer for the Order. Required only if the Customer is not currently logged in */
   setCustomerForOrder: SetCustomerForOrderResult;
+  /** Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})` */
   login: NativeAuthenticationResult;
+  /** Authenticates the user using a named authentication strategy */
   authenticate: AuthenticationResult;
+  /** End the current authenticated session */
   logout: Success;
+  /**
+   * Register a Customer account with the given credentials. There are three possible registration flows:
+   *
+   * _If `authOptions.requireVerification` is set to `true`:_
+   *
+   * 1. **The Customer is registered _with_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
+   *    verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
+   *    verified and authenticated in one step.
+   * 2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
+   *    verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosed password of the Customer. The Customer is then
+   *    verified and authenticated in one step.
+   *
+   * _If `authOptions.requireVerification` is set to `false`:_
+   *
+   * 3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately.
+   */
   registerCustomerAccount: RegisterCustomerAccountResult;
+  /** Regenerate and send a verification token for a new Customer registration. Only applicable if `authOptions.requireVerification` is set to true. */
   refreshCustomerVerification: RefreshCustomerVerificationResult;
+  /** Update an existing Customer */
   updateCustomer: Customer;
+  /** Create a new Customer Address */
   createCustomerAddress: Address;
+  /** Update an existing Address */
   updateCustomerAddress: Address;
+  /** Delete an existing Address */
   deleteCustomerAddress: Success;
+  /**
+   * Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
+   *
+   * If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
+   * provided here.
+   */
   verifyCustomerAccount: VerifyCustomerAccountResult;
+  /** Update the password of the active Customer */
   updateCustomerPassword: UpdateCustomerPasswordResult;
+  /**
+   * Request to update the emailAddress of the active Customer. If `authOptions.requireVerification` is enabled
+   * (as is the default), then the `identifierChangeToken` will be assigned to the current User and
+   * a IdentifierChangeRequestEvent will be raised. This can then be used e.g. by the EmailPlugin to email
+   * that verification token to the Customer, which is then used to verify the change of email address.
+   */
   requestUpdateCustomerEmailAddress: RequestUpdateCustomerEmailAddressResult;
+  /**
+   * Confirm the update of the emailAddress with the provided token, which has been generated by the
+   * `requestUpdateCustomerEmailAddress` mutation.
+   */
   updateCustomerEmailAddress: UpdateCustomerEmailAddressResult;
+  /** Requests a password reset email to be sent */
   requestPasswordReset?: Maybe<RequestPasswordResetResult>;
+  /** Resets a Customer's password based on the provided token */
   resetPassword: ResetPasswordResult;
 };
 
@@ -1264,29 +1737,35 @@ export type MutationResetPasswordArgs = {
   password: Scalars["String"];
 };
 
-export type NativeAuthenticationResult =
-  | CurrentUser
-  | InvalidCredentialsError
-  | NotVerifiedError
-  | NativeAuthStrategyError;
-
 export type NativeAuthInput = {
   username: Scalars["String"];
   password: Scalars["String"];
 };
 
+/** Retured when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured. */
 export type NativeAuthStrategyError = ErrorResult & {
   __typename?: "NativeAuthStrategyError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+export type NativeAuthenticationResult =
+  | CurrentUser
+  | InvalidCredentialsError
+  | NotVerifiedError
+  | NativeAuthStrategyError;
+
+/** Retured when attemting to set a negative OrderLine quantity. */
 export type NegativeQuantityError = ErrorResult & {
   __typename?: "NegativeQuantityError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+/**
+ * Returned when invoking a mutation which depends on there being an active Order on the
+ * current session.
+ */
 export type NoActiveOrderError = ErrorResult & {
   __typename?: "NoActiveOrderError";
   errorCode: ErrorCode;
@@ -1297,6 +1776,10 @@ export type Node = {
   id: Scalars["ID"];
 };
 
+/**
+ * Returned if `authOptions.requireVerification` is set to `true` (which is the default)
+ * and an unverified user attempts to authenticate.
+ */
 export type NotVerifiedError = ErrorResult & {
   __typename?: "NotVerifiedError";
   errorCode: ErrorCode;
@@ -1322,31 +1805,53 @@ export type Order = Node & {
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
+  /**
+   * The date & time that the Order was placed, i.e. the Customer
+   * completed the checkout and the Order is no longer "active"
+   */
   orderPlacedAt?: Maybe<Scalars["DateTime"]>;
+  /** A unique code for the Order */
   code: Scalars["String"];
   state: Scalars["String"];
+  /** An order is active as long as the payment process has not been completed */
   active: Scalars["Boolean"];
   customer?: Maybe<Customer>;
   shippingAddress?: Maybe<OrderAddress>;
   billingAddress?: Maybe<OrderAddress>;
   lines: Array<OrderLine>;
+  /**
+   * Surcharges are arbitrary modifications to the Order total which are neither
+   * ProductVariants nor discounts resulting from applied Promotions. For example,
+   * one-off discounts based on customer interaction, or surcharges based on payment
+   * methods.
+   */
   surcharges: Array<Surcharge>;
-  /** @deprecated Use `discounts` instead */
-  adjustments: Array<Adjustment>;
-  discounts: Array<Adjustment>;
+  discounts: Array<Discount>;
+  /** An array of all coupon codes applied to the Order */
   couponCodes: Array<Scalars["String"]>;
+  /** Promotions applied to the order. Only gets populated after the payment process has completed. */
   promotions: Array<Promotion>;
   payments?: Maybe<Array<Payment>>;
   fulfillments?: Maybe<Array<Fulfillment>>;
   totalQuantity: Scalars["Int"];
+  /**
+   * The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
+   * discounts which have been prorated (proportionally distributed) amongst the OrderItems.
+   * To get a total of all OrderLines which does not account for prorated discounts, use the
+   * sum of `OrderLine.discountedLinePrice` values.
+   */
   subTotal: Scalars["Int"];
+  /** Same as subTotal, but inclusive of tax */
   subTotalWithTax: Scalars["Int"];
   currencyCode: CurrencyCode;
   shippingLines: Array<ShippingLine>;
   shipping: Scalars["Int"];
   shippingWithTax: Scalars["Int"];
+  /** Equal to subTotal plus shipping */
   total: Scalars["Int"];
+  /** The final payable amount. Equal to subTotalWithTax plus shippingWithTax */
   totalWithTax: Scalars["Int"];
+  /** A summary of the taxes being applied to this Order */
   taxSummary: Array<OrderTaxSummary>;
   history: HistoryEntryList;
   customFields?: Maybe<OrderCustomFields>;
@@ -1400,15 +1905,30 @@ export type OrderItem = Node & {
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
   cancelled: Scalars["Boolean"];
+  /** The price of a single unit, excluding tax and discounts */
   unitPrice: Scalars["Int"];
+  /** The price of a single unit, including tax but excluding discounts */
   unitPriceWithTax: Scalars["Int"];
+  /**
+   * The price of a single unit including discounts, excluding tax.
+   *
+   * If Order-level discounts have been applied, this will not be the
+   * actual taxable unit price (see `proratedUnitPrice`), but is generally the
+   * correct price to display to customers to avoid confusion
+   * about the internal handling of distributed Order-level discounts.
+   */
   discountedUnitPrice: Scalars["Int"];
+  /** The price of a single unit including discounts and tax */
   discountedUnitPriceWithTax: Scalars["Int"];
+  /**
+   * The actual unit price, taking into account both item discounts _and_ prorated (proportially-distributed)
+   * Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
+   * and refund calculations.
+   */
   proratedUnitPrice: Scalars["Int"];
+  /** The proratedUnitPrice including tax */
   proratedUnitPriceWithTax: Scalars["Int"];
   unitTax: Scalars["Int"];
-  /** @deprecated `unitPrice` is now always without tax */
-  unitPriceIncludesTax: Scalars["Boolean"];
   taxRate: Scalars["Float"];
   adjustments: Array<Adjustment>;
   taxLines: Array<TaxLine>;
@@ -1416,6 +1936,7 @@ export type OrderItem = Node & {
   refundId?: Maybe<Scalars["ID"]>;
 };
 
+/** Retured when the maximum order size limit has been reached. */
 export type OrderLimitError = ErrorResult & {
   __typename?: "OrderLimitError";
   errorCode: ErrorCode;
@@ -1430,29 +1951,55 @@ export type OrderLine = Node & {
   updatedAt: Scalars["DateTime"];
   productVariant: ProductVariant;
   featuredAsset?: Maybe<Asset>;
+  /** The price of a single unit, excluding tax and discounts */
   unitPrice: Scalars["Int"];
+  /** The price of a single unit, including tax but excluding discounts */
   unitPriceWithTax: Scalars["Int"];
+  /** Non-zero if the unitPrice has changed since it was initially added to Order */
   unitPriceChangeSinceAdded: Scalars["Int"];
+  /** Non-zero if the unitPriceWithTax has changed since it was initially added to Order */
   unitPriceWithTaxChangeSinceAdded: Scalars["Int"];
+  /**
+   * The price of a single unit including discounts, excluding tax.
+   *
+   * If Order-level discounts have been applied, this will not be the
+   * actual taxable unit price (see `proratedUnitPrice`), but is generally the
+   * correct price to display to customers to avoid confusion
+   * about the internal handling of distributed Order-level discounts.
+   */
   discountedUnitPrice: Scalars["Int"];
+  /** The price of a single unit including discounts and tax */
   discountedUnitPriceWithTax: Scalars["Int"];
+  /**
+   * The actual unit price, taking into account both item discounts _and_ prorated (proportially-distributed)
+   * Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
+   * and refund calculations.
+   */
   proratedUnitPrice: Scalars["Int"];
+  /** The proratedUnitPrice including tax */
   proratedUnitPriceWithTax: Scalars["Int"];
   quantity: Scalars["Int"];
   items: Array<OrderItem>;
-  /** @deprecated Use `linePriceWithTax` instead */
-  totalPrice: Scalars["Int"];
   taxRate: Scalars["Float"];
+  /** The total price of the line excluding tax and discounts. */
   linePrice: Scalars["Int"];
+  /** The total price of the line including tax bit excluding discounts. */
   linePriceWithTax: Scalars["Int"];
+  /** The price of the line including discounts, excluding tax */
   discountedLinePrice: Scalars["Int"];
+  /** The price of the line including discounts and tax */
   discountedLinePriceWithTax: Scalars["Int"];
+  /**
+   * The actual line price, taking into account both item discounts _and_ prorated (proportially-distributed)
+   * Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
+   * and refund calculations.
+   */
   proratedLinePrice: Scalars["Int"];
+  /** The proratedLinePrice including tax */
   proratedLinePriceWithTax: Scalars["Int"];
+  /** The total tax on this line */
   lineTax: Scalars["Int"];
-  /** @deprecated Use `discounts` instead */
-  adjustments: Array<Adjustment>;
-  discounts: Array<Adjustment>;
+  discounts: Array<Discount>;
   taxLines: Array<TaxLine>;
   order: Order;
   customFields?: Maybe<Scalars["JSON"]>;
@@ -1471,12 +2018,14 @@ export type OrderListOptions = {
   filter?: Maybe<OrderFilterParameter>;
 };
 
+/** Returned when attempting to modify the contents of an Order that is not in the `AddingItems` state. */
 export type OrderModificationError = ErrorResult & {
   __typename?: "OrderModificationError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+/** Returned when attempting to add a Payment to an Order that is not in the `ArrangingPayment` state. */
 export type OrderPaymentStateError = ErrorResult & {
   __typename?: "OrderPaymentStateError";
   errorCode: ErrorCode;
@@ -1500,6 +2049,7 @@ export type OrderSortParameter = {
   notes?: Maybe<SortOrder>;
 };
 
+/** Returned if there is an error in transitioning the Order state */
 export type OrderStateTransitionError = ErrorResult & {
   __typename?: "OrderStateTransitionError";
   errorCode: ErrorCode;
@@ -1509,11 +2059,19 @@ export type OrderStateTransitionError = ErrorResult & {
   toState: Scalars["String"];
 };
 
+/**
+ * A summary of the taxes being applied to this order, grouped
+ * by taxRate.
+ */
 export type OrderTaxSummary = {
   __typename?: "OrderTaxSummary";
+  /** A description of this tax */
   description: Scalars["String"];
+  /** The taxRate as a percentage */
   taxRate: Scalars["Float"];
+  /** The total net price or OrderItems to which this taxRate applies */
   taxBase: Scalars["Int"];
+  /** The total tax being applied to the Order at this taxRate */
   taxTotal: Scalars["Int"];
 };
 
@@ -1522,18 +2080,27 @@ export type PaginatedList = {
   totalItems: Scalars["Int"];
 };
 
+/** Retured when attemting to verify a customer account with a password, when a password has already been set. */
 export type PasswordAlreadySetError = ErrorResult & {
   __typename?: "PasswordAlreadySetError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+/**
+ * Retured if the token used to reset a Customer's password is valid, but has
+ * expired according to the `verificationTokenDuration` setting in the AuthOptions.
+ */
 export type PasswordResetTokenExpiredError = ErrorResult & {
   __typename?: "PasswordResetTokenExpiredError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+/**
+ * Retured if the token used to reset a Customer's password is either
+ * invalid or does not match any expected tokens.
+ */
 export type PasswordResetTokenInvalidError = ErrorResult & {
   __typename?: "PasswordResetTokenInvalidError";
   errorCode: ErrorCode;
@@ -1554,6 +2121,7 @@ export type Payment = Node & {
   metadata?: Maybe<Scalars["JSON"]>;
 };
 
+/** Returned when a Payment is declined by the payment provider. */
 export type PaymentDeclinedError = ErrorResult & {
   __typename?: "PaymentDeclinedError";
   errorCode: ErrorCode;
@@ -1561,6 +2129,7 @@ export type PaymentDeclinedError = ErrorResult & {
   paymentErrorMessage: Scalars["String"];
 };
 
+/** Returned when a Payment fails due to an error. */
 export type PaymentFailedError = ErrorResult & {
   __typename?: "PaymentFailedError";
   errorCode: ErrorCode;
@@ -1568,8 +2137,15 @@ export type PaymentFailedError = ErrorResult & {
   paymentErrorMessage: Scalars["String"];
 };
 
+/** Passed as input to the `addPaymentToOrder` mutation. */
 export type PaymentInput = {
+  /** This field should correspond to the `code` property of a PaymentMethodHandler. */
   method: Scalars["String"];
+  /**
+   * This field should contain arbitrary data passed to the specified PaymentMethodHandler's `createPayment()` method
+   * as the "metadata" argument. For example, it could contain an ID for the payment and other
+   * data generated by the payment provider.
+   */
   metadata: Scalars["JSON"];
 };
 
@@ -1577,41 +2153,193 @@ export type PaymentMethodQuote = {
   __typename?: "PaymentMethodQuote";
   id: Scalars["ID"];
   code: Scalars["String"];
+  name: Scalars["String"];
+  description: Scalars["String"];
   isEligible: Scalars["Boolean"];
   eligibilityMessage?: Maybe<Scalars["String"]>;
 };
 
+/**
+ * @description
+ * Permissions for administrators and customers. Used to control access to
+ * GraphQL resolvers via the {@link Allow} decorator.
+ *
+ * @docsCategory common
+ */
 export enum Permission {
+  /** Authenticated means simply that the user is logged in */
   Authenticated = "Authenticated",
+  /** SuperAdmin has unrestricted access to all operations */
   SuperAdmin = "SuperAdmin",
+  /** Owner means the user owns this entity, e.g. a Customer's own Order */
   Owner = "Owner",
+  /** Public means any unauthenticated user may perform the operation */
   Public = "Public",
+  /** Grants permission to update GlobalSettings */
+  UpdateGlobalSettings = "UpdateGlobalSettings",
+  /** Grants permission to create Products, Facets, Assets, Collections */
   CreateCatalog = "CreateCatalog",
+  /** Grants permission to read Products, Facets, Assets, Collections */
   ReadCatalog = "ReadCatalog",
+  /** Grants permission to update Products, Facets, Assets, Collections */
   UpdateCatalog = "UpdateCatalog",
+  /** Grants permission to delete Products, Facets, Assets, Collections */
   DeleteCatalog = "DeleteCatalog",
-  CreateCustomer = "CreateCustomer",
-  ReadCustomer = "ReadCustomer",
-  UpdateCustomer = "UpdateCustomer",
-  DeleteCustomer = "DeleteCustomer",
-  CreateAdministrator = "CreateAdministrator",
-  ReadAdministrator = "ReadAdministrator",
-  UpdateAdministrator = "UpdateAdministrator",
-  DeleteAdministrator = "DeleteAdministrator",
-  CreateOrder = "CreateOrder",
-  ReadOrder = "ReadOrder",
-  UpdateOrder = "UpdateOrder",
-  DeleteOrder = "DeleteOrder",
-  CreatePromotion = "CreatePromotion",
-  ReadPromotion = "ReadPromotion",
-  UpdatePromotion = "UpdatePromotion",
-  DeletePromotion = "DeletePromotion",
+  /** Grants permission to create PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
   CreateSettings = "CreateSettings",
+  /** Grants permission to read PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
   ReadSettings = "ReadSettings",
+  /** Grants permission to update PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
   UpdateSettings = "UpdateSettings",
+  /** Grants permission to delete PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
   DeleteSettings = "DeleteSettings",
+  /** Grants permission to create Administrator */
+  CreateAdministrator = "CreateAdministrator",
+  /** Grants permission to read Administrator */
+  ReadAdministrator = "ReadAdministrator",
+  /** Grants permission to update Administrator */
+  UpdateAdministrator = "UpdateAdministrator",
+  /** Grants permission to delete Administrator */
+  DeleteAdministrator = "DeleteAdministrator",
+  /** Grants permission to create Asset */
+  CreateAsset = "CreateAsset",
+  /** Grants permission to read Asset */
+  ReadAsset = "ReadAsset",
+  /** Grants permission to update Asset */
+  UpdateAsset = "UpdateAsset",
+  /** Grants permission to delete Asset */
+  DeleteAsset = "DeleteAsset",
+  /** Grants permission to create Channel */
+  CreateChannel = "CreateChannel",
+  /** Grants permission to read Channel */
+  ReadChannel = "ReadChannel",
+  /** Grants permission to update Channel */
+  UpdateChannel = "UpdateChannel",
+  /** Grants permission to delete Channel */
+  DeleteChannel = "DeleteChannel",
+  /** Grants permission to create Collection */
+  CreateCollection = "CreateCollection",
+  /** Grants permission to read Collection */
+  ReadCollection = "ReadCollection",
+  /** Grants permission to update Collection */
+  UpdateCollection = "UpdateCollection",
+  /** Grants permission to delete Collection */
+  DeleteCollection = "DeleteCollection",
+  /** Grants permission to create Country */
+  CreateCountry = "CreateCountry",
+  /** Grants permission to read Country */
+  ReadCountry = "ReadCountry",
+  /** Grants permission to update Country */
+  UpdateCountry = "UpdateCountry",
+  /** Grants permission to delete Country */
+  DeleteCountry = "DeleteCountry",
+  /** Grants permission to create Customer */
+  CreateCustomer = "CreateCustomer",
+  /** Grants permission to read Customer */
+  ReadCustomer = "ReadCustomer",
+  /** Grants permission to update Customer */
+  UpdateCustomer = "UpdateCustomer",
+  /** Grants permission to delete Customer */
+  DeleteCustomer = "DeleteCustomer",
+  /** Grants permission to create CustomerGroup */
+  CreateCustomerGroup = "CreateCustomerGroup",
+  /** Grants permission to read CustomerGroup */
+  ReadCustomerGroup = "ReadCustomerGroup",
+  /** Grants permission to update CustomerGroup */
+  UpdateCustomerGroup = "UpdateCustomerGroup",
+  /** Grants permission to delete CustomerGroup */
+  DeleteCustomerGroup = "DeleteCustomerGroup",
+  /** Grants permission to create Facet */
+  CreateFacet = "CreateFacet",
+  /** Grants permission to read Facet */
+  ReadFacet = "ReadFacet",
+  /** Grants permission to update Facet */
+  UpdateFacet = "UpdateFacet",
+  /** Grants permission to delete Facet */
+  DeleteFacet = "DeleteFacet",
+  /** Grants permission to create Order */
+  CreateOrder = "CreateOrder",
+  /** Grants permission to read Order */
+  ReadOrder = "ReadOrder",
+  /** Grants permission to update Order */
+  UpdateOrder = "UpdateOrder",
+  /** Grants permission to delete Order */
+  DeleteOrder = "DeleteOrder",
+  /** Grants permission to create PaymentMethod */
+  CreatePaymentMethod = "CreatePaymentMethod",
+  /** Grants permission to read PaymentMethod */
+  ReadPaymentMethod = "ReadPaymentMethod",
+  /** Grants permission to update PaymentMethod */
+  UpdatePaymentMethod = "UpdatePaymentMethod",
+  /** Grants permission to delete PaymentMethod */
+  DeletePaymentMethod = "DeletePaymentMethod",
+  /** Grants permission to create Product */
+  CreateProduct = "CreateProduct",
+  /** Grants permission to read Product */
+  ReadProduct = "ReadProduct",
+  /** Grants permission to update Product */
+  UpdateProduct = "UpdateProduct",
+  /** Grants permission to delete Product */
+  DeleteProduct = "DeleteProduct",
+  /** Grants permission to create Promotion */
+  CreatePromotion = "CreatePromotion",
+  /** Grants permission to read Promotion */
+  ReadPromotion = "ReadPromotion",
+  /** Grants permission to update Promotion */
+  UpdatePromotion = "UpdatePromotion",
+  /** Grants permission to delete Promotion */
+  DeletePromotion = "DeletePromotion",
+  /** Grants permission to create ShippingMethod */
+  CreateShippingMethod = "CreateShippingMethod",
+  /** Grants permission to read ShippingMethod */
+  ReadShippingMethod = "ReadShippingMethod",
+  /** Grants permission to update ShippingMethod */
+  UpdateShippingMethod = "UpdateShippingMethod",
+  /** Grants permission to delete ShippingMethod */
+  DeleteShippingMethod = "DeleteShippingMethod",
+  /** Grants permission to create Tag */
+  CreateTag = "CreateTag",
+  /** Grants permission to read Tag */
+  ReadTag = "ReadTag",
+  /** Grants permission to update Tag */
+  UpdateTag = "UpdateTag",
+  /** Grants permission to delete Tag */
+  DeleteTag = "DeleteTag",
+  /** Grants permission to create TaxCategory */
+  CreateTaxCategory = "CreateTaxCategory",
+  /** Grants permission to read TaxCategory */
+  ReadTaxCategory = "ReadTaxCategory",
+  /** Grants permission to update TaxCategory */
+  UpdateTaxCategory = "UpdateTaxCategory",
+  /** Grants permission to delete TaxCategory */
+  DeleteTaxCategory = "DeleteTaxCategory",
+  /** Grants permission to create TaxRate */
+  CreateTaxRate = "CreateTaxRate",
+  /** Grants permission to read TaxRate */
+  ReadTaxRate = "ReadTaxRate",
+  /** Grants permission to update TaxRate */
+  UpdateTaxRate = "UpdateTaxRate",
+  /** Grants permission to delete TaxRate */
+  DeleteTaxRate = "DeleteTaxRate",
+  /** Grants permission to create System */
+  CreateSystem = "CreateSystem",
+  /** Grants permission to read System */
+  ReadSystem = "ReadSystem",
+  /** Grants permission to update System */
+  UpdateSystem = "UpdateSystem",
+  /** Grants permission to delete System */
+  DeleteSystem = "DeleteSystem",
+  /** Grants permission to create Zone */
+  CreateZone = "CreateZone",
+  /** Grants permission to read Zone */
+  ReadZone = "ReadZone",
+  /** Grants permission to update Zone */
+  UpdateZone = "UpdateZone",
+  /** Grants permission to delete Zone */
+  DeleteZone = "DeleteZone",
 }
 
+/** The price range where the result has more than one price */
 export type PriceRange = {
   __typename?: "PriceRange";
   min: Scalars["Int"];
@@ -1654,6 +2382,7 @@ export type ProductCustomFields = {
   __typename?: "ProductCustomFields";
   productRecommendationsEnabled?: Maybe<Scalars["Boolean"]>;
   groupKey?: Maybe<Scalars["String"]>;
+  ordering?: Maybe<Scalars["Int"]>;
 };
 
 export type ProductFilterParameter = {
@@ -1666,6 +2395,7 @@ export type ProductFilterParameter = {
   resellerDiscount?: Maybe<NumberOperators>;
   productRecommendationsEnabled?: Maybe<BooleanOperators>;
   groupKey?: Maybe<StringOperators>;
+  ordering?: Maybe<NumberOperators>;
 };
 
 export type ProductList = PaginatedList & {
@@ -1743,6 +2473,7 @@ export type ProductSortParameter = {
   resellerDiscount?: Maybe<SortOrder>;
   productRecommendationsEnabled?: Maybe<SortOrder>;
   groupKey?: Maybe<SortOrder>;
+  ordering?: Maybe<SortOrder>;
 };
 
 export type ProductTranslation = {
@@ -1770,8 +2501,6 @@ export type ProductVariant = Node & {
   assets: Array<Asset>;
   price: Scalars["Int"];
   currencyCode: CurrencyCode;
-  /** @deprecated price now always excludes tax */
-  priceIncludesTax: Scalars["Boolean"];
   priceWithTax: Scalars["Int"];
   stockLevel: Scalars["String"];
   taxRateApplied: TaxRate;
@@ -1798,7 +2527,6 @@ export type ProductVariantFilterParameter = {
   name?: Maybe<StringOperators>;
   price?: Maybe<NumberOperators>;
   currencyCode?: Maybe<StringOperators>;
-  priceIncludesTax?: Maybe<BooleanOperators>;
   priceWithTax?: Maybe<NumberOperators>;
   stockLevel?: Maybe<StringOperators>;
   resellerDiscount?: Maybe<NumberOperators>;
@@ -1866,20 +2594,51 @@ export type PromotionList = PaginatedList & {
 
 export type Query = {
   __typename?: "Query";
+  /** The active Channel */
   activeChannel: Channel;
+  /** The active Customer */
   activeCustomer?: Maybe<Customer>;
+  /**
+   * The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
+   * state of `PaymentApproved` or `PaymentSettled`, then that Order is no longer considered "active" and this
+   * query will once again return `null`.
+   */
   activeOrder?: Maybe<Order>;
+  /** An array of supported Countries */
   availableCountries: Array<Country>;
+  /** A list of Collections available to the shop */
   collections: CollectionList;
+  /** Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is speicified, an error will result. */
   collection?: Maybe<Collection>;
+  /** Returns a list of eligible shipping methods based on the current active Order */
   eligibleShippingMethods: Array<ShippingMethodQuote>;
+  /** Returns a list of payment methods and their eligibility based on the current active Order */
   eligiblePaymentMethods: Array<PaymentMethodQuote>;
+  /** A list of Facets available to the shop */
+  facets: FacetList;
+  /** Returns a Facet by its id */
+  facet?: Maybe<Facet>;
+  /** Returns information about the current authenticated User */
   me?: Maybe<CurrentUser>;
+  /** Returns the possible next states that the activeOrder can transition to */
   nextOrderStates: Array<Scalars["String"]>;
+  /**
+   * Returns an Order based on the id. Note that in the Shop API, only orders belonging to the
+   * currently-authenticated User may be queried.
+   */
   order?: Maybe<Order>;
+  /**
+   * Returns an Order based on the order `code`. For guest Orders (i.e. Orders placed by non-authenticated Customers)
+   * this query will only return the Order within 2 hours of the Order being placed. This allows an Order confirmation
+   * screen to be shown immediately after completion of a guest checkout, yet prevents security risks of allowing
+   * general anonymous access to Order data.
+   */
   orderByCode?: Maybe<Order>;
+  /** Get a Product either by id or slug. If neither 'id' nor 'slug' is speicified, an error will result. */
   product?: Maybe<Product>;
+  /** Get a list of Products */
   products: ProductList;
+  /** Search Products based on the criteria set by the `SearchInput` */
   search: SearchResponse;
   productRecommendations: Array<ProductRecommendation>;
   productBulkDiscounts: Array<BulkDiscount>;
@@ -1893,6 +2652,14 @@ export type QueryCollectionsArgs = {
 export type QueryCollectionArgs = {
   id?: Maybe<Scalars["ID"]>;
   slug?: Maybe<Scalars["String"]>;
+};
+
+export type QueryFacetsArgs = {
+  options?: Maybe<FacetListOptions>;
+};
+
+export type QueryFacetArgs = {
+  id: Scalars["ID"];
 };
 
 export type QueryOrderArgs = {
@@ -2025,6 +2792,7 @@ export type SearchInput = {
   term?: Maybe<Scalars["String"]>;
   facetValueIds?: Maybe<Array<Scalars["ID"]>>;
   facetValueOperator?: Maybe<LogicalOperator>;
+  facetValueFilters?: Maybe<Array<FacetValueFilterInput>>;
   collectionId?: Maybe<Scalars["ID"]>;
   collectionSlug?: Maybe<Scalars["String"]>;
   groupByProduct?: Maybe<Scalars["Boolean"]>;
@@ -2045,6 +2813,7 @@ export type SearchResponse = {
   items: Array<SearchResult>;
   totalItems: Scalars["Int"];
   facetValues: Array<FacetValueResult>;
+  collections: Array<CollectionResult>;
   prices: SearchResponsePriceData;
 };
 
@@ -2062,13 +2831,9 @@ export type SearchResult = {
   slug: Scalars["String"];
   productId: Scalars["ID"];
   productName: Scalars["String"];
-  /** @deprecated Use `productAsset.preview` instead */
-  productPreview: Scalars["String"];
   productAsset?: Maybe<SearchResultAsset>;
   productVariantId: Scalars["ID"];
   productVariantName: Scalars["String"];
-  /** @deprecated Use `productVariantAsset.preview` instead */
-  productVariantPreview: Scalars["String"];
   productVariantAsset?: Maybe<SearchResultAsset>;
   price: SearchResultPrice;
   priceWithTax: SearchResultPrice;
@@ -2076,7 +2841,9 @@ export type SearchResult = {
   description: Scalars["String"];
   facetIds: Array<Scalars["ID"]>;
   facetValueIds: Array<Scalars["ID"]>;
+  /** An array of ids of the Collections in which this result appears */
   collectionIds: Array<Scalars["ID"]>;
+  /** A relevence score for the result. Differs between database implementations */
   score: Scalars["Float"];
 };
 
@@ -2087,6 +2854,7 @@ export type SearchResultAsset = {
   focalPoint?: Maybe<Coordinate>;
 };
 
+/** The price of a search result product, either as a range or as a single price */
 export type SearchResultPrice = PriceRange | SinglePrice;
 
 export type SearchResultSortParameter = {
@@ -2113,7 +2881,7 @@ export type ShippingLine = {
   priceWithTax: Scalars["Int"];
   discountedPrice: Scalars["Int"];
   discountedPriceWithTax: Scalars["Int"];
-  discounts: Array<Adjustment>;
+  discounts: Array<Discount>;
 };
 
 export type ShippingMethod = Node & {
@@ -2142,8 +2910,10 @@ export type ShippingMethodQuote = {
   id: Scalars["ID"];
   price: Scalars["Int"];
   priceWithTax: Scalars["Int"];
+  code: Scalars["String"];
   name: Scalars["String"];
   description: Scalars["String"];
+  /** Any optional metadata returned by the ShippingCalculator in the ShippingCalculationResult */
   metadata?: Maybe<Scalars["JSON"]>;
 };
 
@@ -2157,6 +2927,7 @@ export type ShippingMethodTranslation = {
   description: Scalars["String"];
 };
 
+/** The price value where the result has a single price */
 export type SinglePrice = {
   __typename?: "SinglePrice";
   value: Scalars["Int"];
@@ -2197,6 +2968,7 @@ export type StringOperators = {
   regex?: Maybe<Scalars["String"]>;
 };
 
+/** Indicates that an operation succeeded, where we do not want to return any more specific information. */
 export type Success = {
   __typename?: "Success";
   success: Scalars["Boolean"];
@@ -2261,6 +3033,17 @@ export type TaxRateList = PaginatedList & {
   __typename?: "TaxRateList";
   items: Array<TaxRate>;
   totalItems: Scalars["Int"];
+};
+
+export type TextCustomFieldConfig = CustomField & {
+  __typename?: "TextCustomFieldConfig";
+  name: Scalars["String"];
+  type: Scalars["String"];
+  list: Scalars["Boolean"];
+  label?: Maybe<Array<LocalizedString>>;
+  description?: Maybe<Array<LocalizedString>>;
+  readonly?: Maybe<Scalars["Boolean"]>;
+  internal?: Maybe<Scalars["Boolean"]>;
 };
 
 export type TransitionOrderToStateResult = Order | OrderStateTransitionError;
@@ -2328,12 +3111,20 @@ export type User = Node & {
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
+/**
+ * Returned if the verification token (used to verify a Customer's email address) is valid, but has
+ * expired according to the `verificationTokenDuration` setting in the AuthOptions.
+ */
 export type VerificationTokenExpiredError = ErrorResult & {
   __typename?: "VerificationTokenExpiredError";
   errorCode: ErrorCode;
   message: Scalars["String"];
 };
 
+/**
+ * Retured if the verification token (used to verify a Customer's email address) is either
+ * invalid or does not match any expected tokens.
+ */
 export type VerificationTokenInvalidError = ErrorResult & {
   __typename?: "VerificationTokenInvalidError";
   errorCode: ErrorCode;

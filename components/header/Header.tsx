@@ -75,7 +75,6 @@ const HtmlHead: FunctionComponent<{ intl: IntlShape }> = React.memo(
       <title>{intl.formatMessage(shop.siteTitle)}</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="format-detection" content="telephone=no" />
       <meta
         name="description"
         content={intl.formatMessage(messages.siteDescription)}
@@ -83,6 +82,8 @@ const HtmlHead: FunctionComponent<{ intl: IntlShape }> = React.memo(
       <link rel="canonical" href={ABSOLUTE_URL} />
       <link rel="preconnect" href={API_BASE_URL} />
       <link rel="preconnect" href={WP_BLOG_URL} />
+      <meta name="format-detection" content="telephone=no" />
+      <meta name="apple-mobile-web-app-capable" content="no" />
       <link
         rel="apple-touch-icon"
         sizes="57x57"

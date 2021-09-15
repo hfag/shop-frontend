@@ -17,6 +17,7 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import address from "../../i18n/address";
 import order from "../../i18n/order";
 import { trackOrder } from "../../utilities/analytics";
+import { decodeHTMLEntities } from "../../utilities/text";
 
 const messages = defineMessages({
   shipToDifferentAddress: {
@@ -60,7 +61,7 @@ const messages = defineMessages({
 const getStateOptionsByCountry = (countries, country) => {
   return Object.keys(countries[country].states).map((value) => ({
     value,
-    label: countries[country].states[value],
+    label: decodeHTMLEntities(countries[country].states[value]),
   }));
 };
 
@@ -126,7 +127,7 @@ const InnerCheckoutForm = React.memo(
               placeholder={intl.formatMessage(address.chooseCountry)}
               options={Object.keys(countries).map((key) => ({
                 value: key,
-                label: countries[key].name,
+                label: decodeHTMLEntities(countries[key].name),
               }))}
             />
             <InputField

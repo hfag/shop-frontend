@@ -70,7 +70,7 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
       id
     }
     variants {
-      price
+      priceWithTax
     }
     collections {
       name

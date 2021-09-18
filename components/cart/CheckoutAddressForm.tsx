@@ -94,207 +94,234 @@ const InnerCheckoutAddressForm = React.memo(
     enabled,
     billingAddress,
     shippingAddress,
-  }: IProps & FormikProps<FormValues>) => (
-    <Form>
-      <Flex flexWrap="wrap">
-        <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
-          <h3>Rechnungsdetails</h3>
-          {/*<InputField
-              type="text"
-              label={intl.formatMessage(address.additionalLineAbove)}
-              name="billing_additional_line_above"
-              required={false}
-            />*/}
-          <InputField
-            type="text"
-            label={intl.formatMessage(address.firstName)}
-            name="billingFirstName"
-            required={true}
-          />
-          <InputField
-            type="text"
-            label={intl.formatMessage(address.lastName)}
-            name="billingLastName"
-            required={true}
-          />
-          {/*<InputField
-              type="text"
-              label={intl.formatMessage(address.description)}
-              name="billing_description"
-              required={false}
-            />*/}
-          <InputField
-            type="text"
-            label={intl.formatMessage(address.company)}
-            name="billingCompany"
-            required={false}
-          />
-          <SelectField
-            label={intl.formatMessage(address.country)}
-            name="billingCountry"
-            required={true}
-            placeholder={intl.formatMessage(address.chooseCountry)}
-            options={countries.map((country) => ({
-              value: country.code,
-              label: country.name,
-            }))}
-          />
-          <InputField
-            type="text"
-            label={intl.formatMessage(address.street1)}
-            name="billingStreetLine1"
-            required={true}
-          />
-          <InputField
-            type="text"
-            label={intl.formatMessage(address.street2)}
-            name="billingStreetLine2"
-            required={false}
-          />
-          {/*<InputField
-              type="text"
-              label={intl.formatMessage(address.postOfficeBox)}
-              name="billing_post_office_box"
-              required={false}
-            />*/}
-          <InputField
-            type="text"
-            label={intl.formatMessage(address.postalCode)}
-            name="billingPostalCode"
-            required={true}
-          />
-          <InputField
-            type="text"
-            label={intl.formatMessage(address.city)}
-            name="billingCity"
-            required={true}
-          />
-          <InputField
-            type="text"
-            label={intl.formatMessage(address.province)}
-            name="billingProvince"
-            required={true}
-          />
-          <InputField
-            type="tel"
-            label={intl.formatMessage(address.phone)}
-            name="billingPhone"
-            required={true}
-          />
-          <InputField
-            type="email"
-            label={intl.formatMessage(address.email)}
-            name="billingEmail"
-            required={true}
-          />
-        </Box>
-        <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
-          <InputField
-            id="shipToDifferentAddress"
-            name="shipToDifferentAddress"
-            type="checkbox"
-            value="1"
-            checkbox={true}
-            componentProps={{ checked: values.shipToDifferentAddress }}
-          />
-          <h3>
-            <label htmlFor="shipToDifferentAddress">
-              {intl.formatMessage(messages.shipToDifferentAddress)}
-            </label>
-          </h3>
-          {values.shipToDifferentAddress && (
-            <div>
-              {/*<InputField
-              type="text"
-              label={intl.formatMessage(address.additionalLineAbove)}
-              name="billing_additional_line_above"
-              required={false}
-            />*/}
-              <InputField
+  }: IProps & FormikProps<FormValues>) => {
+    const readOnly = !enabled;
+
+    return (
+      <Form>
+        <Flex flexWrap="wrap">
+          <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
+            <h3>Rechnungsdetails</h3>
+            {/*<InputField
                 type="text"
-                label={intl.formatMessage(address.fullName)}
-                name="shippingFullName"
-                required={true}
-              />
-              {/*<InputField
-              type="text"
-              label={intl.formatMessage(address.description)}
-              name="billing_description"
-              required={false}
-            />*/}
-              <InputField
-                type="text"
-                label={intl.formatMessage(address.company)}
-                name="shippingCompany"
+                label={intl.formatMessage(address.additionalLineAbove)}
+                name="billing_additional_line_above"
                 required={false}
-              />
-              <SelectField
-                label={intl.formatMessage(address.country)}
-                name="shippingCountry"
-                required={true}
-                placeholder={intl.formatMessage(address.chooseCountry)}
-                options={countries.map((country) => ({
-                  value: country.code,
-                  label: country.name,
-                }))}
-              />
-              <InputField
-                type="text"
-                label={intl.formatMessage(address.street1)}
-                name="shippingStreetLine1"
-                required={true}
-              />
-              <InputField
-                type="text"
-                label={intl.formatMessage(address.street2)}
-                name="shippingStreetLine2"
-                required={false}
-              />
-              {/*<InputField
+              />*/}
+            <InputField
               type="text"
-              label={intl.formatMessage(address.postOfficeBox)}
-              name="billing_post_office_box"
+              label={intl.formatMessage(address.firstName)}
+              name="billingFirstName"
+              required={true}
+              readOnly={readOnly}
+            />
+            <InputField
+              type="text"
+              label={intl.formatMessage(address.lastName)}
+              name="billingLastName"
+              required={true}
+              readOnly={readOnly}
+            />
+            {/*<InputField
+                type="text"
+                label={intl.formatMessage(address.description)}
+                name="billing_description"
+                required={false}
+                readOnly={readOnly}
+              />*/}
+            <InputField
+              type="text"
+              label={intl.formatMessage(address.company)}
+              name="billingCompany"
               required={false}
-            />*/}
-              <InputField
+              readOnly={readOnly}
+            />
+            <SelectField
+              label={intl.formatMessage(address.country)}
+              name="billingCountry"
+              required={true}
+              placeholder={intl.formatMessage(address.chooseCountry)}
+              options={countries.map((country) => ({
+                value: country.code,
+                label: country.name,
+              }))}
+              readOnly={readOnly}
+            />
+            <InputField
+              type="text"
+              label={intl.formatMessage(address.street1)}
+              name="billingStreetLine1"
+              required={true}
+              readOnly={readOnly}
+            />
+            <InputField
+              type="text"
+              label={intl.formatMessage(address.street2)}
+              name="billingStreetLine2"
+              required={false}
+              readOnly={readOnly}
+            />
+            {/*<InputField
                 type="text"
-                label={intl.formatMessage(address.postalCode)}
-                name="shippingPostalCode"
-                required={true}
-              />
-              <InputField
+                label={intl.formatMessage(address.postOfficeBox)}
+                name="billing_post_office_box"
+                required={false}
+              />*/}
+            <InputField
+              type="text"
+              label={intl.formatMessage(address.postalCode)}
+              name="billingPostalCode"
+              required={true}
+              readOnly={readOnly}
+            />
+            <InputField
+              type="text"
+              label={intl.formatMessage(address.city)}
+              name="billingCity"
+              required={true}
+              readOnly={readOnly}
+            />
+            <InputField
+              type="text"
+              label={intl.formatMessage(address.province)}
+              name="billingProvince"
+              required={true}
+              readOnly={readOnly}
+            />
+            <InputField
+              type="tel"
+              label={intl.formatMessage(address.phone)}
+              name="billingPhone"
+              required={true}
+              readOnly={readOnly}
+            />
+            <InputField
+              type="email"
+              label={intl.formatMessage(address.email)}
+              name="billingEmail"
+              required={true}
+              readOnly={readOnly}
+            />
+          </Box>
+          <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
+            <InputField
+              id="shipToDifferentAddress"
+              name="shipToDifferentAddress"
+              type="checkbox"
+              value="1"
+              checkbox={true}
+              componentProps={{ checked: values.shipToDifferentAddress }}
+              readOnly={readOnly}
+            />
+            <h3>
+              <label htmlFor="shipToDifferentAddress">
+                {intl.formatMessage(messages.shipToDifferentAddress)}
+              </label>
+            </h3>
+            {values.shipToDifferentAddress && (
+              <div>
+                {/*<InputField
                 type="text"
-                label={intl.formatMessage(address.city)}
-                name="shippingCity"
-                required={true}
-              />
-              <InputField
+                label={intl.formatMessage(address.additionalLineAbove)}
+                name="billing_additional_line_above"
+                required={false}
+              />*/}
+                <InputField
+                  type="text"
+                  label={intl.formatMessage(address.fullName)}
+                  name="shippingFullName"
+                  required={true}
+                  readOnly={readOnly}
+                />
+                {/*<InputField
                 type="text"
-                label={intl.formatMessage(address.province)}
-                name="shippingProvince"
-                required={true}
-              />
-              <InputField
-                type="tel"
-                label={intl.formatMessage(address.phone)}
-                name="shippingPhoneNumber"
-                required={true}
-              />
-            </div>
-          )}
-        </Box>
-      </Flex>
-      <br />
-      <Button
-        fullWidth
-        onClick={handleSubmit}
-        controlled
-        state={isValid && enabled ? status : "disabled"}
-      >
-        {intl.formatMessage(messages.continue)}
-      </Button>
-    </Form>
-  )
+                label={intl.formatMessage(address.description)}
+                name="billing_description"
+                required={false}
+              />*/}
+                <InputField
+                  type="text"
+                  label={intl.formatMessage(address.company)}
+                  name="shippingCompany"
+                  required={false}
+                  readOnly={readOnly}
+                />
+                <SelectField
+                  label={intl.formatMessage(address.country)}
+                  name="shippingCountry"
+                  required={true}
+                  placeholder={intl.formatMessage(address.chooseCountry)}
+                  options={countries.map((country) => ({
+                    value: country.code,
+                    label: country.name,
+                  }))}
+                  readOnly={readOnly}
+                />
+                <InputField
+                  type="text"
+                  label={intl.formatMessage(address.street1)}
+                  name="shippingStreetLine1"
+                  required={true}
+                  readOnly={readOnly}
+                />
+                <InputField
+                  type="text"
+                  label={intl.formatMessage(address.street2)}
+                  name="shippingStreetLine2"
+                  required={false}
+                  readOnly={readOnly}
+                />
+                {/*<InputField
+                type="text"
+                label={intl.formatMessage(address.postOfficeBox)}
+                name="billing_post_office_box"
+                required={false}
+                readOnly={readOnly}
+              />*/}
+                <InputField
+                  type="text"
+                  label={intl.formatMessage(address.postalCode)}
+                  name="shippingPostalCode"
+                  required={true}
+                  readOnly={readOnly}
+                />
+                <InputField
+                  type="text"
+                  label={intl.formatMessage(address.city)}
+                  name="shippingCity"
+                  required={true}
+                  readOnly={readOnly}
+                />
+                <InputField
+                  type="text"
+                  label={intl.formatMessage(address.province)}
+                  name="shippingProvince"
+                  required={true}
+                  readOnly={readOnly}
+                />
+                <InputField
+                  type="tel"
+                  label={intl.formatMessage(address.phone)}
+                  name="shippingPhoneNumber"
+                  required={true}
+                  readOnly={readOnly}
+                />
+              </div>
+            )}
+          </Box>
+        </Flex>
+        <br />
+        <Button
+          fullWidth
+          onClick={handleSubmit}
+          controlled
+          state={isValid && enabled ? status : "disabled"}
+        >
+          {intl.formatMessage(messages.continue)}
+        </Button>
+      </Form>
+    );
+  }
 );
 
 const CheckoutAddressForm = withFormik<IProps, FormValues>({

@@ -36,6 +36,7 @@ const SelectField: FunctionComponent<{
   placeholder?: string;
   options: { label: string; value: any }[];
   required?: boolean;
+  readOnly?: boolean;
   width?: number;
   flexGrow?: number;
   marginRight?: number;
@@ -45,6 +46,7 @@ const SelectField: FunctionComponent<{
     label,
     options,
     required,
+    readOnly,
     placeholder,
     width,
     flexGrow,
@@ -81,6 +83,7 @@ const SelectField: FunctionComponent<{
               width={width}
               flexGrow={flexGrow}
               marginRight={marginRight}
+              readOnly={readOnly}
             />
             <ValidationErrors>{get(errors, name, false)}</ValidationErrors>
           </SelectFieldWrapper>

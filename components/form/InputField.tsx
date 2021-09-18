@@ -19,6 +19,7 @@ const InputField: FunctionComponent<{
   label?: string;
   name: string;
   required?: boolean;
+  readOnly?: boolean;
   placeholder?: string;
   type?: string;
   value?: string;
@@ -34,6 +35,7 @@ const InputField: FunctionComponent<{
   label,
   name,
   required,
+  readOnly,
   placeholder,
   type,
   value: forceValue,
@@ -80,6 +82,7 @@ const InputField: FunctionComponent<{
               onBlur={onBlur}
               placeholder={placeholder}
               type={type}
+              disabled={readOnly}
               {...componentProps}
             />
             {children}

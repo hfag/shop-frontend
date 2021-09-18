@@ -53,6 +53,7 @@ const Select = <Option extends unknown>({
   flexGrow,
   marginLeft,
   marginRight,
+  readOnly,
 }: {
   options: Option[];
   placeholder?: string;
@@ -64,6 +65,7 @@ const Select = <Option extends unknown>({
   flexGrow?: number;
   marginLeft?: number;
   marginRight?: number;
+  readOnly?: boolean;
 }) => {
   const onSelectChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -87,6 +89,7 @@ const Select = <Option extends unknown>({
       <select
         onChange={onSelectChange}
         value={selectedIndex < 0 ? "default" : selectedIndex.toString()}
+        disabled={readOnly}
       >
         <option value="default">{placeholder}</option>
         {options.map((option, index) => (

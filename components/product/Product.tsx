@@ -88,6 +88,9 @@ const DiscountRow = styled.tr<{ selected?: boolean }>`
   color: ${({ selected }) => (selected ? "#fff" : "inherit")};
 `;
 
+const areOptionsEqual = (o1: ProductOption, o2: ProductOption) =>
+  o1 && o2 && o1.id == o2.id;
+
 const Product: FunctionComponent<{
   product?: ProductType;
 }> = React.memo(({ product }) => {
@@ -250,7 +253,8 @@ const Product: FunctionComponent<{
         : defaultOptions
     );
   }, [router.query.sku]);
-  useEffect(() => {
+
+  /*useEffect(() => {
     const autoSelection: { [groupId: string]: ProductOption } = Object.keys(
       possibleOptions
     )
@@ -266,7 +270,7 @@ const Product: FunctionComponent<{
     if (Object.keys(autoSelection).length > 0) {
       setSelectedOptions({ ...selectedOptions, ...autoSelection });
     }
-  }, [possibleVariants]);
+  }, [possibleVariants]);*/
 
   return (
     <div>
@@ -337,6 +341,7 @@ const Product: FunctionComponent<{
                     possibleOptions[optionGroup.id].includes(option)
                   )}
                   mapOptionToLabel={(item: ProductOption) => item.name}
+                  areOptionsEqual={areOptionsEqual}
                 />
               </Box>
             ))}

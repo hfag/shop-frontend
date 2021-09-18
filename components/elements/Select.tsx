@@ -47,6 +47,7 @@ const Select = <Option extends unknown>({
   mapOptionToLabel = (option) =>
     //@ts-ignore
     "label" in option ? option.label : "Error: no label",
+  areOptionsEqual = (o1, o2) => o1 == o2,
   selected,
   width,
   flexGrow,
@@ -57,6 +58,7 @@ const Select = <Option extends unknown>({
   placeholder?: string;
   onChange: (option: Option) => void;
   mapOptionToLabel: (option: Option) => string;
+  areOptionsEqual: (o1: Option, o2: Option) => boolean;
   selected?: Option;
   width?: number;
   flexGrow?: number;
@@ -71,7 +73,9 @@ const Select = <Option extends unknown>({
     [onChange]
   );
 
-  const selectedIndex = options.findIndex((option) => selected == option);
+  const selectedIndex = options.findIndex((option) =>
+    areOptionsEqual(selected, option)
+  );
 
   return (
     <StyledWrapper
@@ -84,7 +88,7 @@ const Select = <Option extends unknown>({
         onChange={onSelectChange}
         value={selectedIndex < 0 ? "default" : selectedIndex.toString()}
       >
-        {!selected && <option value="default">{placeholder}</option>}
+        <option value="default">{placeholder}</option>
         {options.map((option, index) => (
           <option key={index} value={index.toString()}>
             {mapOptionToLabel(option)}

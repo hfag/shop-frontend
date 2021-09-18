@@ -22,6 +22,10 @@ import styled from "@emotion/styled";
 import useSWR from "swr";
 
 const homeMessages = defineMessages({
+  shopProducts: {
+    id: "Frontpage.shopProducts",
+    defaultMessage: "Unsere Produkte im Shop",
+  },
   moreAboutCompany: {
     id: "Frontpage.moreAboutCompany",
     defaultMessage: "Mehr über das Unternehmen",
@@ -91,6 +95,9 @@ const Page: FunctionComponent<{
       <SaleProducts
         posts={postsData ? postsData.filter((p) => p.sticky) : postsData}
       />
+      <h2 style={{ marginBottom: 0 }}>
+        {intl.formatMessage(homeMessages.shopProducts)}
+      </h2>
       <ProductCollection
         collection={data?.collection}
         showDescription={false}

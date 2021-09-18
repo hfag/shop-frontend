@@ -17,6 +17,9 @@
   "Frontpage.moreAboutCompany": {
     "defaultMessage": "Mehr über das Unternehmen"
   },
+  "Frontpage.shopProducts": {
+    "defaultMessage": "Unsere Produkte im Shop"
+  },
   "logout.pleaseWait": {
     "defaultMessage": "Bitte warten..."
   }

@@ -58,7 +58,7 @@ const Select = <Option extends unknown>({
   placeholder?: string;
   onChange: (option: Option) => void;
   mapOptionToLabel: (option: Option) => string;
-  areOptionsEqual: (o1: Option, o2: Option) => boolean;
+  areOptionsEqual?: (o1: Option, o2: Option) => boolean;
   selected?: Option;
   width?: number;
   flexGrow?: number;

@@ -22,18 +22,6 @@ textarea {
   box-sizing: border-box;
 }
 
-.redux-loading-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-
-  height: 3px;
-  background-color: #fff;
-
-  z-index: 99999;
-}
-
 hr {
   border: none;
   border-top: #343434 1px solid;
@@ -97,4 +85,8 @@ h6 {
 
 figure.wp-block-image {
   margin: 0 0 0.25rem 0;
+}
+
+ul li > p {
+  margin-bottom: 0;
 }

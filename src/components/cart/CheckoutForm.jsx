@@ -172,7 +172,7 @@ const InnerCheckoutForm = React.memo(
                 />
               )}
             <InputField
-              type="tel"
+              type="text"
               label={intl.formatMessage(address.phone)}
               name="billing_phone"
               required={true}

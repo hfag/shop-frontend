@@ -26,5 +26,9 @@
   {
     "id": "CheckoutForm.tosMustBeAccepted",
     "defaultMessage": "Die AGBs müssen akzeptiert werden!"
+  },
+  {
+    "id": "CheckoutForm.errorPhoneNumber",
+    "defaultMessage": "Die Telefonnummer muss im Format 0XX XXX XX XX eingegeben werden."
   }
 ]

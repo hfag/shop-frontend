@@ -17,6 +17,7 @@
   "CheckoutForm.acceptTos": "J'ai lu les termes et conditions et je les accepte *",
   "CheckoutForm.submitOrder": "Envoyer la commande",
   "CheckoutForm.tosMustBeAccepted": "Les conditions générales doivent être acceptées!",
+  "CheckoutForm.errorPhoneNumber": "Le numéro de téléphone doit être saisi au format 0XX XXX XX.",
   "Footer.toHomepage": "Ä la page d'accueil de notre entreprise",
   "Footer.aboutTitle": "Hauser Feuerschutz AG",
   "Footer.about": "L'entreprise, fondée en 1970, offre des services et des produits dans les domaines du marquage de sécurité, de la protection des marches et de la protection incendie.",

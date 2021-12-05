@@ -18,6 +18,7 @@
     "CheckoutForm.acceptTos": "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und akzeptiere diese *",
     "CheckoutForm.submitOrder": "Bestellung abschicken",
     "CheckoutForm.tosMustBeAccepted": "Die AGBs müssen akzeptiert werden!",
+    "CheckoutForm.errorPhoneNumber": "Die Telefonnummer muss im Format 0XX XXX XX XX eingegeben werden.",
     "Footer.aboutTitle": "Über die Hauser Feuerschutz AG",
     "Footer.about": "Die 1970 gegründete Firma bietet Ihnen Dienstleistungen und Produkte an in den Bereichen Sicherheitskennzeichnung, Trittschutz und Feuerschutz.",
     "Footer.moreAbout": "Weitere Informationen",

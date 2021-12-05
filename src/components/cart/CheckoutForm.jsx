@@ -50,6 +50,10 @@ const messages = defineMessages({
     id: "CheckoutForm.tosMustBeAccepted",
     defaultMessage: "Die AGBs müssen akzeptiert werden!",
   },
+  errorPhoneNumber: {
+    id: "CheckoutForm.errorPhoneNumber",
+    defaultMessage: "Die Telefonnummer muss im Format 0XX XXX XX XX eingegeben werden.",
+  }
 });
 
 /**
@@ -420,7 +424,11 @@ const CheckoutForm = injectIntl(
             }
           ),
 
-        billing_phone: yup.string().required(),
+        billing_phone: yup.string().test(
+          "test-phone",
+          intl.formatMessage(messages.errorPhoneNumber),
+          (value) => (/^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/).test(value)
+        ).required(),
         billing_email: yup.string().email().required(),
 
         terms: yup

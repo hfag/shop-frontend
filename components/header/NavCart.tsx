@@ -77,8 +77,8 @@ const NavCart: FunctionComponent<{
           <Circle
             negative
             filled
-            width="1.75rem"
-            height="1.75rem"
+            w="1.75rem"
+            h="1.75rem"
             padding="0"
             centerChildren
           >

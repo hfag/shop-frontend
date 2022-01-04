@@ -22,7 +22,7 @@ const env = {
   // ASSET_URL: "https://beta.feuerschutz.ch/assets",
   WP_BLOG_URL: "https://api.feuerschutz.ch",
   // ABSOLUTE_URL: "https://beta.feuerschutz.ch",
-  ABSOLUTE_URL: "",
+  ABSOLUTE_URL: "http://localhost:3000",
   PUBLIC_PATH: "/",
 };
 

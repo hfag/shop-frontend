@@ -4,8 +4,8 @@ import styled from "@emotion/styled";
 
 interface IProps {
   padding?: string;
-  width?: string;
-  height?: string;
+  w?: string;
+  h?: string;
   negative?: boolean;
   inline?: boolean;
   filled?: boolean;
@@ -14,32 +14,34 @@ interface IProps {
 }
 
 const CircleWrapper = styled.div<IProps>`
-	position: relative;
-	padding: ${({ padding }) => (padding ? padding : "0.25rem")};
-	border-radius: 50%;
-	text-align: center;
-	border: ${({ negative }) =>
-    negative ? colors.primaryContrast : colors.primary}
-		${({ thickness }) => (thickness ? thickness : "1px")} solid;
+  position: relative;
+  padding: ${({ padding }) => (padding ? padding : "0.25rem")};
+  border-radius: 50%;
+  text-align: center;
+  border: ${({ negative }) =>
+      negative ? colors.primaryContrast : colors.primary}
+    ${({ thickness }) => (thickness ? thickness : "1px")} solid;
 
-	color: ${({ filled, negative }) =>
+  color: ${({ filled, negative }) =>
     negative
       ? filled
         ? colors.primary
         : colors.primaryContrast
       : filled
       ? colors.primaryContrast
-      : colors.primary}};
+      : colors.primary};
 
-	${({ filled, negative }) =>
+  background-color: ${({ filled, negative }) =>
     filled
-      ? `background-color: ${
-          negative ? colors.primaryContrast : colors.primary
-        };`
-      : ""} ${({ width }) => (width ? `width: ${width};` : "")} ${({
-  height,
-}) => (height ? `height: ${height};` : "")} ${({ inline }) =>
-  inline ? "display: inline-block;" : ""};
+      ? negative
+        ? colors.primaryContrast
+        : colors.primary
+      : "transparent"};
+
+  width: ${({ w }) => (w ? w : "auto")};
+  height: ${({ h }) => (h ? h : "auto")};
+
+  display: ${({ inline }) => (inline ? "inline-block" : "block")};
 
   ${({ centerChildren }) =>
     centerChildren

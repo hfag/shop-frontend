@@ -59,11 +59,6 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
       options{
         name
       }
-      product{
-        customFields {
-          customizationOptions
-        }
-      }
     }
     unitPrice
     unitPriceWithTax

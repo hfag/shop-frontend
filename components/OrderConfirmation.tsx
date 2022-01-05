@@ -152,14 +152,10 @@ const OrderConfirmation: FunctionComponent = () => {
               line.unitPriceWithTax
             );
 
-            let customizationOptions: { [key: string]: any } | null = null;
             let customizations: { [key: string]: any } | null = null;
 
             try {
               customizations = JSON.parse(line.customFields.customizations);
-              customizationOptions = JSON.parse(
-                line.productVariant.product.customFields.customizationOptions
-              );
             } catch (e) {
               customizations = null;
             }
@@ -182,16 +178,10 @@ const OrderConfirmation: FunctionComponent = () => {
                   {customizations && (
                     <p>
                       {Object.keys(customizations)
-                        .map((key) => {
-                          const label = (
-                            customizationOptions[key]?.labels || []
-                          ).find(
-                            (l: { language: string; label: string }) =>
-                              l.language === intl.locale
-                          )?.label;
-
-                          return `${label}: ${customizations[key]}`;
-                        })
+                        .map(
+                          (key) =>
+                            `${customizations[key].label}: ${customizations[key].value}`
+                        )
                         .join(", ")}
                     </p>
                   )}

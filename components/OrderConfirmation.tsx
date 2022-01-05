@@ -152,6 +152,18 @@ const OrderConfirmation: FunctionComponent = () => {
               line.unitPriceWithTax
             );
 
+            let customizationOptions: { [key: string]: any } | null = null;
+            let customizations: { [key: string]: any } | null = null;
+
+            try {
+              customizations = JSON.parse(line.customFields.customizations);
+              customizationOptions = JSON.parse(
+                line.productVariant.product.customFields.customizationOptions
+              );
+            } catch (e) {
+              customizations = null;
+            }
+
             return (
               <tr key={index}>
                 <td style={{ minWidth: "100px", maxWidth: "100px" }}>
@@ -167,6 +179,22 @@ const OrderConfirmation: FunctionComponent = () => {
                     line.productVariant.options
                       .map((option) => option.name)
                       .join(", ")}
+                  {customizations && (
+                    <p>
+                      {Object.keys(customizations)
+                        .map((key) => {
+                          const label = (
+                            customizationOptions[key]?.labels || []
+                          ).find(
+                            (l: { language: string; label: string }) =>
+                              l.language === intl.locale
+                          )?.label;
+
+                          return `${label}: ${customizations[key]}`;
+                        })
+                        .join(", ")}
+                    </p>
+                  )}
                 </td>
                 <td>{line.productVariant.sku}</td>
                 <td>

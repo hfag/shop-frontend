@@ -19,7 +19,7 @@ const SidebarBreadcrumb = styled.div<{ active?: boolean }>`
     vertical-align: top !important;
     margin-right: 0.2rem;
   }
-  & > div:first-child {
+  & > div:first-of-type {
     margin-right: 0.25rem;
   }
 `;

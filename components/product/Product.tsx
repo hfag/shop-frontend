@@ -23,6 +23,7 @@ import {
   ProductVariant,
   RecommendationType,
 } from "../../schema";
+import { InputFieldWrapper } from "../form/InputFieldWrapper";
 import { borders, colors } from "../../utilities/style";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { isClient } from "../../utilities/ssr";
@@ -240,6 +241,16 @@ const Product: FunctionComponent<{
     return defaultOptions;
   }, []);
 
+  const customizationOptions: { [key: string]: any } | null = useMemo(() => {
+    try {
+      return JSON.parse(product.customFields.customizationOptions);
+    } catch (e) {
+      return null;
+    }
+  }, [product.customFields.customizationOptions]);
+
+  const [customizations, setCustomizations] = useState({});
+
   useEffect(() => {
     //select the default options or the specified sku
     setSelectedOptions(
@@ -272,6 +283,10 @@ const Product: FunctionComponent<{
     }
   }, [possibleVariants]);*/
 
+  const buyable = !(
+    product.variants.length == 1 && product.variants[0].priceWithTax <= 0
+  );
+
   return (
     <div>
       <Head>
@@ -292,15 +307,17 @@ const Product: FunctionComponent<{
       </JsonLd>
       <ProductCard>
         <h1 dangerouslySetInnerHTML={{ __html: product.name }} />
-        <div>
-          <hr />
-          <h4>{intl.formatMessage(messages.chooseAVariation)}</h4>
-          <VariationSlider
-            variants={product.variants}
-            selectedOptions={selectedOptions}
-            onSelect={onVariationSliderSelect}
-          />
-        </div>
+        {buyable && (
+          <div>
+            <hr />
+            <h4>{intl.formatMessage(messages.chooseAVariation)}</h4>
+            <VariationSlider
+              variants={product.variants}
+              selectedOptions={selectedOptions}
+              onSelect={onVariationSliderSelect}
+            />
+          </div>
+        )}
         <Flex flexWrap="wrap" marginX>
           {product.optionGroups
             .filter((optionGroup) => !(optionGroup.id in defaultOptions))
@@ -345,55 +362,65 @@ const Product: FunctionComponent<{
                 />
               </Box>
             ))}
-          <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
-            <h4>{intl.formatMessage(productMessages.quantity)}</h4>
-            <Counter
-              type="number"
-              value={quantity}
-              onChange={(e) =>
-                setQuantity(Math.max(parseInt(e.currentTarget.value), 1))
-              }
-            />
-          </Box>
-          {/*fields.map(({ label, placeholder, type, maxLength }, index) => (
-            <Box key={index} widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={2}>
-              <h4>{label}</h4>
-              {type === "text" && (
-                <InputFieldWrapper>
-                  <input
-                    type="text"
-                    placeholder={placeholder}
-                    maxLength={maxLength}
-                    onChange={this.onChangeField(label)}
-                    value={fieldValues[label] || ""}
-                  />
-                </InputFieldWrapper>
-              )}
-              {type === "textarea" && (
-                <InputFieldWrapper>
-                  <textarea
-                    placeholder={placeholder}
-                    maxLength={maxLength}
-                    onChange={this.onChangeField(label)}
-                    value={fieldValues[label] || ""}
-                  />
-                </InputFieldWrapper>
-              )}
-            </Box>
-              ))*/}
-          <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
-            <h4>{intl.formatMessage(messages.reset)}</h4>
-            <Button
-              onClick={() =>
-                new Promise((resolve, reject) => {
-                  setSelectedOptions({});
-                  resolve(true);
-                })
-              }
-            >
-              {intl.formatMessage(messages.resetSelection)}
-            </Button>
-          </Box>
+          {Object.keys(customizationOptions).map((optionKey) => {
+            const { labels, type } = customizationOptions[optionKey];
+            const label = labels.find(
+              (l: { language: string; label: string }) =>
+                l.language === intl.locale
+            )?.label;
+
+            return (
+              <Box
+                key={optionKey}
+                widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
+                paddingX={0.5}
+              >
+                <h4>{label || optionKey}</h4>
+                {type === "text" && (
+                  <InputFieldWrapper>
+                    <input
+                      type="text"
+                      placeholder={/*placeholder*/ ""}
+                      onChange={(e) =>
+                        setCustomizations({
+                          ...customizations,
+                          [optionKey]: e.target.value,
+                        })
+                      }
+                      value={customizations[optionKey] || ""}
+                    />
+                  </InputFieldWrapper>
+                )}
+              </Box>
+            );
+          })}
+          {buyable && (
+            <>
+              <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
+                <h4>{intl.formatMessage(productMessages.quantity)}</h4>
+                <Counter
+                  type="number"
+                  value={quantity}
+                  onChange={(e) =>
+                    setQuantity(Math.max(parseInt(e.currentTarget.value), 1))
+                  }
+                />
+              </Box>
+              <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
+                <h4>{intl.formatMessage(messages.reset)}</h4>
+                <Button
+                  onClick={() =>
+                    new Promise((resolve, reject) => {
+                      setSelectedOptions({});
+                      resolve(true);
+                    })
+                  }
+                >
+                  {intl.formatMessage(messages.resetSelection)}
+                </Button>
+              </Box>
+            </>
+          )}
         </Flex>
         <Flex flexWrap="wrap" marginX>
           {activeResellerDiscounts.length === 0 ? (
@@ -493,14 +520,20 @@ const Product: FunctionComponent<{
                   onClick={async () => {
                     if (selectedVariant) {
                       const data = await request<{
-                        addItemToOrder: Mutation["addItemToOrder"];
+                        addCustomItemToOrder: Mutation["addCustomItemToOrder"];
                       }>(intl.locale, ADD_TO_ORDER, {
                         productVariantId: selectedVariant.id,
                         quantity,
+                        customizations:
+                          Object.keys(customizations).length > 0
+                            ? JSON.stringify(customizations)
+                            : undefined,
                       });
 
-                      if ("errorCode" in data.addItemToOrder) {
-                        setError(errorCodeToMessage(intl, data.addItemToOrder));
+                      if ("errorCode" in data.addCustomItemToOrder) {
+                        setError(
+                          errorCodeToMessage(intl, data.addCustomItemToOrder)
+                        );
                         return;
                       }
 

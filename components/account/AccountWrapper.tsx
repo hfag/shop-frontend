@@ -54,7 +54,7 @@ const ProfileNavigation = styled.ul`
     padding: 0.25rem 0.5rem;
     border-bottom: #eee 1px solid;
 
-    &:last-child {
+    &:last-of-type {
       border-bottom: none;
     }
   }

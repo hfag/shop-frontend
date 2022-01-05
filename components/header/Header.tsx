@@ -39,6 +39,12 @@ const messages = defineMessages({
   },
 });
 
+const SearchMediaQuery = styled(MediaQuery)`
+  width: 100%;
+  height: auto;
+  margin-right: 1rem;
+`;
+
 const SearchWrapper = styled.div`
   width: 100%;
   margin-right: 1rem;
@@ -224,16 +230,21 @@ const Header: FunctionComponent = React.memo(() => {
                       </NavItem>
                     </Flexbar>
                   </MediaQuery>
-                  <SearchWrapper>
-                    <MediaQuery lg up>
+                  <SearchMediaQuery lg up>
+                    <SearchWrapper>
                       <Searchbar id="navigation" />
-                    </MediaQuery>
-                  </SearchWrapper>
+                    </SearchWrapper>
+                  </SearchMediaQuery>
                   <Push left>
                     <MediaQuery md down>
-                      <NavItem>
-                        <LanguageSwitcher />
-                      </NavItem>
+                      <Flexbar>
+                        <NavItem seperator>
+                          <LanguageSwitcher vertical />
+                        </NavItem>
+                        <NavItem>
+                          <NavCart dropdown={false} />
+                        </NavItem>
+                      </Flexbar>
                     </MediaQuery>
                     <MediaQuery md up>
                       <Flexbar>

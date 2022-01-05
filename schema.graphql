@@ -98,7 +98,11 @@ type Mutation {
   """
   Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available.
   """
-  addItemToOrder(productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
+  addItemToOrder(
+    productVariantId: ID!
+    quantity: Int!
+    customFields: OrderLineCustomFieldsInput = null
+  ): UpdateOrderItemsResult!
 
   """
   Remove an OrderLine from the Order
@@ -113,7 +117,11 @@ type Mutation {
   """
   Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available.
   """
-  adjustOrderLine(orderLineId: ID!, quantity: Int!): UpdateOrderItemsResult!
+  adjustOrderLine(
+    orderLineId: ID!
+    quantity: Int!
+    customFields: OrderLineCustomFieldsInput = null
+  ): UpdateOrderItemsResult!
 
   """
   Applies the given coupon code to the active Order
@@ -274,6 +282,11 @@ type Mutation {
   Resets a Customer's password based on the provided token
   """
   resetPassword(token: String!, password: String!): ResetPasswordResult!
+  addCustomItemToOrder(
+    productVariantId: ID!
+    quantity: Int!
+    customizations: JSON
+  ): UpdateOrderItemsResult!
 }
 
 type Address implements Node {
@@ -394,18 +407,6 @@ type CollectionTranslation {
 type CollectionList implements PaginatedList {
   items: [Collection!]!
   totalItems: Int!
-}
-
-type ProductVariantList implements PaginatedList {
-  items: [ProductVariant!]!
-  totalItems: Int!
-}
-
-input ProductVariantListOptions {
-  skip: Int
-  take: Int
-  sort: ProductVariantSortParameter
-  filter: ProductVariantFilterParameter
 }
 
 enum GlobalFlag {
@@ -1056,6 +1057,9 @@ input ConfigurableOperationInput {
   arguments: [ConfigArgInput!]!
 }
 
+"""
+Operators for filtering on a String field
+"""
 input StringOperators {
   eq: String
   notEq: String
@@ -1066,6 +1070,19 @@ input StringOperators {
   regex: String
 }
 
+"""
+Operators for filtering on an ID field
+"""
+input IDOperators {
+  eq: String
+  notEq: String
+  in: [String!]
+  notIn: [String!]
+}
+
+"""
+Operators for filtering on a Boolean field
+"""
 input BooleanOperators {
   eq: Boolean
 }
@@ -1075,6 +1092,9 @@ input NumberRange {
   end: Float!
 }
 
+"""
+Operators for filtering on a Int or Float field
+"""
 input NumberOperators {
   eq: Float
   lt: Float
@@ -1089,6 +1109,9 @@ input DateRange {
   end: DateTime!
 }
 
+"""
+Operators for filtering on a DateTime field
+"""
 input DateOperators {
   eq: DateTime
   before: DateTime
@@ -1122,6 +1145,7 @@ input SearchInput {
   sort: SearchResultSortParameter
   priceRange: PriceRangeInput
   priceRangeWithTax: PriceRangeInput
+  inStock: Boolean
 }
 
 input SearchResultSortParameter {
@@ -1188,6 +1212,7 @@ type ShippingMethodQuote {
   Any optional metadata returned by the ShippingCalculator in the ShippingCalculationResult
   """
   metadata: JSON
+  customFields: JSON
 }
 
 type PaymentMethodQuote {
@@ -1197,6 +1222,7 @@ type PaymentMethodQuote {
   description: String!
   isEligible: Boolean!
   eligibilityMessage: String
+  customFields: JSON
 }
 
 type Country implements Node {
@@ -1208,6 +1234,7 @@ type Country implements Node {
   name: String!
   enabled: Boolean!
   translations: [CountryTranslation!]!
+  customFields: JSON
 }
 
 type CountryTranslation {
@@ -2024,6 +2051,8 @@ interface CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
+  ui: JSON
 }
 
 type StringCustomFieldConfig implements CustomField {
@@ -2035,8 +2064,10 @@ type StringCustomFieldConfig implements CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
   pattern: String
   options: [StringFieldOption!]
+  ui: JSON
 }
 
 type StringFieldOption {
@@ -2053,7 +2084,9 @@ type LocaleStringCustomFieldConfig implements CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
   pattern: String
+  ui: JSON
 }
 
 type IntCustomFieldConfig implements CustomField {
@@ -2064,9 +2097,11 @@ type IntCustomFieldConfig implements CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
   min: Int
   max: Int
   step: Int
+  ui: JSON
 }
 
 type FloatCustomFieldConfig implements CustomField {
@@ -2077,9 +2112,11 @@ type FloatCustomFieldConfig implements CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
   min: Float
   max: Float
   step: Float
+  ui: JSON
 }
 
 type BooleanCustomFieldConfig implements CustomField {
@@ -2090,6 +2127,8 @@ type BooleanCustomFieldConfig implements CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
+  ui: JSON
 }
 
 """
@@ -2104,9 +2143,11 @@ type DateTimeCustomFieldConfig implements CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
   min: String
   max: String
   step: Int
+  ui: JSON
 }
 
 type RelationCustomFieldConfig implements CustomField {
@@ -2117,8 +2158,10 @@ type RelationCustomFieldConfig implements CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
   entity: String!
   scalarFields: [String!]!
+  ui: JSON
 }
 
 type TextCustomFieldConfig implements CustomField {
@@ -2129,6 +2172,8 @@ type TextCustomFieldConfig implements CustomField {
   description: [LocalizedString!]
   readonly: Boolean
   internal: Boolean
+  nullable: Boolean
+  ui: JSON
 }
 
 type LocalizedString {
@@ -2152,13 +2197,34 @@ type CustomerGroup implements Node {
   updatedAt: DateTime!
   name: String!
   customers(options: CustomerListOptions): CustomerList!
+  customFields: JSON
 }
 
 input CustomerListOptions {
+  """
+  Skips the first n results, for use in pagination
+  """
   skip: Int
+
+  """
+  Takes n results, for use in pagination
+  """
   take: Int
+
+  """
+  Specifies which properties to sort the results by
+  """
   sort: CustomerSortParameter
+
+  """
+  Allows the results to be filtered
+  """
   filter: CustomerFilterParameter
+
+  """
+  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  """
+  filterOperator: LogicalOperator
 }
 
 type Customer implements Node {
@@ -2268,10 +2334,30 @@ type HistoryEntryList implements PaginatedList {
 }
 
 input HistoryEntryListOptions {
+  """
+  Skips the first n results, for use in pagination
+  """
   skip: Int
+
+  """
+  Takes n results, for use in pagination
+  """
   take: Int
+
+  """
+  Specifies which properties to sort the results by
+  """
   sort: HistoryEntrySortParameter
+
+  """
+  Allows the results to be filtered
+  """
   filter: HistoryEntryFilterParameter
+
+  """
+  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  """
+  filterOperator: LogicalOperator
 }
 
 """
@@ -3247,7 +3333,7 @@ type OrderItem implements Node {
   discountedUnitPriceWithTax: Int!
 
   """
-  The actual unit price, taking into account both item discounts _and_ prorated (proportially-distributed)
+  The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
   Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
   and refund calculations.
   """
@@ -3308,7 +3394,7 @@ type OrderLine implements Node {
   discountedUnitPriceWithTax: Int!
 
   """
-  The actual unit price, taking into account both item discounts _and_ prorated (proportially-distributed)
+  The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
   Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
   and refund calculations.
   """
@@ -3328,7 +3414,7 @@ type OrderLine implements Node {
   linePrice: Int!
 
   """
-  The total price of the line including tax bit excluding discounts.
+  The total price of the line including tax but excluding discounts.
   """
   linePriceWithTax: Int!
 
@@ -3343,7 +3429,7 @@ type OrderLine implements Node {
   discountedLinePriceWithTax: Int!
 
   """
-  The actual line price, taking into account both item discounts _and_ prorated (proportially-distributed)
+  The actual line price, taking into account both item discounts _and_ prorated (proportionally-distributed)
   Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
   and refund calculations.
   """
@@ -3361,7 +3447,7 @@ type OrderLine implements Node {
   discounts: [Discount!]!
   taxLines: [TaxLine!]!
   order: Order!
-  customFields: JSON
+  customFields: OrderLineCustomFields
 }
 
 type Payment implements Node {
@@ -3415,6 +3501,19 @@ type Surcharge implements Node {
   price: Int!
   priceWithTax: Int!
   taxRate: Float!
+}
+
+type PaymentMethod implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  code: String!
+  description: String!
+  enabled: Boolean!
+  checker: ConfigurableOperation
+  handler: ConfigurableOperation!
+  customFields: JSON
 }
 
 type ProductOptionGroup implements Node {
@@ -3519,6 +3618,7 @@ type SearchResult {
   A relevence score for the result. Differs between database implementations
   """
   score: Float!
+  inStock: Boolean
 }
 
 """
@@ -3551,7 +3651,16 @@ type Product implements Node {
   description: String!
   featuredAsset: Asset
   assets: [Asset!]!
+
+  """
+  Returns all ProductVariants
+  """
   variants: [ProductVariant!]!
+
+  """
+  Returns a paginated, sortable, filterable list of ProductVariants
+  """
+  variantList(options: ProductVariantListOptions): ProductVariantList!
   optionGroups: [ProductOptionGroup!]!
   facetValues: [FacetValue!]!
   translations: [ProductTranslation!]!
@@ -3573,6 +3682,11 @@ type ProductTranslation {
 
 type ProductList implements PaginatedList {
   items: [Product!]!
+  totalItems: Int!
+}
+
+type ProductVariantList implements PaginatedList {
+  items: [ProductVariant!]!
   totalItems: Int!
 }
 
@@ -3621,6 +3735,7 @@ type Promotion implements Node {
   enabled: Boolean!
   conditions: [ConfigurableOperation!]!
   actions: [ConfigurableOperation!]!
+  customFields: JSON
 }
 
 type PromotionList implements PaginatedList {
@@ -3689,6 +3804,7 @@ type TaxCategory implements Node {
   updatedAt: DateTime!
   name: String!
   isDefault: Boolean!
+  customFields: JSON
 }
 
 type TaxRate implements Node {
@@ -3701,6 +3817,7 @@ type TaxRate implements Node {
   category: TaxCategory!
   zone: Zone!
   customerGroup: CustomerGroup
+  customFields: JSON
 }
 
 type TaxRateList implements PaginatedList {
@@ -3733,6 +3850,7 @@ type Zone implements Node {
   updatedAt: DateTime!
   name: String!
   members: [Country!]!
+  customFields: JSON
 }
 
 """
@@ -3941,7 +4059,7 @@ Passed as input to the `addPaymentToOrder` mutation.
 """
 input PaymentInput {
   """
-  This field should correspond to the `code` property of a PaymentMethodHandler.
+  This field should correspond to the `code` property of a PaymentMethod.
   """
   method: String!
 
@@ -3954,31 +4072,138 @@ input PaymentInput {
 }
 
 input CollectionListOptions {
+  """
+  Skips the first n results, for use in pagination
+  """
   skip: Int
+
+  """
+  Takes n results, for use in pagination
+  """
   take: Int
+
+  """
+  Specifies which properties to sort the results by
+  """
   sort: CollectionSortParameter
+
+  """
+  Allows the results to be filtered
+  """
   filter: CollectionFilterParameter
+
+  """
+  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  """
+  filterOperator: LogicalOperator
 }
 
 input FacetListOptions {
+  """
+  Skips the first n results, for use in pagination
+  """
   skip: Int
+
+  """
+  Takes n results, for use in pagination
+  """
   take: Int
+
+  """
+  Specifies which properties to sort the results by
+  """
   sort: FacetSortParameter
+
+  """
+  Allows the results to be filtered
+  """
   filter: FacetFilterParameter
+
+  """
+  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  """
+  filterOperator: LogicalOperator
 }
 
 input OrderListOptions {
+  """
+  Skips the first n results, for use in pagination
+  """
   skip: Int
+
+  """
+  Takes n results, for use in pagination
+  """
   take: Int
+
+  """
+  Specifies which properties to sort the results by
+  """
   sort: OrderSortParameter
+
+  """
+  Allows the results to be filtered
+  """
   filter: OrderFilterParameter
+
+  """
+  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  """
+  filterOperator: LogicalOperator
 }
 
 input ProductListOptions {
+  """
+  Skips the first n results, for use in pagination
+  """
   skip: Int
+
+  """
+  Takes n results, for use in pagination
+  """
   take: Int
+
+  """
+  Specifies which properties to sort the results by
+  """
   sort: ProductSortParameter
+
+  """
+  Allows the results to be filtered
+  """
   filter: ProductFilterParameter
+
+  """
+  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  """
+  filterOperator: LogicalOperator
+}
+
+input ProductVariantListOptions {
+  """
+  Skips the first n results, for use in pagination
+  """
+  skip: Int
+
+  """
+  Takes n results, for use in pagination
+  """
+  take: Int
+
+  """
+  Specifies which properties to sort the results by
+  """
+  sort: ProductVariantSortParameter
+
+  """
+  Allows the results to be filtered
+  """
+  filter: ProductVariantFilterParameter
+
+  """
+  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  """
+  filterOperator: LogicalOperator
 }
 
 union UpdateOrderItemsResult =
@@ -4135,6 +4360,8 @@ type ResellerDiscount {
 }
 
 input ProductVariantFilterParameter {
+  id: IDOperators
+  productId: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
   languageCode: StringOperators
@@ -4165,6 +4392,7 @@ input ProductVariantSortParameter {
 }
 
 input CustomerFilterParameter {
+  id: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
   title: StringOperators
@@ -4186,6 +4414,7 @@ input CustomerSortParameter {
 }
 
 input OrderFilterParameter {
+  id: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
   orderPlacedAt: DateOperators
@@ -4221,6 +4450,7 @@ input OrderSortParameter {
 }
 
 input HistoryEntryFilterParameter {
+  id: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
   type: StringOperators
@@ -4233,6 +4463,7 @@ input HistoryEntrySortParameter {
 }
 
 input CollectionFilterParameter {
+  id: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
   languageCode: StringOperators
@@ -4253,6 +4484,7 @@ input CollectionSortParameter {
 }
 
 input FacetFilterParameter {
+  id: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
   languageCode: StringOperators
@@ -4269,6 +4501,7 @@ input FacetSortParameter {
 }
 
 input ProductFilterParameter {
+  id: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
   languageCode: StringOperators
@@ -4279,6 +4512,7 @@ input ProductFilterParameter {
   productRecommendationsEnabled: BooleanOperators
   groupKey: StringOperators
   ordering: NumberOperators
+  customizationOptions: StringOperators
 }
 
 input ProductSortParameter {
@@ -4292,6 +4526,7 @@ input ProductSortParameter {
   productRecommendationsEnabled: SortOrder
   groupKey: SortOrder
   ordering: SortOrder
+  customizationOptions: SortOrder
 }
 
 type OrderCustomFields {
@@ -4302,15 +4537,24 @@ input UpdateOrderCustomFieldsInput {
   notes: String
 }
 
+type OrderLineCustomFields {
+  customizations: String
+}
+
 type ProductCustomFields {
   productRecommendationsEnabled: Boolean
   groupKey: String
   ordering: Int
+  customizationOptions: String
 }
 
 type ProductVariantCustomFields {
   bulkDiscountEnabled: Boolean
   minimumOrderQuantity: Int
+}
+
+input OrderLineCustomFieldsInput {
+  customizations: String
 }
 
 input NativeAuthInput {

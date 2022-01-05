@@ -80,6 +80,7 @@ export const FULL_PRODUCT_FRAGMENT = `
   }
   customFields {
     groupKey
+    customizationOptions
   }
   variants{
     ${VARIANT_FRAGMENT}

@@ -10,7 +10,7 @@ import React, { FunctionComponent, useMemo } from "react";
 import styled from "@emotion/styled";
 
 const Slider = styled.div`
-  & > div:first-child {
+  & > div:first-of-type {
     overflow-x: scroll;
   }
 `;
@@ -25,7 +25,7 @@ const Slide = styled.div<IProps>`
 
   cursor: pointer;
 
-  &:last-child {
+  &:last-of-type {
     margin-right: 0;
   }
 `;

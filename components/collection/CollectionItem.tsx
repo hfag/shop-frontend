@@ -19,7 +19,7 @@ const StyledCategory = styled.div`
   flex-direction: column;
   height: 100%;
 
-  & > div:first-child {
+  & > div:first-of-type {
     position: relative;
     border-bottom: ${colors.primaryContrast} 1px solid;
     padding-top: 100%;
@@ -46,7 +46,7 @@ const StyledCategory = styled.div`
     }
   }
 
-  & > div:last-child {
+  & > div:last-of-type {
     flex: 1 0 auto;
   }
 

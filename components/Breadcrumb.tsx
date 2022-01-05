@@ -21,7 +21,7 @@ const Breadcrumb = styled.div`
     color: ${colors.primary};
   }
 
-  &:last-child {
+  &:last-of-type {
     font-weight: bold;
 
     & > div {

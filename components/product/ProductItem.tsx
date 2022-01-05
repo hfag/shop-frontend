@@ -35,7 +35,7 @@ const StyledProduct = styled.div`
   flex-direction: column;
   height: 100%;
 
-  & > div:first-child {
+  & > div:first-of-type {
     position: relative;
     border-bottom: ${colors.background} 1px solid;
     padding-top: 100%;
@@ -62,7 +62,7 @@ const StyledProduct = styled.div`
     }
   }
 
-  & > div:last-child {
+  & > div:last-of-type {
     flex: 1 0 auto;
   }
 
@@ -70,7 +70,7 @@ const StyledProduct = styled.div`
     padding: 0.5rem;
   }
 
-  &:hover div > div:first-child {
+  &:hover div > div:first-of-type {
     text-decoration: underline;
   }
 `;
@@ -181,7 +181,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
               ) : (
                 <Placeholder text />
               )}
-              {minPrice && (
+              {minPrice && minPrice > 0 ? (
                 <div>
                   <Subtitle>
                     Ab{" "}
@@ -190,7 +190,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
                     </u>
                   </Subtitle>
                 </div>
-              )}
+              ) : null}
               {product ? (
                 product.collections &&
                 product.collections

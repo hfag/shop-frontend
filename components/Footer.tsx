@@ -77,18 +77,18 @@ const BorderBox = styled(Box)`
     border-bottom: #fff 1px solid;
   }
 
-  &:last-child {
+  &:last-of-type {
     border-bottom: none;
   }
 `;
 
 const IconList = styled.table`
   width: 100%;
-  td:first-child {
+  td:first-of-type {
     width: 15%;
     padding: 0.25rem 0;
   }
-  td:last-child {
+  td:last-of-type {
     padding-left: 1rem;
   }
 `;

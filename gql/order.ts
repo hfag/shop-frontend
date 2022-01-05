@@ -59,6 +59,11 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
       options{
         name
       }
+      product{
+        customFields {
+          customizationOptions
+        }
+      }
     }
     unitPrice
     unitPriceWithTax
@@ -70,6 +75,9 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
       amount
     }
     linePriceWithTax
+    customFields {
+      customizations
+    }
   }
   discounts {
     adjustmentSource
@@ -124,8 +132,16 @@ export const GET_ORDER_BY_CODE = /* GraphQL */ `
 `;
 
 export const ADD_TO_ORDER = /* GraphQL */ `
-  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {
-    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
+  mutation AddCustomItemToOrder(
+    $productVariantId: ID!
+    $quantity: Int!
+    $customizations: JSON
+  ) {
+    addCustomItemToOrder(
+      productVariantId: $productVariantId
+      quantity: $quantity
+      customizations: $customizations
+    ) {
       ... on Order {
         id
       }

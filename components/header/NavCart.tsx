@@ -1,6 +1,11 @@
 import { FaShoppingCart } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
-import React, { FunctionComponent, useContext, useEffect } from "react";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+} from "react";
 import styled from "@emotion/styled";
 
 import { AppContext } from "../AppWrapper";
@@ -44,7 +49,7 @@ const ShoppingCartList = styled.div`
   display: flex;
   align-items: center;
 
-  & > div:first-child {
+  & > div:first-of-type {
     flex: 0 0 10%;
     margin-right: 0.5rem;
   }
@@ -56,7 +61,7 @@ const ShoppingCartList = styled.div`
 
 const NavCart: FunctionComponent<{
   dropdown: string | boolean;
-  setDropdown: (dropdown: string | boolean) => void;
+  setDropdown?: (dropdown: string | boolean) => void;
 }> = ({ dropdown, setDropdown }) => {
   const intl = useIntl();
   const router = useRouter();
@@ -65,44 +70,54 @@ const NavCart: FunctionComponent<{
     request<{ activeOrder: Query["activeOrder"] }>(intl.locale, query)
   );
 
+  const onCartClick = useCallback(() => {
+    if (setDropdown) {
+      setDropdown(dropdown === "cart" ? false : "cart");
+    } else {
+      router.push(
+        `/${intl.locale}/${pathnamesByLanguage.cart.languages[intl.locale]}`
+      );
+    }
+  }, [setDropdown]);
+
   return (
     <>
-      <Link
-        onClick={() => setDropdown(dropdown === "cart" ? false : "cart")}
-        negative
-        flex
-      >
+      <Link onClick={onCartClick} negative flex>
         <FaShoppingCart size="35" />
-        <Counter>
-          <Circle
-            negative
-            filled
-            w="1.75rem"
-            h="1.75rem"
-            padding="0"
-            centerChildren
-          >
-            <small>
-              {!data /* loading */ ? (
-                <Placeholder
-                  text
-                  inline
-                  height={1.25}
-                  minWidth={0.75}
-                  mb={-0.2}
-                ></Placeholder>
-              ) : data.activeOrder === null ? (
-                0 /* no active order */
-              ) : (
-                data.activeOrder.lines.reduce(
-                  (sum, line) => sum + line.quantity,
-                  0
-                )
-              )}
-            </small>
-          </Circle>
-        </Counter>
-        <Triangle color={colors.primaryContrast} size="0.5rem" />
+        {setDropdown && (
+          <>
+            <Counter>
+              <Circle
+                negative
+                filled
+                w="1.75rem"
+                h="1.75rem"
+                padding="0"
+                centerChildren
+              >
+                <small>
+                  {!data /* loading */ ? (
+                    <Placeholder
+                      text
+                      inline
+                      height={1.25}
+                      minWidth={0.75}
+                      mb={-0.2}
+                    ></Placeholder>
+                  ) : data.activeOrder === null ? (
+                    0 /* no active order */
+                  ) : (
+                    data.activeOrder.lines.reduce(
+                      (sum, line) => sum + line.quantity,
+                      0
+                    )
+                  )}
+                </small>
+              </Circle>
+            </Counter>
+            <Triangle color={colors.primaryContrast} size="0.5rem" />
+          </>
+        )}
       </Link>
       {dropdown === "cart" && (
         <Dropdown>

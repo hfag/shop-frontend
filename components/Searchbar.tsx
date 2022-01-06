@@ -242,7 +242,10 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
       ) : (
         <Suggestion>
           <Flexbar>
-            <Asset asset={result.productVariantAsset} preset="small" />
+            <Asset
+              asset={result.productVariantAsset || result.productAsset}
+              preset="small"
+            />
             <div className="name">
               <div>{result.productVariantName}</div>
               <Detail>{result.sku}</Detail>
@@ -253,9 +256,9 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
                   {intl.formatMessage(search.from)}{" "}
                   <Price>{result.priceWithTax.min}</Price>
                 </>
-              ) : (
+              ) : result.priceWithTax.value > 0 ? (
                 <Price>{result.priceWithTax.value}</Price>
-              )}
+              ) : null}
             </div>
           </Flexbar>
         </Suggestion>

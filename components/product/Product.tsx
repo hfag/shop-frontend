@@ -319,49 +319,50 @@ const Product: FunctionComponent<{
           </div>
         )}
         <Flex flexWrap="wrap" marginX>
-          {product.optionGroups
-            .filter((optionGroup) => !(optionGroup.id in defaultOptions))
-            .map((optionGroup) => (
-              <Box
-                key={optionGroup.id}
-                widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
-                paddingX={0.5}
-              >
-                <h4>{optionGroup.name}</h4>
-                <Select
-                  placeholder={intl.formatMessage(messages.chooseAnAttribute)}
-                  onChange={(item: ProductOption) => {
-                    const group = product.optionGroups.find(
-                      (g) => g.id === optionGroup.id
-                    );
-                    if (!group) {
-                      console.error(
-                        "The select isn't paired to a group, this shouldn't happen"
+          {buyable &&
+            product.optionGroups
+              .filter((optionGroup) => !(optionGroup.id in defaultOptions))
+              .map((optionGroup) => (
+                <Box
+                  key={optionGroup.id}
+                  widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
+                  paddingX={0.5}
+                >
+                  <h4>{optionGroup.name}</h4>
+                  <Select
+                    placeholder={intl.formatMessage(messages.chooseAnAttribute)}
+                    onChange={(item: ProductOption) => {
+                      const group = product.optionGroups.find(
+                        (g) => g.id === optionGroup.id
                       );
-                      return;
-                    }
-                    if (!item) {
-                      const o = { ...selectedOptions };
-                      delete o[optionGroup.id];
-                      setSelectedOptions(o);
-                    } else {
-                      setSelectedOptions({
-                        ...selectedOptions,
-                        [optionGroup.id]: group.options.find(
-                          (o) => o.code === item.code
-                        ),
-                      });
-                    }
-                  }}
-                  selected={selectedOptions[optionGroup.id] || null}
-                  options={optionGroup.options.filter((option) =>
-                    possibleOptions[optionGroup.id].includes(option)
-                  )}
-                  mapOptionToLabel={(item: ProductOption) => item.name}
-                  areOptionsEqual={areOptionsEqual}
-                />
-              </Box>
-            ))}
+                      if (!group) {
+                        console.error(
+                          "The select isn't paired to a group, this shouldn't happen"
+                        );
+                        return;
+                      }
+                      if (!item) {
+                        const o = { ...selectedOptions };
+                        delete o[optionGroup.id];
+                        setSelectedOptions(o);
+                      } else {
+                        setSelectedOptions({
+                          ...selectedOptions,
+                          [optionGroup.id]: group.options.find(
+                            (o) => o.code === item.code
+                          ),
+                        });
+                      }
+                    }}
+                    selected={selectedOptions[optionGroup.id] || null}
+                    options={optionGroup.options.filter((option) =>
+                      possibleOptions[optionGroup.id].includes(option)
+                    )}
+                    mapOptionToLabel={(item: ProductOption) => item.name}
+                    areOptionsEqual={areOptionsEqual}
+                  />
+                </Box>
+              ))}
           {customizationOptions &&
             Object.keys(customizationOptions).map((optionKey) => {
               const { labels, type } = customizationOptions[optionKey];

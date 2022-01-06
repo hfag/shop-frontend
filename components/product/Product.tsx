@@ -362,38 +362,39 @@ const Product: FunctionComponent<{
                 />
               </Box>
             ))}
-          {Object.keys(customizationOptions).map((optionKey) => {
-            const { labels, type } = customizationOptions[optionKey];
-            const label = labels.find(
-              (l: { language: string; label: string }) =>
-                l.language === intl.locale
-            )?.label;
+          {customizationOptions &&
+            Object.keys(customizationOptions).map((optionKey) => {
+              const { labels, type } = customizationOptions[optionKey];
+              const label = labels.find(
+                (l: { language: string; label: string }) =>
+                  l.language === intl.locale
+              )?.label;
 
-            return (
-              <Box
-                key={optionKey}
-                widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
-                paddingX={0.5}
-              >
-                <h4>{label || optionKey}</h4>
-                {type === "text" && (
-                  <InputFieldWrapper>
-                    <input
-                      type="text"
-                      placeholder={/*placeholder*/ ""}
-                      onChange={(e) =>
-                        setCustomizations({
-                          ...customizations,
-                          [optionKey]: e.target.value,
-                        })
-                      }
-                      value={customizations[optionKey] || ""}
-                    />
-                  </InputFieldWrapper>
-                )}
-              </Box>
-            );
-          })}
+              return (
+                <Box
+                  key={optionKey}
+                  widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]}
+                  paddingX={0.5}
+                >
+                  <h4>{label || optionKey}</h4>
+                  {type === "text" && (
+                    <InputFieldWrapper>
+                      <input
+                        type="text"
+                        placeholder={/*placeholder*/ ""}
+                        onChange={(e) =>
+                          setCustomizations({
+                            ...customizations,
+                            [optionKey]: e.target.value,
+                          })
+                        }
+                        value={customizations[optionKey] || ""}
+                      />
+                    </InputFieldWrapper>
+                  )}
+                </Box>
+              );
+            })}
           {buyable && (
             <>
               <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>

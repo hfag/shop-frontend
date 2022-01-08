@@ -21,27 +21,31 @@ const StyledCategory = styled.div`
 
   & > div:first-of-type {
     position: relative;
-    border-bottom: ${colors.primaryContrast} 1px solid;
-    padding-top: 100%;
+    border-bottom: ${colors.background} 1px solid;
 
-    & > * {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+    & > div {
+      position: relative;
+      padding-top: 100%;
 
-      width: 90%;
-      height: 90%;
+      & > * {
+        position: absolute;
+        top: 50%;
+        left: 50%;
 
-      transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
 
-      &.b-height {
-        height: 90% !important;
-        width: auto !important;
-      }
+        transform: translate(-50%, -50%);
 
-      &.b-width {
-        width: 90% !important;
-        height: auto !important;
+        &.b-height {
+          height: 100% !important;
+          width: auto !important;
+        }
+
+        &.b-width {
+          width: 100% !important;
+          height: auto !important;
+        }
       }
     }
   }
@@ -95,7 +99,9 @@ const CollectionItem: FunctionComponent<{
     >
       <StyledLink href={url}>
         <StyledCategory>
-          <Asset asset={collection?.featuredAsset} squared />
+          <div>
+            <Asset asset={collection?.featuredAsset} squared />
+          </div>
           <div>
             {collection ? (
               <Title dangerouslySetInnerHTML={{ __html: collection.name }} />

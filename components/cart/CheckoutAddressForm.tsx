@@ -36,6 +36,11 @@ const messages = defineMessages({
     id: "CheckoutAddressForm.continue",
     defaultMessage: "Weiter",
   },
+  errorPhoneNumber: {
+    id: "CheckoutForm.errorPhoneNumber",
+    defaultMessage:
+      "Bitte die Telefonnummer im Format '000 000 00 00' eingegeben.",
+  },
 });
 
 interface FormValues {
@@ -189,7 +194,7 @@ const InnerCheckoutAddressForm = React.memo(
               readOnly={readOnly}
             />
             <InputField
-              type="tel"
+              type="text"
               label={intl.formatMessage(address.phone)}
               name="billingPhone"
               required={true}
@@ -300,7 +305,7 @@ const InnerCheckoutAddressForm = React.memo(
                   readOnly={readOnly}
                 />
                 <InputField
-                  type="tel"
+                  type="text"
                   label={intl.formatMessage(address.phone)}
                   name="shippingPhoneNumber"
                   required={true}
@@ -385,7 +390,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     return values;
   },
 
-  validationSchema: ({ countries }: IProps) => {
+  validationSchema: ({ countries, intl }: IProps) => {
     const countryCodes = countries.map((country) => country.code);
 
     return yup.object().shape({
@@ -452,8 +457,23 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         otherwise: yup.string().notRequired(),
       }),
 
-      billingPhone: yup.string().required(),
-      shippingPhone: yup.string().notRequired(),
+      billingPhone: yup
+        .string()
+        .test(
+          "test-phone",
+          intl.formatMessage(messages.errorPhoneNumber),
+          (value) => /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value)
+        )
+        .required(),
+      shippingPhone: yup
+        .string()
+        .test(
+          "test-phone",
+          intl.formatMessage(messages.errorPhoneNumber),
+          (value) => /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value)
+        )
+        .required()
+        .notRequired(),
 
       billingEmail: yup.string().email().required(),
     });

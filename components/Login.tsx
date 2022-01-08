@@ -173,7 +173,7 @@ const LoginRegisterForm = withFormik<
   mapPropsToValues: (props) => ({}),
   validationSchema: ({ password, intl }: IPropsLoginRegister) =>
     yup.object().shape({
-      email: yup.string().email().required(),
+      email: yup.string().required(),
       password: yup
         .string()
         .when([], (schema) =>

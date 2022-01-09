@@ -24,7 +24,7 @@ import MediaQuery from "../MediaQuery";
 import RestrictedView from "../../elements/RestrictedView";
 import page from "../../../i18n/page";
 
-const BurgerContainer = styled(Card)<{ isOpen: boolean }>`
+const BurgerContainer = styled(Card)<{ isOpen: boolean; hasChildren: boolean }>`
   height: 100%;
   z-index: 100;
   border-top-left-radius: 0;
@@ -33,6 +33,8 @@ const BurgerContainer = styled(Card)<{ isOpen: boolean }>`
 
   transition: all 0.3s ease-in;
   -webkit-overflow-scrolling: touch;
+
+  padding: ${({ hasChildren }) => (hasChildren ? "1" : "0")}rem;
 
   ${media.maxLarge} {
     position: fixed;
@@ -47,6 +49,7 @@ const BurgerContainer = styled(Card)<{ isOpen: boolean }>`
 
     box-shadow: none !important;
     margin: 0;
+    padding: 1rem;
   }
 `;
 
@@ -94,6 +97,14 @@ const BurgerBackground = styled.div<BurgerBackgroundProps>`
   opacity: ${({ isOpen }) => (isOpen ? 0.3 : 0)};
 
   z-index: ${({ isOpen }) => (isOpen ? 99 : -1)};
+
+  user-select: none;
+`;
+
+const StyledSidebar = styled.div<{ hasChildren: boolean }>`
+  height: 100%;
+  width: ${({ hasChildren }) => (hasChildren ? "100%" : "auto")};
+  padding-bottom: 2rem;
 `;
 
 const Sidebar: FunctionComponent<{ children: ReactNode }> = React.memo(
@@ -103,9 +114,12 @@ const Sidebar: FunctionComponent<{ children: ReactNode }> = React.memo(
     const isAuthenticated = false;
 
     return (
-      <div style={{ height: "100%", paddingBottom: "2rem" }}>
+      <StyledSidebar hasChildren={children ? true : false}>
         <BurgerBackground onClick={toggleBurgerMenu} isOpen={burgerMenuOpen} />
-        <BurgerContainer isOpen={burgerMenuOpen}>
+        <BurgerContainer
+          isOpen={burgerMenuOpen}
+          hasChildren={children ? true : false}
+        >
           <MediaQuery lg down style={{ height: "auto" }}>
             <BurgerLogo src="/images/logo/name_slogan.svg" alt="Slogan" />
             <BurgerList>
@@ -190,7 +204,7 @@ const Sidebar: FunctionComponent<{ children: ReactNode }> = React.memo(
           </MediaQuery>
           {children}
         </BurgerContainer>
-      </div>
+      </StyledSidebar>
     );
   }
 );

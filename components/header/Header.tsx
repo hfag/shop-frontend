@@ -65,13 +65,18 @@ const LogoLeft = styled.div`
 `;
 
 const MobileSearchWrapper = styled.div`
-  margin-top: 1.5rem;
+  margin-top: 6rem;
+
   h3 {
     margin-top: 0;
   }
   input {
     background-color: #fff;
     border: ${colors.primary} 1px solid;
+  }
+
+  & > div > div > div {
+    margin-bottom: 0;
   }
 `;
 

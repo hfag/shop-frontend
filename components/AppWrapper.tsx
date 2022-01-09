@@ -35,7 +35,7 @@ const AppWrapper: FunctionComponent<{
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const toggleBurgerMenu = useCallback(
     () => setBurgerMenuOpen(!burgerMenuOpen),
-    [burgerMenuOpen]
+    [setBurgerMenuOpen, burgerMenuOpen]
   );
 
   const [token, setToken] = useLocalStorage("vendure-auth-token");

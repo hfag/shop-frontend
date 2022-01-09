@@ -78,7 +78,7 @@ const NavCart: FunctionComponent<{
         `/${intl.locale}/${pathnamesByLanguage.cart.languages[intl.locale]}`
       );
     }
-  }, [setDropdown]);
+  }, [setDropdown, dropdown]);
 
   return (
     <>

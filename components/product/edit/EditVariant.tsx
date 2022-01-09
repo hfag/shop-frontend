@@ -112,8 +112,8 @@ const EditVariant: FunctionComponent<{ variant: ProductVariant }> = ({
                             (b) =>
                               isNaN(b.quantity) ||
                               b.quantity <= 0 ||
-                              isNaN(b.price) ||
-                              b.price <= 0
+                              isNaN(parseFloat(b.price)) ||
+                              parseFloat(b.price) <= 0
                           )
                         ) {
                           setBulkDiscounts(newValue);

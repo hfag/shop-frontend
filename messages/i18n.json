@@ -230,6 +230,9 @@
   "page.confirmation": {
     "defaultMessage": "Bestellbestätigung"
   },
+  "page.editProduct": {
+    "defaultMessage": "Produkt bearbeiten"
+  },
   "page.networkAdmin": {
     "defaultMessage": "Netzwerk-Admin"
   },

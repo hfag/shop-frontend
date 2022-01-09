@@ -36,6 +36,19 @@
       }
     }
   },
+  "editProduct": {
+    "path": "de/produkt/bearbeiten",
+    "languages": { "de": "produkt/bearbeiten", "fr": "produit/modifier" },
+    "pathnames": {
+      "[slug].tsx": {
+        "path": "de/produkt/bearbeiten/[slug].tsx",
+        "languages": {
+          "de": "[slug]",
+          "fr": "[slug]"
+        }
+      }
+    }
+  },
   "post": {
     "path": "de/beitrag",
     "languages": { "de": "beitrag", "fr": "article" },

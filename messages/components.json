@@ -98,6 +98,9 @@
   "CheckoutForm.acceptTos": {
     "defaultMessage": "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und akzeptiere diese *"
   },
+  "CheckoutForm.errorPhoneNumber": {
+    "defaultMessage": "Bitte die Telefonnummer im Format '000 000 00 00' eingegeben."
+  },
   "CheckoutForm.invalidPaymentMethod": {
     "defaultMessage": "Die ausgewählte Zahlungsmethode ist ungültig!"
   },
@@ -121,6 +124,12 @@
   },
   "Confirmation.support": {
     "defaultMessage": "Bei Fragen können sie uns per E-Mail unter {mail} oder per Telefon unter {phone} erreichen."
+  },
+  "EditProduct.backToProduct": {
+    "defaultMessage": "Zurück zum Produkt"
+  },
+  "EditProduct.variants": {
+    "defaultMessage": "Produktvarianten"
   },
   "EntityChooser.itemsPerPage": {
     "defaultMessage": "Zeilen pro Seite"

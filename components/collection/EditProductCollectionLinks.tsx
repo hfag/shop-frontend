@@ -30,6 +30,7 @@ import { requestAdmin } from "../../utilities/request";
 import ActionButton from "../ActionButton";
 import AssetField from "../form/AssetField";
 import Button from "../elements/Button";
+import Buttons from "../elements/Buttons";
 import Flexbar from "../layout/Flexbar";
 import InputField from "../form/InputField";
 import LanguageChooser from "../LanguageChooser";
@@ -97,12 +98,6 @@ interface IProps {
 interface FormValues {
   links: AdminCollectionLink[];
 }
-
-const Buttons = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-`;
 
 const EditProductCollectionLinksInnerForm: FunctionComponent<
   IProps & FormikProps<FormValues>

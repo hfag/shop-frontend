@@ -5,30 +5,24 @@ import {
   GET_PRODUCTS,
   GET_PRODUCT_BY_SLUG,
 } from "../../gql/product";
-import { FaEdit } from "react-icons/fa";
+
 import { Product, ProductRecommendation, Query } from "../../schema";
 import { defineMessages, useIntl } from "react-intl";
 import { mutate } from "swr";
 import { useAuthenticate } from "../../utilities/hooks";
 import Button from "../elements/Button";
 import Card from "../layout/Card";
+import Edit from "../elements/EditButton";
 import Flex from "../layout/Flex";
 import Flexbar from "../layout/Flexbar";
 import ProductItem from "./ProductItem";
 import React, { FunctionComponent, useCallback, useState } from "react";
-import RestrictedView from "../elements/RestrictedView";
 import dynamic from "next/dynamic";
 import form from "../../i18n/form";
 import request, { requestAdmin } from "../../utilities/request";
 import styled from "@emotion/styled";
 
 const AsyncSelect = dynamic(() => import("react-select/async"), { ssr: false });
-
-const Edit = styled(FaEdit)`
-  cursor: pointer;
-  font-size: 1rem;
-  margin-left: 0.5rem;
-`;
 
 const StyledAsyncSelect = styled(AsyncSelect)`
   flex-grow: 1;

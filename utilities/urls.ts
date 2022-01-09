@@ -1,11 +1,11 @@
 import {
+  Language,
   getLanguageFromCurrentWindow,
   getLanguageFromLocation,
-  Language,
 } from "./i18n";
 
-import pathnames from "./pathnames.json";
 import pages from "./pages.json";
+import pathnames from "./pathnames.json";
 
 export const pathnamesByLanguage = pathnames;
 export const pageSlugsByLanguage = pages;

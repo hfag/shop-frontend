@@ -151,3 +151,9 @@ export const ADMIN_UPDATE_UP_SELLS = /* GraphQL */ `
     updateUpSellingProducts(productId: $productId, productIds: $productIds)
   }
 `;
+
+export const ADMIN_UPDATE_BULK_DISCOUNTS = /* GraphQL */ `
+  mutation UpdateBulkDiscounts($updates: [BulkDiscountUpdate!]!) {
+    updateBulkDiscounts(updates: $updates)
+  }
+`;

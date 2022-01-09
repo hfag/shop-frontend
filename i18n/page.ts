@@ -61,4 +61,8 @@ export default defineMessages({
     id: "page.networkAdmin",
     defaultMessage: "Netzwerk-Admin",
   },
+  editProduct: {
+    id: "page.editProduct",
+    defaultMessage: "Produkt bearbeiten",
+  },
 });

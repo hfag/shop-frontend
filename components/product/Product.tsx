@@ -8,7 +8,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import ReactDOM from "react-dom";
 import styled from "@emotion/styled";
 
 import { ABSOLUTE_URL } from "../../utilities/api";
@@ -32,12 +31,14 @@ import { pathnamesByLanguage } from "../../utilities/urls";
 import { productToJsonLd } from "../../utilities/json-ld";
 import { setProductView, trackPageView } from "../../utilities/analytics";
 import { stripTags } from "../../utilities/decode";
+import { useAuthenticate } from "../../utilities/hooks";
 import { useRouter } from "next/router";
 import Asset from "../elements/Asset";
 import Bill from "../elements/Bill";
 import Box from "../layout/Box";
 import Button from "../elements/Button";
 import Card from "../layout/Card";
+import Edit from "../elements/EditButton";
 import Flex from "../layout/Flex";
 import Head from "next/head";
 import JsonLd from "../seo/JsonLd";
@@ -95,14 +96,15 @@ const areOptionsEqual = (o1: ProductOption, o2: ProductOption) =>
 const Product: FunctionComponent<{
   product?: ProductType;
 }> = React.memo(({ product }) => {
+  if (!product) {
+    return <Placeholder block />;
+  }
+
   const intl = useIntl();
   const router = useRouter();
 
   const { customer: user, token } = useContext(AppContext);
-
-  if (!product) {
-    return <Placeholder block />;
-  }
+  const isAdmin = useAuthenticate();
 
   const [selectedOptions, setSelectedOptions] = useState<{
     [optionGroupId: string]: ProductOption;
@@ -306,7 +308,18 @@ const Product: FunctionComponent<{
         }}
       </JsonLd>
       <ProductCard>
-        <h1 dangerouslySetInnerHTML={{ __html: product.name }} />
+        <h1>
+          <span dangerouslySetInnerHTML={{ __html: product.name }} />
+          <Edit
+            onClick={() =>
+              router.push(
+                `/${intl.locale}/${
+                  pathnamesByLanguage.editProduct.languages[intl.locale]
+                }/${product.slug}`
+              )
+            }
+          />
+        </h1>
         {buyable && (
           <div>
             <hr />

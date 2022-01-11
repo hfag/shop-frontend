@@ -61,8 +61,11 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
       }
     }
     quantity
+    unitPrice
     unitPriceWithTax
+    proratedUnitPrice
     proratedUnitPriceWithTax
+    proratedLinePrice
     proratedLinePriceWithTax
     linePriceWithTax
     customFields {

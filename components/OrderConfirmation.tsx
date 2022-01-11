@@ -190,17 +190,17 @@ const OrderConfirmation: FunctionComponent = () => {
         </tbody>
         <tfoot>
           <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(orderMessages.taxesOfThat)}</td>
-            <td>
-              <Price>
-                {data.orderByCode.subTotalWithTax - data.orderByCode.total}
-              </Price>
-            </td>
-          </tr>
-          <tr className="total">
             <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
             <td>
               <Price>{data.orderByCode.shipping}</Price>
+            </td>
+          </tr>
+          <tr className="total">
+            <td colSpan={5}>{intl.formatMessage(orderMessages.taxesOfThat)}</td>
+            <td>
+              <Price>
+                {data.orderByCode.totalWithTax - data.orderByCode.total}
+              </Price>
             </td>
           </tr>
           <tr className="total">

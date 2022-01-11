@@ -31,7 +31,7 @@ export default defineMessages({
   },
   taxesOfThat: {
     id: "CartForm.taxesOfThat",
-    defaultMessage: "Davon MWST (7.7%)",
+    defaultMessage: "MWST (7.7%)",
   },
   noOrders: {
     id: "order.noOrders",

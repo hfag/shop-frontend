@@ -190,14 +190,14 @@ const InnerCheckoutForm = React.memo(
               </td>
             </tr>
             <tr>
-              <td>{intl.formatMessage(orderMessages.taxes)}</td>
-              <td>
-                <Price>{order.subTotalWithTax - order.subTotal}</Price>
-              </td>
-            </tr>
-            <tr>
               <td>{intl.formatMessage(orderMessages.shipping)}</td>
               <td>{shipping && <Price>{shipping}</Price>}</td>
+            </tr>
+            <tr>
+              <td>{intl.formatMessage(orderMessages.taxes)}</td>
+              <td>
+                <Price>{order.totalWithTax - order.total}</Price>
+              </td>
             </tr>
             <tr>
               <td>{intl.formatMessage(orderMessages.total)}</td>

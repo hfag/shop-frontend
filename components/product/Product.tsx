@@ -620,7 +620,9 @@ const Product: FunctionComponent<{
               <UnsafeHTMLContent content={product.description} />
               <h2>{intl.formatMessage(messages.imageGallery)}</h2>
               <LightboxGallery
-                images={product.assets}
+                images={product.assets.filter(
+                  (a) => a.id != product.featuredAsset.id
+                )}
                 imageToUrl={(asset) => asset.source}
                 imageToPreviewElement={(asset) => <Asset asset={asset} />}
               />

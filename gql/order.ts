@@ -243,7 +243,6 @@ export const ORDER_GET_SHIPPING_METHODS = /* GraphQL */ `
   query {
     eligibleShippingMethods {
       id
-      price
       priceWithTax
       name
       description

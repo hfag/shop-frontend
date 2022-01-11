@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { borders, colors } from "../../utilities/style";
 
 export const InputFieldWrapper = styled.div<{
-  checkbox?: boolean;
   flexGrow?: number;
   marginRight?: number;
   marginLeft?: number;
@@ -15,13 +14,7 @@ export const InputFieldWrapper = styled.div<{
     marginRight ? `margin-right: ${marginRight}rem;` : ""}
   ${({ marginLeft }) => (marginLeft ? `margin-left: ${marginLeft}rem;` : "")}
     
-  ${({ checkbox }) =>
-    checkbox
-      ? `position: absolute;
-  top: 1.3rem;
-  left: -1.5rem;
-  `
-      : ""} /**/    
+   
   .input-label {
     display: block;
     margin-bottom: 0.5rem;

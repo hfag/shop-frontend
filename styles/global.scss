@@ -18,6 +18,11 @@ textarea {
   line-height: 1.4;
 }
 
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+}
+
 * {
   box-sizing: border-box;
 }

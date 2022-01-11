@@ -142,7 +142,8 @@ const InnerCheckoutForm = React.memo(
                     value={shippingMethod.id}
                     checked={values.shippingMethod === shippingMethod.id}
                   />{" "}
-                  {shippingMethod.name} <Price>{shippingMethod.price}</Price>
+                  {shippingMethod.name}{" "}
+                  <Price>{shippingMethod.priceWithTax}</Price>
                 </label>
               </Box>
             ))
@@ -202,7 +203,9 @@ const InnerCheckoutForm = React.memo(
               <td>{intl.formatMessage(orderMessages.total)}</td>
               <td>
                 <Price>
-                  {shipping ? order.total + shipping : order.totalWithTax}
+                  {shipping
+                    ? order.totalWithTax + shipping
+                    : order.totalWithTax}
                 </Price>
               </td>
             </tr>

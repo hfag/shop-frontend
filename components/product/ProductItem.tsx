@@ -163,7 +163,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
         paddingX={0.5}
         marginTop={1}
       >
-        {resellerDiscount && (
+        {resellerDiscount ? (
           <Discount
             data-balloon={
               resellerDiscount +
@@ -174,7 +174,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
           >
             <FaPercent />
           </Discount>
-        )}
+        ) : null}
         <StyledLink href={url} noHover>
           <StyledProduct>
             <div>

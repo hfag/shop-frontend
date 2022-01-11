@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { Form, FormikProps, withFormik } from "formik";
+import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages } from "react-intl";
 import React, { FunctionComponent } from "react";
 
@@ -17,24 +17,27 @@ import {
   ORDER_SET_ADDRESS,
   ORDER_SET_CUSTOMER,
 } from "../../gql/order";
+import { GET_CURRENT_USER, UPDATE_CUSTOMER } from "../../gql/user";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { mutate } from "swr";
 import Box from "../layout/Box";
 import Button from "../elements/Button";
 import Flex from "../layout/Flex";
+import Flexbar from "../layout/Flexbar";
 import InputField from "../form/InputField";
 import SelectField from "../form/SelectField";
 import address from "../../i18n/address";
 import request from "../../utilities/request";
+import styled from "@emotion/styled";
 
 const messages = defineMessages({
   shipToDifferentAddress: {
     id: "CheckoutAddressForm.shipToDifferentAddress",
     defaultMessage: "Lieferung an eine andere Adresse",
   },
-  continue: {
-    id: "CheckoutAddressForm.continue",
-    defaultMessage: "Weiter",
+  save: {
+    id: "CheckoutAddressForm.saveAndContinue",
+    defaultMessage: "Speichern und weiter",
   },
   errorPhoneNumber: {
     id: "CheckoutForm.errorPhoneNumber",
@@ -42,6 +45,18 @@ const messages = defineMessages({
       "Bitte die Telefonnummer im Format '000 000 00 00' eingegeben.",
   },
 });
+
+const ShipToDifferentAddress = styled.div`
+  display: flex;
+  align-items: center;
+  align-content: center;
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+
+  h3 {
+    margin: 0 0 0 0.5rem;
+  }
+`;
 
 interface FormValues {
   billingFirstName?: string;
@@ -209,20 +224,19 @@ const InnerCheckoutAddressForm = React.memo(
             />
           </Box>
           <Box widths={[1, 1, 1, 1 / 2, 1 / 2]} paddingRight={1}>
-            <InputField
-              id="shipToDifferentAddress"
-              name="shipToDifferentAddress"
-              type="checkbox"
-              value="1"
-              checkbox={true}
-              componentProps={{ checked: values.shipToDifferentAddress }}
-              readOnly={readOnly}
-            />
-            <h3>
-              <label htmlFor="shipToDifferentAddress">
-                {intl.formatMessage(messages.shipToDifferentAddress)}
-              </label>
-            </h3>
+            <ShipToDifferentAddress>
+              <Field
+                type="checkbox"
+                name="shipToDifferentAddress"
+                readOnly={readOnly}
+                disabled={readOnly}
+              />
+              <h3>
+                <label htmlFor="shipToDifferentAddress">
+                  {intl.formatMessage(messages.shipToDifferentAddress)}
+                </label>
+              </h3>
+            </ShipToDifferentAddress>
             {values.shipToDifferentAddress && (
               <div>
                 {/*<InputField
@@ -322,7 +336,7 @@ const InnerCheckoutAddressForm = React.memo(
           controlled
           state={isValid && enabled ? status : "disabled"}
         >
-          {intl.formatMessage(messages.continue)}
+          {intl.formatMessage(messages.save)}
         </Button>
       </Form>
     );
@@ -470,9 +484,9 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         .test(
           "test-phone",
           intl.formatMessage(messages.errorPhoneNumber),
-          (value) => /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value)
+          (value) =>
+            value ? /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value) : true
         )
-        .required()
         .notRequired(),
 
       billingEmail: yup.string().email().required(),
@@ -506,7 +520,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
           postalCode: values.shippingPostalCode,
           countryCode: values.shippingCountry,
           phoneNumber: values.shippingPhoneNumber,
-          defaultShippingAddress: true,
+          //defaultShippingAddress: true,
         }
       : billingAddress;
 
@@ -515,7 +529,26 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     }
 
     if (customer) {
-      //do something
+      const response = await request<{
+        updateCustomer: Mutation["updateCustomer"];
+      }>(intl.locale, UPDATE_CUSTOMER, {
+        input: {
+          firstName: values.billingFirstName,
+          lastName: values.billingLastName,
+          phoneNumber: values.billingPhone,
+        },
+      });
+
+      mutate([GET_CURRENT_USER, token]);
+
+      if ("errorCode" in response.updateCustomer) {
+        setErrors({
+          billingFirstName: errorCodeToMessage(intl, response.updateCustomer),
+        });
+        setStatus("error");
+        setTimeout(() => setStatus(""), 300);
+        return;
+      }
     } else {
       const response = await request<{
         setCustomerForOrder: Mutation["setCustomerForOrder"];

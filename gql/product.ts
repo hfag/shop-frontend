@@ -110,6 +110,9 @@ export const FULL_PRODUCT_FRAGMENT = `
       id
       name
       slug
+      facetValues {
+        id
+      }
       variants {
         price
       }

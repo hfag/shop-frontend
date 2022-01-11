@@ -89,8 +89,8 @@
   "CartFrom.showMoreDetails": {
     "defaultMessage": "Zeige Details"
   },
-  "CheckoutAddressForm.continue": {
-    "defaultMessage": "Weiter"
+  "CheckoutAddressForm.saveAndContinue": {
+    "defaultMessage": "Speichern und weiter"
   },
   "CheckoutAddressForm.shipToDifferentAddress": {
     "defaultMessage": "Lieferung an eine andere Adresse"

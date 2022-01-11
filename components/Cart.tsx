@@ -100,7 +100,7 @@ const Cart: FunctionComponent = React.memo(() => {
           {(step === "address" || step === "checkout") && (
             <CheckoutAddressForm
               intl={intl}
-              enabled={step === "address"}
+              enabled={true}
               token={token}
               countries={countryData?.availableCountries || []}
               onProceed={() => setStep("checkout")}

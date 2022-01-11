@@ -60,15 +60,10 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
         name
       }
     }
-    unitPrice
-    unitPriceWithTax
     quantity
+    unitPriceWithTax
+    proratedUnitPriceWithTax
     proratedLinePriceWithTax
-    discounts {
-      adjustmentSource
-      type
-      amount
-    }
     linePriceWithTax
     customFields {
       customizations

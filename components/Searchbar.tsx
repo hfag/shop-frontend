@@ -251,13 +251,13 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
               <Detail>{result.sku}</Detail>
             </div>
             <div className="price">
-              {"min" in result.priceWithTax ? (
+              {"min" in result.price ? (
                 <>
                   {intl.formatMessage(search.from)}{" "}
-                  <Price>{result.priceWithTax.min}</Price>
+                  <Price>{result.price.min}</Price>
                 </>
-              ) : result.priceWithTax.value > 0 ? (
-                <Price>{result.priceWithTax.value}</Price>
+              ) : result.price.value > 0 ? (
+                <Price>{result.price.value}</Price>
               ) : null}
             </div>
           </Flexbar>

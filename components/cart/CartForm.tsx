@@ -129,31 +129,6 @@ const InnerCartForm = React.memo(
               return order.lines
                 .filter((line) => values.lines.find((l) => l.id === line.id))
                 .map((line, index) => {
-                  //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
-                  const adjustmentSources: string[] = line.discounts.reduce(
-                    (array, adjustment) => {
-                      //already included adjustments
-                      if (array.includes(adjustment.adjustmentSource)) {
-                        return array;
-                      } else {
-                        array.push(adjustment.adjustmentSource);
-                        return array;
-                      }
-                    },
-                    []
-                  );
-
-                  const adjustmentsPerUnit: Discount[] = adjustmentSources.map(
-                    (source) =>
-                      line.discounts.find((a) => a.adjustmentSource === source)
-                  );
-
-                  const price = adjustmentsPerUnit.reduce(
-                    (price, adjustment) =>
-                      price + adjustment.amount / line.quantity,
-                    line.unitPriceWithTax
-                  );
-
                   let customizations: { [key: string]: any } | null = null;
 
                   try {
@@ -195,13 +170,14 @@ const InnerCartForm = React.memo(
                       </td>
                       <td>{line.productVariant.sku}</td>
                       <td>
-                        {price !== line.unitPriceWithTax ? (
+                        {line.proratedUnitPriceWithTax !==
+                        line.unitPriceWithTax ? (
                           <>
                             <div>
                               <Price strike>{line.unitPriceWithTax}</Price>
                             </div>
                             <div>
-                              <Price>{price}</Price>
+                              <Price>{line.proratedUnitPriceWithTax}</Price>
                             </div>
                           </>
                         ) : (

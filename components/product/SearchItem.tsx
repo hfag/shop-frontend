@@ -185,17 +185,17 @@ const SearchItem: FunctionComponent<{
               <Subtitle>
                 {result.sku}
                 <br />
-                {"value" in result.priceWithTax ? (
+                {"value" in result.price ? (
                   <>
                     <u>
-                      <Price>{result.priceWithTax.value}</Price>
+                      <Price>{result.price.value}</Price>
                     </u>
                   </>
                 ) : (
                   <>
                     {intl.formatMessage(search.from)}{" "}
                     <u>
-                      <Price>{result.priceWithTax.min}</Price>
+                      <Price>{result.price.min}</Price>
                     </u>
                   </>
                 )}

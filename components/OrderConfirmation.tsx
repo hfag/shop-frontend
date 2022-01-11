@@ -129,29 +129,6 @@ const OrderConfirmation: FunctionComponent = () => {
         <tbody>
           {data.orderByCode.lines.map((line, index) => {
             //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
-            const adjustmentSources: string[] = line.discounts.reduce(
-              (array, adjustment) => {
-                //ignore already included adjustments
-                if (array.includes(adjustment.adjustmentSource)) {
-                  return array;
-                } else {
-                  array.push(adjustment.adjustmentSource);
-                  return array;
-                }
-              },
-              []
-            );
-
-            const adjustmentsPerUnit: Discount[] = adjustmentSources.map(
-              (source) =>
-                line.discounts.find((a) => a.adjustmentSource === source)
-            );
-
-            const price = adjustmentsPerUnit.reduce(
-              (price, adjustment) => price + adjustment.amount,
-              line.unitPriceWithTax
-            );
-
             let customizations: { [key: string]: any } | null = null;
 
             try {
@@ -188,13 +165,13 @@ const OrderConfirmation: FunctionComponent = () => {
                 </td>
                 <td>{line.productVariant.sku}</td>
                 <td>
-                  {price !== line.unitPriceWithTax ? (
+                  {line.proratedUnitPriceWithTax !== line.unitPriceWithTax ? (
                     <>
                       <div>
                         <Price strike>{line.unitPriceWithTax}</Price>
                       </div>
                       <div>
-                        <Price>{price}</Price>
+                        <Price>{line.proratedUnitPriceWithTax}</Price>
                       </div>
                     </>
                   ) : (
@@ -205,7 +182,7 @@ const OrderConfirmation: FunctionComponent = () => {
                   <span>{line.quantity}</span>
                 </td>
                 <td>
-                  <Price>{line.linePriceWithTax}</Price>
+                  <Price>{line.proratedLinePriceWithTax}</Price>
                 </td>
               </tr>
             );
@@ -216,7 +193,7 @@ const OrderConfirmation: FunctionComponent = () => {
             <td colSpan={5}>{intl.formatMessage(orderMessages.taxesOfThat)}</td>
             <td>
               <Price>
-                {data.orderByCode.totalWithTax - data.orderByCode.total}
+                {data.orderByCode.subTotalWithTax - data.orderByCode.total}
               </Price>
             </td>
           </tr>

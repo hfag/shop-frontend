@@ -13,7 +13,7 @@ export const SEARCH = /* GraphQL */ `
         productVariantAsset {
           preview
         }
-        priceWithTax {
+        price {
           ... on PriceRange {
             min
             max

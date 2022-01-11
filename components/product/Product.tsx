@@ -286,7 +286,7 @@ const Product: FunctionComponent<{
   }, [possibleVariants]);*/
 
   const buyable = !(
-    product.variants.length == 1 && product.variants[0].priceWithTax <= 0
+    product.variants.length == 1 && product.variants[0].price <= 0
   );
 
   return (
@@ -509,13 +509,13 @@ const Product: FunctionComponent<{
             paddingX={0.5}
             marginTop={1}
           >
-            {selectedVariant && selectedVariant.priceWithTax ? (
+            {selectedVariant && selectedVariant.price ? (
               <div>
                 <h4>{intl.formatMessage(productMessages.price)}</h4>
                 <Bill
                   items={[
                     {
-                      price: selectedVariant.priceWithTax,
+                      price: selectedVariant.price,
                       quantity,
                       discountPrice:
                         activeResellerDiscounts.length === 0
@@ -524,7 +524,7 @@ const Product: FunctionComponent<{
                             : undefined
                           : activeResellerDiscounts.reduce(
                               (price, d) => (1 - d.discount / 100) * price,
-                              selectedVariant.priceWithTax
+                              selectedVariant.price
                             ),
                       unit,
                     },

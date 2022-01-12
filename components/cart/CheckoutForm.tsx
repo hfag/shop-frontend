@@ -113,7 +113,7 @@ const InnerCheckoutForm = React.memo(
         (m) => m.id === values.shippingMethod
       );
 
-      return method ? method.priceWithTax : null;
+      return method ? method.price : null;
     }, [data, values]);
 
     return (
@@ -142,8 +142,7 @@ const InnerCheckoutForm = React.memo(
                     value={shippingMethod.id}
                     checked={values.shippingMethod === shippingMethod.id}
                   />{" "}
-                  {shippingMethod.name}{" "}
-                  <Price>{shippingMethod.priceWithTax}</Price>
+                  {shippingMethod.name} <Price>{shippingMethod.price}</Price>
                 </label>
               </Box>
             ))

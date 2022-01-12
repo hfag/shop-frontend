@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages } from "react-intl";
-import React, { FunctionComponent, useMemo } from "react";
+import React, { FunctionComponent, useEffect, useMemo } from "react";
 
 import { CreateAddressInput, Mutation, Order, Query } from "../../schema";
 import {
@@ -104,6 +104,16 @@ const InnerCheckoutForm = React.memo(
       )
     );
 
+    useEffect(() => {
+      if (values.shippingMethod) {
+        request<{
+          setOrderShippingMethod: Mutation["setOrderShippingMethod"];
+        }>(intl.locale, ORDER_SET_SHIPPING_METHOD, {
+          shippingMethodId: values.shippingMethod,
+        }).catch(console.log);
+      }
+    }, [values.shippingMethod]);
+
     const shipping: number | null = useMemo(() => {
       if (!data) {
         return null;
@@ -201,11 +211,7 @@ const InnerCheckoutForm = React.memo(
             <tr>
               <td>{intl.formatMessage(orderMessages.total)}</td>
               <td>
-                <Price>
-                  {shipping
-                    ? order.totalWithTax + shipping
-                    : order.totalWithTax}
-                </Price>
+                <Price>{order.totalWithTax}</Price>
               </td>
             </tr>
           </tbody>

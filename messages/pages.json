@@ -20,6 +20,9 @@
   "Frontpage.shopProducts": {
     "defaultMessage": "Unsere Produkte im Shop"
   },
+  "account.details.newEmail": {
+    "defaultMessage": "Sie haben eine neue E-Mail angegeben, bestätigen Sie die erhaltene E-Mail auf der neuen Adresse."
+  },
   "logout.pleaseWait": {
     "defaultMessage": "Bitte warten..."
   }

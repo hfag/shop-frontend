@@ -131,6 +131,18 @@
   "EditProduct.variants": {
     "defaultMessage": "Produktvarianten"
   },
+  "EditVariant.addRow": {
+    "defaultMessage": "Zeile hinzufügen"
+  },
+  "EditVariant.bulkDiscounts": {
+    "defaultMessage": "Mengenrabatte"
+  },
+  "EditVariant.properties": {
+    "defaultMessage": "Eigenschaften"
+  },
+  "EditVariant.removeRow": {
+    "defaultMessage": "Zeile entfernen"
+  },
   "EntityChooser.itemsPerPage": {
     "defaultMessage": "Zeilen pro Seite"
   },

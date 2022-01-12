@@ -26,6 +26,10 @@ const messages = defineMessages({
     id: "EditVariant.addRow",
     defaultMessage: "Zeile hinzufügen",
   },
+  removeRow: {
+    id: "EditVariant.removeRow",
+    defaultMessage: "Zeile entfernen",
+  },
 });
 
 const H4 = styled.h4<{ marginTop?: boolean }>`
@@ -81,23 +85,37 @@ const EditVariant: FunctionComponent<{ variant: ProductVariant }> = ({
                       }}
                     />
                   </td>
-                  <input
-                    type="number"
-                    value={discount.price}
-                    min="0"
-                    step="0.01"
-                    onChange={(e) => {
-                      const newValue = [...bulkDiscounts];
-                      newValue[index].price = e.target.value;
-                      setBulkDiscounts(newValue);
-                    }}
-                  />
+                  <td>
+                    <input
+                      type="number"
+                      value={discount.price}
+                      min="0"
+                      step="0.01"
+                      onChange={(e) => {
+                        const newValue = [...bulkDiscounts];
+                        newValue[index].price = e.target.value;
+                        setBulkDiscounts(newValue);
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <Button
+                      onClick={() => {
+                        setBulkDiscounts(
+                          bulkDiscounts.filter((d, idx) => idx !== index)
+                        );
+                        return Promise.resolve();
+                      }}
+                    >
+                      {intl.formatMessage(messages.removeRow)}
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan={2}>
+                <td colSpan={3}>
                   <Buttons>
                     <Button
                       onClick={() => {
@@ -136,10 +154,14 @@ const EditVariant: FunctionComponent<{ variant: ProductVariant }> = ({
                               })),
                             },
                           ];
-                          return requestAdmin(
+                          return requestAdmin<{ updateBulkDiscounts: boolean }>(
                             intl.locale,
                             ADMIN_UPDATE_BULK_DISCOUNTS,
                             { updates }
+                          ).then((r) =>
+                            r.updateBulkDiscounts
+                              ? Promise.resolve()
+                              : Promise.reject()
                           );
                         }
                       }}

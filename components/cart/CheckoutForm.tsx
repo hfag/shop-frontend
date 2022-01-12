@@ -95,6 +95,7 @@ const InnerCheckoutForm = React.memo(
     handleSubmit,
     isSubmitting,
     intl,
+    token,
     order,
   }: IProps & FormikProps<FormValues>) => {
     const { data } = useSWR(ORDER_GET_SHIPPING_METHODS, (query) =>
@@ -110,7 +111,11 @@ const InnerCheckoutForm = React.memo(
           setOrderShippingMethod: Mutation["setOrderShippingMethod"];
         }>(intl.locale, ORDER_SET_SHIPPING_METHOD, {
           shippingMethodId: values.shippingMethod,
-        }).catch(console.log);
+        })
+          .then(() => {
+            mutate([GET_ACTIVE_ORDER, token]);
+          })
+          .catch(console.log);
       }
     }, [values.shippingMethod]);
 

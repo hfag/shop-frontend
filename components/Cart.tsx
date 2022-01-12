@@ -114,6 +114,7 @@ const Cart: FunctionComponent = React.memo(() => {
                 orderData?.activeOrder.shippingAddress
               }
               customer={orderData?.activeOrder?.customer}
+              user={user}
             />
           )}
           {step === "checkout" && (

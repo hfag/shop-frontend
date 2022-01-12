@@ -165,24 +165,24 @@ const OrderConfirmation: FunctionComponent = () => {
                 </td>
                 <td>{line.productVariant.sku}</td>
                 <td>
-                  {line.proratedUnitPriceWithTax !== line.unitPriceWithTax ? (
+                  {line.proratedUnitPrice !== line.unitPrice ? (
                     <>
                       <div>
-                        <Price strike>{line.unitPriceWithTax}</Price>
+                        <Price strike>{line.unitPrice}</Price>
                       </div>
                       <div>
-                        <Price>{line.proratedUnitPriceWithTax}</Price>
+                        <Price>{line.proratedUnitPrice}</Price>
                       </div>
                     </>
                   ) : (
-                    <Price>{line.unitPriceWithTax}</Price>
+                    <Price>{line.unitPrice}</Price>
                   )}
                 </td>
                 <td>
                   <span>{line.quantity}</span>
                 </td>
                 <td>
-                  <Price>{line.proratedLinePriceWithTax}</Price>
+                  <Price>{line.proratedLinePrice}</Price>
                 </td>
               </tr>
             );

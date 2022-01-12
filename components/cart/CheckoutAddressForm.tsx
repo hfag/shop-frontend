@@ -89,6 +89,7 @@ interface IProps {
   token?: string;
   billingAddress: Address | OrderAddress | null;
   shippingAddress: Address | OrderAddress | null;
+  user?: Customer | null;
   customer: Customer | null;
   intl: IntlShape;
   enabled?: boolean;
@@ -494,7 +495,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
   },
   handleSubmit: async (
     values,
-    { props: { intl, customer, token, onProceed }, setStatus, setErrors }
+    { props: { intl, customer, user, token, onProceed }, setStatus, setErrors }
   ) => {
     const billingAddress: CreateAddressInput = {
       fullName: `${values.billingFirstName} ${values.billingLastName}`,
@@ -528,7 +529,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       billingAddress.defaultShippingAddress = true;
     }
 
-    if (customer) {
+    if (user) {
       const response = await request<{
         updateCustomer: Mutation["updateCustomer"];
       }>(intl.locale, UPDATE_CUSTOMER, {

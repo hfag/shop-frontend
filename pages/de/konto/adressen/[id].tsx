@@ -64,6 +64,7 @@ const Page = () => {
           <AddressForm
             id={typeof id === "string" ? id : "new"}
             intl={intl}
+            router={router}
             token={token}
             countries={countryData ? countryData.availableCountries : []}
             values={

@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { Form, FormikProps, withFormik } from "formik";
+import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape } from "react-intl";
 import PropTypes from "prop-types";
 import React from "react";
@@ -11,7 +11,10 @@ import {
   UPDATE_CUSTOMER_ADDRESS,
 } from "../../gql/user";
 import { Country, Mutation } from "../../schema";
+import { InputFieldWrapper } from "../form/InputFieldWrapper";
+import { NextRouter } from "next/router";
 import { mutate } from "swr";
+import { pathnamesByLanguage } from "../../utilities/urls";
 import Button from "../elements/Button";
 import InputField from "../form/InputField";
 import SelectField from "../form/SelectField";
@@ -43,6 +46,7 @@ interface IProps {
   id?: string;
   token: string | null;
   intl: IntlShape;
+  router: NextRouter;
   countries: Country[];
   values: FormValues;
 }
@@ -129,28 +133,26 @@ const InnerAddressForm = React.memo(
         name="phone"
         required={false}
       />
-      <InputField
-        id="defaultShippingAddress"
-        name="defaultShippingAddress"
-        type="checkbox"
-        value="1"
-        componentProps={{ checked: values["defaultShippingAddress"] }}
-      >
+      <InputFieldWrapper>
+        <Field
+          type="checkbox"
+          id="defaultShippingAddress"
+          name="defaultShippingAddress"
+        />
         <label htmlFor="defaultShippingAddress">
           {intl.formatMessage(address.defaultShippingAddress)}
         </label>
-      </InputField>
-      <InputField
-        id="defaultBillingAddress"
-        name="defaultBillingAddress"
-        type="checkbox"
-        value="1"
-        componentProps={{ checked: values["defaultBillingAddress"] }}
-      >
+      </InputFieldWrapper>
+      <InputFieldWrapper>
+        <Field
+          type="checkbox"
+          id="defaultBillingAddress"
+          name="defaultBillingAddress"
+        />
         <label htmlFor="defaultBillingAddress">
           {intl.formatMessage(address.defaultBillingAddress)}
         </label>
-      </InputField>
+      </InputFieldWrapper>
       <br />
       <Button fullWidth controlled state={isValid ? status : "disabled"}>
         {intl.formatMessage(form.saveChanges)}
@@ -199,7 +201,7 @@ const AddressForm = withFormik<IProps, FormValues>({
   },
   handleSubmit: async (
     values,
-    { props: { intl, id = "new", token }, setStatus }
+    { props: { intl, router, id = "new", token }, setStatus }
   ) => {
     setStatus("loading");
 
@@ -248,6 +250,13 @@ const AddressForm = withFormik<IProps, FormValues>({
       setStatus("success");
       setTimeout(() => {
         setStatus("");
+        router.push(
+          `/${intl.locale}/${
+            pathnamesByLanguage.account.languages[intl.locale]
+          }/${
+            pathnamesByLanguage.account.pathnames.address.languages[intl.locale]
+          }`
+        );
       }, 300);
     } catch (e) {
       setStatus("error");

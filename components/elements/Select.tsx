@@ -91,7 +91,7 @@ const Select = <Option extends unknown>({
         value={selectedIndex < 0 ? "default" : selectedIndex.toString()}
         disabled={readOnly}
       >
-        <option value="default">{placeholder}</option>
+        {placeholder && <option value="default">{placeholder}</option>}
         {options.map((option, index) => (
           <option key={index} value={index.toString()}>
             {mapOptionToLabel(option)}

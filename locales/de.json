@@ -47,6 +47,8 @@
   "CheckoutForm.tosMustBeAccepted": "Die AGBs müssen akzeptiert werden!",
   "Confirmation.support": "Bei Fragen können sie uns per E-Mail unter {mail} oder per Telefon unter {phone} erreichen.",
   "EditProduct.backToProduct": "Zurück zum Produkt",
+  "EditProduct.description": "Produktbeschreibung",
+  "EditProduct.name": "Produktname",
   "EditProduct.variants": "Produktvarianten",
   "EditVariant.addRow": "Zeile hinzufügen",
   "EditVariant.bulkDiscounts": "Mengenrabatte",

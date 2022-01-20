@@ -66,7 +66,7 @@ export const OPTION_GROUP_FRAGMENT = `
   }
 `;
 
-export const FULL_PRODUCT_FRAGMENT = `
+export const PRODUCT_FRAGMENT = `
   id
   slug
   name
@@ -128,16 +128,94 @@ export const FULL_PRODUCT_FRAGMENT = `
   }
 `;
 
+export const FULL_PRODUCT_FRAGMENT = `
+  id
+  name
+  slug
+  translations {
+    id
+    name
+    slug
+    description
+    languageCode
+    createdAt
+    updatedAt
+  }
+  featuredAsset {
+    ${ASSET_FRAGMENT}
+  }
+  assets {
+    ${ASSET_FRAGMENT}
+    source
+  }
+  customFields {
+    groupKey
+    customizationOptions
+  }
+  variants{
+    ${VARIANT_FRAGMENT}
+  }
+  optionGroups{
+    ${OPTION_GROUP_FRAGMENT}
+  }
+  facetValues{
+    id
+    name
+    facet{
+      name
+      code
+    }
+  }
+  collections{
+    id
+    name
+    breadcrumbs{
+      id
+      slug
+      name
+    }
+  }
+  recommendations{
+    recommendation{
+      id
+      name
+      slug
+      facetValues {
+        id
+      }
+      variants {
+        price
+      }
+      collections{
+        id
+        name
+      }
+      featuredAsset{
+        ${ASSET_FRAGMENT}
+      }
+    }
+    type
+  }
+`;
+
 export const GET_PRODUCT = /* GraphQL */ `
   query Product($id: ID!) {
     product(id: $id) {
-      ${FULL_PRODUCT_FRAGMENT}
+      ${PRODUCT_FRAGMENT}
     }
   }
 `;
 export const GET_PRODUCT_BY_SLUG = /* GraphQL */ `
   query ProductBySlug($slug: String!) {
     productBySlug(slug: $slug) {
+      ${PRODUCT_FRAGMENT}
+    }
+  }
+`;
+
+export const GET_FULL_PRODUCT_BY_ID = /* GraphQL */ `
+  query ProductById($id: ID!) {
+    product(id: $id) {
       ${FULL_PRODUCT_FRAGMENT}
     }
   }
@@ -158,5 +236,13 @@ export const ADMIN_UPDATE_UP_SELLS = /* GraphQL */ `
 export const ADMIN_UPDATE_BULK_DISCOUNTS = /* GraphQL */ `
   mutation UpdateBulkDiscounts($updates: [BulkDiscountUpdate!]!) {
     updateBulkDiscounts(updates: $updates)
+  }
+`;
+
+export const ADMIN_UPDATE_PRODUCT = /* GraphQL */ `
+  mutation UpdateProduct($input: UpdateProductInput!) {
+    updateProduct(input: $input){
+      ${FULL_PRODUCT_FRAGMENT}
+    }
   }
 `;

@@ -47,6 +47,8 @@
   "CheckoutForm.tosMustBeAccepted": "Les conditions générales doivent être acceptées!",
   "Confirmation.support": "Si vous avez des questions, vous pouvez nous contacter par e-mail à {mail} ou par téléphone à {phone}.",
   "EditProduct.backToProduct": "Retour au produit",
+  "EditProduct.description": "Description du produit",
+  "EditProduct.name": "Nom du produit",
   "EditProduct.variants": "Variantes de produits",
   "EditVariant.addRow": "Ajouter une ligne",
   "EditVariant.bulkDiscounts": "Rabais de quantité",

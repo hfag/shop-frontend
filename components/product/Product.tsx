@@ -310,15 +310,17 @@ const Product: FunctionComponent<{
       <ProductCard>
         <h1>
           <span dangerouslySetInnerHTML={{ __html: product.name }} />
-          <Edit
-            onClick={() =>
-              router.push(
-                `/${intl.locale}/${
-                  pathnamesByLanguage.editProduct.languages[intl.locale]
-                }/${product.slug}`
-              )
-            }
-          />
+          {isAdmin && (
+            <Edit
+              onClick={() =>
+                router.push(
+                  `/${intl.locale}/${
+                    pathnamesByLanguage.editProduct.languages[intl.locale]
+                  }/${product.id}`
+                )
+              }
+            />
+          )}
         </h1>
         {buyable && (
           <div>

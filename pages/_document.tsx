@@ -10,7 +10,7 @@ export default class MyDocument extends Document<IProps> {
     return (
       <Html>
         <Head />
-        <body>
+        <body spellCheck="false">
           <Main />
           <div id="modal" />
           <div id="lightbox" />

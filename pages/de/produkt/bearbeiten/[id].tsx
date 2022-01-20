@@ -1,4 +1,4 @@
-import { GET_PRODUCT_BY_SLUG } from "../../../../gql/product";
+import { GET_FULL_PRODUCT_BY_ID } from "../../../../gql/product";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Product as ProductType, Query } from "../../../../schema";
 import { defineMessages, useIntl } from "react-intl";
@@ -20,16 +20,16 @@ const EditProduct = dynamic(
 );
 
 const Page: FunctionComponent<{
-  productSlug: string;
-  productResponse: { productBySlug: ProductType };
-}> = ({ productSlug, productResponse }) => {
+  productId: string;
+  productResponse: { product: ProductType };
+}> = ({ productId, productResponse }) => {
   const intl = useIntl();
 
   const { data, error } = useSWR(
-    [GET_PRODUCT_BY_SLUG, productSlug],
-    (query, productSlug) =>
-      request<{ productBySlug: Query["productBySlug"] }>(intl.locale, query, {
-        slug: productSlug,
+    [GET_FULL_PRODUCT_BY_ID, productId],
+    (query, productId) =>
+      request<{ product: Query["product"] }>(intl.locale, query, {
+        id: productId,
       }),
     {
       initialData: productResponse,
@@ -37,8 +37,8 @@ const Page: FunctionComponent<{
   );
 
   const breadcrumbs = useMemo(() => {
-    return data.productBySlug.collections.length > 0
-      ? data.productBySlug.collections[0].breadcrumbs
+    return data.product.collections.length > 0
+      ? data.product.collections[0].breadcrumbs
           .filter((b) => parseInt(b.id) > 1 /* remove root collection */)
           .map((b) => ({
             name: b.name,
@@ -54,9 +54,7 @@ const Page: FunctionComponent<{
       sidebar={
         <SidebarBreadcrumbs breadcrumbs={breadcrumbs}>
           {data && (
-            <SidebarBreadcrumb active>
-              {data.productBySlug.name}
-            </SidebarBreadcrumb>
+            <SidebarBreadcrumb active>{data.product.name}</SidebarBreadcrumb>
           )}
         </SidebarBreadcrumbs>
       }
@@ -65,22 +63,22 @@ const Page: FunctionComponent<{
           ? [
               ...breadcrumbs,
               {
-                name: data.productBySlug.name,
+                name: data.product.name,
                 url: `/${intl.locale}/${
                   pathnamesByLanguage.product.languages[intl.locale]
-                }/${productSlug}`,
+                }/${data.product.slug}`,
               },
               {
                 name: intl.formatMessage(page.editProduct),
                 url: `/${intl.locale}/${
                   pathnamesByLanguage.editProduct.languages[intl.locale]
-                }/${productSlug}`,
+                }/${productId}`,
               },
             ]
           : []
       }
     >
-      <EditProduct product={data && data.productBySlug} />
+      <EditProduct product={data && data.product} />
     </Wrapper>
   );
 };
@@ -103,17 +101,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const productResponse = await request<{
-    productBySlug: Query["productBySlug"];
-  }>(locale, GET_PRODUCT_BY_SLUG, {
-    slug: context.params.slug,
+    product: Query["product"];
+  }>(locale, GET_FULL_PRODUCT_BY_ID, {
+    id: context.params.id,
   });
 
   return {
     revalidate: 10, //products will be rerendered at most every 10s
-    notFound: productResponse?.productBySlug ? false : true,
+    notFound: productResponse?.product ? false : true,
     props: {
       productResponse,
-      productSlug: context.params.slug,
+      productId: context.params.id,
     },
   };
 };

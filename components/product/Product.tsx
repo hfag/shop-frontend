@@ -370,9 +370,11 @@ const Product: FunctionComponent<{
                       }
                     }}
                     selected={selectedOptions[optionGroup.id] || null}
-                    options={optionGroup.options.filter((option) =>
-                      possibleOptions[optionGroup.id].includes(option)
-                    )}
+                    options={optionGroup.options
+                      .filter((option) =>
+                        possibleOptions[optionGroup.id].includes(option)
+                      )
+                      .sort((a, b) => a.name.localeCompare(b.name))}
                     mapOptionToLabel={(item: ProductOption) => item.name}
                     areOptionsEqual={areOptionsEqual}
                   />

@@ -41,10 +41,10 @@
     "languages": { "de": "produkt/bearbeiten", "fr": "produit/modifier" },
     "pathnames": {
       "[slug].tsx": {
-        "path": "de/produkt/bearbeiten/[slug].tsx",
+        "path": "de/produkt/bearbeiten/[id].tsx",
         "languages": {
-          "de": "[slug]",
-          "fr": "[slug]"
+          "de": "[id]",
+          "fr": "[id]"
         }
       }
     }

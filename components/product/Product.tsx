@@ -285,6 +285,10 @@ const Product: FunctionComponent<{
     }
   }, [possibleVariants]);*/
 
+  const galleryAssets = product.assets.filter(
+    (a) => a.id != product.featuredAsset.id
+  );
+
   return (
     <div>
       <Head>
@@ -618,14 +622,16 @@ const Product: FunctionComponent<{
               marginTop={1}
             >
               <UnsafeHTMLContent content={product.description} />
-              <h2>{intl.formatMessage(messages.imageGallery)}</h2>
-              <LightboxGallery
-                images={product.assets.filter(
-                  (a) => a.id != product.featuredAsset.id
-                )}
-                imageToUrl={(asset) => asset.source}
-                imageToPreviewElement={(asset) => <Asset asset={asset} />}
-              />
+              {galleryAssets.length > 0 ? (
+                <>
+                  <h2>{intl.formatMessage(messages.imageGallery)}</h2>
+                  <LightboxGallery
+                    images={galleryAssets}
+                    imageToUrl={(asset) => asset.source}
+                    imageToPreviewElement={(asset) => <Asset asset={asset} />}
+                  />
+                </>
+              ) : null}
             </Box>
           )}
           <Box widths={[1, 1, 1, 1 / 2, 1 / 3]} paddingLeft={1} marginTop={1}>

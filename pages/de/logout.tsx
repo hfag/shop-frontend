@@ -28,6 +28,7 @@ const Page = () => {
     request<{ logout: Mutation["logout"] }>(intl.locale, LOGOUT)
       .catch(() => Promise.resolve()) //always redirect
       .then(() => {
+        localStorage.removeItem("vendure-auth-token");
         router.push(`/${intl.locale}`);
       });
   }, []);

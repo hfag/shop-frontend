@@ -1,6 +1,6 @@
 import { defineMessages, useIntl } from "react-intl";
 import ClipLoader from "react-spinners/ClipLoader";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import styled from "@emotion/styled";
 import useSWR from "swr";
 
@@ -34,14 +34,19 @@ const LanguageChooser: FunctionComponent<{
 }> = ({ value, onChange }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
-    requestAdmin(intl.locale, query).then(
-      (response: { globalSettings: { availableLanguages: LanguageCode[] } }) =>
-        response.globalSettings.availableLanguages.map((l) => ({
+  const { data, error } = useSWR<{
+    globalSettings: { availableLanguages: LanguageCode[] };
+  }>(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
+    requestAdmin(intl.locale, query)
+  );
+
+  const options = useMemo(() => {
+    return data
+      ? data.globalSettings.availableLanguages.map((l) => ({
           value: l,
         }))
-    )
-  );
+      : [];
+  }, [data]);
 
   if (!data) {
     return <ClipLoader loading size={20} color={colors.primary} />;
@@ -51,9 +56,9 @@ const LanguageChooser: FunctionComponent<{
     <LanguageChooserWrapper>
       <span>{intl.formatMessage(messages.chooseTranslationLanguage)}</span>
       <Select
-        options={data}
+        options={options}
         onChange={(option) => onChange(option.value)}
-        selected={data.find((l) => l.value === value)}
+        selected={options.find((l) => l.value === value)}
         mapOptionToLabel={(item) => item.value}
         width={8}
       />

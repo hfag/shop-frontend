@@ -11,6 +11,7 @@ import React, {
 import styled from "@emotion/styled";
 
 import { ABSOLUTE_URL } from "../../utilities/api";
+import { ADMIN_GET_AVAILABLE_LANGUAGES } from "../../gql/admin";
 import {
   ADMIN_UPDATE_PRODUCT,
   GET_FULL_PRODUCT_BY_ID,
@@ -22,7 +23,6 @@ import {
   Product as ProductType,
   RecommendationType,
 } from "../../schema";
-import { mutate } from "swr";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { productToJsonLd } from "../../utilities/json-ld";
 import { requestAdmin } from "../../utilities/request";
@@ -42,6 +42,7 @@ import Placeholder from "../elements/Placeholder";
 import ProductCrossSells from "./ProductCrossSells";
 import dynamic from "next/dynamic";
 import formMessages from "../../i18n/form";
+import useSWR, { mutate } from "swr";
 
 const Label = styled.label`
   margin-bottom: 0.25rem;
@@ -115,7 +116,6 @@ type FormState = {
 };
 
 const formReducer = (state: FormState, action: FormAction): FormState => {
-  console.log("reduce", action);
   switch (action.type) {
     case "update":
       return {
@@ -144,7 +144,11 @@ const EditProduct: FunctionComponent<{
     intl.locale as LanguageCode
   );
 
-  const editable = useRef<boolean>(true);
+  const { data: languages, error: languagesError } = useSWR<{
+    globalSettings: { availableLanguages: LanguageCode[] };
+  }>(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
+    requestAdmin(intl.locale, query)
+  );
 
   const [form, dispatch] = useReducer(formReducer, {}, () =>
     product.translations.reduce<FormState>((state, translation) => {
@@ -217,14 +221,8 @@ const EditProduct: FunctionComponent<{
           {intl.formatMessage(messages.backToProduct)}
         </Link>
         <hr />
-        <LanguageChooser
-          value={language}
-          onChange={(lang) => {
-            editable.current = false;
-            setLanguage(lang);
-          }}
-        />
-        <p>
+        <LanguageChooser value={language} onChange={setLanguage} />
+        <div>
           <InputFieldWrapper>
             <Label>{intl.formatMessage(messages.name)}</Label>
             <input
@@ -240,30 +238,32 @@ const EditProduct: FunctionComponent<{
               }
             />
           </InputFieldWrapper>
-        </p>
-        <p>
+        </div>
+        <div>
           <InputFieldWrapper>
             <Label>{intl.formatMessage(messages.description)}</Label>
-            <ReactQuill
-              theme="snow"
-              modules={QUILL_MODULES}
-              value={form[language].description || ""}
-              onChange={(newDescription) => {
-                if (!editable.current) {
-                  //ignore one onChange after language change
-                  editable.current = true;
-                  return;
-                }
-                dispatch({
-                  type: "update",
-                  language,
-                  field: "description",
-                  value: newDescription,
-                });
-              }}
-            />
+            {languages
+              ? languages.globalSettings.availableLanguages
+                  .filter((lang) => lang === language)
+                  .map((lang) => (
+                    <ReactQuill
+                      key={lang}
+                      theme="snow"
+                      modules={QUILL_MODULES}
+                      value={form[language].description || ""}
+                      onChange={(newDescription) => {
+                        dispatch({
+                          type: "update",
+                          language,
+                          field: "description",
+                          value: newDescription,
+                        });
+                      }}
+                    />
+                  ))
+              : null}
           </InputFieldWrapper>
-        </p>
+        </div>
         <Button
           onClick={() =>
             requestAdmin(intl.locale, ADMIN_UPDATE_PRODUCT, {

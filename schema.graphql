@@ -4512,6 +4512,7 @@ input ProductFilterParameter {
   productRecommendationsEnabled: BooleanOperators
   groupKey: StringOperators
   ordering: NumberOperators
+  buyable: BooleanOperators
   customizationOptions: StringOperators
 }
 
@@ -4526,6 +4527,7 @@ input ProductSortParameter {
   productRecommendationsEnabled: SortOrder
   groupKey: SortOrder
   ordering: SortOrder
+  buyable: SortOrder
   customizationOptions: SortOrder
 }
 
@@ -4545,6 +4547,7 @@ type ProductCustomFields {
   productRecommendationsEnabled: Boolean
   groupKey: String
   ordering: Int
+  buyable: Boolean
   customizationOptions: String
 }
 

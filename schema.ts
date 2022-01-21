@@ -2483,6 +2483,7 @@ export type ProductCustomFields = {
   productRecommendationsEnabled?: Maybe<Scalars["Boolean"]>;
   groupKey?: Maybe<Scalars["String"]>;
   ordering?: Maybe<Scalars["Int"]>;
+  buyable?: Maybe<Scalars["Boolean"]>;
   customizationOptions?: Maybe<Scalars["String"]>;
 };
 
@@ -2498,6 +2499,7 @@ export type ProductFilterParameter = {
   productRecommendationsEnabled?: Maybe<BooleanOperators>;
   groupKey?: Maybe<StringOperators>;
   ordering?: Maybe<NumberOperators>;
+  buyable?: Maybe<BooleanOperators>;
   customizationOptions?: Maybe<StringOperators>;
 };
 
@@ -2583,6 +2585,7 @@ export type ProductSortParameter = {
   productRecommendationsEnabled?: Maybe<SortOrder>;
   groupKey?: Maybe<SortOrder>;
   ordering?: Maybe<SortOrder>;
+  buyable?: Maybe<SortOrder>;
   customizationOptions?: Maybe<SortOrder>;
 };
 

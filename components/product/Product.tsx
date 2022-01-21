@@ -285,10 +285,6 @@ const Product: FunctionComponent<{
     }
   }, [possibleVariants]);*/
 
-  const buyable = !(
-    product.variants.length == 1 && product.variants[0].price <= 0
-  );
-
   return (
     <div>
       <Head>
@@ -322,7 +318,7 @@ const Product: FunctionComponent<{
             />
           )}
         </h1>
-        {buyable && (
+        {product.customFields.buyable && (
           <div>
             <hr />
             <h4>{intl.formatMessage(messages.chooseAVariation)}</h4>
@@ -334,7 +330,7 @@ const Product: FunctionComponent<{
           </div>
         )}
         <Flex flexWrap="wrap" marginX>
-          {buyable &&
+          {product.customFields.buyable &&
             product.optionGroups
               .filter((optionGroup) => !(optionGroup.id in defaultOptions))
               .map((optionGroup) => (
@@ -413,7 +409,7 @@ const Product: FunctionComponent<{
                 </Box>
               );
             })}
-          {buyable && (
+          {product.customFields.buyable && (
             <>
               <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
                 <h4>{intl.formatMessage(productMessages.quantity)}</h4>

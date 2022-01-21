@@ -81,6 +81,7 @@ export const PRODUCT_FRAGMENT = `
   customFields {
     groupKey
     customizationOptions
+    buyable
   }
   variants{
     ${VARIANT_FRAGMENT}

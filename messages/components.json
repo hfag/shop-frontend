@@ -374,6 +374,9 @@
   "SupportButton.call": {
     "defaultMessage": "Rufen Sie uns un"
   },
+  "VerifyEmail.instructions": {
+    "defaultMessage": "Geben Sie hier ein Passwort an mit dem Sie sich später bei ihrem Benutzerkonto anmelden möchten. Danach kann das Konto angelegt werden und Sie können sich wie gewohnt anmelden."
+  },
   "VerifyEmail.invalidLink": {
     "defaultMessage": "Der Link aus der E-Mail ist abgelaufen."
   },

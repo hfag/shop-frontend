@@ -16,6 +16,11 @@ import request from "../utilities/request";
 import user from "../i18n/user";
 
 const messages = defineMessages({
+  instructions: {
+    id: "VerifyEmail.instructions",
+    defaultMessage:
+      "Geben Sie hier ein Passwort an mit dem Sie sich später bei ihrem Benutzerkonto anmelden möchten. Danach kann das Konto angelegt werden und Sie können sich wie gewohnt anmelden.",
+  },
   verifyEmail: {
     id: "VerifyEmail.verifyEmail",
     defaultMessage: "Email verifizieren und Benutzerkonto anlegen",
@@ -102,6 +107,7 @@ const VerifyEmail: FunctionComponent = (props) => {
   return (
     <Card>
       <h2>{intl.formatMessage(page.verifyEmail)}</h2>
+      <p>{intl.formatMessage(messages.instructions)}</p>
       <VerifyEmailForm intl={intl} router={router} token={token} />
     </Card>
   );

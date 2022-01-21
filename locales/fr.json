@@ -145,6 +145,7 @@
   "Searchbar.showMore": "Montrer plus...",
   "SelectField.optional": "facultatif",
   "SupportButton.call": "Téléphonez nous",
+  "VerifyEmail.instructions": "Indiquez ici le mot de passe que vous souhaitez utiliser plus tard pour vous connecter à votre compte d'utilisateur. Le compte peut ensuite être créé et vous pouvez vous connecter comme d'habitude.",
   "VerifyEmail.invalidLink": "Le lien du courriel a expiré.",
   "VerifyEmail.verifyEmail": "Vérifier le courrier électronique et créer un compte d'utilisateur",
   "VerifyNewEmail.verifyNewEmail": "Vérifier le nouveau courriel et créer un compte d'utilisateur",

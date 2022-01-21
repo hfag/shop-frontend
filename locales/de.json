@@ -145,6 +145,7 @@
   "Searchbar.showMore": "Zeige mehr...",
   "SelectField.optional": "optional",
   "SupportButton.call": "Rufen Sie uns un",
+  "VerifyEmail.instructions": "Geben Sie hier ein Passwort an mit dem Sie sich später bei ihrem Benutzerkonto anmelden möchten. Danach kann das Konto angelegt werden und Sie können sich wie gewohnt anmelden.",
   "VerifyEmail.invalidLink": "Der Link aus der E-Mail ist abgelaufen.",
   "VerifyEmail.verifyEmail": "Email verifizieren und Benutzerkonto anlegen",
   "VerifyNewEmail.verifyNewEmail": "Neue Email verifizieren und Benutzerkonto anlegen",

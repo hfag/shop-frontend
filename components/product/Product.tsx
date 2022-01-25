@@ -513,7 +513,7 @@ const Product: FunctionComponent<{
             paddingX={0.5}
             marginTop={1}
           >
-            {selectedVariant && selectedVariant.price ? (
+            {product.customFields.buyable && selectedVariant ? (
               <div>
                 <h4>{intl.formatMessage(productMessages.price)}</h4>
                 <Bill
@@ -569,7 +569,7 @@ const Product: FunctionComponent<{
                         window.location.reload();
                       } else {
                         throw new Error(
-                          "What is going on here? This should never ever happen, please contact us!"
+                          "This should never ever happen, please contact us!"
                         );
                       }
                     }

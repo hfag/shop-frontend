@@ -83,6 +83,10 @@ const messages = defineMessages({
     id: "EditProduct.name",
     defaultMessage: "Produktname",
   },
+  slug: {
+    id: "EditProduct.slug",
+    defaultMessage: "Slug",
+  },
   description: {
     id: "EditProduct.description",
     defaultMessage: "Produktbeschreibung",
@@ -104,13 +108,14 @@ const ProductCard = styled(Card)`
 interface FormAction {
   type: "update";
   language: LanguageCode;
-  field: "name" | "description";
+  field: "name" | "slug" | "description";
   value: string;
 }
 
 type FormState = {
   [language: string]: {
     name?: string;
+    slug?: string;
     description?: string;
   };
 };
@@ -154,6 +159,7 @@ const EditProduct: FunctionComponent<{
     product.translations.reduce<FormState>((state, translation) => {
       state[translation.languageCode] = {
         name: translation.name,
+        slug: translation.slug,
         description: translation.description,
       };
       return state;
@@ -227,12 +233,29 @@ const EditProduct: FunctionComponent<{
             <Label>{intl.formatMessage(messages.name)}</Label>
             <input
               type="text"
-              value={form[language].name || ""}
+              value={form[language]?.name || ""}
               onChange={(e) =>
                 dispatch({
                   type: "update",
                   language,
                   field: "name",
+                  value: e.target.value,
+                })
+              }
+            />
+          </InputFieldWrapper>
+        </div>
+        <div>
+          <InputFieldWrapper>
+            <Label>{intl.formatMessage(messages.slug)}</Label>
+            <input
+              type="text"
+              value={form[language]?.slug || ""}
+              onChange={(e) =>
+                dispatch({
+                  type: "update",
+                  language,
+                  field: "slug",
                   value: e.target.value,
                 })
               }
@@ -250,7 +273,7 @@ const EditProduct: FunctionComponent<{
                       key={lang}
                       theme="snow"
                       modules={QUILL_MODULES}
-                      value={form[language].description || ""}
+                      value={form[language]?.description || ""}
                       onChange={(newDescription) => {
                         dispatch({
                           type: "update",
@@ -272,6 +295,7 @@ const EditProduct: FunctionComponent<{
                 translations: Object.keys(form).map((key) => ({
                   languageCode: key,
                   name: form[key].name,
+                  slug: form[key].slug,
                   description: form[key].description,
                 })),
               },

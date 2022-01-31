@@ -12,17 +12,16 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 
 const env = {
+  ABSOLUTE_URL: "http://localhost:8080",
   ASSET_URL: "http://localhost:3000/assets",
   API_URL: "http://localhost:3000/shop-api",
   ADMIN_API_URL: "http://localhost:3000/admin-api",
   ASSET_URL: "http://localhost:3000/assets",
-  // API_BASE_URL: "https://beta.feuerschutz.ch",
+  // ABSOLUTE_URL: "https://beta.feuerschutz.ch",
+  // ASSET_URL: "https://beta.feuerschutz.ch/assets",
   // API_URL: "https://beta.feuerschutz.ch/shop-api",
   // ADMIN_API_URL: "https://beta.feuerschutz.ch/admin-api",
-  // ASSET_URL: "https://beta.feuerschutz.ch/assets",
   WP_BLOG_URL: "https://api.feuerschutz.ch",
-  // ABSOLUTE_URL: "https://beta.feuerschutz.ch",
-  ABSOLUTE_URL: "http://localhost:8080",
   PUBLIC_PATH: "/",
 };
 

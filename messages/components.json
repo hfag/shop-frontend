@@ -134,6 +134,9 @@
   "EditProduct.name": {
     "defaultMessage": "Produktname"
   },
+  "EditProduct.slug": {
+    "defaultMessage": "Slug"
+  },
   "EditProduct.variants": {
     "defaultMessage": "Produktvarianten"
   },

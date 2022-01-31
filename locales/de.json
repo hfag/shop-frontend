@@ -49,6 +49,7 @@
   "EditProduct.backToProduct": "Zurück zum Produkt",
   "EditProduct.description": "Produktbeschreibung",
   "EditProduct.name": "Produktname",
+  "EditProduct.slug": "Slug",
   "EditProduct.variants": "Produktvarianten",
   "EditVariant.addRow": "Zeile hinzufügen",
   "EditVariant.bulkDiscounts": "Mengenrabatte",

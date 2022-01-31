@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import styled from "@emotion/styled";
 
-import { ABSOLUTE_URL, API_BASE_URL, WP_BLOG_URL } from "../../utilities/api";
+import { ABSOLUTE_URL, WP_BLOG_URL } from "../../utilities/api";
 import { AppContext } from "../AppWrapper";
 import { BUSINESS_JSON_LD } from "../../utilities/json-ld";
 import { colors } from "../../utilities/style";

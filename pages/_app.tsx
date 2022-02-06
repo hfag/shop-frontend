@@ -1,8 +1,6 @@
 //styles
 import "../styles/global.scss";
 import "../styles/quill-custom.scss";
-//analytics script
-//import "../utilities/analytics";
 import "../utilities/set-yup-locale";
 
 //dependencies

@@ -29,7 +29,6 @@ import { isClient } from "../../utilities/ssr";
 import { mutate } from "swr";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { productToJsonLd } from "../../utilities/json-ld";
-import { setProductView, trackPageView } from "../../utilities/analytics";
 import { stripTags } from "../../utilities/decode";
 import { useAuthenticate } from "../../utilities/hooks";
 import { useRouter } from "next/router";

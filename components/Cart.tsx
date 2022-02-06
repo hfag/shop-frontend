@@ -5,7 +5,6 @@ import { CreateAddressInput, Query } from "../schema";
 import { GET_ACTIVE_ORDER } from "../gql/order";
 import { defineMessages, useIntl } from "react-intl";
 import { pathnamesByLanguage } from "../utilities/urls";
-import { trackPageView } from "../utilities/analytics";
 import { useRouter } from "next/router";
 import Button from "./elements/Button";
 import Card from "./layout/Card";
@@ -62,10 +61,6 @@ const Cart: FunctionComponent = React.memo(() => {
       query
     )
   );
-
-  useEffect(() => {
-    trackPageView();
-  }, []);
 
   return (
     <Card>

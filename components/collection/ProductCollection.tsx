@@ -6,10 +6,6 @@ import styled from "@emotion/styled";
 import { ABSOLUTE_URL } from "../../utilities/api";
 import { Collection, CollectionLinkType } from "../../schema";
 import { pathnamesByLanguage } from "../../utilities/urls";
-import {
-  setProductCategoryView,
-  trackPageView,
-} from "../../utilities/analytics";
 import { stripTags } from "../../utilities/decode";
 import CollectionItem from "./CollectionItem";
 import Flex from "../layout/Flex";
@@ -79,15 +75,6 @@ const ProductCollection: FunctionComponent<{
     () => collection.products.map(productToJsonLd),
     [collection]
   );
-
-  useEffect(() => {
-    if (!collection) {
-      return;
-    }
-
-    trackPageView();
-    setProductCategoryView(stripTags(collection.name));
-  }, [collection]); //caching ensures the object stays the same?
 
   return (
     <ProductCollectionWrapper>

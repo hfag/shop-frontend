@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 
 import { ABSOLUTE_URL } from "../../utilities/api";
 import { pathnamesByLanguage } from "../../utilities/urls";
-import { trackPageView } from "../../utilities/analytics";
 import Box from "../layout/Box";
 import Card from "../layout/Card";
 import Flex from "../layout/Flex";
@@ -72,10 +71,6 @@ const AccountContainer = styled.div`
 const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
   ({ children }) => {
     const intl = useIntl();
-
-    useEffect(() => {
-      trackPageView();
-    }, []);
 
     return (
       <AccountContainer>

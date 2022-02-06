@@ -18,7 +18,6 @@ import { Mutation, RegisterCustomerAccountResult } from "../schema";
 import { errorCodeToMessage } from "../utilities/i18n";
 import { mutate } from "swr";
 import { pathnamesByLanguage } from "../utilities/urls";
-import { trackPageView } from "../utilities/analytics";
 import { useRouter } from "next/router";
 import Box from "./layout/Box";
 import Button from "./elements/Button";
@@ -296,10 +295,6 @@ const Login = React.memo(() => {
     }
 
     return true;
-  }, []);
-
-  useEffect(() => {
-    trackPageView();
   }, []);
 
   useEffect(() => {

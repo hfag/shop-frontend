@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { ABSOLUTE_URL } from "../utilities/api";
 import { GetStaticProps } from "next";
 import { locale, messages } from "./de/config";
-import { trackPageView } from "../utilities/analytics";
 import { withApp } from "../components/AppWrapper";
 import Card from "../components/layout/Card";
 import Head from "next/head";

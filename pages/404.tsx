@@ -35,10 +35,6 @@ const errorMessages = defineMessages({
 const Page404 = React.memo(() => {
   const intl = useIntl();
 
-  useEffect(() => {
-    trackPageView();
-  });
-
   return (
     <Wrapper sidebar={null} breadcrumbs={[{ name: "Error 404", url: " " }]}>
       <Card>

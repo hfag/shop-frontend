@@ -563,7 +563,10 @@ const Product: FunctionComponent<{
                       mutate([GET_ACTIVE_ORDER, token]);
 
                       if (crosssellRef.current) {
-                        crosssellRef.current.scrollIntoView();
+                        crosssellRef.current.scrollIntoView({
+                          behavior: "smooth",
+                          block: "center",
+                        });
                       }
 
                       return true;

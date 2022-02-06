@@ -112,6 +112,10 @@ const Product: FunctionComponent<{
   const [error, setError] = useState<string | null>(null);
   const crosssellRef = useRef(null);
 
+  useEffect(() => {
+    setSelectedOptions({});
+  }, [product]);
+
   const possibleVariants = useMemo(
     () =>
       product.variants.filter((v) =>

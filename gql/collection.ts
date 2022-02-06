@@ -140,41 +140,23 @@ export const ADMIN_GET_COLLECTION_LINKS_BY_SLUG = /* GraphQL */ `
   }
 `;
 
-export const ADMIN_CREATE_COLLECTION_LINK_URL = /* GraphQL */ `
-  mutation CreateCollectionLinkUrl($input: CreateCollectionLinkUrlInput!) {
-    createCollectionLinkUrl(input: $input) {
-      ${ADMIN_COLLECTION_LINK_FRAGMENT}
-    }
-  }
-`;
-
-export const ADMIN_CREATE_COLLECTION_LINK_ASSET = /* GraphQL */ `
-  mutation CreateCollectionLinkAsset($input: CreateCollectionLinkAssetInput!) {
-    createCollectionLinkAsset(input: $input) {
-      ${ADMIN_COLLECTION_LINK_FRAGMENT}
-    }
-  }
-`;
-
-export const ADMIN_UPDATE_COLLECTION_LINK_URL = /* GraphQL */ `
-  mutation UpdateCollectionUrlLink($input: UpdateCollectionLinkUrlInput!) {
-    updateCollectionUrlLink(input: $input) {
-      ${ADMIN_COLLECTION_LINK_FRAGMENT}
-    }
-  }
-`;
-
-export const ADMIN_UPDATE_COLLECTION_LINK_ASSET = /* GraphQL */ `
-  mutation UpdateCollectionAssetLink($input: UpdateCollectionLinkAssetInput!) {
-    updateCollectionAssetLink(input: $input) {
-      ${ADMIN_COLLECTION_LINK_FRAGMENT}
-    }
-  }
-`;
-
-export const ADMIN_DELETE_COLLECTION_LINK = /* GraphQL */ `
-  mutation DeleteCollectionLink($id: ID!) {
-    deleteCollectionLink(id: $id){
+export const ADMIN_UPDATE_COLLECTION_LINKS = /* GraphQL */ `
+  mutation UpdateCollectionLinks(
+    $collectionId: ID!,
+    $urlsToCreate: [CreateCollectionLinkUrlInput!]!,
+    $urlsToUpdate: [UpdateCollectionLinkUrlInput!]!,
+    $assetsToCreate: [CreateCollectionLinkAssetInput!]!,
+    $assetsToUpdate: [UpdateCollectionLinkAssetInput!]!,
+    $toDelete: [ID!]!
+  ) {
+    updateCollectionLinks(
+      collectionId: $collectionId,
+      urlsToCreate: $urlsToCreate,
+      urlsToUpdate: $urlsToUpdate,
+      assetsToCreate: $assetsToCreate,
+      assetsToUpdate: $assetsToUpdate,
+      toDelete: $toDelete
+    ) {
       ${ADMIN_COLLECTION_LINK_FRAGMENT}
     }
   }

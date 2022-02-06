@@ -5,12 +5,8 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 
 import {
-  ADMIN_CREATE_COLLECTION_LINK_ASSET,
-  ADMIN_CREATE_COLLECTION_LINK_URL,
-  ADMIN_DELETE_COLLECTION_LINK,
   ADMIN_GET_COLLECTION_LINKS_BY_SLUG,
-  ADMIN_UPDATE_COLLECTION_LINK_ASSET,
-  ADMIN_UPDATE_COLLECTION_LINK_URL,
+  ADMIN_UPDATE_COLLECTION_LINKS,
 } from "../../gql/collection";
 import {
   Asset,
@@ -329,78 +325,89 @@ const EditProductCollectionLinks = withFormik<
   ) => {
     const links = values.links.map((l, index) => ({ ...l, order: index }));
     setStatus("loading");
-    const createPromises = links
-      .filter((link) => !("linkId" in link))
-      .map((link) => {
-        if (link.__typename === "CollectionUrlLink") {
-          return requestAdmin(intl.locale, ADMIN_CREATE_COLLECTION_LINK_URL, {
-            input: {
-              collectionId: link.collectionId,
-              icon: link.icon,
-              order: link.order,
-              translations: link.translations,
-            },
-          });
-        } else {
-          return requestAdmin(intl.locale, ADMIN_CREATE_COLLECTION_LINK_ASSET, {
-            input: {
-              collectionId: link.collectionId,
-              icon: link.icon,
-              order: link.order,
-              languageCode: link.languageCode,
-              assetId: link.asset.id,
-            },
-          });
-        }
+    const createUrlInputs = links
+      .filter(
+        (link) => !("linkId" in link) && link.__typename === "CollectionUrlLink"
+      )
+      .map((link: CollectionUrlLink) => {
+        return {
+          collectionId: link.collectionId,
+          icon: link.icon,
+          order: link.order,
+          translations: link.translations,
+        };
       });
 
-    const updatePromises = links
-      .filter((link) => "linkId" in link)
-      .map((link) => {
-        if (link.__typename === "CollectionUrlLink") {
-          return requestAdmin(intl.locale, ADMIN_UPDATE_COLLECTION_LINK_URL, {
-            input: {
-              //@ts-ignore
-              id: link.linkUrlId,
-              icon: link.icon,
-              order: link.order,
-              translations: link.translations,
-            },
-          });
-        } else {
-          return requestAdmin(intl.locale, ADMIN_UPDATE_COLLECTION_LINK_ASSET, {
-            input: {
-              //@ts-ignore
-              id: link.linkAssetId,
-              icon: link.icon,
-              order: link.order,
-              languageCode: link.languageCode,
-              assetId: link.asset.id,
-            },
-          });
-        }
+    const createAssetInputs = links
+      .filter(
+        (link) =>
+          !("linkId" in link) && link.__typename === "CollectionAssetLink"
+      )
+      .map((link: CollectionAssetLink) => {
+        return {
+          collectionId: link.collectionId,
+          icon: link.icon,
+          order: link.order,
+          languageCode: link.languageCode,
+          assetId: link.asset.id,
+        };
       });
 
-    const deletePromises = collection.links
+    const updateUrlInputs = links
+      .filter(
+        //@ts-ignore
+        (link) => "linkId" in link && link.__typename === "CollectionUrlLink"
+      )
+      .map((link: CollectionUrlLink) => {
+        return {
+          //@ts-ignore
+          id: link.linkUrlId,
+          icon: link.icon,
+          order: link.order,
+          translations: link.translations,
+        };
+      });
+
+    const updateAssetInputs = links
+      .filter(
+        //@ts-ignore
+        (link) => "linkId" in link && link.__typename === "CollectionAssetLink"
+      )
+      .map((link: CollectionAssetLink) => {
+        return {
+          //@ts-ignore
+          id: link.linkAssetId,
+          icon: link.icon,
+          order: link.order,
+          languageCode: link.languageCode,
+          assetId: link.asset.id,
+        };
+      });
+
+    const deleteIds = collection.links
       .filter(
         //@ts-ignore
         (link) => !links.find((l) => "linkId" in l && l.linkId === link.id)
       )
-      .map((link) =>
-        requestAdmin(intl.locale, ADMIN_DELETE_COLLECTION_LINK, {
-          id: link.id,
-        })
-      );
+      .map((link) => link.id);
 
-    return Promise.all([
-      ...createPromises,
-      ...updatePromises,
-      ...deletePromises,
-    ]).then(() => {
-      setStatus("success");
-      setTimeout(() => setStatus(""), 300);
-      onSave();
-    });
+    return requestAdmin(intl.locale, ADMIN_UPDATE_COLLECTION_LINKS, {
+      collectionId: collection.id,
+      urlsToCreate: createUrlInputs,
+      urlsToUpdate: updateUrlInputs,
+      assetsToCreate: createAssetInputs,
+      assetsToUpdate: updateAssetInputs,
+      toDelete: deleteIds,
+    })
+      .then(() => {
+        setStatus("success");
+        setTimeout(() => setStatus(""), 300);
+        onSave();
+      })
+      .catch(() => {
+        setStatus("error");
+        setTimeout(() => setStatus(""), 300);
+      });
   },
 })(EditProductCollectionLinksInnerForm);
 

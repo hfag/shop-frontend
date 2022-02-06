@@ -272,7 +272,7 @@ export const ORDER_SET_SHIPPING_METHOD = /* GraphQL */ `
   mutation SetOrderShippingMethod($shippingMethodId: ID!) {
     setOrderShippingMethod(shippingMethodId: $shippingMethodId) {
       ... on Order {
-        id
+        ${FULL_ORDER_FRAGMENT}
       }
       ... on OrderModificationError {
         errorCode

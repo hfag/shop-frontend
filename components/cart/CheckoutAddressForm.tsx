@@ -18,6 +18,7 @@ import {
   ORDER_SET_CUSTOMER,
 } from "../../gql/order";
 import { GET_CURRENT_USER, UPDATE_CUSTOMER } from "../../gql/user";
+import { ORDER_SET_SHIPPING_METHOD } from "../../gql/order";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { mutate } from "swr";
 import Box from "../layout/Box";
@@ -612,6 +613,32 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       { activeOrder: billingRequest.setOrderBillingAddress },
       false
     );
+
+    if (billingRequest.setOrderBillingAddress.state !== "ArrangingPayment") {
+      const setShipping = await request<{
+        setOrderShippingMethod: Mutation["setOrderShippingMethod"];
+      }>(intl.locale, ORDER_SET_SHIPPING_METHOD, {
+        shippingMethodId: "1",
+      });
+
+      if ("errorCode" in setShipping.setOrderShippingMethod) {
+        setErrors({
+          billingFirstName: errorCodeToMessage(
+            intl,
+            setShipping.setOrderShippingMethod
+          ),
+        });
+        setStatus("error");
+        setTimeout(() => setStatus(""), 300);
+        return;
+      }
+
+      mutate(
+        [GET_ACTIVE_ORDER, token],
+        { activeOrder: setShipping.setOrderShippingMethod },
+        false
+      );
+    }
 
     onProceed();
   },

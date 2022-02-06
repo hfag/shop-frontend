@@ -112,8 +112,12 @@ const InnerCheckoutForm = React.memo(
         }>(intl.locale, ORDER_SET_SHIPPING_METHOD, {
           shippingMethodId: values.shippingMethod,
         })
-          .then(() => {
-            mutate([GET_ACTIVE_ORDER, token]);
+          .then((response) => {
+            mutate(
+              [GET_ACTIVE_ORDER, token],
+              { activeOrder: response.setOrderShippingMethod },
+              false
+            );
           })
           .catch(console.log);
       }
@@ -242,6 +246,7 @@ const CheckoutForm = withFormik<IProps, FormValues>({
     paymentMethod: "invoice",
     orderComments: order?.customFields?.notes,
     ...values,
+    shippingMethod: "1",
     terms: false,
   }),
 

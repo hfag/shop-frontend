@@ -9,11 +9,7 @@ import Flex from "../layout/Flex";
 import React, { FunctionComponent, useMemo } from "react";
 import styled from "@emotion/styled";
 
-const Slider = styled.div`
-  & > div:first-of-type {
-    overflow-x: scroll;
-  }
-`;
+const Slider = styled.div``;
 
 interface IProps {
   isSlideActive: boolean;

@@ -244,7 +244,7 @@ const Product: FunctionComponent<{
     }, {});
 
     return defaultOptions;
-  }, []);
+  }, [product]);
 
   const customizationOptions: { [key: string]: any } | null = useMemo(() => {
     try {

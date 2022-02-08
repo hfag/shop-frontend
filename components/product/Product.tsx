@@ -114,6 +114,7 @@ const Product: FunctionComponent<{
 
   useEffect(() => {
     setSelectedOptions({});
+    setQuantity(1);
   }, [product]);
 
   const possibleVariants = useMemo(

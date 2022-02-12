@@ -67,7 +67,7 @@ export const GET_CURRENT_CUSTOMER_ORDERS = /* GraphQL */ `
 export const GET_CURRENT_CUSTOMER_ALL_ORDERS = /* GraphQL */ `
   query activeCustomerOrders {
     activeCustomer {
-      orders(options: { sort: { updatedAt: DESC } }) {
+      orders(options: { sort: { updatedAt: DESC } }, take: 10) {
         items {
           id
           code

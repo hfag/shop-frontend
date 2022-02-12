@@ -3,7 +3,7 @@ import { defineMessages } from "react-intl";
 export default defineMessages({
   orders: {
     id: "order.orders",
-    defaultMessage: "Bestellungen",
+    defaultMessage: "Letzte 10 Bestellungen",
   },
   orderNumber: {
     id: "order.orderNumber",

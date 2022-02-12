@@ -210,7 +210,7 @@
   "order.order": "Commande",
   "order.orderDate": "Date de commande",
   "order.orderNumber": "Numéro d'ordre",
-  "order.orders": "Commandes",
+  "order.orders": "10 dernières commandes",
   "order.shipping": "Livraison",
   "order.taxes": "Taxes",
   "order.total": "Montant total",

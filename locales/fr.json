@@ -161,7 +161,7 @@
   "address.defaultBillingAddress": "Adresse de facturation standard?",
   "address.defaultShippingAddress": "Adresse de livraison standard",
   "address.description": "Désignation",
-  "address.email": "adresse électronique",
+  "address.email": "L'adresse e-mail",
   "address.firstName": "Prénom",
   "address.fullName": "Nom et prénom",
   "address.lastName": "Nom de famille",

@@ -1,7 +1,4 @@
-import {
-  GET_ALL_PRODUCT_SLUGS,
-  GET_PRODUCT_BY_SLUG,
-} from "../../../gql/product";
+import { GET_PRODUCT_BY_SLUG, GET_PRODUCT_SLUGS } from "../../../gql/product";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Product as ProductType, Query } from "../../../schema";
 import { locale, messages } from "../config";
@@ -80,15 +77,27 @@ const Page: FunctionComponent<{
 export default withApp(locale, messages)(Page);
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // const data: { products: { items: ProductType[] } } = await request(
-  //   locale,
-  //   GET_ALL_PRODUCT_SLUGS
-  // );
+  const data: { products: Query["products"] } = await request(
+    locale,
+    GET_PRODUCT_SLUGS,
+    { options: { take: 100, skip: 0 } }
+  );
+  const { items, totalItems }: { items: ProductType[]; totalItems: number } =
+    data.products;
+
+  while (items.length < totalItems) {
+    const data: { products: Query["products"] } = await request(
+      locale,
+      GET_PRODUCT_SLUGS,
+      { options: { take: 100, skip: items.length } }
+    );
+    items.push(...data.products.items);
+  }
 
   return {
-    paths: [] /*data.products.items.map((product) => ({
+    paths: items.map((product) => ({
       params: { slug: product.slug, id: product.id },
-    }))*/,
+    })),
     fallback: "blocking",
   };
 };

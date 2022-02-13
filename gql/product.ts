@@ -1,12 +1,13 @@
 import { ASSET_FRAGMENT } from "./asset";
 
-export const GET_ALL_PRODUCT_SLUGS = /* GraphQL */ `
-  query {
-    products {
+export const GET_PRODUCT_SLUGS = /* GraphQL */ `
+  query GetProducts($options: ProductListOptions) {
+    products(options: $options) {
       items {
         id
         slug
       }
+      totalItems
     }
   }
 `;

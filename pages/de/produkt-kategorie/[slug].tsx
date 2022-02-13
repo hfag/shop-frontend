@@ -2,6 +2,7 @@ import { Collection, Query } from "../../../schema";
 import {
   GET_ALL_COLLECTIONS,
   GET_COLLECTION_BY_SLUG,
+  GET_COLLECTION_SLUGS,
 } from "../../../gql/collection";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { locale, messages } from "../config";
@@ -92,15 +93,28 @@ const Page: FunctionComponent<{
 export default withApp(locale, messages)(Page);
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // const data: { collections: { items: Collection[] } } = await request(
-  //   locale,
-  //   GET_ALL_COLLECTIONS
-  // );
+  const data: { collections: Query["collections"] } = await request(
+    locale,
+    GET_COLLECTION_SLUGS,
+    { options: { take: 100, skip: 0 } }
+  );
+  const { items, totalItems }: { items: Collection[]; totalItems: number } =
+    data.collections;
+
+  while (items.length < totalItems) {
+    const data: { collections: Query["collections"] } = await request(
+      locale,
+      GET_COLLECTION_SLUGS,
+      { options: { take: 100, skip: items.length } }
+    );
+
+    items.push(...data.collections.items);
+  }
 
   return {
-    paths: [] /*data.collections.items.map((collection) => ({
+    paths: items.map((collection) => ({
       params: { slug: collection.slug },
-    }))*/,
+    })),
     fallback: "blocking",
   };
 };
@@ -115,7 +129,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   );
 
   return {
-    revalidate: 30, //product categories will be rerendered at most every 30s
+    revalidate: 10, //product categories will be rerendered at most every 10s
     notFound: collectionResponse?.collection ? false : true,
     props: {
       slug: context.params.slug,

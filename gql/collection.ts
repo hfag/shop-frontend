@@ -1,3 +1,15 @@
+export const GET_COLLECTION_SLUGS = /* GraphQL */ `
+  query GetCollections($options: CollectionListOptions) {
+    collections(options: $options) {
+      items {
+        id
+        slug
+      }
+      totalItems
+    }
+  }
+`;
+
 export const GET_ALL_COLLECTIONS = /* GraphQL */ `
   query {
     collections {

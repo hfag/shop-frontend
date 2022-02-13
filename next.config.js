@@ -16,7 +16,6 @@ const env = {
   ASSET_URL: "http://localhost:3000/assets",
   API_URL: "http://localhost:3000/shop-api",
   ADMIN_API_URL: "http://localhost:3000/admin-api",
-  ASSET_URL: "http://localhost:3000/assets",
   // ABSOLUTE_URL: "https://shop.feuerschutz.ch",
   // ASSET_URL: "https://shop.feuerschutz.ch/assets",
   // API_URL: "https://shop.feuerschutz.ch/shop-api",

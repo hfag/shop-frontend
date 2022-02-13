@@ -60,14 +60,14 @@ const Page: FunctionComponent<{ slug: string; page: PageType }> = ({
 export default withApp(locale, messages)(Page);
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // const response: WP_Page[] = await fetch(
-  //   `${getWordpressUrl(
-  //     locale
-  //   )}/wp-json/wp/v2/pages?per_page=100&orderby=date&order=desc`
-  // ).then((r) => r.json());
+  const response: WP_Page[] = await fetch(
+    `${getWordpressUrl(
+      locale
+    )}/wp-json/wp/v2/pages?per_page=100&orderby=date&order=desc`
+  ).then((r) => r.json());
 
   return {
-    paths: [] /*response.map((page) => ({ params: { slug: page.slug } }))*/,
+    paths: response.map((page) => ({ params: { slug: page.slug } })),
     fallback: "blocking",
   };
 };

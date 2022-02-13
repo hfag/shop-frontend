@@ -90,7 +90,6 @@ const HtmlHead: FunctionComponent<{ intl: IntlShape }> = React.memo(
         name="description"
         content={intl.formatMessage(messages.siteDescription)}
       />
-      <link rel="canonical" href={ABSOLUTE_URL} />
       <link rel="preconnect" href={WP_BLOG_URL} />
       <meta name="format-detection" content="telephone=no" />
       <meta name="apple-mobile-web-app-capable" content="no" />

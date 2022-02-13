@@ -13,4 +13,9 @@ export default defineMessages({
     id: "form.cancel",
     defaultMessage: "Abbrechen",
   },
+  errorPhoneNumber: {
+    id: "form.errorPhoneNumber",
+    defaultMessage:
+      "Bitte die Telefonnummer im Format '000 000 00 00' eingegeben.",
+  },
 });

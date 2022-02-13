@@ -28,6 +28,7 @@ import Flexbar from "../layout/Flexbar";
 import InputField from "../form/InputField";
 import SelectField from "../form/SelectField";
 import address from "../../i18n/address";
+import form from "../../i18n/form";
 import request from "../../utilities/request";
 import styled from "@emotion/styled";
 
@@ -39,11 +40,6 @@ const messages = defineMessages({
   save: {
     id: "CheckoutAddressForm.saveAndContinue",
     defaultMessage: "Speichern und weiter",
-  },
-  errorPhoneNumber: {
-    id: "CheckoutForm.errorPhoneNumber",
-    defaultMessage:
-      "Bitte die Telefonnummer im Format '000 000 00 00' eingegeben.",
   },
 });
 
@@ -60,8 +56,7 @@ const ShipToDifferentAddress = styled.div`
 `;
 
 interface FormValues {
-  billingFirstName?: string;
-  billingLastName?: string;
+  billingFullName?: string;
   billingCompany?: string;
   billingStreetLine1?: string;
   billingStreetLine2?: string;
@@ -80,7 +75,7 @@ interface FormValues {
   shippingProvince?: string;
   shippingPostalCode?: string;
   shippingCountry?: string; //country code
-  shippingPhoneNumber?: string;
+  shippingPhone?: string;
 
   shipToDifferentAddress?: boolean;
 }
@@ -132,15 +127,8 @@ const InnerCheckoutAddressForm = React.memo(
               />*/}
             <InputField
               type="text"
-              label={intl.formatMessage(address.firstName)}
-              name="billingFirstName"
-              required={true}
-              readOnly={readOnly}
-            />
-            <InputField
-              type="text"
-              label={intl.formatMessage(address.lastName)}
-              name="billingLastName"
+              label={intl.formatMessage(address.fullName)}
+              name="billingFullName"
               required={true}
               readOnly={readOnly}
             />
@@ -323,7 +311,7 @@ const InnerCheckoutAddressForm = React.memo(
                 <InputField
                   type="text"
                   label={intl.formatMessage(address.phone)}
-                  name="shippingPhoneNumber"
+                  name="shippingPhone"
                   required={true}
                   readOnly={readOnly}
                 />
@@ -366,8 +354,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     const sAddress = isBillingAddress ? shippingAddress : null;
 
     const values: FormValues = {
-      billingFirstName: customer ? customer.firstName : "",
-      billingLastName: customer ? customer.lastName : "",
+      billingFullName: bAddress.fullName || "",
       billingCompany: bAddress.company || "",
       billingStreetLine1: bAddress.streetLine1 || "",
       billingStreetLine2: bAddress.streetLine2 || "",
@@ -398,7 +385,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
           : typeof sAddress.country === "string"
           ? ""
           : sAddress?.country?.code || "";
-      values.shippingPhoneNumber = sAddress.postalCode || "";
+      values.shippingPhone = sAddress.phoneNumber || "";
 
       values.shipToDifferentAddress = true;
     }
@@ -415,8 +402,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       /*billing_additional_line_above: yup.string(),
         shipping_additional_line_above: yup.string(),*/
 
-      billingFirstName: yup.string().required(),
-      billingLastName: yup.string().required(),
+      billingFullName: yup.string().required(),
       shippingFullName: yup.string().when("shipToDifferentAddress", {
         is: true,
         then: yup.string().required(),
@@ -452,11 +438,11 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       /*billing_post_office_box: yup.string(),
         shipping_post_office_box: yup.string(),*/
 
-      billingPostalCode: yup.string().required(),
-      shippingPostalCode: yup.string().when("shipToDifferentAddress", {
+      billingPostalCode: yup.number().required(),
+      shippingPostalCode: yup.number().when("shipToDifferentAddress", {
         is: true,
-        then: yup.string().required(),
-        otherwise: yup.string().notRequired(),
+        then: yup.number().required(),
+        otherwise: yup.number().notRequired(),
       }),
 
       billingCity: yup.string().required(),
@@ -477,7 +463,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         .string()
         .test(
           "test-phone",
-          intl.formatMessage(messages.errorPhoneNumber),
+          intl.formatMessage(form.errorPhoneNumber),
           (value) => /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value)
         )
         .required(),
@@ -485,7 +471,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         .string()
         .test(
           "test-phone",
-          intl.formatMessage(messages.errorPhoneNumber),
+          intl.formatMessage(form.errorPhoneNumber),
           (value) =>
             value ? /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value) : true
         )
@@ -499,7 +485,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     { props: { intl, customer, user, token, onProceed }, setStatus, setErrors }
   ) => {
     const billingAddress: CreateAddressInput = {
-      fullName: `${values.billingFirstName} ${values.billingLastName}`,
+      fullName: values.billingFullName,
       company: values.billingCompany,
       streetLine1: values.billingStreetLine1,
       streetLine2: values.billingStreetLine2,
@@ -521,7 +507,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
           province: values.shippingProvince,
           postalCode: values.shippingPostalCode,
           countryCode: values.shippingCountry,
-          phoneNumber: values.shippingPhoneNumber,
+          phoneNumber: values.shippingPhone,
           //defaultShippingAddress: true,
         }
       : billingAddress;
@@ -531,7 +517,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     }
 
     if (user) {
-      const response = await request<{
+      /*const response = await request<{
         updateCustomer: Mutation["updateCustomer"];
       }>(intl.locale, UPDATE_CUSTOMER, {
         input: {
@@ -545,19 +531,23 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
 
       if ("errorCode" in response.updateCustomer) {
         setErrors({
-          billingFirstName: errorCodeToMessage(intl, response.updateCustomer),
+          billingEmail: errorCodeToMessage(intl, response.updateCustomer),
         });
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
         return;
-      }
+      }*/
     } else {
+      const billingName = values.billingFullName.split(" ");
+      const firstName = billingName.slice(0, -1).join(" ");
+      const lastName = billingName.slice(-1).join(" ");
+
       const response = await request<{
         setCustomerForOrder: Mutation["setCustomerForOrder"];
       }>(intl.locale, ORDER_SET_CUSTOMER, {
         customer: {
-          firstName: values.billingFirstName,
-          lastName: values.billingLastName,
+          firstName: firstName,
+          lastName: lastName,
           phoneNumber: values.billingPhone,
           emailAddress: values.billingEmail,
         },
@@ -565,10 +555,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
 
       if ("errorCode" in response.setCustomerForOrder) {
         setErrors({
-          billingFirstName: errorCodeToMessage(
-            intl,
-            response.setCustomerForOrder
-          ),
+          billingEmail: errorCodeToMessage(intl, response.setCustomerForOrder),
         });
         setStatus("error");
         setTimeout(() => setStatus(""), 300);
@@ -586,7 +573,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
 
     if ("errorCode" in billingRequest.setOrderShippingAddress) {
       setErrors({
-        billingFirstName: errorCodeToMessage(
+        billingEmail: errorCodeToMessage(
           intl,
           billingRequest.setOrderShippingAddress
         ),
@@ -598,7 +585,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
 
     if ("errorCode" in billingRequest.setOrderBillingAddress) {
       setErrors({
-        billingFirstName: errorCodeToMessage(
+        billingEmail: errorCodeToMessage(
           intl,
           billingRequest.setOrderBillingAddress
         ),
@@ -623,7 +610,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
 
       if ("errorCode" in setShipping.setOrderShippingMethod) {
         setErrors({
-          billingFirstName: errorCodeToMessage(
+          billingEmail: errorCodeToMessage(
             intl,
             setShipping.setOrderShippingMethod
           ),

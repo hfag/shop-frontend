@@ -37,7 +37,7 @@
   "CheckoutAddressForm.saveAndContinue": "Enregistrer et continuer",
   "CheckoutAddressForm.shipToDifferentAddress": "Livraison à une autre adresse",
   "CheckoutForm.acceptTos": "J'ai lu les termes et conditions et je les accepte *",
-  "CheckoutForm.errorPhoneNumber": "Veuillez saisir le numéro de téléphone au format '000 000 00 00'.",
+  "form.errorPhoneNumber": "Veuillez saisir le numéro de téléphone au format '000 000 00 00'.",
   "CheckoutForm.invalidPaymentMethod": "Le mode de paiement sélectionné n'est pas valable !",
   "CheckoutForm.orderComments": "Annotation",
   "CheckoutForm.orderCommentsPlaceholder": "Note sur votre commande",

@@ -166,7 +166,7 @@ const AddressForm = withFormik<IProps, FormValues>({
   mapPropsToValues: ({ values }) => ({
     ...values,
   }),
-  validationSchema: ({ countries, type }) => {
+  validationSchema: ({ intl, countries }: IProps) => {
     return yup.object().shape({
       // additional_line_above: yup.string(),
 
@@ -193,7 +193,15 @@ const AddressForm = withFormik<IProps, FormValues>({
 
       province: yup.string().required(),
 
-      phone: yup.string().notRequired(),
+      phone: yup
+        .string()
+        .test(
+          "test-phone",
+          intl.formatMessage(form.errorPhoneNumber),
+          (value) =>
+            value ? /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value) : true
+        )
+        .notRequired(),
 
       defaultShippingAddress: yup.boolean(),
       defaultBillingAddress: yup.boolean(),

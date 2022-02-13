@@ -65,9 +65,9 @@ export const BUSINESS_JSON_LD: LocalBusiness = {
   //@ts-ignore
   "@type": "LocalBusiness ",
   image: [
-    ABSOLUTE_URL + PUBLIC_PATH + "imgages/logo/logo-1x1.png",
-    ABSOLUTE_URL + PUBLIC_PATH + "imgages/logo/logo-4x3.png",
-    ABSOLUTE_URL + PUBLIC_PATH + "imgages/logo/logo-16x9.png",
+    ABSOLUTE_URL + PUBLIC_PATH + "images/logo/logo-1x1.png",
+    ABSOLUTE_URL + PUBLIC_PATH + "images/logo/logo-4x3.png",
+    ABSOLUTE_URL + PUBLIC_PATH + "images/logo/logo-16x9.png",
   ],
   logo: ABSOLUTE_URL + PUBLIC_PATH + "v/logo/logo.png",
   "@id": ABSOLUTE_URL + "/#organization",

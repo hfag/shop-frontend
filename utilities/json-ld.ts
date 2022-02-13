@@ -1,11 +1,11 @@
+import { ABSOLUTE_URL, PUBLIC_PATH } from "./api";
 import {
-  Product as JsonLdProduct,
   AggregateOffer,
+  Product as JsonLdProduct,
   LocalBusiness,
 } from "schema-dts";
-import { stripTags } from "./decode";
 import { Product } from "../schema";
-import { ABSOLUTE_URL, PUBLIC_PATH } from "./api";
+import { stripTags } from "./decode";
 
 /**
  * Maps a product to a json-ld schema
@@ -65,11 +65,11 @@ export const BUSINESS_JSON_LD: LocalBusiness = {
   //@ts-ignore
   "@type": "LocalBusiness ",
   image: [
-    ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-1x1.png",
-    ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-4x3.png",
-    ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo-16x9.png",
+    ABSOLUTE_URL + PUBLIC_PATH + "imgages/logo/logo-1x1.png",
+    ABSOLUTE_URL + PUBLIC_PATH + "imgages/logo/logo-4x3.png",
+    ABSOLUTE_URL + PUBLIC_PATH + "imgages/logo/logo-16x9.png",
   ],
-  logo: ABSOLUTE_URL + PUBLIC_PATH + "img/logo/logo.png",
+  logo: ABSOLUTE_URL + PUBLIC_PATH + "v/logo/logo.png",
   "@id": ABSOLUTE_URL + "/#organization",
   branchCode: "ch.feuerschutz.1",
   name: "Hauser Feuerschutz AG",

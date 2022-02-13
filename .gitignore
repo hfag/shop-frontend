@@ -74,3 +74,5 @@ typings/
 
 # i18n
 pages/fr/
+
+.DS_Store

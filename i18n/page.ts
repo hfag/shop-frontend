@@ -29,6 +29,10 @@ export default defineMessages({
     id: "page.verifyNewEmail",
     defaultMessage: "Neue E-Mail verifizieren",
   },
+  resetPassword: {
+    id: "page.resetPassword",
+    defaultMessage: "Passwort zurücksetzen",
+  },
   myAccount: {
     id: "pages.myAccount",
     defaultMessage: "Mein Konto",

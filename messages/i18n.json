@@ -191,6 +191,9 @@
   "form.cancel": {
     "defaultMessage": "Abbrechen"
   },
+  "form.errorPhoneNumber": {
+    "defaultMessage": "Bitte die Telefonnummer im Format '000 000 00 00' eingegeben."
+  },
   "form.noInformation": {
     "defaultMessage": "Keine Angabe"
   },
@@ -216,7 +219,7 @@
     "defaultMessage": "Bestellnummer"
   },
   "order.orders": {
-    "defaultMessage": "Bestellungen"
+    "defaultMessage": "Letzte 10 Bestellungen"
   },
   "order.shipping": {
     "defaultMessage": "Versand"
@@ -235,6 +238,9 @@
   },
   "page.networkAdmin": {
     "defaultMessage": "Netzwerk-Admin"
+  },
+  "page.resetPassword": {
+    "defaultMessage": "Passwort zurücksetzen"
   },
   "page.shopAdmin": {
     "defaultMessage": "Shop-Admin"

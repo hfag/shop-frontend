@@ -151,5 +151,12 @@
       "de": "neue-email-verifizieren",
       "fr": "verifier-nouveau-courrier"
     }
+  },
+  "resetPassword": {
+    "path": "de/passwort-vergessen.tsx",
+    "languages": {
+      "de": "passwort-vergessen",
+      "fr": "oublier-mot-de-passe"
+    }
   }
 }

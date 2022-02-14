@@ -169,6 +169,32 @@ export const DELETE_CUSTOMER_ADDRESS = /* GraphQL */ `
     }
   }
 `;
+export const RESET_PASSWORD = /* GraphQL */ `
+  mutation ResetPassword($token: String!, $password: String!) {
+    resetPassword(token: $token, password: $password) {
+      ... on CurrentUser {
+        id
+      }
+      ... on PasswordResetTokenInvalidError {
+        errorCode
+        message
+      }
+      ... on PasswordResetTokenExpiredError {
+        errorCode
+        message
+      }
+      ... on NativeAuthStrategyError {
+        errorCode
+        message
+      }
+      ... on NotVerifiedError {
+        errorCode
+        message
+      }
+    }
+  }
+`;
+
 export const LOGOUT = /* GraphQL */ `
   mutation logout {
     logout {

@@ -98,9 +98,6 @@
   "CheckoutForm.acceptTos": {
     "defaultMessage": "Ich habe die Allgemeinen Geschäftsbedingungen gelesen und akzeptiere diese *"
   },
-  "form.errorPhoneNumber": {
-    "defaultMessage": "Bitte die Telefonnummer im Format '000 000 00 00' eingegeben."
-  },
   "CheckoutForm.invalidPaymentMethod": {
     "defaultMessage": "Die ausgewählte Zahlungsmethode ist ungültig!"
   },
@@ -358,6 +355,12 @@
   },
   "ProductItem.discountForResellers": {
     "defaultMessage": "Rabatt für Wiederverkäufer"
+  },
+  "ResetPassword.changePassword": {
+    "defaultMessage": "Passwort ändern"
+  },
+  "ResetPassword.newPassword": {
+    "defaultMessage": "Neues Passwort"
   },
   "SaleProducts.newsAndDiscounts": {
     "defaultMessage": "News und Aktionen"

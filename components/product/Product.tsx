@@ -622,7 +622,7 @@ const Product: FunctionComponent<{
           </Box>
         </Flex>
         <Flex flexWrap="wrap">
-          {product.description && (
+          {(product.description || galleryAssets.length > 0) && (
             <Box
               widths={[1, 1, 1, 1 / 2, 2 / 3]}
               paddingRight={1}

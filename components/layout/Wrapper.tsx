@@ -1,6 +1,6 @@
 import { useIntl } from "react-intl";
+import { useRouter } from "next/router";
 import React, { FunctionComponent, ReactNode, useMemo } from "react";
-import Router, { useRouter } from "next/router";
 
 import Box from "./Box";
 import Breadcrumbs, { Breadcrumb } from "../Breadcrumbs";

@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 import { IntlShape, defineMessages, useIntl } from "react-intl";
 import { Order as OrderType } from "../../schema";
-import { borders, colors, shadows } from "../../utilities/style";
+import { borders, colors } from "../../utilities/style";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Placeholder from "./Placeholder";
 import Price from "../elements/Price";

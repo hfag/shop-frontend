@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useMemo } from "react";
+import React, { FunctionComponent, useMemo } from "react";
 import styled from "@emotion/styled";
 
 import { Collection } from "../../schema";

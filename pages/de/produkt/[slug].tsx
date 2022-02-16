@@ -10,7 +10,6 @@ import React, { FunctionComponent, useMemo } from "react";
 import SidebarBreadcrumb from "../../../components/layout/sidebar/SidebarBreadcrumb";
 import SidebarBreadcrumbs from "../../../components/layout/sidebar/SidebarBreadcrumbs";
 import Wrapper from "../../../components/layout/Wrapper";
-import page from "../../../i18n/page";
 import request from "../../../utilities/request";
 import useSWR from "swr";
 
@@ -20,7 +19,7 @@ const Page: FunctionComponent<{
 }> = ({ productSlug, productResponse }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     [GET_PRODUCT_BY_SLUG, productSlug],
     (query, productSlug) =>
       request<{ productBySlug: Query["productBySlug"] }>(intl.locale, query, {

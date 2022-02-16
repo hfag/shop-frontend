@@ -1,11 +1,6 @@
 import { Permission } from "../../schema";
 import { useAuthenticate } from "../../utilities/hooks";
-import React, {
-  FunctionComponent,
-  ReactNode,
-  useContext,
-  useMemo,
-} from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 
 const RestrictedView: FunctionComponent<{
   children?: ReactNode;

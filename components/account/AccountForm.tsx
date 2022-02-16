@@ -1,7 +1,6 @@
 import * as yup from "yup";
 import { Form, FormikProps, withFormik } from "formik";
-import { IntlShape, defineMessages, injectIntl, useIntl } from "react-intl";
-import PropTypes from "prop-types";
+import { IntlShape, defineMessages } from "react-intl";
 import React from "react";
 import styled from "@emotion/styled";
 
@@ -75,7 +74,7 @@ interface IProps {
  * The inner account form
  */
 const InnerAccountForm = React.memo(
-  ({ dirty, isValid, status = "", intl }: IProps & FormikProps<FormValues>) => (
+  ({ isValid, status = "", intl }: IProps & FormikProps<FormValues>) => (
     <FormWrapper>
       <h2>Konto-Details</h2>
       <InputField
@@ -133,18 +132,16 @@ const AccountForm = withFormik<IProps, FormValues>({
       firstName: yup.string().required(),
       lastName: yup.string().required(),
       email: yup.string().email().required(),
-      password: yup
-        .string()
-        .test("is-required", isRequiredString, function (value) {
-          const { newPassword, passwordConfirmation, email } = this.parent;
-          return newPassword || passwordConfirmation || email !== previousEmail
-            ? false
-            : true;
-        }),
+      password: yup.string().test("is-required", isRequiredString, function () {
+        const { newPassword, passwordConfirmation, email } = this.parent;
+        return newPassword || passwordConfirmation || email !== previousEmail
+          ? false
+          : true;
+      }),
       newPassword: yup
         .string()
         .min(7)
-        .test("is-required", isRequiredString, function (value) {
+        .test("is-required", isRequiredString, function () {
           const { password, passwordConfirmation } = this.parent;
           return password && passwordConfirmation ? false : true;
         })
@@ -155,10 +152,12 @@ const AccountForm = withFormik<IProps, FormValues>({
       passwordConfirmation: yup
         .string()
         .min(7)
-        .when(["newPassword"], (newPassword, schema) =>
-          newPassword ? schema.required() : schema
+        .when(
+          ["newPassword"],
+          (newPassword: string, schema: yup.StringSchema) =>
+            newPassword ? schema.required() : schema
         )
-        .test("is-required", isRequiredString, function (value) {
+        .test("is-required", isRequiredString, function () {
           const { newPassword } = this.parent;
           return newPassword ? false : true;
         }),
@@ -228,7 +227,7 @@ const AccountForm = withFormik<IProps, FormValues>({
 
     try {
       if (password && newPassword) {
-        const passwordUpdate = await request(
+        /*const passwordUpdate =*/ await request(
           intl.locale,
           UPDATE_CUSTOMER_PASSWORD,
           {

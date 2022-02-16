@@ -1,10 +1,5 @@
 import { LazyImage } from "react-lazy-images";
-import React, {
-  CSSProperties,
-  FunctionComponent,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { CSSProperties, FunctionComponent } from "react";
 
 import { borders } from "../../utilities/style";
 import Placeholder from "./Placeholder";
@@ -46,7 +41,7 @@ const StyledImage: FunctionComponent<{
       <LazyImage
         src={src}
         alt={alt}
-        placeholder={({ imageProps, ref }) => (
+        placeholder={({ /*imageProps,*/ ref }) => (
           <div ref={ref}>
             <Placeholder block />
           </div>

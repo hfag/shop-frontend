@@ -31,7 +31,7 @@ const Page: FunctionComponent = () => {
 
 export default withApp(locale, messages)(Page);
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
   };

@@ -1,16 +1,11 @@
 import { FaShoppingCart } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
-import React, {
-  FunctionComponent,
-  useCallback,
-  useContext,
-  useEffect,
-} from "react";
+import React, { FunctionComponent, useCallback, useContext } from "react";
 import styled from "@emotion/styled";
 
 import { AppContext } from "../AppWrapper";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
-import { Order, Query } from "../../schema";
+import { Query } from "../../schema";
 import { colors } from "../../utilities/style";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { useRouter } from "next/router";

@@ -1,4 +1,4 @@
-import { Collection, Query, SearchResult } from "../schema";
+import { Query, SearchResult } from "../schema";
 import { SEARCH } from "../gql/search";
 import { useIntl } from "react-intl";
 import Card from "./layout/Card";
@@ -9,15 +9,12 @@ import React, {
   FunctionComponent,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import SearchItem from "./product/SearchItem";
-import Select from "./elements/Select";
 import request from "../utilities/request";
 import search from "../i18n/search";
-import useSWR from "swr";
 
 const ITEMS_PER_PAGE = 10;
 

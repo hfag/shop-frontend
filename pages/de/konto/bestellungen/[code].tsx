@@ -21,7 +21,7 @@ const Page = () => {
 
   const { code } = router.query;
 
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     [GET_ORDER_BY_CODE, code, token],
     (query, code) =>
       request<{ orderByCode: Query["orderByCode"] }>(intl.locale, query, {

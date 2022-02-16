@@ -1,7 +1,7 @@
 import { Field, FieldArray, Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages } from "react-intl";
 import { MdDelete } from "react-icons/md";
-import React, { ReactNode, useMemo } from "react";
+import React, { ReactNode } from "react";
 import styled from "@emotion/styled";
 
 import {
@@ -9,13 +9,7 @@ import {
   GET_ACTIVE_ORDER,
   REMOVE_ORDER_LINE,
 } from "../../gql/order";
-import {
-  Adjustment,
-  AdjustmentType,
-  Discount,
-  Mutation,
-  Order,
-} from "../../schema";
+import { Mutation, Order } from "../../schema";
 import { colors } from "../../utilities/style";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { mutate } from "swr";
@@ -85,11 +79,7 @@ const InnerCartForm = React.memo(
     status,
     values,
     errors,
-    touched,
-    handleChange,
-    handleBlur,
     handleSubmit,
-    isSubmitting,
     dirty,
     enabled,
     intl,
@@ -122,14 +112,18 @@ const InnerCartForm = React.memo(
         <tbody>
           <FieldArray
             name="lines"
-            render={({ move, swap, push, insert, unshift, pop, remove }) => {
+            render={({
+              /*move, swap, push, insert, unshift, pop,*/ remove,
+            }) => {
               if (!order) {
                 return null;
               }
               return order.lines
                 .filter((line) => values.lines.find((l) => l.id === line.id))
                 .map((line, index) => {
-                  let customizations: { [key: string]: any } | null = null;
+                  let customizations: {
+                    [key: string]: { label: string; value: string };
+                  } | null = null;
 
                   try {
                     customizations = JSON.parse(
@@ -273,13 +267,13 @@ const CartForm = withFormik({
       ? props.order.lines.map((l) => ({ id: l.id, quantity: l.quantity }))
       : [],
   }),
-  validate: (values, props) => {
+  validate: (/*values, props*/) => {
     const errors = {};
     return errors;
   },
   handleSubmit: async (
     { lines },
-    { setStatus, setErrors, setFieldTouched, props: { intl, order, token } }
+    { setStatus, setErrors, props: { intl, order, token } }
   ) => {
     setStatus("loading");
     try {

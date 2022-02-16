@@ -1,21 +1,15 @@
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { FunctionComponent, useContext, useMemo } from "react";
 import styled from "@emotion/styled";
 
 import { AppContext } from "../AppWrapper";
-import { Product, SearchResult } from "../../schema";
+import { SearchResult } from "../../schema";
 import { borders, colors, shadows } from "../../utilities/style";
 import { notEmpty } from "../../utilities/typescript";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Asset from "../elements/Asset";
 import Box from "../layout/Box";
-import Placeholder from "../elements/Placeholder";
 import Price from "../elements/Price";
 import StyledLink from "../elements/StyledLink";
 import search from "../../i18n/search";

@@ -22,7 +22,7 @@ const Page: FunctionComponent<{ slug: string; post: PostType }> = ({
 }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     `${getWordpressUrl(intl.locale)}/wp-json/wp/v2/posts?slug=${slug}&_embed`,
     (url) =>
       fetch(url)

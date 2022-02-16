@@ -8,7 +8,7 @@ import React from "react";
 import Wrapper from "../../components/layout/Wrapper";
 import page from "../../i18n/page";
 
-const Page = (props) => {
+const Page = () => {
   const intl = useIntl();
 
   return (

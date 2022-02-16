@@ -1,23 +1,15 @@
-import { FaPercent } from "react-icons/fa";
 import { IntlShape, defineMessages, useIntl } from "react-intl";
-import React, {
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
 import { Post as PostType } from "../utilities/wordpress";
-import { WP_BLOG_URL } from "../utilities/api";
-import { borders, colors, shadows } from "../utilities/style";
+import { borders, shadows } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
 import Box from "./layout/Box";
 import Flex from "../components/layout/Flex";
 import Placeholder from "./elements/Placeholder";
 import StyledImage from "./elements/StyledImage";
 import StyledLink from "./elements/StyledLink";
-import useSWR from "swr";
 
 const messages = defineMessages({
   title: {

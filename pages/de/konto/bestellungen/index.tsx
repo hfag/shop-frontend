@@ -1,7 +1,7 @@
 import { AppContext, withApp } from "../../../../components/AppWrapper";
 import { GET_CURRENT_CUSTOMER_ALL_ORDERS } from "../../../../gql/user";
 import { GetStaticProps } from "next";
-import { Order, Query } from "../../../../schema";
+import { Query } from "../../../../schema";
 import { locale, messages } from "../../config";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import { useIntl } from "react-intl";
@@ -16,7 +16,7 @@ import useSWR from "swr";
 const Page = () => {
   const intl = useIntl();
   const { token } = useContext(AppContext);
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     [GET_CURRENT_CUSTOMER_ALL_ORDERS, token],
     (query) =>
       request<{ activeCustomer: Query["activeCustomer"] }>(intl.locale, query)

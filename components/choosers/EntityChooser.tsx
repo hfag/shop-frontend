@@ -1,9 +1,8 @@
-import { ADMIN_ASSETS } from "../../gql/asset";
-import { Asset, SortOrder } from "../../schema";
-import { FunctionComponent, useMemo, useState } from "react";
 import { InputFieldWrapper } from "../form/InputFieldWrapper";
+import { SortOrder } from "../../schema";
 import { defineMessages, useIntl } from "react-intl";
 import { requestAdmin } from "../../utilities/request";
+import { useMemo, useState } from "react";
 import Button from "../elements/Button";
 import React from "react";
 import Select from "../elements/Select";
@@ -120,7 +119,7 @@ const EntityChooser = <
     data,
   }: {
     data?: QueryResponseType;
-    error?: any;
+    error?: unknown;
   } = useSWR([query, options], (query, options) =>
     requestAdmin(intl.locale, query, { options })
   );
@@ -140,7 +139,7 @@ const EntityChooser = <
         <Select
           options={sortByOptions}
           onChange={(option) => {
-            setSortBy((option as { label: string; value: any }).value);
+            setSortBy(option.value);
             setPage(0);
           }}
           mapOptionToLabel={(option) =>
@@ -156,7 +155,7 @@ const EntityChooser = <
         <Select
           options={SORT_ORDER_OPTIONS}
           onChange={(option) => {
-            setOrder((option as { label: string; value: any }).value);
+            setOrder(option.value);
             setPage(0);
           }}
           mapOptionToLabel={(option) =>

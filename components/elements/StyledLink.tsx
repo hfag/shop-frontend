@@ -1,5 +1,5 @@
+import { useRouter } from "next/router";
 import React, { FunctionComponent, MouseEvent, ReactNode } from "react";
-import Router, { useRouter } from "next/router";
 import styled, { StyledComponent } from "@emotion/styled";
 
 import { colors } from "../../utilities/style";
@@ -78,8 +78,7 @@ const StyledLink: FunctionComponent<{
       target?: string;
       onClick?: (e: MouseEvent) => void;
     },
-    IProps,
-    any
+    IProps
   > = underlined ? BorderLink : _StyledLink;
 
   if (external || onClick) {

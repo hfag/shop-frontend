@@ -41,9 +41,9 @@ const H1 = styled.h1`
   margin-top: 0;
 `;
 
-const H2 = styled.h2`
+/*const H2 = styled.h2`
   margin-bottom: 0;
-`;
+`;*/
 
 const Page: FunctionComponent<{
   collectionResponse: { collection: Collection };
@@ -51,7 +51,7 @@ const Page: FunctionComponent<{
 }> = ({ collectionResponse, posts }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     [GET_COLLECTION_BY_ID, 1],
     (query, collectionId) =>
       request<{ collection: Query["collection"] }>(intl.locale, query, {
@@ -64,10 +64,10 @@ const Page: FunctionComponent<{
 
   const {
     data: postsData,
-    error: postsError,
-  }: {
+  }: /*error: postsError,*/
+  {
     data?: Post[];
-    error?: any;
+    /*error?: any;*/
   } = useSWR(
     `${getWordpressUrl(
       intl.locale
@@ -123,7 +123,7 @@ const Page: FunctionComponent<{
 
 export default withApp(locale, messages)(Page);
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   return {
     revalidate: 60, //landing page will be rerendered at most every minute
     props: {

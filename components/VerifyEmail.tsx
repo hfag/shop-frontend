@@ -5,7 +5,6 @@ import { Mutation } from "../schema";
 import { NextRouter, useRouter } from "next/router";
 import { VERIFY_ACCOUNT } from "../gql/authentication";
 import { errorCodeToMessage } from "../utilities/i18n";
-import { mutate } from "swr";
 import { pathnamesByLanguage } from "../utilities/urls";
 import Button from "./elements/Button";
 import Card from "./layout/Card";
@@ -62,8 +61,8 @@ const InnerForm = ({
 
 const VerifyEmailForm = withFormik<IProps, FormValues>({
   enableReinitialize: true,
-  mapPropsToValues: (props) => ({}),
-  validationSchema: ({ intl }: IProps) =>
+  mapPropsToValues: (/*props*/) => ({}),
+  validationSchema: () =>
     yup.object().shape({
       password: yup.string().min(7).required(),
     }),
@@ -97,7 +96,7 @@ const VerifyEmailForm = withFormik<IProps, FormValues>({
   },
 })(InnerForm);
 
-const VerifyEmail: FunctionComponent = (props) => {
+const VerifyEmail: FunctionComponent = () => {
   const intl = useIntl();
   const router = useRouter();
   const token: string | null = useMemo(() => {

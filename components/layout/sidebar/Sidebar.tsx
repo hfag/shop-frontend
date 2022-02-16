@@ -3,16 +3,10 @@ import {
   FaShoppingCart as CartIcon,
   FaCogs as GearsIcon,
   FaHome as HomeIcon,
-  FaSearch as SearchIcon,
   FaSignInAlt as SignInIcon,
 } from "react-icons/fa";
 import { useIntl } from "react-intl";
-import React, {
-  FunctionComponent,
-  ReactNode,
-  useCallback,
-  useContext,
-} from "react";
+import React, { FunctionComponent, ReactNode, useContext } from "react";
 import styled from "@emotion/styled";
 
 import { AppContext } from "../../AppWrapper";

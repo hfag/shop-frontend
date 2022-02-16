@@ -247,7 +247,12 @@ const Product: FunctionComponent<{
     return defaultOptions;
   }, [product]);
 
-  const customizationOptions: { [key: string]: any } | null = useMemo(() => {
+  const customizationOptions: {
+    [key: string]: {
+      labels: { language: string; label: string }[];
+      type: string;
+    };
+  } | null = useMemo(() => {
     try {
       return JSON.parse(product.customFields.customizationOptions);
     } catch (e) {
@@ -388,8 +393,7 @@ const Product: FunctionComponent<{
             Object.keys(customizationOptions).map((optionKey) => {
               const { labels, type } = customizationOptions[optionKey];
               const label = labels.find(
-                (l: { language: string; label: string }) =>
-                  l.language === intl.locale
+                (l) => l.language === intl.locale
               )?.label;
 
               return (
@@ -433,7 +437,7 @@ const Product: FunctionComponent<{
                 <h4>{intl.formatMessage(messages.reset)}</h4>
                 <Button
                   onClick={() =>
-                    new Promise((resolve, reject) => {
+                    new Promise((resolve) => {
                       setSelectedOptions({});
                       resolve(true);
                     })

@@ -22,7 +22,7 @@ const Page: FunctionComponent<{ slug: string; page: PageType }> = ({
 }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     `${getWordpressUrl(intl.locale)}/wp-json/wp/v2/pages?slug=${slug}`,
     (url) =>
       fetch(url)

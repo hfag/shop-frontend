@@ -1,7 +1,6 @@
 import * as yup from "yup";
 import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape } from "react-intl";
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "@emotion/styled";
 
@@ -60,7 +59,6 @@ const InnerAddressForm = React.memo(
     isValid,
     status = "",
     countries,
-    values,
   }: IProps & FormikProps<FormValues>) => (
     <FormWrapper>
       {/*<InputField

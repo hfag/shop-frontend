@@ -1,6 +1,6 @@
-import { IntlShape, defineMessages, useIntl } from "react-intl";
 import { Mutation } from "../schema";
 import { UPDATE_CUSTOMER_EMAIL } from "../gql/user";
+import { defineMessages, useIntl } from "react-intl";
 import { errorCodeToMessage } from "../utilities/i18n";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { useRouter } from "next/router";
@@ -23,7 +23,7 @@ const messages = defineMessages({
   },
 });
 
-const VerifyNewEmail: FunctionComponent = (props) => {
+const VerifyNewEmail: FunctionComponent = () => {
   const intl = useIntl();
   const router = useRouter();
   const token: string | null = useMemo(() => {

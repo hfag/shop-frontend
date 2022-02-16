@@ -1,5 +1,4 @@
 import { media } from "../../utilities/style";
-import React from "react";
 import styled from "@emotion/styled";
 
 const Container = styled.div`

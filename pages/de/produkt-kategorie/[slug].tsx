@@ -1,6 +1,5 @@
 import { Collection, Query } from "../../../schema";
 import {
-  GET_ALL_COLLECTIONS,
   GET_COLLECTION_BY_SLUG,
   GET_COLLECTION_SLUGS,
 } from "../../../gql/collection";
@@ -25,7 +24,7 @@ const Page: FunctionComponent<{
 }> = ({ slug, collectionResponse }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     [GET_COLLECTION_BY_SLUG, slug],
     (query, slug) =>
       request<{ collection: Query["collection"] }>(intl.locale, query, {

@@ -48,7 +48,7 @@ const AccountDashboard: FunctionComponent = React.memo(() => {
     (a) => a.defaultShippingAddress
   );
 
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     [GET_CURRENT_CUSTOMER_ORDERS, token, 0, 3],
     (query, token, skip, take) =>
       request<{

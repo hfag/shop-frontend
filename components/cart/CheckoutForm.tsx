@@ -1,9 +1,8 @@
 import * as yup from "yup";
 import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages } from "react-intl";
-import React, { FunctionComponent, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
-import { CreateAddressInput, Mutation, Order, Query } from "../../schema";
 import {
   GET_ACTIVE_ORDER,
   ORDER_ADD_PAYMENT,
@@ -12,6 +11,7 @@ import {
   ORDER_SET_SHIPPING_METHOD,
   TRANSITION_ORDER_AND_ADD_PAYMENT,
 } from "../../gql/order";
+import { Mutation, Order, Query } from "../../schema";
 import { NextRouter } from "next/router";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { pageSlugsByLanguage, pathnamesByLanguage } from "../../utilities/urls";
@@ -88,12 +88,7 @@ const InnerCheckoutForm = React.memo(
     status,
     values,
     isValid,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
     handleSubmit,
-    isSubmitting,
     intl,
     token,
     order,

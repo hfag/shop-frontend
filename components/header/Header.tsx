@@ -1,16 +1,11 @@
 import { IntlShape, defineMessages, useIntl } from "react-intl";
 import { MdMenu } from "react-icons/md";
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { FunctionComponent, useContext, useState } from "react";
 import styled from "@emotion/styled";
 
-import { ABSOLUTE_URL, WP_BLOG_URL } from "../../utilities/api";
 import { AppContext } from "../AppWrapper";
 import { BUSINESS_JSON_LD } from "../../utilities/json-ld";
+import { WP_BLOG_URL } from "../../utilities/api";
 import { colors } from "../../utilities/style";
 import Box from "../layout/Box";
 import Card from "../layout/Card";

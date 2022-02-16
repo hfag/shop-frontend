@@ -34,7 +34,7 @@ const LanguageChooser: FunctionComponent<{
 }> = ({ value, onChange }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR<{
+  const { data /*, error*/ } = useSWR<{
     globalSettings: { availableLanguages: LanguageCode[] };
   }>(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
     requestAdmin(intl.locale, query)

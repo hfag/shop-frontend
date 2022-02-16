@@ -1,5 +1,4 @@
 import { colors } from "../utilities/style";
-import React from "react";
 import styled from "@emotion/styled";
 
 const Breadcrumb = styled.div`

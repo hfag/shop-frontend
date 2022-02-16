@@ -1,15 +1,12 @@
-import { FaChevronDown as ChevronDown } from "react-icons/fa";
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { FunctionComponent } from "react";
 
 import { Collection } from "../../../schema";
 import { colors } from "../../../utilities/style";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import { useIntl } from "react-intl";
-import Placeholder from "../../elements/Placeholder";
 import SidebarBreadcrumb from "./SidebarBreadcrumb";
 import SidebarListWrapper from "./SidebarListWrapper";
 import StyledLink from "../../elements/StyledLink";
-import page from "../../../i18n/page";
 import product from "../../../i18n/product";
 import styled from "@emotion/styled";
 
@@ -22,7 +19,7 @@ const H4 = styled.h4`
 
 const SidebarCollections: FunctionComponent<{
   collections: Collection[];
-}> = ({ collections, children }) => {
+}> = ({ collections }) => {
   const intl = useIntl();
 
   if (collections.length === 0) {

@@ -5,7 +5,6 @@ import styled from "@emotion/styled";
 import { AppContext } from "../AppWrapper";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Dropdown from "../elements/Dropdown";
-import RestrictedView from "../elements/RestrictedView";
 import StyledLink from "../elements/StyledLink";
 import Triangle from "../shapes/Triangle";
 import page from "../../i18n/page";

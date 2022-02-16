@@ -47,7 +47,7 @@ const messages = defineMessages({
 const ProductCrossSells: FunctionComponent<{
   productId: number | string;
   productSlug: string;
-  crosssellRef: React.MutableRefObject<any>;
+  crosssellRef: React.MutableRefObject<unknown>;
   crosssells: ProductRecommendation[];
   upsells: ProductRecommendation[];
 }> = ({ productId, productSlug, crosssellRef, crosssells, upsells }) => {

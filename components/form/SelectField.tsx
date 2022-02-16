@@ -34,7 +34,7 @@ const SelectField: FunctionComponent<{
   name: string;
   label?: string;
   placeholder?: string;
-  options: { label: string; value: any }[];
+  options: { label: string; value: string }[];
   required?: boolean;
   readOnly?: boolean;
   width?: number;
@@ -58,7 +58,7 @@ const SelectField: FunctionComponent<{
       <Field name={name}>
         {({
           field: { name, value },
-          form: { errors, touched, setFieldValue, setFieldTouched },
+          form: { errors, setFieldValue, setFieldTouched },
         }) => (
           <SelectFieldWrapper>
             {label && (

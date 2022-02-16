@@ -1,5 +1,4 @@
 import ProgressButton from "react-progress-button";
-import PropTypes from "prop-types";
 import React, { FunctionComponent, ReactNode } from "react";
 import styled from "@emotion/styled";
 

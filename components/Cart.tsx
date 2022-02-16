@@ -1,24 +1,18 @@
 import { ABSOLUTE_URL } from "../utilities/api";
 import { AVAILABLE_COUNTRIES } from "../gql/country";
 import { AppContext } from "./AppWrapper";
-import { CreateAddressInput, Query } from "../schema";
 import { GET_ACTIVE_ORDER } from "../gql/order";
+import { Query } from "../schema";
 import { defineMessages, useIntl } from "react-intl";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { useRouter } from "next/router";
-import Button from "./elements/Button";
 import Card from "./layout/Card";
 import CartForm from "./cart/CartForm";
 import CheckoutAddressForm from "./cart/CheckoutAddressForm";
 import CheckoutForm from "./cart/CheckoutForm";
 import Head from "next/head";
 import Placeholder from "./elements/Placeholder";
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { FunctionComponent, useContext, useState } from "react";
 import request from "../utilities/request";
 import useSWR from "swr";
 

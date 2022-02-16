@@ -1,13 +1,12 @@
 import * as yup from "yup";
 import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages } from "react-intl";
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 import {
   Address,
   Country,
   CreateAddressInput,
-  CurrentUser,
   Customer,
   Mutation,
   OrderAddress,
@@ -17,14 +16,12 @@ import {
   ORDER_SET_ADDRESS,
   ORDER_SET_CUSTOMER,
 } from "../../gql/order";
-import { GET_CURRENT_USER, UPDATE_CUSTOMER } from "../../gql/user";
 import { ORDER_SET_SHIPPING_METHOD } from "../../gql/order";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { mutate } from "swr";
 import Box from "../layout/Box";
 import Button from "../elements/Button";
 import Flex from "../layout/Flex";
-import Flexbar from "../layout/Flexbar";
 import InputField from "../form/InputField";
 import SelectField from "../form/SelectField";
 import address from "../../i18n/address";
@@ -100,17 +97,10 @@ const InnerCheckoutAddressForm = React.memo(
     status,
     values,
     isValid,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
     handleSubmit,
-    isSubmitting,
     countries,
     intl,
     enabled,
-    billingAddress,
-    shippingAddress,
   }: IProps & FormikProps<FormValues>) => {
     const readOnly = !enabled;
 
@@ -482,7 +472,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
   },
   handleSubmit: async (
     values,
-    { props: { intl, customer, user, token, onProceed }, setStatus, setErrors }
+    { props: { intl, user, token, onProceed }, setStatus, setErrors }
   ) => {
     const billingAddress: CreateAddressInput = {
       fullName: values.billingFullName,

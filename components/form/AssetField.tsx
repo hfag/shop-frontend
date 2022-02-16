@@ -54,8 +54,8 @@ const AssetField: FunctionComponent<{
         )}
         <Field name={name}>
           {({
-            field: { value, onChange, onBlur },
-            form: { values, errors, touched, validateForm, setFieldValue },
+            field: { value /*, onChange, onBlur*/ },
+            form: { errors, /*touched, validateForm,*/ setFieldValue },
           }) => (
             <>
               <FileChooserInput onClick={() => setModalOpen(true)}>

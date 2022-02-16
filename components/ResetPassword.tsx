@@ -1,19 +1,14 @@
 import { InputFieldWrapper } from "./form/InputFieldWrapper";
-import { IntlShape, defineMessages, useIntl } from "react-intl";
 import { Mutation } from "../schema";
-import { RESET_PASSWORD, UPDATE_CUSTOMER_EMAIL } from "../gql/user";
+import { RESET_PASSWORD } from "../gql/user";
+import { defineMessages, useIntl } from "react-intl";
 import { errorCodeToMessage } from "../utilities/i18n";
 import { pathnamesByLanguage } from "../utilities/urls";
 import { useRouter } from "next/router";
 import Button from "./elements/Button";
 import Card from "./layout/Card";
 import Message from "./elements/Message";
-import React, {
-  FunctionComponent,
-  useCallback,
-  useMemo,
-  useState,
-} from "react";
+import React, { FunctionComponent, useMemo, useState } from "react";
 import page from "../i18n/page";
 import request from "../utilities/request";
 
@@ -28,7 +23,7 @@ const messages = defineMessages({
   },
 });
 
-const ResetPassword: FunctionComponent = (props) => {
+const ResetPassword: FunctionComponent = () => {
   const intl = useIntl();
   const router = useRouter();
   const token: string | null = useMemo(() => {

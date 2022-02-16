@@ -1,10 +1,10 @@
 import { Field } from "formik";
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { ChangeEvent, FunctionComponent, ReactNode } from "react";
 import get from "lodash/get";
 import styled from "@emotion/styled";
 
 import { InputFieldWrapper } from "./InputFieldWrapper";
-import { borders, colors } from "../../utilities/style";
+import { colors } from "../../utilities/style";
 
 const ValidationErrors = styled.div`
   color: ${colors.danger};
@@ -23,7 +23,7 @@ const InputField: FunctionComponent<{
   placeholder?: string;
   type?: string;
   value?: string;
-  onChange?: (e: React.ChangeEvent<any>) => void;
+  onChange?: (e: React.ChangeEvent<unknown>) => void;
   marginRight?: number;
   flexGrow?: number;
   component?: React.ComponentType | "textarea";
@@ -56,10 +56,7 @@ const InputField: FunctionComponent<{
         </label>
       )}
       <Field name={name}>
-        {({
-          field: { value, onChange, onBlur },
-          form: { values, errors, touched, validateForm },
-        }) => (
+        {({ field: { value, onChange, onBlur }, form: { errors } }) => (
           <div>
             <Component
               id={id}
@@ -67,7 +64,7 @@ const InputField: FunctionComponent<{
               value={forceValue || value || ""}
               onChange={
                 secondOnChange
-                  ? (e) => {
+                  ? (e: ChangeEvent<unknown>) => {
                       secondOnChange(e);
                       return onChange(e);
                     }

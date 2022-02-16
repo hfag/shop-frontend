@@ -1,10 +1,5 @@
 import { AVAILABLE_COUNTRIES } from "../../../../gql/country";
-import {
-  Address,
-  Country,
-  Order as OrderType,
-  Query,
-} from "../../../../schema";
+import { Address, Query } from "../../../../schema";
 import { AppContext, withApp } from "../../../../components/AppWrapper";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { locale, messages } from "../../config";

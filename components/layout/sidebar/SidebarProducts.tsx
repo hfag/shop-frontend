@@ -1,5 +1,4 @@
-import { FaChevronDown as ChevronDown } from "react-icons/fa";
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { FunctionComponent } from "react";
 
 import { Product } from "../../../schema";
 import { colors } from "../../../utilities/style";
@@ -20,7 +19,7 @@ const H4 = styled.h4`
 
 const SidebarProducts: FunctionComponent<{
   products: Product[];
-}> = ({ products, children }) => {
+}> = ({ products }) => {
   const intl = useIntl();
 
   if (products.length === 0) {

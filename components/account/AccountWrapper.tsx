@@ -1,5 +1,5 @@
 import { defineMessages, useIntl } from "react-intl";
-import React, { FunctionComponent, ReactNode, useEffect } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 import styled from "@emotion/styled";
 
 import { ABSOLUTE_URL } from "../../utilities/api";

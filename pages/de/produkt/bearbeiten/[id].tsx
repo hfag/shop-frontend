@@ -1,9 +1,9 @@
 import { GET_FULL_PRODUCT_BY_ID } from "../../../../gql/product";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Product as ProductType, Query } from "../../../../schema";
-import { defineMessages, useIntl } from "react-intl";
 import { locale, messages } from "../../config";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
+import { useIntl } from "react-intl";
 import { withApp } from "../../../../components/AppWrapper";
 
 import React, { FunctionComponent, useMemo } from "react";
@@ -25,7 +25,7 @@ const Page: FunctionComponent<{
 }> = ({ productId, productResponse }) => {
   const intl = useIntl();
 
-  const { data, error } = useSWR(
+  const { data /*, error*/ } = useSWR(
     [GET_FULL_PRODUCT_BY_ID, productId],
     (query, productId) =>
       request<{ product: Query["product"] }>(intl.locale, query, {

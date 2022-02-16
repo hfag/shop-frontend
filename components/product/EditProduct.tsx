@@ -1,7 +1,6 @@
 import { defineMessages, useIntl } from "react-intl";
 import React, {
   FunctionComponent,
-  useCallback,
   useEffect,
   useMemo,
   useReducer,
@@ -29,11 +28,9 @@ import { requestAdmin } from "../../utilities/request";
 import { stripTags } from "../../utilities/decode";
 import { useAuthenticate } from "../../utilities/hooks";
 import { useRouter } from "next/router";
-import Box from "../layout/Box";
 import Button from "../elements/Button";
 import Card from "../layout/Card";
 import EditVariants from "./edit/EditVariants";
-import Flex from "../layout/Flex";
 import Head from "next/head";
 import JsonLd from "../seo/JsonLd";
 import LanguageChooser from "../LanguageChooser";
@@ -149,7 +146,7 @@ const EditProduct: FunctionComponent<{
     intl.locale as LanguageCode
   );
 
-  const { data: languages, error: languagesError } = useSWR<{
+  const { data: languages /*, error: languagesError*/ } = useSWR<{
     globalSettings: { availableLanguages: LanguageCode[] };
   }>(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
     requestAdmin(intl.locale, query)

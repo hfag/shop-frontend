@@ -1,5 +1,5 @@
 import { defineMessages, useIntl } from "react-intl";
-import React, { useEffect } from "react";
+import React from "react";
 
 import { ABSOLUTE_URL } from "../utilities/api";
 import { GetStaticProps } from "next";
@@ -63,7 +63,7 @@ const Page404 = React.memo(() => {
   );
 });
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
   };

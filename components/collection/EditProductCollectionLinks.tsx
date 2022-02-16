@@ -2,7 +2,6 @@ import { IntlShape, defineMessages, useIntl } from "react-intl";
 import { MdArrowUpward, MdDelete } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import styled from "@emotion/styled";
 
 import {
   ADMIN_GET_COLLECTION_LINKS_BY_SLUG,
@@ -17,7 +16,6 @@ import {
 import {
   COLLECTION_LINK_TYPE_OPTIONS,
   DownloadList,
-  ICON_BY_COLLECTION_LINK_TYPE,
 } from "./ProductCollectionLinks";
 import { DEFAULT_LANGUAGE } from "../../utilities/i18n";
 import { FieldArray, FormikProps, withFormik } from "formik";
@@ -31,7 +29,7 @@ import Flexbar from "../layout/Flexbar";
 import InputField from "../form/InputField";
 import LanguageChooser from "../LanguageChooser";
 import SelectField from "../form/SelectField";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 
 const messages = defineMessages({
   saveLinks: {
@@ -97,23 +95,12 @@ interface FormValues {
 
 const EditProductCollectionLinksInnerForm: FunctionComponent<
   IProps & FormikProps<FormValues>
-> = ({
-  collection,
-  onAbort,
-  values,
-  touched,
-  errors,
-  handleChange,
-  handleBlur,
-  handleSubmit,
-  setValues,
-  status,
-}) => {
+> = ({ collection, onAbort, values, handleSubmit, setValues, status }) => {
   const intl = useIntl();
   //@ts-ignore
   const [language, setLanguage] = useState<LanguageCode>(intl.locale);
 
-  const { data, error } = useSWR<{
+  const { data /*, error*/ } = useSWR<{
     collection: {
       id: number | string;
       slug: string;

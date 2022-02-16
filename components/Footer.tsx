@@ -125,7 +125,7 @@ const Footer: FunctionComponent = React.memo(() => {
                 <LazyImage
                   src="/images/logo/logo_negative.svg"
                   alt="Logo"
-                  placeholder={({ imageProps, ref }) => (
+                  placeholder={({ /*imageProps,*/ ref }) => (
                     <div ref={ref}>
                       <Placeholder block />
                     </div>
@@ -138,7 +138,7 @@ const Footer: FunctionComponent = React.memo(() => {
                 <LazyImage
                   src="/images/logo/name_slogan_negative.svg"
                   alt="Slogan"
-                  placeholder={({ imageProps, ref }) => (
+                  placeholder={({ /*imageProps,*/ ref }) => (
                     <div ref={ref}>
                       <Placeholder block />
                     </div>

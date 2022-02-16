@@ -1,10 +1,4 @@
-import React, {
-  FunctionComponent,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { FunctionComponent } from "react";
 
 const UnsafeHTMLContent: FunctionComponent<{ content: string }> = React.memo(
   ({ content }) => {

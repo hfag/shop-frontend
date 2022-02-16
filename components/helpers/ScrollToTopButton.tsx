@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from "react-intl";
 import React, { useCallback } from "react";
 import styled from "@emotion/styled";
 
-import { colors, shadows } from "../../utilities/style";
+import { colors } from "../../utilities/style";
 
 const messages = defineMessages({
   backToTop: {

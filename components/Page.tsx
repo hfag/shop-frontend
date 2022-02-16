@@ -8,8 +8,7 @@ import Card from "./layout/Card";
 import H1 from "./elements/H1";
 import Head from "next/head";
 import Placeholder from "./elements/Placeholder";
-import React, { FunctionComponent, useEffect } from "react";
-import UnsafeHTMLContent from "./content/UnsafeHTMLContent";
+import React, { FunctionComponent } from "react";
 
 const Page: FunctionComponent<{ page?: PageType }> = React.memo(({ page }) => {
   const intl = useIntl();

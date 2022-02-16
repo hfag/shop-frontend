@@ -1,16 +1,9 @@
 import { ADMIN_ASSETS } from "../../gql/asset";
-import { Asset, SortOrder } from "../../schema";
-import { FunctionComponent, useMemo, useState } from "react";
-import { InputFieldWrapper } from "../form/InputFieldWrapper";
-import { defineMessages, useIntl } from "react-intl";
-import { requestAdmin } from "../../utilities/request";
-import Button from "../elements/Button";
+import { Asset } from "../../schema";
+import { FunctionComponent } from "react";
+import { defineMessages } from "react-intl";
 import EntityChooser from "./EntityChooser";
 import React from "react";
-import Select from "../elements/Select";
-import Table from "../elements/Table";
-import styled from "@emotion/styled";
-import useSWR from "swr";
 
 const messages = defineMessages({
   // sortById: {
@@ -51,7 +44,7 @@ const messages = defineMessages({
   },
 });
 
-type AssetSortBy =
+/*type AssetSortBy =
   | "id"
   | "createdAt"
   | "updatedAt"
@@ -61,7 +54,7 @@ type AssetSortBy =
   | "width"
   | "height"
   | "source"
-  | "preview";
+  | "preview";*/
 
 const SORT_BY_OPTIONS = [
   //   { label: "sortByOptionId", value: "id" },
@@ -76,7 +69,7 @@ const SORT_BY_OPTIONS = [
   //   { label: "sortByPreview", value: "preview" },
 ];
 
-const SORT_ORDER_OPTIONS = [
+/*const SORT_ORDER_OPTIONS = [
   { label: "sortOrderAsc", value: SortOrder.Asc },
   { label: "sortOrderDesc", value: SortOrder.Desc },
 ];
@@ -90,7 +83,7 @@ const FilterRow = styled.div<{ center?: boolean }>`
 
 const ClickableTr = styled.tr`
   cursor: pointer;
-`;
+`;*/
 
 interface Response {
   assets?: { items: Asset[]; totalItems: number };

@@ -1,11 +1,6 @@
 import { FaPercent } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { FunctionComponent, useContext, useMemo } from "react";
 import styled from "@emotion/styled";
 
 import { AppContext } from "../AppWrapper";

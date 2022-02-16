@@ -1,4 +1,3 @@
-//dependencies
 import { CurrentUser, Customer, Maybe, Query } from "../schema";
 import { GET_CURRENT_USER } from "../gql/user";
 import { IntlProvider } from "react-intl";
@@ -29,7 +28,7 @@ export const AppContext = React.createContext<{
 
 const AppWrapper: FunctionComponent<{
   locale: Language;
-  messages: any;
+  messages: IntlProvider["props"]["messages"];
   children: ReactNode;
 }> = ({ locale, messages, children }) => {
   const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
@@ -38,9 +37,9 @@ const AppWrapper: FunctionComponent<{
     [setBurgerMenuOpen, burgerMenuOpen]
   );
 
-  const [token, setToken] = useLocalStorage("vendure-auth-token");
+  const [token /*, setToken*/] = useLocalStorage("vendure-auth-token");
 
-  const { data, error } = useSWR<{
+  const { data /*, error*/ } = useSWR<{
     activeCustomer: Query["activeCustomer"];
     me: Query["me"];
   }>(token ? [GET_CURRENT_USER, token] : null, (query) =>
@@ -70,9 +69,9 @@ const AppWrapper: FunctionComponent<{
 };
 
 export const withApp =
-  (locale: Language, messages: any) =>
-  (Component: React.JSXElementConstructor<any>) =>
-    React.memo((props: any) => {
+  (locale: Language, messages: IntlProvider["props"]["messages"]) =>
+  <P extends unknown>(Component: React.JSXElementConstructor<P>) =>
+    React.memo((props: P) => {
       return (
         <AppWrapper locale={locale} messages={messages}>
           <Component {...props} />

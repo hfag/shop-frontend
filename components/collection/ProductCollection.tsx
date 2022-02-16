@@ -1,10 +1,10 @@
 import { Product as JsonLdProduct } from "schema-dts";
-import { defineMessages, useIntl } from "react-intl";
-import React, { FunctionComponent, useEffect, useMemo } from "react";
+import { useIntl } from "react-intl";
+import React, { FunctionComponent, useMemo } from "react";
 import styled from "@emotion/styled";
 
 import { ABSOLUTE_URL } from "../../utilities/api";
-import { Collection, CollectionLinkType } from "../../schema";
+import { Collection } from "../../schema";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { stripTags } from "../../utilities/decode";
 import CollectionItem from "./CollectionItem";
@@ -69,8 +69,6 @@ const ProductCollection: FunctionComponent<{
   showDescription?: boolean;
   collection?: Collection;
 }> = React.memo(({ collection, showDescription }) => {
-  const intl = useIntl();
-
   const productsJsonLd = useMemo<JsonLdProduct[]>(
     () => collection.products.map(productToJsonLd),
     [collection]

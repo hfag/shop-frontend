@@ -1,16 +1,12 @@
-import { FaPercent } from "react-icons/fa";
 import { IntlShape, defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
 import { Post } from "../utilities/wordpress";
-import { Product, ProductVariant, Promotion } from "../schema";
-import { borders, colors, shadows } from "../utilities/style";
+import { borders, shadows } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
-import Asset from "./elements/Asset";
 import Box from "./layout/Box";
 import Flex from "./layout/Flex";
-import Price from "./elements/Price";
 import StyledImage from "./elements/StyledImage";
 import StyledLink from "./elements/StyledLink";
 
@@ -40,29 +36,6 @@ const SaleWrapper = styled.div`
   p {
     margin: 0;
     font-weight: 300;
-  }
-`;
-
-const DiscountLogo = styled.span`
-  position: absolute;
-  top: -1rem;
-  right: -1rem;
-
-  padding: 0.25rem;
-  color: #fff;
-  width: 2rem;
-  height: 2rem;
-  font-size: 1.15rem;
-  display: inline-block;
-
-  background-color: ${colors.danger};
-  border-radius: 50%;
-
-  svg {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
   }
 `;
 

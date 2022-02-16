@@ -1,11 +1,6 @@
 import { FaFilm, FaLink, FaRegFilePdf } from "react-icons/fa";
 import { defineMessages, useIntl } from "react-intl";
-import React, {
-  FunctionComponent,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import React, { FunctionComponent, useState } from "react";
 import styled from "@emotion/styled";
 
 import { ASSET_URL } from "../../utilities/api";
@@ -89,7 +84,7 @@ const ProductCollectionLinks: FunctionComponent<{ collection: Collection }> = ({
             <H2>{intl.formatMessage(messages.downloadsAndLinks)}</H2>
             {!editing && (
               <DownloadList>
-                {collection.links.map((link, index) => {
+                {collection.links.map((link) => {
                   const Icon = ICON_BY_COLLECTION_LINK_TYPE[link.icon];
 
                   return (

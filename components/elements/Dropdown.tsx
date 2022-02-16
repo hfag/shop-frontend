@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "@emotion/styled";
 
-import { borders, colors, shadows } from "../../utilities/style";
+import { borders, shadows } from "../../utilities/style";
 
 const Dropdown = styled.div`
   position: absolute;

@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 import { locale, messages } from "./config";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { useIntl } from "react-intl";

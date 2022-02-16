@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
-import { Page, WP_Page, mapPage } from "../utilities/wordpress";
+import { WP_Page, mapPage } from "../utilities/wordpress";
 import { borders, colors } from "../utilities/style";
 import { getWordpressUrl } from "../utilities/api";
 import { useIntl } from "react-intl";
@@ -22,7 +22,7 @@ const InlinePageContainer = styled.div`
 const InlinePage: FunctionComponent<{ slug: string }> = ({ slug }) => {
   const intl = useIntl();
 
-  const { data: page, error } = useSWR(
+  const { data: page /*, error*/ } = useSWR(
     `${getWordpressUrl(intl.locale)}/wp-json/wp/v2/pages?slug=${slug}`,
     (url) =>
       fetch(url)

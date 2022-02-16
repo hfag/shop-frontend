@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { Form, FormikErrors, FormikProps, withFormik } from "formik";
+import { Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages, useIntl } from "react-intl";
 import React, {
   ReactNode,
@@ -30,7 +30,6 @@ import address from "../i18n/address";
 import request from "../utilities/request";
 import styled from "@emotion/styled";
 import userMessages from "../i18n/user";
-import validation from "../i18n/validation";
 
 const messages = defineMessages({
   siteTitle: {
@@ -81,7 +80,7 @@ interface IPropsLoginRegister {
   message: ReactNode;
   password?: boolean;
   intl: IntlShape;
-  action: (email: string, password: string) => Promise<any>;
+  action: (email: string, password: string) => Promise<boolean>;
   callback?: () => void;
 }
 
@@ -169,8 +168,8 @@ const LoginRegisterForm = withFormik<
   FormValuesLoginRegister
 >({
   enableReinitialize: true,
-  mapPropsToValues: (props) => ({}),
-  validationSchema: ({ password, intl }: IPropsLoginRegister) =>
+  mapPropsToValues: (/*props*/) => ({}),
+  validationSchema: ({ password }: IPropsLoginRegister) =>
     yup.object().shape({
       email: yup.string().required(),
       password: yup
@@ -182,7 +181,7 @@ const LoginRegisterForm = withFormik<
   handleSubmit: (
     { email, password },
     {
-      props: { action, intl, callback },
+      props: { action, callback },
       setStatus,
       setErrors,
       /* setErrors, setValues, setStatus, and other goodies */
@@ -214,7 +213,7 @@ const PasswordResetForm = withFormik<
   FormValuesPasswordReset
 >({
   enableReinitialize: true,
-  mapPropsToValues: (props) => ({}),
+  mapPropsToValues: (/*props*/) => ({}),
   validationSchema: yup.object().shape({
     email: yup.string().email().required(),
   }),

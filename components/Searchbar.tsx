@@ -132,7 +132,10 @@ const getSuggestionValue = (suggestion: SearchResult) =>
 /**
  * Renders the suggstion wrapper
  */
-const renderSuggestionContainer = ({ containerProps, children, query }) => {
+const renderSuggestionContainer = ({
+  containerProps,
+  children /*, query*/,
+}) => {
   return (
     <SuggestionContainer {...containerProps}>{children}</SuggestionContainer>
   );
@@ -190,7 +193,7 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
 
   const onSuggestionSelected = useCallback(
     (
-      event: FormEvent<any>,
+      event: FormEvent<unknown>,
       {
         suggestion,
       }: {
@@ -273,7 +276,7 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
     placeholder: intl.formatMessage(messages.placeholder),
     value,
     onChange,
-    onKeyDown: (e: KeyboardEvent<any>) => {
+    onKeyDown: (e: KeyboardEvent<unknown>) => {
       if (e.keyCode === 13) {
         router.push(
           `/${intl.locale}/${

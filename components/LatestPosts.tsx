@@ -2,7 +2,7 @@ import { IntlShape, defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
-import { Post as PostType } from "../utilities/wordpress";
+import { PostPreview as PostType } from "../utilities/wordpress";
 import { borders, shadows } from "../utilities/style";
 import { pathnamesByLanguage } from "../utilities/urls";
 import Box from "./layout/Box";

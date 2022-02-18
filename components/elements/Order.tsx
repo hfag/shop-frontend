@@ -129,7 +129,6 @@ const Order: FunctionComponent<{ order?: OrderType; compact?: boolean }> = ({
 }) => {
   const intl = useIntl();
   const date = new Date(order?.updatedAt);
-  const state = getState(order?.state, intl);
 
   return (
     <OrderWrapper>
@@ -183,11 +182,6 @@ const Order: FunctionComponent<{ order?: OrderType; compact?: boolean }> = ({
                 </OrderItem>
               ))}
           {order && <Price>{order.total}</Price>}
-        </div>
-      )}
-      {order && (
-        <div>
-          <Status color={state.color}>{state.label}</Status>
         </div>
       )}
     </OrderWrapper>

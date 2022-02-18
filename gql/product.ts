@@ -74,6 +74,7 @@ export const PRODUCT_FRAGMENT = `
   description
   featuredAsset {
     ${ASSET_FRAGMENT}
+    source
   }
   assets {
     ${ASSET_FRAGMENT}

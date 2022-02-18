@@ -1,7 +1,11 @@
 import { Collection, Query } from "../../schema";
 import { GET_COLLECTION_BY_ID } from "../../gql/collection";
 import { GetStaticProps } from "next";
-import { Post, WP_Post, mapPost } from "../../utilities/wordpress";
+import {
+  PostPreview,
+  WP_Post,
+  mapPostPreview,
+} from "../../utilities/wordpress";
 import { defineMessages, useIntl } from "react-intl";
 import { getWordpressUrl } from "../../utilities/api";
 import { locale, messages } from "./config";
@@ -47,7 +51,7 @@ const H1 = styled.h1`
 
 const Page: FunctionComponent<{
   collectionResponse: { collection: Collection };
-  posts: Post[];
+  posts: PostPreview[];
 }> = ({ collectionResponse, posts }) => {
   const intl = useIntl();
 
@@ -58,7 +62,7 @@ const Page: FunctionComponent<{
         id: collectionId,
       }),
     {
-      initialData: collectionResponse,
+      fallbackData: collectionResponse,
     }
   );
 
@@ -66,7 +70,7 @@ const Page: FunctionComponent<{
     data: postsData,
   }: /*error: postsError,*/
   {
-    data?: Post[];
+    data?: PostPreview[];
     /*error?: any;*/
   } = useSWR(
     `${getWordpressUrl(
@@ -75,8 +79,8 @@ const Page: FunctionComponent<{
     (url) =>
       fetch(url)
         .then((r) => r.json())
-        .then((posts: WP_Post[]) => posts.map(mapPost)),
-    { initialData: posts }
+        .then((posts: WP_Post[]) => posts.map(mapPostPreview)),
+    { fallbackData: posts }
   );
 
   return (
@@ -125,7 +129,7 @@ export default withApp(locale, messages)(Page);
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
-    revalidate: 60, //landing page will be rerendered at most every minute
+    revalidate: 60 * 60 * 12,
     props: {
       collectionResponse: await request(locale, GET_COLLECTION_BY_ID, {
         id: 1,
@@ -136,7 +140,7 @@ export const getStaticProps: GetStaticProps = async () => {
         )}/wp-json/wp/v2/posts?per_page=20&orderby=date&order=desc&_embed`
       )
         .then((r) => r.json())
-        .then((posts: WP_Post[]) => posts.map(mapPost)),
+        .then((posts: WP_Post[]) => posts.map(mapPostPreview)),
     },
   };
 };

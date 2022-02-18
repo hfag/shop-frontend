@@ -31,7 +31,7 @@ const Page: FunctionComponent<{
         slug,
       }),
     {
-      initialData: collectionResponse,
+      fallbackData: collectionResponse,
     }
   );
 
@@ -128,7 +128,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   );
 
   return {
-    revalidate: 10, //product categories will be rerendered at most every 10s
+    revalidate: 60 * 60 * 12,
     notFound: collectionResponse?.collection ? false : true,
     props: {
       slug: context.params.slug,

@@ -92,7 +92,7 @@ export interface WP_Post {
 }
 
 export interface Post {
-  id: number;
+  //id: number;
   slug: string;
   title: string;
   blocks: MappedBlock[];
@@ -102,9 +102,14 @@ export interface Post {
     height: number | null;
     alt: string | null;
   };
+  //sticky: boolean;
+  //description: string;
+}
+
+export type PostPreview = Omit<Post, "blocks"> & {
   sticky: boolean;
   description: string;
-}
+};
 
 const mapBlock = (block: Block): MappedBlock => {
   switch (block.blockName) {
@@ -143,10 +148,44 @@ export const mapPost = (post: WP_Post): Post => {
     post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail;
 
   return {
-    id: post.id,
     slug: post.slug,
     title: post.title.rendered,
     blocks: post.blocks.filter((b) => b.blockName).map(mapBlock),
+    thumbnail: {
+      url:
+        (hasThumbnail &&
+          post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
+            .source_url) ||
+        null,
+      width:
+        (hasThumbnail &&
+          post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
+            .width) ||
+        null,
+      height:
+        (hasThumbnail &&
+          post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
+            .height) ||
+        null,
+      alt: (hasMedia && post._embedded["wp:featuredmedia"][0].alt_text) || null,
+    },
+  };
+};
+
+export const mapPostPreview = (post: WP_Post): PostPreview => {
+  const hasMedia =
+    post._embedded &&
+    post._embedded["wp:featuredmedia"] &&
+    post._embedded["wp:featuredmedia"].length > 0;
+
+  const hasThumbnail =
+    hasMedia &&
+    post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail &&
+    post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail;
+
+  return {
+    slug: post.slug,
+    title: post.title.rendered,
     thumbnail: {
       url:
         (hasThumbnail &&

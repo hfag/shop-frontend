@@ -40,6 +40,10 @@ const messages = defineMessages({
     id: "Footer.socialMedia",
     defaultMessage: "Soziale Medien",
   },
+  tos: {
+    id: "Footer.tos",
+    defaultMessage: "Allgemeine Geschäftsbedingungen",
+  },
 });
 
 const StyledFooter = styled.footer`
@@ -229,18 +233,32 @@ const Footer: FunctionComponent = React.memo(() => {
                 </IconList>
               </BorderBox>
               <BorderBox widths={[1, 1, 1, 1 / 3, 1 / 3]} paddingX={3}>
-                <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
-                {intl.formatMessage(messages.about)}{" "}
-                <StyledLink
-                  underlined
-                  href={`/${intl.locale}/${
-                    pathnamesByLanguage.page.languages[intl.locale]
-                  }/${pageSlugsByLanguage.companyAbout.languages[intl.locale]}`}
-                  negative
-                >
-                  {intl.formatMessage(messages.moreAbout)}
-                </StyledLink>
-                <br />
+                <p>
+                  <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
+                  {intl.formatMessage(messages.about)}{" "}
+                  <StyledLink
+                    underlined
+                    href={`/${intl.locale}/${
+                      pathnamesByLanguage.page.languages[intl.locale]
+                    }/${
+                      pageSlugsByLanguage.companyAbout.languages[intl.locale]
+                    }`}
+                    negative
+                  >
+                    {intl.formatMessage(messages.moreAbout)}
+                  </StyledLink>
+                </p>
+                <p>
+                  <StyledLink
+                    underlined
+                    href={`/${intl.locale}/${
+                      pathnamesByLanguage.page.languages[intl.locale]
+                    }/${pageSlugsByLanguage.tos.languages[intl.locale]}`}
+                    negative
+                  >
+                    {intl.formatMessage(messages.tos)}
+                  </StyledLink>
+                </p>
                 <StyledLink
                   external
                   target="_blank"

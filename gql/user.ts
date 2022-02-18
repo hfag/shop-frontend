@@ -1,4 +1,4 @@
-import { FULL_ADDRESS_FRAGMENT, FULL_ORDER_FRAGMENT } from "./order";
+import { FULL_ADDRESS_FRAGMENT } from "./order";
 
 export const CURRENT_USER_FRAGMENT = `
   identifier

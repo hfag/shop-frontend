@@ -28,7 +28,7 @@ const Page: FunctionComponent<{ slug: string; post: PostType }> = ({
       fetch(url)
         .then((r) => r.json())
         .then((posts: WP_Post[]) => mapPost(posts[0])),
-    { initialData: post }
+    { fallbackData: post }
   );
 
   const breadcrumbs = useMemo(
@@ -95,7 +95,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   }
 
   return {
-    revalidate: 60, //posts will be rerendered at most every minute
+    revalidate: 60 * 60 * 12,
     notFound,
     props: {
       slug: context.params.slug,

@@ -17,7 +17,6 @@ const Post: FunctionComponent<{ post?: PostType }> = React.memo(({ post }) => {
     <React.Fragment>
       <Head>
         <title>{stripTags(post.title)} - Hauser Feuerschutz AG</title>
-        <meta name="description" content={stripTags(post.description)} />
         <link
           rel="canonical"
           href={`${ABSOLUTE_URL}/${intl.locale}/${

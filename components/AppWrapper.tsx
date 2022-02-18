@@ -10,7 +10,7 @@ import React, {
   useState,
 } from "react";
 import request from "../utilities/request";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 
 export const AppContext = React.createContext<{
   burgerMenuOpen: boolean;
@@ -42,28 +42,38 @@ const AppWrapper: FunctionComponent<{
   const { data /*, error*/ } = useSWR<{
     activeCustomer: Query["activeCustomer"];
     me: Query["me"];
-  }>(token ? [GET_CURRENT_USER, token] : null, (query) =>
-    request(locale, query).catch((e: Error) => {
-      if (e.message.includes("not currently authorized")) {
-        return { activeCustomer: null, me: null };
-      }
-      throw e;
-    })
+  }>(
+    token ? [GET_CURRENT_USER, token] : null,
+    (query) =>
+      request(locale, query).catch((e: Error) => {
+        if (e.message.includes('"code":"FORBIDDEN"')) {
+          return { activeCustomer: null, me: null };
+        }
+        throw e;
+      }),
+    { revalidateOnFocus: false, refreshInterval: 0 }
   );
 
   return (
     <IntlProvider locale={locale} messages={messages}>
-      <AppContext.Provider
+      <SWRConfig
         value={{
-          burgerMenuOpen,
-          toggleBurgerMenu,
-          user: token && data ? data.me : null,
-          customer: token && data ? data.activeCustomer : null,
-          token,
+          refreshInterval: 0,
+          revalidateOnFocus: false,
         }}
       >
-        {children}
-      </AppContext.Provider>
+        <AppContext.Provider
+          value={{
+            burgerMenuOpen,
+            toggleBurgerMenu,
+            user: token && data ? data.me : null,
+            customer: token && data ? data.activeCustomer : null,
+            token,
+          }}
+        >
+          {children}
+        </AppContext.Provider>
+      </SWRConfig>
     </IntlProvider>
   );
 };

@@ -43,13 +43,6 @@ export const FULL_COLLECTION_FRAGMENT = /* Graphql */ `
     slug
     name
   }
-  featuredAsset {
-    id
-    name
-    width
-    height
-    preview
-  }
   children {
     id
     slug

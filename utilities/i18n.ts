@@ -1,7 +1,7 @@
-import { IntlShape } from "react-intl";
-import errors from "../i18n/errors";
 import { ErrorCode } from "../schema";
+import { IntlShape } from "react-intl";
 import { isClient } from "./ssr";
+import errors from "../i18n/errors";
 
 export type Language = "de" | "fr";
 export const supportedLanguages = ["de", "fr"];

@@ -79,7 +79,7 @@ export default async function handler(
         await Promise.all(
           languages.map((lang, index) => {
             return res.unstable_revalidate(
-              `/${lang}/${pathnamesByLanguage.post[lang]}/${slugs[index]}`
+              `/${lang}/${pathnamesByLanguage.page.languages[lang]}/${slugs[index]}`
             );
           })
         );
@@ -91,7 +91,7 @@ export default async function handler(
           /* Collection / Product category pages */
           ...languages.map((lang, index) => {
             return res.unstable_revalidate(
-              `/${lang}/${pathnamesByLanguage.post[lang]}/${slugs[index]}`
+              `/${lang}/${pathnamesByLanguage.post.languages[lang]}/${slugs[index]}`
             );
           }),
         ]);

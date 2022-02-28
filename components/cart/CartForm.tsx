@@ -9,6 +9,7 @@ import {
   GET_ACTIVE_ORDER,
   REMOVE_ORDER_LINE,
 } from "../../gql/order";
+import { FACTOR_PLUS_TAXES, FACTOR_TAXES } from "../../utilities/taxes";
 import { Mutation, Order } from "../../schema";
 import { colors } from "../../utilities/style";
 import { errorCodeToMessage } from "../../utilities/i18n";
@@ -232,15 +233,13 @@ const InnerCartForm = React.memo(
             </tr>
           )}
           <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(orderMessages.taxesOfThat)}</td>
-            <td>
-              {order && <Price>{order.totalWithTax - order.total}</Price>}
-            </td>
+            <td colSpan={5}>{intl.formatMessage(orderMessages.vat)}</td>
+            <td>{order && <Price>{order.total * FACTOR_TAXES}</Price>}</td>
             <td />
           </tr>
           <tr className="total">
             <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
-            <td>{order && <Price>{order.totalWithTax}</Price>}</td>
+            <td>{order && <Price>{order.total * FACTOR_PLUS_TAXES}</Price>}</td>
             <td />
           </tr>
         </tfoot>

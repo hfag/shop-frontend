@@ -29,8 +29,8 @@ export default defineMessages({
     id: "order.taxes",
     defaultMessage: "Steuern",
   },
-  taxesOfThat: {
-    id: "CartForm.taxesOfThat",
+  vat: {
+    id: "CartForm.vat",
     defaultMessage: "MWST (7.7%)",
   },
   noOrders: {

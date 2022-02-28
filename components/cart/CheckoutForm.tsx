@@ -3,6 +3,7 @@ import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages } from "react-intl";
 import React, { useEffect, useMemo } from "react";
 
+import { FACTOR_PLUS_TAXES, FACTOR_TAXES } from "../../utilities/taxes";
 import {
   GET_ACTIVE_ORDER,
   ORDER_ADD_PAYMENT,
@@ -209,13 +210,13 @@ const InnerCheckoutForm = React.memo(
             <tr>
               <td>{intl.formatMessage(orderMessages.taxes)}</td>
               <td>
-                <Price>{order.totalWithTax - order.total}</Price>
+                <Price>{order.total * FACTOR_TAXES}</Price>
               </td>
             </tr>
             <tr>
               <td>{intl.formatMessage(orderMessages.total)}</td>
               <td>
-                <Price>{order.totalWithTax}</Price>
+                <Price>{order.total * FACTOR_PLUS_TAXES}</Price>
               </td>
             </tr>
           </tbody>

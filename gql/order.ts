@@ -62,12 +62,8 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     }
     quantity
     unitPrice
-    unitPriceWithTax
     proratedUnitPrice
-    proratedUnitPriceWithTax
     proratedLinePrice
-    proratedLinePriceWithTax
-    linePriceWithTax
     customFields {
       customizations
     }
@@ -85,10 +81,8 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     enabled
   }
   subTotal
-  subTotalWithTax
   currencyCode
   shipping
-  shippingWithTax
   shippingLines {
     shippingMethod {
       code
@@ -101,7 +95,6 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     taxTotal
   }
   total
-  totalWithTax
   customFields {
     notes
   }

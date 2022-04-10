@@ -68,7 +68,7 @@ export interface WP_Post {
   featured_media: number;
   sticky: boolean;
   description: string;
-  blocks: Block[];
+  _blocks: Block[];
   _embedded: {
     "wp:featuredmedia": {
       id: number;
@@ -150,7 +150,7 @@ export const mapPost = (post: WP_Post): Post => {
   return {
     slug: post.slug,
     title: post.title.rendered,
-    blocks: post.blocks.filter((b) => b.blockName).map(mapBlock),
+    blocks: post._blocks.filter((b) => b.blockName).map(mapBlock),
     thumbnail: {
       url:
         (hasThumbnail &&
@@ -214,7 +214,7 @@ export interface WP_Page {
   slug: string;
   title: { rendered: string };
   content: { rendered: string };
-  blocks: Block[];
+  _blocks: Block[];
   excerpt: { rendered: string };
 }
 
@@ -233,5 +233,5 @@ export const mapPage = (page: WP_Page): Page => ({
   title: page.title.rendered,
   content: page.content.rendered,
   excerpt: page.excerpt.rendered,
-  blocks: page.blocks.map(mapBlock),
+  blocks: page._blocks.map(mapBlock),
 });

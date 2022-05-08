@@ -55,7 +55,7 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
     name: stripTags(product.name),
     image: product?.featuredAsset?.source,
     description: product.description,
-    sku: product.customFields.groupKey,
+    sku: product.customFields.groupKey || product.variants[0]?.sku,
     offers: offer,
   };
 

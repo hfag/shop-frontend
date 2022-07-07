@@ -710,7 +710,12 @@ const Product: FunctionComponent<{
                   );
                 })}
                 {product.facetValues
-                  .filter((vf) => vf.facet.code !== "category")
+                  .filter(
+                    (fv) =>
+                      !["categories", "reseller-discounts"].includes(
+                        fv.facet.code
+                      )
+                  )
                   .map((facetValue, index) => (
                     <tr key={index}>
                       <td

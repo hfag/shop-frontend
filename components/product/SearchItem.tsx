@@ -179,20 +179,22 @@ const SearchItem: FunctionComponent<{
               <Subtitle>
                 {result.sku}
                 <br />
-                {"value" in result.price ? (
-                  <>
-                    <u>
-                      <Price>{result.price.value}</Price>
-                    </u>
-                  </>
-                ) : (
-                  <>
-                    {intl.formatMessage(search.from)}{" "}
-                    <u>
-                      <Price>{result.price.min}</Price>
-                    </u>
-                  </>
-                )}
+                {"value" in result.price
+                  ? result.price.value > 0 && (
+                      <>
+                        <u>
+                          <Price>{result.price.value}</Price>
+                        </u>
+                      </>
+                    )
+                  : result.price.min > 0 && (
+                      <>
+                        {intl.formatMessage(search.from)}{" "}
+                        <u>
+                          <Price>{result.price.min}</Price>
+                        </u>
+                      </>
+                    )}
               </Subtitle>
             </div>
           </div>

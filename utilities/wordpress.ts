@@ -29,18 +29,19 @@ interface ImageBlock extends BlockBase {
 
 interface GalleryBlock extends BlockBase {
   blockName: "core/gallery";
-  attrs: {
-    ids: number[];
-    columns: number;
-    linkTo: string;
-  };
+  attrs:
+    | {
+        ids: number[];
+        columns: number;
+        linkTo: string;
+      }
+    | { urls: string[] };
 }
 
 interface MappedGalleryBlock extends BlockBase {
   blockName: "core/gallery";
   attrs: {
     urls: string[];
-    columns: number;
   };
 }
 
@@ -120,12 +121,14 @@ const mapBlock = (block: Block): MappedBlock => {
       return {
         ...block,
         attrs: {
-          urls: block.innerHTML
-            ? (block.innerHTML.match(/src="[^ <>]+"/g) || []).map((s) =>
-                s.substr(5, s.length - 6)
-              )
-            : [],
-          columns: block.attrs.columns || null,
+          urls:
+            "urls" in block.attrs
+              ? block.attrs.urls
+              : block.innerHTML
+              ? (block.innerHTML.match(/src="[^ <>]+"/g) || []).map((s) =>
+                  s.substr(5, s.length - 6)
+                )
+              : [],
         },
       };
     default:

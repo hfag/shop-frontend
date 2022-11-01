@@ -1,7 +1,6 @@
 import {
   FaEnvelope as Envelope,
   FaDownload,
-  FaTwitter,
   FaMapMarkerAlt as MapMarker,
   FaPhone as Phone,
 } from "react-icons/fa";
@@ -108,11 +107,6 @@ const Icon = styled.span<{ margin?: boolean }>`
     display: block;
     margin: 0 auto;
   }
-`;
-
-const IconRow = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 const Footer: FunctionComponent = React.memo(() => {
@@ -259,19 +253,6 @@ const Footer: FunctionComponent = React.memo(() => {
                     {intl.formatMessage(messages.tos)}
                   </StyledLink>
                 </p>
-                <StyledLink
-                  external
-                  target="_blank"
-                  href="https://twitter.com/Hauser_AG"
-                  negative
-                >
-                  <IconRow>
-                    <Icon margin>
-                      <FaTwitter />
-                    </Icon>
-                    Twitter
-                  </IconRow>
-                </StyledLink>
               </BorderBox>
             </Flex>
           </Container>

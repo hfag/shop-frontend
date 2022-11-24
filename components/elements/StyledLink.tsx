@@ -17,25 +17,34 @@ const _StyledLink = styled.span<IProps>`
   height: 100%;
   cursor: pointer;
 
-  font-weight: ${({ active }) => (active ? "bold" : "normal")};
   display: ${({ block }) => (block ? "inline-block" : "inline")};
 
-  color: ${({ negative }) => (negative ? colors.primaryContrast : colors.font)};
+  .link-container {
+    height: 100%;
 
-  text-decoration: none;
+    font-weight: ${({ active }) => (active ? "bold" : "normal")};
+    display: ${({ block }) => (block ? "inline-block" : "inline")};
 
-  ${({ noHover }) =>
-    noHover
-      ? ""
-      : `
+    color: ${({ negative }) =>
+      negative ? colors.primaryContrast : colors.font};
+
+    text-decoration: none;
+
+    ${({ noHover }) =>
+      noHover
+        ? ""
+        : `
     &:hover {
       text-decoration: underline;
     }
   `}
+  }
 `;
 
 const StyledNextLink = styled(Link)`
+  height: 100%;
   text-decoration: none;
+  display: inline-block;
 `;
 
 const BorderLink = styled(_StyledLink)`
@@ -88,6 +97,7 @@ const StyledLink: FunctionComponent<{
         }
       >
         <a
+          className="link-container"
           rel={rel}
           title={title}
           target={target}
@@ -108,13 +118,16 @@ const StyledLink: FunctionComponent<{
         onClick={onClick}
       >
         <LinkComponent
+          block={block}
           negative={negative}
           noHover={noHover}
           active={
             typeof active !== "undefined" ? active : href === router.pathname
           }
         >
-          {flex ? <Flexbar>{children}</Flexbar> : children}
+          <span className="link-container">
+            {flex ? <Flexbar>{children}</Flexbar> : children}
+          </span>
         </LinkComponent>
       </StyledNextLink>
     );

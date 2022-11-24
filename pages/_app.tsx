@@ -24,6 +24,7 @@ const font = localFont({
   preload: true,
   fallback: ["Helvetica", "Arial", "sans-serif"],
   variable: "--main-font",
+  display: "swap",
 });
 
 export default class MyApp extends App {
@@ -41,7 +42,6 @@ export default class MyApp extends App {
           select,
           textarea {
             font-family: ${font.style.fontFamily};
-            font-display: swap;
           }
         `}</style>
         <Component {...pageProps} />

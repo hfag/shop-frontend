@@ -227,8 +227,8 @@ const Footer: FunctionComponent = React.memo(() => {
                 </IconList>
               </BorderBox>
               <BorderBox widths={[1, 1, 1, 1 / 3, 1 / 3]} paddingX={3}>
+                <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
                 <p>
-                  <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
                   {intl.formatMessage(messages.about)}{" "}
                   <StyledLink
                     underlined

@@ -44,6 +44,7 @@ const _StyledLink = styled.span<IProps>`
 const StyledInlineBlockNextLink = styled(Link)`
   height: 100%;
   width: 100%;
+  display: inline-block;
   text-decoration: none;
 `;
 
@@ -51,7 +52,6 @@ const StyledInlineNextLink = styled(Link)`
   height: 100%;
   width: 100%;
   text-decoration: none;
-  display: inline-block;
 `;
 
 const BorderLink = styled(_StyledLink)`

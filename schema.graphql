@@ -11,7 +11,7 @@ type Query {
 
   """
   The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
-  state of `PaymentApproved` or `PaymentSettled`, then that Order is no longer considered "active" and this
+  state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
   query will once again return `null`.
   """
   activeOrder: Order
@@ -27,7 +27,7 @@ type Query {
   collections(options: CollectionListOptions): CollectionList!
 
   """
-  Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is speicified, an error will result.
+  Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is specified, an error will result.
   """
   collection(id: ID, slug: String): Collection
 
@@ -76,7 +76,7 @@ type Query {
   orderByCode(code: String!): Order
 
   """
-  Get a Product either by id or slug. If neither 'id' nor 'slug' is speicified, an error will result.
+  Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result.
   """
   product(id: ID, slug: String): Product
 
@@ -199,7 +199,7 @@ type Mutation {
      verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
      verified and authenticated in one step.
   2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
-     verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosed password of the Customer. The Customer is then
+     verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosen password of the Customer. The Customer is then
      verified and authenticated in one step.
 
   _If `authOptions.requireVerification` is set to `false`:_
@@ -240,7 +240,7 @@ type Mutation {
   """
   Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
 
-  If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
+  If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the password _must_ be
   provided here.
   """
   verifyCustomerAccount(
@@ -418,6 +418,7 @@ enum GlobalFlag {
 enum AdjustmentType {
   PROMOTION
   DISTRIBUTED_ORDER_PROMOTION
+  OTHER
 }
 
 enum DeletionResult {
@@ -436,6 +437,31 @@ enum DeletionResult {
 @description
 Permissions for administrators and customers. Used to control access to
 GraphQL resolvers via the {@link Allow} decorator.
+
+## Understanding Permission.Owner
+
+`Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
+be accessible to the "owner" of that resource.
+
+For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
+based on the activeUserId of the current session. As a result, the resolver code looks like this:
+
+@example
+```TypeScript
+\@Query()
+\@Allow(Permission.Owner)
+async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
+  const userId = ctx.activeUserId;
+  if (userId) {
+    return this.customerService.findOneByUserId(ctx, userId);
+  }
+}
+```
+
+Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
+nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
+of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
+
 
 @docsCategory common
 """
@@ -880,17 +906,19 @@ enum ErrorCode {
   ORDER_LIMIT_ERROR
   NEGATIVE_QUANTITY_ERROR
   INSUFFICIENT_STOCK_ERROR
+  COUPON_CODE_INVALID_ERROR
+  COUPON_CODE_EXPIRED_ERROR
+  COUPON_CODE_LIMIT_ERROR
   ORDER_MODIFICATION_ERROR
   INELIGIBLE_SHIPPING_METHOD_ERROR
+  NO_ACTIVE_ORDER_ERROR
   ORDER_PAYMENT_STATE_ERROR
   INELIGIBLE_PAYMENT_METHOD_ERROR
   PAYMENT_FAILED_ERROR
   PAYMENT_DECLINED_ERROR
-  COUPON_CODE_INVALID_ERROR
-  COUPON_CODE_EXPIRED_ERROR
-  COUPON_CODE_LIMIT_ERROR
   ALREADY_LOGGED_IN_ERROR
   MISSING_PASSWORD_ERROR
+  PASSWORD_VALIDATION_ERROR
   PASSWORD_ALREADY_SET_ERROR
   VERIFICATION_TOKEN_INVALID_ERROR
   VERIFICATION_TOKEN_EXPIRED_ERROR
@@ -899,7 +927,6 @@ enum ErrorCode {
   PASSWORD_RESET_TOKEN_INVALID_ERROR
   PASSWORD_RESET_TOKEN_EXPIRED_ERROR
   NOT_VERIFIED_ERROR
-  NO_ACTIVE_ORDER_ERROR
 }
 
 enum LogicalOperator {
@@ -908,7 +935,7 @@ enum LogicalOperator {
 }
 
 """
-Retured when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured.
+Returned when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured.
 """
 type NativeAuthStrategyError implements ErrorResult {
   errorCode: ErrorCode!
@@ -936,7 +963,7 @@ type OrderStateTransitionError implements ErrorResult {
 }
 
 """
-Retured when attemting to create a Customer with an email address already registered to an existing User.
+Returned when attempting to create a Customer with an email address already registered to an existing User.
 """
 type EmailAddressConflictError implements ErrorResult {
   errorCode: ErrorCode!
@@ -944,7 +971,7 @@ type EmailAddressConflictError implements ErrorResult {
 }
 
 """
-Retured when the maximum order size limit has been reached.
+Returned when the maximum order size limit has been reached.
 """
 type OrderLimitError implements ErrorResult {
   errorCode: ErrorCode!
@@ -953,7 +980,7 @@ type OrderLimitError implements ErrorResult {
 }
 
 """
-Retured when attemting to set a negative OrderLine quantity.
+Returned when attempting to set a negative OrderLine quantity.
 """
 type NegativeQuantityError implements ErrorResult {
   errorCode: ErrorCode!
@@ -968,6 +995,59 @@ type InsufficientStockError implements ErrorResult {
   message: String!
   quantityAvailable: Int!
   order: Order!
+}
+
+"""
+Returned if the provided coupon code is invalid
+"""
+type CouponCodeInvalidError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  couponCode: String!
+}
+
+"""
+Returned if the provided coupon code is invalid
+"""
+type CouponCodeExpiredError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  couponCode: String!
+}
+
+"""
+Returned if the provided coupon code is invalid
+"""
+type CouponCodeLimitError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  couponCode: String!
+  limit: Int!
+}
+
+"""
+Returned when attempting to modify the contents of an Order that is not in the `AddingItems` state.
+"""
+type OrderModificationError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+"""
+Returned when attempting to set a ShippingMethod for which the Order is not eligible
+"""
+type IneligibleShippingMethodError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+}
+
+"""
+Returned when invoking a mutation which depends on there being an active Order on the
+current session.
+"""
+type NoActiveOrderError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
 }
 
 """
@@ -1120,6 +1200,41 @@ input DateOperators {
 }
 
 """
+Operators for filtering on a list of String fields
+"""
+input StringListOperators {
+  inList: String!
+}
+
+"""
+Operators for filtering on a list of Number fields
+"""
+input NumberListOperators {
+  inList: Float!
+}
+
+"""
+Operators for filtering on a list of Boolean fields
+"""
+input BooleanListOperators {
+  inList: Boolean!
+}
+
+"""
+Operators for filtering on a list of ID fields
+"""
+input IDListOperators {
+  inList: ID!
+}
+
+"""
+Operators for filtering on a list of Date fields
+"""
+input DateListOperators {
+  inList: DateTime!
+}
+
+"""
 Used to construct boolean expressions for filtering search results
 by FacetValue ID. Examples:
 
@@ -1224,6 +1339,27 @@ type PaymentMethodQuote {
   eligibilityMessage: String
   customFields: JSON
 }
+
+union UpdateOrderItemsResult =
+    Order
+  | OrderModificationError
+  | OrderLimitError
+  | NegativeQuantityError
+  | InsufficientStockError
+
+union RemoveOrderItemsResult = Order | OrderModificationError
+
+union SetOrderShippingMethodResult =
+    Order
+  | OrderModificationError
+  | IneligibleShippingMethodError
+  | NoActiveOrderError
+
+union ApplyCouponCodeResult =
+    Order
+  | CouponCodeExpiredError
+  | CouponCodeInvalidError
+  | CouponCodeLimitError
 
 type Country implements Node {
   id: ID!
@@ -3285,6 +3421,7 @@ type OrderList implements PaginatedList {
 }
 
 type ShippingLine {
+  id: ID!
   shippingMethod: ShippingMethod!
   price: Int!
   priceWithTax: Int!
@@ -3447,6 +3584,7 @@ type OrderLine implements Node {
   discounts: [Discount!]!
   taxLines: [TaxLine!]!
   order: Order!
+  fulfillments: [Fulfillment!]
   customFields: OrderLineCustomFields
 }
 
@@ -3480,11 +3618,17 @@ type Refund implements Node {
   metadata: JSON
 }
 
+type FulfillmentLineSummary {
+  orderLine: OrderLine!
+  quantity: Int!
+}
+
 type Fulfillment implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   orderItems: [OrderItem!]!
+  summary: [FulfillmentLineSummary!]!
   state: String!
   method: String!
   trackingCode: String
@@ -3615,7 +3759,7 @@ type SearchResult {
   collectionIds: [ID!]!
 
   """
-  A relevence score for the result. Differs between database implementations
+  A relevance score for the result. Differs between database implementations
   """
   score: Float!
   inStock: Boolean
@@ -3762,6 +3906,7 @@ type ShippingMethod implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  languageCode: LanguageCode!
   code: String!
   name: String!
   description: String!
@@ -3854,22 +3999,6 @@ type Zone implements Node {
 }
 
 """
-Returned when attempting to modify the contents of an Order that is not in the `AddingItems` state.
-"""
-type OrderModificationError implements ErrorResult {
-  errorCode: ErrorCode!
-  message: String!
-}
-
-"""
-Returned when attempting to set a ShippingMethod for which the Order is not eligible
-"""
-type IneligibleShippingMethodError implements ErrorResult {
-  errorCode: ErrorCode!
-  message: String!
-}
-
-"""
 Returned when attempting to add a Payment to an Order that is not in the `ArrangingPayment` state.
 """
 type OrderPaymentStateError implements ErrorResult {
@@ -3905,35 +4034,7 @@ type PaymentDeclinedError implements ErrorResult {
 }
 
 """
-Returned if the provided coupon code is invalid
-"""
-type CouponCodeInvalidError implements ErrorResult {
-  errorCode: ErrorCode!
-  message: String!
-  couponCode: String!
-}
-
-"""
-Returned if the provided coupon code is invalid
-"""
-type CouponCodeExpiredError implements ErrorResult {
-  errorCode: ErrorCode!
-  message: String!
-  couponCode: String!
-}
-
-"""
-Returned if the provided coupon code is invalid
-"""
-type CouponCodeLimitError implements ErrorResult {
-  errorCode: ErrorCode!
-  message: String!
-  couponCode: String!
-  limit: Int!
-}
-
-"""
-Retured when attemting to set the Customer for an Order when already logged in.
+Returned when attempting to set the Customer for an Order when already logged in.
 """
 type AlreadyLoggedInError implements ErrorResult {
   errorCode: ErrorCode!
@@ -3941,7 +4042,7 @@ type AlreadyLoggedInError implements ErrorResult {
 }
 
 """
-Retured when attemting to register or verify a customer account without a password, when one is required.
+Returned when attempting to register or verify a customer account without a password, when one is required.
 """
 type MissingPasswordError implements ErrorResult {
   errorCode: ErrorCode!
@@ -3949,7 +4050,16 @@ type MissingPasswordError implements ErrorResult {
 }
 
 """
-Retured when attemting to verify a customer account with a password, when a password has already been set.
+Returned when attempting to register or verify a customer account where the given password fails password validation.
+"""
+type PasswordValidationError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  validationErrorMessage: String!
+}
+
+"""
+Returned when attempting to verify a customer account with a password, when a password has already been set.
 """
 type PasswordAlreadySetError implements ErrorResult {
   errorCode: ErrorCode!
@@ -3957,7 +4067,7 @@ type PasswordAlreadySetError implements ErrorResult {
 }
 
 """
-Retured if the verification token (used to verify a Customer's email address) is either
+Returned if the verification token (used to verify a Customer's email address) is either
 invalid or does not match any expected tokens.
 """
 type VerificationTokenInvalidError implements ErrorResult {
@@ -3975,7 +4085,7 @@ type VerificationTokenExpiredError implements ErrorResult {
 }
 
 """
-Retured if the token used to change a Customer's email address is either
+Returned if the token used to change a Customer's email address is either
 invalid or does not match any expected tokens.
 """
 type IdentifierChangeTokenInvalidError implements ErrorResult {
@@ -3984,7 +4094,7 @@ type IdentifierChangeTokenInvalidError implements ErrorResult {
 }
 
 """
-Retured if the token used to change a Customer's email address is valid, but has
+Returned if the token used to change a Customer's email address is valid, but has
 expired according to the `verificationTokenDuration` setting in the AuthOptions.
 """
 type IdentifierChangeTokenExpiredError implements ErrorResult {
@@ -3993,7 +4103,7 @@ type IdentifierChangeTokenExpiredError implements ErrorResult {
 }
 
 """
-Retured if the token used to reset a Customer's password is either
+Returned if the token used to reset a Customer's password is either
 invalid or does not match any expected tokens.
 """
 type PasswordResetTokenInvalidError implements ErrorResult {
@@ -4002,7 +4112,7 @@ type PasswordResetTokenInvalidError implements ErrorResult {
 }
 
 """
-Retured if the token used to reset a Customer's password is valid, but has
+Returned if the token used to reset a Customer's password is valid, but has
 expired according to the `verificationTokenDuration` setting in the AuthOptions.
 """
 type PasswordResetTokenExpiredError implements ErrorResult {
@@ -4015,15 +4125,6 @@ Returned if `authOptions.requireVerification` is set to `true` (which is the def
 and an unverified user attempts to authenticate.
 """
 type NotVerifiedError implements ErrorResult {
-  errorCode: ErrorCode!
-  message: String!
-}
-
-"""
-Returned when invoking a mutation which depends on there being an active Order on the
-current session.
-"""
-type NoActiveOrderError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
 }
@@ -4206,27 +4307,6 @@ input ProductVariantListOptions {
   filterOperator: LogicalOperator
 }
 
-union UpdateOrderItemsResult =
-    Order
-  | OrderModificationError
-  | OrderLimitError
-  | NegativeQuantityError
-  | InsufficientStockError
-
-union RemoveOrderItemsResult = Order | OrderModificationError
-
-union SetOrderShippingMethodResult =
-    Order
-  | OrderModificationError
-  | IneligibleShippingMethodError
-  | NoActiveOrderError
-
-union ApplyCouponCodeResult =
-    Order
-  | CouponCodeExpiredError
-  | CouponCodeInvalidError
-  | CouponCodeLimitError
-
 union AddPaymentToOrderResult =
     Order
   | OrderPaymentStateError
@@ -4247,6 +4327,7 @@ union SetCustomerForOrderResult =
 union RegisterCustomerAccountResult =
     Success
   | MissingPasswordError
+  | PasswordValidationError
   | NativeAuthStrategyError
 
 union RefreshCustomerVerificationResult = Success | NativeAuthStrategyError
@@ -4256,12 +4337,14 @@ union VerifyCustomerAccountResult =
   | VerificationTokenInvalidError
   | VerificationTokenExpiredError
   | MissingPasswordError
+  | PasswordValidationError
   | PasswordAlreadySetError
   | NativeAuthStrategyError
 
 union UpdateCustomerPasswordResult =
     Success
   | InvalidCredentialsError
+  | PasswordValidationError
   | NativeAuthStrategyError
 
 union RequestUpdateCustomerEmailAddressResult =
@@ -4282,7 +4365,9 @@ union ResetPasswordResult =
     CurrentUser
   | PasswordResetTokenInvalidError
   | PasswordResetTokenExpiredError
+  | PasswordValidationError
   | NativeAuthStrategyError
+  | NotVerifiedError
 
 union NativeAuthenticationResult =
     CurrentUser

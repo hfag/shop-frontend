@@ -4,7 +4,6 @@ import {
   FaMapMarkerAlt as MapMarker,
   FaPhone as Phone,
 } from "react-icons/fa";
-import { LazyImage } from "react-lazy-images";
 import { defineMessages, useIntl } from "react-intl";
 import Container from "./layout/Container";
 import React, { FunctionComponent } from "react";
@@ -14,7 +13,6 @@ import { colors, media } from "../utilities/style";
 import { pageSlugsByLanguage, pathnamesByLanguage } from "../utilities/urls";
 import Box from "./layout/Box";
 import Flex from "./layout/Flex";
-import Placeholder from "./elements/Placeholder";
 import StyledLink from "./elements/StyledLink";
 
 const messages = defineMessages({
@@ -120,30 +118,18 @@ const Footer: FunctionComponent = React.memo(() => {
           <Container>
             <Flex flexWrap="wrap">
               <BorderBox widths={[1, 1, 1, 1 / 3, 1 / 3]} paddingX={3}>
-                <LazyImage
+                <img
                   src="/images/logo/logo_negative.svg"
+                  loading="lazy"
                   alt="Logo"
-                  placeholder={({ /*imageProps,*/ ref }) => (
-                    <div ref={ref}>
-                      <Placeholder block />
-                    </div>
-                  )}
-                  actual={({ imageProps }) => (
-                    <img {...imageProps} className="logo" />
-                  )}
+                  className="logo"
                 />
                 <br />
-                <LazyImage
+                <img
                   src="/images/logo/name_slogan_negative.svg"
+                  loading="lazy"
                   alt="Slogan"
-                  placeholder={({ /*imageProps,*/ ref }) => (
-                    <div ref={ref}>
-                      <Placeholder block />
-                    </div>
-                  )}
-                  actual={({ imageProps }) => (
-                    <img {...imageProps} className="slogan" />
-                  )}
+                  className="slogan"
                 />
               </BorderBox>
               <BorderBox widths={[1, 1, 1 / 3, 1 / 3]} paddingX={3}>

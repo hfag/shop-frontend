@@ -1,4 +1,3 @@
-import { LazyImage } from "react-lazy-images";
 import React, { CSSProperties, FunctionComponent } from "react";
 
 import { borders } from "../../utilities/style";
@@ -38,38 +37,31 @@ const StyledImage: FunctionComponent<{
     const h = originalHeight || height;
 
     return !placeholder ? (
-      <LazyImage
-        src={src}
-        alt={alt}
-        placeholder={({ /*imageProps,*/ ref }) => (
-          <div ref={ref}>
-            <Placeholder block />
-          </div>
-        )}
-        actual={({ imageProps }) =>
-          squared ? (
-            <div>
-              <img
-                {...imageProps}
-                className={w < h ? "b-height" : "b-width"}
-                style={css}
-                width={width}
-                height={height}
-                alt={alt}
-              />
-            </div>
-          ) : (
+      <>
+        {squared ? (
+          <div>
             <img
-              {...imageProps}
+              src={src}
               className={w < h ? "b-height" : "b-width"}
+              loading="lazy"
               style={css}
               width={width}
               height={height}
               alt={alt}
             />
-          )
-        }
-      />
+          </div>
+        ) : (
+          <img
+            src={src}
+            className={w < h ? "b-height" : "b-width"}
+            loading="lazy"
+            style={css}
+            width={width}
+            height={height}
+            alt={alt}
+          />
+        )}
+      </>
     ) : (
       <div>
         <Placeholder block />

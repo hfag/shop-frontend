@@ -57,7 +57,7 @@ export default async function handler(
       case "product":
         await Promise.all(
           languages.map((lang, index) => {
-            return res.unstable_revalidate(
+            return res.revalidate(
               `/${lang}/${pathnamesByLanguage.product.languages[lang]}/${slugs[index]}`
             );
           })
@@ -66,10 +66,10 @@ export default async function handler(
       case "collection":
         await Promise.all([
           /* Front pages */
-          ...languages.map((lang) => res.unstable_revalidate(`/${lang}`)),
+          ...languages.map((lang) => res.revalidate(`/${lang}`)),
           /* Collection / Product category pages */
           ...languages.map((lang, index) => {
-            return res.unstable_revalidate(
+            return res.revalidate(
               `/${lang}/${pathnamesByLanguage.productCategory.languages[lang]}/${slugs[index]}`
             );
           }),
@@ -78,7 +78,7 @@ export default async function handler(
       case "page":
         await Promise.all(
           languages.map((lang, index) => {
-            return res.unstable_revalidate(
+            return res.revalidate(
               `/${lang}/${pathnamesByLanguage.page.languages[lang]}/${slugs[index]}`
             );
           })
@@ -87,10 +87,10 @@ export default async function handler(
       case "post":
         await Promise.all([
           /* Front page */
-          ...languages.map((lang) => res.unstable_revalidate(`/${lang}`)),
+          ...languages.map((lang) => res.revalidate(`/${lang}`)),
           /* Collection / Product category pages */
           ...languages.map((lang, index) => {
-            return res.unstable_revalidate(
+            return res.revalidate(
               `/${lang}/${pathnamesByLanguage.post.languages[lang]}/${slugs[index]}`
             );
           }),

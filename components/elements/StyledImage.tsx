@@ -40,31 +40,26 @@ const StyledImage: FunctionComponent<{
     const w = originalWidth || width;
     const h = originalHeight || height;
 
-    const srcSet =
-      previewUrl &&
-      `${previewUrl}?preset=small 300w, ${previewUrl}?preset=medium 500w, ${previewUrl}?preset=large 800w`;
-
     const Image = (
       <picture>
         {previewUrl && (
           <>
             <source
-              srcSet={`${previewUrl}?preset=small&format=webp 300w, ${previewUrl}?preset=medium&format=webp 500w, ${previewUrl}?preset=large&format=webp 800w`}
+              srcSet={`${previewUrl}?preset=small&format=webp 300w`}
               type="image/webp"
             />
             <source
-              srcSet={`${previewUrl}?preset=small&format=avif 300w, ${previewUrl}?preset=medium&format=avif 500w, ${previewUrl}?preset=large&format=avif 800w`}
+              srcSet={`${previewUrl}?preset=small&format=avif 300w`}
               type="image/avif"
             />
             <source
-              srcSet={`${previewUrl}?preset=small&format=jpeg 300w, ${previewUrl}?preset=medium&format=jpeg 500w, ${previewUrl}?preset=large&format=jpeg 800w`}
+              srcSet={`${previewUrl}?preset=small&format=jpeg 300w`}
               type="image/jpeg"
             />
           </>
         )}
         <img
           src={src}
-          srcSet={srcSet}
           className={w < h ? "b-height" : "b-width"}
           loading={eagerLoading ? "eager" : "lazy"}
           style={css}

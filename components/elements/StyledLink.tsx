@@ -13,10 +13,9 @@ interface IProps {
   noHover?: boolean;
 }
 
-const _StyledLink = styled.a<IProps>`
+const _StyledLink = styled.span<IProps>`
   height: 100%;
   cursor: pointer;
-  text-decoration: none;
 
   font-weight: ${({ active }) => (active ? "bold" : "normal")};
   display: ${({ block }) => (block ? "inline-block" : "inline")};
@@ -33,6 +32,10 @@ const _StyledLink = styled.a<IProps>`
       text-decoration: underline;
     }
   `}
+`;
+
+const StyledNextLink = styled(Link)`
+  text-decoration: none;
 `;
 
 const BorderLink = styled(_StyledLink)`
@@ -70,16 +73,9 @@ const StyledLink: FunctionComponent<{
 }) => {
   const router = useRouter();
 
-  const LinkComponent: StyledComponent<
-    {
-      href?: string;
-      rel?: string;
-      title?: string;
-      target?: string;
-      onClick?: (e: MouseEvent) => void;
-    },
-    IProps
-  > = underlined ? BorderLink : _StyledLink;
+  const LinkComponent: StyledComponent<unknown, IProps> = underlined
+    ? BorderLink
+    : _StyledLink;
 
   if (external || onClick) {
     return (
@@ -87,36 +83,40 @@ const StyledLink: FunctionComponent<{
         negative={negative}
         block={block}
         noHover={noHover}
-        rel={rel}
-        title={title}
-        target={target}
-        href={href}
-        onClick={onClick}
         active={
           typeof active !== "undefined" ? active : href === router.pathname
         }
       >
-        {flex ? <Flexbar>{children}</Flexbar> : children}
-      </LinkComponent>
-    );
-  } else {
-    return (
-      <Link href={href}>
-        <LinkComponent
-          negative={negative}
-          noHover={noHover}
+        <a
           rel={rel}
           title={title}
           target={target}
           href={href}
           onClick={onClick}
+        >
+          {flex ? <Flexbar>{children}</Flexbar> : children}
+        </a>
+      </LinkComponent>
+    );
+  } else {
+    return (
+      <StyledNextLink
+        href={href}
+        rel={rel}
+        title={title}
+        target={target}
+        onClick={onClick}
+      >
+        <LinkComponent
+          negative={negative}
+          noHover={noHover}
           active={
             typeof active !== "undefined" ? active : href === router.pathname
           }
         >
           {flex ? <Flexbar>{children}</Flexbar> : children}
         </LinkComponent>
-      </Link>
+      </StyledNextLink>
     );
   }
 };

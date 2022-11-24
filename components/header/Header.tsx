@@ -86,18 +86,6 @@ const HtmlHead: FunctionComponent<{ intl: IntlShape }> = React.memo(
         content={intl.formatMessage(messages.siteDescription)}
       />
       <link rel="preconnect" href={WP_BLOG_URL} />
-      <link
-        rel="preload"
-        href="/public/fonts/694048/de34f32a-1665-4069-8dd9-61abfe04b68f.woff2"
-        as="font"
-        type="font/woff2"
-      />
-      <link
-        rel="preload"
-        href="/public/fonts/694054/21f9012d-b72a-422e-84c3-96619ee09ae4.woff2"
-        as="font"
-        type="font/woff2"
-      />
       <meta name="format-detection" content="telephone=no" />
       <meta name="apple-mobile-web-app-capable" content="no" />
       <link

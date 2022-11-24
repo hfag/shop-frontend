@@ -200,7 +200,7 @@ const EditProduct: FunctionComponent<{
   return (
     <div>
       <Head>
-        <title>{stripTags(product.name)} - Hauser Feuerschutz AG</title>
+        <title>{`${stripTags(product.name)} - Hauser Feuerschutz AG`}</title>
         {/* <meta name="description" content={stripTags(product.description)} /> */}
         <link
           rel="canonical"

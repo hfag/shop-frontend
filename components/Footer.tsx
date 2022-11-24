@@ -65,8 +65,9 @@ const StyledFooter = styled.footer`
     width: 75%;
   }
 
-  h4 {
+  .about-header {
     margin: 0 0 0.25rem 0;
+    font-weight: 500;
   }
 `;
 
@@ -213,7 +214,9 @@ const Footer: FunctionComponent = React.memo(() => {
                 </IconList>
               </BorderBox>
               <BorderBox widths={[1, 1, 1, 1 / 3, 1 / 3]} paddingX={3}>
-                <h4>{intl.formatMessage(messages.aboutTitle)}</h4>
+                <p className="about-header">
+                  {intl.formatMessage(messages.aboutTitle)}
+                </p>
                 <p>
                   {intl.formatMessage(messages.about)}{" "}
                   <StyledLink

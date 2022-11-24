@@ -28,6 +28,7 @@ const Asset: FunctionComponent<{
       placeholder={!asset}
       squared={squared}
       src={asset?.preview ? `${asset.preview}?preset=${p}` : undefined}
+      previewUrl={asset?.preview}
       width={SIZE_BY_PRESET[p].width}
       height={SIZE_BY_PRESET[p].height}
       originalHeight={asset && "height" in asset ? asset.height : undefined}

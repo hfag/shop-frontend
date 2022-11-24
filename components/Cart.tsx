@@ -60,7 +60,7 @@ const Cart: FunctionComponent = React.memo(() => {
     <Card>
       <Head>
         <title>
-          {intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG
+          {`${intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG`}
         </title>
         <meta
           name="description"

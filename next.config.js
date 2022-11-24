@@ -1,4 +1,3 @@
-const withPlugins = require("next-compose-plugins");
 const withTM = require("next-transpile-modules")([
   "@formatjs/intl-relativetimeformat",
   "@formatjs/intl-utils",
@@ -26,8 +25,8 @@ const env = {
   PUBLIC_PATH: "/",
 };
 
-module.exports = withPlugins([withTM, withBundleAnalyzer({})], {
-  env,
-});
-
-module.exports.env = env;
+module.exports = withTM(
+  withBundleAnalyzer({
+    env,
+  })
+);

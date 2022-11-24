@@ -40,8 +40,9 @@ const Page404 = React.memo(() => {
       <Card>
         <Head>
           <title>
-            {intl.formatMessage(errorMessages.siteTitle)} - Hauser Feuerschutz
-            AG
+            {`${intl.formatMessage(
+              errorMessages.siteTitle
+            )} - Hauser Feuerschutz AG`}
           </title>
           <meta
             name="description"

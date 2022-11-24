@@ -16,7 +16,7 @@ const Page: FunctionComponent<{ page?: PageType }> = React.memo(({ page }) => {
   return (
     <React.Fragment>
       <Head>
-        <title>{stripTags(page.title)} - Hauser Feuerschutz AG</title>
+        <title>{`${stripTags(page.title)} - Hauser Feuerschutz AG`}</title>
         <meta name="description" content={stripTags(page.excerpt)} />
         <link
           rel="canonical"

@@ -56,6 +56,7 @@ const PostComponent: FunctionComponent<{ intl: IntlShape; post: PostPreview }> =
                 width={post.thumbnail.width}
                 height={post.thumbnail.height}
                 alt={post.thumbnail.alt || post.title}
+                eagerLoading
               />
             </Box>
             <Box widths={[1, 1, 1, 1 / 2, 2 / 3]} paddingLeft={0.5}>

@@ -16,38 +16,42 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ hostname, port, dev });
 const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
-  const server = express();
-  server.all("*", (request, response) => {
-    //add locale for pages but no static assets
-    if (
-      !request.url.startsWith("/_next/") && //next js stuff
-      !request.url.startsWith("/api") && // global urls
-      request.url.indexOf(".") === -1 //static files from public folder
-    ) {
-      let locale = getLanguageFromPathname(request.url, "no-language");
-      if (locale === "no-language") {
-        //if the requested path doesn't contain a language, redirect
-        response.redirect(
-          `/${DEFAULT_LANGUAGE}${request.url === "/" ? "" : request.url}`
-        );
-        return;
-      } else if (request.url.endsWith("/")) {
-        response.redirect(request.url.substring(0, request.url.length - 1));
-        return;
+app
+  .prepare()
+  .then(() => {
+    console.log("y");
+    const server = express();
+    server.all("*", (request, response) => {
+      //add locale for pages but no static assets
+      if (
+        !request.url.startsWith("/_next/") && //next js stuff
+        !request.url.startsWith("/api") && // global urls
+        request.url.indexOf(".") === -1 //static files from public folder
+      ) {
+        let locale = getLanguageFromPathname(request.url, "no-language");
+        if (locale === "no-language") {
+          //if the requested path doesn't contain a language, redirect
+          response.redirect(
+            `/${DEFAULT_LANGUAGE}${request.url === "/" ? "" : request.url}`
+          );
+          return;
+        } else if (request.url.endsWith("/")) {
+          response.redirect(request.url.substring(0, request.url.length - 1));
+          return;
+        }
+
+        request.locale = locale;
       }
 
-      request.locale = locale;
-    }
+      handle(request, response);
+    });
 
-    handle(request, response);
-  });
-
-  server.listen(port, (err) => {
-    if (err) throw err;
-    //eslint-disable-next-line
-    console.log(
-      `> Ready on http://${hostname}:${port} - env ${process.env.NODE_ENV}`
-    );
-  });
-});
+    server.listen(port, (err) => {
+      if (err) throw err;
+      //eslint-disable-next-line
+      console.log(
+        `> Ready on http://${hostname}:${port} - env ${process.env.NODE_ENV}`
+      );
+    });
+  })
+  .catch(console.error);

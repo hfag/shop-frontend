@@ -41,6 +41,7 @@ export default class MyApp extends App {
           select,
           textarea {
             font-family: ${font.style.fontFamily};
+            font-display: swap;
           }
         `}</style>
         <Component {...pageProps} />

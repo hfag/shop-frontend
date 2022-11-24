@@ -41,8 +41,15 @@ const _StyledLink = styled.span<IProps>`
   }
 `;
 
-const StyledNextLink = styled(Link)`
+const StyledInlineBlockNextLink = styled(Link)`
   height: 100%;
+  width: 100%;
+  text-decoration: none;
+`;
+
+const StyledInlineNextLink = styled(Link)`
+  height: 100%;
+  width: 100%;
   text-decoration: none;
   display: inline-block;
 `;
@@ -109,6 +116,10 @@ const StyledLink: FunctionComponent<{
       </LinkComponent>
     );
   } else {
+    const StyledNextLink = block
+      ? StyledInlineBlockNextLink
+      : StyledInlineNextLink;
+
     return (
       <StyledNextLink
         href={href}

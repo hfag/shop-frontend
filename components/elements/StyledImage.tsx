@@ -7,6 +7,7 @@ import Placeholder from "./Placeholder";
 const Picture = styled.picture`
   display: flex;
   justify-content: center;
+  align-items: center;
 `;
 
 const Img = styled.img`

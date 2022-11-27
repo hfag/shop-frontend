@@ -31,18 +31,20 @@ const SidebarProducts: FunctionComponent<{
       <SidebarBreadcrumb>
         <H4>{intl.formatMessage(product.products)}</H4>
       </SidebarBreadcrumb>
-      {products.map((product, index) => (
-        <StyledLink
-          key={index}
-          href={`/${intl.locale}/${
-            pathnamesByLanguage.product.languages[intl.locale]
-          }/${product.slug}`}
-        >
-          <SidebarBreadcrumb active={false}>
-            <div>{product.name}</div>
-          </SidebarBreadcrumb>
-        </StyledLink>
-      ))}
+      {products
+        .sort((a, b) => a.customFields.ordering - b.customFields.ordering)
+        .map((product) => (
+          <StyledLink
+            key={product.id}
+            href={`/${intl.locale}/${
+              pathnamesByLanguage.product.languages[intl.locale]
+            }/${product.slug}`}
+          >
+            <SidebarBreadcrumb active={false}>
+              <div>{product.name}</div>
+            </SidebarBreadcrumb>
+          </StyledLink>
+        ))}
     </SidebarListWrapper>
   );
 };

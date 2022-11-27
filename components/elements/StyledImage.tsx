@@ -1,13 +1,19 @@
-import React, { CSSProperties, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
+import styled from "@emotion/styled";
 
 import { borders } from "../../utilities/style";
 import Placeholder from "./Placeholder";
 
-const css: CSSProperties = {
-  width: "100%",
-  height: "auto",
-  borderRadius: borders.radius,
-};
+const Picture = styled.picture`
+  display: flex;
+  justify-content: center;
+`;
+
+const Img = styled.img`
+  width: "100%";
+  height: "auto";
+  border-radius: ${borders.radius};
+`;
 
 /**
  * Renders a thumbnail
@@ -41,7 +47,7 @@ const StyledImage: FunctionComponent<{
     const h = originalHeight || height;
 
     const Image = (
-      <picture>
+      <Picture>
         {previewUrl && (
           <>
             <source
@@ -58,16 +64,15 @@ const StyledImage: FunctionComponent<{
             />
           </>
         )}
-        <img
+        <Img
           src={src}
           className={w < h ? "b-height" : "b-width"}
           loading={eagerLoading ? "eager" : "lazy"}
-          style={css}
           width={width}
           height={height}
           alt={alt}
         />
-      </picture>
+      </Picture>
     );
 
     return !placeholder ? (

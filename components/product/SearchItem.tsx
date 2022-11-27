@@ -45,12 +45,12 @@ const StyledProduct = styled.div`
 
       transform: translate(-50%, -50%);
 
-      &.b-height {
+      .b-height {
         height: 90% !important;
         width: auto !important;
       }
 
-      &.b-width {
+      .b-width {
         width: 90% !important;
         height: auto !important;
       }

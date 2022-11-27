@@ -37,12 +37,12 @@ const StyledCategory = styled.div`
 
         transform: translate(-50%, -50%);
 
-        &.b-height {
+        .b-height {
           height: 100% !important;
           width: auto !important;
         }
 
-        &.b-width {
+        .b-width {
           width: 100% !important;
           height: auto !important;
         }

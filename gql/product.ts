@@ -102,6 +102,7 @@ export const PRODUCT_FRAGMENT = `
   collections{
     id
     name
+    slug
     breadcrumbs{
       id
       slug
@@ -172,6 +173,7 @@ export const FULL_PRODUCT_FRAGMENT = `
   collections{
     id
     name
+    slug
     breadcrumbs{
       id
       slug

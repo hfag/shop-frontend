@@ -660,7 +660,7 @@ const Product: FunctionComponent<{
                 <tr>
                   <td>{intl.formatMessage(productMessages.categories)}</td>
                   <td>
-                    {product.collections.map(({ id, name }, index) => (
+                    {product.collections.map(({ id, name, slug }, index) => (
                       <span key={id}>
                         {index > 0 && ", "}
                         <StyledLink
@@ -669,7 +669,7 @@ const Product: FunctionComponent<{
                             pathnamesByLanguage.productCategory.languages[
                               intl.locale
                             ]
-                          }/${id}`}
+                          }/${slug}`}
                         >
                           {name}
                         </StyledLink>

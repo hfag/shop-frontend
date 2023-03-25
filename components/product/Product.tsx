@@ -274,7 +274,7 @@ const Product: FunctionComponent<{
             }, {})
         : defaultOptions
     );
-  }, [router.query.sku]);
+  }, [product.variants, router.query.sku]);
 
   /*useEffect(() => {
     const autoSelection: { [groupId: string]: ProductOption } = Object.keys(

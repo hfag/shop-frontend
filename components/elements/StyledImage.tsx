@@ -60,8 +60,8 @@ const StyledImage: FunctionComponent<{
               type="image/avif"
             />
             <source
-              srcSet={`${previewUrl}?preset=small&format=jpeg 300w`}
-              type="image/jpeg"
+              srcSet={`${previewUrl}?preset=small&format=png 300w`}
+              type="image/png"
             />
           </>
         )}

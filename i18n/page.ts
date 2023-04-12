@@ -49,6 +49,10 @@ export default defineMessages({
     id: "pages.accountOrders",
     defaultMessage: "Bestellungen",
   },
+  accountReseller: {
+    id: "pages.accountResellerDiscounts",
+    defaultMessage: "Wiederverkäufer",
+  },
   login: {
     id: "pages.login",
     defaultMessage: "Login",

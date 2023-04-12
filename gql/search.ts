@@ -39,3 +39,30 @@ export const SEARCH = /* GraphQL */ `
     }
   }
 `;
+
+export const GET_PRODUCTS_BY_FACETS_IDS = /* GraphQL */ `
+  query GetProductsByFacetIds($facetValueIds: [ID!]!, $take: Int, $skip: Int) {
+    search(
+      input: {
+        facetValueIds: $facetValueIds
+        take: $take
+        skip: $skip
+        sort: { name: ASC }
+        groupByProduct: false
+      }
+    ) {
+      items {
+        sku
+        productVariantName
+        slug
+        price {
+          ... on SinglePrice {
+            value
+          }
+        }
+        facetValueIds
+      }
+      totalItems
+    }
+  }
+`;

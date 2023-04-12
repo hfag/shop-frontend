@@ -260,6 +260,9 @@
   "pages.accountOrders": {
     "defaultMessage": "Bestellungen"
   },
+  "pages.accountResellerDiscounts": {
+    "defaultMessage": "Wiederverkäufer"
+  },
   "pages.cart": {
     "defaultMessage": "Warenkorb"
   },

@@ -163,6 +163,7 @@ const Product: FunctionComponent<{
 
   const activeResellerDiscounts = useMemo(
     () => [
+      /* facets from product */
       ...(user
         ? user.resellerDiscounts.filter((discount) =>
             discount.facetValueIds.reduce(
@@ -174,6 +175,7 @@ const Product: FunctionComponent<{
             )
           )
         : []),
+      /* facets from variant */
       ...(user && selectedVariant
         ? user.resellerDiscounts.filter((discount) =>
             discount.facetValueIds.reduce(

@@ -108,6 +108,10 @@
         "path": "de/konto/details.tsx",
         "languages": { "de": "details", "fr": "details" }
       },
+      "reseller": {
+        "path": "de/konto/wiederverkaeufer.tsx",
+        "languages": { "de": "wiederverkaeufer", "fr": "revendeur" }
+      },
       "address": {
         "path": "de/konto/adressen",
         "languages": {

@@ -11,6 +11,9 @@
   "Account.overview": {
     "defaultMessage": "Übersicht"
   },
+  "Account.resellerDiscounts": {
+    "defaultMessage": "Wiederverkäufer"
+  },
   "Account.siteDescription": {
     "defaultMessage": "Verwalten Sie hier Ihr Kundenkonto bei der Hauser Feuerschutz AG. Beispielsweise können Sie die Lieferadresse anpassen."
   },
@@ -55,6 +58,12 @@
   },
   "AccountForm.unknownError": {
     "defaultMessage": "Beim Aktualisieren ist ein unbekannter Fehler aufgetreten. Bitte kontaktieren Sie uns."
+  },
+  "AccountResellerDiscounts.download": {
+    "defaultMessage": "Herunterladen"
+  },
+  "AccountResellerDiscounts.reseller": {
+    "defaultMessage": "Wiederverkäufer"
   },
   "AssetField.chooseFile": {
     "defaultMessage": "Wähle Datei"

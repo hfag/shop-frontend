@@ -1,8 +1,9 @@
 import { defineMessages, useIntl } from "react-intl";
-import React, { FunctionComponent, ReactNode } from "react";
+import React, { FunctionComponent, ReactNode, useContext } from "react";
 import styled from "@emotion/styled";
 
 import { ABSOLUTE_URL } from "../../utilities/api";
+import { AppContext } from "../AppWrapper";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Box from "../layout/Box";
 import Card from "../layout/Card";
@@ -38,6 +39,10 @@ const messages = defineMessages({
     id: "Account.addresses",
     defaultMessage: "Adressen",
   },
+  resellerDiscounts: {
+    id: "Account.resellerDiscounts",
+    defaultMessage: "Wiederverkäufer",
+  },
 });
 
 const ProfileNavigation = styled.ul`
@@ -71,6 +76,7 @@ const AccountContainer = styled.div`
 const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
   ({ children }) => {
     const intl = useIntl();
+    const { customer } = useContext(AppContext);
 
     return (
       <AccountContainer>
@@ -147,6 +153,21 @@ const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
                     {intl.formatMessage(order.orders)}
                   </StyledLink>
                 </li>
+                {customer?.resellerDiscounts &&
+                  customer?.resellerDiscounts.length > 0 && (
+                    <li>
+                      <StyledLink
+                        href={`/${intl.locale}/${
+                          pathnamesByLanguage.account.languages[intl.locale]
+                        }/${
+                          pathnamesByLanguage.account.pathnames.reseller
+                            .languages[intl.locale]
+                        }`}
+                      >
+                        {intl.formatMessage(messages.resellerDiscounts)}
+                      </StyledLink>
+                    </li>
+                  )}
                 <li>
                   <StyledLink
                     href={`/${intl.locale}/${

@@ -109,27 +109,6 @@ export const PRODUCT_FRAGMENT = `
       name
     }
   }
-  recommendations{
-    recommendation{
-      id
-      name
-      slug
-      facetValues {
-        id
-      }
-      variants {
-        price
-      }
-      collections{
-        id
-        name
-      }
-      featuredAsset{
-        ${ASSET_FRAGMENT}
-      }
-    }
-    type
-  }
 `;
 
 export const FULL_PRODUCT_FRAGMENT = `

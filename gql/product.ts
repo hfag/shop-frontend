@@ -226,6 +226,43 @@ export const GET_FULL_PRODUCT_BY_ID = /* GraphQL */ `
   }
 `;
 
+export const GET_EXPORT_PRODUCT_PAGE = /* GraphQL */ `
+  query GetProductPage($take: Int, $skip: Int) {
+    products(options: { take: $take, skip: $skip, sort: { name: ASC } }) {
+      totalItems
+      items {
+        name
+        customFields {
+          groupKey
+        }
+        facetValues {
+          id
+        }
+        variants {
+          sku
+          featuredAsset {
+            source
+          }
+          price
+          facetValues {
+            id
+          }
+          bulkDiscounts {
+            quantity
+            price
+          }
+          options {
+            name
+            group {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const ADMIN_UPDATE_CROSS_SELLS = /* GraphQL */ `
   mutation UpdateCrossSellingProducts($productId: ID!, $productIds: [ID!]!) {
     updateCrossSellingProducts(productId: $productId, productIds: $productIds)

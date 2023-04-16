@@ -1,8 +1,9 @@
 import { AppContext } from "../AppWrapper";
+import { GET_EXPORT_PRODUCT_PAGE } from "../../gql/product";
 import { GET_PRODUCTS_BY_FACETS_IDS } from "../../gql/search";
+import { Product, SearchResult } from "../../schema";
 import { Query } from "../../schema";
 import { ResellerDiscount } from "../../schema";
-import { SearchResult } from "../../schema";
 import { Unavailable } from "../administrator/Unavailable";
 import { defineMessages, useIntl } from "react-intl";
 import { pathnamesByLanguage } from "../../utilities/urls";
@@ -33,7 +34,7 @@ const ResellerWrapper = styled.div`
   }
 `;
 
-const ITEMS_PER_PAGE = 100;
+const ITEMS_PER_PAGE = 50;
 
 const mapSearchResult = (
   item: SearchResult,
@@ -67,47 +68,107 @@ const mapSearchResult = (
   };
 };
 
+type ExportProduct = {
+  [key: string]: string;
+};
+
+const mapProductItem = (
+  item: Product,
+  resellerDiscounts: ResellerDiscount[]
+): ExportProduct[] =>
+  item.variants.map<ExportProduct>((variant) => {
+    const facetValueIds = [
+      ...item.facetValues.map((v) => v.id),
+      ...variant.facetValues.map((v) => v.id),
+    ];
+
+    const activeResellerDiscounts = resellerDiscounts.filter((discount) =>
+      discount.facetValueIds.reduce(
+        (has, valueId) =>
+          has && facetValueIds.includes(valueId) ? true : false,
+        true
+      )
+    );
+
+    const discountedPrice = activeResellerDiscounts.reduce(
+      (price, d) => (1 - d.discount / 100) * price,
+      variant.price
+    );
+
+    const p = {
+      group: item.customFields?.groupKey,
+      sku: variant.sku,
+      name: item.name,
+      image: variant?.featuredAsset?.source,
+      price: (Math.round(variant.price) / 100).toFixed(2),
+      discounted_price: (Math.round(discountedPrice) / 100).toFixed(2),
+      reseller_discounts: activeResellerDiscounts
+        .map((d) => `${d.discount}%`)
+        .join(";"),
+      bulk_discounts: variant.bulkDiscounts
+        .map(
+          (d) => `(${d.quantity}, ${(Math.round(d.price) / 100).toFixed(2)})`
+        )
+        .join(";"),
+    };
+
+    for (const option of variant.options) {
+      p[option.group.name] = option.name;
+    }
+
+    return p;
+  });
+
 const getFullResellerList = async (
   locale: string,
-  facetValueIds: string[],
   resellerDiscounts: ResellerDiscount[]
-) => {
-  const response = await request<{ search: Query["search"] }>(
+): Promise<string> => {
+  const response = await request<{ products: Query["products"] }>(
     locale,
-    GET_PRODUCTS_BY_FACETS_IDS,
+    GET_EXPORT_PRODUCT_PAGE,
     {
-      facetValueIds,
       take: ITEMS_PER_PAGE,
       skip: 0,
     }
   );
 
-  const items = response.search.items.map((item) =>
-    mapSearchResult(item, resellerDiscounts)
+  const items = response.products.items.map((item: Product) =>
+    mapProductItem(item, resellerDiscounts)
   );
-  let totalItems = response.search.totalItems;
+  let totalItems = response.products.totalItems;
 
   while (items.length < totalItems) {
-    const response = await request<{ search: Query["search"] }>(
+    const response = await request<{ products: Query["products"] }>(
       locale,
-      GET_PRODUCTS_BY_FACETS_IDS,
+      GET_EXPORT_PRODUCT_PAGE,
       {
-        facetValueIds,
         take: ITEMS_PER_PAGE,
         skip: items.length,
       }
     );
 
-    totalItems = response.search.totalItems;
+    totalItems = response.products.totalItems;
 
     items.push(
-      ...response.search.items.map((item) =>
-        mapSearchResult(item, resellerDiscounts)
+      ...response.products.items.map((item: Product) =>
+        mapProductItem(item, resellerDiscounts)
       )
     );
+
+    // wait 300ms to reduce the likelihood of the server being overloaded
+    await new Promise((resolve) => setTimeout(resolve, 300));
   }
 
-  return items;
+  const flattenedItems = items.flat();
+
+  const columns = Array.from(
+    new Set<string>(flattenedItems.flatMap(Object.keys))
+  );
+  const body = flattenedItems
+    .map((item) => columns.map((column) => `"${item[column] || ""}"`).join(","))
+    .join("\n");
+
+  return '"' + columns.join('","') + '"' + "\n" + body;
 };
 
 const AccountReseller = () => {
@@ -144,35 +205,22 @@ const AccountReseller = () => {
       return;
     }
 
-    const items = await getFullResellerList(
-      intl.locale,
-      facetValueIds,
-      customer.resellerDiscounts
-    );
+    try {
+      const csvFileData = await getFullResellerList(
+        intl.locale,
+        customer.resellerDiscounts
+      );
 
-    const fileData =
-      `sku,name,discount,price,discounted_price\n` +
-      items
-        .map(
-          (item) =>
-            item.sku +
-            "," +
-            '"' +
-            item.productVariantName.replaceAll('"', "") +
-            '",' +
-            item.discounts.map((d) => `${d}%`).join(";") +
-            "," +
-            (Math.round(item.price) / 100).toFixed(2) +
-            "," +
-            (Math.round(item.discountedPrice) / 100).toFixed(2)
-        )
-        .join("\n");
-    const blob = new Blob([fileData], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.download = "reseller-discounts.csv";
-    link.href = url;
-    link.click();
+      const blob = new Blob([csvFileData], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = "reseller-discounts.csv";
+      link.href = url;
+      link.click();
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   };
 
   const items = useMemo(() => {

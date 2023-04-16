@@ -78,11 +78,8 @@ const ButtonWrapper = styled.div<IProps>`
     opacity: 0;
     fill: none;
   }
-  .pb-container .pb-button svg.pb-progress-circle {
-    animation: ${({ state }) =>
-      state === "loading"
-        ? "spin 0.9s infinite cubic-bezier(0.085, 0.26, 0.935, 0.71)"
-        : "none"};
+  .pb-container.loading .pb-button svg.pb-progress-circle {
+    animation: spin 0.9s infinite cubic-bezier(0.085, 0.26, 0.935, 0.71);
   }
   .pb-container .pb-button svg.pb-progress-circle path {
     stroke: ${colors.secondary};

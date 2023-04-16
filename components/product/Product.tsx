@@ -219,9 +219,21 @@ const Product: FunctionComponent<{
     return null;
   }, [selectedVariant]);
 
-  const crosssells = [];
+  const crosssells = useMemo(
+    () =>
+      product.recommendations.filter(
+        (r) => r.type === RecommendationType.Crosssell
+      ),
+    [product]
+  );
 
-  const upsells = [];
+  const upsells = useMemo(
+    () =>
+      product.recommendations.filter(
+        (r) => r.type === RecommendationType.Upsell
+      ),
+    [product]
+  );
 
   const defaultOptions = useMemo(() => {
     //on the initial render select

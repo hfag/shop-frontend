@@ -28,8 +28,9 @@ const ImageContainer = styled.div`
   justify-content: space-between;
 
   img {
-    max-height: 80vh;
-    max-width: 50vw;
+    max-height: 90vh;
+    max-width: 90vw;
+    max-width: calc(100vw - 4rem);
     padding: 0.5rem 0;
   }
 
@@ -39,17 +40,25 @@ const ImageContainer = styled.div`
 `;
 
 const ImageStack = styled.div`
+  margin: 0 auto;
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 `;
 
 const ArrowLeft = styled(FaChevronLeft)`
-  margin-left: 2rem;
+  position: absolute;
+  left: 2rem;
+
+  filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
 `;
 
 const ArrowRight = styled(FaChevronRight)`
-  margin-right: 2rem;
+  position: absolute;
+  right: 2rem;
+
+  filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
 `;
 
 const Lightbox: FunctionComponent<{

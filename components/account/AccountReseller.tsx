@@ -8,6 +8,7 @@ import { Unavailable } from "../administrator/Unavailable";
 import { defineMessages, useIntl } from "react-intl";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Button from "../elements/Button";
+import Buttons from "../elements/Buttons";
 import Pagination from "../elements/Pagination";
 import Price from "../elements/Price";
 import React, { useContext, useMemo, useState } from "react";
@@ -22,9 +23,13 @@ const messages = defineMessages({
     id: "AccountResellerDiscounts.reseller",
     defaultMessage: "Wiederverkäufer",
   },
-  download: {
-    id: "AccountResellerDiscounts.download",
-    defaultMessage: "Herunterladen",
+  downloadCsv: {
+    id: "AccountResellerDiscounts.downloadCsv",
+    defaultMessage: "Herunterladen (CSV)",
+  },
+  downloadExcel: {
+    id: "AccountResellerDiscounts.downloadExcel",
+    defaultMessage: "Herunterladen (Excel)",
   },
 });
 
@@ -219,7 +224,29 @@ const AccountReseller = () => {
       link.click();
     } catch (e) {
       console.log(e);
-      throw e;
+      alert(e.message);
+    }
+  };
+
+  const onDownloadExcel = async () => {
+    if (!customer?.resellerDiscounts) {
+      alert("Please try again later");
+      return;
+    }
+
+    try {
+      // https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading
+      const XLSX = await import("xlsx");
+
+      const csvFileData = await getFullResellerList(
+        intl.locale,
+        customer.resellerDiscounts
+      );
+      const wb = XLSX.read(csvFileData, { type: "string" });
+      XLSX.writeFile(wb, "reseller-discounts.xlsx");
+    } catch (e) {
+      console.log(e);
+      alert(e.message);
     }
   };
 
@@ -240,9 +267,14 @@ const AccountReseller = () => {
   return (
     <ResellerWrapper>
       <h2>{intl.formatMessage(messages.reseller)}</h2>
-      <Button onClick={onDownloadList}>
-        {intl.formatMessage(messages.download)}
-      </Button>
+      <Buttons>
+        <Button onClick={onDownloadList}>
+          {intl.formatMessage(messages.downloadCsv)}
+        </Button>
+        <Button onClick={onDownloadExcel}>
+          {intl.formatMessage(messages.downloadExcel)}
+        </Button>
+      </Buttons>
       <Pagination currentPage={page} total={total} setPage={setPage} />
       <div>
         <Table>

@@ -59,8 +59,11 @@
   "AccountForm.unknownError": {
     "defaultMessage": "Beim Aktualisieren ist ein unbekannter Fehler aufgetreten. Bitte kontaktieren Sie uns."
   },
-  "AccountResellerDiscounts.download": {
-    "defaultMessage": "Herunterladen"
+  "AccountResellerDiscounts.downloadCsv": {
+    "defaultMessage": "Herunterladen (CSV)"
+  },
+  "AccountResellerDiscounts.downloadExcel": {
+    "defaultMessage": "Herunterladen (Excel)"
   },
   "AccountResellerDiscounts.reseller": {
     "defaultMessage": "Wiederverkäufer"

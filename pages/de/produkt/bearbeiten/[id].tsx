@@ -33,7 +33,7 @@ const Page: FunctionComponent = () => {
   );
 
   const breadcrumbs = useMemo(() => {
-    return data && data.product.collections.length > 0
+    return data?.product?.collections && data.product.collections.length > 0
       ? data.product.collections[0].breadcrumbs
           .filter((b) => parseInt(b.id) > 1 /* remove root collection */)
           .map((b) => ({
@@ -50,19 +50,19 @@ const Page: FunctionComponent = () => {
       sidebar={
         <SidebarBreadcrumbs breadcrumbs={breadcrumbs}>
           {data && (
-            <SidebarBreadcrumb active>{data.product.name}</SidebarBreadcrumb>
+            <SidebarBreadcrumb active>{data.product?.name}</SidebarBreadcrumb>
           )}
         </SidebarBreadcrumbs>
       }
       breadcrumbs={
-        data
+        data?.product
           ? [
               ...breadcrumbs,
               {
                 name: data.product.name,
                 url: `/${intl.locale}/${
                   pathnamesByLanguage.product.languages[intl.locale]
-                }/${data.product.slug}`,
+                }/${data.product?.slug}`,
               },
               {
                 name: intl.formatMessage(page.editProduct),
@@ -74,7 +74,7 @@ const Page: FunctionComponent = () => {
           : []
       }
     >
-      <EditProduct product={data && data.product} />
+      <EditProduct product={data?.product} />
     </Wrapper>
   );
 };

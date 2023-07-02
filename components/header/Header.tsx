@@ -78,10 +78,11 @@ const MobileSearchWrapper = styled.div`
 const HtmlHead: FunctionComponent<{ intl: IntlShape }> = React.memo(
   ({ intl }) => (
     <Head>
-      <title>{intl.formatMessage(shop.siteTitle)}</title>
+      <title key="title">{intl.formatMessage(shop.siteTitle)}</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta
+        key="description"
         name="description"
         content={intl.formatMessage(messages.siteDescription)}
       />

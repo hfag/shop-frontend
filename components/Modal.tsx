@@ -40,11 +40,11 @@ const CloseModal = styled.div`
   right: 1rem;
 `;
 
-const Modal: FunctionComponent<{ title: string; onClose: () => void }> = ({
-  title,
-  children,
-  onClose,
-}) => {
+const Modal: FunctionComponent<{
+  title: string;
+  onClose: () => void;
+  children: React.ReactNode;
+}> = ({ title, children, onClose }) => {
   return (
     <Backdrop>
       <ModalWrapper>

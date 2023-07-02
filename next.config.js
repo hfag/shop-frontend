@@ -2,13 +2,9 @@ const withTM = require("next-transpile-modules")([
   "@formatjs/intl-relativetimeformat",
   "@formatjs/intl-utils",
   "react-intl",
-  "intl-format-cache",
   "intl-messageformat-parser",
   "intl-messageformat",
 ]);
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-});
 
 const env = {
   REVALIDATION_SECRET: "test",
@@ -25,8 +21,4 @@ const env = {
   PUBLIC_PATH: "/",
 };
 
-module.exports = withTM(
-  withBundleAnalyzer({
-    env,
-  })
-);
+module.exports = withTM({ env });

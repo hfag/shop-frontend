@@ -31,7 +31,8 @@ const Page: FunctionComponent<{
   );
 
   const breadcrumbs = useMemo(() => {
-    return data.productBySlug.collections.length > 0
+    return data?.productBySlug?.collections &&
+      data.productBySlug.collections.length > 0
       ? data.productBySlug.collections[0].breadcrumbs
           .filter((b) => parseInt(b.id) > 1 /* remove root collection */)
           .map((b) => ({
@@ -49,13 +50,13 @@ const Page: FunctionComponent<{
         <SidebarBreadcrumbs breadcrumbs={breadcrumbs}>
           {data && (
             <SidebarBreadcrumb active>
-              {data.productBySlug.name}
+              {data.productBySlug?.name}
             </SidebarBreadcrumb>
           )}
         </SidebarBreadcrumbs>
       }
       breadcrumbs={
-        data
+        data?.productBySlug
           ? [
               ...breadcrumbs,
               {
@@ -68,7 +69,7 @@ const Page: FunctionComponent<{
           : []
       }
     >
-      <Product product={data && data.productBySlug} />
+      <Product product={data?.productBySlug} />
     </Wrapper>
   );
 };
@@ -105,7 +106,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const productResponse = await request<{
     productBySlug: Query["productBySlug"];
   }>(locale, GET_PRODUCT_BY_SLUG, {
-    slug: context.params.slug,
+    slug: context.params?.slug,
   });
 
   return {
@@ -113,7 +114,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     notFound: productResponse?.productBySlug ? false : true,
     props: {
       productResponse,
-      productSlug: context.params.slug,
+      productSlug: context.params?.slug,
     },
   };
 };

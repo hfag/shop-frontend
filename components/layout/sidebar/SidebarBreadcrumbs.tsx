@@ -27,7 +27,7 @@ const SidebarBreadcrumbs: FunctionComponent<{
       </StyledLink>
       {breadcrumbs.map((b, index) =>
         b.url === null ? (
-          <SidebarBreadcrumb active={false}>
+          <SidebarBreadcrumb key={index} active={false}>
             <div>
               <ChevronDown />
             </div>
@@ -43,7 +43,7 @@ const SidebarBreadcrumbs: FunctionComponent<{
             </SidebarBreadcrumb>
           </StyledLink>
         ) : (
-          <SidebarBreadcrumb>
+          <SidebarBreadcrumb key={index}>
             <Placeholder text inline minWidth={5} />
           </SidebarBreadcrumb>
         )

@@ -41,10 +41,10 @@ const AccountDashboard: FunctionComponent = React.memo(() => {
   const { user, customer, token } = useContext(AppContext);
   const intl = useIntl();
 
-  const billing: AddressType | undefined = customer?.addresses.find(
+  const billing: AddressType | undefined = customer?.addresses?.find(
     (a) => a.defaultBillingAddress
   );
-  const shipping: AddressType | undefined = customer?.addresses.find(
+  const shipping: AddressType | undefined = customer?.addresses?.find(
     (a) => a.defaultShippingAddress
   );
 

@@ -10,8 +10,8 @@ import StyledLink from "./elements/StyledLink";
 import page from "../i18n/page";
 
 export interface Breadcrumb {
-  name?: string;
-  url?: string;
+  name: string;
+  url: string;
 }
 
 /**

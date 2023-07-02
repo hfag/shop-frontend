@@ -53,40 +53,40 @@ const ShipToDifferentAddress = styled.div`
 `;
 
 interface FormValues {
-  billingFullName?: string;
-  billingCompany?: string;
-  billingStreetLine1?: string;
-  billingStreetLine2?: string;
-  billingCity?: string;
-  billingProvince?: string;
-  billingPostalCode?: string;
-  billingCountry?: string; //country code
-  billingPhone?: string;
-  billingEmail?: string;
+  billingFullName: string;
+  billingCompany: string;
+  billingStreetLine1: string;
+  billingStreetLine2: string;
+  billingCity: string;
+  billingProvince: string;
+  billingPostalCode: string;
+  billingCountry: string; //country code
+  billingPhone: string;
+  billingEmail: string;
 
-  shippingFullName?: string;
-  shippingCompany?: string;
-  shippingStreetLine1?: string;
-  shippingStreetLine2?: string;
-  shippingCity?: string;
-  shippingProvince?: string;
-  shippingPostalCode?: string;
-  shippingCountry?: string; //country code
-  shippingPhone?: string;
+  shippingFullName: string;
+  shippingCompany: string;
+  shippingStreetLine1: string;
+  shippingStreetLine2: string;
+  shippingCity: string;
+  shippingProvince: string;
+  shippingPostalCode: string;
+  shippingCountry: string; //country code
+  shippingPhone: string;
 
-  shipToDifferentAddress?: boolean;
+  shipToDifferentAddress: boolean;
 }
 
 interface IProps {
   countries: Country[];
-  token?: string;
-  billingAddress: Address | OrderAddress | null;
-  shippingAddress: Address | OrderAddress | null;
+  token?: string | null;
+  billingAddress?: Address | OrderAddress | null;
+  shippingAddress?: Address | OrderAddress | null;
   user?: Customer | null;
-  customer: Customer | null;
+  customer?: Customer | null;
   intl: IntlShape;
   enabled?: boolean;
-  onProceed?: () => void;
+  onProceed: () => void;
 }
 
 /**
@@ -331,52 +331,54 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     shippingAddress = null,
     customer = null,
   }) => {
-    const isBillingAddress = !Object.values(billingAddress).reduce(
-      (b, v) => b && v === null,
-      true
-    );
-    const isShippingAddress = !Object.values(shippingAddress).reduce(
-      (b, v) => b && v === null,
-      true
-    );
+    const isBillingAddress =
+      !billingAddress ||
+      !Object.values(billingAddress).reduce((b, v) => b && v === null, true);
+
+    const isShippingAddress =
+      !shippingAddress ||
+      !Object.values(shippingAddress).reduce((b, v) => b && v === null, true);
+
     //if only one is set, use for billing
     const bAddress = isBillingAddress ? billingAddress : shippingAddress;
-    const sAddress = isBillingAddress ? shippingAddress : null;
+    const sAddress = isShippingAddress ? shippingAddress : null;
 
     const values: FormValues = {
-      billingFullName: bAddress.fullName || "",
-      billingCompany: bAddress.company || "",
-      billingStreetLine1: bAddress.streetLine1 || "",
-      billingStreetLine2: bAddress.streetLine2 || "",
-      billingCity: bAddress.city || "",
-      billingProvince: bAddress.province || "",
-      billingPostalCode: bAddress.postalCode || "",
+      billingFullName: bAddress?.fullName || "",
+      billingCompany: bAddress?.company || "",
+      billingStreetLine1: bAddress?.streetLine1 || "",
+      billingStreetLine2: bAddress?.streetLine2 || "",
+      billingCity: bAddress?.city || "",
+      billingProvince: bAddress?.province || "",
+      billingPostalCode: bAddress?.postalCode || "",
       billingCountry:
-        "countryCode" in bAddress
+        bAddress && "countryCode" in bAddress
           ? bAddress.countryCode || ""
-          : typeof bAddress.country === "string"
+          : typeof bAddress?.country === "string"
           ? ""
           : bAddress?.country?.code || "",
-      billingPhone: bAddress.phoneNumber || "",
+      billingPhone: bAddress?.phoneNumber || "",
       billingEmail: customer ? customer.emailAddress : "",
+
+      shippingFullName: sAddress?.fullName || "",
+      shippingCompany: sAddress?.company || "",
+      shippingStreetLine1: sAddress?.streetLine1 || "",
+      shippingStreetLine2: sAddress?.streetLine2 || "",
+      shippingCity: sAddress?.city || "",
+      shippingProvince: sAddress?.province || "",
+      shippingPostalCode: sAddress?.postalCode || "",
+      shippingCountry:
+        sAddress && "countryCode" in sAddress
+          ? sAddress?.countryCode || ""
+          : typeof sAddress?.country === "string"
+          ? ""
+          : sAddress?.country?.code || "",
+      shippingPhone: sAddress?.phoneNumber || "",
+
+      shipToDifferentAddress: false,
     };
 
-    if (isShippingAddress && sAddress) {
-      values.shippingFullName = sAddress.fullName || "";
-      values.shippingCompany = sAddress.company || "";
-      values.shippingStreetLine1 = sAddress.streetLine1 || "";
-      values.shippingStreetLine2 = sAddress.streetLine2 || "";
-      values.shippingCity = sAddress.city || "";
-      values.shippingProvince = sAddress.province || "";
-      values.shippingPostalCode = sAddress.postalCode || "";
-      values.shippingCountry =
-        "countryCode" in sAddress
-          ? sAddress.countryCode || ""
-          : typeof sAddress.country === "string"
-          ? ""
-          : sAddress?.country?.code || "";
-      values.shippingPhone = sAddress.phoneNumber || "";
-
+    if (sAddress && isShippingAddress) {
       values.shipToDifferentAddress = true;
     }
 
@@ -454,7 +456,8 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         .test(
           "test-phone",
           intl.formatMessage(form.errorPhoneNumber),
-          (value) => /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value)
+          (value) =>
+            !!value && /^[0-9]{3} [0-9]{3} [0-9]{2} [0-9]{2}$/.test(value)
         )
         .required(),
       shippingPhone: yup
@@ -528,7 +531,7 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         return;
       }*/
     } else {
-      const billingName = values.billingFullName.split(" ");
+      const billingName = (values.billingFullName || "").split(" ");
       const firstName = billingName.slice(0, -1).join(" ");
       const lastName = billingName.slice(-1).join(" ");
 

@@ -155,7 +155,7 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState<string>(
-    Array.isArray(router.query.query) ? null : router.query.query || ""
+    typeof router.query.query === "string" ? router.query.query : ""
   );
   const [lastQuery, setLastQuery] = useState("");
   const [suggestions, setSuggestions] = useState<SearchResult[]>([]);
@@ -218,9 +218,7 @@ const Searchbar: FunctionComponent<{ id: string }> = ({ id }) => {
 
   //update value
   useEffect(() => {
-    setValue(
-      Array.isArray(router.query.query) ? null : router.query.query || ""
-    );
+    setValue(typeof router.query.query === "string" ? router.query.query : "");
   }, [router.query.query]);
 
   useEffect(() => {

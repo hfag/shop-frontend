@@ -32,14 +32,17 @@ const Page: FunctionComponent<{ slug: string; post: PostType }> = ({
   );
 
   const breadcrumbs = useMemo(
-    () => [
-      {
-        name: data.title,
-        url: `/${intl.locale}/${
-          pathnamesByLanguage.post.languages[intl.locale]
-        }/${slug}`,
-      },
-    ],
+    () =>
+      data
+        ? [
+            {
+              name: data.title,
+              url: `/${intl.locale}/${
+                pathnamesByLanguage.post.languages[intl.locale]
+              }/${slug}`,
+            },
+          ]
+        : [],
     [data]
   );
 
@@ -74,12 +77,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   let notFound = false;
-  let post = null;
+  let post: PostType | null = null;
 
   try {
     post = await fetch(
       `${getWordpressUrl(locale)}/wp-json/wp/v2/posts?slug=${
-        context.params.slug
+        context.params?.slug
       }&_embed`
     )
       .then((r) => r.json())
@@ -98,7 +101,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     revalidate: 60 * 60 * 12,
     notFound,
     props: {
-      slug: context.params.slug,
+      slug: context.params?.slug,
       post,
     },
   };

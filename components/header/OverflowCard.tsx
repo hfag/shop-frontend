@@ -16,7 +16,7 @@ const More = styled.div<{ maxHeight?: number }>`
   left: 0;
   right: 0;
   bottom: 0;
-  height: ${({ maxHeight }) => maxHeight / 3 || 7}rem;
+  height: ${({ maxHeight }) => (maxHeight ? maxHeight / 3 : 7)}rem;
 
   cursor: pointer;
 

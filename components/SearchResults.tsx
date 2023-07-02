@@ -82,6 +82,7 @@ const SearchResults: FunctionComponent<{ term: string }> = ({ term }) => {
       return;
     }
     const base = page * ITEMS_PER_PAGE;
+
     return searchRequest(
       intl.locale,
       term,
@@ -89,10 +90,15 @@ const SearchResults: FunctionComponent<{ term: string }> = ({ term }) => {
       base,
       ITEMS_PER_PAGE
     ).then((newResults) => {
-      newResults.items.forEach((item, index) => {
-        items.current[base + index] = item;
-      });
-      setNextItem(Math.max(nextItem, base + newResults.items.length));
+      const results = items.current;
+
+      if (results) {
+        newResults.items.forEach((item, index) => {
+          results[base + index] = item;
+        });
+
+        setNextItem(Math.max(nextItem, base + newResults.items.length));
+      }
     });
   }, [isFetching, term, groupByProduct]);
 

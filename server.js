@@ -19,7 +19,6 @@ const handle = app.getRequestHandler();
 app
   .prepare()
   .then(() => {
-    console.log("y");
     const server = express();
     server.all("*", (request, response) => {
       //add locale for pages but no static assets

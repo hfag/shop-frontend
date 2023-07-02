@@ -101,10 +101,10 @@ const mapProductItem = (
     );
 
     const p = {
-      group: item.customFields?.groupKey,
+      group: item.customFields?.groupKey || "",
       sku: variant.sku,
       name: item.name,
-      image: variant?.featuredAsset?.source,
+      image: variant?.featuredAsset?.source || "",
       price: (Math.round(variant.price) / 100).toFixed(2),
       discounted_price: (Math.round(discountedPrice) / 100).toFixed(2),
       reseller_discounts: activeResellerDiscounts
@@ -189,7 +189,9 @@ const AccountReseller = () => {
   const facetValueIds: string[] = useMemo(
     () =>
       customer?.resellerDiscounts
-        ? [].concat(...customer.resellerDiscounts.map((d) => d.facetValueIds))
+        ? ([] as string[]).concat(
+            ...customer.resellerDiscounts.map((d) => d.facetValueIds)
+          )
         : [],
     [customer]
   );

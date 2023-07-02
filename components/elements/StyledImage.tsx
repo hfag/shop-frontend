@@ -67,7 +67,7 @@ const StyledImage: FunctionComponent<{
         )}
         <Img
           src={src}
-          className={w < h ? "b-height" : "b-width"}
+          className={w && h && w < h ? "b-height" : "b-width"}
           loading={eagerLoading ? "eager" : "lazy"}
           width={width}
           height={height}

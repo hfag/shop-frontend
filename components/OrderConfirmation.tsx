@@ -60,11 +60,7 @@ const OrderConfirmation: FunctionComponent = () => {
       : null
   );
 
-  if (!data && !error) {
-    return <Placeholder block />;
-  }
-
-  if (error || !data.orderByCode) {
+  if (error || (data && !data?.orderByCode)) {
     return (
       <div>
         <h1>{intl.formatMessage(messages.title)}</h1>
@@ -73,11 +69,16 @@ const OrderConfirmation: FunctionComponent = () => {
     );
   }
 
+  if (!data) {
+    return <Placeholder block />;
+  }
+
   return (
     <div>
       <Head>
-        <title>{intl.formatMessage(messages.siteTitle)}</title>
+        <title key="title">{intl.formatMessage(messages.siteTitle)}</title>
         <meta
+          key="description"
           name="description"
           content={intl.formatMessage(messages.siteDescription)}
         />
@@ -128,16 +129,18 @@ const OrderConfirmation: FunctionComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {data.orderByCode.lines.map((line, index) => {
+          {data.orderByCode?.lines.map((line, index) => {
             //get the adjustments per item, i.e. one for every source (except for taxes, nobody wants taxes)
             let customizations: {
-              [key: string]: { label: string; value: string };
-            } | null = null;
+              [key: string]: { label: string; value: string } | undefined;
+            } = {};
 
             try {
-              customizations = JSON.parse(line.customFields.customizations);
+              customizations = JSON.parse(
+                line.customFields?.customizations || "{}"
+              );
             } catch (e) {
-              customizations = null;
+              customizations = {};
             }
 
             return (
@@ -160,7 +163,7 @@ const OrderConfirmation: FunctionComponent = () => {
                       {Object.keys(customizations)
                         .map(
                           (key) =>
-                            `${customizations[key].label}: ${customizations[key].value}`
+                            `${customizations[key]?.label}: ${customizations[key]?.value}`
                         )
                         .join(", ")}
                     </p>
@@ -191,26 +194,28 @@ const OrderConfirmation: FunctionComponent = () => {
             );
           })}
         </tbody>
-        <tfoot>
-          <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
-            <td>
-              <Price>{data.orderByCode.shipping}</Price>
-            </td>
-          </tr>
-          <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(orderMessages.vat)}</td>
-            <td>
-              <Price>{data.orderByCode.total * FACTOR_TAXES}</Price>
-            </td>
-          </tr>
-          <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
-            <td>
-              <Price>{data.orderByCode.total * FACTOR_PLUS_TAXES}</Price>
-            </td>
-          </tr>
-        </tfoot>
+        {data.orderByCode && (
+          <tfoot>
+            <tr className="total">
+              <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
+              <td>
+                <Price>{data.orderByCode.shipping}</Price>
+              </td>
+            </tr>
+            <tr className="total">
+              <td colSpan={5}>{intl.formatMessage(orderMessages.vat)}</td>
+              <td>
+                <Price>{data.orderByCode.total * FACTOR_TAXES}</Price>
+              </td>
+            </tr>
+            <tr className="total">
+              <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
+              <td>
+                <Price>{data.orderByCode.total * FACTOR_PLUS_TAXES}</Price>
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </CartTable>
     </div>
   );

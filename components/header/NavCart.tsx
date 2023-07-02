@@ -99,7 +99,7 @@ const NavCart: FunctionComponent<{
                       minWidth={0.75}
                       mb={-0.2}
                     ></Placeholder>
-                  ) : data.activeOrder === null ? (
+                  ) : !data.activeOrder ? (
                     0 /* no active order */
                   ) : (
                     data.activeOrder.lines.reduce(
@@ -124,7 +124,10 @@ const NavCart: FunctionComponent<{
                   pathnamesByLanguage.cart.languages[intl.locale]
                 }`
               );
-              setDropdown(false);
+
+              if (setDropdown) {
+                setDropdown(false);
+              }
               return Promise.resolve();
             }}
           >

@@ -17,14 +17,14 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
   const offer: AggregateOffer = {
     "@type": "AggregateOffer",
     priceCurrency: "CHF",
-    lowPrice: product.customFields.buyable
+    lowPrice: product.customFields?.buyable
       ? product.variants.reduce(
           (lowest, variant) =>
             lowest < variant.price && lowest !== 0 ? lowest : variant.price,
           product.variants[0].price
         ) / 100
       : undefined,
-    highPrice: product.customFields.buyable
+    highPrice: product.customFields?.buyable
       ? product.variants.reduce(
           (highest, variant) =>
             highest > variant.price && highest !== 0 ? highest : variant.price,
@@ -57,7 +57,7 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
     name: stripTags(product.name),
     image: product?.featuredAsset?.source,
     description: stripTags(product.description),
-    sku: product.customFields.groupKey || product.variants[0]?.sku,
+    sku: product.customFields?.groupKey || product.variants[0]?.sku,
     offers: offer,
   };
 

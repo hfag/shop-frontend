@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
-import { IntlShape, defineMessages, useIntl } from "react-intl";
 import { Order as OrderType } from "../../schema";
-import { borders, colors } from "../../utilities/style";
+import { borders } from "../../utilities/style";
+import { defineMessages, useIntl } from "react-intl";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Placeholder from "./Placeholder";
 import Price from "../elements/Price";
@@ -17,34 +17,6 @@ const messages = defineMessages({
   differentProducts: {
     id: "Order.differentProducts",
     defaultMessage: "verschiedene Produkte für",
-  },
-  addingItems: {
-    id: "Order.addingItem",
-    defaultMessage: "Noch nicht versendet",
-  },
-  arrangingPayment: {
-    id: "Order.arrangingPayment",
-    defaultMessage: "Bezahlung ausstehend",
-  },
-  paymentAuthorized: {
-    id: "Order.paymentAuthorized",
-    defaultMessage: "Zahlung freigegeben",
-  },
-  paymentSettled: {
-    id: "Order.paymentSettled",
-    defaultMessage: "Zahlung abgeschlossen",
-  },
-  partiallyFulfilled: {
-    id: "Order.partiallyFulfilled",
-    defaultMessage: "Teilweise abgeschlossen",
-  },
-  cancelled: {
-    id: "Order.cancelled",
-    defaultMessage: "Storniert",
-  },
-  fulfilled: {
-    id: "Order.fulfilled",
-    defaultMessage: "Abgeschlossen",
   },
 });
 
@@ -60,73 +32,18 @@ const OrderWrapper = styled.div`
   }
 `;
 
-const Status = styled.div<{ color: string }>`
-  display: inline-block;
-  background-color: ${({ color }) => color};
-  color: #fff;
-
-  border-radius: 5px;
-  margin-top: 0.5rem;
-  padding: 0.125rem 0.25rem;
-`;
-
 const OrderItem = styled.div`
   margin: 0.5rem 0 1rem 0;
 `;
 const OrderMeta = styled.div``;
 
 /**
- * Gets the state object based on the wc status
- */
-const getState = (status: string | undefined, intl: IntlShape) => {
-  switch (status) {
-    case "AddingItems":
-      return {
-        color: colors.info,
-        label: intl.formatMessage(messages.addingItems),
-      };
-    case "ArrangingPayment":
-      return {
-        color: colors.info,
-        label: intl.formatMessage(messages.arrangingPayment),
-      };
-    case "PaymentAuthorized":
-      return {
-        color: colors.info,
-        label: intl.formatMessage(messages.paymentAuthorized),
-      };
-    case "PaymentSettled":
-      return {
-        color: colors.success,
-        label: intl.formatMessage(messages.paymentSettled),
-      };
-    case "PartiallyFulfilled":
-      return {
-        color: colors.warning,
-        label: intl.formatMessage(messages.partiallyFulfilled),
-      };
-    case "Cancelled":
-      return {
-        color: colors.danger,
-        label: intl.formatMessage(messages.cancelled),
-      };
-    case "Fulfilled":
-      return {
-        color: colors.success,
-        label: intl.formatMessage(messages.fulfilled),
-      };
-    default:
-      return { color: colors.danger, label: status };
-  }
-};
-
-/**
  * An order component
  */
-const Order: FunctionComponent<{ order?: OrderType; compact?: boolean }> = ({
-  order,
-  compact,
-}) => {
+const Order: FunctionComponent<{
+  order?: OrderType | null;
+  compact?: boolean;
+}> = ({ order, compact }) => {
   const intl = useIntl();
   const date = new Date(order?.updatedAt);
 

@@ -14,17 +14,25 @@ const Page: FunctionComponent<{ page?: PageType }> = React.memo(({ page }) => {
   const intl = useIntl();
 
   return (
-    <React.Fragment>
-      <Head>
-        <title>{`${stripTags(page.title)} - Hauser Feuerschutz AG`}</title>
-        <meta name="description" content={stripTags(page.excerpt)} />
-        <link
-          rel="canonical"
-          href={`${ABSOLUTE_URL}/${intl.locale}/${
-            pathnamesByLanguage.post[intl.locale]
-          }/${page.slug}`}
-        />
-      </Head>
+    <>
+      {page && (
+        <Head>
+          <title key="title">{`${stripTags(
+            page.title
+          )} - Hauser Feuerschutz AG`}</title>
+          <meta
+            key="description"
+            name="description"
+            content={stripTags(page.excerpt)}
+          />
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${intl.locale}/${
+              pathnamesByLanguage.post[intl.locale]
+            }/${page.slug}`}
+          />
+        </Head>
+      )}
       <Card>
         {page ? (
           <H1 dangerouslySetInnerHTML={{ __html: page.title }} />
@@ -39,7 +47,7 @@ const Page: FunctionComponent<{ page?: PageType }> = React.memo(({ page }) => {
           <Placeholder text height={15} />
         )}
       </Card>
-    </React.Fragment>
+    </>
   );
 });
 

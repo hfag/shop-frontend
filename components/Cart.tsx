@@ -59,10 +59,11 @@ const Cart: FunctionComponent = React.memo(() => {
   return (
     <Card>
       <Head>
-        <title>
+        <title key="title">
           {`${intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG`}
         </title>
         <meta
+          key="description"
           name="description"
           content={intl.formatMessage(messages.siteDescription)}
         />
@@ -76,7 +77,7 @@ const Cart: FunctionComponent = React.memo(() => {
 
       <h1>{intl.formatMessage(messages.cart)}</h1>
 
-      {orderData ? (
+      {orderData?.activeOrder ? (
         <>
           <CartForm
             intl={intl}
@@ -94,15 +95,16 @@ const Cart: FunctionComponent = React.memo(() => {
               countries={countryData?.availableCountries || []}
               onProceed={() => setStep("checkout")}
               billingAddress={
-                (user && user.addresses.find((a) => a.defaultBillingAddress)) ||
-                orderData?.activeOrder.billingAddress
+                (user &&
+                  user.addresses?.find((a) => a.defaultBillingAddress)) ||
+                orderData.activeOrder.billingAddress
               }
               shippingAddress={
                 (user &&
-                  user.addresses.find((a) => a.defaultShippingAddress)) ||
-                orderData?.activeOrder.shippingAddress
+                  user.addresses?.find((a) => a.defaultShippingAddress)) ||
+                orderData.activeOrder.shippingAddress
               }
-              customer={orderData?.activeOrder?.customer}
+              customer={orderData.activeOrder.customer}
               user={user}
             />
           )}

@@ -14,16 +14,20 @@ const Post: FunctionComponent<{ post?: PostType }> = React.memo(({ post }) => {
   const intl = useIntl();
 
   return (
-    <React.Fragment>
-      <Head>
-        <title>{`${stripTags(post.title)} - Hauser Feuerschutz AG`}</title>
-        <link
-          rel="canonical"
-          href={`${ABSOLUTE_URL}/${intl.locale}/${
-            pathnamesByLanguage.post[intl.locale]
-          }/${post.slug}`}
-        />
-      </Head>
+    <>
+      {post && (
+        <Head>
+          <title key="title">{`${stripTags(
+            post.title
+          )} - Hauser Feuerschutz AG`}</title>
+          <link
+            rel="canonical"
+            href={`${ABSOLUTE_URL}/${intl.locale}/${
+              pathnamesByLanguage.post[intl.locale]
+            }/${post.slug}`}
+          />
+        </Head>
+      )}
       <Card>
         {post ? (
           <H1 dangerouslySetInnerHTML={{ __html: post.title }} />
@@ -38,7 +42,7 @@ const Post: FunctionComponent<{ post?: PostType }> = React.memo(({ post }) => {
           <Placeholder text height={15} />
         )}
       </Card>
-    </React.Fragment>
+    </>
   );
 });
 

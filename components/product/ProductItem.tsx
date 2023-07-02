@@ -136,12 +136,12 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
       [product]
     );
 
-    const resellerDiscount: number | null = useMemo(() => {
+    const resellerDiscount: number | null | undefined = useMemo(() => {
       if (!customer) {
         return null;
       }
 
-      return product.facetValues
+      return product?.facetValues
         .map((f) => {
           const d = customer.resellerDiscounts.find((d) =>
             d.facetValueIds.includes(f.id.toString())
@@ -151,6 +151,10 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
         .filter(notEmpty)
         .reduce((sum, d) => sum + d, 0);
     }, [customer]);
+
+    if (!product) {
+      return null;
+    }
 
     return (
       <Box

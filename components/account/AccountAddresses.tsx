@@ -44,7 +44,7 @@ const AddressWrapper = styled.div`
 `;
 
 const AccountAddresses: FunctionComponent<{
-  addresses?: AddressType[];
+  addresses?: AddressType[] | null;
 }> = React.memo(({ addresses }) => {
   const intl = useIntl();
   const router = useRouter();

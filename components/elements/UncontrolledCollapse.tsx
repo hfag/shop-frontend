@@ -13,7 +13,7 @@ const UncontrolledCollapse: FunctionComponent<{
   closeLink: ReactNode;
   children: ReactNode;
 }> = ({ isOpenDefault, openLink, closeLink, children }) => {
-  const [isOpen, setIsOpen] = useState(isOpenDefault);
+  const [isOpen, setIsOpen] = useState(isOpenDefault || false);
   return (
     <div>
       <Collapse isOpened={isOpen}>{children}</Collapse>

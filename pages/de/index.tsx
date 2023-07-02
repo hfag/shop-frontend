@@ -88,16 +88,14 @@ const Page: FunctionComponent<{
       sidebar={
         <>
           <SidebarBreadcrumbs breadcrumbs={[]} />
-          <SidebarCollections
-            collections={data ? data.collection.children : []}
-          />
-          <SidebarProducts products={data ? data.collection.products : []} />
+          <SidebarCollections collections={data?.collection?.children || []} />
+          <SidebarProducts products={data?.collection?.products || []} />
         </>
       }
       breadcrumbs={[]}
     >
       <SaleProducts
-        posts={postsData ? postsData.filter((p) => p.sticky) : postsData}
+        posts={postsData ? postsData.filter((p) => p.sticky) : []}
       />
       <h2 style={{ marginBottom: 0 }}>
         {intl.formatMessage(homeMessages.shopProducts)}

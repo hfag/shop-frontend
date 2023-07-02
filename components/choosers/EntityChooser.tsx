@@ -124,13 +124,17 @@ const EntityChooser = <
     requestAdmin(intl.locale, query, { options })
   );
 
-  const totalPages = useMemo(
-    () =>
-      mapResponseToTotalItems(data)
-        ? Math.ceil(mapResponseToTotalItems(data) / itemsPerPage)
-        : null,
-    [data]
-  );
+  const totalPages = useMemo(() => {
+    if (data) {
+      const totalItems = mapResponseToTotalItems(data);
+
+      if (totalItems) {
+        return Math.ceil(totalItems / itemsPerPage);
+      }
+    }
+
+    return null;
+  }, [data]);
 
   return (
     <div>
@@ -200,18 +204,20 @@ const EntityChooser = <
             ))}
           </tr>
         </thead>
-        <tbody>
-          {mapResponseToEntities(data).map((entity) => (
-            <ClickableTr
-              key={entity.id}
-              onClick={() => {
-                onSelect(entity);
-              }}
-            >
-              {mapEntityToTableColumns(entity)}
-            </ClickableTr>
-          ))}
-        </tbody>
+        {data && (
+          <tbody>
+            {mapResponseToEntities(data).map((entity) => (
+              <ClickableTr
+                key={entity.id}
+                onClick={() => {
+                  onSelect(entity);
+                }}
+              >
+                {mapEntityToTableColumns(entity)}
+              </ClickableTr>
+            ))}
+          </tbody>
+        )}
       </Table>
       <FilterRow center>
         {`${intl.formatMessage(messages.page)} ${page + 1} ${intl.formatMessage(

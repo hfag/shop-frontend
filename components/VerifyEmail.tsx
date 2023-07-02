@@ -33,7 +33,7 @@ const messages = defineMessages({
 interface IProps {
   intl: IntlShape;
   token?: string;
-  router?: NextRouter;
+  router: NextRouter;
 }
 
 interface FormValues {
@@ -99,8 +99,10 @@ const VerifyEmailForm = withFormik<IProps, FormValues>({
 const VerifyEmail: FunctionComponent = () => {
   const intl = useIntl();
   const router = useRouter();
-  const token: string | null = useMemo(() => {
-    return typeof router.query?.token === "string" ? router.query.token : null;
+  const token: string | undefined = useMemo(() => {
+    return typeof router.query?.token === "string"
+      ? router.query.token
+      : undefined;
   }, [router.query]);
 
   return (

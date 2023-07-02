@@ -134,7 +134,7 @@ const mapBlock = (block: Block): MappedBlock => {
     default:
       return {
         ...block,
-        innerHTML: block.innerHTML.replace(/\r\n\r\n/g, "<br/>"),
+        innerHTML: block.innerHTML?.replace(/\r\n\r\n/g, "<br/>") || null,
       };
   }
 };
@@ -158,17 +158,17 @@ export const mapPost = (post: WP_Post): Post => {
       url:
         (hasThumbnail &&
           post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
-            .source_url) ||
+            ?.source_url) ||
         null,
       width:
         (hasThumbnail &&
           post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
-            .width) ||
+            ?.width) ||
         null,
       height:
         (hasThumbnail &&
           post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
-            .height) ||
+            ?.height) ||
         null,
       alt: (hasMedia && post._embedded["wp:featuredmedia"][0].alt_text) || null,
     },
@@ -193,17 +193,17 @@ export const mapPostPreview = (post: WP_Post): PostPreview => {
       url:
         (hasThumbnail &&
           post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
-            .source_url) ||
+            ?.source_url) ||
         null,
       width:
         (hasThumbnail &&
           post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
-            .width) ||
+            ?.width) ||
         null,
       height:
         (hasThumbnail &&
           post._embedded["wp:featuredmedia"][0].media_details.sizes.thumbnail
-            .height) ||
+            ?.height) ||
         null,
       alt: (hasMedia && post._embedded["wp:featuredmedia"][0].alt_text) || null,
     },

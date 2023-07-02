@@ -36,13 +36,13 @@ const Page: FunctionComponent<{
   );
 
   const breadcrumbs = useMemo(() => {
-    return data
-      ? data.collection.breadcrumbs
+    const collection = data?.collection;
+
+    return collection
+      ? collection.breadcrumbs
           .filter(
             (b) =>
-              !["1", data.collection.id].includes(
-                b.id
-              ) /* remove root collection */
+              !["1", collection.id].includes(b.id) /* remove root collection */
           )
           .map((b) => ({
             name: b.name,
@@ -59,26 +59,28 @@ const Page: FunctionComponent<{
         <>
           <SidebarBreadcrumbs breadcrumbs={breadcrumbs}>
             {data ? (
-              <SidebarBreadcrumb active>
-                {data.collection.name}
-              </SidebarBreadcrumb>
+              <>
+                <SidebarBreadcrumb active>
+                  {data.collection?.name}
+                </SidebarBreadcrumb>
+                <SidebarCollections
+                  collections={data.collection?.children || []}
+                />
+                <SidebarProducts products={data.collection?.products || []} />
+              </>
             ) : null}
           </SidebarBreadcrumbs>
-          <SidebarCollections
-            collections={data ? data.collection.children : []}
-          />
-          <SidebarProducts products={data ? data.collection.products : []} />
         </>
       }
       breadcrumbs={
-        data
+        data?.collection
           ? [
               ...breadcrumbs,
               {
                 name: data.collection.name,
                 url: `/${intl.locale}/${
                   pathnamesByLanguage.productCategory.languages[intl.locale]
-                }/${data.collection.slug}`,
+                }/${data.collection?.slug}`,
               },
             ]
           : breadcrumbs
@@ -123,7 +125,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     locale,
     GET_COLLECTION_BY_SLUG,
     {
-      slug: context.params.slug,
+      slug: context.params?.slug,
     }
   );
 
@@ -131,7 +133,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     revalidate: 60 * 60 * 12,
     notFound: collectionResponse?.collection ? false : true,
     props: {
-      slug: context.params.slug,
+      slug: context.params?.slug,
       collectionResponse,
     },
   };

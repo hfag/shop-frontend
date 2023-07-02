@@ -188,7 +188,7 @@ const LoginRegisterForm = withFormik<
     }
   ) => {
     setStatus("loading");
-    action(email, password)
+    action(email || "", password || "")
       .then(() => {
         setStatus("success");
         if (callback) {
@@ -233,6 +233,10 @@ const PasswordResetForm = withFormik<
       }>(intl.locale, REQUEST_PASSWORD_RESET, {
         email,
       });
+
+      if (!data.requestPasswordReset) {
+        throw new Error(intl.formatMessage(messages.unknownError));
+      }
 
       if (!("success" in data.requestPasswordReset)) {
         throw new Error(errorCodeToMessage(intl, data.requestPasswordReset));
@@ -307,10 +311,11 @@ const Login = React.memo(() => {
   return (
     <Card>
       <Head>
-        <title>
+        <title key="title">
           {`${intl.formatMessage(messages.siteTitle)} - Hauser Feuerschutz AG`}
         </title>
         <meta
+          key="description"
           name="description"
           content={intl.formatMessage(messages.siteDescription)}
         />

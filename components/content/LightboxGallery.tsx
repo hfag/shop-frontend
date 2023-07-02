@@ -97,7 +97,7 @@ const reducer = (
   }
 };
 
-const LightboxGallery = <Image extends unknown>({
+const LightboxGallery = <Image,>({
   images,
   imageToUrl,
   imageToPreviewElement,

@@ -40,7 +40,7 @@ const SelectIcon = styled.div`
   pointer-events: none;
 `;
 
-const Select = <Option extends unknown>({
+const Select = <Option,>({
   options,
   placeholder,
   onChange,
@@ -75,9 +75,9 @@ const Select = <Option extends unknown>({
     [onChange]
   );
 
-  const selectedIndex = options.findIndex((option) =>
-    areOptionsEqual(selected, option)
-  );
+  const selectedIndex = selected
+    ? options.findIndex((option) => areOptionsEqual(selected, option))
+    : -1;
 
   return (
     <StyledWrapper

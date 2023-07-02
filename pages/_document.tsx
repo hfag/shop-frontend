@@ -5,10 +5,15 @@ interface IProps {
   locale: string;
 }
 
+const getLanguageFromPathname = (pathname: string, fallback: string) => {
+  const locale = pathname.split("/")[1];
+  return ["de", "fr"].includes(locale) ? locale : fallback;
+};
+
 export default class MyDocument extends Document<IProps> {
   render() {
     return (
-      <Html>
+      <Html lang={getLanguageFromPathname(this.props.__NEXT_DATA__.page, "de")}>
         <Head />
         <body spellCheck="false">
           <Main />

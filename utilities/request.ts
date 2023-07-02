@@ -1,9 +1,8 @@
 // Apparently they're not able to maintain this anymore?
 // https://github.com/prisma-labs/graphql-request
 
+import { ADMIN_API_URL, API_URL } from "./api";
 import { isClient } from "./ssr";
-import { API_URL, ADMIN_API_URL } from "./api";
-import { getLanguageFromCurrentWindow } from "./i18n";
 
 export type Variables = { [key: string]: any };
 
@@ -181,17 +180,20 @@ export async function request<T = any>(
     `${API_URL}?languageCode=${languageCode}`,
     token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
   );
-  const {
-    data,
-    headers: responseHeaders,
-    status,
-  } = await client.rawRequest<T>(query, variables);
-  if (responseHeaders.get("vendure-auth-token") && isClient) {
-    localStorage.setItem(
-      "vendure-auth-token",
-      responseHeaders.get("vendure-auth-token")
-    );
+  const { data, headers: responseHeaders } = await client.rawRequest<T>(
+    query,
+    variables
+  );
+
+  const newToken = responseHeaders.get("vendure-auth-token");
+  if (newToken && isClient) {
+    localStorage.setItem("vendure-auth-token", newToken);
   }
+
+  if (!data) {
+    return Promise.reject("received undefined data");
+  }
+
   return data;
 }
 
@@ -208,17 +210,20 @@ export async function requestAdmin<T = any>(
     `${ADMIN_API_URL}?languageCode=${languageCode}`,
     token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
   );
-  const {
-    data,
-    headers: responseHeaders,
-    status,
-  } = await client.rawRequest<T>(query, variables);
-  if (responseHeaders.get("vendure-auth-token") && isClient) {
-    localStorage.setItem(
-      "vendure-auth-token",
-      responseHeaders.get("vendure-auth-token")
-    );
+  const { data, headers: responseHeaders } = await client.rawRequest<T>(
+    query,
+    variables
+  );
+
+  const newToken = responseHeaders.get("vendure-auth-token");
+  if (newToken && isClient) {
+    localStorage.setItem("vendure-auth-token", newToken);
   }
+
+  if (!data) {
+    return Promise.reject("received undefined data");
+  }
+
   return data;
 }
 

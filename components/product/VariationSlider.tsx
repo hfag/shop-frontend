@@ -48,16 +48,18 @@ const VariationSlider: FunctionComponent<{
       [id: string]: { [optionGroupId: string]: ProductOption };
     } = {};
     variants.forEach((v) => {
-      if (v.featuredAsset && v.featuredAsset.id in imageMap) {
+      const featuredAsset = v.featuredAsset;
+
+      if (featuredAsset && featuredAsset.id in imageMap) {
         //compare
-        Object.keys(imageMap[v.featuredAsset.id]).forEach((optionGroupId) => {
+        Object.keys(imageMap[featuredAsset.id]).forEach((optionGroupId) => {
           const option = v.options.find((o) => o.groupId === optionGroupId);
           if (
             !option ||
-            option.code !== imageMap[v.featuredAsset.id][optionGroupId].code
+            option.code !== imageMap[featuredAsset.id][optionGroupId].code
           ) {
             //not the same value, this image maps to two different values for this group id
-            delete imageMap[v.featuredAsset.id][optionGroupId];
+            delete imageMap[featuredAsset.id][optionGroupId];
           }
         });
       } else {

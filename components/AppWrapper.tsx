@@ -66,8 +66,8 @@ const AppWrapper: FunctionComponent<{
           value={{
             burgerMenuOpen,
             toggleBurgerMenu,
-            user: token && data ? data.me : null,
-            customer: token && data ? data.activeCustomer : null,
+            user: (token && data?.me) || null,
+            customer: (token && data?.activeCustomer) || null,
             token,
           }}
         >
@@ -80,7 +80,9 @@ const AppWrapper: FunctionComponent<{
 
 export const withApp =
   (locale: Language, messages: IntlProvider["props"]["messages"]) =>
-  <P extends unknown>(Component: React.JSXElementConstructor<P>) =>
+  <P extends Record<string, unknown>>(
+    Component: React.JSXElementConstructor<P>
+  ) =>
     React.memo((props: P) => {
       return (
         <AppWrapper locale={locale} messages={messages}>

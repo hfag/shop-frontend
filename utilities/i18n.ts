@@ -89,7 +89,6 @@ export const errorCodeToMessage = <
     case ErrorCode.OrderPaymentStateError:
     case ErrorCode.PaymentFailedError:
     case ErrorCode.PaymentDeclinedError:
-    case ErrorCode.PaymentDeclinedError:
       return `${msg} \n${error.errorMessage}`;
     default:
       return msg;

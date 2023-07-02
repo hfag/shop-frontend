@@ -28,17 +28,17 @@ const FormWrapper = styled(Form)`
 `;
 
 interface FormValues {
-  fullName?: string;
-  company?: string;
-  streetLine1?: string;
-  streetLine2?: string;
-  city?: string;
-  province?: string;
-  postalCode?: string;
-  country?: string; //country code
-  phone?: string;
-  defaultShippingAddress?: boolean;
-  defaultBillingAddress?: boolean;
+  fullName?: string | null;
+  company?: string | null;
+  streetLine1?: string | null;
+  streetLine2?: string | null;
+  city?: string | null;
+  province?: string | null;
+  postalCode?: string | null;
+  country?: string | null; //country code
+  phone?: string | null;
+  defaultShippingAddress?: boolean | null;
+  defaultBillingAddress?: boolean | null;
 }
 
 interface IProps {

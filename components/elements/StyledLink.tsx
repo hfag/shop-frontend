@@ -11,6 +11,7 @@ interface IProps {
   block?: boolean;
   negative?: boolean;
   noHover?: boolean;
+  children?: React.ReactNode;
 }
 
 const _StyledLink = styled.span<IProps>`
@@ -89,7 +90,7 @@ const StyledLink: FunctionComponent<{
 }) => {
   const router = useRouter();
 
-  const LinkComponent: StyledComponent<unknown, IProps> = underlined
+  const LinkComponent: StyledComponent<IProps> = underlined
     ? BorderLink
     : _StyledLink;
 
@@ -122,7 +123,7 @@ const StyledLink: FunctionComponent<{
 
     return (
       <StyledNextLink
-        href={href}
+        href={href || ""}
         rel={rel}
         title={title}
         target={target}

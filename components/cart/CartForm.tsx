@@ -11,7 +11,6 @@ import {
 } from "../../gql/order";
 import { FACTOR_PLUS_TAXES, FACTOR_TAXES } from "../../utilities/taxes";
 import { Mutation, Order } from "../../schema";
-import { colors } from "../../utilities/style";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { mutate } from "swr";
 import Asset from "../elements/Asset";
@@ -54,20 +53,16 @@ const LastRow = styled.div`
   }
 `;
 
-const ValidationErrors = styled.div`
-  color: ${colors.danger};
-`;
-
 interface FormValues {
   lines: { id: string; quantity: number }[];
 }
 
 interface IProps {
   intl: IntlShape;
-  token?: string;
+  token?: string | null;
   values?: FormValues;
   enabled?: boolean;
-  order: Order | null;
+  order: Order;
   lastRow?: ReactNode;
   onProceed?: () => void;
 }
@@ -79,7 +74,6 @@ const InnerCartForm = React.memo(
   ({
     status,
     values,
-    errors,
     handleSubmit,
     dirty,
     enabled,
@@ -123,15 +117,15 @@ const InnerCartForm = React.memo(
                 .filter((line) => values.lines.find((l) => l.id === line.id))
                 .map((line, index) => {
                   let customizations: {
-                    [key: string]: { label: string; value: string };
-                  } | null = null;
+                    [key: string]: { label: string; value: string } | undefined;
+                  };
 
                   try {
                     customizations = JSON.parse(
-                      line.customFields.customizations
+                      line.customFields?.customizations || "{}"
                     );
                   } catch (e) {
-                    customizations = null;
+                    customizations = {};
                   }
 
                   return (
@@ -157,7 +151,7 @@ const InnerCartForm = React.memo(
                             {Object.keys(customizations)
                               .map(
                                 (key) =>
-                                  `${customizations[key].label}: ${customizations[key].value}`
+                                  `${customizations[key]?.label}: ${customizations[key]?.value}`
                               )
                               .join(", ")}
                           </p>
@@ -244,7 +238,7 @@ const InnerCartForm = React.memo(
           </tr>
         </tfoot>
       </CartTable>
-      {errors.lines && <ValidationErrors>{errors.lines}</ValidationErrors>}
+      {/*errors.lines && <ValidationErrors>{errors.lines}</ValidationErrors>*/}
       {enabled && values.lines.length > 0 && order && order.total > 0 && (
         <Button
           controlled

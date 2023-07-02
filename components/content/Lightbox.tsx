@@ -84,7 +84,7 @@ const Lightbox: FunctionComponent<{
   rightArrowTitle,
   closeButtonTitle,
 }) => {
-  const backdrop = useRef();
+  const backdrop = useRef<HTMLDivElement | null>(null);
 
   const onKeyUp = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape" || e.which === 27) {
@@ -101,34 +101,32 @@ const Lightbox: FunctionComponent<{
     return () => document.removeEventListener("keyup", onKeyUp);
   }, []);
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    isOpen && (
-      <ClientOnlyPortal selector="#lightbox">
-        <Backdrop
-          onClick={(e: React.MouseEvent) => {
-            if (e.target === backdrop.current) {
-              onClose();
-            }
-          }}
-        >
-          <ImageContainer ref={backdrop}>
-            <ArrowLeft size={48} onClick={onClickPrev} title={leftArrowTitle} />
-            <ImageStack>
-              <FaTimes size={24} onClick={onClose} title={closeButtonTitle} />
-              <img src={images[currentImage].src} />
-              <div>
-                {currentImage + 1} {imageCountSeparator} {images.length}
-              </div>
-            </ImageStack>
-            <ArrowRight
-              size={48}
-              onClick={onClickNext}
-              title={rightArrowTitle}
-            />
-          </ImageContainer>
-        </Backdrop>
-      </ClientOnlyPortal>
-    )
+    <ClientOnlyPortal selector="#lightbox">
+      <Backdrop
+        onClick={(e: React.MouseEvent) => {
+          if (e.target === backdrop.current) {
+            onClose();
+          }
+        }}
+      >
+        <ImageContainer ref={backdrop}>
+          <ArrowLeft size={48} onClick={onClickPrev} title={leftArrowTitle} />
+          <ImageStack>
+            <FaTimes size={24} onClick={onClose} title={closeButtonTitle} />
+            <img src={images[currentImage].src} />
+            <div>
+              {currentImage + 1} {imageCountSeparator} {images.length}
+            </div>
+          </ImageStack>
+          <ArrowRight size={48} onClick={onClickNext} title={rightArrowTitle} />
+        </ImageContainer>
+      </Backdrop>
+    </ClientOnlyPortal>
   );
 };
 

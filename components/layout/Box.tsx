@@ -52,6 +52,7 @@ const Box: FunctionComponent<{
   className?: string; // recursive styled components
   defaultHidden?: boolean;
   onClick?: () => void;
+  children?: React.ReactNode;
 }> = React.memo(
   ({
     widths,

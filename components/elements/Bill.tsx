@@ -40,7 +40,7 @@ const Bill: FunctionComponent<{
     quantity: number;
     price: number;
     discountPrice?: number;
-    unit?: string;
+    unit?: string | null;
   }[];
 }> = React.memo(({ items }) => {
   const intl = useIntl();

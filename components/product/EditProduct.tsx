@@ -133,7 +133,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 };
 
 const EditProduct: FunctionComponent<{
-  product?: ProductType;
+  product?: ProductType | null;
 }> = React.memo(({ product }) => {
   if (!product) {
     return <Placeholder block />;
@@ -200,7 +200,9 @@ const EditProduct: FunctionComponent<{
   return (
     <div>
       <Head>
-        <title>{`${stripTags(product.name)} - Hauser Feuerschutz AG`}</title>
+        <title key="title">{`${stripTags(
+          product.name
+        )} - Hauser Feuerschutz AG`}</title>
         {/* <meta name="description" content={stripTags(product.description)} /> */}
         <link
           rel="canonical"

@@ -35,7 +35,7 @@ const Page: FunctionComponent = () => {
       ]}
     >
       <SearchResults
-        term={Array.isArray(router.query.query) ? "" : router.query.query}
+        term={typeof router.query.query === "string" ? router.query.query : ""}
       />
     </Wrapper>
   );

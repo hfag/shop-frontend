@@ -1,5 +1,5 @@
 import { MdInfoOutline } from "react-icons/md";
-import React from "react";
+import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 
 import { borders, colors } from "../../utilities/style";
@@ -20,17 +20,17 @@ const MessageWrapper = styled.div`
 /**
  * Renders a message
  */
-class Message extends React.PureComponent {
-  render = () => {
-    return (
-      <MessageWrapper>
-        <Flexbar>
-          <MdInfoOutline color={colors.info} />
-          {this.props.children}
-        </Flexbar>
-      </MessageWrapper>
-    );
-  };
-}
+const Message: FunctionComponent<{ children?: React.ReactNode }> = ({
+  children,
+}) => {
+  return (
+    <MessageWrapper>
+      <Flexbar>
+        <MdInfoOutline color={colors.info} />
+        {children}
+      </Flexbar>
+    </MessageWrapper>
+  );
+};
 
 export default Message;

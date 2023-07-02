@@ -23,7 +23,7 @@ const Page = () => {
   const { id } = router.query;
 
   const address: Address | undefined = useMemo(
-    () => user?.addresses.find((a) => a.id === id),
+    () => user?.addresses?.find((a) => a.id === id),
     [user, id]
   );
 
@@ -63,9 +63,8 @@ const Page = () => {
             token={token}
             countries={countryData ? countryData.availableCountries : []}
             values={
-              id === "new"
-                ? {}
-                : {
+              address
+                ? {
                     fullName: address.fullName,
                     company: address.company,
                     country: address.country.code,
@@ -84,6 +83,7 @@ const Page = () => {
                       ? true
                       : false,
                   }
+                : {}
             }
           />
         ) : (

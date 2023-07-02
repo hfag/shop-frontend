@@ -3,6 +3,7 @@ import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages } from "react-intl";
 import React, { useEffect, useMemo } from "react";
 
+import { ErrorCode, Mutation, Order, Query } from "../../schema";
 import { FACTOR_PLUS_TAXES, FACTOR_TAXES } from "../../utilities/taxes";
 import {
   GET_ACTIVE_ORDER,
@@ -12,7 +13,6 @@ import {
   ORDER_SET_SHIPPING_METHOD,
   TRANSITION_ORDER_AND_ADD_PAYMENT,
 } from "../../gql/order";
-import { Mutation, Order, Query } from "../../schema";
 import { NextRouter } from "next/router";
 import { errorCodeToMessage } from "../../utilities/i18n";
 import { pageSlugsByLanguage, pathnamesByLanguage } from "../../utilities/urls";
@@ -67,18 +67,18 @@ const messages = defineMessages({
 });
 
 interface FormValues {
-  shippingMethod?: string;
-  orderComments?: string;
-  terms?: boolean;
+  shippingMethod?: string | null;
+  orderComments?: string | null;
+  terms?: boolean | null;
   paymentMethod: string;
 }
 
 interface IProps {
   intl: IntlShape;
   router: NextRouter;
-  token?: string;
+  token?: string | null;
   values?: FormValues;
-  order: Order | null;
+  order: Order;
 }
 
 /**
@@ -240,7 +240,7 @@ const CheckoutForm = withFormik<IProps, FormValues>({
   isInitialValid: false,
   mapPropsToValues: ({ order, values = {} }) => ({
     paymentMethod: "invoice",
-    orderComments: order?.customFields?.notes,
+    orderComments: order.customFields?.notes,
     ...values,
     shippingMethod: "1",
     terms: false,
@@ -327,6 +327,17 @@ const CheckoutForm = withFormik<IProps, FormValues>({
             metadata: {},
           },
         });
+
+        if (!response.transitionOrderToState) {
+          setErrors({
+            terms: errorCodeToMessage(intl, {
+              errorCode: ErrorCode.UnknownError,
+            }),
+          });
+          setStatus("error");
+          setTimeout(() => setStatus(""), 300);
+          return;
+        }
 
         if ("errorCode" in response.transitionOrderToState) {
           setErrors({

@@ -34,7 +34,7 @@ const ProductCategoryHead: FunctionComponent<{
   const intl = useIntl();
   return (
     <Head>
-      <title>
+      <title key="title">
         {collection
           ? stripTags(collection.name) + " - Hauser Feuerschutz AG"
           : intl.formatMessage(shop.siteTitle)}
@@ -67,10 +67,10 @@ const RichSnippet: FunctionComponent<{
 
 const ProductCollection: FunctionComponent<{
   showDescription?: boolean;
-  collection?: Collection;
+  collection?: Collection | null;
 }> = React.memo(({ collection, showDescription }) => {
   const productsJsonLd = useMemo<JsonLdProduct[]>(
-    () => collection.products.map(productToJsonLd),
+    () => collection?.products.map(productToJsonLd) || [],
     [collection]
   );
 
@@ -110,26 +110,28 @@ const ProductCollection: FunctionComponent<{
           }}
           marginX
         >
-          {collection &&
-            collection.children
-              .sort((a, b) => a.position - b.position)
-              .map((collection) => (
-                <CollectionItem
-                  key={"collection-" + collection.id}
-                  collection={collection}
-                />
-              ))}
-          {collection &&
-            collection.products
-              .sort((a, b) => a.customFields.ordering - b.customFields.ordering)
-              .map((product) => (
-                <ProductItem key={"product-" + product.id} product={product} />
-              ))}
+          {collection?.children
+            ?.sort((a, b) => a.position - b.position)
+            .map((collection) => (
+              <CollectionItem
+                key={"collection-" + collection.id}
+                collection={collection}
+              />
+            ))}
+          {collection?.products
+            .sort(
+              (a, b) =>
+                (a.customFields?.ordering || 0) -
+                (b.customFields?.ordering || 0)
+            )
+            .map((product) => (
+              <ProductItem key={"product-" + product.id} product={product} />
+            ))}
 
           {!collection &&
             new Array(12)
               .fill(0)
-              .map((el, index) => <CollectionItem key={index} />)}
+              .map((_, index) => <CollectionItem key={index} />)}
         </Flex>
       </div>
     </ProductCollectionWrapper>

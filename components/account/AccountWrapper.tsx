@@ -81,12 +81,13 @@ const AccountWrapper: FunctionComponent<{ children: ReactNode }> = React.memo(
     return (
       <AccountContainer>
         <Head>
-          <title>
+          <title key="title">
             {`${intl.formatMessage(
               messages.siteTitle
             )} - Hauser Feuerschutz AG`}
           </title>
           <meta
+            key="description"
             name="description"
             content={intl.formatMessage(messages.siteDescription)}
           />

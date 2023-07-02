@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
+  Page,
   Page as PageType,
   WP_Page,
   mapPage,
@@ -32,14 +33,17 @@ const Page: FunctionComponent<{ slug: string; page: PageType }> = ({
   );
 
   const breadcrumbs = useMemo(
-    () => [
-      {
-        name: data.title,
-        url: `/${intl.locale}/${
-          pathnamesByLanguage.post.languages[intl.locale]
-        }/${slug}`,
-      },
-    ],
+    () =>
+      data
+        ? [
+            {
+              name: data.title,
+              url: `/${intl.locale}/${
+                pathnamesByLanguage.post.languages[intl.locale]
+              }/${slug}`,
+            },
+          ]
+        : [],
     [data]
   );
 
@@ -74,12 +78,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   let notFound = false;
-  let page = null;
+  let page: Page | null = null;
 
   try {
     page = await fetch(
       `${getWordpressUrl(locale)}/wp-json/wp/v2/pages?slug=${
-        context.params.slug
+        context.params?.slug
       }`
     )
       .then((r) => r.json())
@@ -97,7 +101,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     revalidate: 60 * 60 * 12,
     notFound,
     props: {
-      slug: context.params.slug,
+      slug: context.params?.slug,
       page,
     },
   };

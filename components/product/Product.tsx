@@ -93,7 +93,7 @@ const areOptionsEqual = (o1: ProductOption, o2: ProductOption) =>
   o1 && o2 && o1.id == o2.id;
 
 const Product: FunctionComponent<{
-  product?: ProductType;
+  product?: ProductType | null;
 }> = React.memo(({ product }) => {
   if (!product) {
     return <Placeholder block />;
@@ -110,7 +110,7 @@ const Product: FunctionComponent<{
   }>({});
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState<string | null>(null);
-  const crosssellRef = useRef(null);
+  const crosssellRef = useRef<HTMLHeadingElement | null>(null);
 
   useEffect(() => {
     setSelectedOptions({});
@@ -256,26 +256,31 @@ const Product: FunctionComponent<{
     };
   } | null = useMemo(() => {
     try {
-      return JSON.parse(product.customFields.customizationOptions);
+      return JSON.parse(product.customFields?.customizationOptions || "");
     } catch (e) {
       return null;
     }
-  }, [product.customFields.customizationOptions]);
+  }, [product.customFields?.customizationOptions]);
 
   const [customizations, setCustomizations] = useState({});
 
   useEffect(() => {
     //select the default options or the specified sku
-    setSelectedOptions(
-      router.query.sku && !Array.isArray(router.query.sku)
-        ? product.variants
-            .find((v) => v.sku === router.query.sku)
-            .options.reduce((obj, option) => {
-              obj[option.groupId] = option;
-              return obj;
-            }, {})
-        : defaultOptions
-    );
+    const sku = router.query.sku;
+    if (typeof sku === "string") {
+      const variant = product.variants.find((v) => v.sku === router.query.sku);
+
+      if (variant) {
+        setSelectedOptions(
+          variant.options.reduce((obj, option) => {
+            obj[option.groupId] = option;
+            return obj;
+          }, {})
+        );
+      }
+    }
+
+    setSelectedOptions(defaultOptions);
   }, [product.variants, router.query.sku]);
 
   /*useEffect(() => {
@@ -297,13 +302,17 @@ const Product: FunctionComponent<{
   }, [possibleVariants]);*/
 
   const galleryAssets = product.assets.filter(
-    (a) => a.id != product.featuredAsset.id
+    (a) => a.id != product.featuredAsset?.id
   );
+
+  const buyable = product.customFields?.buyable;
 
   return (
     <div>
       <Head>
-        <title>{`${stripTags(product.name)} - Hauser Feuerschutz AG`}</title>
+        <title key="title">{`${stripTags(
+          product.name
+        )} - Hauser Feuerschutz AG`}</title>
         {/* <meta name="description" content={stripTags(product.description)} /> */}
         <link
           rel="canonical"
@@ -333,7 +342,7 @@ const Product: FunctionComponent<{
             />
           )}
         </h1>
-        {product.customFields.buyable && (
+        {buyable && (
           <div>
             <hr />
             <h4>{intl.formatMessage(messages.chooseAVariation)}</h4>
@@ -345,7 +354,7 @@ const Product: FunctionComponent<{
           </div>
         )}
         <Flex flexWrap="wrap" marginX>
-          {product.customFields.buyable &&
+          {buyable &&
             product.optionGroups
               .filter((optionGroup) => !(optionGroup.id in defaultOptions))
               .map((optionGroup) => (
@@ -372,11 +381,21 @@ const Product: FunctionComponent<{
                         delete o[optionGroup.id];
                         setSelectedOptions(o);
                       } else {
+                        const productOption = group.options.find(
+                          (o) => o.code === item.code
+                        );
+
+                        if (!productOption) {
+                          console.error(
+                            "The item isn't paired to a product option, this shouldn't happen"
+                          );
+
+                          return;
+                        }
+
                         setSelectedOptions({
                           ...selectedOptions,
-                          [optionGroup.id]: group.options.find(
-                            (o) => o.code === item.code
-                          ),
+                          [optionGroup.id]: productOption,
                         });
                       }
                     }}
@@ -423,7 +442,7 @@ const Product: FunctionComponent<{
                 </Box>
               );
             })}
-          {product.customFields.buyable && (
+          {buyable && (
             <>
               <Box widths={[1, 1, 1 / 2, 1 / 3, 1 / 3]} paddingX={0.5}>
                 <h4>{intl.formatMessage(productMessages.quantity)}</h4>
@@ -480,8 +499,9 @@ const Product: FunctionComponent<{
                           <DiscountRow
                             onClick={() => setQuantity(quantity)}
                             selected={
-                              activeBulkDiscount &&
-                              quantity === activeBulkDiscount.quantity
+                              activeBulkDiscount
+                                ? quantity === activeBulkDiscount.quantity
+                                : false
                             }
                             key={index}
                           >
@@ -523,7 +543,7 @@ const Product: FunctionComponent<{
             paddingX={0.5}
             marginTop={1}
           >
-            {product.customFields.buyable && selectedVariant ? (
+            {buyable && selectedVariant ? (
               <div>
                 <h4>{intl.formatMessage(productMessages.price)}</h4>
                 <Bill
@@ -570,7 +590,7 @@ const Product: FunctionComponent<{
                       mutate([GET_ACTIVE_ORDER, token]);
 
                       if (crosssellRef.current) {
-                        crosssellRef.current.scrollIntoView({
+                        crosssellRef.current?.scrollIntoView({
                           behavior: "smooth",
                           block: "center",
                         });
@@ -656,7 +676,7 @@ const Product: FunctionComponent<{
                   <td>
                     {selectedVariant
                       ? selectedVariant.sku
-                      : product.customFields.groupKey}
+                      : product.customFields?.groupKey}
                   </td>
                 </tr>
                 <tr>

@@ -9,12 +9,13 @@ interface IProps {
 }
 
 const Block: FunctionComponent<IProps> = memo(({ block }) => {
-  switch (block.blockName) {
-    case null:
-      return null;
+  if (!block) {
+    return null;
+  }
 
+  switch (block.blockName) {
     case "core/image":
-      return <UnsafeHTMLContent content={block.innerHTML} />;
+      return <UnsafeHTMLContent content={block.innerHTML || ""} />;
     case "core/gallery":
       return (
         <LightboxGallery
@@ -30,7 +31,7 @@ const Block: FunctionComponent<IProps> = memo(({ block }) => {
     case "core/list":
     case "core/paragraph":
     default:
-      return <UnsafeHTMLContent content={block.innerHTML} />;
+      return <UnsafeHTMLContent content={block.innerHTML || ""} />;
   }
 });
 

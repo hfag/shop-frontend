@@ -32,7 +32,10 @@ const SidebarProducts: FunctionComponent<{
         <H4>{intl.formatMessage(product.products)}</H4>
       </SidebarBreadcrumb>
       {products
-        .sort((a, b) => a.customFields.ordering - b.customFields.ordering)
+        .sort(
+          (a, b) =>
+            (a.customFields?.ordering || 0) - (b.customFields?.ordering || 0)
+        )
         .map((product) => (
           <StyledLink
             key={product.id}

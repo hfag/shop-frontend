@@ -33,7 +33,7 @@ export default class MyApp extends App {
 
     return (
       <>
-        <style jsx global>{`
+        <style>{`
           html,
           body,
           button,

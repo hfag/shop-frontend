@@ -23,11 +23,11 @@ const Img = styled.img`
 const StyledImage: FunctionComponent<{
   placeholder?: boolean;
   squared?: boolean;
-  width?: number;
-  height?: number;
+  width?: number | null;
+  height?: number | null;
   originalWidth?: number;
   originalHeight?: number;
-  src?: string;
+  src?: string | null;
   previewUrl?: string;
   alt?: string;
   eagerLoading?: boolean;
@@ -66,11 +66,11 @@ const StyledImage: FunctionComponent<{
           </>
         )}
         <Img
-          src={src}
+          src={src || undefined}
           className={w && h && w < h ? "b-height" : "b-width"}
           loading={eagerLoading ? "eager" : "lazy"}
-          width={width}
-          height={height}
+          width={width || undefined}
+          height={height || undefined}
           alt={alt}
         />
       </Picture>

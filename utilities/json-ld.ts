@@ -17,20 +17,20 @@ export const productToJsonLd = (product: Product): JsonLdProduct => {
   const offer: AggregateOffer = {
     "@type": "AggregateOffer",
     priceCurrency: "CHF",
-    lowPrice:
-      product.customFields.buyable &&
-      product.variants.reduce(
-        (lowest, variant) =>
-          lowest < variant.price && lowest !== 0 ? lowest : variant.price,
-        product.variants[0].price
-      ) / 100,
-    highPrice:
-      product.customFields.buyable &&
-      product.variants.reduce(
-        (highest, variant) =>
-          highest > variant.price && highest !== 0 ? highest : variant.price,
-        product.variants[0].price
-      ) / 100,
+    lowPrice: product.customFields.buyable
+      ? product.variants.reduce(
+          (lowest, variant) =>
+            lowest < variant.price && lowest !== 0 ? lowest : variant.price,
+          product.variants[0].price
+        ) / 100
+      : undefined,
+    highPrice: product.customFields.buyable
+      ? product.variants.reduce(
+          (highest, variant) =>
+            highest > variant.price && highest !== 0 ? highest : variant.price,
+          product.variants[0].price
+        ) / 100
+      : undefined,
     offerCount: product.variants.length,
     itemCondition: "NewCondition",
     availability: "InStock",

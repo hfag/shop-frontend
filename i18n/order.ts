@@ -31,7 +31,7 @@ export default defineMessages({
   },
   vat: {
     id: "CartForm.vat",
-    defaultMessage: "MWST (7.7%)",
+    defaultMessage: "MWST (8.1%)",
   },
   noOrders: {
     id: "order.noOrders",

@@ -33,7 +33,9 @@ export default class MyApp extends App {
 
     return (
       <>
-        <style>{`
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
           html,
           body,
           button,
@@ -43,7 +45,9 @@ export default class MyApp extends App {
           textarea {
             font-family: ${font.style.fontFamily};
           }
-        `}</style>
+        `,
+          }}
+        />
         <Component {...pageProps} />
       </>
     );

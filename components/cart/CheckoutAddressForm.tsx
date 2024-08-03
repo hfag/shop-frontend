@@ -10,9 +10,11 @@ import {
   Customer,
   Mutation,
   OrderAddress,
+  Query,
 } from "../../schema";
 import {
   GET_ACTIVE_ORDER,
+  ORDER_GET_SHIPPING_METHODS,
   ORDER_SET_ADDRESS,
   ORDER_SET_CUSTOMER,
 } from "../../gql/order";
@@ -595,10 +597,27 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
     );
 
     if (billingRequest.setOrderBillingAddress.state !== "ArrangingPayment") {
+      const eligibleShippingMethods = await request<{
+        eligibleShippingMethods: Query["eligibleShippingMethods"];
+      }>(intl.locale, ORDER_GET_SHIPPING_METHODS);
+
+      if (
+        !eligibleShippingMethods.eligibleShippingMethods ||
+        eligibleShippingMethods.eligibleShippingMethods.length < 1
+      ) {
+        setErrors({
+          billingEmail:
+            "Internal error: cannot ship this order. Please report this issue",
+        });
+        setStatus("error");
+        setTimeout(() => setStatus(""), 300);
+        return;
+      }
+
       const setShipping = await request<{
         setOrderShippingMethod: Mutation["setOrderShippingMethod"];
       }>(intl.locale, ORDER_SET_SHIPPING_METHOD, {
-        shippingMethodId: "1",
+        shippingMethodId: eligibleShippingMethods.eligibleShippingMethods[0].id,
       });
 
       if ("errorCode" in setShipping.setOrderShippingMethod) {

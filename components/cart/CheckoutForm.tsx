@@ -109,6 +109,10 @@ const InnerCheckoutForm = React.memo(
           shippingMethodId: values.shippingMethod,
         })
           .then((response) => {
+            if ("errorCode" in response.setOrderShippingMethod) {
+              return;
+            }
+
             mutate(
               [GET_ACTIVE_ORDER, token],
               { activeOrder: response.setOrderShippingMethod },
@@ -166,6 +170,16 @@ const InnerCheckoutForm = React.memo(
               <Placeholder block />
             </Box>
           )}
+          <Box widths={[1, 1, 1, 1, 1]} paddingRight={1}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html:
+                  data?.eligibleShippingMethods.find(
+                    (method) => method.id === values.shippingMethod
+                  )?.description || "",
+              }}
+            ></div>
+          </Box>
         </Flex>
         <h3>{intl.formatMessage(messages.paymentMethods)}</h3>
         <Flex flexWrap="wrap">
@@ -242,7 +256,7 @@ const CheckoutForm = withFormik<IProps, FormValues>({
     paymentMethod: "invoice",
     orderComments: order.customFields?.notes,
     ...values,
-    shippingMethod: "1",
+    shippingMethod: order.shippingLines[0]?.shippingMethod.id || "1",
     terms: false,
   }),
 

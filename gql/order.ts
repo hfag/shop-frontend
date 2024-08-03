@@ -85,6 +85,7 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
   shipping
   shippingLines {
     shippingMethod {
+      id
       code
       description
     }

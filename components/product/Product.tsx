@@ -32,6 +32,7 @@ import { productToJsonLd } from "../../utilities/json-ld";
 import { stripTags } from "../../utilities/decode";
 import { useAuthenticate } from "../../utilities/hooks";
 import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import Asset from "../elements/Asset";
 import Bill from "../elements/Bill";
 import Box from "../layout/Box";
@@ -264,9 +265,11 @@ const Product: FunctionComponent<{
 
   const [customizations, setCustomizations] = useState({});
 
+  const searchParams = useSearchParams();
+  const sku = searchParams.get("sku");
+
   useEffect(() => {
     //select the default options or the specified sku
-    const sku = router.query.sku;
     if (typeof sku === "string") {
       const variant = product.variants.find((v) => v.sku === router.query.sku);
 
@@ -277,11 +280,13 @@ const Product: FunctionComponent<{
             return obj;
           }, {})
         );
+
+        return;
       }
     }
 
     setSelectedOptions(defaultOptions);
-  }, [product.variants, router.query.sku]);
+  }, [product.variants, sku]);
 
   /*useEffect(() => {
     const autoSelection: { [groupId: string]: ProductOption } = Object.keys(

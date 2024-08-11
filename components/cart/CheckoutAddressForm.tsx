@@ -617,7 +617,12 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       const setShipping = await request<{
         setOrderShippingMethod: Mutation["setOrderShippingMethod"];
       }>(intl.locale, ORDER_SET_SHIPPING_METHOD, {
-        shippingMethodId: eligibleShippingMethods.eligibleShippingMethods[0].id,
+        shippingMethodId: eligibleShippingMethods.eligibleShippingMethods.find(
+          (method) => method.id === "1"
+        )
+          ? // if default shipping is available, always select this first
+            "1"
+          : eligibleShippingMethods.eligibleShippingMethods[0].id,
       });
 
       if ("errorCode" in setShipping.setOrderShippingMethod) {

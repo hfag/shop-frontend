@@ -140,6 +140,9 @@
   "errors.MISSING_PASSWORD_ERROR": {
     "defaultMessage": "Es muss ein Passwort angegeben werden."
   },
+  "errors.PASSWORD_VALIDATION_ERROR": {
+    "defaultMessage": "Das angegebene Passwort ist zu schwach. Verwenden Sie mindestens 7 Zeichen."
+  },
   "errors.NATIVE_AUTH_STRATEGY_ERROR": {
     "defaultMessage": "Authentifikationsfehler."
   },
@@ -175,6 +178,9 @@
   },
   "errors.PAYMENT_DECLINED_ERROR": {
     "defaultMessage": "Bezahlung wurde abgelehnt."
+  },
+  "errors.INELIGIBLE_PAYMENT_METHOD_ERROR": {
+    "defaultMessage": "Ungültige Zahlungsmethode. Falls Sie denken dass dies ein Fehler ist, kontaktieren Sie uns."
   },
   "errors.PAYMENT_FAILED_ERROR": {
     "defaultMessage": "Zahlung ist fehlgeschlagen."

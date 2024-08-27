@@ -50,6 +50,11 @@ export default defineMessages({
     id: "errors.ORDER_PAYMENT_STATE_ERROR",
     defaultMessage: "Fehler beim Bezahlungszustand der Bestellung.",
   },
+  INELIGIBLE_PAYMENT_METHOD_ERROR: {
+    id: "errors.INELIGIBLE_PAYMENT_METHOD_ERROR",
+    defaultMessage:
+      "Ungültige Zahlungsmethode. Falls Sie denken dass dies ein Fehler ist, kontaktieren Sie uns.",
+  },
   PAYMENT_FAILED_ERROR: {
     id: "errors.PAYMENT_FAILED_ERROR",
     defaultMessage: "Zahlung ist fehlgeschlagen.",
@@ -77,6 +82,11 @@ export default defineMessages({
   MISSING_PASSWORD_ERROR: {
     id: "errors.MISSING_PASSWORD_ERROR",
     defaultMessage: "Es muss ein Passwort angegeben werden.",
+  },
+  PASSWORD_VALIDATION_ERROR: {
+    id: "errors.PASSWORD_VALIDATION_ERROR",
+    defaultMessage:
+      "Das angegebene Passwort ist zu schwach. Verwenden Sie mindestens 7 Zeichen.",
   },
   PASSWORD_ALREADY_SET_ERROR: {
     id: "errors.PASSWORD_ALREADY_SET_ERROR",

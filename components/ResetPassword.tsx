@@ -43,7 +43,7 @@ const ResetPassword: FunctionComponent = () => {
     });
     if ("errorCode" in data.resetPassword) {
       setError(errorCodeToMessage(intl, data.resetPassword));
-      return;
+      return Promise.reject();
     }
 
     router.push(
@@ -65,7 +65,7 @@ const ResetPassword: FunctionComponent = () => {
           }}
         />
       </InputFieldWrapper>
-      <Button onClick={onReset} controlled state={error ? "disabled" : ""}>
+      <Button onClick={onReset}>
         {intl.formatMessage(messages.changePassword)}
       </Button>
       {error && (

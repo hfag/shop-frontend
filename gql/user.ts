@@ -187,6 +187,10 @@ export const RESET_PASSWORD = /* GraphQL */ `
         errorCode
         message
       }
+      ... on PasswordValidationError {
+        errorCode
+        message
+      }
       ... on NotVerifiedError {
         errorCode
         message

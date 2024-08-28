@@ -122,6 +122,9 @@
   "CheckoutForm.paymentMethods": {
     "defaultMessage": "Zahlungsmethoden"
   },
+  "CheckoutForm.pickupWarning": {
+    "defaultMessage": "Achtung: Sie haben Abholung als Liefermethode ausgewählt. Für diese Lieferart wird eine ach Vorauszahlung verlangt."
+  },
   "CheckoutForm.shippingMethods": {
     "defaultMessage": "Liefermethoden"
   },

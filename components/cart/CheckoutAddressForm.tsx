@@ -91,6 +91,21 @@ interface IProps {
   onProceed: () => void;
 }
 
+export const mapShippingMethodToOrder = (shippingMethod: string) => {
+  switch (shippingMethod) {
+    case "standard-shipping":
+      return 0;
+    case "sperrgut-lieferung":
+      return 1;
+    case "cargo-domizil":
+      return 2;
+    case "abholung":
+      return 999;
+    default:
+      return 50;
+  }
+};
+
 /**
  * The inner checkout form
  */
@@ -614,15 +629,16 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         return;
       }
 
+      // order shipping methods
+      eligibleShippingMethods.eligibleShippingMethods.sort(
+        (a, b) =>
+          mapShippingMethodToOrder(a.code) - mapShippingMethodToOrder(b.code)
+      );
+
       const setShipping = await request<{
         setOrderShippingMethod: Mutation["setOrderShippingMethod"];
       }>(intl.locale, ORDER_SET_SHIPPING_METHOD, {
-        shippingMethodId: eligibleShippingMethods.eligibleShippingMethods.find(
-          (method) => method.id === "1"
-        )
-          ? // if default shipping is available, always select this first
-            "1"
-          : eligibleShippingMethods.eligibleShippingMethods[0].id,
+        shippingMethodId: eligibleShippingMethods.eligibleShippingMethods[0].id,
       });
 
       if ("errorCode" in setShipping.setOrderShippingMethod) {

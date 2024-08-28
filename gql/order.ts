@@ -240,6 +240,7 @@ export const ORDER_GET_SHIPPING_METHODS = /* GraphQL */ `
   query {
     eligibleShippingMethods {
       id
+      code
       price
       name
       description

@@ -45,6 +45,7 @@
   "CheckoutForm.orderComments": "Bestellnotiz",
   "CheckoutForm.orderCommentsPlaceholder": "Anmerkungen zu Ihrer Bestellung, z.B. besondere Hinweise für die Lieferung.",
   "CheckoutForm.paymentMethods": "Zahlungsmethoden",
+  "CheckoutForm.pickupWarning": "Achtung: Sie haben Abholung als Liefermethode ausgewählt. Für diese Lieferart wird eine Vorauszahlung verlangt.",
   "CheckoutForm.shippingMethods": "Liefermethoden",
   "CheckoutForm.submitOrder": "Bestellung abschicken",
   "CheckoutForm.tosMustBeAccepted": "Die AGBs müssen akzeptiert werden!",

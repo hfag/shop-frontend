@@ -45,6 +45,7 @@
   "CheckoutForm.orderComments": "Annotation",
   "CheckoutForm.orderCommentsPlaceholder": "Note sur votre commande",
   "CheckoutForm.paymentMethods": "Méthode de paiement",
+  "CheckoutForm.pickupWarning": "Attention : vous avez choisi l'enlèvement comme mode de livraison. Un paiement anticipé est demandé pour ce mode de livraison.",
   "CheckoutForm.shippingMethods": "Modes de livraison",
   "CheckoutForm.submitOrder": "Envoyer la commande",
   "CheckoutForm.tosMustBeAccepted": "Les conditions générales doivent être acceptées!",

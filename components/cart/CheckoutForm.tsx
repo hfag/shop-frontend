@@ -3,7 +3,13 @@ import { Field, Form, FormikProps, withFormik } from "formik";
 import { IntlShape, defineMessages } from "react-intl";
 import React, { useEffect, useMemo } from "react";
 
-import { ErrorCode, Mutation, Order, Query } from "../../schema";
+import {
+  ErrorCode,
+  Mutation,
+  Order,
+  Query,
+  ShippingMethodQuote,
+} from "../../schema";
 import { FACTOR_PLUS_TAXES, FACTOR_TAXES } from "../../utilities/taxes";
 import {
   GET_ACTIVE_ORDER,
@@ -15,6 +21,7 @@ import {
 } from "../../gql/order";
 import { NextRouter } from "next/router";
 import { errorCodeToMessage } from "../../utilities/i18n";
+import { mapShippingMethodToOrder } from "./CheckoutAddressForm";
 import { pageSlugsByLanguage, pathnamesByLanguage } from "../../utilities/urls";
 import Box from "../layout/Box";
 import Button from "../elements/Button";
@@ -63,6 +70,11 @@ const messages = defineMessages({
   invalidPaymentMethod: {
     id: "CheckoutForm.invalidPaymentMethod",
     defaultMessage: "Die ausgewählte Zahlungsmethode ist ungültig!",
+  },
+  pickupWarning: {
+    id: "CheckoutForm.pickupWarning",
+    defaultMessage:
+      "Achtung: Sie haben Abholung als Liefermethode ausgewählt. Für diese Lieferart wird eine Vorauszahlung verlangt.",
   },
 });
 
@@ -123,17 +135,30 @@ const InnerCheckoutForm = React.memo(
       }
     }, [values.shippingMethod]);
 
-    const shipping: number | null = useMemo(() => {
+    const shippingMethod: ShippingMethodQuote | null = useMemo(() => {
       if (!data) {
         return null;
       }
 
-      const method = data.eligibleShippingMethods.find(
-        (m) => m.id === values.shippingMethod
+      data.eligibleShippingMethods.sort(
+        (a, b) =>
+          mapShippingMethodToOrder(a.code) - mapShippingMethodToOrder(b.code)
       );
 
-      return method ? method.price : null;
+      return (
+        data.eligibleShippingMethods.find(
+          (m) => m.id === values.shippingMethod
+        ) || null
+      );
     }, [data, values]);
+
+    useEffect(() => {
+      if (shippingMethod?.code == "abholung") {
+        window.alert(intl.formatMessage(messages.pickupWarning));
+      }
+    }, [shippingMethod]);
+
+    const shipping = shippingMethod ? shippingMethod.price : null;
 
     return (
       <Form>

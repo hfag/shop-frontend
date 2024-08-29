@@ -92,7 +92,23 @@ export const UPDATE_CUSTOMER_PASSWORD = /* GraphQL */ `
     updateCustomerPassword(
       currentPassword: $password
       newPassword: $newPassword
-    )
+    ) {
+      ... on Success {
+        success
+      }
+      ... on InvalidCredentialsError {
+        errorCode
+        message
+      }
+      ... on PasswordValidationError {
+        errorCode
+        message
+      }
+      ... on NativeAuthStrategyError {
+        errorCode
+        message
+      }
+    }
   }
 `;
 export const REQUEST_UPDATE_CUSTOMER_EMAIL = /* GraphQL */ `

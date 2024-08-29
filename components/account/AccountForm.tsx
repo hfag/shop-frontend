@@ -133,17 +133,25 @@ const AccountForm = withFormik<IProps, FormValues>({
       lastName: yup.string().required(),
       email: yup.string().email().required(),
       password: yup.string().test("is-required", isRequiredString, function () {
-        const { newPassword, passwordConfirmation, email } = this.parent;
-        return newPassword || passwordConfirmation || email !== previousEmail
-          ? false
-          : true;
+        const { password, newPassword, passwordConfirmation, email } =
+          this.parent;
+
+        if (newPassword || passwordConfirmation || email !== previousEmail) {
+          return password && password.length > 0;
+        }
+
+        return true;
       }),
       newPassword: yup
         .string()
         .min(7)
         .test("is-required", isRequiredString, function () {
-          const { password, passwordConfirmation } = this.parent;
-          return password && passwordConfirmation ? false : true;
+          const { password, newPassword, passwordConfirmation } = this.parent;
+
+          if (password || passwordConfirmation) {
+            return newPassword && newPassword.length > 0;
+          }
+          return true;
         })
         .oneOf(
           [yup.ref("passwordConfirmation")],
@@ -158,8 +166,12 @@ const AccountForm = withFormik<IProps, FormValues>({
             newPassword ? schema.required() : schema
         )
         .test("is-required", isRequiredString, function () {
-          const { newPassword } = this.parent;
-          return newPassword ? false : true;
+          const { newPassword, passwordConfirmation } = this.parent;
+          if (newPassword) {
+            return passwordConfirmation && passwordConfirmation.length > 0;
+          }
+
+          return true;
         }),
     });
   },
@@ -227,14 +239,24 @@ const AccountForm = withFormik<IProps, FormValues>({
 
     try {
       if (password && newPassword) {
-        /*const passwordUpdate =*/ await request(
-          intl.locale,
-          UPDATE_CUSTOMER_PASSWORD,
-          {
-            password,
-            newPassword,
-          }
-        );
+        const passwordUpdate = await request<{
+          updateCustomerPassword: Mutation["updateCustomerPassword"];
+        }>(intl.locale, UPDATE_CUSTOMER_PASSWORD, {
+          password,
+          newPassword,
+        });
+
+        if ("errorCode" in passwordUpdate.updateCustomerPassword) {
+          setErrors({
+            passwordConfirmation: errorCodeToMessage(
+              intl,
+              passwordUpdate.updateCustomerPassword
+            ),
+          });
+          setStatus("error");
+          setTimeout(() => setStatus(""), 300);
+          return;
+        }
       }
     } catch (e) {
       setErrors({
@@ -242,6 +264,7 @@ const AccountForm = withFormik<IProps, FormValues>({
       });
       setStatus("error");
       setTimeout(() => setStatus(""), 300);
+      return;
     }
 
     setStatus("success");

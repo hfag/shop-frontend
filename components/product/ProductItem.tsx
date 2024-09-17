@@ -4,7 +4,7 @@ import React, { FunctionComponent, useContext, useMemo } from "react";
 import styled from "@emotion/styled";
 
 import { AppContext } from "../AppWrapper";
-import { Product } from "../../schema";
+import { FacetValue, Product } from "../../schema";
 import { borders, colors, shadows } from "../../utilities/style";
 import { notEmpty } from "../../utilities/typescript";
 import { pathnamesByLanguage } from "../../utilities/urls";
@@ -141,7 +141,13 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
         return null;
       }
 
-      return product?.facetValues
+      const productFacetValues = product?.facetValues || [];
+      const variantFacetValues = [].concat.apply(
+        [],
+        ...(product?.variants.map((v) => v.facetValues) || [])
+      ) as FacetValue[];
+
+      return [...productFacetValues, ...variantFacetValues]
         .map((f) => {
           const d = customer.resellerDiscounts.find((d) =>
             d.facetValueIds.includes(f.id.toString())
@@ -149,7 +155,7 @@ const ProductItem: FunctionComponent<{ product?: Product }> = React.memo(
           return d ? d.discount : null;
         })
         .filter(notEmpty)
-        .reduce((sum, d) => sum + d, 0);
+        .reduce((max, d) => Math.max(max, d), 0);
     }, [customer]);
 
     if (!product) {

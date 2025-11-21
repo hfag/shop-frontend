@@ -147,11 +147,12 @@ const Footer: FunctionComponent = React.memo(() => {
                           underlined
                           target="_blank"
                           external
-                          href="https://www.google.ch/maps/place/Sonnmattweg+6,+5000+Aarau/@47.3971534,8.0412625,17z/data=!3m1!4b1!4m5!3m4!1s0x47903be72641ef39:0x35e802ea186c4a2d!8m2!3d47.3971534!4d8.0434512"
+                          href="https://www.google.ch/maps/place/Laurenzenvorstadt+85,+5000+Aarau/@47.3944942,8.0486031,16z/data=!3m1!4b1!4m6!3m5!1s0x47903be525e9b93f:0x651cd1fe9a322e4a!8m2!3d47.3944942!4d8.051178!16s%2Fg%2F11q2vvx459?entry=ttu&g_ep=EgoyMDI1MTExNy4wIKXMDSoASAFQAw%3D%3D"
                           rel="noopener"
                           negative
                         >
-                          Sonnmattweg 6<br />
+                          Laurenzenvorstadt 85
+                          <br />
                           CH 5000 Aarau
                         </StyledLink>
                       </td>

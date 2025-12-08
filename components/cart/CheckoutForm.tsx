@@ -10,7 +10,6 @@ import {
   Query,
   ShippingMethodQuote,
 } from "../../schema";
-import { FACTOR_PLUS_TAXES, FACTOR_TAXES } from "../../utilities/taxes";
 import {
   GET_ACTIVE_ORDER,
   ORDER_ADD_PAYMENT,
@@ -249,13 +248,13 @@ const InnerCheckoutForm = React.memo(
             <tr>
               <td>{intl.formatMessage(orderMessages.taxes)}</td>
               <td>
-                <Price>{order.total * FACTOR_TAXES}</Price>
+                <Price>{order.totalWithTax - order.total}</Price>
               </td>
             </tr>
             <tr>
               <td>{intl.formatMessage(orderMessages.total)}</td>
               <td>
-                <Price>{order.total * FACTOR_PLUS_TAXES}</Price>
+                <Price>{order.totalWithTax}</Price>
               </td>
             </tr>
           </tbody>

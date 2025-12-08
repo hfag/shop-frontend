@@ -3,7 +3,6 @@ import React, { FunctionComponent, useMemo } from "react";
 import useSWR from "swr";
 
 import { ABSOLUTE_URL } from "../utilities/api";
-import { FACTOR_PLUS_TAXES, FACTOR_TAXES } from "../utilities/taxes";
 import { GET_ORDER_BY_CODE } from "../gql/order";
 import { Query } from "../schema";
 import { pathnamesByLanguage } from "../utilities/urls";
@@ -205,13 +204,15 @@ const OrderConfirmation: FunctionComponent = () => {
             <tr className="total">
               <td colSpan={5}>{intl.formatMessage(orderMessages.vat)}</td>
               <td>
-                <Price>{data.orderByCode.total * FACTOR_TAXES}</Price>
+                <Price>
+                  {data.orderByCode.totalWithTax - data.orderByCode.total}
+                </Price>
               </td>
             </tr>
             <tr className="total">
               <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
               <td>
-                <Price>{data.orderByCode.total * FACTOR_PLUS_TAXES}</Price>
+                <Price>{data.orderByCode.totalWithTax}</Price>
               </td>
             </tr>
           </tfoot>

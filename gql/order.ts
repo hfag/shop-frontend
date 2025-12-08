@@ -96,6 +96,7 @@ export const FULL_ORDER_FRAGMENT = /* GraphQL */ `
     taxTotal
   }
   total
+  totalWithTax
   customFields {
     notes
   }

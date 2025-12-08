@@ -154,9 +154,14 @@ type Mutation {
   setOrderCustomFields(input: UpdateOrderInput!): ActiveOrderResult!
 
   """
-  Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query
+  Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query.
+  An Order can have multiple shipping methods, in which case you can pass an array of ids. In this case,
+  you should configure a custom ShippingLineAssignmentStrategy in order to know which OrderLines each
+  shipping method will apply to.
   """
-  setOrderShippingMethod(shippingMethodId: ID!): SetOrderShippingMethodResult!
+  setOrderShippingMethod(
+    shippingMethodId: [ID!]!
+  ): SetOrderShippingMethodResult!
 
   """
   Add a Payment to the Order
@@ -169,7 +174,10 @@ type Mutation {
   setCustomerForOrder(input: CreateCustomerInput!): SetCustomerForOrderResult!
 
   """
-  Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})`
+  Authenticates the user using the native authentication strategy. This mutation is an alias for authenticate({ native: { ... }})
+
+  The `rememberMe` option applies when using cookie-based sessions, and if `true` it will set the maxAge of the session cookie
+  to 1 year.
   """
   login(
     username: String!
@@ -320,6 +328,7 @@ type Asset implements Node {
   source: String!
   preview: String!
   focalPoint: Coordinate
+  tags: [Tag!]!
   customFields: JSON
 }
 
@@ -361,8 +370,23 @@ type Channel implements Node {
   defaultTaxZone: Zone
   defaultShippingZone: Zone
   defaultLanguageCode: LanguageCode!
+  availableLanguageCodes: [LanguageCode!]
   currencyCode: CurrencyCode!
+    @deprecated(reason: "Use defaultCurrencyCode instead")
+  defaultCurrencyCode: CurrencyCode!
+  availableCurrencyCodes: [CurrencyCode!]!
+
+  """
+  Not yet used - will be implemented in a future release.
+  """
+  trackInventory: Boolean
+
+  """
+  Not yet used - will be implemented in a future release.
+  """
+  outOfStockThreshold: Int
   pricesIncludeTax: Boolean!
+  seller: Seller
   customFields: JSON
 }
 
@@ -379,6 +403,7 @@ type Collection implements Node {
   featuredAsset: Asset
   assets: [Asset!]!
   parent: Collection
+  parentId: ID!
   children: [Collection!]
   filters: [ConfigurableOperation!]!
   translations: [CollectionTranslation!]!
@@ -852,6 +877,46 @@ enum Permission {
   DeleteTaxRate
 
   """
+  Grants permission to create Seller
+  """
+  CreateSeller
+
+  """
+  Grants permission to read Seller
+  """
+  ReadSeller
+
+  """
+  Grants permission to update Seller
+  """
+  UpdateSeller
+
+  """
+  Grants permission to delete Seller
+  """
+  DeleteSeller
+
+  """
+  Grants permission to create StockLocation
+  """
+  CreateStockLocation
+
+  """
+  Grants permission to read StockLocation
+  """
+  ReadStockLocation
+
+  """
+  Grants permission to update StockLocation
+  """
+  UpdateStockLocation
+
+  """
+  Grants permission to delete StockLocation
+  """
+  DeleteStockLocation
+
+  """
   Grants permission to create System
   """
   CreateSystem
@@ -903,6 +968,7 @@ enum ErrorCode {
   INVALID_CREDENTIALS_ERROR
   ORDER_STATE_TRANSITION_ERROR
   EMAIL_ADDRESS_CONFLICT_ERROR
+  GUEST_CHECKOUT_ERROR
   ORDER_LIMIT_ERROR
   NEGATIVE_QUANTITY_ERROR
   INSUFFICIENT_STOCK_ERROR
@@ -968,6 +1034,15 @@ Returned when attempting to create a Customer with an email address already regi
 type EmailAddressConflictError implements ErrorResult {
   errorCode: ErrorCode!
   message: String!
+}
+
+"""
+Returned when attempting to set the Customer on a guest checkout when the configured GuestCheckoutStrategy does not allow it.
+"""
+type GuestCheckoutError implements ErrorResult {
+  errorCode: ErrorCode!
+  message: String!
+  errorDetail: String!
 }
 
 """
@@ -1065,6 +1140,11 @@ The `Upload` scalar type represents a file upload.
 """
 scalar Upload
 
+"""
+The `Money` scalar type represents monetary values and supports signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
+"""
+scalar Money
+
 interface PaginatedList {
   items: [Node!]!
   totalItems: Int!
@@ -1083,7 +1163,8 @@ type Adjustment {
   adjustmentSource: String!
   type: AdjustmentType!
   description: String!
-  amount: Int!
+  amount: Money!
+  data: JSON
 }
 
 type TaxLine {
@@ -1282,6 +1363,13 @@ input CreateCustomerInput {
   customFields: JSON
 }
 
+"""
+Input used to create an Address.
+
+The countryCode must correspond to a `code` property of a Country that has been defined in the
+Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+If an invalid code is passed, the mutation will fail.
+"""
 input CreateAddressInput {
   fullName: String
   company: String
@@ -1297,6 +1385,13 @@ input CreateAddressInput {
   customFields: JSON
 }
 
+"""
+Input used to update an Address.
+
+The countryCode must correspond to a `code` property of a Country that has been defined in the
+Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+If an invalid code is passed, the mutation will fail.
+"""
 input UpdateAddressInput {
   id: ID!
   fullName: String
@@ -1322,8 +1417,8 @@ type Success {
 
 type ShippingMethodQuote {
   id: ID!
-  price: Int!
-  priceWithTax: Int!
+  price: Money!
+  priceWithTax: Money!
   code: String!
   name: String!
   description: String!
@@ -1365,31 +1460,6 @@ union ApplyCouponCodeResult =
   | CouponCodeExpiredError
   | CouponCodeInvalidError
   | CouponCodeLimitError
-
-type Country implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  languageCode: LanguageCode!
-  code: String!
-  name: String!
-  enabled: Boolean!
-  translations: [CountryTranslation!]!
-  customFields: JSON
-}
-
-type CountryTranslation {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  languageCode: LanguageCode!
-  name: String!
-}
-
-type CountryList implements PaginatedList {
-  items: [Country!]!
-  totalItems: Int!
-}
 
 """
 @description
@@ -2193,6 +2263,7 @@ interface CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
   ui: JSON
 }
 
@@ -2206,6 +2277,7 @@ type StringCustomFieldConfig implements CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
   pattern: String
   options: [StringFieldOption!]
   ui: JSON
@@ -2226,6 +2298,7 @@ type LocaleStringCustomFieldConfig implements CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
   pattern: String
   ui: JSON
 }
@@ -2239,6 +2312,7 @@ type IntCustomFieldConfig implements CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
   min: Int
   max: Int
   step: Int
@@ -2254,6 +2328,7 @@ type FloatCustomFieldConfig implements CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
   min: Float
   max: Float
   step: Float
@@ -2269,6 +2344,7 @@ type BooleanCustomFieldConfig implements CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
   ui: JSON
 }
 
@@ -2285,6 +2361,7 @@ type DateTimeCustomFieldConfig implements CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
   min: String
   max: String
   step: Int
@@ -2300,6 +2377,7 @@ type RelationCustomFieldConfig implements CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
   entity: String!
   scalarFields: [String!]!
   ui: JSON
@@ -2314,6 +2392,20 @@ type TextCustomFieldConfig implements CustomField {
   readonly: Boolean
   internal: Boolean
   nullable: Boolean
+  requiresPermission: [Permission!]
+  ui: JSON
+}
+
+type LocaleTextCustomFieldConfig implements CustomField {
+  name: String!
+  type: String!
+  list: Boolean!
+  label: [LocalizedString!]
+  description: [LocalizedString!]
+  readonly: Boolean
+  internal: Boolean
+  nullable: Boolean
+  requiresPermission: [Permission!]
   ui: JSON
 }
 
@@ -2331,6 +2423,7 @@ union CustomFieldConfig =
   | DateTimeCustomFieldConfig
   | RelationCustomFieldConfig
   | TextCustomFieldConfig
+  | LocaleTextCustomFieldConfig
 
 type CustomerGroup implements Node {
   id: ID!
@@ -2363,7 +2456,7 @@ input CustomerListOptions {
   filter: CustomerFilterParameter
 
   """
-  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
   """
   filterOperator: LogicalOperator
 }
@@ -2395,6 +2488,7 @@ type FacetValue implements Node {
   updatedAt: DateTime!
   languageCode: LanguageCode!
   facet: Facet!
+  facetId: ID!
   name: String!
   code: String!
   translations: [FacetValueTranslation!]!
@@ -2417,6 +2511,11 @@ type Facet implements Node {
   name: String!
   code: String!
   values: [FacetValue!]!
+
+  """
+  Returns a paginated, sortable, filterable list of the Facet's values. Added in v2.1.0.
+  """
+  valueList(options: FacetValueListOptions): FacetValueList!
   translations: [FacetTranslation!]!
   customFields: JSON
 }
@@ -2431,6 +2530,38 @@ type FacetTranslation {
 
 type FacetList implements PaginatedList {
   items: [Facet!]!
+  totalItems: Int!
+}
+
+input FacetValueListOptions {
+  """
+  Skips the first n results, for use in pagination
+  """
+  skip: Int
+
+  """
+  Takes n results, for use in pagination
+  """
+  take: Int
+
+  """
+  Specifies which properties to sort the results by
+  """
+  sort: FacetValueSortParameter
+
+  """
+  Allows the results to be filtered
+  """
+  filter: FacetValueFilterParameter
+
+  """
+  Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
+  """
+  filterOperator: LogicalOperator
+}
+
+type FacetValueList implements PaginatedList {
+  items: [FacetValue!]!
   totalItems: Int!
 }
 
@@ -2467,6 +2598,7 @@ enum HistoryEntryType {
   ORDER_COUPON_APPLIED
   ORDER_COUPON_REMOVED
   ORDER_MODIFIED
+  ORDER_CUSTOMER_UPDATED
 }
 
 type HistoryEntryList implements PaginatedList {
@@ -2496,7 +2628,7 @@ input HistoryEntryListOptions {
   filter: HistoryEntryFilterParameter
 
   """
-  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
   """
   filterOperator: LogicalOperator
 }
@@ -3297,10 +3429,17 @@ enum LanguageCode {
   zu
 }
 
+enum OrderType {
+  Regular
+  Seller
+  Aggregate
+}
+
 type Order implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  type: OrderType!
 
   """
   The date & time that the Order was placed, i.e. the Customer
@@ -3347,30 +3486,30 @@ type Order implements Node {
 
   """
   The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
-  discounts which have been prorated (proportionally distributed) amongst the OrderItems.
+  discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
   To get a total of all OrderLines which does not account for prorated discounts, use the
   sum of `OrderLine.discountedLinePrice` values.
   """
-  subTotal: Int!
+  subTotal: Money!
 
   """
   Same as subTotal, but inclusive of tax
   """
-  subTotalWithTax: Int!
+  subTotalWithTax: Money!
   currencyCode: CurrencyCode!
   shippingLines: [ShippingLine!]!
-  shipping: Int!
-  shippingWithTax: Int!
+  shipping: Money!
+  shippingWithTax: Money!
 
   """
   Equal to subTotal plus shipping
   """
-  total: Int!
+  total: Money!
 
   """
   The final payable amount. Equal to subTotalWithTax plus shippingWithTax
   """
-  totalWithTax: Int!
+  totalWithTax: Money!
 
   """
   A summary of the taxes being applied to this Order
@@ -3396,14 +3535,14 @@ type OrderTaxSummary {
   taxRate: Float!
 
   """
-  The total net price or OrderItems to which this taxRate applies
+  The total net price of OrderLines to which this taxRate applies
   """
-  taxBase: Int!
+  taxBase: Money!
 
   """
   The total tax being applied to the Order at this taxRate
   """
-  taxTotal: Int!
+  taxTotal: Money!
 }
 
 type OrderAddress {
@@ -3428,10 +3567,10 @@ type OrderList implements PaginatedList {
 type ShippingLine {
   id: ID!
   shippingMethod: ShippingMethod!
-  price: Int!
-  priceWithTax: Int!
-  discountedPrice: Int!
-  discountedPriceWithTax: Int!
+  price: Money!
+  priceWithTax: Money!
+  discountedPrice: Money!
+  discountedPriceWithTax: Money!
   discounts: [Discount!]!
 }
 
@@ -3439,58 +3578,8 @@ type Discount {
   adjustmentSource: String!
   type: AdjustmentType!
   description: String!
-  amount: Int!
-  amountWithTax: Int!
-}
-
-type OrderItem implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  cancelled: Boolean!
-
-  """
-  The price of a single unit, excluding tax and discounts
-  """
-  unitPrice: Int!
-
-  """
-  The price of a single unit, including tax but excluding discounts
-  """
-  unitPriceWithTax: Int!
-
-  """
-  The price of a single unit including discounts, excluding tax.
-
-  If Order-level discounts have been applied, this will not be the
-  actual taxable unit price (see `proratedUnitPrice`), but is generally the
-  correct price to display to customers to avoid confusion
-  about the internal handling of distributed Order-level discounts.
-  """
-  discountedUnitPrice: Int!
-
-  """
-  The price of a single unit including discounts and tax
-  """
-  discountedUnitPriceWithTax: Int!
-
-  """
-  The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-  Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
-  and refund calculations.
-  """
-  proratedUnitPrice: Int!
-
-  """
-  The proratedUnitPrice including tax
-  """
-  proratedUnitPriceWithTax: Int!
-  unitTax: Int!
-  taxRate: Float!
-  adjustments: [Adjustment!]!
-  taxLines: [TaxLine!]!
-  fulfillment: Fulfillment
-  refundId: ID
+  amount: Money!
+  amountWithTax: Money!
 }
 
 type OrderLine implements Node {
@@ -3503,22 +3592,22 @@ type OrderLine implements Node {
   """
   The price of a single unit, excluding tax and discounts
   """
-  unitPrice: Int!
+  unitPrice: Money!
 
   """
   The price of a single unit, including tax but excluding discounts
   """
-  unitPriceWithTax: Int!
+  unitPriceWithTax: Money!
 
   """
   Non-zero if the unitPrice has changed since it was initially added to Order
   """
-  unitPriceChangeSinceAdded: Int!
+  unitPriceChangeSinceAdded: Money!
 
   """
   Non-zero if the unitPriceWithTax has changed since it was initially added to Order
   """
-  unitPriceWithTaxChangeSinceAdded: Int!
+  unitPriceWithTaxChangeSinceAdded: Money!
 
   """
   The price of a single unit including discounts, excluding tax.
@@ -3528,68 +3617,76 @@ type OrderLine implements Node {
   correct price to display to customers to avoid confusion
   about the internal handling of distributed Order-level discounts.
   """
-  discountedUnitPrice: Int!
+  discountedUnitPrice: Money!
 
   """
   The price of a single unit including discounts and tax
   """
-  discountedUnitPriceWithTax: Int!
+  discountedUnitPriceWithTax: Money!
 
   """
   The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
   Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
   and refund calculations.
   """
-  proratedUnitPrice: Int!
+  proratedUnitPrice: Money!
 
   """
   The proratedUnitPrice including tax
   """
-  proratedUnitPriceWithTax: Int!
+  proratedUnitPriceWithTax: Money!
+
+  """
+  The quantity of items purchased
+  """
   quantity: Int!
-  items: [OrderItem!]!
+
+  """
+  The quantity at the time the Order was placed
+  """
+  orderPlacedQuantity: Int!
   taxRate: Float!
 
   """
   The total price of the line excluding tax and discounts.
   """
-  linePrice: Int!
+  linePrice: Money!
 
   """
   The total price of the line including tax but excluding discounts.
   """
-  linePriceWithTax: Int!
+  linePriceWithTax: Money!
 
   """
   The price of the line including discounts, excluding tax
   """
-  discountedLinePrice: Int!
+  discountedLinePrice: Money!
 
   """
   The price of the line including discounts and tax
   """
-  discountedLinePriceWithTax: Int!
+  discountedLinePriceWithTax: Money!
 
   """
   The actual line price, taking into account both item discounts _and_ prorated (proportionally-distributed)
   Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
   and refund calculations.
   """
-  proratedLinePrice: Int!
+  proratedLinePrice: Money!
 
   """
   The proratedLinePrice including tax
   """
-  proratedLinePriceWithTax: Int!
+  proratedLinePriceWithTax: Money!
 
   """
   The total tax on this line
   """
-  lineTax: Int!
+  lineTax: Money!
   discounts: [Discount!]!
   taxLines: [TaxLine!]!
   order: Order!
-  fulfillments: [Fulfillment!]
+  fulfillmentLines: [FulfillmentLine!]
   customFields: OrderLineCustomFields
 }
 
@@ -3598,7 +3695,7 @@ type Payment implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   method: String!
-  amount: Int!
+  amount: Money!
   state: String!
   transactionId: String
   errorMessage: String
@@ -3606,34 +3703,46 @@ type Payment implements Node {
   metadata: JSON
 }
 
+type RefundLine {
+  orderLine: OrderLine!
+  orderLineId: ID!
+  quantity: Int!
+  refund: Refund!
+  refundId: ID!
+}
+
 type Refund implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  items: Int!
-  shipping: Int!
-  adjustment: Int!
-  total: Int!
+  items: Money!
+  shipping: Money!
+  adjustment: Money!
+  total: Money!
   method: String
   state: String!
   transactionId: String
   reason: String
-  orderItems: [OrderItem!]!
+  lines: [RefundLine!]!
   paymentId: ID!
   metadata: JSON
 }
 
-type FulfillmentLineSummary {
+type FulfillmentLine {
   orderLine: OrderLine!
+  orderLineId: ID!
   quantity: Int!
+  fulfillment: Fulfillment!
+  fulfillmentId: ID!
 }
 
 type Fulfillment implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  orderItems: [OrderItem!]!
-  summary: [FulfillmentLineSummary!]!
+  lines: [FulfillmentLine!]!
+  summary: [FulfillmentLine!]!
+    @deprecated(reason: "Use the `lines` field instead")
   state: String!
   method: String!
   trackingCode: String
@@ -3647,8 +3756,8 @@ type Surcharge implements Node {
   description: String!
   sku: String
   taxLines: [TaxLine!]!
-  price: Int!
-  priceWithTax: Int!
+  price: Money!
+  priceWithTax: Money!
   taxRate: Float!
 }
 
@@ -3662,7 +3771,17 @@ type PaymentMethod implements Node {
   enabled: Boolean!
   checker: ConfigurableOperation
   handler: ConfigurableOperation!
+  translations: [PaymentMethodTranslation!]!
   customFields: JSON
+}
+
+type PaymentMethodTranslation {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  languageCode: LanguageCode!
+  name: String!
+  description: String!
 }
 
 type ProductOptionGroup implements Node {
@@ -3779,15 +3898,15 @@ union SearchResultPrice = PriceRange | SinglePrice
 The price value where the result has a single price
 """
 type SinglePrice {
-  value: Int!
+  value: Money!
 }
 
 """
 The price range where the result has more than one price
 """
 type PriceRange {
-  min: Int!
-  max: Int!
+  min: Money!
+  max: Money!
 }
 
 type Product implements Node {
@@ -3798,6 +3917,7 @@ type Product implements Node {
   name: String!
   slug: String!
   description: String!
+  enabled: Boolean!
   featuredAsset: Asset
   assets: [Asset!]!
 
@@ -3850,9 +3970,9 @@ type ProductVariant implements Node {
   name: String!
   featuredAsset: Asset
   assets: [Asset!]!
-  price: Int!
+  price: Money!
   currencyCode: CurrencyCode!
-  priceWithTax: Int!
+  priceWithTax: Money!
   stockLevel: String!
   taxRateApplied: TaxRate!
   taxCategory: TaxCategory!
@@ -3880,15 +4000,95 @@ type Promotion implements Node {
   endsAt: DateTime
   couponCode: String
   perCustomerUsageLimit: Int
+  usageLimit: Int
   name: String!
+  description: String!
   enabled: Boolean!
   conditions: [ConfigurableOperation!]!
   actions: [ConfigurableOperation!]!
+  translations: [PromotionTranslation!]!
   customFields: JSON
+}
+
+type PromotionTranslation {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  languageCode: LanguageCode!
+  name: String!
+  description: String!
 }
 
 type PromotionList implements PaginatedList {
   items: [Promotion!]!
+  totalItems: Int!
+}
+
+interface Region implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  languageCode: LanguageCode!
+  code: String!
+  type: String!
+  name: String!
+  enabled: Boolean!
+  parent: Region
+  parentId: ID
+  translations: [RegionTranslation!]!
+}
+
+type RegionTranslation {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  languageCode: LanguageCode!
+  name: String!
+}
+
+"""
+A Country of the world which your shop operates in.
+
+The `code` field is typically a 2-character ISO code such as "GB", "US", "DE" etc. This code is used in certain inputs such as
+`UpdateAddressInput` and `CreateAddressInput` to specify the country.
+"""
+type Country implements Region & Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  languageCode: LanguageCode!
+  code: String!
+  type: String!
+  name: String!
+  enabled: Boolean!
+  parent: Region
+  parentId: ID
+  translations: [RegionTranslation!]!
+  customFields: JSON
+}
+
+type CountryList implements PaginatedList {
+  items: [Country!]!
+  totalItems: Int!
+}
+
+type Province implements Region & Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  languageCode: LanguageCode!
+  code: String!
+  type: String!
+  name: String!
+  enabled: Boolean!
+  parent: Region
+  parentId: ID
+  translations: [RegionTranslation!]!
+  customFields: JSON
+}
+
+type ProvinceList implements PaginatedList {
+  items: [Province!]!
   totalItems: Int!
 }
 
@@ -3905,6 +4105,14 @@ type Role implements Node {
 type RoleList implements PaginatedList {
   items: [Role!]!
   totalItems: Int!
+}
+
+type Seller implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  customFields: JSON
 }
 
 type ShippingMethod implements Node {
@@ -3999,7 +4207,7 @@ type Zone implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  members: [Country!]!
+  members: [Region!]!
   customFields: JSON
 }
 
@@ -4136,7 +4344,6 @@ type NotVerifiedError implements ErrorResult {
 
 input AuthenticationInput {
   native: NativeAuthInput
-  legacy: LegacyAuthInput
 }
 
 input RegisterCustomerInput {
@@ -4178,6 +4385,8 @@ input PaymentInput {
 }
 
 input CollectionListOptions {
+  topLevelOnly: Boolean
+
   """
   Skips the first n results, for use in pagination
   """
@@ -4199,7 +4408,7 @@ input CollectionListOptions {
   filter: CollectionFilterParameter
 
   """
-  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
   """
   filterOperator: LogicalOperator
 }
@@ -4226,7 +4435,7 @@ input FacetListOptions {
   filter: FacetFilterParameter
 
   """
-  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
   """
   filterOperator: LogicalOperator
 }
@@ -4253,7 +4462,7 @@ input OrderListOptions {
   filter: OrderFilterParameter
 
   """
-  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
   """
   filterOperator: LogicalOperator
 }
@@ -4280,7 +4489,7 @@ input ProductListOptions {
   filter: ProductFilterParameter
 
   """
-  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
   """
   filterOperator: LogicalOperator
 }
@@ -4307,7 +4516,7 @@ input ProductVariantListOptions {
   filter: ProductVariantFilterParameter
 
   """
-  Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+  Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
   """
   filterOperator: LogicalOperator
 }
@@ -4328,6 +4537,7 @@ union SetCustomerForOrderResult =
   | AlreadyLoggedInError
   | EmailAddressConflictError
   | NoActiveOrderError
+  | GuestCheckoutError
 
 union RegisterCustomerAccountResult =
     Success
@@ -4462,7 +4672,8 @@ input ProductVariantFilterParameter {
   priceWithTax: NumberOperators
   stockLevel: StringOperators
   resellerDiscount: NumberOperators
-  bulkDiscountEnabled: BooleanOperators
+  _and: [ProductVariantFilterParameter!]
+  _or: [ProductVariantFilterParameter!]
   minimumOrderQuantity: NumberOperators
 }
 
@@ -4477,7 +4688,6 @@ input ProductVariantSortParameter {
   priceWithTax: SortOrder
   stockLevel: SortOrder
   resellerDiscount: SortOrder
-  bulkDiscountEnabled: SortOrder
   minimumOrderQuantity: SortOrder
 }
 
@@ -4490,6 +4700,8 @@ input CustomerFilterParameter {
   lastName: StringOperators
   phoneNumber: StringOperators
   emailAddress: StringOperators
+  _and: [CustomerFilterParameter!]
+  _or: [CustomerFilterParameter!]
 }
 
 input CustomerSortParameter {
@@ -4507,6 +4719,7 @@ input OrderFilterParameter {
   id: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
+  type: StringOperators
   orderPlacedAt: DateOperators
   code: StringOperators
   state: StringOperators
@@ -4519,6 +4732,8 @@ input OrderFilterParameter {
   shippingWithTax: NumberOperators
   total: NumberOperators
   totalWithTax: NumberOperators
+  _and: [OrderFilterParameter!]
+  _or: [OrderFilterParameter!]
   notes: StringOperators
 }
 
@@ -4539,11 +4754,34 @@ input OrderSortParameter {
   notes: SortOrder
 }
 
+input FacetValueFilterParameter {
+  id: IDOperators
+  createdAt: DateOperators
+  updatedAt: DateOperators
+  languageCode: StringOperators
+  facetId: IDOperators
+  name: StringOperators
+  code: StringOperators
+  _and: [FacetValueFilterParameter!]
+  _or: [FacetValueFilterParameter!]
+}
+
+input FacetValueSortParameter {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  facetId: SortOrder
+  name: SortOrder
+  code: SortOrder
+}
+
 input HistoryEntryFilterParameter {
   id: IDOperators
   createdAt: DateOperators
   updatedAt: DateOperators
   type: StringOperators
+  _and: [HistoryEntryFilterParameter!]
+  _or: [HistoryEntryFilterParameter!]
 }
 
 input HistoryEntrySortParameter {
@@ -4561,6 +4799,9 @@ input CollectionFilterParameter {
   slug: StringOperators
   position: NumberOperators
   description: StringOperators
+  parentId: IDOperators
+  _and: [CollectionFilterParameter!]
+  _or: [CollectionFilterParameter!]
 }
 
 input CollectionSortParameter {
@@ -4571,6 +4812,7 @@ input CollectionSortParameter {
   slug: SortOrder
   position: SortOrder
   description: SortOrder
+  parentId: SortOrder
 }
 
 input FacetFilterParameter {
@@ -4580,6 +4822,8 @@ input FacetFilterParameter {
   languageCode: StringOperators
   name: StringOperators
   code: StringOperators
+  _and: [FacetFilterParameter!]
+  _or: [FacetFilterParameter!]
 }
 
 input FacetSortParameter {
@@ -4598,8 +4842,10 @@ input ProductFilterParameter {
   name: StringOperators
   slug: StringOperators
   description: StringOperators
+  enabled: BooleanOperators
   resellerDiscount: NumberOperators
-  productRecommendationsEnabled: BooleanOperators
+  _and: [ProductFilterParameter!]
+  _or: [ProductFilterParameter!]
   groupKey: StringOperators
   ordering: NumberOperators
   buyable: BooleanOperators
@@ -4614,7 +4860,6 @@ input ProductSortParameter {
   slug: SortOrder
   description: SortOrder
   resellerDiscount: SortOrder
-  productRecommendationsEnabled: SortOrder
   groupKey: SortOrder
   ordering: SortOrder
   buyable: SortOrder
@@ -4634,7 +4879,6 @@ type OrderLineCustomFields {
 }
 
 type ProductCustomFields {
-  productRecommendationsEnabled: Boolean
   groupKey: String
   ordering: Int
   buyable: Boolean
@@ -4642,7 +4886,6 @@ type ProductCustomFields {
 }
 
 type ProductVariantCustomFields {
-  bulkDiscountEnabled: Boolean
   minimumOrderQuantity: Int
 }
 
@@ -4652,10 +4895,5 @@ input OrderLineCustomFieldsInput {
 
 input NativeAuthInput {
   username: String!
-  password: String!
-}
-
-input LegacyAuthInput {
-  email: String!
   password: String!
 }

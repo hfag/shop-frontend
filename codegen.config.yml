@@ -1,4 +1,7 @@
 schema: schema.graphql
+config:
+  scalars:
+    Money: number
 generates:
   ./schema.ts:
     plugins:

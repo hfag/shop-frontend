@@ -265,7 +265,7 @@ export const ORDER_SET_CUSTOM_FIELDS = /* GraphQL */ `
 
 export const ORDER_SET_SHIPPING_METHOD = /* GraphQL */ `
   mutation SetOrderShippingMethod($shippingMethodId: ID!) {
-    setOrderShippingMethod(shippingMethodId: $shippingMethodId) {
+    setOrderShippingMethod(shippingMethodId: [$shippingMethodId]) {
       ... on Order {
         ${FULL_ORDER_FRAGMENT}
       }

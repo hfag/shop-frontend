@@ -16,7 +16,7 @@ export const REQUEST_PASSWORD_RESET = /* GraphQL */ `
 
 export const LOGIN = /* GraphQL */ `
   mutation login($email: String!, $password: String!) {
-    authenticate(input: {legacy: {email: $email, password: $password}}){
+    authenticate(input: {native: {username: $email, password: $password}}){
       ... on CurrentUser {
         ${CURRENT_USER_FRAGMENT}
       }

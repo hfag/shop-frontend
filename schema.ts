@@ -19,6 +19,8 @@ export type Scalars = {
   DateTime: any;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
+  /** The `Money` scalar type represents monetary values and supports signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). */
+  Money: number;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -58,7 +60,8 @@ export type Adjustment = {
   adjustmentSource: Scalars["String"];
   type: AdjustmentType;
   description: Scalars["String"];
-  amount: Scalars["Int"];
+  amount: Scalars["Money"];
+  data?: Maybe<Scalars["JSON"]>;
 };
 
 export enum AdjustmentType {
@@ -94,6 +97,7 @@ export type Asset = Node & {
   source: Scalars["String"];
   preview: Scalars["String"];
   focalPoint?: Maybe<Coordinate>;
+  tags: Array<Tag>;
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
@@ -111,7 +115,6 @@ export enum AssetType {
 
 export type AuthenticationInput = {
   native?: Maybe<NativeAuthInput>;
-  legacy?: Maybe<LegacyAuthInput>;
 };
 
 export type AuthenticationMethod = Node & {
@@ -137,6 +140,7 @@ export type BooleanCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   ui?: Maybe<Scalars["JSON"]>;
 };
 
@@ -168,8 +172,17 @@ export type Channel = Node & {
   defaultTaxZone?: Maybe<Zone>;
   defaultShippingZone?: Maybe<Zone>;
   defaultLanguageCode: LanguageCode;
+  availableLanguageCodes?: Maybe<Array<LanguageCode>>;
+  /** @deprecated Use defaultCurrencyCode instead */
   currencyCode: CurrencyCode;
+  defaultCurrencyCode: CurrencyCode;
+  availableCurrencyCodes: Array<CurrencyCode>;
+  /** Not yet used - will be implemented in a future release. */
+  trackInventory?: Maybe<Scalars["Boolean"]>;
+  /** Not yet used - will be implemented in a future release. */
+  outOfStockThreshold?: Maybe<Scalars["Int"]>;
   pricesIncludeTax: Scalars["Boolean"];
+  seller?: Maybe<Seller>;
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
@@ -187,6 +200,7 @@ export type Collection = Node & {
   featuredAsset?: Maybe<Asset>;
   assets: Array<Asset>;
   parent?: Maybe<Collection>;
+  parentId: Scalars["ID"];
   children?: Maybe<Array<Collection>>;
   filters: Array<ConfigurableOperation>;
   translations: Array<CollectionTranslation>;
@@ -216,6 +230,9 @@ export type CollectionFilterParameter = {
   slug?: Maybe<StringOperators>;
   position?: Maybe<NumberOperators>;
   description?: Maybe<StringOperators>;
+  parentId?: Maybe<IdOperators>;
+  _and?: Maybe<Array<CollectionFilterParameter>>;
+  _or?: Maybe<Array<CollectionFilterParameter>>;
 };
 
 export type CollectionLink = {
@@ -250,6 +267,7 @@ export type CollectionList = PaginatedList & {
 };
 
 export type CollectionListOptions = {
+  topLevelOnly?: Maybe<Scalars["Boolean"]>;
   /** Skips the first n results, for use in pagination */
   skip?: Maybe<Scalars["Int"]>;
   /** Takes n results, for use in pagination */
@@ -258,7 +276,7 @@ export type CollectionListOptions = {
   sort?: Maybe<CollectionSortParameter>;
   /** Allows the results to be filtered */
   filter?: Maybe<CollectionFilterParameter>;
-  /** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+  /** Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND. */
   filterOperator?: Maybe<LogicalOperator>;
 };
 
@@ -280,6 +298,7 @@ export type CollectionSortParameter = {
   slug?: Maybe<SortOrder>;
   position?: Maybe<SortOrder>;
   description?: Maybe<SortOrder>;
+  parentId?: Maybe<SortOrder>;
 };
 
 export type CollectionTranslation = {
@@ -341,32 +360,33 @@ export type Coordinate = {
   y: Scalars["Float"];
 };
 
-export type Country = Node & {
-  __typename?: "Country";
-  id: Scalars["ID"];
-  createdAt: Scalars["DateTime"];
-  updatedAt: Scalars["DateTime"];
-  languageCode: LanguageCode;
-  code: Scalars["String"];
-  name: Scalars["String"];
-  enabled: Scalars["Boolean"];
-  translations: Array<CountryTranslation>;
-  customFields?: Maybe<Scalars["JSON"]>;
-};
+/**
+ * A Country of the world which your shop operates in.
+ *
+ * The `code` field is typically a 2-character ISO code such as "GB", "US", "DE" etc. This code is used in certain inputs such as
+ * `UpdateAddressInput` and `CreateAddressInput` to specify the country.
+ */
+export type Country = Region &
+  Node & {
+    __typename?: "Country";
+    id: Scalars["ID"];
+    createdAt: Scalars["DateTime"];
+    updatedAt: Scalars["DateTime"];
+    languageCode: LanguageCode;
+    code: Scalars["String"];
+    type: Scalars["String"];
+    name: Scalars["String"];
+    enabled: Scalars["Boolean"];
+    parent?: Maybe<Region>;
+    parentId?: Maybe<Scalars["ID"]>;
+    translations: Array<RegionTranslation>;
+    customFields?: Maybe<Scalars["JSON"]>;
+  };
 
 export type CountryList = PaginatedList & {
   __typename?: "CountryList";
   items: Array<Country>;
   totalItems: Scalars["Int"];
-};
-
-export type CountryTranslation = {
-  __typename?: "CountryTranslation";
-  id: Scalars["ID"];
-  createdAt: Scalars["DateTime"];
-  updatedAt: Scalars["DateTime"];
-  languageCode: LanguageCode;
-  name: Scalars["String"];
 };
 
 /** Returned if the provided coupon code is invalid */
@@ -394,6 +414,13 @@ export type CouponCodeLimitError = ErrorResult & {
   limit: Scalars["Int"];
 };
 
+/**
+ * Input used to create an Address.
+ *
+ * The countryCode must correspond to a `code` property of a Country that has been defined in the
+ * Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+ * If an invalid code is passed, the mutation will fail.
+ */
 export type CreateAddressInput = {
   fullName?: Maybe<Scalars["String"]>;
   company?: Maybe<Scalars["String"]>;
@@ -765,6 +792,7 @@ export type CustomField = {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   ui?: Maybe<Scalars["JSON"]>;
 };
 
@@ -776,7 +804,8 @@ export type CustomFieldConfig =
   | BooleanCustomFieldConfig
   | DateTimeCustomFieldConfig
   | RelationCustomFieldConfig
-  | TextCustomFieldConfig;
+  | TextCustomFieldConfig
+  | LocaleTextCustomFieldConfig;
 
 export type Customer = Node & {
   __typename?: "Customer";
@@ -808,6 +837,8 @@ export type CustomerFilterParameter = {
   lastName?: Maybe<StringOperators>;
   phoneNumber?: Maybe<StringOperators>;
   emailAddress?: Maybe<StringOperators>;
+  _and?: Maybe<Array<CustomerFilterParameter>>;
+  _or?: Maybe<Array<CustomerFilterParameter>>;
 };
 
 export type CustomerGroup = Node & {
@@ -839,7 +870,7 @@ export type CustomerListOptions = {
   sort?: Maybe<CustomerSortParameter>;
   /** Allows the results to be filtered */
   filter?: Maybe<CustomerFilterParameter>;
-  /** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+  /** Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND. */
   filterOperator?: Maybe<LogicalOperator>;
 };
 
@@ -887,6 +918,7 @@ export type DateTimeCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   min?: Maybe<Scalars["String"]>;
   max?: Maybe<Scalars["String"]>;
   step?: Maybe<Scalars["Int"]>;
@@ -911,8 +943,8 @@ export type Discount = {
   adjustmentSource: Scalars["String"];
   type: AdjustmentType;
   description: Scalars["String"];
-  amount: Scalars["Int"];
-  amountWithTax: Scalars["Int"];
+  amount: Scalars["Money"];
+  amountWithTax: Scalars["Money"];
 };
 
 /** Returned when attempting to create a Customer with an email address already registered to an existing User. */
@@ -928,6 +960,7 @@ export enum ErrorCode {
   InvalidCredentialsError = "INVALID_CREDENTIALS_ERROR",
   OrderStateTransitionError = "ORDER_STATE_TRANSITION_ERROR",
   EmailAddressConflictError = "EMAIL_ADDRESS_CONFLICT_ERROR",
+  GuestCheckoutError = "GUEST_CHECKOUT_ERROR",
   OrderLimitError = "ORDER_LIMIT_ERROR",
   NegativeQuantityError = "NEGATIVE_QUANTITY_ERROR",
   InsufficientStockError = "INSUFFICIENT_STOCK_ERROR",
@@ -968,8 +1001,14 @@ export type Facet = Node & {
   name: Scalars["String"];
   code: Scalars["String"];
   values: Array<FacetValue>;
+  /** Returns a paginated, sortable, filterable list of the Facet's values. Added in v2.1.0. */
+  valueList: FacetValueList;
   translations: Array<FacetTranslation>;
   customFields?: Maybe<Scalars["JSON"]>;
+};
+
+export type FacetValueListArgs = {
+  options?: Maybe<FacetValueListOptions>;
 };
 
 export type FacetFilterParameter = {
@@ -979,6 +1018,8 @@ export type FacetFilterParameter = {
   languageCode?: Maybe<StringOperators>;
   name?: Maybe<StringOperators>;
   code?: Maybe<StringOperators>;
+  _and?: Maybe<Array<FacetFilterParameter>>;
+  _or?: Maybe<Array<FacetFilterParameter>>;
 };
 
 export type FacetList = PaginatedList & {
@@ -996,7 +1037,7 @@ export type FacetListOptions = {
   sort?: Maybe<FacetSortParameter>;
   /** Allows the results to be filtered */
   filter?: Maybe<FacetFilterParameter>;
-  /** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+  /** Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND. */
   filterOperator?: Maybe<LogicalOperator>;
 };
 
@@ -1024,6 +1065,7 @@ export type FacetValue = Node & {
   updatedAt: Scalars["DateTime"];
   languageCode: LanguageCode;
   facet: Facet;
+  facetId: Scalars["ID"];
   name: Scalars["String"];
   code: Scalars["String"];
   translations: Array<FacetValueTranslation>;
@@ -1043,6 +1085,37 @@ export type FacetValueFilterInput = {
   or?: Maybe<Array<Scalars["ID"]>>;
 };
 
+export type FacetValueFilterParameter = {
+  id?: Maybe<IdOperators>;
+  createdAt?: Maybe<DateOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  languageCode?: Maybe<StringOperators>;
+  facetId?: Maybe<IdOperators>;
+  name?: Maybe<StringOperators>;
+  code?: Maybe<StringOperators>;
+  _and?: Maybe<Array<FacetValueFilterParameter>>;
+  _or?: Maybe<Array<FacetValueFilterParameter>>;
+};
+
+export type FacetValueList = PaginatedList & {
+  __typename?: "FacetValueList";
+  items: Array<FacetValue>;
+  totalItems: Scalars["Int"];
+};
+
+export type FacetValueListOptions = {
+  /** Skips the first n results, for use in pagination */
+  skip?: Maybe<Scalars["Int"]>;
+  /** Takes n results, for use in pagination */
+  take?: Maybe<Scalars["Int"]>;
+  /** Specifies which properties to sort the results by */
+  sort?: Maybe<FacetValueSortParameter>;
+  /** Allows the results to be filtered */
+  filter?: Maybe<FacetValueFilterParameter>;
+  /** Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND. */
+  filterOperator?: Maybe<LogicalOperator>;
+};
+
 /**
  * Which FacetValues are present in the products returned
  * by the search, and in what quantity.
@@ -1051,6 +1124,15 @@ export type FacetValueResult = {
   __typename?: "FacetValueResult";
   facetValue: FacetValue;
   count: Scalars["Int"];
+};
+
+export type FacetValueSortParameter = {
+  id?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+  facetId?: Maybe<SortOrder>;
+  name?: Maybe<SortOrder>;
+  code?: Maybe<SortOrder>;
 };
 
 export type FacetValueTranslation = {
@@ -1072,6 +1154,7 @@ export type FloatCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   min?: Maybe<Scalars["Float"]>;
   max?: Maybe<Scalars["Float"]>;
   step?: Maybe<Scalars["Float"]>;
@@ -1083,18 +1166,22 @@ export type Fulfillment = Node & {
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
-  orderItems: Array<OrderItem>;
-  summary: Array<FulfillmentLineSummary>;
+  lines: Array<FulfillmentLine>;
+  /** @deprecated Use the `lines` field instead */
+  summary: Array<FulfillmentLine>;
   state: Scalars["String"];
   method: Scalars["String"];
   trackingCode?: Maybe<Scalars["String"]>;
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
-export type FulfillmentLineSummary = {
-  __typename?: "FulfillmentLineSummary";
+export type FulfillmentLine = {
+  __typename?: "FulfillmentLine";
   orderLine: OrderLine;
+  orderLineId: Scalars["ID"];
   quantity: Scalars["Int"];
+  fulfillment: Fulfillment;
+  fulfillmentId: Scalars["ID"];
 };
 
 export enum GlobalFlag {
@@ -1102,6 +1189,14 @@ export enum GlobalFlag {
   False = "FALSE",
   Inherit = "INHERIT",
 }
+
+/** Returned when attempting to set the Customer on a guest checkout when the configured GuestCheckoutStrategy does not allow it. */
+export type GuestCheckoutError = ErrorResult & {
+  __typename?: "GuestCheckoutError";
+  errorCode: ErrorCode;
+  message: Scalars["String"];
+  errorDetail: Scalars["String"];
+};
 
 export type HistoryEntry = Node & {
   __typename?: "HistoryEntry";
@@ -1117,6 +1212,8 @@ export type HistoryEntryFilterParameter = {
   createdAt?: Maybe<DateOperators>;
   updatedAt?: Maybe<DateOperators>;
   type?: Maybe<StringOperators>;
+  _and?: Maybe<Array<HistoryEntryFilterParameter>>;
+  _or?: Maybe<Array<HistoryEntryFilterParameter>>;
 };
 
 export type HistoryEntryList = PaginatedList & {
@@ -1134,7 +1231,7 @@ export type HistoryEntryListOptions = {
   sort?: Maybe<HistoryEntrySortParameter>;
   /** Allows the results to be filtered */
   filter?: Maybe<HistoryEntryFilterParameter>;
-  /** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+  /** Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND. */
   filterOperator?: Maybe<LogicalOperator>;
 };
 
@@ -1169,6 +1266,7 @@ export enum HistoryEntryType {
   OrderCouponApplied = "ORDER_COUPON_APPLIED",
   OrderCouponRemoved = "ORDER_COUPON_REMOVED",
   OrderModified = "ORDER_MODIFIED",
+  OrderCustomerUpdated = "ORDER_CUSTOMER_UPDATED",
 }
 
 /** Operators for filtering on a list of ID fields */
@@ -1239,6 +1337,7 @@ export type IntCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   min?: Maybe<Scalars["Int"]>;
   max?: Maybe<Scalars["Int"]>;
   step?: Maybe<Scalars["Int"]>;
@@ -1579,11 +1678,6 @@ export enum LanguageCode {
   Zu = "zu",
 }
 
-export type LegacyAuthInput = {
-  email: Scalars["String"];
-  password: Scalars["String"];
-};
-
 export type LocaleStringCustomFieldConfig = CustomField & {
   __typename?: "LocaleStringCustomFieldConfig";
   name: Scalars["String"];
@@ -1595,7 +1689,22 @@ export type LocaleStringCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   pattern?: Maybe<Scalars["String"]>;
+  ui?: Maybe<Scalars["JSON"]>;
+};
+
+export type LocaleTextCustomFieldConfig = CustomField & {
+  __typename?: "LocaleTextCustomFieldConfig";
+  name: Scalars["String"];
+  type: Scalars["String"];
+  list: Scalars["Boolean"];
+  label?: Maybe<Array<LocalizedString>>;
+  description?: Maybe<Array<LocalizedString>>;
+  readonly?: Maybe<Scalars["Boolean"]>;
+  internal?: Maybe<Scalars["Boolean"]>;
+  nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   ui?: Maybe<Scalars["JSON"]>;
 };
 
@@ -1639,13 +1748,23 @@ export type Mutation = {
   setOrderBillingAddress: ActiveOrderResult;
   /** Allows any custom fields to be set for the active order */
   setOrderCustomFields: ActiveOrderResult;
-  /** Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query */
+  /**
+   * Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query.
+   * An Order can have multiple shipping methods, in which case you can pass an array of ids. In this case,
+   * you should configure a custom ShippingLineAssignmentStrategy in order to know which OrderLines each
+   * shipping method will apply to.
+   */
   setOrderShippingMethod: SetOrderShippingMethodResult;
   /** Add a Payment to the Order */
   addPaymentToOrder: AddPaymentToOrderResult;
   /** Set the Customer for the Order. Required only if the Customer is not currently logged in */
   setCustomerForOrder: SetCustomerForOrderResult;
-  /** Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})` */
+  /**
+   * Authenticates the user using the native authentication strategy. This mutation is an alias for authenticate({ native: { ... }})
+   *
+   * The `rememberMe` option applies when using cookie-based sessions, and if `true` it will set the maxAge of the session cookie
+   * to 1 year.
+   */
   login: NativeAuthenticationResult;
   /** Authenticates the user using a named authentication strategy */
   authenticate: AuthenticationResult;
@@ -1747,7 +1866,7 @@ export type MutationSetOrderCustomFieldsArgs = {
 };
 
 export type MutationSetOrderShippingMethodArgs = {
-  shippingMethodId: Scalars["ID"];
+  shippingMethodId: Array<Scalars["ID"]>;
 };
 
 export type MutationAddPaymentToOrderArgs = {
@@ -1902,6 +2021,7 @@ export type Order = Node & {
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
+  type: OrderType;
   /**
    * The date & time that the Order was placed, i.e. the Customer
    * completed the checkout and the Order is no longer "active"
@@ -1933,21 +2053,21 @@ export type Order = Node & {
   totalQuantity: Scalars["Int"];
   /**
    * The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
-   * discounts which have been prorated (proportionally distributed) amongst the OrderItems.
+   * discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
    * To get a total of all OrderLines which does not account for prorated discounts, use the
    * sum of `OrderLine.discountedLinePrice` values.
    */
-  subTotal: Scalars["Int"];
+  subTotal: Scalars["Money"];
   /** Same as subTotal, but inclusive of tax */
-  subTotalWithTax: Scalars["Int"];
+  subTotalWithTax: Scalars["Money"];
   currencyCode: CurrencyCode;
   shippingLines: Array<ShippingLine>;
-  shipping: Scalars["Int"];
-  shippingWithTax: Scalars["Int"];
+  shipping: Scalars["Money"];
+  shippingWithTax: Scalars["Money"];
   /** Equal to subTotal plus shipping */
-  total: Scalars["Int"];
+  total: Scalars["Money"];
   /** The final payable amount. Equal to subTotalWithTax plus shippingWithTax */
-  totalWithTax: Scalars["Int"];
+  totalWithTax: Scalars["Money"];
   /** A summary of the taxes being applied to this Order */
   taxSummary: Array<OrderTaxSummary>;
   history: HistoryEntryList;
@@ -1982,6 +2102,7 @@ export type OrderFilterParameter = {
   id?: Maybe<IdOperators>;
   createdAt?: Maybe<DateOperators>;
   updatedAt?: Maybe<DateOperators>;
+  type?: Maybe<StringOperators>;
   orderPlacedAt?: Maybe<DateOperators>;
   code?: Maybe<StringOperators>;
   state?: Maybe<StringOperators>;
@@ -1994,44 +2115,9 @@ export type OrderFilterParameter = {
   shippingWithTax?: Maybe<NumberOperators>;
   total?: Maybe<NumberOperators>;
   totalWithTax?: Maybe<NumberOperators>;
+  _and?: Maybe<Array<OrderFilterParameter>>;
+  _or?: Maybe<Array<OrderFilterParameter>>;
   notes?: Maybe<StringOperators>;
-};
-
-export type OrderItem = Node & {
-  __typename?: "OrderItem";
-  id: Scalars["ID"];
-  createdAt: Scalars["DateTime"];
-  updatedAt: Scalars["DateTime"];
-  cancelled: Scalars["Boolean"];
-  /** The price of a single unit, excluding tax and discounts */
-  unitPrice: Scalars["Int"];
-  /** The price of a single unit, including tax but excluding discounts */
-  unitPriceWithTax: Scalars["Int"];
-  /**
-   * The price of a single unit including discounts, excluding tax.
-   *
-   * If Order-level discounts have been applied, this will not be the
-   * actual taxable unit price (see `proratedUnitPrice`), but is generally the
-   * correct price to display to customers to avoid confusion
-   * about the internal handling of distributed Order-level discounts.
-   */
-  discountedUnitPrice: Scalars["Int"];
-  /** The price of a single unit including discounts and tax */
-  discountedUnitPriceWithTax: Scalars["Int"];
-  /**
-   * The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-   * Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
-   * and refund calculations.
-   */
-  proratedUnitPrice: Scalars["Int"];
-  /** The proratedUnitPrice including tax */
-  proratedUnitPriceWithTax: Scalars["Int"];
-  unitTax: Scalars["Int"];
-  taxRate: Scalars["Float"];
-  adjustments: Array<Adjustment>;
-  taxLines: Array<TaxLine>;
-  fulfillment?: Maybe<Fulfillment>;
-  refundId?: Maybe<Scalars["ID"]>;
 };
 
 /** Returned when the maximum order size limit has been reached. */
@@ -2050,13 +2136,13 @@ export type OrderLine = Node & {
   productVariant: ProductVariant;
   featuredAsset?: Maybe<Asset>;
   /** The price of a single unit, excluding tax and discounts */
-  unitPrice: Scalars["Int"];
+  unitPrice: Scalars["Money"];
   /** The price of a single unit, including tax but excluding discounts */
-  unitPriceWithTax: Scalars["Int"];
+  unitPriceWithTax: Scalars["Money"];
   /** Non-zero if the unitPrice has changed since it was initially added to Order */
-  unitPriceChangeSinceAdded: Scalars["Int"];
+  unitPriceChangeSinceAdded: Scalars["Money"];
   /** Non-zero if the unitPriceWithTax has changed since it was initially added to Order */
-  unitPriceWithTaxChangeSinceAdded: Scalars["Int"];
+  unitPriceWithTaxChangeSinceAdded: Scalars["Money"];
   /**
    * The price of a single unit including discounts, excluding tax.
    *
@@ -2065,42 +2151,44 @@ export type OrderLine = Node & {
    * correct price to display to customers to avoid confusion
    * about the internal handling of distributed Order-level discounts.
    */
-  discountedUnitPrice: Scalars["Int"];
+  discountedUnitPrice: Scalars["Money"];
   /** The price of a single unit including discounts and tax */
-  discountedUnitPriceWithTax: Scalars["Int"];
+  discountedUnitPriceWithTax: Scalars["Money"];
   /**
    * The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
    * Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
    * and refund calculations.
    */
-  proratedUnitPrice: Scalars["Int"];
+  proratedUnitPrice: Scalars["Money"];
   /** The proratedUnitPrice including tax */
-  proratedUnitPriceWithTax: Scalars["Int"];
+  proratedUnitPriceWithTax: Scalars["Money"];
+  /** The quantity of items purchased */
   quantity: Scalars["Int"];
-  items: Array<OrderItem>;
+  /** The quantity at the time the Order was placed */
+  orderPlacedQuantity: Scalars["Int"];
   taxRate: Scalars["Float"];
   /** The total price of the line excluding tax and discounts. */
-  linePrice: Scalars["Int"];
+  linePrice: Scalars["Money"];
   /** The total price of the line including tax but excluding discounts. */
-  linePriceWithTax: Scalars["Int"];
+  linePriceWithTax: Scalars["Money"];
   /** The price of the line including discounts, excluding tax */
-  discountedLinePrice: Scalars["Int"];
+  discountedLinePrice: Scalars["Money"];
   /** The price of the line including discounts and tax */
-  discountedLinePriceWithTax: Scalars["Int"];
+  discountedLinePriceWithTax: Scalars["Money"];
   /**
    * The actual line price, taking into account both item discounts _and_ prorated (proportionally-distributed)
    * Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
    * and refund calculations.
    */
-  proratedLinePrice: Scalars["Int"];
+  proratedLinePrice: Scalars["Money"];
   /** The proratedLinePrice including tax */
-  proratedLinePriceWithTax: Scalars["Int"];
+  proratedLinePriceWithTax: Scalars["Money"];
   /** The total tax on this line */
-  lineTax: Scalars["Int"];
+  lineTax: Scalars["Money"];
   discounts: Array<Discount>;
   taxLines: Array<TaxLine>;
   order: Order;
-  fulfillments?: Maybe<Array<Fulfillment>>;
+  fulfillmentLines?: Maybe<Array<FulfillmentLine>>;
   customFields?: Maybe<OrderLineCustomFields>;
 };
 
@@ -2128,7 +2216,7 @@ export type OrderListOptions = {
   sort?: Maybe<OrderSortParameter>;
   /** Allows the results to be filtered */
   filter?: Maybe<OrderFilterParameter>;
-  /** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+  /** Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND. */
   filterOperator?: Maybe<LogicalOperator>;
 };
 
@@ -2183,11 +2271,17 @@ export type OrderTaxSummary = {
   description: Scalars["String"];
   /** The taxRate as a percentage */
   taxRate: Scalars["Float"];
-  /** The total net price or OrderItems to which this taxRate applies */
-  taxBase: Scalars["Int"];
+  /** The total net price of OrderLines to which this taxRate applies */
+  taxBase: Scalars["Money"];
   /** The total tax being applied to the Order at this taxRate */
-  taxTotal: Scalars["Int"];
+  taxTotal: Scalars["Money"];
 };
+
+export enum OrderType {
+  Regular = "Regular",
+  Seller = "Seller",
+  Aggregate = "Aggregate",
+}
 
 export type PaginatedList = {
   items: Array<Node>;
@@ -2235,7 +2329,7 @@ export type Payment = Node & {
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
   method: Scalars["String"];
-  amount: Scalars["Int"];
+  amount: Scalars["Money"];
   state: Scalars["String"];
   transactionId?: Maybe<Scalars["String"]>;
   errorMessage?: Maybe<Scalars["String"]>;
@@ -2282,6 +2376,7 @@ export type PaymentMethod = Node & {
   enabled: Scalars["Boolean"];
   checker?: Maybe<ConfigurableOperation>;
   handler: ConfigurableOperation;
+  translations: Array<PaymentMethodTranslation>;
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
@@ -2294,6 +2389,16 @@ export type PaymentMethodQuote = {
   isEligible: Scalars["Boolean"];
   eligibilityMessage?: Maybe<Scalars["String"]>;
   customFields?: Maybe<Scalars["JSON"]>;
+};
+
+export type PaymentMethodTranslation = {
+  __typename?: "PaymentMethodTranslation";
+  id: Scalars["ID"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  languageCode: LanguageCode;
+  name: Scalars["String"];
+  description: Scalars["String"];
 };
 
 /**
@@ -2483,6 +2588,22 @@ export enum Permission {
   UpdateTaxRate = "UpdateTaxRate",
   /** Grants permission to delete TaxRate */
   DeleteTaxRate = "DeleteTaxRate",
+  /** Grants permission to create Seller */
+  CreateSeller = "CreateSeller",
+  /** Grants permission to read Seller */
+  ReadSeller = "ReadSeller",
+  /** Grants permission to update Seller */
+  UpdateSeller = "UpdateSeller",
+  /** Grants permission to delete Seller */
+  DeleteSeller = "DeleteSeller",
+  /** Grants permission to create StockLocation */
+  CreateStockLocation = "CreateStockLocation",
+  /** Grants permission to read StockLocation */
+  ReadStockLocation = "ReadStockLocation",
+  /** Grants permission to update StockLocation */
+  UpdateStockLocation = "UpdateStockLocation",
+  /** Grants permission to delete StockLocation */
+  DeleteStockLocation = "DeleteStockLocation",
   /** Grants permission to create System */
   CreateSystem = "CreateSystem",
   /** Grants permission to read System */
@@ -2504,8 +2625,8 @@ export enum Permission {
 /** The price range where the result has more than one price */
 export type PriceRange = {
   __typename?: "PriceRange";
-  min: Scalars["Int"];
-  max: Scalars["Int"];
+  min: Scalars["Money"];
+  max: Scalars["Money"];
 };
 
 export type PriceRangeBucket = {
@@ -2528,6 +2649,7 @@ export type Product = Node & {
   name: Scalars["String"];
   slug: Scalars["String"];
   description: Scalars["String"];
+  enabled: Scalars["Boolean"];
   featuredAsset?: Maybe<Asset>;
   assets: Array<Asset>;
   /** Returns all ProductVariants */
@@ -2549,7 +2671,6 @@ export type ProductVariantListArgs = {
 
 export type ProductCustomFields = {
   __typename?: "ProductCustomFields";
-  productRecommendationsEnabled?: Maybe<Scalars["Boolean"]>;
   groupKey?: Maybe<Scalars["String"]>;
   ordering?: Maybe<Scalars["Int"]>;
   buyable?: Maybe<Scalars["Boolean"]>;
@@ -2564,8 +2685,10 @@ export type ProductFilterParameter = {
   name?: Maybe<StringOperators>;
   slug?: Maybe<StringOperators>;
   description?: Maybe<StringOperators>;
+  enabled?: Maybe<BooleanOperators>;
   resellerDiscount?: Maybe<NumberOperators>;
-  productRecommendationsEnabled?: Maybe<BooleanOperators>;
+  _and?: Maybe<Array<ProductFilterParameter>>;
+  _or?: Maybe<Array<ProductFilterParameter>>;
   groupKey?: Maybe<StringOperators>;
   ordering?: Maybe<NumberOperators>;
   buyable?: Maybe<BooleanOperators>;
@@ -2587,7 +2710,7 @@ export type ProductListOptions = {
   sort?: Maybe<ProductSortParameter>;
   /** Allows the results to be filtered */
   filter?: Maybe<ProductFilterParameter>;
-  /** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+  /** Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND. */
   filterOperator?: Maybe<LogicalOperator>;
 };
 
@@ -2651,7 +2774,6 @@ export type ProductSortParameter = {
   slug?: Maybe<SortOrder>;
   description?: Maybe<SortOrder>;
   resellerDiscount?: Maybe<SortOrder>;
-  productRecommendationsEnabled?: Maybe<SortOrder>;
   groupKey?: Maybe<SortOrder>;
   ordering?: Maybe<SortOrder>;
   buyable?: Maybe<SortOrder>;
@@ -2681,9 +2803,9 @@ export type ProductVariant = Node & {
   name: Scalars["String"];
   featuredAsset?: Maybe<Asset>;
   assets: Array<Asset>;
-  price: Scalars["Int"];
+  price: Scalars["Money"];
   currencyCode: CurrencyCode;
-  priceWithTax: Scalars["Int"];
+  priceWithTax: Scalars["Money"];
   stockLevel: Scalars["String"];
   taxRateApplied: TaxRate;
   taxCategory: TaxCategory;
@@ -2697,7 +2819,6 @@ export type ProductVariant = Node & {
 
 export type ProductVariantCustomFields = {
   __typename?: "ProductVariantCustomFields";
-  bulkDiscountEnabled?: Maybe<Scalars["Boolean"]>;
   minimumOrderQuantity?: Maybe<Scalars["Int"]>;
 };
 
@@ -2714,7 +2835,8 @@ export type ProductVariantFilterParameter = {
   priceWithTax?: Maybe<NumberOperators>;
   stockLevel?: Maybe<StringOperators>;
   resellerDiscount?: Maybe<NumberOperators>;
-  bulkDiscountEnabled?: Maybe<BooleanOperators>;
+  _and?: Maybe<Array<ProductVariantFilterParameter>>;
+  _or?: Maybe<Array<ProductVariantFilterParameter>>;
   minimumOrderQuantity?: Maybe<NumberOperators>;
 };
 
@@ -2733,7 +2855,7 @@ export type ProductVariantListOptions = {
   sort?: Maybe<ProductVariantSortParameter>;
   /** Allows the results to be filtered */
   filter?: Maybe<ProductVariantFilterParameter>;
-  /** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+  /** Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND. */
   filterOperator?: Maybe<LogicalOperator>;
 };
 
@@ -2748,7 +2870,6 @@ export type ProductVariantSortParameter = {
   priceWithTax?: Maybe<SortOrder>;
   stockLevel?: Maybe<SortOrder>;
   resellerDiscount?: Maybe<SortOrder>;
-  bulkDiscountEnabled?: Maybe<SortOrder>;
   minimumOrderQuantity?: Maybe<SortOrder>;
 };
 
@@ -2770,16 +2891,52 @@ export type Promotion = Node & {
   endsAt?: Maybe<Scalars["DateTime"]>;
   couponCode?: Maybe<Scalars["String"]>;
   perCustomerUsageLimit?: Maybe<Scalars["Int"]>;
+  usageLimit?: Maybe<Scalars["Int"]>;
   name: Scalars["String"];
+  description: Scalars["String"];
   enabled: Scalars["Boolean"];
   conditions: Array<ConfigurableOperation>;
   actions: Array<ConfigurableOperation>;
+  translations: Array<PromotionTranslation>;
   customFields?: Maybe<Scalars["JSON"]>;
 };
 
 export type PromotionList = PaginatedList & {
   __typename?: "PromotionList";
   items: Array<Promotion>;
+  totalItems: Scalars["Int"];
+};
+
+export type PromotionTranslation = {
+  __typename?: "PromotionTranslation";
+  id: Scalars["ID"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  languageCode: LanguageCode;
+  name: Scalars["String"];
+  description: Scalars["String"];
+};
+
+export type Province = Region &
+  Node & {
+    __typename?: "Province";
+    id: Scalars["ID"];
+    createdAt: Scalars["DateTime"];
+    updatedAt: Scalars["DateTime"];
+    languageCode: LanguageCode;
+    code: Scalars["String"];
+    type: Scalars["String"];
+    name: Scalars["String"];
+    enabled: Scalars["Boolean"];
+    parent?: Maybe<Region>;
+    parentId?: Maybe<Scalars["ID"]>;
+    translations: Array<RegionTranslation>;
+    customFields?: Maybe<Scalars["JSON"]>;
+  };
+
+export type ProvinceList = PaginatedList & {
+  __typename?: "ProvinceList";
+  items: Array<Province>;
   totalItems: Scalars["Int"];
 };
 
@@ -2900,17 +3057,49 @@ export type Refund = Node & {
   id: Scalars["ID"];
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
-  items: Scalars["Int"];
-  shipping: Scalars["Int"];
-  adjustment: Scalars["Int"];
-  total: Scalars["Int"];
+  items: Scalars["Money"];
+  shipping: Scalars["Money"];
+  adjustment: Scalars["Money"];
+  total: Scalars["Money"];
   method?: Maybe<Scalars["String"]>;
   state: Scalars["String"];
   transactionId?: Maybe<Scalars["String"]>;
   reason?: Maybe<Scalars["String"]>;
-  orderItems: Array<OrderItem>;
+  lines: Array<RefundLine>;
   paymentId: Scalars["ID"];
   metadata?: Maybe<Scalars["JSON"]>;
+};
+
+export type RefundLine = {
+  __typename?: "RefundLine";
+  orderLine: OrderLine;
+  orderLineId: Scalars["ID"];
+  quantity: Scalars["Int"];
+  refund: Refund;
+  refundId: Scalars["ID"];
+};
+
+export type Region = {
+  id: Scalars["ID"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  languageCode: LanguageCode;
+  code: Scalars["String"];
+  type: Scalars["String"];
+  name: Scalars["String"];
+  enabled: Scalars["Boolean"];
+  parent?: Maybe<Region>;
+  parentId?: Maybe<Scalars["ID"]>;
+  translations: Array<RegionTranslation>;
+};
+
+export type RegionTranslation = {
+  __typename?: "RegionTranslation";
+  id: Scalars["ID"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  languageCode: LanguageCode;
+  name: Scalars["String"];
 };
 
 export type RegisterCustomerAccountResult =
@@ -2938,6 +3127,7 @@ export type RelationCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   entity: Scalars["String"];
   scalarFields: Array<Scalars["String"]>;
   ui?: Maybe<Scalars["JSON"]>;
@@ -3060,11 +3250,21 @@ export type SearchResultSortParameter = {
   price?: Maybe<SortOrder>;
 };
 
+export type Seller = Node & {
+  __typename?: "Seller";
+  id: Scalars["ID"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  name: Scalars["String"];
+  customFields?: Maybe<Scalars["JSON"]>;
+};
+
 export type SetCustomerForOrderResult =
   | Order
   | AlreadyLoggedInError
   | EmailAddressConflictError
-  | NoActiveOrderError;
+  | NoActiveOrderError
+  | GuestCheckoutError;
 
 export type SetOrderShippingMethodResult =
   | Order
@@ -3076,10 +3276,10 @@ export type ShippingLine = {
   __typename?: "ShippingLine";
   id: Scalars["ID"];
   shippingMethod: ShippingMethod;
-  price: Scalars["Int"];
-  priceWithTax: Scalars["Int"];
-  discountedPrice: Scalars["Int"];
-  discountedPriceWithTax: Scalars["Int"];
+  price: Scalars["Money"];
+  priceWithTax: Scalars["Money"];
+  discountedPrice: Scalars["Money"];
+  discountedPriceWithTax: Scalars["Money"];
   discounts: Array<Discount>;
 };
 
@@ -3108,8 +3308,8 @@ export type ShippingMethodList = PaginatedList & {
 export type ShippingMethodQuote = {
   __typename?: "ShippingMethodQuote";
   id: Scalars["ID"];
-  price: Scalars["Int"];
-  priceWithTax: Scalars["Int"];
+  price: Scalars["Money"];
+  priceWithTax: Scalars["Money"];
   code: Scalars["String"];
   name: Scalars["String"];
   description: Scalars["String"];
@@ -3131,7 +3331,7 @@ export type ShippingMethodTranslation = {
 /** The price value where the result has a single price */
 export type SinglePrice = {
   __typename?: "SinglePrice";
-  value: Scalars["Int"];
+  value: Scalars["Money"];
 };
 
 export enum SortOrder {
@@ -3150,6 +3350,7 @@ export type StringCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   pattern?: Maybe<Scalars["String"]>;
   options?: Maybe<Array<StringFieldOption>>;
   ui?: Maybe<Scalars["JSON"]>;
@@ -3192,8 +3393,8 @@ export type Surcharge = Node & {
   description: Scalars["String"];
   sku?: Maybe<Scalars["String"]>;
   taxLines: Array<TaxLine>;
-  price: Scalars["Int"];
-  priceWithTax: Scalars["Int"];
+  price: Scalars["Money"];
+  priceWithTax: Scalars["Money"];
   taxRate: Scalars["Float"];
 };
 
@@ -3257,11 +3458,19 @@ export type TextCustomFieldConfig = CustomField & {
   readonly?: Maybe<Scalars["Boolean"]>;
   internal?: Maybe<Scalars["Boolean"]>;
   nullable?: Maybe<Scalars["Boolean"]>;
+  requiresPermission?: Maybe<Array<Permission>>;
   ui?: Maybe<Scalars["JSON"]>;
 };
 
 export type TransitionOrderToStateResult = Order | OrderStateTransitionError;
 
+/**
+ * Input used to update an Address.
+ *
+ * The countryCode must correspond to a `code` property of a Country that has been defined in the
+ * Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+ * If an invalid code is passed, the mutation will fail.
+ */
 export type UpdateAddressInput = {
   id: Scalars["ID"];
   fullName?: Maybe<Scalars["String"]>;
@@ -3361,6 +3570,6 @@ export type Zone = Node & {
   createdAt: Scalars["DateTime"];
   updatedAt: Scalars["DateTime"];
   name: Scalars["String"];
-  members: Array<Country>;
+  members: Array<Region>;
   customFields?: Maybe<Scalars["JSON"]>;
 };

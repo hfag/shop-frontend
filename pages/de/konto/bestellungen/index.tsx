@@ -1,10 +1,11 @@
-import { AppContext, withApp } from "../../../../components/AppWrapper";
+import { AppContext } from "../../../../components/AppContext";
 import { GET_CURRENT_CUSTOMER_ALL_ORDERS } from "../../../../gql/user";
 import { GetStaticProps } from "next";
 import { Query } from "../../../../schema";
 import { locale, messages } from "../../config";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import { useIntl } from "react-intl";
+import { withApp } from "../../../../components/AppWrapper";
 import AccountOrders from "../../../../components/account/AccountOrders";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
 import React, { useContext } from "react";

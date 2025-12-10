@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent, useContext, useMemo } from "react";
 import styled from "@emotion/styled";
 
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { FacetValue, Product } from "../../schema";
 import { borders, colors, shadows } from "../../utilities/style";
 import { notEmpty } from "../../utilities/typescript";

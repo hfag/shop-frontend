@@ -9,7 +9,7 @@ import { useIntl } from "react-intl";
 import React, { FunctionComponent, ReactNode, useContext } from "react";
 import styled from "@emotion/styled";
 
-import { AppContext } from "../../AppWrapper";
+import { AppContext } from "../../AppContext";
 import { colors, media } from "../../../utilities/style";
 import { pathnamesByLanguage } from "../../../utilities/urls";
 import Card from "../Card";

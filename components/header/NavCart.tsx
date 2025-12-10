@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent, useCallback, useContext } from "react";
 import styled from "@emotion/styled";
 
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { GET_ACTIVE_ORDER } from "../../gql/order";
 import { Query } from "../../schema";
 import { colors } from "../../utilities/style";

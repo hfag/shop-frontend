@@ -1,5 +1,5 @@
 import { defineMessages, useIntl } from "react-intl";
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useReducer, type JSX } from "react";
 import styled from "@emotion/styled";
 
 import Box from "../layout/Box";

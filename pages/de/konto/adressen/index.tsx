@@ -1,8 +1,9 @@
-import { AppContext, withApp } from "../../../../components/AppWrapper";
+import { AppContext } from "../../../../components/AppContext";
 import { GetStaticProps } from "next";
 import { locale, messages } from "../../config";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import { useIntl } from "react-intl";
+import { withApp } from "../../../../components/AppWrapper";
 import AccountAddresses from "../../../../components/account/AccountAddresses";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
 import React, { useContext } from "react";

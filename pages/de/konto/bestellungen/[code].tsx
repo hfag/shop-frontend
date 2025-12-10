@@ -1,4 +1,4 @@
-import { AppContext, withApp } from "../../../../components/AppWrapper";
+import { AppContext } from "../../../../components/AppContext";
 import { GET_ORDER_BY_CODE } from "../../../../gql/order";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Query } from "../../../../schema";
@@ -6,6 +6,7 @@ import { locale, messages } from "../../config";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
+import { withApp } from "../../../../components/AppWrapper";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
 import Order from "../../../../components/elements/Order";
 import React, { useContext } from "react";

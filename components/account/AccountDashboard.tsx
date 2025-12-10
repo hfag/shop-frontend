@@ -7,7 +7,7 @@ import {
   Order as OrderType,
   Query,
 } from "../../schema";
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { GET_CURRENT_CUSTOMER_ORDERS } from "../../gql/user";
 import { Unavailable } from "../administrator/Unavailable";
 import { pathnamesByLanguage } from "../../utilities/urls";

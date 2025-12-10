@@ -1,9 +1,10 @@
-import { AppContext, withApp } from "../../../components/AppWrapper";
+import { AppContext } from "../../../components/AppContext";
 import { GetStaticProps } from "next";
 import { Unavailable } from "../../../components/administrator/Unavailable";
 import { defineMessages, useIntl } from "react-intl";
 import { locale, messages } from "../config";
 import { pathnamesByLanguage } from "../../../utilities/urls";
+import { withApp } from "../../../components/AppWrapper";
 import AccountForm from "../../../components/account/AccountForm";
 import AccountWrapper from "../../../components/account/AccountWrapper";
 import Message from "../../../components/elements/Message";

@@ -5,7 +5,7 @@ const ClientOnlyPortal: FunctionComponent<{
   selector: string;
   children: React.ReactNode;
 }> = ({ children, selector }) => {
-  const ref = useRef<Element | DocumentFragment>();
+  const ref = useRef<Element | DocumentFragment>(undefined);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

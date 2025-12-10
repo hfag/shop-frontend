@@ -2,7 +2,7 @@ import { defineMessages, useIntl } from "react-intl";
 import React, { FunctionComponent, useContext } from "react";
 import styled from "@emotion/styled";
 
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Dropdown from "../elements/Dropdown";
 import StyledLink from "../elements/StyledLink";

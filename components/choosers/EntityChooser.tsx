@@ -2,7 +2,7 @@ import { InputFieldWrapper } from "../form/InputFieldWrapper";
 import { SortOrder } from "../../schema";
 import { defineMessages, useIntl } from "react-intl";
 import { requestAdmin } from "../../utilities/request";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type JSX } from "react";
 import Button from "../elements/Button";
 import React from "react";
 import Select from "../elements/Select";

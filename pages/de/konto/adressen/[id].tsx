@@ -1,11 +1,12 @@
 import { AVAILABLE_COUNTRIES } from "../../../../gql/country";
 import { Address, Query } from "../../../../schema";
-import { AppContext, withApp } from "../../../../components/AppWrapper";
+import { AppContext } from "../../../../components/AppContext";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { locale, messages } from "../../config";
 import { pathnamesByLanguage } from "../../../../utilities/urls";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";
+import { withApp } from "../../../../components/AppWrapper";
 import AccountWrapper from "../../../../components/account/AccountWrapper";
 import AddressForm from "../../../../components/account/AddressForm";
 import Placeholder from "../../../../components/elements/Placeholder";

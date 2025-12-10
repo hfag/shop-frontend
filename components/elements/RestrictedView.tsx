@@ -9,7 +9,7 @@ const RestrictedView: FunctionComponent<{
 }> = ({ children, permission = Permission.SuperAdmin, channelId = "1" }) => {
   const isAllowed = useAuthenticate(permission, channelId);
 
-  return isAllowed ? <>{children}</> : null;
+  return isAllowed ? <React.Fragment>{children}</React.Fragment> : null;
 };
 
 export default RestrictedView;

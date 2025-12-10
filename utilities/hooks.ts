@@ -1,7 +1,7 @@
-import { useContext, useMemo } from "react";
-import { AppContext } from "../components/AppWrapper";
+import { AppContext } from "../components/AppContext";
 import { Permission } from "../schema";
 import { isClient } from "./ssr";
+import { useContext, useMemo } from "react";
 
 export const useLocalStorage = (
   key: string

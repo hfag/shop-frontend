@@ -3,7 +3,7 @@ import { MdMenu } from "react-icons/md";
 import React, { FunctionComponent, useContext, useState } from "react";
 import styled from "@emotion/styled";
 
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { BUSINESS_JSON_LD } from "../../utilities/json-ld";
 import { WP_BLOG_URL } from "../../utilities/api";
 import { colors } from "../../utilities/style";

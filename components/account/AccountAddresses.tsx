@@ -1,5 +1,5 @@
 import { Address as AddressType, Mutation } from "../../schema";
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { DELETE_CUSTOMER_ADDRESS, GET_CURRENT_CUSTOMER } from "../../gql/user";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";

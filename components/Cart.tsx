@@ -1,6 +1,6 @@
 import { ABSOLUTE_URL } from "../utilities/api";
 import { AVAILABLE_COUNTRIES } from "../gql/country";
-import { AppContext } from "./AppWrapper";
+import { AppContext } from "./AppContext";
 import { GET_ACTIVE_ORDER } from "../gql/order";
 import { Query } from "../schema";
 import { defineMessages, useIntl } from "react-intl";

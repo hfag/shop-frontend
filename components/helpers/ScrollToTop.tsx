@@ -1,4 +1,4 @@
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import { useIntl } from "react-intl";
 import { useRouter } from "next/router";

@@ -11,7 +11,7 @@ import React, {
 } from "react";
 
 import { ABSOLUTE_URL } from "../utilities/api";
-import { AppContext } from "./AppWrapper";
+import { AppContext } from "./AppContext";
 import { GET_CURRENT_CUSTOMER } from "../gql/user";
 import { LOGIN, REGISTER, REQUEST_PASSWORD_RESET } from "../gql/authentication";
 import { Mutation, RegisterCustomerAccountResult } from "../schema";

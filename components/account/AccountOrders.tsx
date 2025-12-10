@@ -1,4 +1,4 @@
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { Order as OrderType } from "../../schema";
 import { Unavailable } from "../administrator/Unavailable";
 import { pathnamesByLanguage } from "../../utilities/urls";

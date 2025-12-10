@@ -1,7 +1,8 @@
-import { CurrentUser, Customer, Maybe, Query } from "../schema";
+import { AppContext } from "./AppContext";
 import { GET_CURRENT_USER } from "../gql/user";
 import { IntlProvider } from "react-intl";
 import { Language } from "../utilities/i18n";
+import { Query } from "../schema";
 import { useLocalStorage } from "../utilities/hooks";
 import React, {
   FunctionComponent,
@@ -12,20 +13,6 @@ import React, {
 import YupLocalization from "./form/YupLocalization";
 import request from "../utilities/request";
 import useSWR, { SWRConfig } from "swr";
-
-export const AppContext = React.createContext<{
-  burgerMenuOpen: boolean;
-  toggleBurgerMenu: () => void;
-  user: Maybe<CurrentUser>;
-  customer: Maybe<Customer>;
-  token: Maybe<string>;
-}>({
-  burgerMenuOpen: false,
-  toggleBurgerMenu: () => {},
-  user: null,
-  customer: null,
-  token: null,
-});
 
 const AppWrapper: FunctionComponent<{
   locale: Language;

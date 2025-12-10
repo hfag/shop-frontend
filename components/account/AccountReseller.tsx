@@ -1,4 +1,4 @@
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { GET_EXPORT_PRODUCT_PAGE } from "../../gql/product";
 import { GET_PRODUCTS_BY_FACETS_IDS } from "../../gql/search";
 import { Product, SearchResult } from "../../schema";

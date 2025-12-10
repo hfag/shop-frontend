@@ -12,7 +12,7 @@ import styled from "@emotion/styled";
 
 import { ABSOLUTE_URL } from "../../utilities/api";
 import { ADD_TO_ORDER, GET_ACTIVE_ORDER } from "../../gql/order";
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import {
   BulkDiscount,
   Mutation,

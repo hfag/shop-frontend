@@ -3,7 +3,7 @@ import React, { FunctionComponent, ReactNode, useContext } from "react";
 import styled from "@emotion/styled";
 
 import { ABSOLUTE_URL } from "../../utilities/api";
-import { AppContext } from "../AppWrapper";
+import { AppContext } from "../AppContext";
 import { pathnamesByLanguage } from "../../utilities/urls";
 import Box from "../layout/Box";
 import Card from "../layout/Card";

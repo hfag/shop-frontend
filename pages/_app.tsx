@@ -1,7 +1,6 @@
 //styles
 import "../styles/global.scss";
 import "../styles/quill-custom.scss";
-import "../utilities/set-yup-locale";
 
 //fonts
 import localFont from "@next/font/local";

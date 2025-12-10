@@ -123,7 +123,7 @@
     "defaultMessage": "Zahlungsmethoden"
   },
   "CheckoutForm.pickupWarning": {
-    "defaultMessage": "Achtung: Sie haben Abholung als Liefermethode ausgewählt. Für diese Lieferart wird eine ach Vorauszahlung verlangt."
+    "defaultMessage": "Achtung: Sie haben Abholung als Liefermethode ausgewählt. Für diese Lieferart wird eine Vorauszahlung verlangt."
   },
   "CheckoutForm.shippingMethods": {
     "defaultMessage": "Liefermethoden"
@@ -236,6 +236,9 @@
   "Footer.tos": {
     "defaultMessage": "Allgemeine Geschäftsbedingungen"
   },
+  "Header.siteDescription": {
+    "defaultMessage": "Bei der Hauser Feuerschutz AG finden Sie alle Produkte im Bereich Feuerschutz sowie ein kompetenter Kundensupport der Ihnen gerne Ihre Fragen beantwortet."
+  },
   "LatestPosts.title": {
     "defaultMessage": "Aktuelle Beiträge"
   },
@@ -290,32 +293,11 @@
   "NavUser.toAccount": {
     "defaultMessage": "Zum Konto"
   },
-  "Order.addingItem": {
-    "defaultMessage": "Noch nicht versendet"
-  },
-  "Order.arrangingPayment": {
-    "defaultMessage": "Bezahlung ausstehend"
-  },
-  "Order.cancelled": {
-    "defaultMessage": "Storniert"
-  },
   "Order.differentProducts": {
     "defaultMessage": "verschiedene Produkte für"
   },
-  "Order.fulfilled": {
-    "defaultMessage": "Abgeschlossen"
-  },
   "Order.order": {
     "defaultMessage": "Bestellung"
-  },
-  "Order.partiallyFulfilled": {
-    "defaultMessage": "Teilweise abgeschlossen"
-  },
-  "Order.paymentAuthorized": {
-    "defaultMessage": "Zahlung freigegeben"
-  },
-  "Order.paymentSettled": {
-    "defaultMessage": "Zahlung abgeschlossen"
   },
   "OrderConfirmation.message": {
     "defaultMessage": "Vielen Dank für Ihre Bestellung bei der Hauser Feuerschutz AG. Sie werden in Kürze eine Bestätigungsemail erhalten."
@@ -406,5 +388,104 @@
   },
   "VerifyNewEmail.verifyNewEmail": {
     "defaultMessage": "Neue Email verifizieren und Benutzerkonto anlegen"
+  },
+  "forms.arrayLength": {
+    "defaultMessage": "Muss exakt $'{length}' Einträge haben"
+  },
+  "forms.arrayMax": {
+    "defaultMessage": "Darf maximal $'{max}' Einträge haben"
+  },
+  "forms.arrayMin": {
+    "defaultMessage": "Muss mindestens $'{min}' Einträge haben"
+  },
+  "forms.booleanIsValue": {
+    "defaultMessage": "Muss $'{value}' sein"
+  },
+  "forms.dateMax": {
+    "defaultMessage": "Muss früher als ${max} sein"
+  },
+  "forms.dateMin": {
+    "defaultMessage": "Muss später als ${min} sein"
+  },
+  "forms.mixedDefault": {
+    "defaultMessage": "Ist ungültig"
+  },
+  "forms.mixedDefined": {
+    "defaultMessage": "Dieses Feld muss definiert sein"
+  },
+  "forms.mixedNotNull": {
+    "defaultMessage": "Dieses Feld darf nicht leer sein"
+  },
+  "forms.mixedNotOneOf": {
+    "defaultMessage": "Darf keiner der folgenden Werte sein: $'{values}'"
+  },
+  "forms.mixedOneOf": {
+    "defaultMessage": "Muss einer der folgenden Werte sein: $'{values}'"
+  },
+  "forms.mixedRequired": {
+    "defaultMessage": "Dieses Feld darf nicht leer sein"
+  },
+  "forms.numberInteger": {
+    "defaultMessage": "Muss eine ganzzahlige Nummer sein"
+  },
+  "forms.numberLessThan": {
+    "defaultMessage": "Muss kleiner als $'{less}' sein"
+  },
+  "forms.numberMax": {
+    "defaultMessage": "Muss kleiner oder gleich wie ${max} sein"
+  },
+  "forms.numberMin": {
+    "defaultMessage": "Muss grösser oder gleich wie ${min} sein"
+  },
+  "forms.numberMoreThan": {
+    "defaultMessage": "Muss grösser als $'{more}' sein"
+  },
+  "forms.numberNegative": {
+    "defaultMessage": "Muss eine negative Zahl sein"
+  },
+  "forms.numberPositive": {
+    "defaultMessage": "Muss eine positive Zahl sein"
+  },
+  "forms.objectNoUnknown": {
+    "defaultMessage": "Darf keine ungültigen Werte enthalten"
+  },
+  "forms.stringDatetime": {
+    "defaultMessage": "Muss ein gültiger ISO Zeitstempel sein"
+  },
+  "forms.stringDatetimeOffset": {
+    "defaultMessage": "Muss ein gültiger ISO Zeitstempel mit UTC \"Z\" Zeitzone sein"
+  },
+  "forms.stringDatetimePrecision": {
+    "defaultMessage": "Muss ein gültiger ISO Zeitstempel mit einer unter-Sekunden Präzesion von $'{precision}' Stellen sein"
+  },
+  "forms.stringEmail": {
+    "defaultMessage": "Es muss eine gültige E-Mail Adresse angegeben werden."
+  },
+  "forms.stringLength": {
+    "defaultMessage": "Muss exakt $'{length}' Zeichen lang sein."
+  },
+  "forms.stringLowercase": {
+    "defaultMessage": "Darf nur aus Kleinbuchstaben bestehen"
+  },
+  "forms.stringMatches": {
+    "defaultMessage": "Muss dem folgendem Muster entsprechen: $'{regex}'"
+  },
+  "forms.stringMax": {
+    "defaultMessage": "Darf maximal $'{max}' Zeichen lang sein."
+  },
+  "forms.stringMin": {
+    "defaultMessage": "Muss mindestens $'{min}' Zeichen lang sein."
+  },
+  "forms.stringTrim": {
+    "defaultMessage": "Muss eine getrimmte Zeichenkette sein"
+  },
+  "forms.stringUppercase": {
+    "defaultMessage": "Darf nur aus Grossbuchstaben bestehen"
+  },
+  "forms.stringUrl": {
+    "defaultMessage": "Muss eine gültige URL sein"
+  },
+  "forms.stringUuid": {
+    "defaultMessage": "Muss eine gültige UUID sein"
   }
 }

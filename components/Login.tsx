@@ -174,7 +174,7 @@ const LoginRegisterForm = withFormik<
       email: yup.string().required(),
       password: yup
         .string()
-        .when([], (schema) =>
+        .when([], (_, schema) =>
           password ? schema.required() : schema.notRequired()
         ),
     }),

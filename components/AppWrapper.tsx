@@ -9,6 +9,7 @@ import React, {
   useCallback,
   useState,
 } from "react";
+import YupLocalization from "./form/YupLocalization";
 import request from "../utilities/request";
 import useSWR, { SWRConfig } from "swr";
 
@@ -71,7 +72,7 @@ const AppWrapper: FunctionComponent<{
             token,
           }}
         >
-          {children}
+          <YupLocalization>{children}</YupLocalization>
         </AppContext.Provider>
       </SWRConfig>
     </IntlProvider>

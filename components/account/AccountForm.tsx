@@ -160,10 +160,8 @@ const AccountForm = withFormik<IProps, FormValues>({
       passwordConfirmation: yup
         .string()
         .min(7)
-        .when(
-          ["newPassword"],
-          (newPassword: string, schema: yup.StringSchema) =>
-            newPassword ? schema.required() : schema
+        .when(["newPassword"], ([newPassword]: [string], schema) =>
+          newPassword ? schema.required() : schema
         )
         .test("is-required", isRequiredString, function () {
           const { newPassword, passwordConfirmation } = this.parent;

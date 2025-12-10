@@ -414,8 +414,8 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       billingFullName: yup.string().required(),
       shippingFullName: yup.string().when("shipToDifferentAddress", {
         is: true,
-        then: yup.string().required(),
-        otherwise: yup.string().notRequired(),
+        then: (schema) => schema.required(),
+        otherwise: (schema) => schema.notRequired(),
       }),
 
       /*billing_description: yup.string(),
@@ -430,15 +430,15 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
         .oneOf(countryCodes)
         .when("shipToDifferentAddress", {
           is: true,
-          then: yup.string().oneOf(countryCodes).required(),
-          otherwise: yup.string().oneOf(countryCodes).notRequired(),
+          then: (schema) => schema.oneOf(countryCodes).required(),
+          otherwise: (schema) => schema.oneOf(countryCodes).notRequired(),
         }),
 
       billingStreetLine1: yup.string().required(),
       shippingStreetLine1: yup.string().when("shipToDifferentAddress", {
         is: true,
-        then: yup.string().required(),
-        otherwise: yup.string().notRequired(),
+        then: (schema) => schema.required(),
+        otherwise: (schema) => schema.notRequired(),
       }),
 
       billingStreetLine2: yup.string().notRequired(),
@@ -450,22 +450,22 @@ const CheckoutAddressForm = withFormik<IProps, FormValues>({
       billingPostalCode: yup.number().required(),
       shippingPostalCode: yup.number().when("shipToDifferentAddress", {
         is: true,
-        then: yup.number().required(),
-        otherwise: yup.number().notRequired(),
+        then: (schema) => schema.required(),
+        otherwise: (schema) => schema.notRequired(),
       }),
 
       billingCity: yup.string().required(),
       shippingCity: yup.string().when("shipToDifferentAddress", {
         is: true,
-        then: yup.string().required(),
-        otherwise: yup.string().notRequired(),
+        then: (schema) => schema.required(),
+        otherwise: (schema) => schema.notRequired(),
       }),
 
       billingProvince: yup.string().required(),
       shippingProvince: yup.string().when("shipToDifferentAddress", {
         is: true,
-        then: yup.string().required(),
-        otherwise: yup.string().notRequired(),
+        then: (schema) => schema.required(),
+        otherwise: (schema) => schema.notRequired(),
       }),
 
       billingPhone: yup

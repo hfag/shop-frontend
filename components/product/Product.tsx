@@ -310,7 +310,7 @@ const Product: FunctionComponent<{
     (a) => a.id != product.featuredAsset?.id
   );
 
-  const buyable = product.customFields?.buyable;
+  const buyable = product.enabled && product.customFields?.buyable;
 
   return (
     <div>
@@ -617,7 +617,7 @@ const Product: FunctionComponent<{
                 </Button>
                 {error && <ErrorContainer>{error}</ErrorContainer>}
               </div>
-            ) : !selectedVariant ? (
+            ) : !selectedVariant && buyable ? (
               <div>
                 <h4>{intl.formatMessage(productMessages.price)}</h4>
                 <p>{intl.formatMessage(messages.mustSelectVariation)}</p>

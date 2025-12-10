@@ -70,6 +70,7 @@ export const OPTION_GROUP_FRAGMENT = `
 export const PRODUCT_FRAGMENT = `
   id
   slug
+  enabled
   name
   description
   featuredAsset {

@@ -198,7 +198,7 @@ const AccountReseller = () => {
 
   const { data: searchResponse } = useSWR(
     [GET_PRODUCTS_BY_FACETS_IDS, token, page, customer?.resellerDiscounts],
-    (query) =>
+    ([query]) =>
       request<{ search: Query["search"] }>(intl.locale, query, {
         facetValueIds,
         take: ITEMS_PER_PAGE,

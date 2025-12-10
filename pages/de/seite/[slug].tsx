@@ -1,6 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import {
-  Page,
   Page as PageType,
   WP_Page,
   mapPage,
@@ -78,7 +77,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   let notFound = false;
-  let page: Page | null = null;
+  let page: PageType | null = null;
 
   try {
     page = await fetch(

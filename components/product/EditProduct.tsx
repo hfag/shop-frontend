@@ -148,7 +148,7 @@ const EditProduct: FunctionComponent<{
 
   const { data: languages /*, error: languagesError*/ } = useSWR<{
     globalSettings: { availableLanguages: LanguageCode[] };
-  }>(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
+  }>(ADMIN_GET_AVAILABLE_LANGUAGES, (query: string) =>
     requestAdmin(intl.locale, query)
   );
 

@@ -51,7 +51,7 @@ const OrderConfirmation: FunctionComponent = () => {
     return typeof router.query.code === "string" ? router.query.code : null;
   }, [router.query]);
 
-  const { data, error } = useSWR([GET_ORDER_BY_CODE, code], (query, code) =>
+  const { data, error } = useSWR([GET_ORDER_BY_CODE, code], ([query, code]) =>
     code
       ? request<{ orderByCode: Query["orderByCode"] }>(intl.locale, query, {
           code,

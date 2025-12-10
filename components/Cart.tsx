@@ -45,7 +45,7 @@ const Cart: FunctionComponent = React.memo(() => {
   const { customer: user, token } = useContext(AppContext);
   const router = useRouter();
 
-  const { data: orderData } = useSWR([GET_ACTIVE_ORDER, token], (query) =>
+  const { data: orderData } = useSWR([GET_ACTIVE_ORDER, token], ([query]) =>
     request<{ activeOrder: Query["activeOrder"] }>(intl.locale, query)
   );
 

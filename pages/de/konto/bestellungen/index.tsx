@@ -18,7 +18,7 @@ const Page = () => {
   const { token } = useContext(AppContext);
   const { data /*, error*/ } = useSWR(
     [GET_CURRENT_CUSTOMER_ALL_ORDERS, token],
-    (query) =>
+    ([query]) =>
       request<{ activeCustomer: Query["activeCustomer"] }>(intl.locale, query)
   );
 

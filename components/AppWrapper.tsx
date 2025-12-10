@@ -45,7 +45,7 @@ const AppWrapper: FunctionComponent<{
     me: Query["me"];
   }>(
     token ? [GET_CURRENT_USER, token] : null,
-    (query) =>
+    ([query]) =>
       request(locale, query).catch((e: Error) => {
         if (e.message.includes('"code":"FORBIDDEN"')) {
           return { activeCustomer: null, me: null };

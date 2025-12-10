@@ -106,7 +106,7 @@ const EditProductCollectionLinksInnerForm: FunctionComponent<
       slug: string;
       links: AdminCollectionLink[];
     };
-  }>([ADMIN_GET_COLLECTION_LINKS_BY_SLUG, collection.slug], (query, slug) =>
+  }>([ADMIN_GET_COLLECTION_LINKS_BY_SLUG, collection.slug], ([query, slug]) =>
     requestAdmin(intl.locale, query, { slug })
   );
 

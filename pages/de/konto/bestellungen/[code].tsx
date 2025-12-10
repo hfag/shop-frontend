@@ -23,7 +23,7 @@ const Page = () => {
 
   const { data /*, error*/ } = useSWR(
     [GET_ORDER_BY_CODE, code, token],
-    (query, code) =>
+    ([query, code]) =>
       request<{ orderByCode: Query["orderByCode"] }>(intl.locale, query, {
         code,
       })

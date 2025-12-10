@@ -26,7 +26,7 @@ const Page: FunctionComponent = () => {
 
   const { data /*, error*/ } = useSWR(
     [GET_FULL_PRODUCT_BY_ID, productId],
-    (query, productId) =>
+    ([query, productId]) =>
       request<{ product: Query["product"] }>(intl.locale, query, {
         id: productId,
       })

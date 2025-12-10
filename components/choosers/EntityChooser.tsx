@@ -120,7 +120,7 @@ const EntityChooser = <
   }: {
     data?: QueryResponseType;
     error?: unknown;
-  } = useSWR([query, options], (query, options) =>
+  } = useSWR([query, options], ([query, options]) =>
     requestAdmin(intl.locale, query, { options })
   );
 

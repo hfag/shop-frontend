@@ -50,7 +50,7 @@ const AccountDashboard: FunctionComponent = React.memo(() => {
 
   const { data /*, error*/ } = useSWR(
     [GET_CURRENT_CUSTOMER_ORDERS, token, 0, 3],
-    (query, token, skip, take) =>
+    ([query, token, skip, take]) =>
       request<{
         activeCustomer: Query["activeCustomer"];
       }>(intl.locale, query, { skip, take })

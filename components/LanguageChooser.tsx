@@ -36,7 +36,7 @@ const LanguageChooser: FunctionComponent<{
 
   const { data /*, error*/ } = useSWR<{
     globalSettings: { availableLanguages: LanguageCode[] };
-  }>(ADMIN_GET_AVAILABLE_LANGUAGES, (query) =>
+  }>(ADMIN_GET_AVAILABLE_LANGUAGES, (query: string) =>
     requestAdmin(intl.locale, query)
   );
 

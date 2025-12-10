@@ -61,7 +61,7 @@ const NavCart: FunctionComponent<{
   const intl = useIntl();
   const router = useRouter();
   const { token } = useContext(AppContext);
-  const { data } = useSWR([GET_ACTIVE_ORDER, token], (query) =>
+  const { data } = useSWR([GET_ACTIVE_ORDER, token], ([query]) =>
     request<{ activeOrder: Query["activeOrder"] }>(intl.locale, query)
   );
 

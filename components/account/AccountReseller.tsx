@@ -237,7 +237,7 @@ const AccountReseller = () => {
     }
 
     try {
-      // https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading
+      // https://nextjs.org/docs/pages/guides/lazy-loading#with-external-libraries
       const XLSX = await import("xlsx");
 
       const csvFileData = await getFullResellerList(

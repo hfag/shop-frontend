@@ -10,6 +10,7 @@
     "start": "HOSTNAME=127.0.0.1 PORT=8080 NODE_ENV=production node server.js",
     "dev": "HOSTNAME=127.0.0.1 PORT=8080 node server.js",
     "build": "next build",
+    "analysis": "ANALYZE=true next build --webpack",
     "lint": "eslint .",
     "generate-sitemap": "next-sitemap --config ./next-sitemap.js",
     "build-server": "webpack --config webpack-build-server.config.js",
@@ -23,11 +24,9 @@
     "collect-messages": "node scripts/collect-i18n-strings.js",
     "generate-messages": "rm -r messages/* && yarn extract-messages && yarn collect-messages && node scripts/update-18n.js",
     "generate-types": "gq $(node scripts/get-env-variable.js API_URL) --introspect -H 'Content-Type: application/json' > schema.graphql && node scripts/convert-schema.js && graphql-codegen --config codegen.config.yml",
-    "analysis": "webpack-bundle-analyzer ./dist/stats.json",
     "prettier": "prettier --write .",
     "test": "echo 'not implemented'",
-    "deploy": "node scripts/generate-i18n-pages.js && yarn build",
-    "analyze": "ANALYZE=true next build"
+    "deploy": "node scripts/generate-i18n-pages.js && yarn build"
   },
   "config": {
     "ghooks": {
@@ -46,7 +45,7 @@
     "@graphql-codegen/cli": "^6.1.0",
     "@graphql-codegen/typescript": "^5.0.6",
     "@graphql-codegen/typescript-operations": "^5.0.6",
-    "@next/bundle-analyzer": "16.0.8",
+    "@next/bundle-analyzer": "^16.0.8",
     "@types/color": "^4.2.0",
     "@types/lodash": "^4.17.21",
     "@types/node": "^24.10.2",

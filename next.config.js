@@ -1,16 +1,24 @@
-const env = {
-  REVALIDATION_SECRET: "test",
-  ABSOLUTE_URL: "http://127.0.0.1:8080",
-  ASSET_URL: "http://127.0.0.1:3000/assets",
-  API_URL: "http://127.0.0.1:3000/shop-api",
-  ADMIN_API_URL: "http://127.0.0.1:3000/admin-api",
-  // ABSOLUTE_URL: "https://shop.feuerschutz.ch",
-  // ASSET_URL: "https://shop.feuerschutz.ch/assets",
-  // API_URL: "https://shop.feuerschutz.ch/shop-api",
-  // ADMIN_API_URL: "https://shop.feuerschutz.ch/admin-api",
-  // REVALIDATION_SECRET: "",
-  WP_BLOG_URL: "https://api.feuerschutz.ch",
-  PUBLIC_PATH: "/",
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  env: {
+    REVALIDATION_SECRET: "test",
+    ABSOLUTE_URL: "http://127.0.0.1:8080",
+    ASSET_URL: "http://127.0.0.1:3000/assets",
+    API_URL: "http://127.0.0.1:3000/shop-api",
+    ADMIN_API_URL: "http://127.0.0.1:3000/admin-api",
+    // ABSOLUTE_URL: "https://shop.feuerschutz.ch",
+    // ASSET_URL: "https://shop.feuerschutz.ch/assets",
+    // API_URL: "https://shop.feuerschutz.ch/shop-api",
+    // ADMIN_API_URL: "https://shop.feuerschutz.ch/admin-api",
+    // REVALIDATION_SECRET: "",
+    WP_BLOG_URL: "https://api.feuerschutz.ch",
+    PUBLIC_PATH: "/",
+  },
 };
 
-module.exports = { env };
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+module.exports =
+  process.env.ANALYZE === "true" ? withBundleAnalyzer(nextConfig) : nextConfig;

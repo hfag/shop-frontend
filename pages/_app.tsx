@@ -3,7 +3,7 @@ import "../styles/global.scss";
 import "../styles/quill-custom.scss";
 
 //fonts
-import localFont from "@next/font/local";
+import localFont from "next/font/local";
 
 //dependencies
 import App from "next/app";

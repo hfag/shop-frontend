@@ -39,8 +39,6 @@
     "graphql": "15.5.1"
   },
   "dependencies": {
-    "@babel/core": "^7.14.8",
-    "@babel/eslint-parser": "^7.14.7",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@formatjs/cli": "^2.13.1",

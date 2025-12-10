@@ -61,7 +61,7 @@
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
-    "express": "^4.17.1",
+    "express": "^5.2.1",
     "formik": "^2.4.9",
     "ghooks": "^2.0.4",
     "glob": "^13.0.0",

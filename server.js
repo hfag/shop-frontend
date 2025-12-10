@@ -1,5 +1,6 @@
 const express = require("express");
 const next = require("next");
+const { parse } = require("url");
 
 const DEFAULT_LANGUAGE = "de";
 const SUPPORTED_LANGUAGES = ["de", "fr"];
@@ -16,11 +17,12 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ hostname, port, dev });
 const handle = app.getRequestHandler();
 
+// A custom server as described at https://nextjs.org/docs/pages/guides/custom-server
 app
   .prepare()
   .then(() => {
     const server = express();
-    server.all("*", (request, response) => {
+    server.all("*route", (request, response) => {
       //add locale for pages but no static assets
       if (
         !request.url.startsWith("/_next/") && //next js stuff
@@ -42,7 +44,8 @@ app
         request.locale = locale;
       }
 
-      handle(request, response);
+      const parsedUrl = parse(request.url, true);
+      handle(request, response, parsedUrl);
     });
 
     server.listen(port, (err) => {

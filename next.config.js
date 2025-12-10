@@ -1,11 +1,3 @@
-const withTM = require("next-transpile-modules")([
-  "@formatjs/intl-relativetimeformat",
-  "@formatjs/intl-utils",
-  "react-intl",
-  "intl-messageformat-parser",
-  "intl-messageformat",
-]);
-
 const env = {
   REVALIDATION_SECRET: "test",
   ABSOLUTE_URL: "http://127.0.0.1:8080",
@@ -21,4 +13,4 @@ const env = {
   PUBLIC_PATH: "/",
 };
 
-module.exports = withTM({ env });
+module.exports = { env };

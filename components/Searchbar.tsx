@@ -133,19 +133,26 @@ const getSuggestionValue = (suggestion: SearchResult) =>
  * Renders the suggstion wrapper
  */
 const renderSuggestionContainer = ({
-  containerProps,
+  containerProps: { key, ...containerProps },
   children /*, query*/,
 }) => {
   return (
-    <SuggestionContainer {...containerProps}>{children}</SuggestionContainer>
+    <SuggestionContainer key={key} {...containerProps}>
+      {children}
+    </SuggestionContainer>
   );
 };
 
 /**
  * Renders the input field
  */
-const renderInputComponent = (inputProps: { [key: string]: any }) => {
-  return <SearchInput {...inputProps} />;
+const renderInputComponent = ({
+  key,
+  ...inputProps
+}: {
+  [key: string]: any;
+}) => {
+  return <SearchInput key={key} {...inputProps} />;
 };
 
 type NO_RESULTS = { noResults: boolean };

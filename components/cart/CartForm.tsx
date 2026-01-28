@@ -19,6 +19,7 @@ import CartTableAction from "../ActionButton";
 import Price from "../elements/Price";
 import cart from "../../i18n/cart";
 import orderMessages from "../../i18n/order";
+import productMessages from "../../i18n/product";
 import product from "../../i18n/product";
 import request from "../../utilities/request";
 
@@ -225,6 +226,11 @@ const InnerCartForm = React.memo(
               <td />
             </tr>
           )}
+          <tr className="total">
+            <td colSpan={5}>{intl.formatMessage(productMessages.subtotal)}</td>
+            <td>{order && <Price>{order.subTotal}</Price>}</td>
+            <td />
+          </tr>
           <tr className="total">
             <td colSpan={5}>{intl.formatMessage(orderMessages.vat)}</td>
             <td>

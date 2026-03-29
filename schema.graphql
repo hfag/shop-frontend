@@ -4542,7 +4542,7 @@ type PublicShippingMethod {
 }
 
 input AuthenticationInput {
-  native: NativeAuthInput
+  hfag: LegacyAuthInput
 }
 
 input RegisterCustomerInput {
@@ -5107,7 +5107,7 @@ input OrderLineCustomFieldsInput {
   customizations: String
 }
 
-input NativeAuthInput {
-  username: String!
+input LegacyAuthInput {
+  email: String!
   password: String!
 }

@@ -130,7 +130,7 @@ export enum AssetType {
 }
 
 export type AuthenticationInput = {
-  native?: InputMaybe<NativeAuthInput>;
+  hfag?: InputMaybe<LegacyAuthInput>;
 };
 
 export type AuthenticationMethod = Node & {
@@ -1760,6 +1760,11 @@ export enum LanguageCode {
   Zu = "zu",
 }
 
+export type LegacyAuthInput = {
+  email: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
+};
+
 export type LocaleStringCustomFieldConfig = CustomField & {
   __typename?: "LocaleStringCustomFieldConfig";
   deprecated?: Maybe<Scalars["Boolean"]["output"]>;
@@ -2040,11 +2045,6 @@ export type MutationUpdateCustomerPasswordArgs = {
 export type MutationVerifyCustomerAccountArgs = {
   password?: InputMaybe<Scalars["String"]["input"]>;
   token: Scalars["String"]["input"];
-};
-
-export type NativeAuthInput = {
-  password: Scalars["String"]["input"];
-  username: Scalars["String"]["input"];
 };
 
 /** Returned when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured. */

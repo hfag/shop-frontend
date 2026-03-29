@@ -1,6 +1,6 @@
 {
   "CartForm.vat": {
-    "defaultMessage": "MWST (8.1%)"
+    "defaultMessage": "+ MwST-Betrag 8.1%"
   },
   "Product.chooseAVariation": {
     "defaultMessage": "Wählen Sie eine Variante"
@@ -228,13 +228,16 @@
     "defaultMessage": "Letzte 10 Bestellungen"
   },
   "order.shipping": {
-    "defaultMessage": "Versand"
+    "defaultMessage": "+ Porto und Verpackung"
   },
   "order.taxes": {
     "defaultMessage": "Steuern"
   },
-  "order.total": {
-    "defaultMessage": "Gesamtsumme"
+  "order.totalWithVat": {
+    "defaultMessage": "Totalbetrag, inkl. MwSt."
+  },
+  "order.totalWithoutVat": {
+    "defaultMessage": "Totalbetrag, ohne MwSt."
   },
   "page.confirmation": {
     "defaultMessage": "Bestellbestätigung"
@@ -349,6 +352,9 @@
   },
   "product.subtotal": {
     "defaultMessage": "Subtotal"
+  },
+  "product.totalProducts": {
+    "defaultMessage": "Total Produkte"
   },
   "product.variation": {
     "defaultMessage": "Variante"

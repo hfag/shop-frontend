@@ -217,8 +217,15 @@ const InnerCartForm = React.memo(
           </tr>
         </tbody>
         <tfoot>
+          <tr className="total">
+            <td colSpan={5}>
+              {intl.formatMessage(productMessages.totalProducts)}
+            </td>
+            <td>{order && <Price>{order.subTotal}</Price>}</td>
+            <td />
+          </tr>
           {order && order.shippingLines && order.shippingLines.length > 0 && (
-            <tr className="total">
+            <tr>
               <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
               <td>
                 <Price>{order.shipping}</Price>
@@ -227,11 +234,15 @@ const InnerCartForm = React.memo(
             </tr>
           )}
           <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(productMessages.subtotal)}</td>
-            <td>{order && <Price>{order.subTotal}</Price>}</td>
+            <td colSpan={5}>
+              {intl.formatMessage(orderMessages.totalWithoutVat)}
+            </td>
+            <td>
+              <Price>{order.total}</Price>
+            </td>
             <td />
           </tr>
-          <tr className="total">
+          <tr>
             <td colSpan={5}>{intl.formatMessage(orderMessages.vat)}</td>
             <td>
               {order && <Price>{order.totalWithTax - order.total}</Price>}
@@ -239,7 +250,9 @@ const InnerCartForm = React.memo(
             <td />
           </tr>
           <tr className="total">
-            <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
+            <td colSpan={5}>
+              {intl.formatMessage(orderMessages.totalWithVat)}
+            </td>
             <td>{order && <Price>{order.totalWithTax}</Price>}</td>
             <td />
           </tr>

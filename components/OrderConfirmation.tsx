@@ -196,12 +196,26 @@ const OrderConfirmation: FunctionComponent = () => {
         {data.orderByCode && (
           <tfoot>
             <tr className="total">
+              <td colSpan={5}>{intl.formatMessage(product.totalProducts)}</td>
+              <td>
+                <Price>{data.orderByCode.subTotal}</Price>
+              </td>
+            </tr>
+            <tr>
               <td colSpan={5}>{intl.formatMessage(orderMessages.shipping)}</td>
               <td>
                 <Price>{data.orderByCode.shipping}</Price>
               </td>
             </tr>
             <tr className="total">
+              <td colSpan={5}>
+                {intl.formatMessage(orderMessages.totalWithoutVat)}
+              </td>
+              <td>
+                <Price>{data.orderByCode.total}</Price>
+              </td>
+            </tr>
+            <tr>
               <td colSpan={5}>{intl.formatMessage(orderMessages.vat)}</td>
               <td>
                 <Price>
@@ -210,7 +224,9 @@ const OrderConfirmation: FunctionComponent = () => {
               </td>
             </tr>
             <tr className="total">
-              <td colSpan={5}>{intl.formatMessage(orderMessages.total)}</td>
+              <td colSpan={5}>
+                {intl.formatMessage(orderMessages.totalWithVat)}
+              </td>
               <td>
                 <Price>{data.orderByCode.totalWithTax}</Price>
               </td>

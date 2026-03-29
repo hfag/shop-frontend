@@ -36,7 +36,7 @@ const AccountOrders: FunctionComponent<{ orders?: OrderType[] }> = React.memo(
           <thead>
             <tr>
               <th>{intl.formatMessage(orderMessages.orderNumber)}</th>
-              <th>{intl.formatMessage(orderMessages.total)}</th>
+              <th>{intl.formatMessage(orderMessages.totalWithVat)}</th>
               <th>{intl.formatMessage(orderMessages.orderDate)}</th>
             </tr>
           </thead>

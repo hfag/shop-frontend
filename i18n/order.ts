@@ -23,7 +23,7 @@ export default defineMessages({
   },
   shipping: {
     id: "order.shipping",
-    defaultMessage: "Versand",
+    defaultMessage: "+ Porto und Verpackung",
   },
   taxes: {
     id: "order.taxes",
@@ -31,7 +31,7 @@ export default defineMessages({
   },
   vat: {
     id: "CartForm.vat",
-    defaultMessage: "MWST (8.1%)",
+    defaultMessage: "+ MwST-Betrag 8.1%",
   },
   noOrders: {
     id: "order.noOrders",
@@ -41,8 +41,12 @@ export default defineMessages({
     id: "order.lastThreeOrders",
     defaultMessage: "Letzte 3 Bestellungen",
   },
-  total: {
-    id: "order.total",
-    defaultMessage: "Gesamtsumme",
+  totalWithoutVat: {
+    id: "order.totalWithoutVat",
+    defaultMessage: "Totalbetrag, ohne MwSt.",
+  },
+  totalWithVat: {
+    id: "order.totalWithVat",
+    defaultMessage: "Totalbetrag, inkl. MwSt.",
   },
 });

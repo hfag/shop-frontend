@@ -34,6 +34,8 @@ import orderMessages from "../../i18n/order";
 import product from "../../i18n/product";
 import request from "../../utilities/request";
 import useSWR, { mutate } from "swr";
+import styled from "@emotion/styled";
+import { colors } from "../../utilities/style";
 
 const messages = defineMessages({
   orderComments: {
@@ -91,6 +93,13 @@ interface IProps {
   values?: FormValues;
   order: Order;
 }
+
+const CheckoutTable = styled(Table)`
+  tr.total {
+    border-top: ${colors.secondary} 1px solid;
+    font-weight: bold;
+  }
+`;
 
 /**
  * The inner checkout form
@@ -227,16 +236,10 @@ const InnerCheckoutForm = React.memo(
           </label>
         </InputField>
         <br />
-        <Table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Subtotal</th>
-            </tr>
-          </thead>
+        <CheckoutTable>
           <tbody>
             <tr>
-              <td>{intl.formatMessage(product.subtotal)}</td>
+              <td>{intl.formatMessage(product.totalProducts)}</td>
               <td>
                 <Price>{order.subTotal}</Price>
               </td>
@@ -245,20 +248,30 @@ const InnerCheckoutForm = React.memo(
               <td>{intl.formatMessage(orderMessages.shipping)}</td>
               <td>{shipping && <Price>{shipping}</Price>}</td>
             </tr>
+            <tr className="total">
+              <td>{intl.formatMessage(orderMessages.totalWithoutVat)}</td>
+              <td>
+                <Price>{order.total}</Price>
+              </td>
+            </tr>
             <tr>
-              <td>{intl.formatMessage(orderMessages.taxes)}</td>
+              <td>{intl.formatMessage(orderMessages.vat)}</td>
               <td>
                 <Price>{order.totalWithTax - order.total}</Price>
               </td>
             </tr>
-            <tr>
-              <td>{intl.formatMessage(orderMessages.total)}</td>
+            <tr className="total">
+              <td>
+                <strong>
+                  {intl.formatMessage(orderMessages.totalWithVat)}
+                </strong>
+              </td>
               <td>
                 <Price>{order.totalWithTax}</Price>
               </td>
             </tr>
           </tbody>
-        </Table>
+        </CheckoutTable>
         <br />
         <Button
           fullWidth

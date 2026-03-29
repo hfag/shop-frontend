@@ -45,6 +45,10 @@ export default defineMessages({
     id: "product.subtotal",
     defaultMessage: "Subtotal",
   },
+  totalProducts: {
+    id: "product.totalProducts",
+    defaultMessage: "Total Produkte",
+  },
   pieces: {
     id: "product.pieces",
     defaultMessage: "Stück",

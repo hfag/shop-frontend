@@ -47,7 +47,7 @@ const Label = styled.label`
 `;
 
 // https://nextjs.org/docs/pages/guides/lazy-loading
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 //import "../../styles/quill-custom.scss";
 
 const QUILL_MODULES = {
